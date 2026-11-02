@@ -141,7 +141,7 @@ export const ROOT_BUFFS: Record<Element, { stat: BuffStat; value: number }> = {
   thuy: { stat: "manaMax", value: 150 }, // mana tối đa +15%
   hoa: { stat: "damage", value: 100 }, // sát thương +10%
   tho: { stat: "hp", value: 120 }, // máu tối đa +12%
-  loi: { stat: "attackSpeed", value: 120 }, // tốc độ đánh +12%
+  loi: { stat: "attackSpeed", value: 80 }, // tốc độ đánh +8% (GDD +12%, người dùng duyệt giảm 2026-11-02 theo tools/balance)
   phong: { stat: "cooldownCut", value: 100 }, // giảm hồi chiêu 10%
   quang: { stat: "healPower", value: 150 }, // hiệu quả hồi máu và khiên +15%
   am_lanh: { stat: "lifesteal", value: 80 }, // hút máu +8%

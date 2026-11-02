@@ -141,11 +141,11 @@ test("buff linh căn: trùng hệ chủ quyển đủ, trùng hệ phụ một n
   assert.equal(unitBonuses(["tho"], [], [tech("can_don", "tho"), tech("tam_xa", "tho")]).hp, 120);
   assert.equal(unitBonuses(["kim"], [], [tech("can_don", "tho")]).hp, 0);
   const two = unitBonuses(["loi", "tho"], [], [tech("can_don", "loi", "tho")]);
-  assert.equal(two.attackSpeed, 120);
+  assert.equal(two.attackSpeed, 80);
   assert.equal(two.hp, 60);
 });
 
-test("buff linh căn trong trận: Thổ máu +12%, Phong hồi chiêu −10%, Lôi đánh nhanh 12%", () => {
+test("buff linh căn trong trận: Thổ máu +12%, Phong hồi chiêu −10%, Lôi đánh nhanh 8%", () => {
   const tho = new Battle({ seed: 1, teamA: [unit(1, 0, [tech("can_don", "tho")], { element: "tho" })], teamB: [inert(101)] });
   assert.equal(get(tho, 1).hp, 22400);
   const pt = tech("can_don", "phong");
@@ -155,8 +155,8 @@ test("buff linh căn trong trận: Thổ máu +12%, Phong hồi chiêu −10%, L
   const loi = new Battle({ seed: 1, teamA: [unit(1, 0, [tech("can_don", "loi")], { element: "loi" })], teamB: [inert(101)] }, true);
   while (loi.events.filter((e) => e.unitId === 1).length < 3) loi.step();
   const [e1, e2, e3] = loi.events.filter((e) => e.unitId === 1);
-  assert.equal(e2.tick - e1.tick, 18); // 20 tick hồi chiêu ÷ 1,12
-  assert.equal(e3.tick - e2.tick, 18);
+  assert.equal(e2.tick - e1.tick, 19); // 20 tick hồi chiêu ÷ 1,08, làm tròn lên
+  assert.equal(e3.tick - e2.tick, 19);
 });
 
 // Tài năng (GDD mục 6)
