@@ -29,8 +29,22 @@ export interface ReplayUnit {
   manaMax: number;
   /** Vị trí đầu trận, milli-ô; đội A ở nửa thấp của trục, đội B ở nửa cao. */
   pos: number;
-  /** Khoá hình trong assets/pixellab/manifest.json; thiếu hình thì vẽ khối màu. */
+  /** Khoá hình tĩnh trong assets/pixellab/manifest.json (tu_si/<tài năng>); thiếu hình thì vẽ khối màu. */
   sprite?: string;
+  /** Ngoại hình ghép: thân, áo, đồ; chưa có thì trình xem tự chọn theo hàng đứng. */
+  look?: Look;
+}
+
+/** Ngoại hình nhân vật ghép từ thân và từng món đồ (ghi chú chung pixellab-tu-si.md). */
+export interface Look {
+  /** nam_khoe, nam_manh, nu_khoe, nu_manh */
+  body: string;
+  /** Bộ áo, ví dụ dao_bao */
+  outfit: string;
+  /** Mã mũ trong do/mu/ */
+  hat?: string;
+  /** Mã vũ khí trong do/vu_khi/ */
+  weapon?: string;
 }
 
 /** Sự kiện xếp theo tick tăng dần. Các trường hp, mana, pos là giá trị sau sự kiện. */

@@ -1,11 +1,19 @@
 // Bộ nạp hình PixelLab. Đọc assets/pixellab/manifest.json (docs/KE_HOACH.md mục 6), nạp từng ảnh song song;
 // manifest hay ảnh nào lỗi thì bỏ qua để người vẽ dùng khối màu thay thế.
 //
-// Khoá tra hình là đường dẫn file bỏ đuôi, theo nhóm:
-//   tu_si/<tài năng>   8 tu sĩ: tu_the, tu_phap, tu_tran, tu_dan, sat_thu, tu_ren, tu_duoc, tu_kim_tien (GDD mục 6)
-//   he/<hệ>            12 icon hệ, mã như ELEMENT_IDS
-//   chieu/<loại chiêu> 10 icon loại chiêu, mã như SKILL_IDS
-// Hoạt ảnh (đứng, ra chiêu, trúng đòn, ngã) sẽ thêm trường khung hình khi có ảnh thật từ animate_character.
+// Khoá tra hình là đường dẫn file bỏ đuôi, theo nhóm (định dạng chốt ở ghi chú chung pixellab-tu-si.md):
+//   nhan_vat/<thân>/<áo>/<hoạt ảnh>  dải khung ngang: dung, ra_chieu, trung_don, nga; có frames, fps, neo
+//   do/mu/<mã>, do/vu_khi/<mã>      đồ ghép rời, có slot, neo, pivot
+//   tu_si/<tài năng>                 hình tĩnh cũ, chỉ còn tu_the
+//   he/<hệ>                          12 icon hệ, mã như ELEMENT_IDS
+//   chieu/<loại chiêu>               10 icon loại chiêu, mã như SKILL_IDS
+
+/** Điểm neo của một khung hoạt ảnh, toạ độ trong khung: tâm đầu (kèm góc nghiêng, độ) và cổ tay phía trước. */
+export interface FrameAnchor {
+  dau: [number, number, number];
+  /** null khi tay không còn cầm được vũ khí (đang ngã) */
+  tay: [number, number] | null;
+}
 
 /** Một dòng trong manifest: nguồn gốc từng ảnh để làm hồ sơ bản quyền và thay dần bằng hình của họa sĩ. */
 export interface ManifestEntry {
@@ -18,21 +26,41 @@ export interface ManifestEntry {
   /** Ngày tạo, YYYY-MM-DD */
   created?: string;
   pixellab_id?: string;
+  /** Dải hoạt ảnh: số khung, cỡ khung (px), tốc độ gợi ý */
+  frames?: number;
+  frame_w?: number;
+  frame_h?: number;
+  fps?: number;
+  /** Dải hoạt ảnh: neo từng khung; đồ ghép: neo vào "dau" hay "tay" */
+  neo?: FrameAnchor[] | "dau" | "tay";
+  /** Đồ ghép: ô trang bị và điểm xoay trong ảnh đồ (px) */
+  slot?: string;
+  pivot?: [number, number];
 }
 
 export interface Manifest {
   assets: ManifestEntry[];
 }
 
+export interface Asset {
+  img: HTMLImageElement;
+  meta: ManifestEntry;
+}
+
 export class Sprites {
-  private images = new Map<string, HTMLImageElement>();
+  private assets = new Map<string, Asset>();
 
   get(key: string | undefined): HTMLImageElement | undefined {
-    return key === undefined ? undefined : this.images.get(key);
+    return key === undefined ? undefined : this.assets.get(key)?.img;
+  }
+
+  /** Ảnh kèm dòng manifest (khung hình, điểm neo, pivot). */
+  asset(key: string): Asset | undefined {
+    return this.assets.get(key);
   }
 
   get size(): number {
-    return this.images.size;
+    return this.assets.size;
   }
 
   /** Không ném lỗi: thiếu manifest hay ảnh hỏng thì chỉ ghi cảnh báo. */
@@ -47,14 +75,14 @@ export class Sprites {
       return;
     }
     await Promise.all(
-      (manifest.assets ?? []).map(async (entry) => {
+      (manifest.assets ?? []).map(async (meta) => {
         const img = new Image();
-        img.src = base + entry.file;
+        img.src = base + meta.file;
         try {
           await img.decode();
-          this.images.set(entry.file.replace(/\.[^./]+$/, ""), img);
+          this.assets.set(meta.file.replace(/\.[^./]+$/, ""), { img, meta });
         } catch {
-          console.warn("Không nạp được ảnh PixelLab:", entry.file);
+          console.warn("Không nạp được ảnh PixelLab:", meta.file);
         }
       }),
     );

@@ -4,8 +4,9 @@ import type { Scene } from "../../app/scene.ts";
 import type { View } from "../../app/view.ts";
 import { ReplayPlayer } from "../../replay/player.ts";
 import { between, ReplayIndex, type UnitTimeline } from "../../replay/timeline.ts";
-import type { ReplaySource } from "../../replay/types.ts";
+import type { Look, ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
+import { animInfo, defaultLook, drawCharacter, type Anim } from "./character.ts";
 import { ReplayControls } from "./controls.ts";
 import { FxLayer, type Point } from "./fx.ts";
 import { drawMotif } from "./motifs.ts";
@@ -17,8 +18,23 @@ const TEAM_RING = ["#e6d8b8", "#b3261e"]; // đội A giấy dó, đội B ấn 
 const HP = "#7bc96f";
 const MANA = "#5aa9e6";
 const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
+const HEAVY_HIT = 0.05; // đòn từ 5% máu tối đa trở lên mới diễn hoạt ảnh trúng đòn
+const BADGE = 12; // cạnh dấu hệ đặt trước thanh máu, đơn vị thế giới
 
-/** Màn xem trận: phát replay, vẽ nhân vật bằng khối màu theo hệ. */
+/** Số tick từ mốc gần nhất không sau t trong `marks` (xếp tăng dần) tới t; undefined nếu chưa có mốc nào. */
+function since(marks: number[] | undefined, t: number): number | undefined {
+  if (!marks || marks.length === 0 || marks[0] > t) return undefined;
+  let lo = 0;
+  let hi = marks.length - 1;
+  while (lo < hi) {
+    const mid = (lo + hi + 1) >> 1;
+    if (marks[mid] <= t) lo = mid;
+    else hi = mid - 1;
+  }
+  return t - marks[lo];
+}
+
+/** Màn xem trận: phát replay, vẽ nhân vật bằng hình PixelLab ghép (thiếu hình thì khối màu theo hệ). */
 export class BattleScene implements Scene {
   readonly id = "tran";
   readonly label = "Trận";
@@ -36,6 +52,8 @@ export class BattleScene implements Scene {
   private loads = 0;
   /** Toạ độ ngang của từng người, theo id */
   private lateral = new Map<number, number>();
+  /** Mốc ra chiêu và trúng đòn nặng theo id, xếp tăng dần */
+  private marks = new Map<number, { casts: number[]; hits: number[] }>();
   /** Trục sân dọc khi màn hình đứng, ngang khi màn hình nằm */
   private vertical: boolean | null = null;
 
@@ -80,6 +98,7 @@ export class BattleScene implements Scene {
         this.player.speed = speed;
         this.controls.bind(this.player);
         this.layoutLanes();
+        this.buildMarks();
         this.vertical = null;
       },
       (e: unknown) => {
@@ -142,6 +161,50 @@ export class BattleScene implements Scene {
     this.drawNumbers(ctx, index, t, life(NUMBER_LIFE));
     this.fx.callouts();
     this.drawScore(v, index, t, player);
+  }
+
+  // ---- hoạt ảnh ----
+
+  /** Mốc ra chiêu (lúc bắt đầu vận công nếu có) và mốc trúng đòn nặng của từng người, để chọn hoạt ảnh. */
+  private buildMarks(): void {
+    const index = this.index!;
+    this.marks.clear();
+    const of = (id: number) => {
+      let m = this.marks.get(id);
+      if (!m) this.marks.set(id, (m = { casts: [], hits: [] }));
+      return m;
+    };
+    for (const c of index.casts) of(c.unit).casts.push(c.start ?? c.tick);
+    for (const e of index.hits) {
+      const ut = index.byId.get(e.unit);
+      // Đòn nhỏ chỉ nháy trắng; từ 5% máu trở lên mới diễn trúng đòn, để người không giật liên tục.
+      if (e.kind === "hit" && ut && e.amount >= ut.unit.hpMax * HEAVY_HIT) of(e.unit).hits.push(e.tick);
+    }
+    for (const m of this.marks.values()) m.casts.sort((a, b) => a - b);
+  }
+
+  /** Hoạt ảnh và khung của một người tại t, ưu tiên: ngã, ra chiêu, trúng đòn nặng, đứng. null nếu chưa có hình. */
+  private pose(ut: UnitTimeline, t: number, look: Look): { anim: Anim; frame: number } | null {
+    const idle = animInfo(this.sprites, look, "dung");
+    if (!idle) return null;
+    const tps = this.index!.replay.tps;
+    const play = (anim: Anim, since: number | undefined) => {
+      const info = since === undefined ? undefined : animInfo(this.sprites, look, anim);
+      if (!info || since === undefined) return null;
+      return { anim, frame: Math.floor((since / tps) * info.fps), frames: info.frames };
+    };
+    if (t >= ut.death) {
+      const p = play("nga", t - ut.death);
+      if (p) return { anim: "nga", frame: Math.min(p.frame, p.frames - 1) };
+    } else {
+      const m = this.marks.get(ut.unit.id);
+      const cast = play("ra_chieu", since(m?.casts, t));
+      if (cast && cast.frame < cast.frames) return cast;
+      const hit = play("trung_don", since(m?.hits, t));
+      if (hit && hit.frame < hit.frames) return hit;
+    }
+    // Đứng thở lệch nhịp theo id để cả đội không nhấp nhô cùng lúc.
+    return { anim: "dung", frame: (Math.floor((t / tps) * idle.fps) + ut.unit.id) % idle.frames };
   }
 
   // ---- bố cục ----
@@ -235,7 +298,9 @@ export class BattleScene implements Scene {
     const dead = t >= ut.death;
     const style = ELEMENT_STYLE[u.element];
     const h = SIZE / 2;
-    const sprite = this.sprites.get(u.sprite);
+    const look = u.look ?? defaultLook(u);
+    const pose = this.pose(ut, t, look);
+    const sprite = pose ? undefined : this.sprites.get(u.sprite);
     const icon = this.sprites.get("he/" + u.element);
 
     ctx.globalAlpha = dead ? 0.25 : 1;
@@ -245,36 +310,29 @@ export class BattleScene implements Scene {
     ctx.fill();
     ctx.imageSmoothingEnabled = false; // giữ nét pixel art khi phóng to
 
-    if (sprite) {
-      // Có hình tu sĩ: vòng đội dưới chân, hình đứng trên vòng, dấu hệ ở góc.
+    const figure = !!(pose || sprite);
+    if (figure) {
+      // Có hình PixelLab: vòng đội dưới chân, người đứng trên vòng; dấu hệ đặt trước thanh máu (vẽ ở dưới).
       ctx.lineWidth = 3;
       ctx.strokeStyle = TEAM_RING[u.team];
       ctx.stroke();
-      if (flash && !dead) ctx.globalAlpha = 0.5;
       const s = SIZE * 1.4;
-      // Hình PixelLab nhìn hướng đông nam; đội B lật ngang để hai đội quay mặt vào nhau.
-      if (u.team === 1) {
+      if (pose) {
+        // Nhân vật ghép có hoạt ảnh: ngã xong thì mờ dần; trúng đòn nháy nhẹ.
+        const tps = this.index!.replay.tps;
+        ctx.globalAlpha = dead ? Math.max(0.35, 1 - (t - ut.death) / (1.5 * tps)) : flash ? 0.7 : 1;
+        drawCharacter(ctx, this.sprites, look, pose.anim, pose.frame, x, y + h, s / 64, u.team === 1);
+      } else if (u.team === 1) {
+        if (flash && !dead) ctx.globalAlpha = 0.5;
+        // Hình PixelLab nhìn hướng đông nam; đội B lật ngang để hai đội quay mặt vào nhau.
         ctx.save();
         ctx.translate(x, 0);
         ctx.scale(-1, 1);
-        ctx.drawImage(sprite, -s / 2, y + h - s, s, s);
+        ctx.drawImage(sprite!, -s / 2, y + h - s, s, s);
         ctx.restore();
       } else {
-        ctx.drawImage(sprite, x - s / 2, y + h - s, s, s);
-      }
-      ctx.globalAlpha = dead ? 0.25 : 1;
-      const bx = x - h - 2;
-      const by = y - h + 2;
-      if (icon) {
-        ctx.drawImage(icon, bx - 8, by - 8, 16, 16);
-      } else {
-        // Chưa có icon hệ của PixelLab: dùng họa tiết hệ trên nền tròn tối.
-        ctx.fillStyle = "rgba(20, 17, 15, 0.8)";
-        ctx.beginPath();
-        ctx.arc(bx, by, 8, 0, Math.PI * 2);
-        ctx.fill();
-        drawMotif(ctx, u.element, bx, by, 6.5, 0, dead ? 0.25 : 1);
-        ctx.globalAlpha = dead ? 0.25 : 1;
+        if (flash && !dead) ctx.globalAlpha = 0.5;
+        ctx.drawImage(sprite!, x - s / 2, y + h - s, s, s);
       }
     } else {
       ctx.beginPath();
@@ -301,10 +359,25 @@ export class BattleScene implements Scene {
     ctx.globalAlpha = 1;
     if (dead) return;
 
-    // Thanh máu và mana phía trên đầu.
+    // Thanh máu và mana phía trên đầu; có hình người thì dấu hệ đứng ngay trước hai thanh, cả cụm canh giữa.
     const bw = SIZE + 4;
-    const bx = x - bw / 2;
-    const by = (sprite ? y + h - SIZE * 1.4 : y - h) - 12;
+    const badge = figure ? BADGE + 2 : 0;
+    const bx = x - (bw + badge) / 2 + badge;
+    const by = (figure ? y + h - SIZE * 1.4 : y - h) - 12;
+    if (figure) {
+      const cx = bx - 2 - BADGE / 2;
+      const cy = by + 3.5;
+      if (icon) {
+        ctx.drawImage(icon, cx - BADGE / 2, cy - BADGE / 2, BADGE, BADGE);
+      } else {
+        // Chưa có icon hệ của PixelLab: họa tiết hệ trên nền tròn tối.
+        ctx.fillStyle = "rgba(20, 17, 15, 0.8)";
+        ctx.beginPath();
+        ctx.arc(cx, cy, BADGE / 2 + 1, 0, Math.PI * 2);
+        ctx.fill();
+        drawMotif(ctx, u.element, cx, cy, BADGE / 2, 0, 1);
+      }
+    }
     ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
     ctx.fillRect(bx - 1, by - 1, bw + 2, 9);
     ctx.fillStyle = HP;
