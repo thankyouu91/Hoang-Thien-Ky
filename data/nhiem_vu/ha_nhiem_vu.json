@@ -1,0 +1,1251 @@
+{
+  "version": 1,
+  "plane": "ha",
+  "scope": "prototype",
+  "status": "de_xuat",
+  "source": "GDD tab Nhiệm vụ và cốt truyện (2026-11-02); mã điểm theo data/maps định dạng bản 1 (commit 6c4f020)",
+  "reset": {
+    "dailyHour": 5,
+    "weeklyDay": "mon",
+    "carryDays": 2
+  },
+  "exp": {
+    "q": {
+      "base": 10,
+      "perLevel": 2
+    },
+    "curve": {
+      "dailyQ": 320,
+      "daysBasePermille": 400,
+      "daysPerLevelPermille": 2,
+      "earlyFloorPermille": 300,
+      "earlyUntilLevel": 60,
+      "roundTo": 10
+    },
+    "questBandUntilLevel": 60,
+    "sourcesQ": {
+      "chinh": [
+        150,
+        40
+      ],
+      "chinh_cuoi_chuong": [
+        300,
+        80
+      ],
+      "cao_thi": [
+        40,
+        3
+      ],
+      "tong_vu": [
+        40,
+        10
+      ],
+      "vung_truyen_buoc": [
+        100,
+        20
+      ],
+      "ky_ngo": [
+        40,
+        2
+      ],
+      "nhat_khoa": [
+        100,
+        5
+      ],
+      "bi_canh": [
+        24,
+        24
+      ],
+      "chien_tranh": [
+        45,
+        45
+      ],
+      "boss_lien_minh": [
+        22,
+        22
+      ],
+      "ho_phap": [
+        6,
+        6
+      ],
+      "be_quan": [
+        16,
+        16
+      ]
+    },
+    "baiQuai": {
+      "openLevel": 60,
+      "tranMoiGio": 18,
+      "qMoiTranPermille": 1000,
+      "gioToiDaMoiNgay": 8,
+      "thapHonMoiCapPermille": -30,
+      "thapNhatPermille": 100,
+      "caoHonMoiCapPermille": 20,
+      "caoNhatPermille": 200,
+      "dungHePermille": 200,
+      "biKhacPermille": -200,
+      "partyMoiNguoiPermille": 50,
+      "partyToiDaPermille": 250,
+      "partyChenhCapToiDa": 10,
+      "tranCongThemPermille": 400,
+      "thuaRoiDo": false,
+      "dangLuyenBiDoSat": false,
+      "canBangVung": false
+    }
+  },
+  "chinhLinhThachTheoChuong": [
+    50,
+    100,
+    300,
+    600,
+    1000,
+    1500
+  ],
+  "tamDao": [
+    {
+      "id": "tam_dao.1",
+      "lesson": "ngu_hanh_khac",
+      "enemy": {
+        "count": 5,
+        "kind": "di_thu",
+        "element": "moc",
+        "skill": "can_don",
+        "statPermille": 1150
+      },
+      "loan": [
+        {
+          "element": "kim",
+          "skill": "can_don"
+        },
+        {
+          "element": "thuy",
+          "skill": "can_don"
+        },
+        {
+          "element": "hoa",
+          "skill": "can_don"
+        },
+        {
+          "element": "tho",
+          "skill": "can_don"
+        }
+      ],
+      "expect": [
+        "kim"
+      ],
+      "reward": {
+        "items": [
+          {
+            "item": "tan_quyen",
+            "grade": "pham",
+            "element": "kim",
+            "bound": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "tam_dao.2",
+      "lesson": "bien_di_theo_goc",
+      "enemy": {
+        "count": 5,
+        "kind": "tu_si",
+        "element": "tho",
+        "skill": "can_don",
+        "statPermille": 1150
+      },
+      "loan": [
+        {
+          "element": "loi",
+          "skill": "can_don"
+        },
+        {
+          "element": "phong",
+          "skill": "can_don"
+        },
+        {
+          "element": "cuc_han",
+          "skill": "can_don"
+        },
+        {
+          "element": "quang",
+          "skill": "can_don"
+        }
+      ],
+      "expect": [
+        "phong"
+      ],
+      "reward": {
+        "items": [
+          {
+            "item": "tan_quyen",
+            "grade": "pham",
+            "element": "phong",
+            "bound": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "tam_dao.3",
+      "lesson": "he_so_ghep",
+      "enemy": {
+        "count": 1,
+        "kind": "hinh_nhan",
+        "element": "$home"
+      },
+      "goal": {
+        "kind": "damage_threshold",
+        "seconds": 30,
+        "minFactorPermille": 1100
+      },
+      "loanCombine": {
+        "main": {
+          "element": "$home",
+          "skill": "tam_xa"
+        },
+        "subs": [
+          "thuan",
+          "tuong_sinh",
+          "tuong_khac"
+        ]
+      },
+      "expect": [
+        "thuan",
+        "tuong_sinh"
+      ],
+      "reward": {
+        "items": [
+          {
+            "item": "tan_quyen",
+            "grade": "pham",
+            "element": "$home",
+            "bound": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "tam_dao.4",
+      "lesson": "khong_che_cat_van_cong",
+      "enemy": {
+        "count": 5,
+        "kind": "tu_si",
+        "element": "tho",
+        "lineup": [
+          {
+            "skill": "dien_rong",
+            "count": 3
+          },
+          {
+            "skill": "can_don",
+            "count": 2,
+            "role": "ho_ve"
+          }
+        ],
+        "statPermille": 1150
+      },
+      "loan": [
+        {
+          "element": "$home",
+          "skill": "khong_che"
+        },
+        {
+          "element": "$home",
+          "skill": "than_phap"
+        },
+        {
+          "element": "$home",
+          "skill": "can_quet"
+        },
+        {
+          "element": "$home",
+          "skill": "hoi_phuc"
+        }
+      ],
+      "expect": [
+        "khong_che"
+      ],
+      "reward": {
+        "items": [
+          {
+            "item": "tan_quyen",
+            "grade": "pham",
+            "element": "$home",
+            "skill": "khong_che",
+            "bound": true
+          }
+        ]
+      }
+    }
+  ],
+  "quests": [
+    {
+      "id": "chinh.0.1",
+      "kind": "chinh",
+      "chapter": 0,
+      "name": "Linh mạch phục tô",
+      "minLevel": 1,
+      "steps": [
+        {
+          "do": "chon_vung"
+        },
+        {
+          "do": "den",
+          "target": {
+            "type": "thanh_chu",
+            "region": "home"
+          }
+        }
+      ],
+      "reward": {
+        "exp": 200,
+        "linhThach": 50
+      }
+    },
+    {
+      "id": "chinh.0.2",
+      "kind": "chinh",
+      "chapter": 0,
+      "name": "Bia Tầm Đạo",
+      "minLevel": 1,
+      "requires": [
+        "chinh.0.1"
+      ],
+      "steps": [
+        {
+          "do": "gieo_que"
+        }
+      ],
+      "reward": {
+        "exp": 250,
+        "linhThach": 50
+      }
+    },
+    {
+      "id": "chinh.0.3",
+      "kind": "chinh",
+      "chapter": 0,
+      "name": "Chỗ dựa",
+      "minLevel": 1,
+      "requires": [
+        "chinh.0.2"
+      ],
+      "steps": [
+        {
+          "do": "vao_tong",
+          "prototype": "lap_tong"
+        },
+        {
+          "do": "den",
+          "target": {
+            "type": "son_mon",
+            "owner": "self"
+          }
+        }
+      ],
+      "reward": {
+        "exp": 300,
+        "linhThach": 50
+      }
+    },
+    {
+      "id": "chinh.0.4",
+      "kind": "chinh",
+      "chapter": 0,
+      "name": "Hai mảnh một quyển",
+      "minLevel": 1,
+      "requires": [
+        "chinh.0.3"
+      ],
+      "steps": [
+        {
+          "do": "ghep",
+          "use": "qua_tan_thu",
+          "result": "cong_phap_tan_thu"
+        }
+      ],
+      "reward": {
+        "exp": 350,
+        "linhThach": 50
+      }
+    },
+    {
+      "id": "chinh.0.5",
+      "kind": "chinh",
+      "chapter": 0,
+      "name": "Thử chiêu",
+      "minLevel": 1,
+      "requires": [
+        "chinh.0.4"
+      ],
+      "steps": [
+        {
+          "do": "thang",
+          "target": {
+            "type": "any",
+            "region": "home",
+            "from": "son_mon",
+            "zone": "an_toan",
+            "pick": "nearest"
+          },
+          "enemy": {
+            "count": 3,
+            "kind": "di_thu",
+            "element": "$beatenByHome",
+            "statPermille": 800
+          }
+        }
+      ],
+      "reward": {
+        "exp": 400,
+        "linhThach": 50
+      }
+    },
+    {
+      "id": "chinh.0.6",
+      "kind": "chinh",
+      "chapter": 0,
+      "name": "Mỏ đầu tiên",
+      "minLevel": 1,
+      "requires": [
+        "chinh.0.5"
+      ],
+      "steps": [
+        {
+          "do": "chiem",
+          "target": {
+            "type": "mo_linh_thach",
+            "region": "home",
+            "owner": "npc",
+            "inRange": "truyen_tong",
+            "pick": "nearest"
+          },
+          "fallback": {
+            "when": "het_mo_npc",
+            "do": "thang",
+            "target": {
+              "kind": "mach_tam",
+              "region": "home",
+              "inRange": "truyen_tong"
+            },
+            "enemy": {
+              "count": 3,
+              "kind": "di_thu",
+              "statPermille": 900
+            }
+          },
+          "party": "cung_tong",
+          "then": {
+            "do": "thu_mo"
+          }
+        }
+      ],
+      "reward": {
+        "exp": 450,
+        "linhThach": 550
+      }
+    },
+    {
+      "id": "chinh.0.7",
+      "kind": "chinh",
+      "chapter": 0,
+      "name": "Giờ mở cửa",
+      "minLevel": 1,
+      "requires": [
+        "chinh.0.6"
+      ],
+      "steps": [
+        {
+          "do": "dat_nhac",
+          "what": "bi_canh"
+        }
+      ],
+      "reward": {
+        "exp": 550,
+        "linhThach": 50,
+        "items": [
+          {
+            "item": "dan_hoi_mau",
+            "count": 5
+          },
+          {
+            "item": "phu_don_tho",
+            "count": 2
+          },
+          {
+            "item": "phu_ho_than",
+            "count": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "chinh.1.1",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Ải thứ nhất",
+      "minLevel": 5,
+      "requires": [
+        "chinh.0.7"
+      ],
+      "steps": [
+        {
+          "do": "tam_dao",
+          "trial": "tam_dao.1",
+          "target": {
+            "type": "thanh_chu",
+            "region": "home"
+          }
+        }
+      ],
+      "reward": {
+        "expQ": "chinh"
+      }
+    },
+    {
+      "id": "chinh.1.2",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Đường ra hang",
+      "minLevel": 8,
+      "requires": [
+        "chinh.1.1"
+      ],
+      "steps": [
+        {
+          "do": "thang",
+          "target": {
+            "type": "hang_di_thu",
+            "region": "home",
+            "from": "thanh_chu",
+            "maxStages": 2,
+            "pick": "nearest"
+          },
+          "enemy": {
+            "count": 1,
+            "kind": "chu_hang",
+            "element": "$home",
+            "statPermille": 1000
+          }
+        }
+      ],
+      "reward": {
+        "expQ": "chinh"
+      }
+    },
+    {
+      "id": "chinh.1.3",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Thú đầu tiên",
+      "minLevel": 10,
+      "requires": [
+        "chinh.1.2"
+      ],
+      "steps": [
+        {
+          "do": "thuan_phuc",
+          "target": {
+            "sameAs": "chinh.1.2#0"
+          },
+          "beast": {
+            "grade": "pham",
+            "element": "$home"
+          },
+          "guaranteed": true
+        }
+      ],
+      "reward": {
+        "expQ": "chinh",
+        "items": [
+          {
+            "item": "thu",
+            "grade": "pham",
+            "element": "$home",
+            "from": "step"
+          }
+        ]
+      }
+    },
+    {
+      "id": "chinh.1.4",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Ải thứ hai",
+      "minLevel": 15,
+      "requires": [
+        "chinh.1.3"
+      ],
+      "steps": [
+        {
+          "do": "tam_dao",
+          "trial": "tam_dao.2",
+          "target": {
+            "type": "thanh_chu",
+            "region": "home"
+          }
+        }
+      ],
+      "reward": {
+        "expQ": "chinh"
+      }
+    },
+    {
+      "id": "chinh.1.5",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Mảnh của ai",
+      "minLevel": 20,
+      "requires": [
+        "chinh.1.4"
+      ],
+      "steps": [
+        {
+          "do": "nop",
+          "item": "tan_quyen",
+          "count": 2,
+          "to": "tang_kinh_cac",
+          "target": {
+            "type": "son_mon",
+            "owner": "self"
+          }
+        }
+      ],
+      "reward": {
+        "expQ": "chinh",
+        "unlock": [
+          "vung_truyen.$home",
+          "an.$home"
+        ]
+      }
+    },
+    {
+      "id": "chinh.1.6",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Cửa mở lúc trưa",
+      "minLevel": 25,
+      "requires": [
+        "chinh.1.5"
+      ],
+      "steps": [
+        {
+          "do": "vao_bi_canh",
+          "window": true,
+          "target": {
+            "type": "cua_bi_canh",
+            "region": "home",
+            "owner": {
+              "noiMon": [
+                "self",
+                "ally"
+              ],
+              "ngoaiMon": [
+                "other"
+              ]
+            },
+            "pick": "nearest",
+            "tier": "thap",
+            "danger": {
+              "relative": true,
+              "max": 10
+            }
+          }
+        }
+      ],
+      "reward": {
+        "expQ": "chinh"
+      }
+    },
+    {
+      "id": "chinh.1.7",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Ải thứ ba",
+      "minLevel": 30,
+      "requires": [
+        "chinh.1.6"
+      ],
+      "steps": [
+        {
+          "do": "tam_dao",
+          "trial": "tam_dao.3",
+          "target": {
+            "type": "thanh_chu",
+            "region": "home"
+          }
+        },
+        {
+          "do": "ghep",
+          "relation": [
+            "thuan",
+            "tuong_sinh"
+          ],
+          "allowPractice": true
+        }
+      ],
+      "reward": {
+        "expQ": "chinh"
+      }
+    },
+    {
+      "id": "chinh.1.8",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Tuần tra áo trắng",
+      "minLevel": 35,
+      "requires": [
+        "chinh.1.7"
+      ],
+      "steps": [
+        {
+          "do": "tu_luyen",
+          "turns": 1,
+          "target": {
+            "type": "linh_tuyen",
+            "region": "home",
+            "owner": [
+              "self",
+              "ally"
+            ],
+            "pick": "nearest",
+            "fallbackOwner": "none"
+          }
+        },
+        {
+          "do": "chon",
+          "options": [
+            {
+              "id": "nop",
+              "cost": [
+                {
+                  "item": "tan_quyen",
+                  "count": 1
+                }
+              ],
+              "reward": {
+                "danhVong": {
+                  "chinh_dao_minh": 200
+                }
+              }
+            },
+            {
+              "id": "tu_choi"
+            }
+          ]
+        }
+      ],
+      "reward": {
+        "expQ": "chinh"
+      }
+    },
+    {
+      "id": "chinh.1.9",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Ải thứ tư",
+      "minLevel": 40,
+      "requires": [
+        "chinh.1.8"
+      ],
+      "steps": [
+        {
+          "do": "tam_dao",
+          "trial": "tam_dao.4",
+          "target": {
+            "type": "thanh_chu",
+            "region": "home"
+          }
+        }
+      ],
+      "reward": {
+        "expQ": "chinh"
+      }
+    },
+    {
+      "id": "chinh.1.10",
+      "kind": "chinh",
+      "chapter": 1,
+      "name": "Trúc Cơ kiếp",
+      "minLevel": 50,
+      "requires": [
+        "chinh.1.9"
+      ],
+      "steps": [
+        {
+          "do": "dot_pha",
+          "fromLevel": 50,
+          "hoPhap": "nguoi_hoac_npc",
+          "target": {
+            "type": [
+              "son_mon",
+              "linh_tuyen"
+            ],
+            "owner": "self"
+          }
+        }
+      ],
+      "reward": {
+        "expQ": "chinh_cuoi_chuong",
+        "items": [
+          {
+            "item": "tan_quyen",
+            "grade": "hoang",
+            "choose": [
+              "element_of_home_drops"
+            ],
+            "bound": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "vung.loi_dinh_coc",
+      "kind": "vung_truyen",
+      "region": "loi_dinh_coc",
+      "name": "Nhịp sấm Chấn Lôi",
+      "minLevel": 20,
+      "steps": [
+        {
+          "do": "den",
+          "target": {
+            "type": "thanh_chu",
+            "region": "loi_dinh_coc"
+          },
+          "npc": "ba_thinh_loi",
+          "reward": {
+            "expQ": "vung_truyen_buoc",
+            "linhThach": 200
+          }
+        },
+        {
+          "do": "dung",
+          "minutes": 10,
+          "target": {
+            "type": "linh_tuyen",
+            "region": "loi_dinh_coc",
+            "from": "thanh_chu",
+            "pick": "nearest"
+          },
+          "reward": {
+            "expQ": "vung_truyen_buoc",
+            "linhThach": 200
+          }
+        },
+        {
+          "do": "thang",
+          "target": {
+            "type": "hang_di_thu",
+            "region": "loi_dinh_coc",
+            "from": "thanh_chu",
+            "maxStages": 3,
+            "pick": "nearest"
+          },
+          "enemy": {
+            "count": 1,
+            "kind": "di_thu",
+            "species": "thiem_dien_bao",
+            "element": "loi",
+            "statPermille": 1050
+          },
+          "allowTame": true,
+          "reward": {
+            "expQ": "vung_truyen_buoc",
+            "linhThach": 200
+          }
+        },
+        {
+          "do": "thang",
+          "party": "co_loi",
+          "target": {
+            "type": "deo",
+            "region": "loi_dinh_coc",
+            "from": "thanh_chu",
+            "pick": "nearest"
+          },
+          "enemy": {
+            "count": 5,
+            "kind": "huyet_sat",
+            "statPermille": 1000
+          },
+          "reward": {
+            "expQ": "vung_truyen_buoc",
+            "linhThach": 200
+          }
+        },
+        {
+          "do": "vao_bi_canh",
+          "window": true,
+          "target": {
+            "type": "cua_bi_canh",
+            "region": "loi_dinh_coc",
+            "from": "thanh_chu",
+            "pick": "nearest",
+            "tier": "thap"
+          },
+          "drop": {
+            "item": "chan_loi_lenh",
+            "guaranteed": true
+          },
+          "reward": {
+            "expQ": "vung_truyen_buoc",
+            "linhThach": 200
+          }
+        },
+        {
+          "do": "thang",
+          "window": false,
+          "target": {
+            "sameAs": "vung.loi_dinh_coc#4"
+          },
+          "enemy": {
+            "count": 5,
+            "kind": "tan_hon",
+            "element": "loi",
+            "statPermille": 1150
+          },
+          "expect": [
+            "hoa",
+            "cuc_duong",
+            "am_lanh"
+          ],
+          "reward": {
+            "expQ": "vung_truyen_buoc",
+            "linhThach": 200,
+            "items": [
+              {
+                "item": "tan_quyen",
+                "grade": "hoang",
+                "element": "loi",
+                "bound": true,
+                "chooseIfHome": [
+                  "skill"
+                ]
+              }
+            ],
+            "title": "truyen_nhan_chan_loi_tong"
+          }
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "cao_thi": [
+      {
+        "id": "cao_thi.tru_hai",
+        "minLevel": 10,
+        "steps": [
+          {
+            "do": "thang",
+            "count": 3,
+            "target": {
+              "type": "hang_di_thu",
+              "region": "home",
+              "danger": {
+                "relative": true,
+                "min": -10,
+                "max": 10
+              },
+              "pick": "nearest"
+            }
+          }
+        ]
+      },
+      {
+        "id": "cao_thi.ho_tong",
+        "minLevel": 10,
+        "steps": [
+          {
+            "do": "ho_tong",
+            "stages": [
+              2,
+              3
+            ],
+            "from": {
+              "type": "thanh_chu",
+              "region": "home"
+            },
+            "to": {
+              "type": [
+                "deo",
+                "ben_do"
+              ],
+              "pick": "nearest"
+            }
+          }
+        ]
+      },
+      {
+        "id": "cao_thi.dep_cuop",
+        "minLevel": 10,
+        "steps": [
+          {
+            "do": "thang",
+            "target": {
+              "edge": true,
+              "region": "home",
+              "danger": {
+                "relative": true,
+                "min": -10,
+                "max": 10
+              },
+              "pick": "nearest"
+            },
+            "enemy": {
+              "count": 5,
+              "kind": "huyet_sat"
+            }
+          }
+        ]
+      },
+      {
+        "id": "cao_thi.thu_duoc",
+        "minLevel": 10,
+        "steps": [
+          {
+            "do": "nop",
+            "item": "duoc_lieu",
+            "count": 10,
+            "to": "thanh_chu"
+          }
+        ]
+      }
+    ],
+    "caoThiReward": {
+      "expQ": "cao_thi",
+      "linhThachBase": 40,
+      "linhThachPerLevelDiv": 5,
+      "items": [
+        {
+          "item": "dan_hoi_mau",
+          "count": 1
+        },
+        {
+          "item": "phu_ho_than",
+          "count": 1,
+          "chancePermille": 100
+        }
+      ],
+      "chinhBonusPermille": 100,
+      "pheItBonusPermille": [
+        150,
+        300
+      ],
+      "perDay": 5,
+      "pheItBonusNote": "tăng theo mức chênh, mục 10"
+    },
+    "tong_vu": [
+      {
+        "id": "tong_vu.canh_mo",
+        "steps": [
+          {
+            "do": "tran_giu",
+            "minutes": 120,
+            "target": {
+              "type": [
+                "mo_linh_thach",
+                "mo_quang",
+                "mo_duoc"
+              ],
+              "owner": "self",
+              "pick": "farthest"
+            }
+          }
+        ]
+      },
+      {
+        "id": "tong_vu.nop_quyen",
+        "steps": [
+          {
+            "do": "nop",
+            "item": "tan_quyen",
+            "count": 1,
+            "to": "tang_kinh_cac"
+          }
+        ]
+      },
+      {
+        "id": "tong_vu.tuan_tra",
+        "steps": [
+          {
+            "do": "di_qua",
+            "count": 3,
+            "target": {
+              "type": "any",
+              "owner": "self"
+            }
+          },
+          {
+            "do": "thang",
+            "enemy": {
+              "count": 3,
+              "kind": "di_thu"
+            }
+          }
+        ]
+      },
+      {
+        "id": "tong_vu.ho_phap",
+        "steps": [
+          {
+            "do": "ho_phap",
+            "count": 1
+          }
+        ]
+      }
+    ],
+    "tongVuReward": {
+      "expQ": "tong_vu",
+      "congHien": 20,
+      "xpTongMon": 2500,
+      "perDay": 3,
+      "party": 10
+    },
+    "nhat_khoa": {
+      "need": 4,
+      "reward": {
+        "expQ": "nhat_khoa",
+        "diemThienDao": 100,
+        "congHien": 30
+      },
+      "items": [
+        {
+          "do": "thu_mo"
+        },
+        {
+          "do": "tong_vu",
+          "count": 3
+        },
+        {
+          "do": "cao_thi",
+          "count": 2
+        },
+        {
+          "do": "vao_bi_canh"
+        },
+        {
+          "do": "ghep_hoac_nang_tang",
+          "allowPractice": true
+        },
+        {
+          "do": "bai_quai_hoac_hanh_trinh",
+          "baiQuaiMinutes": 60
+        }
+      ]
+    },
+    "ky_ngo": [
+      {
+        "id": "ky_ngo.tu_si_hap_hoi",
+        "trigger": "chang",
+        "expiresHours": 24,
+        "steps": [
+          {
+            "do": "ho_tong",
+            "to": {
+              "type": "thanh_chu",
+              "region": "home"
+            }
+          }
+        ],
+        "reward": {
+          "expQ": "ky_ngo",
+          "items": [
+            {
+              "item": "dan_phuong",
+              "count": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "ky_ngo.di_thu_mang_trung",
+        "trigger": "hang_di_thu",
+        "expiresHours": 24,
+        "steps": [
+          {
+            "do": "thang",
+            "enemy": {
+              "count": 1,
+              "kind": "chu_hang"
+            }
+          }
+        ],
+        "reward": {
+          "expQ": "ky_ngo",
+          "items": [
+            {
+              "item": "trung_thu",
+              "grade": "pham",
+              "count": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "ky_ngo.dong_phu_nho",
+        "trigger": "chang",
+        "expiresHours": 24,
+        "steps": [
+          {
+            "do": "thang",
+            "enemy": {
+              "count": 3,
+              "kind": "tan_hon"
+            }
+          }
+        ],
+        "reward": {
+          "expQ": "ky_ngo",
+          "items": [
+            {
+              "item": "tan_quyen",
+              "gradeTable": {
+                "pham": 700,
+                "hoang": 300
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "kyNgoPerDay": 2
+  },
+  "hidden": [
+    {
+      "id": "an.loi_dinh_coc.1",
+      "region": "loi_dinh_coc",
+      "name": "Năm tia sét liền",
+      "condition": {
+        "battleEvent": "crit_streak",
+        "value": 5
+      },
+      "reward": {
+        "title": "loi_tam"
+      }
+    },
+    {
+      "id": "an.loi_dinh_coc.2",
+      "region": "loi_dinh_coc",
+      "name": "Đột phá dưới sấm",
+      "condition": {
+        "breakthroughInside": {
+          "type": "cua_bi_canh",
+          "region": "loi_dinh_coc"
+        }
+      },
+      "reward": {
+        "title": "nghich_loi",
+        "cosmetic": "hao_quang_loi"
+      }
+    }
+  ],
+  "rules": {
+    "instanceFallback": true,
+    "practiceCombineCounts": true,
+    "homeRegionStoryFirstSectOnly": true,
+    "tamDaoLoanPick": 1,
+    "tamDaoEnemyExclude": [],
+    "khacChe": "muc 8, gom vong thien dia di he hoa > am_lanh > kim > quang > hoa (de xuat)"
+  }
+}
