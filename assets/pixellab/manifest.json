@@ -229,6 +229,404 @@
       },
       "created": "2026-11-02",
       "pixellab_id": "fad7de81-6af0-4fbd-b1c2-c12ca8bbbbc0"
+    },
+    {
+      "file": "tu_si/tu_the.png",
+      "description": "Tu sĩ Tu thể (tài năng Tu thể, GDD mục 6): võ tăng luyện thể cởi trần, vai rộng, đai đỏ son, hộ uyển sắt, đầu cạo búi tó. Người dùng duyệt 2026-11-02 làm mẫu phong cách cho mọi tu sĩ. Lưu hướng south-east (chéo, giữ dáng vai rộng ở cỡ nhỏ); đội bên phải dùng ảnh lật ngang. Nhân vật có đủ 8 hướng trên PixelLab, chưa có hoạt ảnh.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "muscular xianxia body cultivator, martial monk with bare chest and bronze tanned skin, very broad shoulders and thick arms, crimson cloth sash belt, loose dark brown trousers tied at the ankles, iron bracers on both forearms, shaved head with a small black topknot, clenched fists, standing in a wide sturdy stance, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "mannequin",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "south-east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "a873b9b2-7b72-4f87-a990-26f52d9384ef"
+    },
+    {
+      "file": "he/kim.png",
+      "description": "Icon hệ Kim: hình tròn kim loại trắng bạc (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a single polished silver-white metal circle disc, bright silver and white, simple bold round shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 1
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "6f064de8-1ec6-48f6-9f3d-2cfb0304a374"
+    },
+    {
+      "file": "he/moc.png",
+      "description": "Icon hệ Mộc: chiếc lá xanh lục (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a single bright green leaf, simple bold leaf shape centered with a midrib, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 1
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "1268e71e-0a43-42e6-aa71-31c154145eab"
+    },
+    {
+      "file": "he/thuy.png",
+      "description": "Icon hệ Thủy: ba lớp gợn sóng xanh lam (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of three stacked deep blue water ripple waves, dark navy blue curling wave lines, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 1
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "47cdbc7c-379c-41a0-b984-c688f6a2ad64"
+    },
+    {
+      "file": "he/hoa.png",
+      "description": "Icon hệ Hỏa: ngọn lửa đỏ son (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a single vermilion red flame, cinnabar red fire with a lighter core, simple bold flame shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 1
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "90785b69-eafa-4b21-8eac-a33f9564c65e"
+    },
+    {
+      "file": "he/tho.png",
+      "description": "Icon hệ Thổ: ô vuông đất vàng nứt (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a flat square earth tile seen straight on, ochre yellow earth color with a darker border and small cracks, a flat square not a cube, centered",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 7
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "88c720f2-658e-4b67-9bf8-e920a47ee863"
+    },
+    {
+      "file": "he/loi.png",
+      "description": "Icon hệ Lôi: tia sét tím điện (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of one thick bold zigzag lightning bolt, bright electric purple violet with white highlights, heavy black outline, centered, fills the icon",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 7
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "859bbd06-c63e-4d45-93f4-e79cb0dbcba7"
+    },
+    {
+      "file": "he/phong.png",
+      "description": "Icon hệ Phong: vòng xoáy xanh ngọc nhạt (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a single spiral wind swirl vortex, pale jade turquoise mint green, simple bold spiral shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 1
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "d031188e-3192-4ce0-b33b-cfa023e0b632"
+    },
+    {
+      "file": "he/quang.png",
+      "description": "Icon hệ Quang: tia sáng bốn cánh vàng kim (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a four-pointed sparkle star of light, long thin golden beams in a cross shape with a bright white center, glowing gold, no circle disc, centered",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 7
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "c9d49825-fce5-41dc-8559-eac97b16b106"
+    },
+    {
+      "file": "he/am_lanh.png",
+      "description": "Icon hệ Âm lãnh: ngọn lửa ma xanh xám (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a ghost fire: a wavy flickering flame with a little ghost-like curling tail, cold blue-grey slate color with pale icy cyan core, flame shape not a droplet, centered",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 7
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "ee9e9a38-ad9a-4648-8b19-777bd3e52872"
+    },
+    {
+      "file": "he/cuc_duong.png",
+      "description": "Icon hệ Cực dương: mặt trời cam (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a blazing orange sun, round orange disc with short triangular rays all around, simple bold sun shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 1
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "da9f4811-0775-4fe1-9daf-8e0b5ca904d2"
+    },
+    {
+      "file": "he/cuc_am.png",
+      "description": "Icon hệ Cực âm: trăng khuyết tím than (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a thick bold crescent moon, very dark charcoal purple and deep indigo violet with a faint lighter rim, heavy black outline, centered, fills the icon",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 7
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "46958418-17ef-48f9-96af-ccf7dd55ea99"
+    },
+    {
+      "file": "he/cuc_han.png",
+      "description": "Icon hệ Cực hàn: bông tuyết xanh băng (GDD mục 15), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a single six-pointed snowflake, icy light blue and white crystal, simple bold snowflake shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 1
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "290f2b15-7d37-4310-91cf-e5b71d14e896"
+    },
+    {
+      "file": "chieu/can_don.png",
+      "description": "Icon loại chiêu Cận chiến đơn: một thanh kiếm thẳng (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a single straight Chinese jian sword pointing diagonally up, steel blade with a bronze guard, ivory and bronze colors, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 3
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "bec875e6-a6de-403b-acba-b90dd3c62cdb"
+    },
+    {
+      "file": "chieu/can_quet.png",
+      "description": "Icon loại chiêu Cận chiến quét: đao cong với vệt chém hình trăng lưỡi liềm (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a wide white crescent slash arc sweeping in a big half circle, with a small curved saber at the end of the arc, ivory and bronze colors, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 11
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "c1efb3df-44a2-4234-b1e0-6cdd9edf15d6"
+    },
+    {
+      "file": "chieu/tam_xa.png",
+      "description": "Icon loại chiêu Tầm xa: mũi tên bay chéo (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a single arrow flying diagonally to the upper right with three speed lines behind it, ivory and bronze colors, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 3
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "6e08a973-5932-4276-823d-beb9d565311e"
+    },
+    {
+      "file": "chieu/dien_rong.png",
+      "description": "Icon loại chiêu Diện rộng: vụ nổ tỏa vòng sóng (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a round explosion burst with a shockwave ring spreading outward, ivory and bronze colors with a white hot center, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 3
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "bb694eab-02e5-4a9d-ae40-e2faeb91fbb6"
+    },
+    {
+      "file": "chieu/ho_the.png",
+      "description": "Icon loại chiêu Hộ thể: khiên tròn có hào quang (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a round shield with a glowing protective aura around it, ivory and bronze colors, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 3
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "607cfde0-46aa-4447-8bd6-4dbe1e711e89"
+    },
+    {
+      "file": "chieu/bua_chu.png",
+      "description": "Icon loại chiêu Bùa chú: lá bùa giấy vàng chữ đỏ (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a vertical yellow paper talisman charm with red ink glyph scribbles on it, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 3
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "9d1cd15a-dbe8-415e-affa-596cd04e6c30"
+    },
+    {
+      "file": "chieu/tran_phap.png",
+      "description": "Icon loại chiêu Trận pháp: bát quái trận bát giác (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of an octagonal bagua formation array: a glowing octagon ring with eight trigram line marks around a small yin-yang center, ivory and bronze colors, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 3
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "b344ce7d-afbc-4fb3-9fc3-ff2c50cb804e"
+    },
+    {
+      "file": "chieu/hoi_phuc.png",
+      "description": "Icon loại chiêu Hồi phục: trái tim hồng có dấu cộng (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a glowing heart with a small white plus sign in its center, warm pink and ivory colors, healing sparkles, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 11
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "f873364d-c66e-405e-89d3-99c8a06842a1"
+    },
+    {
+      "file": "chieu/khong_che.png",
+      "description": "Icon loại chiêu Khống chế: vòng xích sắt (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of heavy iron chains wrapped in a closed loop with a shackle, ivory and bronze colors, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 3
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "f9f871be-63e3-4f6d-8460-0987ce8901a4"
+    },
+    {
+      "file": "chieu/than_phap.png",
+      "description": "Icon loại chiêu Thân pháp: chiếc ủng lướt nhanh (icon yếu, nên làm lại) (GDD mục 8), 32 px nền trong.",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a dashing footstep: a single boot print with three swift wind speed streaks trailing behind it to the left, ivory and bronze colors, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 3
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "32f8d901-5e53-4e3c-bb17-ce81b4b83b15"
     }
   ]
 }
