@@ -3,7 +3,7 @@
   "plane": "ha",
   "scope": "prototype",
   "status": "de_xuat",
-  "source": "GDD tab Nhiệm vụ và cốt truyện (2026-11-02); mã điểm theo data/maps định dạng bản 1 (commit 6c4f020)",
+  "source": "GDD tab Nhiệm vụ và cốt truyện (2026-11-02); mã điểm theo data/maps định dạng bản 1 (commit 34d9da0, cấp nguy hiểm theo quãng đường)",
   "reset": {
     "dailyHour": 5,
     "weeklyDay": "mon",
@@ -649,7 +649,7 @@
             "tier": "thap",
             "danger": {
               "relative": true,
-              "max": 10
+              "max": 20
             }
           }
         }
@@ -710,7 +710,11 @@
               "ally"
             ],
             "pick": "nearest",
-            "fallbackOwner": "none"
+            "fallbackOwner": "none",
+            "danger": {
+              "relative": true,
+              "max": 20
+            }
           }
         },
         {
@@ -823,10 +827,17 @@
           "do": "dung",
           "minutes": 10,
           "target": {
-            "type": "linh_tuyen",
+            "type": [
+              "linh_tuyen",
+              "mo_linh_thach"
+            ],
             "region": "loi_dinh_coc",
             "from": "thanh_chu",
-            "pick": "nearest"
+            "pick": "nearest",
+            "danger": {
+              "relative": true,
+              "max": 20
+            }
           },
           "reward": {
             "expQ": "vung_truyen_buoc",
@@ -1246,6 +1257,7 @@
     "homeRegionStoryFirstSectOnly": true,
     "tamDaoLoanPick": 1,
     "tamDaoEnemyExclude": [],
-    "khacChe": "muc 8, gom vong thien dia di he hoa > am_lanh > kim > quang > hoa (de xuat)"
+    "khacChe": "muc 8, gom vong thien dia di he hoa > am_lanh > kim > quang > hoa (de xuat)",
+    "defaultDangerMaxRelative": 20
   }
 }
