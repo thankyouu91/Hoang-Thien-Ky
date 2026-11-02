@@ -7,6 +7,7 @@ import { between, ReplayIndex, type UnitTimeline } from "../../replay/timeline.t
 import type { ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 import { ReplayControls } from "./controls.ts";
+import { FxLayer, type Point } from "./fx.ts";
 
 const CELL = 64; // đơn vị thế giới mỗi ô sân
 const LANE = 60; // khoảng cách ngang giữa hai người cùng hàng
@@ -15,7 +16,6 @@ const TEAM_RING = ["#e6d8b8", "#b3261e"]; // đội A giấy dó, đội B ấn 
 const HP = "#7bc96f";
 const MANA = "#5aa9e6";
 const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
-const CAST_LIFE = 0.35;
 
 /** Màn xem trận: phát replay, vẽ nhân vật bằng khối màu theo hệ. */
 export class BattleScene implements Scene {
@@ -26,6 +26,7 @@ export class BattleScene implements Scene {
   private controls: ReplayControls;
   private source: ReplaySource;
   private sprites: Sprites;
+  private fx = new FxLayer();
   private index: ReplayIndex | null = null;
   private player: ReplayPlayer | null = null;
   private error = "";
@@ -97,12 +98,28 @@ export class BattleScene implements Scene {
     this.camera.apply(v);
     this.drawField(ctx, index.replay.fieldLength);
 
+    const life = (s: number) => Math.min(2 * tps, s * tps * player.speed);
+    this.fx.prepare({
+      ctx, index, t, life, size: SIZE,
+      at: (id, time = t) => {
+        const ut = index.byId.get(id);
+        return ut ? this.place(ut.pos.moving(time), this.lateral.get(id) ?? 0) : null;
+      },
+      zone: (center, radius) => {
+        const p = this.place(center, 0);
+        const along = (radius / 1000) * CELL;
+        const half = 3.5 * LANE;
+        return this.vertical ? { ...p, rx: half, ry: along } : { ...p, rx: along, ry: half };
+      },
+    });
+    this.fx.ground();
+
     // Ai vừa trúng đòn trong 3 tick gần nhất thì nháy trắng.
     const flashed = new Set(between(index.hits, t - 3, t).filter((h) => h.kind === "hit").map((h) => h.unit));
-    for (const ut of index.units) this.drawUnit(ctx, ut, t, flashed.has(ut.unit.id));
+    const lunges = this.fx.lunges();
+    for (const ut of index.units) this.drawUnit(ctx, ut, t, flashed.has(ut.unit.id), lunges.get(ut.unit.id));
 
-    const life = (s: number) => Math.min(2 * tps, s * tps * player.speed);
-    this.drawCasts(ctx, index, t, life(CAST_LIFE));
+    this.fx.air();
     this.drawNumbers(ctx, index, t, life(NUMBER_LIFE));
     this.drawScore(v, index, t, player);
   }
@@ -180,9 +197,11 @@ export class BattleScene implements Scene {
     ctx.stroke();
   }
 
-  private drawUnit(ctx: CanvasRenderingContext2D, ut: UnitTimeline, t: number, flash: boolean): void {
+  private drawUnit(ctx: CanvasRenderingContext2D, ut: UnitTimeline, t: number, flash: boolean, lunge?: Point): void {
     const u = ut.unit;
-    const { x, y } = this.place(ut.pos.moving(t), this.lateral.get(u.id) ?? 0);
+    const p = this.place(ut.pos.moving(t), this.lateral.get(u.id) ?? 0);
+    const x = p.x + (lunge?.x ?? 0);
+    const y = p.y + (lunge?.y ?? 0);
     const dead = t >= ut.death;
     const style = ELEMENT_STYLE[u.element];
     const h = SIZE / 2;
@@ -241,44 +260,6 @@ export class BattleScene implements Scene {
     ctx.fillRect(bx, by, (bw * ut.hp.step(t)) / u.hpMax, 4);
     ctx.fillStyle = MANA;
     ctx.fillRect(bx, by + 5, (bw * ut.mana.rising(t)) / u.manaMax, 2);
-  }
-
-  /** Đường nối người ra chiêu với mục tiêu, nhạt dần; chiêu diện rộng và trận pháp thêm vòng tròn vùng đánh. */
-  private drawCasts(ctx: CanvasRenderingContext2D, index: ReplayIndex, t: number, life: number): void {
-    ctx.lineCap = "round";
-    for (const c of between(index.casts, t - life, t)) {
-      const src = index.byId.get(c.unit);
-      if (!src) continue;
-      const age = (t - c.tick) / life;
-      const from = this.place(src.pos.moving(t), this.lateral.get(c.unit) ?? 0);
-      ctx.globalAlpha = 0.8 * (1 - age);
-      ctx.strokeStyle = ELEMENT_STYLE[c.element].color;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      for (const id of c.targets) {
-        const dst = index.byId.get(id);
-        if (!dst) continue;
-        const to = this.place(dst.pos.moving(t), this.lateral.get(id) ?? 0);
-        ctx.moveTo(from.x, from.y);
-        ctx.lineTo(to.x, to.y);
-      }
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(from.x, from.y, SIZE / 2 + 4 + age * 16, 0, Math.PI * 2);
-      ctx.stroke();
-      if (c.skill === "dien_rong" || c.skill === "tran_phap") {
-        const first = index.byId.get(c.targets[0]);
-        if (first) {
-          const at = this.place(first.pos.moving(t), 0);
-          ctx.globalAlpha = 0.12 * (1 - age);
-          ctx.fillStyle = ctx.strokeStyle;
-          ctx.beginPath();
-          ctx.arc(at.x, at.y, 2 * CELL, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-    }
-    ctx.globalAlpha = 1;
   }
 
   /** Số sát thương và hồi máu bay lên rồi mờ đi. */

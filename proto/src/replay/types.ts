@@ -36,7 +36,19 @@ export interface ReplayUnit {
 /** Sự kiện xếp theo tick tăng dần. Các trường hp, mana, pos là giá trị sau sự kiện. */
 export type ReplayEvent =
   | { tick: number; kind: "move"; unit: number; pos: number }
-  | { tick: number; kind: "cast"; unit: number; skill: SkillId; element: ElementId; targets: number[] }
+  | {
+      tick: number;
+      kind: "cast";
+      unit: number;
+      skill: SkillId;
+      element: ElementId;
+      targets: number[];
+      /** Chiêu vận công (diện rộng) hay bày trận (trận pháp): tick bắt đầu; `tick` là lúc phát. */
+      start?: number;
+      /** Chiêu có vùng: tâm và bán kính vùng đánh trên trục, milli-ô. */
+      center?: number;
+      radius?: number;
+    }
   | { tick: number; kind: "hit"; unit: number; src: number; amount: number; crit: boolean; hp: number }
   | { tick: number; kind: "heal"; unit: number; src: number; amount: number; hp: number }
   | { tick: number; kind: "mana"; unit: number; mana: number }

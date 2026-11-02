@@ -153,7 +153,11 @@ export function mockReplay(seed = 7): Replay {
       f.mana -= sk.mana;
       f.cd[cast] = sk.cd;
       events.push({ tick, kind: "mana", unit: f.id, mana: f.mana });
-      events.push({ tick, kind: "cast", unit: f.id, skill: id, element: f.element, targets: targets.map((t) => t.id) });
+      // Trận giả phát chiêu ngay; diện rộng và trận pháp ghi lùi lúc bắt đầu để trình phát vẽ vòng báo trước.
+      const zone = id === "dien_rong" || id === "tran_phap"
+        ? { start: Math.max(0, tick - (id === "tran_phap" ? 100 : 20)), center: targets[0].pos, radius: 2000 }
+        : {};
+      events.push({ tick, kind: "cast", unit: f.id, skill: id, element: f.element, targets: targets.map((t) => t.id), ...zone });
 
       if (id === "than_phap") {
         f.pos = foes[0].pos + (f.team === 0 ? -500 : 500);

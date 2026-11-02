@@ -30,6 +30,8 @@ export function replayFromSim(input: BattleInput): Replay {
 
   const events: ReplayEvent[] = battle.units.map((u) => ({ tick: 0, kind: "mana" as const, unit: u.id, mana: u.mana / ONE }));
   const prev = battle.units.map((u) => ({ hp: u.curHp, pos: u.pos, mana: u.mana }));
+  // Tâm vùng của chiêu đang vận công, chốt lúc bắt đầu; sim chỉ ghi sự kiện lúc chiêu phát.
+  const centers = new Map<number, number>();
   let logged = 0;
 
   while (!battle.finished) {
@@ -40,10 +42,12 @@ export function replayFromSim(input: BattleInput): Replay {
     const hitBy = new Map<number, number>();
     for (; logged < battle.events.length; logged++) {
       const e = battle.events[logged];
-      const tech = battle.units.find((u) => u.id === e.unitId)!.slots[e.slot].tech;
-      events.push({ tick: e.tick, kind: "cast", unit: e.unitId, skill: tech.type, element: tech.element, targets: e.targets });
+      const slot = battle.units.find((u) => u.id === e.unitId)!.slots[e.slot];
+      const zone = slot.radius > 0 ? { start: e.startTick, center: centers.get(e.unitId), radius: slot.radius } : {};
+      events.push({ tick: e.tick, kind: "cast", unit: e.unitId, skill: slot.tech.type, element: slot.tech.element, targets: e.targets, ...zone });
       for (const t of e.targets) if (!hitBy.has(t)) hitBy.set(t, e.unitId);
     }
+    for (const u of battle.units) if (u.channel) centers.set(u.id, u.channel.center);
 
     battle.units.forEach((u, i) => {
       const p = prev[i];
