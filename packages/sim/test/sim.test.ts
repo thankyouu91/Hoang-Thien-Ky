@@ -12,7 +12,18 @@ test("khắc chế 12 hệ đúng GDD mục 8", () => {
   assert.equal(elementMultiplier("cuc_duong", "cuc_am"), 1500);
   assert.equal(elementMultiplier("cuc_am", "cuc_duong"), 1500);
   assert.equal(elementMultiplier("quang", "am_lanh"), 1500);
-  assert.equal(elementMultiplier("quang", "kim"), 1000);
+  assert.equal(elementMultiplier("am_lanh", "quang"), 1500);
+  assert.equal(elementMultiplier("quang", "moc"), 1000);
+});
+
+test("thiên địa dị hệ có hệ khắc một chiều (đề xuất): Hỏa khắc Âm lãnh, Kim khắc Quang", () => {
+  assert.equal(elementMultiplier("hoa", "am_lanh"), 1500);
+  assert.equal(elementMultiplier("am_lanh", "hoa"), 700);
+  assert.equal(elementMultiplier("cuc_duong", "am_lanh"), 1500); // Cực dương thừa hưởng Hỏa
+  assert.equal(elementMultiplier("kim", "quang"), 1500);
+  assert.equal(elementMultiplier("quang", "kim"), 700);
+  assert.equal(elementMultiplier("loi", "quang"), 1500); // Lôi thừa hưởng Kim
+  assert.equal(elementMultiplier("quang", "loi"), 700);
 });
 
 test("chênh lệch cấp: sàn 55%, cộng tối đa 30%", () => {

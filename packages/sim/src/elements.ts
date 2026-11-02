@@ -1,4 +1,6 @@
 // 12 hệ và luật khắc chế theo GDD mục 8 (hệ số theo phần nghìn).
+import { DI_HE_COUNTERS } from "./config.ts";
+
 export const ELEMENTS = [
   "kim", "moc", "thuy", "hoa", "tho",
   "loi", "phong", "cuc_duong", "cuc_am", "cuc_han",
@@ -36,7 +38,12 @@ export function isOpposite(a: Element, b: Element): boolean {
 export function generatesEither(a: Element, b: Element): boolean {
   return GENERATES[a] === b || GENERATES[b] === a;
 }
-/** Hai hệ gốc Ngũ Hành khắc nhau theo một trong hai chiều. */
+/** Khắc một chiều thêm cho thiên địa dị hệ (config.ts), xét trên hệ gốc. */
+function diHeBeats(a: Element, b: Element): boolean {
+  for (const [x, y] of DI_HE_COUNTERS) if (x === a && y === b) return true;
+  return false;
+}
+/** Hai hệ gốc Ngũ Hành khắc nhau theo một trong hai chiều; khắc thêm của dị hệ chỉ áp trong trận, không áp khi ghép công pháp. */
 export function beatsEither(a: Element, b: Element): boolean {
   return BEATS[a] === b || BEATS[b] === a;
 }
@@ -47,6 +54,8 @@ export function elementMultiplier(atk: Element, def: Element): number {
   if (PARENT[atk] === def) return 1200; // biến dị đánh hệ gốc
   if (PARENT[def] === atk) return 900; // hệ gốc đánh biến dị
   const a = baseElement(atk), d = baseElement(def);
+  if (diHeBeats(a, d)) return 1500; // khắc thêm của dị hệ
+  if (diHeBeats(d, a)) return 700;
   if (a === "quang" || a === "am_lanh" || d === "quang" || d === "am_lanh") return 1000;
   if (BEATS[a] === d) return 1500; // khắc
   if (BEATS[d] === a) return 700; // bị khắc

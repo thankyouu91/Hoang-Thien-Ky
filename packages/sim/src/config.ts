@@ -5,6 +5,19 @@ import type { Element } from "./elements.ts";
 
 const SEC = 20; // tick mỗi giây, khớp TICKS_PER_SECOND ở battle.ts
 
+/**
+ * Khắc một chiều cho hai thiên địa dị hệ (đề xuất 2026-11-02, GDD mục 8 chỉ có đối cực hai chiều Quang ↔ Âm lãnh, nên đội
+ * Quang hay Âm lãnh không có hệ nào khắc một chiều). [A, B]: A đánh B ×1,5, B đánh A ×0,7 như Ngũ Hành; hệ biến dị thừa hưởng
+ * theo hệ gốc (Lôi như Kim, Cực dương như Hỏa). Chỉ áp trong trận; ghép công pháp vẫn theo quan hệ tổ hợp của GDD mục 9
+ * (ví dụ Lôi + Âm lãnh vẫn là trung tính). Vòng bốn cạnh để mỗi dị hệ có một hệ khắc và một mục tiêu.
+ */
+export const DI_HE_COUNTERS: [Element, Element][] = [
+  ["hoa", "am_lanh"], // lửa xua âm khí
+  ["am_lanh", "kim"], // hàn âm làm kim khí giòn gãy
+  ["kim", "quang"], // gương kim khí phản quang
+  ["quang", "hoa"], // thánh quang tịnh hóa lửa
+];
+
 /** 10 loại chiêu (GDD mục 8) */
 export const SKILL_TYPES = [
   "can_don", "can_quet", "tam_xa", "dien_rong", "ho_the",
