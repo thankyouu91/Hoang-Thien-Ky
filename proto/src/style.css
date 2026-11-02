@@ -1,0 +1,110 @@
+:root {
+  --bg: #14110f;
+  --panel: rgba(28, 24, 20, 0.92);
+  --line: #3a322a;
+  --ink: #efe6d6;
+  --muted: #a89c88;
+  --seal: #b3261e; /* ấn triện đỏ, GDD mục 15 */
+  --bar-h: 56px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font: 14px/1.3 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#view {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: block;
+  touch-action: none;
+}
+
+#hud {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--bar-h) + env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+#hud > * { pointer-events: auto; }
+
+.replay {
+  padding: 6px 12px 8px;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+}
+.replay .seek {
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  accent-color: var(--seal);
+}
+.replay .row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.replay button {
+  min-width: 44px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #241f1a;
+  color: var(--ink);
+  font: inherit;
+}
+.replay button:disabled { opacity: 0.4; }
+.replay .time {
+  flex: 1;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.replay .speeds { display: flex; gap: 4px; }
+/* Điện thoại nằm ngang: gộp thanh tua và nút vào một dòng. */
+@media (orientation: landscape) and (max-height: 500px) {
+  :root { --bar-h: 44px; }
+  .replay { display: flex; align-items: center; gap: 10px; padding: 4px 12px; }
+  .replay .seek { flex: 1; }
+  .replay .time { flex: 0 0 auto; }
+}
+.replay .speeds button[aria-pressed="true"] {
+  background: var(--seal);
+  border-color: var(--seal);
+}
+
+#tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--bar-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+}
+#tabbar button {
+  flex: 1;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 15px;
+}
+#tabbar button[aria-selected="true"] {
+  color: var(--ink);
+  box-shadow: inset 0 3px 0 var(--seal);
+}
