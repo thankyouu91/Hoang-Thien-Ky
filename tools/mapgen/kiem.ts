@@ -6,7 +6,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
 import { assignCells, loadRegions, slug } from "./vung.ts";
-import { DANGER_MAX, MAX_DEO, MIN_BORDER, regionCounts, stagesFrom } from "./diem.ts";
+import { DANGER_MAX, MAX_DEO, MIN_BORDER, lairBands, regionCounts, stagesFrom } from "./diem.ts";
 
 interface FilePoint {
   id: number;
@@ -16,6 +16,7 @@ interface FilePoint {
   y: number;
   stages: number;
   danger: number;
+  ring: number;
   biome: string;
   terrain?: string;
   neighbour?: string;
@@ -85,6 +86,15 @@ function check(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, co
   const freeForest = map.cells.filter((c) => region[c.i] === k && !used.has(c.i) && FOREST.includes(map.biomes[c.biome])).length;
   const inForest = herbs.filter((p) => FOREST.includes(p.biome)).length;
   ok("mỏ dược dùng hết rừng trước", inForest === herbs.length || freeForest === 0, `${inForest} / ${herbs.length} trong rừng, ${freeForest} ô rừng còn trống`);
+
+  // Bãi quái: bậc cấp nào có điểm thì phải đủ hang tối thiểu (bậc không có điểm nào thì không đặt được)
+  const lairs = points.filter((p) => p.type === "hang_di_thu");
+  const short = lairBands().filter((b) => {
+    const inBand = (p: FilePoint) => p.danger >= b.from && p.danger < b.to;
+    return points.some(inBand) && lairs.filter(inBand).length < b.min;
+  });
+  ok("đủ hang mỗi bậc cấp", !short.length, short.length ? `thiếu ở ${short.map((b) => `${b.from}–${b.to - 1}`).join(", ")}` : `${lairs.length} hang, cấp ${Math.min(...lairs.map((p) => p.danger))}–${Math.max(...lairs.map((p) => p.danger))}`);
+  ok("có vị trí rìa ngoài ↔ lòng giữa", points.every((p) => p.ring >= 0 && p.ring <= 1), `ring ${Math.min(...points.map((p) => p.ring))}–${Math.max(...points.map((p) => p.ring))}`);
   return results;
 }
 

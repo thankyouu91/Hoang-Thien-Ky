@@ -6,7 +6,7 @@
 // Ra: data/maps/<vị diện>_diem_<mã vùng>.json
 import { writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
-import { assignCells, loadRegions, regionFrame, slug } from "./vung.ts";
+import { assignCells, loadRegions, regionFrame, ringPosition, slug } from "./vung.ts";
 
 const VERSION = 1; // tăng khi đổi định dạng file
 const SEED = 20261102;
@@ -15,6 +15,7 @@ const SEED = 20261102;
  * bến đò tuỳ địa hình, vị trí sơn môn lấy phần còn lại cho đủ tổng. Hang dị thú và số bến đò tối đa là đề xuất */
 const MEAN_COUNTS = { total: 450, mo_linh_thach: 120, mo_quang: 80, mo_duoc: 80, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
 const MAX_BEN_DO = 12;
+const LAIR_REACH = 3; // hang dị thú nối vào điểm cách tối đa 3 ô
 
 /** Số điểm theo diện tích (người dùng chọn ngày 2026-11-02): mọi loại nhân với số ô của vùng chia số ô trung bình của các
  * vùng, nên mật độ điểm và số mỏ trên mỗi vị trí sơn môn như nhau ở mọi vùng */
@@ -24,8 +25,26 @@ export function regionCounts(region: Int8Array, k: number) {
   const scale = sizes.get(k)! / ([...sizes.values()].reduce((a, b) => a + b, 0) / sizes.size);
   const of = (n: number) => Math.max(1, Math.round(n * scale));
   const counts = Object.fromEntries(Object.entries(MEAN_COUNTS).map(([type, n]) => [type, of(n)])) as typeof MEAN_COUNTS;
+  counts.hang_di_thu = Math.max(counts.hang_di_thu, lairsNeeded()); // phần thêm lấy bớt từ vị trí sơn môn
   return { scale, maxBenDo: of(MAX_BEN_DO), ...counts };
 }
+
+/** Hang dị thú là bãi quái, cấp bãi = cấp nguy hiểm của điểm (người dùng chốt qua phiên nhiệm vụ, 2026-11-02): nhiệm vụ kéo
+ * tới cấp 60, sau đó lên cấp chủ yếu bằng luyện bãi. Đề xuất: ít nhất LAIR_LOW.min hang dưới cấp LAIR_LOW.below cho nhiệm
+ * vụ, và LAIR_PER_BAND hang cho mỗi bậc LAIR_BAND cấp từ đó tới DANGER_MAX */
+export const LAIR_LOW = { below: 60, min: 6 };
+export const LAIR_BAND = 10;
+export const LAIR_PER_BAND = 2;
+/** Các bậc cấp nguy hiểm cần có hang: [từ, tới) và số hang tối thiểu; bậc cuối gồm cả DANGER_MAX */
+export function lairBands(): { from: number; to: number; min: number }[] {
+  const bands = [{ from: 1, to: LAIR_LOW.below, min: LAIR_LOW.min }];
+  for (let from = LAIR_LOW.below; from < DANGER_MAX; from += LAIR_BAND)
+    bands.push({ from, to: Math.min(from + LAIR_BAND, DANGER_MAX) + (from + LAIR_BAND >= DANGER_MAX ? 1 : 0), min: LAIR_PER_BAND });
+  return bands;
+}
+const lairsNeeded = () => lairBands().reduce((s, b) => s + b.min, 0);
+/** Cấp nguy hiểm theo số chặng tới thành chủ: 1 ở thành chủ, DANGER_MAX ở điểm xa nhất (đề xuất) */
+export const dangerOf = (stages: number, maxStages: number) => 1 + Math.round((stages / maxStages) * (DANGER_MAX - 1));
 const BEN_DO_GAP = 3; // hai bến đò cách nhau ít nhất 3 ô
 export const MAX_DEO = 2; // đèo tối đa sang mỗi vùng kề
 const DEO_GAP = 8; // hai đèo sang cùng một vùng cách nhau ít nhất 8 ô
@@ -234,19 +253,59 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
     return { terrain };
   });
 
-  // 7. Hang dị thú trải đều, ưu tiên điểm đánh dấu quái, rừng, núi
-  spread("hang_di_thu", counts.hang_di_thu, (c) => (hasMarker(c, BEAST_MARKERS) ? 4 : 0) + (isForest(c) ? 1 : 0) + (isHigh(c) ? 1 : 0));
-
-  // 8–9. Mỏ quặng nơi cao, mỏ dược trong rừng (gần nước tốt hơn)
+  // 7–8. Mỏ quặng nơi cao, mỏ dược trong rừng (gần nước tốt hơn)
   rank("mo_quang", counts.mo_quang, (c) => cells[c].h);
   // Vùng khô hoặc thảo nguyên có ít ô rừng hơn số mỏ dược: dùng hết rừng rồi mới tới đầm lầy, ven sông
   const herbScore = (c: number) => (map.biomes[cells[c].biome] === "Wetland" ? 4 : 0) + (near(c, (n) => cells[n].r > 0) ? 2 : 0);
   rank("mo_duoc", counts.mo_duoc, herbScore, (c) => (isForest(c) ? 1 : 0));
 
-  // 10. Mỏ linh thạch lấp đều phần còn trống
+  // 9. Mỏ linh thạch lấp đều phần còn trống
   spread("mo_linh_thach", counts.mo_linh_thach);
 
-  return { points, edges: connect(map, region, k, points, taken, road), capital, counts };
+  // 10. Nối đường cho mọi điểm đã đặt, rồi đặt hang dị thú sau cùng: mỗi hang là điểm cụt ngoài đường, nối bằng lối mòn vào
+  // một điểm cách tối đa LAIR_REACH ô, nên số chặng (và cấp nguy hiểm, cấp bãi quái) của nó biết trước: chặng của điểm đó + 1.
+  // Mỗi bậc cấp đặt đủ hang tối thiểu, phần dư trải đều. Hang không nối vào điểm xa nhất, để số chặng tối đa và cấp nguy hiểm
+  // của các điểm khác không đổi.
+  const edges = connect(map, region, k, points, taken, road);
+  const stages = stagesFrom(points.find((p) => p.type === "thanh_chu")!.id, points.length, edges);
+  const maxStages = Math.max(...stages);
+  const lairFit = (c: number) => (hasMarker(c, BEAST_MARKERS) ? 3 : 0) + (isForest(c) ? 1 : 0) + (isHigh(c) ? 1 : 0);
+  const lairDist = new Int32Array(N).fill(-1);
+  const pickLair = (accept: (danger: number) => boolean) => {
+    let best: { cell: number; anchor: number; path: number[] } | undefined, bestScore = -Infinity;
+    for (const anchor of points) {
+      const lairStages = stages[anchor.id] + 1;
+      if (anchor.type === "hang_di_thu" || lairStages > maxStages || !accept(dangerOf(lairStages, maxStages))) continue;
+      const prev = new Map<number, number>([[anchor.cell, -1]]);
+      let frontier = [anchor.cell];
+      for (let hop = 1; hop <= LAIR_REACH; hop++) {
+        const next: number[] = [];
+        for (const c of frontier) for (const n of cells[c].c) if (!prev.has(n) && free(n)) prev.set(n, c), next.push(n);
+        for (const c of next) {
+          if (road.has(c)) continue;
+          const score = lairFit(c) + Math.min(lairDist[c] < 0 ? 12 : lairDist[c], 12) / 3 - hop / 2 + jitter[c];
+          if (score <= bestScore) continue;
+          const path = [c];
+          for (let x = prev.get(c)!; x >= 0; x = prev.get(x)!) path.push(x);
+          (bestScore = score), (best = { cell: c, anchor: anchor.id, path });
+        }
+        frontier = next;
+      }
+    }
+    if (!best) return false;
+    const lair = add("hang_di_thu", best.cell);
+    const { anchor, path } = best;
+    edges.push({ a: Math.min(anchor, lair.id), b: Math.max(anchor, lair.id), kind: "loi_mon", cells: path.length - 1, danger: 0, path: path.map((c) => cells[c].p) });
+    relax(lairDist, best.cell);
+    return true;
+  };
+  let lairs = 0;
+  for (const band of lairBands())
+    for (let j = 0; j < band.min && pickLair((d) => d >= band.from && d < band.to); j++) lairs++;
+  while (lairs < counts.hang_di_thu && pickLair(() => true)) lairs++;
+  edges.sort((a, b) => a.a - b.a || a.b - b.b);
+
+  return { points, edges, capital, counts };
 }
 
 /** Nối điểm theo đường Azgaar; điểm không nằm trên đường thì nối tới điểm gần nhất; cuối cùng nối các mảng rời vào mảng có thành chủ */
@@ -347,9 +406,10 @@ if (import.meta.main) {
   const maxStages = Math.max(...stages);
   for (const p of points) {
     p.stages = stages[p.id];
-    p.danger = 1 + Math.round((p.stages / maxStages) * (DANGER_MAX - 1));
+    p.danger = dangerOf(p.stages, maxStages);
   }
   for (const e of edges) e.danger = Math.max(points[e.a].danger, points[e.b].danger);
+  const ring = ringPosition(map, region);
 
   const round = (v: number) => Math.round(v * 10) / 10;
   const xs = points.map((p) => p.x), ys = points.map((p) => p.y);
@@ -367,7 +427,8 @@ if (import.meta.main) {
     targets: { ...targets, scale: Math.round(targets.scale * 1000) / 1000 }, // số cần đặt theo diện tích
     counts,
     terrains,
-    points: points.map((p) => ({ ...p, x: round(p.x), y: round(p.y) })),
+    // ring: 0 sát rìa ngoài (Hư Không Hải), 1 sát lòng giữa (Linh Hải) của vị diện
+    points: points.map((p) => ({ ...p, x: round(p.x), y: round(p.y), ring: Math.round(ring(p.x, p.y) * 100) / 100 })),
     edges: edges.map((e) => ({ ...e, path: e.path.map(([x, y]) => [round(x), round(y)]) })),
   };
   const file = new URL(`${plane}_diem_${code}.json`, dataDir);

@@ -80,6 +80,32 @@ export function regionFrame(map: AzgaarMap, region: Int8Array, k: number, pad = 
   return [Math.max(0, Math.floor(x0 - pad)), Math.max(0, Math.floor(y0 - pad)), Math.min(map.width, Math.ceil(x1 + pad)), Math.min(map.height, Math.ceil(y1 + pad))];
 }
 
+/** Vị trí một điểm giữa rìa ngoài (Hư Không Hải, 0) và lòng giữa (Linh Hải, 1) của vị diện: khoảng cách thẳng tới ô ngoài
+ * vùng gần nhất ở rìa chia tổng hai khoảng cách. Mảng ngoài vùng liền với ô sát mép trái bản đồ là rìa ngoài, mảng còn lại
+ * là lòng giữa; vị diện không có lòng giữa thì mọi điểm là 0 */
+export function ringPosition(map: AzgaarMap, region: Int8Array): (x: number, y: number) => number {
+  const outside = map.cells.filter((c) => region[c.i] < 0);
+  if (!outside.length) return () => 0;
+  const isRim = new Uint8Array(region.length);
+  const start = outside.reduce((a, b) => (b.p[0] < a.p[0] ? b : a)).i;
+  const queue = [start];
+  isRim[start] = 1;
+  for (let q = 0; q < queue.length; q++)
+    for (const n of map.cells[queue[q]].c) if (!isRim[n] && region[n] < 0) (isRim[n] = 1), queue.push(n);
+  const rim = outside.filter((c) => isRim[c.i]).map((c) => c.p);
+  const centre = outside.filter((c) => !isRim[c.i]).map((c) => c.p);
+  const nearest = (list: [number, number][], x: number, y: number) => {
+    let best = Infinity;
+    for (const [a, b] of list) best = Math.min(best, (a - x) ** 2 + (b - y) ** 2);
+    return Math.sqrt(best);
+  };
+  return (x, y) => {
+    if (!centre.length) return 0;
+    const toRim = nearest(rim, x, y), toCentre = nearest(centre, x, y);
+    return toRim / (toRim + toCentre);
+  };
+}
+
 const FOREST = new Set(["Tropical seasonal forest", "Temperate deciduous forest", "Tropical rainforest", "Temperate rainforest", "Taiga"]);
 const HIGH = 62; // như azgaar-patch.ts
 
