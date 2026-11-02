@@ -11,16 +11,18 @@ test("480 tàn quyển: 12 hệ × 10 loại chiêu × 4 biến thể, mỗi h�
   for (const v of VARIANTS) assert.equal(SCROLL_KINDS.filter((k) => k.variant === v).length, 120);
 });
 
-test("tên tạm: 120 tên khác nhau, 480 tên kèm biến thể khác nhau, đều đánh dấu chờ Excel", () => {
-  assert.equal(new Set(SCROLL_KINDS.map((k) => k.name)).size, 120);
+test("tên lấy từ file số liệu: 480 tên riêng, không trống", () => {
+  assert.equal(new Set(SCROLL_KINDS.map((k) => k.name)).size, 480);
   assert.equal(new Set(SCROLL_KINDS.map(scrollLabel)).size, 480);
-  assert.ok(SCROLL_KINDS.every((k) => k.provisional));
+  assert.ok(SCROLL_KINDS.every((k) => k.name.trim().length > 0));
 });
 
 test("khớp tên ví dụ trong GDD mục 9", () => {
   assert.equal(scrollKind("loi.can_quet.linh").name, "Tử Điện Liên Hoàn");
   assert.equal(scrollKind("loi.tam_xa.linh").name, "Tử Điện Châm");
   assert.equal(scrollKind("quang.ho_the.ben").name, "Phá Hiểu Cố Bản");
+  assert.equal(scrollKind("am_lanh.tam_xa.ben").name, "Âm Sát Xạ");
+  assert.equal(scrollKind("loi.can_don.bao").name, "Lôi Đình Trảm");
   assert.equal(scrollLabel(scrollKind("loi.can_quet.linh")), "Tử Điện Liên Hoàn · Linh");
   assert.equal(GRADE_NAMES[0], "Phàm");
   assert.equal(GRADE_NAMES[9], "Thánh");
