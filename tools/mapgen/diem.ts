@@ -11,9 +11,13 @@ import { assignCells, loadRegions, regionFrame, ringPosition, slug } from "./vun
 const VERSION = 1; // tăng khi đổi định dạng file
 const SEED = 20261102;
 
-/** Số điểm của một vùng Hạ vị có diện tích trung bình: tổng khoảng 450 (GDD mục 3), số mỏ và linh tuyền theo mục 12. Đèo và
- * bến đò tuỳ địa hình, vị trí sơn môn lấy phần còn lại cho đủ tổng. Hang dị thú và số bến đò tối đa là đề xuất */
-const MEAN_COUNTS = { total: 450, mo_linh_thach: 120, mo_quang: 80, mo_duoc: 80, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
+/** Số điểm của một vùng Hạ vị có diện tích trung bình. Gốc theo GDD mục 3 (khoảng 450 điểm) và mục 12 (120 mỏ linh thạch,
+ * 80 quặng, 80 dược, 10 linh tuyền); ngày 2026-11-02 người dùng giảm mỏ linh thạch và mỏ dược còn một nửa vì quá nhiều đảo
+ * giống nhau, tổng bớt đúng phần đó (450 → 350) để số vị trí sơn môn không đổi. Đèo và bến đò tuỳ địa hình, vị trí sơn môn
+ * lấy phần còn lại cho đủ tổng. Hang dị thú và số bến đò tối đa là đề xuất */
+const MEAN_COUNTS = { total: 350, mo_linh_thach: 60, mo_quang: 80, mo_duoc: 40, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
+/** Bậc cửa bí cảnh (người dùng chia ngày 2026-11-02; hình cửa xanh, vàng, đỏ) */
+export const GATE_TIERS = ["thap", "vua", "cao"] as const;
 const MAX_BEN_DO = 12;
 const LAIR_REACH = 3; // hang dị thú nối vào điểm cách tối đa 3 ô
 
@@ -76,6 +80,7 @@ interface Point {
   stages: number; // số chặng tới thành chủ
   danger: number;
   terrain?: Terrain;
+  tier?: (typeof GATE_TIERS)[number]; // cửa bí cảnh: thấp, vừa, cao
   neighbour?: string; // đèo: mã vùng bên kia
   azgaarName?: string; // thành chủ: tên thị trấn Azgaar, chỉ để tra
 }
@@ -272,18 +277,18 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
   const maxStages = Math.max(...stages);
   const lairFit = (c: number) => (hasMarker(c, BEAST_MARKERS) ? 3 : 0) + (isForest(c) ? 1 : 0) + (isHigh(c) ? 1 : 0);
   const lairDist = new Int32Array(N).fill(-1);
-  const pickLair = (accept: (stage: number) => boolean) => {
+  const pickLair = (accept: (stage: number) => boolean, reach = LAIR_REACH, onRoad = false) => {
     let best: { cell: number; anchor: number; path: number[] } | undefined, bestScore = -Infinity;
     for (const anchor of points) {
       const stage = stages[anchor.id] + 1; // số chặng của hang nếu nối vào điểm này
       if (anchor.type === "hang_di_thu" || stage > maxStages || !accept(stage)) continue;
       const prev = new Map<number, number>([[anchor.cell, -1]]);
       let frontier = [anchor.cell];
-      for (let hop = 1; hop <= LAIR_REACH; hop++) {
+      for (let hop = 1; hop <= reach; hop++) {
         const next: number[] = [];
         for (const c of frontier) for (const n of cells[c].c) if (!prev.has(n) && free(n)) prev.set(n, c), next.push(n);
         for (const c of next) {
-          if (road.has(c)) continue;
+          if (road.has(c) && !onRoad) continue;
           const score = lairFit(c) + Math.min(lairDist[c] < 0 ? 12 : lairDist[c], 12) / 3 - hop / 2 + jitter[c];
           if (score <= bestScore) continue;
           const path = [c];
@@ -303,8 +308,12 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
   };
   const lairStages: number[] = [];
   const inBand = (band: { from: number; to: number }) => (s: number) => dangerOf(s, maxStages) >= band.from && dangerOf(s, maxStages) < band.to;
-  while (lairStages.filter((s) => s <= LAIR_NEAR.stages).length < LAIR_NEAR.min && pickLair((s) => s <= LAIR_NEAR.stages));
-  for (const band of lairBands()) while (lairStages.filter(inBand(band)).length < band.min && pickLair(inBand(band)));
+  // quanh điểm cần nối không còn ô trống ngoài đường thì tìm rộng dần, cuối cùng mới cho đặt trên ô có đường (hang vẫn là
+  // điểm cụt nên chặng khác không đổi)
+  const pickNear = (accept: (stage: number) => boolean) =>
+    pickLair(accept) || pickLair(accept, LAIR_REACH * 2) || pickLair(accept, LAIR_REACH * 3) || pickLair(accept, LAIR_REACH * 3, true);
+  while (lairStages.filter((s) => s <= LAIR_NEAR.stages).length < LAIR_NEAR.min && pickNear((s) => s <= LAIR_NEAR.stages));
+  for (const band of lairBands()) while (lairStages.filter(inBand(band)).length < band.min && pickNear(inBand(band)));
   while (lairStages.length < counts.hang_di_thu && pickLair(() => true));
   edges.sort((a, b) => a.a - b.a || a.b - b.b);
 
@@ -413,6 +422,10 @@ if (import.meta.main) {
   }
   for (const e of edges) e.danger = Math.max(points[e.a].danger, points[e.b].danger);
   const ring = ringPosition(map, region);
+  // Bậc cửa bí cảnh theo cấp nguy hiểm trong vùng: một phần ba cửa gần thành chủ nhất là thấp, xa nhất là cao, nên vùng
+  // nào cũng có đủ ba bậc. Loại bí cảnh (GDD mục 11, tỷ lệ rơi 4–50%) sẽ ghép theo bậc: loại càng hiếm thì bậc càng cao
+  const gates = points.filter((p) => p.type === "cua_bi_canh").sort((a, b) => a.danger - b.danger || a.id - b.id);
+  gates.forEach((p, i) => (p.tier = GATE_TIERS[Math.floor((i * GATE_TIERS.length) / gates.length)]));
 
   const round = (v: number) => Math.round(v * 10) / 10;
   const xs = points.map((p) => p.x), ys = points.map((p) => p.y);

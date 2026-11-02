@@ -6,7 +6,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
 import { assignCells, loadRegions, slug } from "./vung.ts";
-import { DANGER_MAX, LAIR_NEAR, MAX_DEO, MIN_BORDER, lairBands, regionCounts, stagesFrom } from "./diem.ts";
+import { DANGER_MAX, GATE_TIERS, LAIR_NEAR, LAIR_PER_BAND, MAX_DEO, MIN_BORDER, lairBands, regionCounts, stagesFrom } from "./diem.ts";
 
 interface FilePoint {
   id: number;
@@ -19,6 +19,7 @@ interface FilePoint {
   ring: number;
   biome: string;
   terrain?: string;
+  tier?: string;
   neighbour?: string;
 }
 interface FileEdge {
@@ -87,16 +88,26 @@ function check(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, co
   const inForest = herbs.filter((p) => FOREST.includes(p.biome)).length;
   ok("mỏ dược dùng hết rừng trước", inForest === herbs.length || freeForest === 0, `${inForest} / ${herbs.length} trong rừng, ${freeForest} ô rừng còn trống`);
 
-  // Bãi quái: bậc cấp nào có điểm thì phải đủ hang tối thiểu (bậc không có điểm nào thì không đặt được)
+  // Bãi quái: bậc cấp nào có điểm thì phải có hang. diem.ts cố đặt đủ LAIR_PER_BAND mỗi bậc, nhưng ở mũi vùng điểm cần nối
+  // có thể bị các điểm khác bao kín, không còn ô trống nào tới được mà không cắt qua đảo khác: khi đó bậc chỉ có 1 hang và
+  // được ghi ra ở đây (bậc không có điểm nào thì không đặt được)
   const lairs = points.filter((p) => p.type === "hang_di_thu");
-  const short = lairBands().filter((b) => {
-    const inBand = (p: FilePoint) => p.danger >= b.from && p.danger < b.to;
-    return points.some(inBand) && lairs.filter(inBand).length < b.min;
-  });
-  ok("đủ hang mỗi bậc cấp", !short.length, short.length ? `thiếu ở ${short.map((b) => `${b.from}–${b.to - 1}`).join(", ")}` : `${lairs.length} hang, cấp ${Math.min(...lairs.map((p) => p.danger))}–${Math.max(...lairs.map((p) => p.danger))}`);
+  const lairsIn = (b: { from: number; to: number }) => lairs.filter((p) => p.danger >= b.from && p.danger < b.to).length;
+  const bands = lairBands().filter((b) => points.some((p) => p.danger >= b.from && p.danger < b.to));
+  const empty = bands.filter((b) => lairsIn(b) === 0);
+  const thin = bands.filter((b) => lairsIn(b) > 0 && lairsIn(b) < b.min);
+  ok("có hang ở mỗi bậc cấp", !empty.length,
+    (empty.length ? `không có hang ở ${empty.map((b) => `${b.from}–${b.to - 1}`).join(", ")}; ` : `${lairs.length} hang, cấp ${Math.min(...lairs.map((p) => p.danger))}–${Math.max(...lairs.map((p) => p.danger))}; `) +
+      (thin.length ? `chỉ 1 hang ở ${thin.map((b) => `${b.from}–${b.to - 1}`).join(", ")}` : `mỗi bậc đủ ${LAIR_PER_BAND}`));
   const nearLairs = lairs.filter((p) => p.stages <= LAIR_NEAR.stages);
   ok("hang gần thành chủ", nearLairs.length >= LAIR_NEAR.min, `${nearLairs.length} hang trong ${LAIR_NEAR.stages} chặng (cấp ${nearLairs.map((p) => p.danger).join(", ")})`);
   ok("có vị trí rìa ngoài ↔ lòng giữa", points.every((p) => p.ring >= 0 && p.ring <= 1), `ring ${Math.min(...points.map((p) => p.ring))}–${Math.max(...points.map((p) => p.ring))}`);
+
+  // Bậc cửa bí cảnh: cửa nào cũng có bậc, đủ ba bậc khi có từ 3 cửa, bậc không giảm khi xa thành chủ hơn
+  const gates = points.filter((p) => p.type === "cua_bi_canh").sort((a, b) => a.danger - b.danger);
+  const level = (p: FilePoint) => (GATE_TIERS as readonly string[]).indexOf(p.tier ?? "");
+  ok("bậc cửa bí cảnh", gates.every((p) => level(p) >= 0) && (gates.length < 3 || new Set(gates.map(level)).size === 3) && gates.every((p, i) => i === 0 || level(p) >= level(gates[i - 1])),
+    gates.map((p) => `${p.tier} ${p.danger}`).join(", "));
   return results;
 }
 
