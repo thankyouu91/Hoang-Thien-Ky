@@ -6,7 +6,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
 import { assignCells, loadRegions, slug } from "./vung.ts";
-import { DANGER_MAX, GATE_LOW, GATE_TIERS, LAIR_NEAR, LAIR_PER_BAND, MAX_DEO, MIN_BORDER, lairBands, regionCounts, stagesFrom } from "./diem.ts";
+import { DANGER_MAX, GATE_LOW, GATE_TIERS, LAIR_NEAR, LAIR_PER_BAND, MAX_DEO, MIN_BORDER, dangerOf, distancesFrom, lairBands, regionCounts, stagesFrom } from "./diem.ts";
 
 interface FilePoint {
   id: number;
@@ -15,6 +15,7 @@ interface FilePoint {
   x: number;
   y: number;
   stages: number;
+  distance: number;
   danger: number;
   ring: number;
   biome: string;
@@ -26,6 +27,7 @@ interface FileEdge {
   a: number;
   b: number;
   kind: string;
+  cells: number;
   danger: number;
   path: [number, number][];
 }
@@ -77,9 +79,11 @@ function check(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, co
   const lost = points.filter((p) => stages[p.id] < 0);
   ok("mọi điểm tới được thành chủ", !lost.length, lost.length ? `${lost.length} điểm không tới được` : `xa nhất ${Math.max(...stages)} chặng`);
   ok("số chặng khớp", points.every((p) => p.stages === stages[p.id]), "");
-  const sorted = [...points].sort((a, b) => a.stages - b.stages);
-  ok("cấp nguy hiểm tăng theo chặng", sorted.every((p, i) => p.danger >= 1 && p.danger <= DANGER_MAX && (i === 0 || p.danger >= sorted[i - 1].danger)),
-    `${sorted[0].danger} → ${sorted.at(-1)!.danger}`);
+  const distances = distancesFrom(capital.id, points.length, edges);
+  const maxDistance = Math.max(...distances);
+  ok("quãng đường khớp", points.every((p) => p.distance === distances[p.id]), `xa nhất ${maxDistance} ô`);
+  ok("cấp nguy hiểm theo quãng đường", points.every((p) => p.danger === dangerOf(p.distance, maxDistance) && p.danger >= 1 && p.danger <= DANGER_MAX),
+    `${Math.min(...points.map((p) => p.danger))} → ${Math.max(...points.map((p) => p.danger))}, ${new Set(points.map((p) => p.danger)).size} mức khác nhau`);
   ok("cấp nguy hiểm của chặng", edges.every((e) => e.danger === Math.max(points[e.a].danger, points[e.b].danger)), "");
   // Vùng ít rừng thì mỏ dược được ra ngoài rừng, nhưng chỉ khi không còn ô rừng nào trống
   const herbs = points.filter((p) => p.type === "mo_duoc");

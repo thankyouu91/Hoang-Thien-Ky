@@ -64,8 +64,10 @@ export function lairBands(): { from: number; to: number; min: number }[] {
   return bands;
 }
 const lairsNeeded = () => LAIR_NEAR.min + lairBands().reduce((s, b) => s + b.min, 0);
-/** Cấp nguy hiểm theo số chặng tới thành chủ: 1 ở thành chủ, DANGER_MAX ở điểm xa nhất (đề xuất) */
-export const dangerOf = (stages: number, maxStages: number) => 1 + Math.round((stages / maxStages) * (DANGER_MAX - 1));
+/** Cấp nguy hiểm theo quãng đường tới thành chủ (số ô dọc các chặng): 1 ở thành chủ, DANGER_MAX ở điểm xa nhất. Người dùng
+ * chọn quãng đường thay cho số chặng ngày 2026-11-02, để vùng ít chặng không nhảy cấp thưa; số chặng vẫn dùng cho tầm
+ * Truyền Tống Trận và sương mù */
+export const dangerOf = (distance: number, maxDistance: number) => 1 + Math.round((distance / maxDistance) * (DANGER_MAX - 1));
 const BEN_DO_GAP = 3; // hai bến đò cách nhau ít nhất 3 ô
 export const MAX_DEO = 2; // đèo tối đa sang mỗi vùng kề
 const DEO_GAP = 8; // hai đèo sang cùng một vùng cách nhau ít nhất 8 ô
@@ -93,7 +95,8 @@ interface Point {
   y: number;
   h: number;
   biome: string;
-  stages: number; // số chặng tới thành chủ
+  stages: number; // số chặng tới thành chủ (tầm Truyền Tống Trận, sương mù)
+  distance: number; // quãng đường tới thành chủ, số ô dọc các chặng
   danger: number;
   terrain?: Terrain;
   tier?: (typeof GATE_TIERS)[number]; // cửa bí cảnh: thấp, vừa, cao
@@ -148,7 +151,7 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
   const free = (c: number) => inRegion(c) && !taken.has(c);
   const add = (type: PointType, cell: number, extra: Partial<Point> = {}) => {
     const [x, y] = cells[cell].p;
-    const point: Point = { id: points.length, type, cell, x, y, h: cells[cell].h, biome: map.biomes[cells[cell].biome], stages: -1, danger: 0, ...extra };
+    const point: Point = { id: points.length, type, cell, x, y, h: cells[cell].h, biome: map.biomes[cells[cell].biome], stages: -1, distance: -1, danger: 0, ...extra };
     points.push(point);
     taken.set(cell, point.id);
     return point;
@@ -285,33 +288,36 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
   spread("mo_linh_thach", counts.mo_linh_thach);
 
   // 10. Nối đường cho mọi điểm đã đặt, rồi đặt hang dị thú sau cùng: mỗi hang là điểm cụt ngoài đường, nối bằng lối mòn vào
-  // một điểm cách tối đa LAIR_REACH ô, nên số chặng (và cấp nguy hiểm, cấp bãi quái) của nó biết trước: chặng của điểm đó + 1.
-  // Mỗi bậc cấp đặt đủ hang tối thiểu, phần dư trải đều. Hang không nối vào điểm xa nhất, để số chặng tối đa và cấp nguy hiểm
-  // của các điểm khác không đổi.
+  // một điểm gần đó, nên số chặng và quãng đường (cấp nguy hiểm, cấp bãi quái) của nó biết trước. Mỗi bậc cấp đặt đủ hang
+  // tối thiểu, phần dư trải đều. Hang không xa thành chủ hơn điểm xa nhất, để cấp nguy hiểm của các điểm khác không đổi.
   const edges = connect(map, region, k, points, taken, road);
-  const stages = stagesFrom(points.find((p) => p.type === "thanh_chu")!.id, points.length, edges);
-  const maxStages = Math.max(...stages);
+  const capitalId = points.find((p) => p.type === "thanh_chu")!.id;
+  const stages = stagesFrom(capitalId, points.length, edges);
+  const distances = distancesFrom(capitalId, points.length, edges);
+  const maxDistance = Math.max(...distances);
+  type Spot = { stage: number; distance: number }; // của hang nếu nối vào một điểm
   const lairFit = (c: number) => (hasMarker(c, BEAST_MARKERS) ? 3 : 0) + (isForest(c) ? 1 : 0) + (isHigh(c) ? 1 : 0);
   const lairDist = new Int32Array(N).fill(-1);
-  const pickLair = (accept: (stage: number) => boolean, reach = LAIR_REACH, onRoad = false) => {
-    let best: { cell: number; anchor: number; path: number[] } | undefined, bestScore = -Infinity;
+  const pickLair = (accept: (spot: Spot) => boolean, reach = LAIR_REACH, onRoad = false) => {
+    let best: { cell: number; anchor: number; path: number[]; spot: Spot } | undefined, bestScore = -Infinity;
     for (const anchor of points) {
-      const stage = stages[anchor.id] + 1; // số chặng của hang nếu nối vào điểm này
-      if (anchor.type === "hang_di_thu" || stage > maxStages || !accept(stage)) continue;
+      if (anchor.type === "hang_di_thu") continue;
       const prev = new Map<number, number>([[anchor.cell, -1]]);
       let frontier = [anchor.cell];
       for (let hop = 1; hop <= reach; hop++) {
         const next: number[] = [];
         for (const c of frontier) for (const n of cells[c].c) if (!prev.has(n) && free(n)) prev.set(n, c), next.push(n);
+        frontier = next;
+        const spot = { stage: stages[anchor.id] + 1, distance: distances[anchor.id] + hop };
+        if (spot.distance > maxDistance || !accept(spot)) continue;
         for (const c of next) {
           if (road.has(c) && !onRoad) continue;
           const score = lairFit(c) + Math.min(lairDist[c] < 0 ? 12 : lairDist[c], 12) / 3 - hop / 2 + jitter[c];
           if (score <= bestScore) continue;
           const path = [c];
           for (let x = prev.get(c)!; x >= 0; x = prev.get(x)!) path.push(x);
-          (bestScore = score), (best = { cell: c, anchor: anchor.id, path });
+          (bestScore = score), (best = { cell: c, anchor: anchor.id, path, spot });
         }
-        frontier = next;
       }
     }
     if (!best) return false;
@@ -319,18 +325,22 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
     const { anchor, path } = best;
     edges.push({ a: Math.min(anchor, lair.id), b: Math.max(anchor, lair.id), kind: "loi_mon", cells: path.length - 1, danger: 0, path: path.map((c) => cells[c].p) });
     relax(lairDist, best.cell);
-    lairStages.push(stages[anchor] + 1);
+    lairSpots.push(best.spot);
     return true;
   };
-  const lairStages: number[] = [];
-  const inBand = (band: { from: number; to: number }) => (s: number) => dangerOf(s, maxStages) >= band.from && dangerOf(s, maxStages) < band.to;
+  const lairSpots: Spot[] = [];
+  const inBand = (band: { from: number; to: number }) => (s: Spot) => {
+    const danger = dangerOf(s.distance, maxDistance);
+    return danger >= band.from && danger < band.to;
+  };
+  const nearCapital = (s: Spot) => s.stage <= LAIR_NEAR.stages; // nhiệm vụ neo theo số chặng
   // quanh điểm cần nối không còn ô trống ngoài đường thì tìm rộng dần, cuối cùng mới cho đặt trên ô có đường (hang vẫn là
   // điểm cụt nên chặng khác không đổi)
-  const pickNear = (accept: (stage: number) => boolean) =>
+  const pickWide = (accept: (spot: Spot) => boolean) =>
     pickLair(accept) || pickLair(accept, LAIR_REACH * 2) || pickLair(accept, LAIR_REACH * 3) || pickLair(accept, LAIR_REACH * 3, true);
-  while (lairStages.filter((s) => s <= LAIR_NEAR.stages).length < LAIR_NEAR.min && pickNear((s) => s <= LAIR_NEAR.stages));
-  for (const band of lairBands()) while (lairStages.filter(inBand(band)).length < band.min && pickNear(inBand(band)));
-  while (lairStages.length < counts.hang_di_thu && pickLair(() => true));
+  while (lairSpots.filter(nearCapital).length < LAIR_NEAR.min && pickWide(nearCapital));
+  for (const band of lairBands()) while (lairSpots.filter(inBand(band)).length < band.min && pickWide(inBand(band)));
+  while (lairSpots.length < counts.hang_di_thu && pickLair(() => true));
   edges.sort((a, b) => a.a - b.a || a.b - b.b);
 
   return { points, edges, capital, counts };
@@ -341,11 +351,11 @@ function connect(map: AzgaarMap, region: Int8Array, k: number, points: Point[], 
   const { cells } = map;
   const inRegion = (c: number) => region[c] === k;
   const edges = new Map<string, Edge>();
-  const addEdge = (a: number, b: number, kind: EdgeKind, path: number[]) => {
+  const addEdge = (a: number, b: number, kind: EdgeKind, path: number[], length = path.length - 1) => {
     const key = a < b ? `${a}-${b}` : `${b}-${a}`;
     const old = edges.get(key);
-    if (old && old.cells <= path.length) return;
-    edges.set(key, { a: Math.min(a, b), b: Math.max(a, b), kind, cells: path.length - 1, danger: 0, path: path.map((c) => cells[c].p) });
+    if (old && old.cells <= length) return;
+    edges.set(key, { a: Math.min(a, b), b: Math.max(a, b), kind, cells: length, danger: 0, path: path.map((c) => cells[c].p) });
   };
   /** Tìm theo chiều rộng từ một ô, không đi xuyên qua ô có điểm khác; trả mọi điểm gặp đầu tiên kèm đường đi */
   const search = (start: number, next: (c: number) => Iterable<number>, firstOnly: boolean) => {
@@ -391,9 +401,27 @@ function connect(map: AzgaarMap, region: Int8Array, k: number, points: Point[], 
           const d = (p.x - q.x) ** 2 + (p.y - q.y) ** 2;
           if (d < best[2]) best = [p.id, q.id, d];
         }
-    addEdge(best[0], best[1], "loi_mon", [points[best[0]].cell, points[best[1]].cell]);
+    // nối thẳng, độ dài quy ra số ô theo khoảng cách giữa hai ô kề nhau
+    const spacing = Math.sqrt((map.width * map.height) / cells.length);
+    addEdge(best[0], best[1], "loi_mon", [points[best[0]].cell, points[best[1]].cell], Math.max(1, Math.round(Math.sqrt(best[2]) / spacing)));
   }
   return [...edges.values()].sort((a, b) => a.a - b.a || a.b - b.b);
+}
+
+/** Quãng đường ngắn nhất (số ô dọc các chặng) từ một điểm tới mọi điểm, -1 là không tới được */
+export function distancesFrom(start: number, n: number, edges: { a: number; b: number; cells: number }[]): Int32Array {
+  const adj: [number, number][][] = Array.from({ length: n }, () => []);
+  for (const e of edges) adj[e.a].push([e.b, e.cells]), adj[e.b].push([e.a, e.cells]);
+  const dist = new Int32Array(n).fill(-1);
+  const done = new Uint8Array(n);
+  dist[start] = 0;
+  for (;;) {
+    let u = -1;
+    for (let i = 0; i < n; i++) if (!done[i] && dist[i] >= 0 && (u < 0 || dist[i] < dist[u])) u = i;
+    if (u < 0) return dist;
+    done[u] = 1;
+    for (const [v, w] of adj[u]) if (dist[v] < 0 || dist[u] + w < dist[v]) dist[v] = dist[u] + w;
+  }
 }
 
 /** Số chặng từ một điểm tới mọi điểm, -1 là không tới được */
@@ -431,10 +459,12 @@ if (import.meta.main) {
 
   const capital = points.find((p) => p.type === "thanh_chu")!;
   const stages = stagesFrom(capital.id, points.length, edges);
-  const maxStages = Math.max(...stages);
+  const distances = distancesFrom(capital.id, points.length, edges);
+  const maxStages = Math.max(...stages), maxDistance = Math.max(...distances);
   for (const p of points) {
     p.stages = stages[p.id];
-    p.danger = dangerOf(p.stages, maxStages);
+    p.distance = distances[p.id];
+    p.danger = dangerOf(p.distance, maxDistance);
   }
   for (const e of edges) e.danger = Math.max(points[e.a].danger, points[e.b].danger);
   const ring = ringPosition(map, region);
@@ -468,7 +498,7 @@ if (import.meta.main) {
   writeFileSync(file, JSON.stringify(out));
   const kinds: Record<string, number> = {};
   for (const e of edges) kinds[e.kind] = (kinds[e.kind] ?? 0) + 1;
-  console.log(`${regions.names[k]}: ${points.length} điểm, ${edges.length} chặng (${JSON.stringify(kinds)}), xa nhất ${maxStages} chặng`);
+  console.log(`${regions.names[k]}: ${points.length} điểm, ${edges.length} chặng (${JSON.stringify(kinds)}), xa nhất ${maxStages} chặng, ${maxDistance} ô`);
   console.log(`  loại: ${JSON.stringify(counts)}`);
   console.log(`  địa thế sơn môn: ${JSON.stringify(terrains)}`);
   console.log(`  thành chủ: ${capital.azgaarName}; đèo sang: ${points.filter((p) => p.neighbour).map((p) => p.neighbour).join(", ")}`);
