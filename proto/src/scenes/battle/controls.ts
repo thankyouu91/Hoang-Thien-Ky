@@ -36,7 +36,7 @@ export class ReplayControls {
     this.time = this.el.querySelector(".time")!;
     this.speedButtons = [...this.el.querySelectorAll<HTMLButtonElement>("[data-speed]")];
 
-    sources.forEach((label, i) => this.source.add(new Option(label, String(i))));
+    this.setSources(sources, 0);
     this.source.addEventListener("change", () => onSource(Number(this.source.value)));
 
     this.seek.addEventListener("pointerdown", () => (this.seeking = true));
@@ -48,6 +48,13 @@ export class ReplayControls {
         if (this.player) this.player.speed = Number(b.dataset.speed);
       });
     }
+  }
+
+  /** Thay danh sách trong ô chọn nguồn và chọn mục `selected`. */
+  setSources(labels: string[], selected: number): void {
+    this.source.length = 0;
+    labels.forEach((label, i) => this.source.add(new Option(label, String(i))));
+    this.source.value = String(selected);
   }
 
   bind(player: ReplayPlayer): void {

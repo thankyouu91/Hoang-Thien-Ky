@@ -25,6 +25,7 @@ export class BattleScene implements Scene {
   readonly camera = new Camera();
   readonly hud: HTMLElement;
   private controls: ReplayControls;
+  private sources: ReplaySource[];
   private source: ReplaySource;
   private sprites: Sprites;
   private fx = new FxLayer();
@@ -40,10 +41,21 @@ export class BattleScene implements Scene {
 
   /** sources[0] mở mặc định; người xem đổi nguồn ở ô chọn trên thanh điều khiển. */
   constructor(sources: ReplaySource[], sprites: Sprites) {
-    this.source = sources[0];
+    this.sources = [...sources];
+    this.source = this.sources[0];
     this.sprites = sprites;
-    this.controls = new ReplayControls(sources.map((s) => s.label), (i) => this.load(sources[i]));
+    this.controls = new ReplayControls(this.sources.map((s) => s.label), (i) => this.load(this.sources[i]));
     this.hud = this.controls.el;
+  }
+
+  /**
+   * Mở một trận cụ thể, ví dụ khi bấm vào chiến báo (GDD mục 14); nguồn chưa có trong ô chọn thì thêm lên đầu.
+   * Gọi trước hay sau khi scene được mở đều được; chuyển sang màn Trận là việc của nơi gọi.
+   */
+  open(source: ReplaySource): void {
+    if (!this.sources.includes(source)) this.sources.unshift(source);
+    this.controls.setSources(this.sources.map((s) => s.label), this.sources.indexOf(source));
+    this.load(source);
   }
 
   enter(v: View): void {
