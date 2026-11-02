@@ -7,8 +7,10 @@
 //
 // Chạy: npm.cmd run balance            (200 cặp mỗi ô, khoảng 76.000 trận)
 //       npm.cmd run balance -- --nhanh (20 cặp mỗi ô)   hoặc   -- --n <số cặp mỗi ô>
-// Ra: tools/balance/out/*.csv và tom_tat.md (sinh lại được, không commit)
+//       npm.cmd run balance -- --thu <file.json>  thử tham số sim mà không sửa packages/sim (xem thu.ts)
+// Ra: tools/balance/out/*.csv và tom_tat.md, có --thu thì ra tools/balance/out/thu_<tên file>/ (sinh lại được, không commit)
 import { mkdirSync, writeFileSync } from "node:fs";
+import { basename } from "node:path";
 import {
   simulate, Rng, ELEMENTS, SKILL_TYPES, COMBO, ONE, MAX_TICKS, TICKS_PER_SECOND, comboRelation, elementMultiplier,
   SKILL_SPECS, SKILL_RULES, BATTLE, UNIT_CURVE, ROOT_BUFFS, TALENT_RULES, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, GRADE_POW,
@@ -17,11 +19,15 @@ import {
 import { ELEMENT_NAMES, SKILL_TYPE_NAMES } from "@ktlp/rules";
 import { BALANCE } from "./config.ts";
 import { buildTeam, makeFrame, type Member, type Plan } from "./doi.ts";
+import { applyTrial } from "./thu.ts";
 
 const argN = process.argv.indexOf("--n");
 const PAIRS = argN > 0 ? Number(process.argv[argN + 1]) : process.argv.includes("--nhanh") ? BALANCE.quickPairs : BALANCE.pairs;
 if (!Number.isInteger(PAIRS) || PAIRS < 1) throw new Error("--n cần một số nguyên dương");
-const OUT = new URL("./out/", import.meta.url);
+const argThu = process.argv.indexOf("--thu");
+const TRIAL = argThu > 0 ? process.argv[argThu + 1] : undefined;
+const trialChanges = TRIAL ? applyTrial(TRIAL) : [];
+const OUT = new URL(TRIAL ? `./out/thu_${basename(TRIAL).replace(/\.json$/i, "")}/` : "./out/", import.meta.url);
 const KHAC = 1500; // hệ số khi đánh hệ bị khắc hoặc hệ đối cực (GDD mục 8)
 
 /** Kết quả một ô, tính theo đội mẫu. */
@@ -161,6 +167,10 @@ say(
     `Tham số ở tools/balance/config.ts.`,
 );
 say();
+if (TRIAL) {
+  say(`Thử tham số sim từ ${basename(TRIAL)} (chưa sửa packages/sim): ${trialChanges.length ? trialChanges.join("; ") : "không đổi gì"}.`);
+  say();
+}
 
 const perDefender = ELEMENTS.map((y) => {
   const list = counters.filter((c) => c.y === y);
