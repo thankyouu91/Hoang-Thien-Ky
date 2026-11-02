@@ -3489,6 +3489,1410 @@
       },
       "created": "2026-11-02",
       "pixellab_id": "d4eb04f9-e3c9-4ee9-91ff-ada9ed34460c"
+    },
+    {
+      "file": "nhan_vat/nam_khoe/tron.png",
+      "description": "Nhân vật nam khỏe, thân trống, ảnh nghỉ hướng south-east 64×64 (màn chọn nhân vật). Nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "muscular young man, blank base body for a xianxia cultivator, plain off-white sleeveless undershirt and plain off-white loose trousers, simple grey cloth shoes, short black hair tied in a small tight bun, empty open hands, relaxed neutral standing pose, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "mannequin",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "south-east",
+        "style_image": "south của a873b9b2-7b72-4f87-a990-26f52d9384ef (tu sĩ Tu thể)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "410d0952-6a5f-41ab-8b1f-fc183f49f987"
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao.png",
+      "description": "Nhân vật nam khỏe, mặc đạo bào, ảnh nghỉ hướng south-east 64×64 (màn chọn nhân vật). Nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_state",
+      "params": {
+        "source_character": "410d0952-6a5f-41ab-8b1f-fc183f49f987",
+        "edit_description": "wearing a long flowing deep blue Taoist robe with wide sleeves, white inner collar, dark sash belt, cloth shoes; same hair, same face, same body, hands empty",
+        "direction": "south-east"
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87"
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/dung.png",
+      "description": "Nhân vật nam khỏe mặc đạo bào, hoạt ảnh đứng thở; dải ngang 4 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "idle",
+        "frame_count": 4,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 4,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            50.6,
+            26.8,
+            0
+          ],
+          "tay": [
+            60.4,
+            51.7
+          ]
+        },
+        {
+          "dau": [
+            50.7,
+            26.8,
+            0
+          ],
+          "tay": [
+            60.4,
+            51.7
+          ]
+        },
+        {
+          "dau": [
+            50.6,
+            27.6,
+            0
+          ],
+          "tay": [
+            60.5,
+            51.6
+          ]
+        },
+        {
+          "dau": [
+            50.6,
+            26.9,
+            0
+          ],
+          "tay": [
+            60.4,
+            51.7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/ra_chieu.png",
+      "description": "Nhân vật nam khỏe mặc đạo bào, hoạt ảnh ra chiêu, tay trước đẩy ra; dải ngang 6 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "cast (energy 1.1)",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 10,
+      "neo": [
+        {
+          "dau": [
+            48.2,
+            27.3,
+            0
+          ],
+          "tay": [
+            60.1,
+            42
+          ]
+        },
+        {
+          "dau": [
+            45.9,
+            28,
+            0
+          ],
+          "tay": [
+            60.2,
+            35.4
+          ]
+        },
+        {
+          "dau": [
+            55.6,
+            31.5,
+            0
+          ],
+          "tay": [
+            66.1,
+            50.6
+          ]
+        },
+        {
+          "dau": [
+            55.7,
+            31.2,
+            0
+          ],
+          "tay": [
+            66.2,
+            51.2
+          ]
+        },
+        {
+          "dau": [
+            49.6,
+            27.7,
+            0
+          ],
+          "tay": [
+            60.7,
+            52
+          ]
+        },
+        {
+          "dau": [
+            49.7,
+            26.9,
+            0
+          ],
+          "tay": [
+            60.2,
+            51.6
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/trung_don.png",
+      "description": "Nhân vật nam khỏe mặc đạo bào, hoạt ảnh trúng đòn, lùi lại rồi đứng vững; dải ngang 6 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "hit",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 10,
+      "neo": [
+        {
+          "dau": [
+            41.5,
+            26.4,
+            0
+          ],
+          "tay": [
+            57.6,
+            48.7
+          ]
+        },
+        {
+          "dau": [
+            39.3,
+            27.2,
+            0
+          ],
+          "tay": [
+            55.4,
+            48.8
+          ]
+        },
+        {
+          "dau": [
+            44.4,
+            30.3,
+            0
+          ],
+          "tay": [
+            56.7,
+            53.4
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            30.6,
+            0
+          ],
+          "tay": [
+            58.3,
+            53.8
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            28.5,
+            0
+          ],
+          "tay": [
+            59.3,
+            52.6
+          ]
+        },
+        {
+          "dau": [
+            49.6,
+            26.7,
+            0
+          ],
+          "tay": [
+            60.4,
+            51.6
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/nga.png",
+      "description": "Nhân vật nam khỏe mặc đạo bào, hoạt ảnh ngã ngửa, giữ khung cuối (bỏ khung 6 vì nhổm dậy); dải ngang 5 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "fall_back",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 5,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            42.3,
+            27.4,
+            -21
+          ],
+          "tay": [
+            62.5,
+            42.4
+          ]
+        },
+        {
+          "dau": [
+            44,
+            33.9,
+            -12
+          ],
+          "tay": [
+            64.1,
+            50.8
+          ]
+        },
+        {
+          "dau": [
+            42,
+            42.7,
+            -12
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            34.1,
+            56.7,
+            -32
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            31.6,
+            67.8,
+            -95
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/tron.png",
+      "description": "Nhân vật nam mảnh, thân trống, ảnh nghỉ hướng south-east 64×64 (màn chọn nhân vật). Nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "slim lean young man, blank base body for a xianxia cultivator, plain off-white sleeveless undershirt and plain off-white loose trousers, simple grey cloth shoes, short black hair tied in a small tight bun, empty open hands, relaxed neutral standing pose, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "mannequin",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "south-east",
+        "style_image": "south của 410d0952-6a5f-41ab-8b1f-fc183f49f987 (thân nam khỏe)",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "a223be75-a61b-4ce7-b99a-661feaeee013"
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao.png",
+      "description": "Nhân vật nam mảnh, mặc đạo bào, ảnh nghỉ hướng south-east 64×64 (màn chọn nhân vật). Nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_state",
+      "params": {
+        "source_character": "a223be75-a61b-4ce7-b99a-661feaeee013",
+        "edit_description": "wearing a long flowing deep blue Taoist robe with wide sleeves, white inner collar, dark sash belt, cloth shoes; same hair, same face, same body, hands empty",
+        "direction": "south-east"
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8"
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/dung.png",
+      "description": "Nhân vật nam mảnh mặc đạo bào, hoạt ảnh đứng thở; dải ngang 4 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "idle",
+        "frame_count": 4,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 4,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            50.4,
+            26.1,
+            0
+          ],
+          "tay": [
+            57.7,
+            52.7
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            26.5,
+            0
+          ],
+          "tay": [
+            57.7,
+            52.7
+          ]
+        },
+        {
+          "dau": [
+            51,
+            26.8,
+            0
+          ],
+          "tay": [
+            57.7,
+            52.5
+          ]
+        },
+        {
+          "dau": [
+            50.1,
+            26.1,
+            0
+          ],
+          "tay": [
+            57.7,
+            52.5
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/ra_chieu.png",
+      "description": "Nhân vật nam mảnh mặc đạo bào, hoạt ảnh ra chiêu, tay trước đẩy ra; dải ngang 6 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "cast (energy 1.1)",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 10,
+      "neo": [
+        {
+          "dau": [
+            47.8,
+            27,
+            0
+          ],
+          "tay": [
+            57.6,
+            42.7
+          ]
+        },
+        {
+          "dau": [
+            45.4,
+            27.6,
+            0
+          ],
+          "tay": [
+            59.3,
+            33.3
+          ]
+        },
+        {
+          "dau": [
+            51.7,
+            29.3,
+            0
+          ],
+          "tay": [
+            63.9,
+            44.6
+          ]
+        },
+        {
+          "dau": [
+            55,
+            30.7,
+            0
+          ],
+          "tay": [
+            64.6,
+            53.8
+          ]
+        },
+        {
+          "dau": [
+            50.7,
+            29.5,
+            0
+          ],
+          "tay": [
+            59.7,
+            54.8
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.8,
+            0
+          ],
+          "tay": [
+            57.8,
+            52.5
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/trung_don.png",
+      "description": "Nhân vật nam mảnh mặc đạo bào, hoạt ảnh trúng đòn, lùi lại rồi đứng vững; dải ngang 6 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "hit",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 10,
+      "neo": [
+        {
+          "dau": [
+            41.1,
+            26.7,
+            0
+          ],
+          "tay": [
+            55.4,
+            49.9
+          ]
+        },
+        {
+          "dau": [
+            38.9,
+            27.5,
+            0
+          ],
+          "tay": [
+            53.1,
+            52.6
+          ]
+        },
+        {
+          "dau": [
+            44,
+            30,
+            0
+          ],
+          "tay": [
+            53.4,
+            53.4
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            29.8,
+            0
+          ],
+          "tay": [
+            55.3,
+            54
+          ]
+        },
+        {
+          "dau": [
+            49.1,
+            27.3,
+            0
+          ],
+          "tay": [
+            56.6,
+            53.9
+          ]
+        },
+        {
+          "dau": [
+            49.1,
+            26.6,
+            0
+          ],
+          "tay": [
+            57.7,
+            52.3
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/nga.png",
+      "description": "Nhân vật nam mảnh mặc đạo bào, hoạt ảnh ngã ngửa, giữ khung cuối (bỏ khung 6 vì nhổm dậy); dải ngang 5 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "fall_back",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 5,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            41.8,
+            28.3,
+            -23
+          ],
+          "tay": [
+            62.3,
+            41.3
+          ]
+        },
+        {
+          "dau": [
+            42.9,
+            36,
+            -19
+          ],
+          "tay": [
+            61.1,
+            51.4
+          ]
+        },
+        {
+          "dau": [
+            39.9,
+            46.6,
+            -11
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            32.5,
+            58.2,
+            -45
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            31.4,
+            69.3,
+            -93
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/tron.png",
+      "description": "Nhân vật nữ khỏe, thân trống, ảnh nghỉ hướng south-east 64×64 (màn chọn nhân vật). Nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "athletic strong young woman, blank base body for a xianxia cultivator, plain off-white sleeveless undershirt and plain off-white loose trousers, simple grey cloth shoes, long black hair tied up in a high bun, empty open hands, relaxed neutral standing pose, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "mannequin",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "south-east",
+        "style_image": "south của 410d0952-6a5f-41ab-8b1f-fc183f49f987 (thân nam khỏe)",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "20b160df-ecc9-4587-abc9-51a1cfa759e2"
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao.png",
+      "description": "Nhân vật nữ khỏe, mặc đạo bào, ảnh nghỉ hướng south-east 64×64 (màn chọn nhân vật). Nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_state",
+      "params": {
+        "source_character": "20b160df-ecc9-4587-abc9-51a1cfa759e2",
+        "edit_description": "wearing a long flowing deep blue Taoist robe with wide sleeves, white inner collar, dark sash belt, cloth shoes; same hair, same face, same body, hands empty",
+        "direction": "south-east"
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2"
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/dung.png",
+      "description": "Nhân vật nữ khỏe mặc đạo bào, hoạt ảnh đứng thở; dải ngang 4 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "idle",
+        "frame_count": 4,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 4,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            49.9,
+            28,
+            0
+          ],
+          "tay": [
+            59.7,
+            51.6
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            27.8,
+            0
+          ],
+          "tay": [
+            59.6,
+            51.6
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            28,
+            0
+          ],
+          "tay": [
+            59.7,
+            51.6
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            28,
+            0
+          ],
+          "tay": [
+            59.6,
+            51.6
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/ra_chieu.png",
+      "description": "Nhân vật nữ khỏe mặc đạo bào, hoạt ảnh ra chiêu, tay trước đẩy ra; dải ngang 6 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "cast (energy 1.1)",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 10,
+      "neo": [
+        {
+          "dau": [
+            49.1,
+            28.6,
+            0
+          ],
+          "tay": [
+            58.8,
+            43.7
+          ]
+        },
+        {
+          "dau": [
+            46.7,
+            29,
+            0
+          ],
+          "tay": [
+            58.2,
+            34.5
+          ]
+        },
+        {
+          "dau": [
+            55.8,
+            32,
+            0
+          ],
+          "tay": [
+            64.7,
+            47.4
+          ]
+        },
+        {
+          "dau": [
+            55.8,
+            32.1,
+            0
+          ],
+          "tay": [
+            64.4,
+            48.2
+          ]
+        },
+        {
+          "dau": [
+            50.3,
+            28.4,
+            0
+          ],
+          "tay": [
+            60,
+            52.1
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            27.9,
+            0
+          ],
+          "tay": [
+            59.6,
+            51.8
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/trung_don.png",
+      "description": "Nhân vật nữ khỏe mặc đạo bào, hoạt ảnh trúng đòn, lùi lại rồi đứng vững; dải ngang 6 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "hit",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 10,
+      "neo": [
+        {
+          "dau": [
+            41.9,
+            28.5,
+            0
+          ],
+          "tay": [
+            56.3,
+            48.4
+          ]
+        },
+        {
+          "dau": [
+            40.1,
+            29.3,
+            0
+          ],
+          "tay": [
+            54.7,
+            48.8
+          ]
+        },
+        {
+          "dau": [
+            44.9,
+            30.9,
+            0
+          ],
+          "tay": [
+            56,
+            52
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            31.8,
+            0
+          ],
+          "tay": [
+            57,
+            53.5
+          ]
+        },
+        {
+          "dau": [
+            49,
+            29,
+            0
+          ],
+          "tay": [
+            58.6,
+            52.1
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            27.9,
+            0
+          ],
+          "tay": [
+            59.6,
+            51.5
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/nga.png",
+      "description": "Nhân vật nữ khỏe mặc đạo bào, hoạt ảnh ngã ngửa, giữ khung cuối (bỏ khung 6 vì nhổm dậy); dải ngang 5 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "fall_back",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 5,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            44.9,
+            29.9,
+            -11
+          ],
+          "tay": [
+            61.7,
+            43.5
+          ]
+        },
+        {
+          "dau": [
+            43,
+            30.5,
+            -18
+          ],
+          "tay": [
+            63.1,
+            43.2
+          ]
+        },
+        {
+          "dau": [
+            44.5,
+            39.5,
+            -15
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            38.7,
+            49.5,
+            -21
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            30.5,
+            65.7,
+            -97
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/tron.png",
+      "description": "Nhân vật nữ mảnh, thân trống, ảnh nghỉ hướng south-east 64×64 (màn chọn nhân vật). Nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "slender graceful young woman, blank base body for a xianxia cultivator, plain off-white sleeveless undershirt and plain off-white loose trousers, simple grey cloth shoes, long black hair tied up in a neat bun, empty open hands, relaxed neutral standing pose, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "mannequin",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "south-east",
+        "style_image": "south của 410d0952-6a5f-41ab-8b1f-fc183f49f987 (thân nam khỏe)",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "8991f1ac-c5ef-48b3-9c64-a00c962dc317"
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao.png",
+      "description": "Nhân vật nữ mảnh, mặc đạo bào, ảnh nghỉ hướng south-east 64×64 (màn chọn nhân vật). Nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_state",
+      "params": {
+        "source_character": "8991f1ac-c5ef-48b3-9c64-a00c962dc317",
+        "edit_description": "wearing a long flowing deep blue Taoist robe with wide sleeves, white inner collar, dark sash belt, cloth shoes; same hair, same face, same body, hands empty",
+        "direction": "south-east"
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec"
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/dung.png",
+      "description": "Nhân vật nữ mảnh mặc đạo bào, hoạt ảnh đứng thở; dải ngang 4 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "idle",
+        "frame_count": 4,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 4,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            49.2,
+            27.5,
+            0
+          ],
+          "tay": [
+            56.6,
+            52.5
+          ]
+        },
+        {
+          "dau": [
+            50.1,
+            27.4,
+            0
+          ],
+          "tay": [
+            56.6,
+            52.5
+          ]
+        },
+        {
+          "dau": [
+            50.1,
+            27.4,
+            0
+          ],
+          "tay": [
+            56.6,
+            52.5
+          ]
+        },
+        {
+          "dau": [
+            50.2,
+            27.5,
+            0
+          ],
+          "tay": [
+            56.6,
+            52.6
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/ra_chieu.png",
+      "description": "Nhân vật nữ mảnh mặc đạo bào, hoạt ảnh ra chiêu, tay trước đẩy ra; dải ngang 6 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "cast (energy 1.1)",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 10,
+      "neo": [
+        {
+          "dau": [
+            47.8,
+            28.2,
+            0
+          ],
+          "tay": [
+            57.4,
+            39.7
+          ]
+        },
+        {
+          "dau": [
+            44.7,
+            28.7,
+            0
+          ],
+          "tay": [
+            51.9,
+            33.2
+          ]
+        },
+        {
+          "dau": [
+            55.4,
+            31.5,
+            0
+          ],
+          "tay": [
+            64.6,
+            51.8
+          ]
+        },
+        {
+          "dau": [
+            54.2,
+            30.9,
+            0
+          ],
+          "tay": [
+            62.7,
+            51.8
+          ]
+        },
+        {
+          "dau": [
+            50.3,
+            28.7,
+            0
+          ],
+          "tay": [
+            57.8,
+            52.8
+          ]
+        },
+        {
+          "dau": [
+            49.5,
+            27.5,
+            0
+          ],
+          "tay": [
+            56.7,
+            52.5
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/trung_don.png",
+      "description": "Nhân vật nữ mảnh mặc đạo bào, hoạt ảnh trúng đòn, lùi lại rồi đứng vững; dải ngang 6 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "hit",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 10,
+      "neo": [
+        {
+          "dau": [
+            41.4,
+            27.6,
+            0
+          ],
+          "tay": [
+            54.9,
+            49.6
+          ]
+        },
+        {
+          "dau": [
+            39.4,
+            28.3,
+            0
+          ],
+          "tay": [
+            52.5,
+            49.8
+          ]
+        },
+        {
+          "dau": [
+            44.5,
+            31.1,
+            0
+          ],
+          "tay": [
+            53.8,
+            53.9
+          ]
+        },
+        {
+          "dau": [
+            48.1,
+            31.9,
+            0
+          ],
+          "tay": [
+            54.9,
+            54.3
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            29.4,
+            0
+          ],
+          "tay": [
+            55.4,
+            53.2
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27.5,
+            0
+          ],
+          "tay": [
+            56.5,
+            52.5
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/nga.png",
+      "description": "Nhân vật nữ mảnh mặc đạo bào, hoạt ảnh ngã ngửa, giữ khung cuối (bỏ khung 6 vì nhổm dậy); dải ngang 5 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "move": "fall_back",
+        "frame_count": 6,
+        "directions": [
+          "south-east"
+        ]
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 5,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            42.7,
+            29.1,
+            -22
+          ],
+          "tay": [
+            61,
+            40.8
+          ]
+        },
+        {
+          "dau": [
+            43.5,
+            35.5,
+            -17
+          ],
+          "tay": [
+            61.7,
+            48.1
+          ]
+        },
+        {
+          "dau": [
+            42.3,
+            43.2,
+            -12
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            35.6,
+            56.8,
+            -35
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            33.5,
+            66.9,
+            -94
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "do/mu/o_sa.png",
+      "description": "Mũ ô sa đen hai cánh: lớp đồ rời 64×64, tách từ ảnh inpaint trên ảnh nghỉ của thân nam khỏe. Vẽ ở (neo khung − pivot); mũ xoay theo góc neo đầu.",
+      "tool": "inpaint_image_pro_flash",
+      "params": {
+        "description": "a black lacquered gauze scholar hat (Chinese official cap with two short side wings) sitting on top of the head, covering the hair bun; face unchanged",
+        "source": "rotation south-east của 410d0952-6a5f-41ab-8b1f-fc183f49f987",
+        "seed": 1
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "4bdf3c5a-458f-49af-850a-b6656ecfbd17",
+      "slot": "mu",
+      "neo": "dau",
+      "pivot": [
+        33.6,
+        10.8
+      ]
+    },
+    {
+      "file": "do/vu_khi/kiem.png",
+      "description": "Kiếm thẳng chuôi vàng (kèm nắm tay): lớp đồ rời 64×64, tách từ ảnh inpaint trên ảnh nghỉ của thân nam khỏe. Vẽ ở (neo khung − pivot); mũ xoay theo góc neo đầu.",
+      "tool": "inpaint_image_pro_flash",
+      "params": {
+        "description": "the right-hand fist grips a straight double-edged Chinese jian sword with a gold guard, the blade pointing up and forward diagonally to the upper right",
+        "source": "rotation south-east của 410d0952-6a5f-41ab-8b1f-fc183f49f987",
+        "seed": 1
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "bcf65f80-5907-447a-9d4d-b8b634b7c16e",
+      "slot": "vu_khi",
+      "neo": "tay",
+      "pivot": [
+        44.7,
+        35.4
+      ]
     }
   ]
 }
