@@ -1,0 +1,6 @@
+{
+  "bao": {"id":"bao","name":"Bạo","dmg":100,"cd":0,"crit":0,"mana":0,"effectPower":1000},
+  "toc": {"id":"toc","name":"Tốc","dmg":0,"cd":-100,"crit":20,"mana":0,"effectPower":1000},
+  "linh": {"id":"linh","name":"Linh","dmg":0,"cd":0,"crit":0,"mana":0,"effectPower":1500},
+  "ben": {"id":"ben","name":"Bền","dmg":0,"cd":0,"crit":0,"mana":-250,"effectPower":1000}
+}

@@ -1,0 +1,56 @@
+{
+  "ha": {
+    "id": "ha",
+    "name": "Hạ vị diện",
+    "qi": 1000,
+    "regions": 12,
+    "pointsPerRegion": 450,
+    "secretRealmsPerRegion": 6,
+    "mines": {"linh_thach":120,"quang":80,"duoc":80,"linh_tuyen":10},
+    "maxMineLevel": 5,
+    "stoneGrade": "hạ phẩm",
+    "maxTechniqueGrade": 4,
+    "maxCharacterLevel": 250,
+    "realms": "Luyện Khí (1–50), Trúc Cơ (51–100), Kết Đan (101–150), Nguyên Anh (151–200), Hóa Thần (201–250)"
+  },
+  "trung": {
+    "id": "trung",
+    "name": "Trung vị diện",
+    "qi": 4000,
+    "regions": 9,
+    "pointsPerRegion": 350,
+    "secretRealmsPerRegion": 5,
+    "mines": {"linh_thach":93,"quang":62,"duoc":62,"linh_tuyen":8},
+    "maxMineLevel": 8,
+    "stoneGrade": "trung phẩm",
+    "maxTechniqueGrade": 6,
+    "maxCharacterLevel": 200,
+    "realms": "Luyện Hư (1–100), Hợp Thể (101–200); cấp đếm lại từ 1, giữ chỉ số"
+  },
+  "than": {
+    "id": "than",
+    "name": "Thần vực",
+    "qi": 8000,
+    "regions": 5,
+    "pointsPerRegion": 250,
+    "secretRealmsPerRegion": 4,
+    "mines": {"linh_thach":67,"quang":44,"duoc":44,"linh_tuyen":6},
+    "maxMineLevel": 20,
+    "stoneGrade": "thượng phẩm",
+    "maxTechniqueGrade": 9,
+    "realms": "Đại Thừa, Độ Kiếp; không còn cấp, tu luyện chiêu thức"
+  },
+  "thanh": {
+    "id": "thanh",
+    "name": "Thánh vực",
+    "qi": 12000,
+    "regions": 2,
+    "pointsPerRegion": 150,
+    "secretRealmsPerRegion": 3,
+    "mines": {"linh_thach":40,"quang":27,"duoc":27,"linh_tuyen":3},
+    "maxMineLevel": 100,
+    "stoneGrade": "cực phẩm",
+    "maxTechniqueGrade": 10,
+    "realms": "Chân Tiên; không còn cấp"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "dong_he": {"id":"dong_he","name":"Đồng hệ","condition":"3 loài cùng hệ","effect":"Công pháp hệ đó +3% sát thương"},
+  "thuan_he": {
+    "id": "thuan_he",
+    "name": "Thuần hệ",
+    "condition": "Cả 5 loài cùng hệ",
+    "effect": "Thay Đồng hệ: công pháp hệ đó +6% sát thương; nhận sát thương từ hệ khắc mình −5%"
+  },
+  "goc_bien": {
+    "id": "goc_bien",
+    "name": "Gốc và biến",
+    "condition": "1 hệ gốc + biến dị của nó (Kim + Lôi, Mộc + Phong, Thủy + Cực hàn, Hỏa + Cực dương, Thổ + Cực âm)",
+    "effect": "Công pháp của hai hệ đó +2% sát thương"
+  },
+  "doi_cuc": {
+    "id": "doi_cuc",
+    "name": "Đối cực",
+    "condition": "Cực dương + Cực âm, hoặc Quang + Âm lãnh",
+    "effect": "Đòn đối cực ×1,5 thành ×1,55"
+  },
+  "ngu_hanh": {
+    "id": "ngu_hanh",
+    "name": "Ngũ Hành tương sinh",
+    "condition": "Đủ 5 hệ Kim, Mộc, Thủy, Hỏa, Thổ",
+    "effect": "+2% máu, công, phòng; nhận sát thương từ hệ khắc mình −5%"
+  },
+  "dong_dang": {
+    "id": "dong_dang",
+    "name": "Đồng dáng",
+    "condition": "Cả 5 thú cùng dáng",
+    "effect": "Tẩu thú: đoàn hộ tống +20% tốc độ. Phi cầm: xác suất gặp sự kiện mỗi chặng −10%. Thủy thú: qua bến đò không phải chờ"
+  },
+  "tu_tuong": {
+    "id": "tu_tuong",
+    "name": "Tứ Tượng",
+    "condition": "Đủ Thanh Long, Bạch Hổ, Chu Tước, Huyền Vũ",
+    "effect": "+3% máu, công, phòng; party cùng hành trình +1%"
+  }
+}

@@ -1,0 +1,98 @@
+[
+  {
+    "grade": 1,
+    "name": "Phàm",
+    "techniqueName": "Phàm pháp",
+    "plane": "Hạ vị",
+    "power": 1000,
+    "learnLevel": 1,
+    "drop": {"ha":600},
+    "contribution": 10
+  },
+  {
+    "grade": 2,
+    "name": "Hoàng",
+    "techniqueName": "Hoàng pháp",
+    "plane": "Hạ vị",
+    "power": 1250,
+    "learnLevel": 50,
+    "drop": {"ha":280},
+    "contribution": 20
+  },
+  {
+    "grade": 3,
+    "name": "Huyền",
+    "techniqueName": "Huyền pháp",
+    "plane": "Hạ vị",
+    "power": 1563,
+    "learnLevel": 100,
+    "drop": {"ha":100,"trung":400},
+    "contribution": 40
+  },
+  {
+    "grade": 4,
+    "name": "Địa",
+    "techniqueName": "Địa pháp",
+    "plane": "Hạ vị",
+    "power": 1953,
+    "learnLevel": 150,
+    "drop": {"ha":20,"trung":350},
+    "contribution": 80
+  },
+  {
+    "grade": 5,
+    "name": "Thiên",
+    "techniqueName": "Thiên pháp",
+    "plane": "Trung vị",
+    "power": 2441,
+    "learnLevel": 1,
+    "drop": {"trung":200,"than":350},
+    "contribution": 160
+  },
+  {
+    "grade": 6,
+    "name": "Vương",
+    "techniqueName": "Vương pháp",
+    "plane": "Trung vị",
+    "power": 3052,
+    "learnLevel": 100,
+    "drop": {"trung":50,"than":350},
+    "contribution": 320
+  },
+  {
+    "grade": 7,
+    "name": "Tôn",
+    "techniqueName": "Tôn pháp",
+    "plane": "Thần vực",
+    "power": 3815,
+    "drop": {"than":200,"thanh":300},
+    "contribution": 640
+  },
+  {
+    "grade": 8,
+    "name": "Tiên",
+    "techniqueName": "Tiên pháp",
+    "plane": "Thần vực",
+    "power": 4768,
+    "drop": {"than":80,"thanh":350},
+    "contribution": 1280
+  },
+  {
+    "grade": 9,
+    "name": "Thần",
+    "techniqueName": "Thần pháp",
+    "plane": "Thần vực",
+    "power": 5960,
+    "drop": {"than":20,"thanh":250},
+    "contribution": 2560
+  },
+  {
+    "grade": 10,
+    "name": "Thánh",
+    "techniqueName": "Thánh pháp",
+    "plane": "Thánh vực",
+    "power": 7451,
+    "drop": {"thanh":100},
+    "contribution": 5120
+  }
+]

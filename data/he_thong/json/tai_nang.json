@@ -1,0 +1,66 @@
+{
+  "tu_the": {
+    "id": "tu_the",
+    "name": "Tu thể",
+    "chance": 125,
+    "combat": "+15% máu, +10% phòng thủ; cận chiến và hộ thể +10%",
+    "economy": "Khai khoáng thủ công +10%",
+    "privilege": "Học Hộ thể cao hơn 1 phẩm"
+  },
+  "tu_phap": {
+    "id": "tu_phap",
+    "name": "Tu pháp",
+    "chance": 125,
+    "combat": "+15% sát thương tầm xa và diện rộng, +10% mana",
+    "economy": "—",
+    "privilege": "Bùa chú thêm 1 lần mỗi trận"
+  },
+  "tu_tran": {
+    "id": "tu_tran",
+    "name": "Tu trận",
+    "chance": 125,
+    "combat": "Bày trận nhanh hơn 30%, tuyệt sát +5%",
+    "economy": "Hộ Sơn Đại Trận +5% khi có Tu trận trấn giữ",
+    "privilege": "Chỉ Tu trận học Trận pháp từ Địa pháp, xây Truyền Tống Trận và hộ trận ở cứ điểm"
+  },
+  "tu_dan": {
+    "id": "tu_dan",
+    "name": "Tu đan",
+    "chance": 125,
+    "combat": "Đan dược tự dùng +20%",
+    "economy": "Luyện đan +1 bậc chất lượng, sản lượng +15%",
+    "privilege": "Luyện Tẩy Tủy Đan"
+  },
+  "sat_thu": {
+    "id": "sat_thu",
+    "name": "Sát thủ",
+    "chance": 125,
+    "combat": "+10% chí mạng, +20% sát thương chí mạng, ẩn thân 3 s đầu trận",
+    "economy": "—",
+    "privilege": "Thân pháp hồi chiêu −20%"
+  },
+  "tu_ren": {
+    "id": "tu_ren",
+    "name": "Tu rèn",
+    "chance": 125,
+    "combat": "Pháp bảo tự rèn +10%",
+    "economy": "Rèn +1 bậc chất lượng, tốn quặng −15%",
+    "privilege": "Rèn pháp bảo từ Thiên phẩm"
+  },
+  "tu_duoc": {
+    "id": "tu_duoc",
+    "name": "Tu dược",
+    "chance": 125,
+    "combat": "Hồi máu nhận +10%",
+    "economy": "Mỏ dược +20%, nhận ra dược liệu hiếm",
+    "privilege": "Thu được dược liệu hiếm"
+  },
+  "tu_kim_tien": {
+    "id": "tu_kim_tien",
+    "name": "Tu kim tiền",
+    "chance": 125,
+    "combat": "Luck +10 (tăng tỷ lệ rơi phẩm cao)",
+    "economy": "Khai khoáng +15%, lợi nhuận giao dịch +10%, thuế chợ −2%, +1 gian hàng",
+    "privilege": "Mở Thương hội"
+  }
+}

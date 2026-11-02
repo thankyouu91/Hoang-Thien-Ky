@@ -1,0 +1,39 @@
+{
+  "pham": {
+    "id": "pham",
+    "name": "Phàm",
+    "species": 36,
+    "habitat": "Hạ vị",
+    "statBonus": 8,
+    "market": "Được, nếu chưa lên Hóa Hình",
+    "refineBonus": 5
+  },
+  "linh": {
+    "id": "linh",
+    "name": "Linh",
+    "species": 24,
+    "habitat": "Hạ vị (hiếm), Trung vị",
+    "statBonus": 12,
+    "market": "Được, nếu chưa lên Hóa Hình",
+    "refineBonus": 10
+  },
+  "huyen": {
+    "id": "huyen",
+    "name": "Huyền",
+    "species": 24,
+    "habitat": "Trung vị, Thần vực; Yêu Thú Sào Huyệt ở Hạ vị",
+    "statBonus": 16,
+    "market": "Không, khóa vào nhân vật",
+    "refineBonus": 20
+  },
+  "thien": {
+    "id": "thien",
+    "name": "Thiên",
+    "species": 12,
+    "habitat": "Thần vực, Thánh vực; Yêu Thú Sào Huyệt ở Trung vị",
+    "statBonus": 20,
+    "market": "Không",
+    "refineBonus": 40
+  },
+  "than": {"id":"than","name":"Thần","species":4,"habitat":"Chỉ Thánh vực","statBonus":24,"market":"Không"}
+}

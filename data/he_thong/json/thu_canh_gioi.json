@@ -1,0 +1,48 @@
+[
+  {
+    "realm": 1,
+    "name": "Khai Linh",
+    "fromStage": 1,
+    "toStage": 20,
+    "unlockLevel": 1,
+    "speed": 1200,
+    "siegePerMinute": 400,
+    "statBonus": {"pham":2,"than":6}
+  },
+  {
+    "realm": 2,
+    "name": "Ngưng Đan",
+    "fromStage": 21,
+    "toStage": 40,
+    "unlockLevel": 50,
+    "speed": 1400,
+    "siegePerMinute": 1000,
+    "breakthroughChance": 600,
+    "breakPillLevel": 3,
+    "statBonus": {"pham":4,"than":12}
+  },
+  {
+    "realm": 3,
+    "name": "Hóa Hình",
+    "fromStage": 41,
+    "toStage": 60,
+    "unlockLevel": 100,
+    "speed": 1600,
+    "siegePerMinute": 2500,
+    "breakthroughChance": 400,
+    "breakPillLevel": 6,
+    "statBonus": {"pham":6,"than":18}
+  },
+  {
+    "realm": 4,
+    "name": "Thông Thiên",
+    "fromStage": 61,
+    "toStage": 80,
+    "unlockLevel": 150,
+    "speed": 1800,
+    "siegePerMinute": 6000,
+    "breakthroughChance": 250,
+    "breakPillLevel": 8,
+    "statBonus": {"pham":8,"than":24}
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "duong_linh": {
+    "id": "duong_linh",
+    "name": "Dưỡng Linh Đơn",
+    "levels": "1–8, theo đại cảnh giới của thú",
+    "use": "Tăng tu vi thú",
+    "materials": "Đan thú (Thú Lâm), dược liệu",
+    "market": "Bán được"
+  },
+  "pha_canh": {
+    "id": "pha_canh",
+    "name": "Phá Cảnh Đơn",
+    "levels": "3 vào Ngưng Đan, 6 vào Hóa Hình, 8 vào Thông Thiên",
+    "use": "Bắt buộc khi qua thú kiếp",
+    "materials": "Đan thú phẩm cao, dược liệu hiếm",
+    "market": "Cấp 3 bán được; cấp 6 và 8 khóa vào nhân vật"
+  },
+  "hoi_linh": {
+    "id": "hoi_linh",
+    "name": "Hồi Linh Đơn",
+    "levels": "1–5",
+    "use": "Chữa thú bị thương ngay",
+    "materials": "Dược liệu",
+    "market": "Bán được"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "linh_thach_quat": {
+    "id": "linh_thach_quat",
+    "name": "Linh Thạch Quật",
+    "dropRate": 500,
+    "strength": "Linh thạch",
+    "share": {"thanVat":30,"thienCap":100,"linhCap":190,"tanQuyen":680}
+  },
+  "duoc_coc": {
+    "id": "duoc_coc",
+    "name": "Dược Cốc",
+    "dropRate": 450,
+    "strength": "Dược liệu, nguyên liệu đan",
+    "share": {"thanVat":34,"thienCap":105,"linhCap":207,"tanQuyen":653}
+  },
+  "khoang_mach_dong": {
+    "id": "khoang_mach_dong",
+    "name": "Khoáng Mạch Động",
+    "dropRate": 450,
+    "strength": "Quặng rèn",
+    "share": {"thanVat":34,"thienCap":105,"linhCap":207,"tanQuyen":653}
+  },
+  "thu_lam": {
+    "id": "thu_lam",
+    "name": "Thú Lâm",
+    "dropRate": 400,
+    "strength": "Đan thú, dị thú",
+    "share": {"thanVat":39,"thienCap":111,"linhCap":225,"tanQuyen":626}
+  },
+  "co_chien_truong": {
+    "id": "co_chien_truong",
+    "name": "Cổ Chiến Trường",
+    "dropRate": 350,
+    "strength": "Trang bị linh cấp",
+    "share": {"thanVat":43,"thienCap":116,"linhCap":242,"tanQuyen":598}
+  },
+  "tang_kinh_dong": {
+    "id": "tang_kinh_dong",
+    "name": "Tàng Kinh Động",
+    "dropRate": 350,
+    "strength": "Tàn quyển",
+    "share": {"thanVat":43,"thienCap":116,"linhCap":242,"tanQuyen":598}
+  },
+  "ngoc_tuy_dong": {
+    "id": "ngoc_tuy_dong",
+    "name": "Ngọc Tủy Động",
+    "dropRate": 300,
+    "strength": "Ngọc khảm",
+    "share": {"thanVat":47,"thienCap":122,"linhCap":260,"tanQuyen":571}
+  },
+  "linh_tuyen_dong": {
+    "id": "linh_tuyen_dong",
+    "name": "Linh Tuyền Động",
+    "dropRate": 300,
+    "strength": "Kinh nghiệm, tu vi",
+    "share": {"thanVat":47,"thienCap":122,"linhCap":260,"tanQuyen":571}
+  },
+  "bang_phach_cung": {
+    "id": "bang_phach_cung",
+    "name": "Băng Phách Cung",
+    "dropRate": 250,
+    "strength": "Ngọc và đồ hệ Cực hàn, Thủy",
+    "share": {"thanVat":52,"thienCap":127,"linhCap":277,"tanQuyen":544}
+  },
+  "loi_tri": {
+    "id": "loi_tri",
+    "name": "Lôi Trì",
+    "dropRate": 250,
+    "strength": "Nguyên liệu hệ Lôi, Kim",
+    "share": {"thanVat":52,"thienCap":127,"linhCap":277,"tanQuyen":544}
+  },
+  "yeu_thu_sao_huyet": {
+    "id": "yeu_thu_sao_huyet",
+    "name": "Yêu Thú Sào Huyệt",
+    "dropRate": 200,
+    "strength": "Thú cưỡi hiếm",
+    "share": {"thanVat":56,"thienCap":133,"linhCap":294,"tanQuyen":517}
+  },
+  "co_tong_di_tich": {
+    "id": "co_tong_di_tich",
+    "name": "Cổ Tông Di Tích",
+    "dropRate": 200,
+    "strength": "Pháp bảo",
+    "share": {"thanVat":56,"thienCap":133,"linhCap":294,"tanQuyen":517}
+  },
+  "dan_tien_dong_phu": {
+    "id": "dan_tien_dong_phu",
+    "name": "Đan Tiên Động Phủ",
+    "dropRate": 150,
+    "strength": "Đan phương, mảnh lô đỉnh",
+    "share": {"thanVat":60,"thienCap":138,"linhCap":312,"tanQuyen":490}
+  },
+  "luyen_khi_di_chi": {
+    "id": "luyen_khi_di_chi",
+    "name": "Luyện Khí Di Chỉ",
+    "dropRate": 150,
+    "strength": "Mảnh lò rèn, trang bị thiên cấp",
+    "share": {"thanVat":60,"thienCap":138,"linhCap":312,"tanQuyen":490}
+  },
+  "huyet_sat_ma_quat": {
+    "id": "huyet_sat_ma_quat",
+    "name": "Huyết Sát Ma Quật",
+    "dropRate": 120,
+    "strength": "Công pháp luyện tà, đồ sát thủ",
+    "share": {"thanVat":63,"thienCap":141,"linhCap":322,"tanQuyen":473}
+  },
+  "thien_loi_dai": {
+    "id": "thien_loi_dai",
+    "name": "Thiên Lôi Đài",
+    "dropRate": 100,
+    "strength": "Phù chống lôi kiếp, Thần đan",
+    "share": {"thanVat":65,"thienCap":143,"linhCap":329,"tanQuyen":463}
+  },
+  "van_kiem_trung": {
+    "id": "van_kiem_trung",
+    "name": "Vạn Kiếm Trủng",
+    "dropRate": 100,
+    "strength": "Vũ khí thiên cấp",
+    "share": {"thanVat":65,"thienCap":143,"linhCap":329,"tanQuyen":463}
+  },
+  "tien_nhan_dong_phu": {
+    "id": "tien_nhan_dong_phu",
+    "name": "Tiên Nhân Động Phủ",
+    "dropRate": 70,
+    "strength": "Thần vật",
+    "share": {"thanVat":67,"thienCap":147,"linhCap":340,"tanQuyen":446}
+  },
+  "thuong_co_chien_truong": {
+    "id": "thuong_co_chien_truong",
+    "name": "Thượng Cổ Chiến Trường",
+    "dropRate": 50,
+    "strength": "Thần vật, mảnh pháp bảo trấn giáo",
+    "share": {"thanVat":69,"thienCap":149,"linhCap":347,"tanQuyen":435}
+  },
+  "hon_don_bi_canh": {
+    "id": "hon_don_bi_canh",
+    "name": "Hỗn Độn Bí Cảnh",
+    "dropRate": 40,
+    "strength": "Mọi loại, tỷ lệ thần vật cao nhất",
+    "share": {"thanVat":70,"thienCap":150,"linhCap":350,"tanQuyen":430}
+  }
+}

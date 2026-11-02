@@ -1,0 +1,127 @@
+{
+  "kim": {
+    "id": "kim",
+    "name": "Kim",
+    "short": "Kim",
+    "group": "Ngũ Hành",
+    "identity": "Xuyên giáp, đơn mục tiêu",
+    "effect": {"desc":"Xuyên giáp","value":100},
+    "stats": {"dmg":0,"crit":20,"cd":0,"mana":0,"range":0},
+    "rootBuff": {"desc":"Sát thương chí mạng","stat":"critDamage","value":120}
+  },
+  "moc": {
+    "id": "moc",
+    "name": "Mộc",
+    "short": "Mộc",
+    "group": "Ngũ Hành",
+    "identity": "Hồi phục, trói chân",
+    "effect": {"desc":"Trói chân","value":20},
+    "stats": {"dmg":0,"crit":0,"cd":0,"mana":0,"range":0},
+    "rootBuff": {"desc":"Hồi máu nhận được","stat":"healTaken","value":100}
+  },
+  "thuy": {
+    "id": "thuy",
+    "name": "Thủy",
+    "short": "Thủy",
+    "group": "Ngũ Hành",
+    "identity": "Làm chậm, tiết kiệm mana",
+    "effect": {"desc":"Làm chậm","value":200,"ticks":40},
+    "stats": {"dmg":0,"crit":0,"cd":0,"mana":-100,"range":0},
+    "rootBuff": {"desc":"Mana tối đa","stat":"manaMax","value":150}
+  },
+  "hoa": {
+    "id": "hoa",
+    "name": "Hỏa",
+    "short": "Hỏa",
+    "group": "Ngũ Hành",
+    "identity": "Diện rộng, thiêu đốt",
+    "effect": {"desc":"Thiêu đốt mỗi giây (theo sát thương đòn đánh)","value":100,"ticks":60},
+    "stats": {"dmg":50,"crit":0,"cd":0,"mana":50,"range":0},
+    "rootBuff": {"desc":"Sát thương","stat":"damage","value":100}
+  },
+  "tho": {
+    "id": "tho",
+    "name": "Thổ",
+    "short": "Thổ",
+    "group": "Ngũ Hành",
+    "identity": "Phòng thủ, khiên",
+    "effect": {"desc":"Khiên bản thân (theo máu tối đa)","value":50},
+    "stats": {"dmg":-50,"crit":0,"cd":0,"mana":0,"range":0},
+    "rootBuff": {"desc":"Máu tối đa","stat":"hp","value":120}
+  },
+  "loi": {
+    "id": "loi",
+    "name": "Lôi",
+    "short": "Lôi",
+    "group": "Biến dị",
+    "parent": "kim",
+    "identity": "Chí mạng, tê liệt",
+    "effect": {"desc":"Tê liệt khi chí mạng","value":10},
+    "stats": {"dmg":0,"crit":30,"cd":0,"mana":0,"range":0},
+    "rootBuff": {"desc":"Tốc độ đánh","stat":"attackSpeed","value":120}
+  },
+  "phong": {
+    "id": "phong",
+    "name": "Phong",
+    "short": "Phong",
+    "group": "Biến dị",
+    "parent": "moc",
+    "identity": "Tốc độ, đẩy lùi",
+    "effect": {"desc":"Đẩy lùi","value":1000},
+    "stats": {"dmg":0,"crit":0,"cd":-50,"mana":0,"range":0},
+    "rootBuff": {"desc":"Giảm hồi chiêu","stat":"cooldownCut","value":100}
+  },
+  "quang": {
+    "id": "quang",
+    "name": "Quang",
+    "short": "Quang",
+    "group": "Thiên địa dị hệ",
+    "identity": "Hồi máu, chói mắt",
+    "effect": {"desc":"Hồi máu theo sát thương gây ra","value":20},
+    "stats": {"dmg":0,"crit":0,"cd":0,"mana":0,"range":0},
+    "rootBuff": {"desc":"Hiệu quả hồi máu và khiên","stat":"healPower","value":150}
+  },
+  "am_lanh": {
+    "id": "am_lanh",
+    "name": "Âm lãnh",
+    "short": "Âm",
+    "group": "Thiên địa dị hệ",
+    "identity": "Tầm xa, hút máu",
+    "effect": {"desc":"Hút máu","value":30},
+    "stats": {"dmg":0,"crit":0,"cd":0,"mana":0,"range":1000},
+    "rootBuff": {"desc":"Hút máu","stat":"lifesteal","value":80}
+  },
+  "cuc_duong": {
+    "id": "cuc_duong",
+    "name": "Cực dương",
+    "short": "Dương",
+    "group": "Biến dị",
+    "parent": "hoa",
+    "identity": "Bùng nổ, xuyên kháng",
+    "effect": {"desc":"Xuyên kháng","value":100},
+    "stats": {"dmg":50,"crit":0,"cd":0,"mana":50,"range":0},
+    "rootBuff": {"desc":"Xuyên kháng","stat":"resistPen","value":100}
+  },
+  "cuc_am": {
+    "id": "cuc_am",
+    "name": "Cực âm",
+    "short": "U",
+    "group": "Biến dị",
+    "parent": "tho",
+    "identity": "Nguyền rủa, sát thương theo thời gian",
+    "effect": {"desc":"Giảm hồi máu của mục tiêu","value":300,"ticks":60},
+    "stats": {"dmg":0,"crit":0,"cd":0,"mana":0,"range":0},
+    "rootBuff": {"desc":"Sát thương theo thời gian","stat":"dot","value":120}
+  },
+  "cuc_han": {
+    "id": "cuc_han",
+    "name": "Cực hàn",
+    "short": "Băng",
+    "group": "Biến dị",
+    "parent": "thuy",
+    "identity": "Đóng băng, khống chế",
+    "effect": {"desc":"Đóng băng (tỷ lệ)","value":80,"ticks":20},
+    "stats": {"dmg":0,"crit":0,"cd":0,"mana":0,"range":0},
+    "rootBuff": {"desc":"Thời gian khống chế","stat":"controlTime","value":150}
+  }
+}
