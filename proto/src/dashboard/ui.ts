@@ -89,6 +89,56 @@ export function assetUrl(key: string): string {
   return `${import.meta.env.BASE_URL}pixellab/${key}.png`;
 }
 
+const cropped = new Map<string, Promise<string>>();
+
+/** Ảnh đồ ghép (do/mu, do/vu_khi) vẽ trong khung lớn của thân: cắt theo phần có hình để làm icon ô trang bị. */
+function cropToContent(src: string): Promise<string> {
+  let p = cropped.get(src);
+  if (!p) {
+    p = new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        const g = c.getContext("2d", { willReadFrequently: true })!;
+        g.drawImage(img, 0, 0);
+        const { data, width, height } = g.getImageData(0, 0, c.width, c.height);
+        let x0 = width, y0 = height, x1 = -1, y1 = -1;
+        for (let y = 0; y < height; y++) {
+          for (let x = 0; x < width; x++) {
+            if (data[(y * width + x) * 4 + 3] > 16) {
+              x0 = Math.min(x0, x);
+              x1 = Math.max(x1, x);
+              y0 = Math.min(y0, y);
+              y1 = Math.max(y1, y);
+            }
+          }
+        }
+        if (x1 < 0) return resolve(src);
+        const side = Math.max(x1 - x0, y1 - y0) + 3;
+        const out = document.createElement("canvas");
+        out.width = out.height = side;
+        out.getContext("2d")!.drawImage(img, x0 - 1, y0 - 1, side, side, (side - (x1 - x0)) / 2 - 1, (side - (y1 - y0)) / 2 - 1, side, side);
+        resolve(out.toDataURL());
+      };
+      img.onerror = () => resolve(src);
+      img.src = src;
+    });
+    cropped.set(src, p);
+  }
+  return p;
+}
+
+/** Thay mọi `<img data-crop>` trong `root` bằng ảnh đã cắt sát hình. */
+export function cropIcons(root: HTMLElement): void {
+  for (const img of root.querySelectorAll<HTMLImageElement>("img[data-crop]")) {
+    const src = img.getAttribute("src")!;
+    img.removeAttribute("data-crop");
+    void cropToContent(src).then((url) => (img.src = url));
+  }
+}
+
 /** Chip hệ: icon kèm tên, màu theo GDD mục 15 (không chỉ dựa vào màu). */
 export function elementChip(e: Element, withName = true): string {
   const st = ELEMENT_STYLE[e];

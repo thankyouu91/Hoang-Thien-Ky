@@ -196,7 +196,7 @@ export function createWorld(region: RegionMap, now: number): World {
       name: names.p1,
       roots: ["loi"],
       talent: "tu_the",
-      exp: 11_840,
+      exp: 8_960,
       linhThach: 3_280,
       tienNgoc: 120,
       satNghiep: 0,
