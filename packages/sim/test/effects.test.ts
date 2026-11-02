@@ -90,14 +90,18 @@ test("Lôi tê liệt 0,5 s khi chí mạng", () => {
   assert.ok(stunned > 0 && stunned < 60, `tê liệt ${stunned}/200`); // chí mạng 9,5%
 });
 
-test("Phong đẩy lùi 1 ô", () => {
-  const b = new Battle({ seed: 1, teamA: [unit(1, 0, [tech("can_don", "phong")])], teamB: [inert(101)] }, true);
-  let pos = 0;
-  while (!b.events.some((e) => e.unitId === 1)) {
-    pos = get(b, 101).pos;
-    b.step();
-  }
-  assert.equal(get(b, 101).pos, pos + 1000 - 100); // bị đẩy 1 ô, rồi tự đi lại 1/10 ô trong lượt của mình
+test("Phong đẩy lùi 1 ô với chiêu đánh xa; chiêu cận chiến không đẩy", () => {
+  const posAfterFirstHit = (type: SkillType, row: 0 | 1) => {
+    const b = new Battle({ seed: 1, teamA: [unit(1, row, [tech(type, "phong")])], teamB: [inert(101)] }, true);
+    let pos = 0;
+    while (!b.events.some((e) => e.unitId === 1)) {
+      pos = get(b, 101).pos;
+      b.step();
+    }
+    return get(b, 101).pos - pos;
+  };
+  assert.equal(posAfterFirstHit("tam_xa", 1), 1000 - 100); // bị đẩy 1 ô, rồi tự đi lại 1/10 ô trong lượt của mình
+  assert.ok(posAfterFirstHit("can_don", 0) <= 0); // không bị đẩy ra khỏi tầm cận chiến
 });
 
 test("Quang hồi máu 2%, Âm lãnh hút máu 3% sát thương gây ra", () => {

@@ -30,9 +30,14 @@ test("ví dụ GDD mục 9: Lôi Âm Châm Quyết", () => {
   assert.equal(t.targets, 2);
   assert.equal(t.critPerMille, 120); // 12%
   assert.equal(t.cooldownTicks, 20); // 1 s
-  assert.equal(t.rangeBonus, 1000); // Âm lãnh tầm +1 ô
+  assert.equal(t.rangeBonus, 500); // Âm lãnh tầm +1 ô, ở phụ quyển góp một nửa
   assert.equal(effectValue(t.effects[0]).value, 15); // tê liệt 0,75 s
   assert.equal(effectValue(t.effects[1]).value, 30); // hút máu 3%
+});
+
+test("tầm cộng thêm tối đa 1 ô dù chủ và phụ quyển đều là Âm lãnh", () => {
+  const t = composeTechnique(scroll({ element: "am_lanh", type: "tam_xa" }), [scroll({ element: "am_lanh" })]);
+  assert.equal(t.rangeBonus, 1000);
 });
 
 test("hệ số tổ hợp giữa hệ chủ và hệ phụ", () => {

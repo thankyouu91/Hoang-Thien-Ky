@@ -3,7 +3,7 @@ import { mul, ONE } from "./fixed.ts";
 import { baseElement, parentOf, isOpposite, generatesEither, beatsEither, type Element } from "./elements.ts";
 import {
   SKILL_SPECS, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, GRADE_POW, COMBO, HARMONY_PAIRS,
-  BASE_CRIT_PER_MILLE, LINH_EFFECT_POWER, type SkillType, type Variant, type ScrollStats,
+  BASE_CRIT_PER_MILLE, LINH_EFFECT_POWER, MAX_RANGE_BONUS, type SkillType, type Variant, type ScrollStats,
 } from "./config.ts";
 
 /** Tàn quyển: 1 hệ, 1 loại chiêu, 1 biến thể, phẩm 1–10 */
@@ -109,7 +109,7 @@ export function composeTechnique(main: Scroll, subs: Scroll[]): Technique {
     critPerMille,
     cooldownTicks,
     manaCost,
-    rangeBonus: m.range + sub.range,
+    rangeBonus: Math.min(MAX_RANGE_BONUS, m.range + Math.trunc(sub.range / 2)),
     combo: t,
     effects,
   };

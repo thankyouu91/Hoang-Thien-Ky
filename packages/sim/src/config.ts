@@ -28,8 +28,8 @@ export interface SkillSpec {
  * Chiêu ra nhanh và gây nhiều sát thương tốn mana nhiều hơn mức hồi. Hồi phục "tốn mana gấp 3" (GDD): 3 × mức gốc 60.
  */
 export const SKILL_SPECS: Record<SkillType, SkillSpec> = {
-  can_don: { k: 1300, targets: 1, cooldownTicks: 1 * SEC, critPerMille: 0, mana: 90, range: 1000, radius: 0 },
-  can_quet: { k: 1000, targets: 5, cooldownTicks: 2 * SEC, critPerMille: 0, mana: 110, range: 1000, radius: 0 },
+  can_don: { k: 1300, targets: 1, cooldownTicks: 1 * SEC, critPerMille: 0, mana: 120, range: 1000, radius: 0 },
+  can_quet: { k: 1000, targets: 5, cooldownTicks: 2 * SEC, critPerMille: 0, mana: 140, range: 1000, radius: 0 },
   tam_xa: { k: 950, targets: 2, cooldownTicks: 1 * SEC, critPerMille: 40, mana: 140, range: 4000, radius: 0 },
   dien_rong: { k: 600, targets: 10, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 35, range: 4000, radius: 2000 },
   ho_the: { k: 200, targets: 3, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 25, range: 4000, radius: 0 },
@@ -60,6 +60,8 @@ export const SKILL_RULES = {
   dashCritBonus: 100, // thân pháp: đòn đầu +10% chí mạng
   dashStandOff: 500, // sau khi lướt đứng cách mục tiêu nửa ô; đề xuất
   exposedTicks: 3 * SEC, // thân pháp: lộ vị trí 3 s, địch ưu tiên đánh
+  selfShieldCooldownTicks: 6 * SEC, // Thổ: khiên bản thân tối đa một lần mỗi 6 s, không phải mỗi lần ra chiêu; đề xuất
+  meleeKnockback: false, // Phong: chiêu cận chiến không đẩy lùi, để không đẩy địch ra khỏi tầm của chính mình; đề xuất
 };
 
 /** Sân đấu và nhịp trận (Q4 trong docs/KE_HOACH.md): tất cả là đề xuất. */
@@ -117,7 +119,8 @@ export type BuffStat =
 
 /**
  * Buff khi luyện đúng hệ (GDD mục 9), áp cho cả nhân vật, mỗi hệ một lần. Trùng hệ chủ quyển nhận đủ, trùng hệ phụ quyển nhận một nửa.
- * Hút máu và xuyên kháng cộng thẳng vào mọi đòn của nhân vật (giả định).
+ * Xuyên kháng cộng thẳng vào mọi đòn của nhân vật (giả định). Hút máu +8% là tăng 8% hiệu quả hút máu của công pháp
+ * (3% thành 3,24%), như buff của Cực âm, Cực hàn tăng hiệu ứng của chính chúng (đề xuất, đổi 2026-11-02 theo tools/balance).
  */
 export const ROOT_BUFFS: Record<Element, { stat: BuffStat; value: number }> = {
   kim: { stat: "critDamage", value: 120 }, // sát thương chí mạng +12%
@@ -177,7 +180,10 @@ export const VARIANT_STATS: Record<Variant, ScrollStats> = {
 /** Linh: hiệu ứng đặc trưng +50% */
 export const LINH_EFFECT_POWER = 1500;
 
-/** Chỉ số kèm theo hệ (GDD mục 9). Âm lãnh "tầm +1 ô" tính đủ cả khi ở phụ quyển (giả định). */
+/** Tầm cộng thêm của một công pháp tối đa 1 ô, kể cả khi chủ và phụ quyển đều là Âm lãnh (đề xuất, 2026-11-02 theo tools/balance). */
+export const MAX_RANGE_BONUS = 1000;
+
+/** Chỉ số kèm theo hệ (GDD mục 9). Âm lãnh "tầm +1 ô": phụ quyển góp 50% như các chỉ số khác (đề xuất, đổi 2026-11-02 theo tools/balance). */
 export const ELEMENT_STATS: Record<Element, ScrollStats> = {
   kim: { ...NONE, crit: 20 },
   moc: NONE,
@@ -221,7 +227,7 @@ export const HARMONY_PAIRS: [Element, Element][] = [["loi", "quang"]];
 export const ELEMENT_EFFECTS: Record<Element, { value: number; ticks?: number }> = {
   kim: { value: 100 }, // xuyên giáp 10%
   moc: { value: 1 * SEC }, // trói chân 1 s
-  thuy: { value: 200, ticks: 2 * SEC }, // làm chậm 20%, đề xuất 2 s
+  thuy: { value: 200, ticks: 2 * SEC }, // làm chậm di chuyển 20% (không chậm hồi chiêu), đề xuất 2 s
   hoa: { value: 100, ticks: 3 * SEC }, // thiêu đốt 10% sát thương mỗi giây trong 3 s
   tho: { value: 50 }, // khiên bản thân 5% máu tối đa
   loi: { value: SEC / 2 }, // tê liệt 0,5 s khi chí mạng

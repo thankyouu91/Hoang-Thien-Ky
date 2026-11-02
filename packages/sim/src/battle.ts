@@ -12,6 +12,7 @@ export const MAX_TICKS = 90 * TICKS_PER_SECOND; // trận tối đa 90 giây
 const MANA_REGEN_PER_TICK = (BATTLE.manaRegenPerSec * ONE) / TICKS_PER_SECOND; // mana tính theo phần nghìn
 const NEVER = -1_000_000; // mốc tick "chưa từng xảy ra"
 const MELEE: SkillType[] = ["can_don", "can_quet", "ho_the"]; // Tu thể +10%
+const CLOSE_RANGE: SkillType[] = ["can_don", "can_quet", "ho_the", "than_phap"]; // đánh sát người: không đẩy lùi
 const RANGED: SkillType[] = ["tam_xa", "dien_rong"]; // Tu pháp +15%
 
 export interface UnitSpec {
@@ -107,6 +108,7 @@ export interface Unit {
   healCutUntil: number;
   exposedUntil: number; // lộ vị trí tới tick này, địch ưu tiên đánh
   stealthUntil: number; // ẩn thân, địch không chọn được
+  selfShieldNext: number; // Thổ: tick sớm nhất được khiên bản thân lại
   channel: Channel | null;
 }
 
@@ -204,6 +206,7 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
     healCut: 0, healCutUntil: NEVER,
     exposedUntil: NEVER,
     stealthUntil: b.stealthTicks > 0 ? b.stealthTicks : NEVER,
+    selfShieldNext: NEVER,
     channel: null,
   };
 }
@@ -254,8 +257,8 @@ export class Battle {
         }
       }
       u.mana = Math.min(u.manaMax, u.mana + u.regen);
-      const slowed = tick < u.slowUntil ? u.slow : 0;
-      const recover = mul(ONE + u.b.attackSpeed, ONE - slowed);
+      const slowed = tick < u.slowUntil ? u.slow : 0; // chỉ chậm di chuyển
+      const recover = ONE + u.b.attackSpeed;
       for (const s of u.slots) if (s.cd > 0) s.cd -= recover;
       if (u.shield > 0 && tick >= u.shieldUntil) u.shield = 0;
       if (u.channel) {
@@ -308,7 +311,10 @@ export class Battle {
       u.mana -= s.cost;
       s.cd = s.cooldown * ONE;
       if (s.uses > 0) s.uses--;
-      if (s.fx.selfShield) this.addShield(u, u, mul(u.hp, s.fx.selfShield));
+      if (s.fx.selfShield && this.tick >= u.selfShieldNext) {
+        this.addShield(u, u, mul(u.hp, s.fx.selfShield));
+        u.selfShieldNext = this.tick + R.selfShieldCooldownTicks;
+      }
       if (s.radius > 0) {
         // Diện rộng vận công, trận pháp bày trận: phát sau, tâm chốt ở địch gần nhất lúc bắt đầu.
         const formation = type === "tran_phap";
@@ -430,7 +436,7 @@ export class Battle {
       if (s.tech.forsakenSect !== undefined && s.tech.forsakenSect === t.sectId) dmg = Math.max(1, mul(dmg, BATTLE.betrayalDamage));
       if (ramp !== ONE) dmg = mul(dmg, ramp);
       this.hurt(t, dmg);
-      const drain = fx.healOfDamage + fx.lifesteal + u.b.lifesteal;
+      const drain = fx.healOfDamage + mul(fx.lifesteal, ONE + u.b.lifesteal);
       if (drain > 0) this.restore(u, u, mul(dmg, drain));
       if (t.curHp <= 0) continue;
       this.applyEffects(u, s, t, dmg, crit);
@@ -459,7 +465,9 @@ export class Battle {
       t.healCut = tick < t.healCutUntil ? Math.max(t.healCut, fx.healCut) : fx.healCut;
       t.healCutUntil = Math.max(t.healCutUntil, tick + fx.healCutTicks);
     }
-    if (fx.knockback) t.pos = clamp(t.pos + (t.pos >= u.pos ? fx.knockback : -fx.knockback), 0, BATTLE.fieldLength);
+    if (fx.knockback && (R.meleeKnockback || !CLOSE_RANGE.includes(s.tech.type))) {
+      t.pos = clamp(t.pos + (t.pos >= u.pos ? fx.knockback : -fx.knockback), 0, BATTLE.fieldLength);
+    }
     if (fx.paralyze && crit) this.control(t, this.controlTicks(u, fx.paralyze));
     if (fx.freezeChance && this.rng.chance(fx.freezeChance)) this.control(t, this.controlTicks(u, fx.freezeTicks));
   }
