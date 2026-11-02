@@ -58,7 +58,7 @@
     "identity": "Chí mạng, tê liệt",
     "effect": {"desc":"Tê liệt khi chí mạng","value":10},
     "stats": {"dmg":0,"crit":30,"cd":0,"mana":0,"range":0},
-    "rootBuff": {"desc":"Tốc độ đánh","stat":"attackSpeed","value":120}
+    "rootBuff": {"desc":"Tốc độ đánh","stat":"attackSpeed","value":80}
   },
   "phong": {
     "id": "phong",

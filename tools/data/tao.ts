@@ -472,7 +472,7 @@ function noteSheet(): SheetOut {
   const legend = (fill: Cell["fill"], v: string): (Cell | null)[] => [{ v: "", fill }, { v }];
   const rows: (Cell | null)[][] = [
     t("Khai Tông Lập Phái — file số liệu hệ thống v1", { bold: true }),
-    t("Dựng lại ngày 2026-11-02 từ GDD (Claude Docs rev 154) và code trong repo, vì file gốc không còn. Mọi số GDD nhắc là \"lấy từ file Excel\" nằm ở đây."),
+    t("Dựng lại ngày 2026-11-02 từ GDD (Claude Docs rev 162) và code trong repo, vì file gốc không còn. Mọi số GDD nhắc là \"lấy từ file Excel\" nằm ở đây."),
     t("File này là nguồn gốc. Sửa trong Excel, lưu lại, rồi chạy lệnh dưới đây ở thư mục repo để xuất JSON cho code và chạy phép kiểm:"),
     t("node --experimental-strip-types --no-warnings tools/data/xuat.ts", { bold: true }),
     [],
