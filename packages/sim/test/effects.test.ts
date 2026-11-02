@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  Battle, composeTechnique, hitDamage, mul, techniqueFx, unitBonuses,
+  Battle, BATTLE, composeTechnique, hitDamage, mul, techniqueFx, unitBonuses,
   type Element, type SkillType, type Technique, type UnitSpec, type Unit, type BattleInput,
 } from "../src/index.ts";
 
@@ -165,7 +165,7 @@ test("Tu thể: máu +15%, phòng thủ +10%, cộng dồn với buff Thổ", ()
 
 test("Tu pháp: bùa chú 4 lần, mana +10%", () => {
   const b = new Battle({ seed: 1, teamA: [unit(1, 1, [tech("bua_chu", "kim")], { talents: ["tu_phap"] })], teamB: [inert(101)] }, true);
-  assert.equal(get(b, 1).manaMax, 1100 * 1000);
+  assert.equal(get(b, 1).manaMax, mul(BATTLE.manaMax, 1100) * 1000);
   while (!b.finished) b.step();
   assert.equal(b.events.filter((e) => e.unitId === 1).length, 4);
 });

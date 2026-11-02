@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { composeTechnique, comboRelation, effectValue, type Scroll } from "../src/index.ts";
+import { composeTechnique, comboRelation, effectValue, mul, SKILL_SPECS, type Scroll } from "../src/index.ts";
 
 const scroll = (s: Partial<Scroll> & Pick<Scroll, "element">): Scroll => ({ type: "can_don", variant: "bao", grade: 1, ...s });
 
@@ -57,7 +57,7 @@ test("đối cực hợp nhất: sát thương ×1,25, mana ×1,5", () => {
   );
   assert.equal(t.combo, 1250);
   assert.equal(t.damage, 90000); // 100 × 0,6 × (1 + 0,15 + 0,05) × 1,25
-  assert.equal(t.manaCost, 126); // 80 × 1,05 = 84, ×1,5
+  assert.equal(t.manaCost, mul(mul(SKILL_SPECS.dien_rong.mana, 1050), 1500)); // mana gốc × 1,05 (Cực dương) × 1,5
 });
 
 test("phẩm công pháp bằng phẩm thấp nhất", () => {

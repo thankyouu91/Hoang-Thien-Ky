@@ -22,18 +22,22 @@ export interface SkillSpec {
   radius: number; // bán kính vùng ảnh hưởng, milli-ô; đề xuất (0 = không có vùng)
 }
 
-/** k, số mục tiêu, hồi chiêu, chí mạng: GDD mục 8. Mana, tầm, bán kính: đề xuất. Hồi phục đã nhân mana ×3. */
+/**
+ * k, số mục tiêu, hồi chiêu, chí mạng: GDD mục 8. Mana, tầm, bán kính: đề xuất.
+ * Mana duyệt 2026-11-02: dò bằng tools/balance để không loại chiêu nào ở vị trí ưu tiên đầu thắng quá 65% trước đội ngẫu nhiên.
+ * Chiêu ra nhanh và gây nhiều sát thương tốn mana nhiều hơn mức hồi. Hồi phục "tốn mana gấp 3" (GDD): 3 × mức gốc 60.
+ */
 export const SKILL_SPECS: Record<SkillType, SkillSpec> = {
-  can_don: { k: 1300, targets: 1, cooldownTicks: 1 * SEC, critPerMille: 0, mana: 20, range: 1000, radius: 0 },
-  can_quet: { k: 1000, targets: 5, cooldownTicks: 2 * SEC, critPerMille: 0, mana: 40, range: 1000, radius: 0 },
-  tam_xa: { k: 950, targets: 2, cooldownTicks: 1 * SEC, critPerMille: 40, mana: 20, range: 4000, radius: 0 },
-  dien_rong: { k: 600, targets: 10, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 80, range: 4000, radius: 2000 },
-  ho_the: { k: 200, targets: 3, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 160, range: 4000, radius: 0 },
-  bua_chu: { k: 3000, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 120, range: 4000, radius: 0 },
-  tran_phap: { k: 5000, targets: 6, cooldownTicks: 20 * SEC, critPerMille: 0, mana: 400, range: 4000, radius: 2000 },
-  hoi_phuc: { k: 900, targets: 3, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 360, range: 4000, radius: 0 },
-  khong_che: { k: 500, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 120, range: 3000, radius: 0 },
-  than_phap: { k: 1600, targets: 1, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 160, range: 6000, radius: 0 },
+  can_don: { k: 1300, targets: 1, cooldownTicks: 1 * SEC, critPerMille: 0, mana: 90, range: 1000, radius: 0 },
+  can_quet: { k: 1000, targets: 5, cooldownTicks: 2 * SEC, critPerMille: 0, mana: 110, range: 1000, radius: 0 },
+  tam_xa: { k: 950, targets: 2, cooldownTicks: 1 * SEC, critPerMille: 40, mana: 140, range: 4000, radius: 0 },
+  dien_rong: { k: 600, targets: 10, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 35, range: 4000, radius: 2000 },
+  ho_the: { k: 200, targets: 3, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 25, range: 4000, radius: 0 },
+  bua_chu: { k: 3000, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 160, range: 4000, radius: 0 },
+  tran_phap: { k: 5000, targets: 6, cooldownTicks: 20 * SEC, critPerMille: 0, mana: 240, range: 4000, radius: 2000 },
+  hoi_phuc: { k: 900, targets: 3, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 180, range: 4000, radius: 0 },
+  khong_che: { k: 500, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 10, range: 3000, radius: 0 },
+  than_phap: { k: 1600, targets: 1, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 25, range: 6000, radius: 0 },
 };
 
 /** Chiêu nhắm đồng minh thay vì địch. */
@@ -65,7 +69,7 @@ export const BATTLE = {
   backPos: 2500, // hàng sau của đội A
   moveSpeed: 100, // milli-ô mỗi tick: đi 1 ô mỗi 10 tick
   supportStandoff: 4000, // khoảng cách tới địch gần nhất mà người chỉ có chiêu hỗ trợ đứng lại
-  manaMax: 1000,
+  manaMax: 300, // nhỏ để mức hồi mana là giới hạn thật trong trận 30 giây (duyệt 2026-11-02)
   manaRegenPerSec: 50,
   initialCooldown: 500, // đầu trận mọi công pháp đã hồi 50%
   ultMultiplier: 2500, // chiêu cuối tông chủ ×2,5
@@ -78,10 +82,10 @@ export const BATTLE = {
 /**
  * Chỉ số chuẩn của nhân vật theo cấp (Hạ vị 1–250), chưa tính đồ, tài năng và buff; đề xuất.
  * Đã chốt 2026-11-02: trận 10 đấu 10 trung bình khoảng 30 giây. `hpBase` và `hpPerLevel` được dò bằng đội mẫu
- * (mỗi người 4 công pháp, chỉ số ±20%): trung bình 29,6 giây, gần như không đổi theo cấp (28,9 giây ở cấp 1–50, 32,8 giây ở cấp 201–250).
+ * (mỗi người 4 công pháp, chỉ số ±20%); dò lại sau khi đổi bảng mana.
  */
 export const UNIT_CURVE = {
-  hpBase: 4100, // máu ở cấp 0
+  hpBase: 2550, // máu ở cấp 0
   hpPerLevel: 18, // máu tăng 1,8% của hpBase mỗi cấp
   atkBase: 100, // công lực ở cấp 0
   atkPerLevel: 4,
