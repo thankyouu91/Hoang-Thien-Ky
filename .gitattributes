@@ -1,0 +1,2 @@
+# File .map của Azgaar ngăn bản ghi bằng CRLF mà phần SVG bên trong dùng LF: git phải giữ nguyên từng byte
+data/maps/*.map -text
