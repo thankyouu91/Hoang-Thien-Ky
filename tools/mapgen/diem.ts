@@ -6,7 +6,7 @@
 // Ra: data/maps/<vị diện>_diem_<mã vùng>.json
 import { writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
-import { assignCells, loadRegions, slug } from "./vung.ts";
+import { assignCells, loadRegions, regionFrame, slug } from "./vung.ts";
 
 const VERSION = 1; // tăng khi đổi định dạng file
 const SEED = 20261102;
@@ -362,7 +362,8 @@ if (import.meta.main) {
     plane,
     region: { code, name: regions.names[k], element: slug(regions.elements[k]) },
     source: { azgaar: `${plane}_azgaar.map`, azgaarSeed: map.seed, seed: SEED },
-    map: { width: map.width, height: map.height, bbox: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)].map(round) },
+    // frame: khung ảnh nền của vùng (azgaar-nen.ts); điểm (x, y) nằm ở ((x − x0) × tỉ lệ, (y − y0) × tỉ lệ) trên ảnh
+    map: { width: map.width, height: map.height, frame: regionFrame(map, region, k), bbox: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)].map(round) },
     targets: { ...targets, scale: Math.round(targets.scale * 1000) / 1000 }, // số cần đặt theo diện tích
     counts,
     terrains,

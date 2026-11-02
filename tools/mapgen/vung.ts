@@ -68,6 +68,18 @@ export function assignCells(map: AzgaarMap, regions: Regions): Int8Array {
   return region;
 }
 
+/** Khung ảnh nền của vùng k: bao trọn đa giác các ô của vùng, thêm lề, số nguyên, trong mép bản đồ. [x0, y0, x1, y1] */
+export function regionFrame(map: AzgaarMap, region: Int8Array, k: number, pad = 8): [number, number, number, number] {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const c of map.cells)
+    if (region[c.i] === k)
+      for (const v of c.v) {
+        const [x, y] = map.vertices[v];
+        (x0 = Math.min(x0, x)), (y0 = Math.min(y0, y)), (x1 = Math.max(x1, x)), (y1 = Math.max(y1, y));
+      }
+  return [Math.max(0, Math.floor(x0 - pad)), Math.max(0, Math.floor(y0 - pad)), Math.min(map.width, Math.ceil(x1 + pad)), Math.min(map.height, Math.ceil(y1 + pad))];
+}
+
 const FOREST = new Set(["Tropical seasonal forest", "Temperate deciduous forest", "Tropical rainforest", "Temperate rainforest", "Taiga"]);
 const HIGH = 62; // như azgaar-patch.ts
 

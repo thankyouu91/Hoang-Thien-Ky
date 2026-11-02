@@ -2,8 +2,8 @@
 // Kiểm: đủ số từng loại, mỗi điểm một ô và nằm trong vùng, mọi điểm đi tới được thành chủ, số chặng và cấp nguy hiểm khớp.
 //
 // Chạy: node --experimental-strip-types tools/mapgen/kiem.ts [vị diện] [mã vùng]   (mặc định: ha loi_dinh_coc)
-// Ra: data/maps/<vị diện>_diem_<mã vùng>.svg; có phép kiểm sai thì thoát mã 1
-import { readFileSync, writeFileSync } from "node:fs";
+// Ra: data/maps/<vị diện>_diem_<mã vùng>.svg (có ảnh nền <vị diện>_nen_<mã vùng>.webp thì lồng vào); có phép kiểm sai thì thoát mã 1
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
 import { assignCells, loadRegions, slug } from "./vung.ts";
 import { DANGER_MAX, MAX_DEO, MIN_BORDER, regionCounts, stagesFrom } from "./diem.ts";
@@ -30,7 +30,7 @@ interface FileEdge {
 interface PointFile {
   version: number;
   region: { code: string; name: string; element: string };
-  map: { bbox: [number, number, number, number] };
+  map: { bbox: [number, number, number, number]; frame?: [number, number, number, number] };
   counts: Record<string, number>;
   terrains: Record<string, number>;
   points: FilePoint[];
@@ -135,7 +135,8 @@ function dangerColor(danger: number): string {
   return `rgb(${r},${g},${b})`;
 }
 
-function preview(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, results: [string, boolean, string][]): string {
+/** `background`: ảnh nền bản đồ tranh (data URI) của khung map.frame, có thì phủ lên nền ô và bỏ nét sông vẽ lại */
+function preview(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, results: [string, boolean, string][], background?: string): string {
   const PAD = 14, MAP_W = 1100, LEGEND_W = 340;
   const [x0, y0, x1, y1] = file.map.bbox;
   const vx = x0 - PAD, vy = y0 - PAD, vw = x1 - x0 + 2 * PAD, vh = y1 - y0 + 2 * PAD;
@@ -154,6 +155,10 @@ function preview(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, 
     if (shade > 0) out.push(`<polygon points="${poly}" fill="#000" fill-opacity="${n1(shade * 10) / 10}"/>`);
     if (region[c.i] !== k) out.push(`<polygon points="${poly}" fill="#f4f1ea" fill-opacity="0.6" stroke="#f4f1ea" stroke-opacity="0.6" stroke-width="0.5"/>`);
   }
+  if (background && file.map.frame) {
+    const [fx0, fy0, fx1, fy1] = file.map.frame;
+    out.push(`<image href="${background}" x="${fx0}" y="${fy0}" width="${fx1 - fx0}" height="${fy1 - fy0}" preserveAspectRatio="none"/>`);
+  }
   for (const c of map.cells) {
     if (region[c.i] !== k) continue;
     for (const n of c.c) {
@@ -165,7 +170,7 @@ function preview(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, 
       }
     }
   }
-  for (const r of map.rivers) {
+  for (const r of background ? [] : map.rivers) {
     // ô -1 là chỗ sông chảy ra khỏi mép bản đồ
     const pts = r.cells.filter((c) => map.cells[c] && inView(map.cells[c].p)).map((c) => map.cells[c].p.map(n1).join(","));
     if (pts.length > 1) out.push(`<polyline points="${pts.join(" ")}" fill="none" stroke="#3b7dd8" stroke-width="${n1(0.5 + Math.min(1.5, r.discharge / 400))}" stroke-linecap="round"/>`);
@@ -240,7 +245,9 @@ if (import.meta.main) {
   const results = check(file, map, region, k, codes);
   for (const [name, pass, detail] of results) console.log(`${pass ? "✓" : "✗"} ${name}${detail ? `: ${detail}` : ""}`);
   const svg = new URL(`${plane}_diem_${code}.svg`, dataDir);
-  writeFileSync(svg, preview(file, map, region, k, results));
+  const nen = new URL(`${plane}_nen_${code}.webp`, dataDir); // ảnh nền từ azgaar-nen.ts, nếu đã xuất
+  const background = existsSync(nen) ? `data:image/webp;base64,${readFileSync(nen).toString("base64")}` : undefined;
+  writeFileSync(svg, preview(file, map, region, k, results, background));
   console.log(`ghi ${svg.pathname}`);
   if (results.some((r) => !r[1])) process.exit(1);
 }
