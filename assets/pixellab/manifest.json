@@ -875,17 +875,17 @@
       "tool": "create_1_direction_object",
       "params": {
         "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a sect hall surrounded by giant swords stuck in the ground, white stone and silver steel",
+        "item_description": "floating island with a sect hall and several huge gleaming steel swords planted upright in the ground around it",
         "size": 64,
         "view": "top-down",
         "style_images": [
           "diem/son_mon.png"
         ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 0
+        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
+        "frame": 4
       },
       "created": "2026-11-02",
-      "pixellab_id": "486e82e1-114a-4ba1-b09c-e6d1ab5e32e9"
+      "pixellab_id": "d6e8e50a-9eaf-4ffc-92d8-bc284bcd5a8b"
     },
     {
       "file": "tong_mon/kim_bach_ngan_dien.png",
@@ -1361,17 +1361,17 @@
       "tool": "create_1_direction_object",
       "params": {
         "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a terrace with white cranes flying around and pine trees",
+        "item_description": "floating island with a terrace and pine trees and three large white red-crowned cranes standing and flying",
         "size": 64,
         "view": "top-down",
         "style_images": [
           "diem/son_mon.png"
         ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 11
+        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
+        "frame": 6
       },
       "created": "2026-11-02",
-      "pixellab_id": "7179f7c0-7733-46c9-a982-d5338ec5c19f"
+      "pixellab_id": "c524dcb6-3ca6-4d86-a110-34ec72f728c0"
     },
     {
       "file": "tong_mon/cuc_duong_thai_duong_cung.png",
@@ -1649,17 +1649,17 @@
       "tool": "create_1_direction_object",
       "params": {
         "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a pavilion of colored glass and crystal glowing softly",
+        "item_description": "floating island with a pavilion made of colorful stained glass panels in red, blue and green",
         "size": 64,
         "view": "top-down",
         "style_images": [
           "diem/son_mon.png"
         ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 11
+        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
+        "frame": 8
       },
       "created": "2026-11-02",
-      "pixellab_id": "e1287d5c-13cb-4519-b36a-8655ca3fb258"
+      "pixellab_id": "802f88e1-d3f3-442a-b5cc-7790618f1548"
     },
     {
       "file": "tong_mon/am_lanh_u_hon_dien.png",
@@ -1732,6 +1732,42 @@
       },
       "created": "2026-11-02",
       "pixellab_id": "f9d2b80b-d711-4cb8-9268-9e27c161d588"
+    },
+    {
+      "file": "tong_mon/le_dao_hoa_dao.png",
+      "description": "Đào Hoa Đảo (le_dao_hoa_dao, lễ hội): cây đào hồng quanh đình đỏ, đèn lồng Tết. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
+      "tool": "create_1_direction_object",
+      "params": {
+        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
+        "item_description": "floating island with pink peach blossom trees around a red pavilion with Lunar New Year red lanterns",
+        "size": 64,
+        "view": "top-down",
+        "style_images": [
+          "diem/son_mon.png"
+        ],
+        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
+        "frame": 0
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "b7d2a17b-2d54-4730-bdce-9102873ed0f6"
+    },
+    {
+      "file": "tong_mon/le_nguyet_cung.png",
+      "description": "Nguyệt Cung (le_nguyet_cung, lễ hội): cung điện dưới trăng tròn, nhiều đèn lồng Trung Thu. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
+      "tool": "create_1_direction_object",
+      "params": {
+        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
+        "item_description": "floating island with a palace under a full moon with many glowing mid-autumn lanterns",
+        "size": 64,
+        "view": "top-down",
+        "style_images": [
+          "diem/son_mon.png"
+        ],
+        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
+        "frame": 2
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "39e901ab-9f43-4900-ac7a-2c08ecd37974"
     }
   ]
 }
