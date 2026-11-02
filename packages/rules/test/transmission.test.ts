@@ -108,7 +108,7 @@ test("mang tối đa 4 công pháp đã học vào trận, theo thứ tự ưu t
   assert.equal(err(carry(s, "de", [ids[0], ids[0]])), "cong_phap_trung");
   ok(carry(s, "de", [ids[1], ids[0]]));
   const techs = loadoutTechniques(s, "de");
-  assert.deepEqual(techs.map((t) => t.damage), [95000, 110000]); // hai ví dụ GDD, đúng thứ tự đã chọn
+  assert.deepEqual(techs.map((t) => t.damage), [95000, 105000]); // hai ví dụ GDD, đúng thứ tự đã chọn
 });
 
 test("bỏ công pháp khỏi bộ truyền thụ thì người đã học vẫn dùng được", () => {

@@ -27,10 +27,10 @@ test("sát thương một đòn: D × công lực, khắc hệ, chí mạng, chi
   const t = composeTechnique({ element: "loi", type: "can_quet", variant: "linh", grade: 1 }, [{ element: "quang", type: "can_quet", variant: "ben", grade: 1 }]);
   const a = { atk: 1000, level: 50 };
   const d = { element: "kim" as Element, level: 50, def: 0 };
-  assert.equal(hitDamage(a, t, d, false, false), 1320); // 110 × 10 × 1,2 (Lôi biến dị đánh Kim gốc)
-  assert.equal(hitDamage(a, t, d, true, false), 1980); // chí mạng ×1,5
-  assert.equal(hitDamage(a, t, d, false, true), 3300); // chiêu cuối ×2,5
-  assert.equal(hitDamage(a, t, { ...d, def: 1000 }, false, false), 660); // phòng thủ 1000 giảm 50%
+  assert.equal(hitDamage(a, t, d, false, false), 1260); // 105 × 10 × 1,2 (Lôi biến dị đánh Kim gốc)
+  assert.equal(hitDamage(a, t, d, true, false), 1890); // chí mạng ×1,5
+  assert.equal(hitDamage(a, t, d, false, true), 3150); // chiêu cuối ×2,5
+  assert.equal(hitDamage(a, t, { ...d, def: 1000 }, false, false), 630); // phòng thủ 1000 giảm 50%
 });
 
 test("cận chiến tiến lại gần rồi mới ra chiêu", () => {
@@ -124,7 +124,7 @@ test("hộ thể: khiên 120% sát thương gốc cho 3 đồng minh gần đị
   const e = b.events.find((e) => e.unitId === 1)!;
   assert.deepEqual(e.targets, [2, 3, 1]); // hàng trước gần địch hơn, rồi id nhỏ hơn
   const amount = shieldAmount(1000, tech("ho_the"));
-  assert.equal(amount, 1518); // 126,5 × 10 × 1,2
+  assert.equal(amount, 1425); // 118,8 × 10 × 1,2
   for (const id of [2, 3, 1]) assert.equal(get(b, id).shield, amount);
   assert.equal(get(b, 4).shield, 0);
   steps(b, 119);

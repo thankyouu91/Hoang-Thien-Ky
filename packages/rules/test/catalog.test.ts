@@ -31,8 +31,8 @@ test("tra tàn quyển không có thì báo lỗi", () => {
 });
 
 test("quyển lấy từ danh mục ghép được bằng thư viện mô phỏng", () => {
-  // Lôi Quang Liên Hoàn Quyết, ví dụ GDD mục 9: sát thương 110
+  // Lôi Quang Liên Hoàn Quyết, ví dụ GDD mục 9: sát thương 105
   const t = composeTechnique(toScroll("loi.can_quet.linh", 1), [toScroll("quang.ho_the.ben", 1)]);
-  assert.equal(t.damage, 110000);
+  assert.equal(t.damage, 105000);
   assert.equal(t.targets, 5);
 });

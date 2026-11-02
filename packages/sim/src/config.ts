@@ -206,16 +206,17 @@ export const BASE_CRIT_PER_MILLE = 50;
 export const GRADE_POW = [1000, 1250, 1563, 1953, 2441, 3052, 3815, 4768, 5960, 7451];
 
 /**
- * Hệ số tổ hợp chủ quyển với phụ quyển (GDD mục 9). Quy tắc tạm cho tới khi có ma trận trong file Excel:
- * xem comboRelation ở technique.ts.
+ * Hệ số tổ hợp chủ quyển với phụ quyển (GDD mục 9). Đã chốt 2026-11-02, thu hẹp từ ×1,15 / 1,10 / 0,85 / 1,25 vì đội dồn một
+ * tổ hợp thuần hoặc tương sinh thắng tới 74% (tools/balance). Cặp nào thuộc quan hệ nào: quy tắc tạm cho tới khi có ma trận
+ * trong file Excel, xem comboRelation ở technique.ts.
  */
 export const COMBO = {
-  pure: 1150, // cùng hệ
-  harmony: 1100, // tương sinh hoặc tương hợp
+  pure: 1080, // cùng hệ
+  harmony: 1050, // tương sinh hoặc tương hợp
   neutral: 1000,
-  clash: 850, // tương khắc
-  polar: 1250, // đối cực hợp nhất
-  polarManaMul: 1500,
+  clash: 920, // tương khắc
+  polar: 1120, // đối cực hợp nhất
+  polarManaMul: 1500, // GDD mục 9, giữ nguyên
 };
 /** Cặp tương hợp lấy từ ví dụ trong GDD (Lôi + Quang), ngoài các quy tắc chung. */
 export const HARMONY_PAIRS: [Element, Element][] = [["loi", "quang"]];

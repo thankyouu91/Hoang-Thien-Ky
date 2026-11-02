@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { composeTechnique, comboRelation, effectValue, mul, SKILL_SPECS, type Scroll } from "../src/index.ts";
+import { composeTechnique, comboRelation, effectValue, mul, SKILL_SPECS, COMBO, type Scroll } from "../src/index.ts";
 
 const scroll = (s: Partial<Scroll> & Pick<Scroll, "element">): Scroll => ({ type: "can_don", variant: "bao", grade: 1, ...s });
 
@@ -10,11 +10,11 @@ test("ví dụ GDD mục 9: Lôi Quang Liên Hoàn Quyết", () => {
     scroll({ element: "loi", type: "can_quet", variant: "linh" }),
     [scroll({ element: "quang", variant: "ben" })],
   );
-  assert.equal(t.damage, 110000); // 110
+  assert.equal(t.damage, 105000); // 105 (GDD cũ ghi 110 với tương hợp ×1,10; chốt ×1,05)
   assert.equal(t.targets, 5);
   assert.equal(t.critPerMille, 80); // 8%
   assert.equal(t.cooldownTicks, 40); // 2 s
-  assert.equal(t.combo, 1100);
+  assert.equal(t.combo, COMBO.harmony);
   assert.deepEqual(t.effects, [{ element: "loi", power: 1500 }, { element: "quang", power: 1000 }]);
   assert.equal(effectValue(t.effects[0]).value, 15); // tê liệt 0,75 s khi chí mạng
   assert.equal(effectValue(t.effects[1]).value, 20); // hồi máu 2% sát thương
@@ -41,34 +41,34 @@ test("tầm cộng thêm tối đa 1 ô dù chủ và phụ quyển đều là �
 });
 
 test("hệ số tổ hợp giữa hệ chủ và hệ phụ", () => {
-  assert.equal(comboRelation("loi", "loi").t, 1150); // thuần
-  assert.equal(comboRelation("kim", "moc").t, 850); // tương khắc
-  assert.equal(comboRelation("moc", "kim").t, 850);
-  assert.equal(comboRelation("phong", "kim").t, 850); // Phong quy về Mộc
-  assert.equal(comboRelation("moc", "hoa").t, 1100); // tương sinh
-  assert.equal(comboRelation("loi", "tho").t, 1100); // Thổ sinh Kim, Lôi quy về Kim
-  assert.equal(comboRelation("loi", "kim").t, 1100); // biến dị với hệ gốc
-  assert.equal(comboRelation("loi", "quang").t, 1100); // ví dụ GDD
-  assert.equal(comboRelation("quang", "loi").t, 1100);
-  assert.equal(comboRelation("loi", "am_lanh").t, 1000); // trung tính, ví dụ GDD
-  assert.deepEqual(comboRelation("cuc_duong", "cuc_am"), { t: 1250, manaMul: 1500 });
-  assert.deepEqual(comboRelation("quang", "am_lanh"), { t: 1250, manaMul: 1500 });
+  assert.equal(comboRelation("loi", "loi").t, COMBO.pure); // thuần
+  assert.equal(comboRelation("kim", "moc").t, COMBO.clash); // tương khắc
+  assert.equal(comboRelation("moc", "kim").t, COMBO.clash);
+  assert.equal(comboRelation("phong", "kim").t, COMBO.clash); // Phong quy về Mộc
+  assert.equal(comboRelation("moc", "hoa").t, COMBO.harmony); // tương sinh
+  assert.equal(comboRelation("loi", "tho").t, COMBO.harmony); // Thổ sinh Kim, Lôi quy về Kim
+  assert.equal(comboRelation("loi", "kim").t, COMBO.harmony); // biến dị với hệ gốc
+  assert.equal(comboRelation("loi", "quang").t, COMBO.harmony); // ví dụ GDD
+  assert.equal(comboRelation("quang", "loi").t, COMBO.harmony);
+  assert.equal(comboRelation("loi", "am_lanh").t, COMBO.neutral); // trung tính, ví dụ GDD
+  assert.deepEqual(comboRelation("cuc_duong", "cuc_am"), { t: COMBO.polar, manaMul: 1500 });
+  assert.deepEqual(comboRelation("quang", "am_lanh"), { t: COMBO.polar, manaMul: 1500 });
 });
 
-test("đối cực hợp nhất: sát thương ×1,25, mana ×1,5", () => {
+test("đối cực hợp nhất: sát thương ×1,12, mana ×1,5", () => {
   const t = composeTechnique(
     scroll({ element: "cuc_duong", type: "dien_rong" }),
     [scroll({ element: "cuc_am" })],
   );
-  assert.equal(t.combo, 1250);
-  assert.equal(t.damage, 90000); // 100 × 0,6 × (1 + 0,15 + 0,05) × 1,25
+  assert.equal(t.combo, 1120);
+  assert.equal(t.damage, 80640); // 100 × 0,6 × (1 + 0,15 + 0,05) × 1,12
   assert.equal(t.manaCost, mul(mul(SKILL_SPECS.dien_rong.mana, 1050), 1500)); // mana gốc × 1,05 (Cực dương) × 1,5
 });
 
 test("phẩm công pháp bằng phẩm thấp nhất", () => {
   const t = composeTechnique(scroll({ element: "moc", grade: 3 }), [scroll({ element: "moc", variant: "ben", grade: 2 })]);
   assert.equal(t.grade, 2);
-  assert.equal(t.damage, 205562); // 100 × 1,3 × 1,25 × 1,1 × 1,15
+  assert.equal(t.damage, 193050); // 100 × 1,3 × 1,25 × 1,1 × 1,08
 });
 
 test("Tốc giảm hồi chiêu 10%", () => {
@@ -80,7 +80,7 @@ test("Tốc giảm hồi chiêu 10%", () => {
 
 test("hai phụ quyển: hệ số tổ hợp là trung bình hai quan hệ", () => {
   const t = composeTechnique(scroll({ element: "loi" }), [scroll({ element: "quang" }), scroll({ element: "moc" })]);
-  assert.equal(t.combo, 975); // (1100 + 850) / 2
+  assert.equal(t.combo, 985); // (1050 + 920) / 2
   assert.deepEqual(t.subElements, ["quang", "moc"]);
 });
 

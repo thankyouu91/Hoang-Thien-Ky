@@ -66,7 +66,7 @@ test("ghép công pháp theo ví dụ GDD: tên, phẩm, chỉ số, tàn quyể
   assert.equal(t.grade, 1); // phẩm thấp nhất
   assert.equal(t.createdBy, "lao");
   assert.equal(t.createdAt, NOW);
-  assert.equal(techniqueOf(t).damage, 110000);
+  assert.equal(techniqueOf(t).damage, 105000);
   assert.equal(s.sects.t.library.length, 0);
 });
 
