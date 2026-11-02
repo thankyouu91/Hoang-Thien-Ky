@@ -1,11 +1,12 @@
 // Số trong config.ts phải khớp file số liệu data/he_thong (Excel xuất ra json/ bằng tools/data/xuat.ts).
-// Lệch thì sửa một bên cho khớp: sửa Excel rồi xuất lại, hoặc sửa config.ts. to_hop.json chưa so (4 cặp tương hợp chờ duyệt).
+// Lệch thì sửa một bên cho khớp: sửa Excel rồi xuất lại, hoặc sửa config.ts.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, ALLY_SKILLS, VARIANT_STATS, LINH_EFFECT_POWER, ELEMENT_STATS, ELEMENT_EFFECTS,
-  ROOT_BUFFS, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, GRADE_POW, BASE_CRIT_PER_MILLE, RESIST_CAP, elementMultiplier,
+  ROOT_BUFFS, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, GRADE_POW, BASE_CRIT_PER_MILLE, RESIST_CAP, COMBO,
+  elementMultiplier, comboRelation,
 } from "../src/index.ts";
 
 const data = (file: string): any => JSON.parse(readFileSync(new URL(`../../../data/he_thong/json/${file}`, import.meta.url), "utf8"));
@@ -57,4 +58,17 @@ test("tham số trận đấu khớp tham_so.json", () => {
 test("phẩm: hệ số 1,25^(phẩm − 1) khớp pham.json", () => {
   const rows = data("pham.json");
   assert.deepEqual(GRADE_POW, rows.map((r: { power: number }) => r.power));
+});
+
+test("hệ số tổ hợp khớp quan_he_to_hop.json; quan hệ 12 × 12 khớp to_hop.json", () => {
+  const rel = data("quan_he_to_hop.json");
+  assert.equal(COMBO.pure, rel.thuan.t);
+  assert.equal(COMBO.harmony, rel.tuong_sinh.t);
+  assert.equal(COMBO.harmony, rel.tuong_hop.t);
+  assert.equal(COMBO.neutral, rel.trung_tinh.t);
+  assert.equal(COMBO.clash, rel.tuong_khac.t);
+  assert.equal(COMBO.polar, rel.doi_cuc.t);
+  assert.equal(COMBO.polarManaMul, rel.doi_cuc.manaMul);
+  const combos = data("to_hop.json").combo;
+  for (const a of ELEMENTS) for (const b of ELEMENTS) assert.deepEqual(comboRelation(a, b), combos[a][b], `${a} + ${b}`);
 });
