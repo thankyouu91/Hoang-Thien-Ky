@@ -1,6 +1,311 @@
 {
   "assets": [
     {
+      "file": "thu/thiet_boi_nguu.png",
+      "description": "Thiết Bối Ngưu (thú cưỡi hệ Kim, phẩm Phàm, tẩu thú): trâu lưng phủ giáp sắt, yên chạm trổ, tông trắng bạc. Hình mẫu phong cách đầu tiên, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "sturdy ox with iron armor plates along its back, xianxia spirit beast mount wearing an ornate saddle, silver and white color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east"
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "1cebc791-283e-4ce1-b931-e822890df887"
+    },
+    {
+      "file": "thu/bich_vu_tuoc.png",
+      "description": "Bích Vũ Tước (thú cưỡi hệ Mộc, phẩm Phàm, phi cầm): chim lớn lông xanh ngọc. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "large bird with jade-green plumage, xianxia spirit beast mount wearing an ornate saddle, green color palette, standing on two legs with wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "7732005c-c601-442f-b190-cc26c83af30f"
+    },
+    {
+      "file": "thu/bich_thuy_quy.png",
+      "description": "Bích Thủy Quy (thú cưỡi hệ Thủy, phẩm Phàm, thủy thú): rùa biển mai xanh biếc. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "sea turtle with a deep blue shell, xianxia spirit beast mount wearing an ornate saddle, deep blue color palette, walking on all four flippers, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "ce7146c5-fe23-4d61-baa4-0b2c974a48ae"
+    },
+    {
+      "file": "thu/hoa_tong_ma.png",
+      "description": "Hỏa Tông Mã (thú cưỡi hệ Hỏa, phẩm Phàm, tẩu thú): ngựa bờm và đuôi đang cháy. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "horse with a burning mane and tail, xianxia spirit beast mount wearing an ornate saddle, vermilion red color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "d76c7b08-10a0-4bb7-a5bb-ef2a651c27a3"
+    },
+    {
+      "file": "thu/thach_bi_tuong.png",
+      "description": "Thạch Bì Tượng (thú cưỡi hệ Thổ, phẩm Phàm, tẩu thú): voi da đá. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "elephant with stone skin, xianxia spirit beast mount wearing an ornate saddle, earthy ochre yellow color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "bear",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "22e84118-ba72-4632-8e6e-a47243c45621"
+    },
+    {
+      "file": "thu/loi_tuoc.png",
+      "description": "Lôi Tước (thú cưỡi hệ Lôi, phẩm Phàm, phi cầm): chim đuôi hình tia sét. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "bird with lightning-bolt tail feathers, xianxia spirit beast mount wearing an ornate saddle, electric purple color palette, standing on two legs with wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "769b6303-9f61-4299-82a1-afe5ab52a4ae"
+    },
+    {
+      "file": "thu/phong_linh_ho.png",
+      "description": "Phong Linh Hồ (thú cưỡi hệ Phong, phẩm Phàm, tẩu thú): cáo đuôi xoáy như gió. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "fox with swirling wind-like tails, xianxia spirit beast mount wearing an ornate saddle, pale jade turquoise color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "89b0ff86-1da4-48f9-8eca-961ed5ab3f9a"
+    },
+    {
+      "file": "thu/than_hi_duong.png",
+      "description": "Thần Hi Dương (thú cưỡi hệ Quang, phẩm Phàm, tẩu thú): dê sừng xoắn màu nắng sớm. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "ram with dawn-gold curled horns, xianxia spirit beast mount wearing an ornate saddle, gold color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "88490f2a-8e1f-4b45-b973-5cb4a18ed35d"
+    },
+    {
+      "file": "thu/hac_dam_ngac.png",
+      "description": "Hắc Đầm Ngạc (thú cưỡi hệ Âm lãnh, phẩm Phàm, thủy thú): cá sấu đầm lầy vảy đen. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "swamp crocodile with dark slimy scales, xianxia spirit beast mount wearing an ornate saddle, blue-grey color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "c167601f-2159-48d5-b628-7fbd836b78de"
+    },
+    {
+      "file": "thu/diem_linh_ung.png",
+      "description": "Diệm Linh Ưng (thú cưỡi hệ Cực dương, phẩm Phàm, phi cầm): ưng cánh lửa thiêng. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "hawk with holy flame wings, xianxia spirit beast mount wearing an ornate saddle, orange color palette, standing on two legs with wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "ec9f9e68-ecf9-49dd-843e-0f9cad048a8e"
+    },
+    {
+      "file": "thu/am_doc_hat.png",
+      "description": "Âm Độc Hạt (thú cưỡi hệ Cực âm, phẩm Phàm, tẩu thú): bọ cạp khổng lồ vỏ tím than. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "giant scorpion with a dark violet shell, xianxia spirit beast mount wearing an ornate saddle, dark charcoal violet color palette, standing on its eight legs with tail curled up, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "2fb9539e-75f6-48ff-ab0e-5606dae8274d"
+    },
+    {
+      "file": "thu/tuyet_lang.png",
+      "description": "Tuyết Lang (thú cưỡi hệ Cực hàn, phẩm Phàm, tẩu thú): sói tuyết thở ra sương giá. Lô 1, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "white snow wolf with frost breath, xianxia spirit beast mount wearing an ornate saddle, ice blue color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "65e62d3c-dbad-4e35-b0ad-8062f80ca986"
+    },
+    {
+      "file": "tu_si/tu_the.png",
+      "description": "Tu sĩ Tu thể (tài năng Tu thể, GDD mục 6): võ tăng luyện thể cởi trần, vai rộng, đai đỏ son, hộ uyển sắt, đầu cạo búi tó. Người dùng duyệt 2026-11-02 làm mẫu phong cách cho mọi tu sĩ. Lưu hướng south-east (chéo, giữ dáng vai rộng ở cỡ nhỏ); đội bên phải dùng ảnh lật ngang. Nhân vật có đủ 8 hướng trên PixelLab, chưa có hoạt ảnh.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "muscular xianxia body cultivator, martial monk with bare chest and bronze tanned skin, very broad shoulders and thick arms, crimson cloth sash belt, loose dark brown trousers tied at the ankles, iron bracers on both forearms, shaved head with a small black topknot, clenched fists, standing in a wide sturdy stance, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "mannequin",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "south-east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "a873b9b2-7b72-4f87-a990-26f52d9384ef"
+    },
+    {
       "file": "diem/son_mon.png",
       "description": "Đảo nổi cho điểm Sơn môn (son_mon) trên bản đồ vùng: điện thờ mái cong, cột đỏ của một tông môn. Hình khoá phong cách cho cả bộ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
       "tool": "create_object_pro_flash",
@@ -231,18 +536,18 @@
       "pixellab_id": "fad7de81-6af0-4fbd-b1c2-c12ca8bbbbc0"
     },
     {
-      "file": "tu_si/tu_the.png",
-      "description": "Tu sĩ Tu thể (tài năng Tu thể, GDD mục 6): võ tăng luyện thể cởi trần, vai rộng, đai đỏ son, hộ uyển sắt, đầu cạo búi tó. Người dùng duyệt 2026-11-02 làm mẫu phong cách cho mọi tu sĩ. Lưu hướng south-east (chéo, giữ dáng vai rộng ở cỡ nhỏ); đội bên phải dùng ảnh lật ngang. Nhân vật có đủ 8 hướng trên PixelLab, chưa có hoạt ảnh.",
+      "file": "thu/kim_tong_ma.png",
+      "description": "Kim Tông Mã (thú cưỡi hệ Kim, phẩm Phàm, tẩu thú): ngựa chiến bờm ánh kim. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
       "tool": "create_character_pro_flash",
       "params": {
-        "description": "muscular xianxia body cultivator, martial monk with bare chest and bronze tanned skin, very broad shoulders and thick arms, crimson cloth sash belt, loose dark brown trousers tied at the ankles, iron bracers on both forearms, shaved head with a small black topknot, clenched fists, standing in a wide sturdy stance, full body",
+        "description": "warhorse with a metallic gold mane, xianxia spirit beast mount wearing an ornate saddle, silver and white color palette, standing on all four legs, side view, full body",
         "view": "side",
         "width": 64,
         "height": 64,
-        "template_id": "mannequin",
+        "template_id": "horse",
         "n_directions": 8,
         "seed": 0,
-        "direction": "south-east",
+        "direction": "east",
         "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
         "style_options": {
           "color_palette": false,
@@ -252,7 +557,703 @@
         }
       },
       "created": "2026-11-02",
-      "pixellab_id": "a873b9b2-7b72-4f87-a990-26f52d9384ef"
+      "pixellab_id": "1e9aa201-0bd1-43a6-ac9e-a20855d820cc"
+    },
+    {
+      "file": "thu/dong_trao_ung.png",
+      "description": "Đồng Trảo Ưng (thú cưỡi hệ Kim, phẩm Phàm, phi cầm): ưng lớn móng đồng. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "large hawk with bronze talons, xianxia spirit beast mount wearing an ornate saddle, silver and white color palette, body held horizontal like a riding mount with the saddle on its back, standing on two legs, wings folded at its sides, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "37c2a0b1-557e-44f3-81f6-d0b9af8ab096"
+    },
+    {
+      "file": "thu/ngan_lan_bao.png",
+      "description": "Ngân Lân Báo (thú cưỡi hệ Kim, phẩm Linh, tẩu thú): báo phủ vảy bạc. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "leopard covered in silver scales, xianxia spirit beast mount wearing an ornate saddle, silver and white color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "lion",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "916426d7-6012-4a10-9967-7715b8e5e6df"
+    },
+    {
+      "file": "thu/thanh_loc.png",
+      "description": "Thanh Lộc (thú cưỡi hệ Mộc, phẩm Phàm, tẩu thú): hươu xanh, sừng như cành lá. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "deer with antlers like leafy branches, xianxia spirit beast mount wearing an ornate saddle, green color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "9593c6c3-fda8-4ad2-8538-cca644ec02b6"
+    },
+    {
+      "file": "thu/dang_giap_quy.png",
+      "description": "Đằng Giáp Quy (thú cưỡi hệ Mộc, phẩm Phàm, thủy thú): rùa mai đan bằng dây mây. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "turtle with a shell of woven rattan vines, xianxia spirit beast mount wearing an ornate saddle, green color palette, walking on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "bd34bdbe-b1c0-40e1-a322-b774f7dbb913"
+    },
+    {
+      "file": "thu/co_thu_hung.png",
+      "description": "Cổ Thụ Hùng (thú cưỡi hệ Mộc, phẩm Linh, tẩu thú): gấu lưng mọc rêu và cây non. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "bear with moss and saplings growing on its back, xianxia spirit beast mount wearing an ornate saddle, green color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "bear",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "e4cf9379-4e39-40d8-966b-0a04e082b4a8"
+    },
+    {
+      "file": "thu/thuy_nguu.png",
+      "description": "Thủy Ngưu (thú cưỡi hệ Thủy, phẩm Phàm, tẩu thú): trâu nước sừng cong, nhỏ nước. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "water buffalo with curved horns, dripping water, xianxia spirit beast mount wearing an ornate saddle, deep blue color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "be33d5b1-15bc-44d7-8c24-9fb55572e73b"
+    },
+    {
+      "file": "thu/xich_diem_lang.png",
+      "description": "Xích Diễm Lang (thú cưỡi hệ Hỏa, phẩm Phàm, tẩu thú): sói đỏ, lửa chạy dọc sống lưng. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "red wolf with flames along its spine, xianxia spirit beast mount wearing an ornate saddle, vermilion red color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "8933006c-494c-471d-ae4a-e375736bc9bb"
+    },
+    {
+      "file": "thu/hoang_sa_da.png",
+      "description": "Hoàng Sa Đà (thú cưỡi hệ Thổ, phẩm Phàm, tẩu thú): lạc đà lông màu cát vàng. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "camel with a sandstone-colored coat, xianxia spirit beast mount wearing an ornate saddle, earthy ochre yellow color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "bf54e04d-4d47-41ad-9867-722b71b086b3"
+    },
+    {
+      "file": "thu/thiem_dien_bao.png",
+      "description": "Thiểm Điện Báo (thú cưỡi hệ Lôi, phẩm Phàm, tẩu thú): báo đen tóe tia chớp. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "lean panther crackling with lightning, xianxia spirit beast mount wearing an ornate saddle, electric purple color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "lion",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "3ca448c4-80cd-4d79-b7fd-de924a84c9ef"
+    },
+    {
+      "file": "thu/loi_am_lang.png",
+      "description": "Lôi Âm Lang (thú cưỡi hệ Lôi, phẩm Phàm, tẩu thú): sói lông như mây giông. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "wolf with thunderclouds in its fur, xianxia spirit beast mount wearing an ornate saddle, electric purple color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "16b24aee-90ad-4c2a-a3c5-4f5f034a9ed9"
+    },
+    {
+      "file": "thu/truy_phong_ma.png",
+      "description": "Truy Phong Mã (thú cưỡi hệ Phong, phẩm Phàm, tẩu thú): ngựa thon, kéo vệt gió. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "slender swift horse leaving wind trails, xianxia spirit beast mount wearing an ornate saddle, pale jade turquoise color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "e0699c9f-e5bd-4ec7-b2f1-bd93b1ecd070"
+    },
+    {
+      "file": "thu/bach_ngoc_ma.png",
+      "description": "Bạch Ngọc Mã (thú cưỡi hệ Quang, phẩm Phàm, tẩu thú): ngựa trắng như ngọc, sáng dịu. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "white jade horse with a soft glow, xianxia spirit beast mount wearing an ornate saddle, gold color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "c1383776-0a8c-4209-95b2-b5dece9e7f31"
+    },
+    {
+      "file": "thu/u_minh_lang.png",
+      "description": "U Minh Lang (thú cưỡi hệ Âm lãnh, phẩm Phàm, tẩu thú): sói xám viền mờ như sương. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "ghostly grey wolf with a misty outline, xianxia spirit beast mount wearing an ornate saddle, blue-grey color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "456ebd6c-695b-43cd-a4b2-cf0cb49a4122"
+    },
+    {
+      "file": "thu/xich_sa_da.png",
+      "description": "Xích Sa Đà (thú cưỡi hệ Cực dương, phẩm Phàm, tẩu thú): lạc đà sa mạc lông đỏ cam, vằn mặt trời. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "desert camel with a red-orange coat and sun markings, xianxia spirit beast mount wearing an ornate saddle, orange color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "0a588259-22d4-48e0-9571-044fff27750b"
+    },
+    {
+      "file": "thu/duong_viem_tich.png",
+      "description": "Dương Viêm Tích (thú cưỡi hệ Cực dương, phẩm Phàm, tẩu thú): thằn lằn diềm cổ rực như nắng. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "frilled lizard glowing like the sun, xianxia spirit beast mount wearing an ornate saddle, orange color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "42bf9689-e182-4479-8e35-d77b8b7be0c5"
+    },
+    {
+      "file": "thu/thi_cot_ma.png",
+      "description": "Thi Cốt Mã (thú cưỡi hệ Cực âm, phẩm Phàm, tẩu thú): ngựa xương, lửa ma tím. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "skeleton horse with violet ghost fire, xianxia spirit beast mount wearing an ornate saddle, dark charcoal violet color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "f8781a97-4be5-4bf4-8e40-a8fef76922c5"
+    },
+    {
+      "file": "thu/han_mao_tuong.png",
+      "description": "Hàn Mao Tượng (thú cưỡi hệ Cực hàn, phẩm Phàm, tẩu thú): voi lông dài ngà băng. Lô 2, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "woolly mammoth with icy tusks, xianxia spirit beast mount wearing an ornate saddle, ice blue color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "bear",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "670b1911-e84a-441e-8cc5-05acda28fae3"
+    },
+    {
+      "file": "thu/kiem_vu_dieu.png",
+      "description": "Kiếm Vũ Điêu (thú cưỡi hệ Kim, phẩm Linh, phi cầm): đại bàng lông như lưỡi kiếm. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "great eagle whose feathers are sword blades, xianxia spirit beast mount wearing an ornate saddle, silver and white color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "bb37c9f4-34e2-4d16-ad41-f6e9637b237f"
+    },
+    {
+      "file": "thu/kim_giap_quy.png",
+      "description": "Kim Giáp Quy (thú cưỡi hệ Kim, phẩm Huyền, thủy thú): rùa khổng lồ mai vàng kim. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "giant turtle with a gleaming golden shell, xianxia spirit beast mount wearing an ornate saddle, silver and white color palette, walking on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "ee6cde4c-4080-4334-ad03-6e0059f9069d"
+    },
+    {
+      "file": "thu/thanh_linh_hac.png",
+      "description": "Thanh Linh Hạc (thú cưỡi hệ Mộc, phẩm Linh, phi cầm): hạc xanh, lông hình lá phát sáng. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "green crane with glowing leaf-shaped feathers, xianxia spirit beast mount wearing an ornate saddle, green color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "664d8cc8-def9-46e8-9552-8f7f0aa0ec16"
+    },
+    {
+      "file": "thu/thanh_moc_giao.png",
+      "description": "Thanh Mộc Giao (thú cưỡi hệ Mộc, phẩm Huyền, thủy thú): giao long vảy như vỏ cây, quấn dây leo. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "river dragon with bark-textured scales and vines, xianxia spirit beast mount wearing an ornate saddle, green color palette, long serpentine dragon body on four short legs, standing on the ground, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "17dce775-86d4-4878-9d9e-2ad15cce0eb1"
+    },
+    {
+      "file": "thu/bach_au.png",
+      "description": "Bạch Âu (thú cưỡi hệ Thủy, phẩm Phàm, phi cầm): hải âu trắng khổng lồ. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "giant white seagull, xianxia spirit beast mount wearing an ornate saddle, deep blue color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "39eea6a3-28fd-4147-b9bb-83759eeb63c0"
+    },
+    {
+      "file": "thu/lam_lan_giao.png",
+      "description": "Lam Lân Giao (thú cưỡi hệ Thủy, phẩm Linh, thủy thú): giao long vảy lam. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "serpentine river dragon with blue scales, xianxia spirit beast mount wearing an ornate saddle, deep blue color palette, long serpentine dragon body on four short legs, standing on the ground, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "adf1d12a-6779-429e-b77f-92563e78936e"
+    },
+    {
+      "file": "thu/bich_ba_bao.png",
+      "description": "Bích Ba Báo (thú cưỡi hệ Thủy, phẩm Linh, tẩu thú): báo đốm hình sóng nước. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "leopard with wave-patterned spots, xianxia spirit beast mount wearing an ornate saddle, deep blue color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "lion",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "1b68176f-fce7-43ad-bd55-a1ea72a7c936"
+    },
+    {
+      "file": "thu/huyen_thuy_kinh.png",
+      "description": "Huyền Thủy Kình (thú cưỡi hệ Thủy, phẩm Huyền, thủy thú): cá voi biển sâu màu tối. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "whale of the dark deep sea, xianxia spirit beast mount wearing an ornate saddle, deep blue color palette, whale floating just above the ground like a mount, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "351ef4dd-2980-4271-ae30-e0952bcf9918"
+    },
+    {
+      "file": "thu/hoa_nha.png",
+      "description": "Hỏa Nha (thú cưỡi hệ Hỏa, phẩm Phàm, phi cầm): quạ lớn đầu lông như than hồng. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "large crow with ember-tipped feathers, xianxia spirit beast mount wearing an ornate saddle, vermilion red color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "1edac608-037b-4b48-852c-987448fe93fb"
+    },
+    {
+      "file": "thu/viem_giap_nguu.png",
+      "description": "Viêm Giáp Ngưu (thú cưỡi hệ Hỏa, phẩm Linh, tẩu thú): trâu giáp dung nham nứt. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "ox with cracked lava armor, xianxia spirit beast mount wearing an ornate saddle, vermilion red color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "horse",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "831c7d83-7d30-44f6-b9a9-6c975e669213"
+    },
+    {
+      "file": "thu/xich_vu_dieu.png",
+      "description": "Xích Vũ Điêu (thú cưỡi hệ Hỏa, phẩm Linh, phi cầm): đại bàng cánh đỏ rực. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "eagle with crimson fiery wings, xianxia spirit beast mount wearing an ornate saddle, vermilion red color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "e64096fb-8fc6-4c8b-988d-978c87996fc8"
+    },
+    {
+      "file": "thu/dung_nham_giao.png",
+      "description": "Dung Nham Giao (thú cưỡi hệ Hỏa, phẩm Huyền, thủy thú): giao long dung nham. Lô 3, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "dragon-serpent of molten lava, xianxia spirit beast mount wearing an ornate saddle, vermilion red color palette, long serpentine dragon body on four short legs, standing on the ground, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "4e9dfa38-a686-4e48-90bd-a09bd6e942db"
     },
     {
       "file": "he/kim.png",
@@ -627,6 +1628,294 @@
       },
       "created": "2026-11-02",
       "pixellab_id": "32f8d901-5e53-4e3c-bb17-ce81b4b83b15"
+    },
+    {
+      "file": "thu/nham_ung.png",
+      "description": "Nham Ưng (thú cưỡi hệ Thổ, phẩm Phàm, phi cầm): ưng lông như đá. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "hawk with rock-like feathers, xianxia spirit beast mount wearing an ornate saddle, earthy ochre yellow color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "78989c6e-47a7-49e2-a841-f5adf07118d9"
+    },
+    {
+      "file": "thu/nham_giap_te.png",
+      "description": "Nham Giáp Tê (thú cưỡi hệ Thổ, phẩm Linh, tẩu thú): tê giác giáp đá tảng. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "rhinoceros with boulder armor, xianxia spirit beast mount wearing an ornate saddle, earthy ochre yellow color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "bear",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "f3cd5752-3e5b-4fc2-8b58-a183437d68bf"
+    },
+    {
+      "file": "thu/hoang_ha_ngac.png",
+      "description": "Hoàng Hà Ngạc (thú cưỡi hệ Thổ, phẩm Linh, thủy thú): cá sấu sông nước vàng đục. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "crocodile of a muddy yellow river, xianxia spirit beast mount wearing an ornate saddle, earthy ochre yellow color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "5af64f29-eeb7-4243-8d31-3e2dfc5802db"
+    },
+    {
+      "file": "thu/dia_long_tich.png",
+      "description": "Địa Long Tích (thú cưỡi hệ Thổ, phẩm Huyền, tẩu thú): thằn lằn rồng đất, mào đá. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "large earth drake lizard with a rocky crest, xianxia spirit beast mount wearing an ornate saddle, earthy ochre yellow color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "97ba4b6e-6ff4-44b5-8872-e0d7b70049a0"
+    },
+    {
+      "file": "thu/tu_dien_dieu.png",
+      "description": "Tử Điện Điêu (thú cưỡi hệ Lôi, phẩm Linh, phi cầm): đại bàng quấn điện tím. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "eagle wreathed in purple electricity, xianxia spirit beast mount wearing an ornate saddle, electric purple color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "be50e213-bbc1-43d3-9c39-94b9aae46650"
+    },
+    {
+      "file": "thu/dien_van_giao.png",
+      "description": "Điện Văn Giao (thú cưỡi hệ Lôi, phẩm Linh, thủy thú): giao long vằn điện phát sáng. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "serpent dragon with glowing electric stripes, xianxia spirit beast mount wearing an ornate saddle, electric purple color palette, long serpentine dragon body on four short legs, standing on the ground, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "e9befd98-80bc-4279-b468-6e8a8d79d55b"
+    },
+    {
+      "file": "thu/cuu_tieu_loi_ung.png",
+      "description": "Cửu Tiêu Lôi Ưng (thú cưỡi hệ Lôi, phẩm Huyền, phi cầm): ưng bão, cánh như mây giông. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "storm hawk with storm-cloud wings, xianxia spirit beast mount wearing an ornate saddle, electric purple color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "a9e5dfe7-2723-40b4-8fdf-338783c6c4b6"
+    },
+    {
+      "file": "thu/thanh_phong_yen.png",
+      "description": "Thanh Phong Yến (thú cưỡi hệ Phong, phẩm Phàm, phi cầm): chim én lớn lướt gió. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "large swallow riding the wind, xianxia spirit beast mount wearing an ornate saddle, pale jade turquoise color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "9b870224-9c79-4212-94d3-6170640f2ebf"
+    },
+    {
+      "file": "thu/cuong_phong_lang.png",
+      "description": "Cuồng Phong Lang (thú cưỡi hệ Phong, phẩm Linh, tẩu thú): sói quấn lốc xoáy. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "wolf surrounded by whirlwinds, xianxia spirit beast mount wearing an ornate saddle, pale jade turquoise color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "1130d2e0-1bf1-4252-8d19-fa94bc274841"
+    },
+    {
+      "file": "thu/ngu_phong_hac.png",
+      "description": "Ngự Phong Hạc (thú cưỡi hệ Phong, phẩm Linh, phi cầm): hạc lượn theo luồng gió. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "elegant crane gliding on air currents, xianxia spirit beast mount wearing an ornate saddle, pale jade turquoise color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "92db9402-25c1-4a2c-a621-0e544051e867"
+    },
+    {
+      "file": "thu/lang_van_dieu.png",
+      "description": "Lăng Vân Điêu (thú cưỡi hệ Phong, phẩm Huyền, phi cầm): đại bàng bay trên tầng mây. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "great eagle soaring above the clouds, xianxia spirit beast mount wearing an ornate saddle, pale jade turquoise color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "3bd1776e-a97d-439d-8999-62a929c80729"
+    },
+    {
+      "file": "thu/minh_quang_tuoc.png",
+      "description": "Minh Quang Tước (thú cưỡi hệ Quang, phẩm Phàm, phi cầm): chim lông vàng phát sáng. Lô 4, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "bird with luminous golden feathers, xianxia spirit beast mount wearing an ornate saddle, gold color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "a6b0706e-f361-4620-ad94-fa557f082548"
     },
     {
       "file": "diem/mo_linh_thach_2.png",
@@ -1768,6 +3057,438 @@
       },
       "created": "2026-11-02",
       "pixellab_id": "39e901ab-9f43-4900-ac7a-2c08ecd37974"
+    },
+    {
+      "file": "thu/dieu_nhat_su.png",
+      "description": "Diệu Nhật Sư (thú cưỡi hệ Quang, phẩm Linh, tẩu thú): sư tử bờm tỏa như mặt trời. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "lion with a radiant sunburst mane, xianxia spirit beast mount wearing an ornate saddle, gold color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "lion",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "25f1c448-0119-40f4-8f62-950cdd8da37c"
+    },
+    {
+      "file": "thu/thai_van_loan.png",
+      "description": "Thải Vân Loan (thú cưỡi hệ Quang, phẩm Linh, phi cầm): chim loan lông mây ngũ sắc. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "luan, mythical bird with rainbow cloud plumage, xianxia spirit beast mount wearing an ornate saddle, gold color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "45fdc127-e6b1-4020-b3be-f77c951b6802"
+    },
+    {
+      "file": "thu/ngan_quang_kinh.png",
+      "description": "Ngân Quang Kình (thú cưỡi hệ Quang, phẩm Huyền, thủy thú): cá voi phát sáng bạc vàng. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "whale glowing with silver-gold light, xianxia spirit beast mount wearing an ornate saddle, gold color palette, whale floating just above the ground like a mount, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "0761dd11-6eca-454d-aeb6-45810127d1c3"
+    },
+    {
+      "file": "thu/am_nha.png",
+      "description": "Âm Nha (thú cưỡi hệ Âm lãnh, phẩm Phàm, phi cầm): quạ ma lửa xám lam. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "spectral crow with blue-grey ghost fire, xianxia spirit beast mount wearing an ornate saddle, blue-grey color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "4a205a59-95e1-4328-8743-882896f69846"
+    },
+    {
+      "file": "thu/u_hon_bao.png",
+      "description": "U Hồn Báo (thú cưỡi hệ Âm lãnh, phẩm Linh, tẩu thú): báo hồn thân trong mờ. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "phantom leopard with a translucent body, xianxia spirit beast mount wearing an ornate saddle, blue-grey color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "lion",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "8673472a-727a-46d4-a091-cbe172edad03"
+    },
+    {
+      "file": "thu/huyet_buc.png",
+      "description": "Huyết Bức (thú cưỡi hệ Âm lãnh, phẩm Linh, phi cầm): dơi khổng lồ cánh gân đỏ thẫm. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "giant bat with dark red veined wings, xianxia spirit beast mount wearing an ornate saddle, blue-grey color palette, giant bat standing on its feet with wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "c7392205-34cd-4490-a25f-0b0f6dc6e9b2"
+    },
+    {
+      "file": "thu/minh_ha_giao.png",
+      "description": "Minh Hà Giao (thú cưỡi hệ Âm lãnh, phẩm Huyền, thủy thú): giao long sông âm phủ, lửa ma. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "serpent dragon of the underworld river with ghost flames, xianxia spirit beast mount wearing an ornate saddle, blue-grey color palette, long serpentine dragon body on four short legs, standing on the ground, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "e3a9315d-49ca-4695-9dce-893b5bdc01ad"
+    },
+    {
+      "file": "thu/phan_thien_su.png",
+      "description": "Phần Thiên Sư (thú cưỡi hệ Cực dương, phẩm Linh, tẩu thú): sư tử bọc lửa cam. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "lion wreathed in blazing orange fire, xianxia spirit beast mount wearing an ornate saddle, orange color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "lion",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "3dd0452e-3859-4af3-bf1f-ed331a7d8019"
+    },
+    {
+      "file": "thu/thai_duong_dieu.png",
+      "description": "Thái Dương Điêu (thú cưỡi hệ Cực dương, phẩm Linh, phi cầm): đại bàng có vầng mặt trời sau lưng. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "eagle with a sun disc halo, xianxia spirit beast mount wearing an ornate saddle, orange color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "b942c020-981f-42ca-bad4-f8a2bfe91fe8"
+    },
+    {
+      "file": "thu/liet_duong_te.png",
+      "description": "Liệt Dương Tê (thú cưỡi hệ Cực dương, phẩm Huyền, tẩu thú): tê giác da rực cam. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "rhinoceros with glowing orange hide, xianxia spirit beast mount wearing an ornate saddle, orange color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "bear",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "b1fdfead-7a2d-4bd0-923b-88111387a7a6"
+    },
+    {
+      "file": "thu/quy_kieu.png",
+      "description": "Quỷ Kiêu (thú cưỡi hệ Cực âm, phẩm Phàm, phi cầm): cú quỷ mắt phát sáng. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "demon owl with glowing eyes, xianxia spirit beast mount wearing an ornate saddle, dark charcoal violet color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "c1899154-ede7-40af-babf-966afcfa8bb1"
+    },
+    {
+      "file": "thu/phe_hon_mang.png",
+      "description": "Phệ Hồn Mãng (thú cưỡi hệ Cực âm, phẩm Linh, tẩu thú): mãng xà quấn hồn phách. Lô 5, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "giant python with drifting soul wisps, xianxia spirit beast mount wearing an ornate saddle, dark charcoal violet color palette, giant serpent with its coiled body raised, saddle on its back, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "custom",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "365313fb-e27a-44a0-9ff5-70974b453bc3"
+    },
+    {
+      "file": "thu/u_uyen_ngac.png",
+      "description": "U Uyên Ngạc (thú cưỡi hệ Cực âm, phẩm Linh, thủy thú): cá sấu vực sâu giáp tối. Lô 6, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "abyssal crocodile with dark armor, xianxia spirit beast mount wearing an ornate saddle, dark charcoal violet color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "d24d037e-d6f1-4c78-ac3a-eb02afe8b275"
+    },
+    {
+      "file": "thu/cuu_u_ma_ho.png",
+      "description": "Cửu U Ma Hổ (thú cưỡi hệ Cực âm, phẩm Huyền, tẩu thú): hổ ma vằn tím đen. Lô 6, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "demonic tiger with purple-black stripes, xianxia spirit beast mount wearing an ornate saddle, dark charcoal violet color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "lion",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "07f948bf-5959-43a2-8b01-03fe66de17e1"
+    },
+    {
+      "file": "thu/suong_vu_tuoc.png",
+      "description": "Sương Vũ Tước (thú cưỡi hệ Cực hàn, phẩm Phàm, phi cầm): chim lông phủ sương giá. Lô 6, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "bird with frosted feathers, xianxia spirit beast mount wearing an ornate saddle, ice blue color palette, giant riding bird with a horizontal body like a chocobo, saddle on its back, standing on two strong legs, wings folded, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "cea05d35-6631-41bf-8740-a08d385df582"
+    },
+    {
+      "file": "thu/tuyet_bao.png",
+      "description": "Tuyết Báo (thú cưỡi hệ Cực hàn, phẩm Linh, tẩu thú): báo tuyết. Lô 6, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "snow leopard with thick pale fur, xianxia spirit beast mount wearing an ornate saddle, ice blue color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "lion",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "7605bb6a-4a6d-4d5c-aee3-5d9f646e9140"
+    },
+    {
+      "file": "thu/han_bang_giao.png",
+      "description": "Hàn Băng Giao (thú cưỡi hệ Cực hàn, phẩm Linh, thủy thú): giao long băng vảy pha lê. Lô 6, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "ice serpent dragon with crystal scales, xianxia spirit beast mount wearing an ornate saddle, ice blue color palette, long serpentine dragon body on four short legs, standing on the ground, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "dog",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "b02a3b06-bea4-4727-a7af-c7470160cac5"
+    },
+    {
+      "file": "thu/huyen_bang_hung.png",
+      "description": "Huyền Băng Hùng (thú cưỡi hệ Cực hàn, phẩm Huyền, tẩu thú): gấu trắng khoác giáp băng. Lô 6, lưu hướng east (nhìn ngang); nhân vật có đủ 8 hướng trên PixelLab.",
+      "tool": "create_character_pro_flash",
+      "params": {
+        "description": "polar bear with ice armor, xianxia spirit beast mount wearing an ornate saddle, ice blue color palette, standing on all four legs, side view, full body",
+        "view": "side",
+        "width": 64,
+        "height": 64,
+        "template_id": "bear",
+        "n_directions": 8,
+        "seed": 0,
+        "direction": "east",
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "d4eb04f9-e3c9-4ee9-91ff-ada9ed34460c"
     }
   ]
 }
