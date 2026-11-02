@@ -1,1 +1,234 @@
-{ "assets": [] }
+{
+  "assets": [
+    {
+      "file": "diem/son_mon.png",
+      "description": "Đảo nổi cho điểm Sơn môn (son_mon) trên bản đồ vùng: điện thờ mái cong, cột đỏ của một tông môn. Hình khoá phong cách cho cả bộ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top stands a xianxia sect shrine hall with red pillars and a curved upturned dark tile roof, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy, earthy brown and moss green palette, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "south của 1cebc791-283e-4ce1-b931-e822890df887 (Thiết Bối Ngưu)",
+        "style_image_usage": "copy outline weight, shading and level of detail only",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "03bee604-bfb8-46f7-8b6f-2df060a81c95"
+    },
+    {
+      "file": "diem/thanh_chu.png",
+      "description": "Đảo nổi cho điểm Thành chủ (thanh_chu) trên bản đồ vùng: thành trì trung lập có tường đá, cổng lầu, mái ngói; đảo lớn nhất, chiếm gần hết khung 64. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "large floating sky island hovering in the air, wider than usual: on top stands a walled neutral fortress city with crenellated grey stone walls, a gate tower and several buildings with curved dark tile roofs, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese xianxia fantasy, earthy brown and moss green palette, 3/4 view, whole island visible, filling the canvas",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass and colors",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "283a4b20-a106-438b-974b-314a5f5fb4bc"
+    },
+    {
+      "file": "diem/mo_linh_thach.png",
+      "description": "Đảo nổi cho điểm Mỏ linh thạch (mo_linh_thach) trên bản đồ vùng: cụm tinh thể linh thạch xanh lam phát sáng. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a cluster of glowing cyan-blue spirit stone crystals jutting out of the rock, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese xianxia fantasy, earthy brown and moss green palette with bright cyan crystals, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "d5be9da3-b1d4-4287-9a28-a85dd25e8c55"
+    },
+    {
+      "file": "diem/mo_quang.png",
+      "description": "Đảo nổi cho điểm Mỏ quặng (mo_quang) trên bản đồ vùng: đá quặng vân vàng và sắt, cuốc cắm trên đá, xe goòng gỗ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a rocky ore outcrop with shiny metallic gold and iron veins, a pickaxe stuck in it and a small wooden mine cart, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese xianxia fantasy, earthy brown and moss green palette, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass and colors",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "e1fbeeb4-68b1-4f8e-b57d-f5040e80f621"
+    },
+    {
+      "file": "diem/mo_duoc.png",
+      "description": "Đảo nổi cho điểm Mỏ dược (mo_duoc) trên bản đồ vùng: vườn linh thảo với nấm linh chi đỏ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small garden of spirit herbs with big glowing red lingzhi reishi mushrooms and leafy medicinal plants, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese xianxia fantasy, earthy brown and moss green palette, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass and colors",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "54bf579a-bb0c-4b88-a481-366150dbcf0a"
+    },
+    {
+      "file": "diem/linh_tuyen.png",
+      "description": "Đảo nổi cho điểm Linh tuyền (linh_tuyen) trên bản đồ vùng: cây cổ thụ bên hồ linh tuyền, thác linh khí đổ qua mép đảo. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a gnarled tree beside a small spring pool of glowing spirit water, a little waterfall spilling over the island edge and falling down, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese xianxia fantasy, earthy brown and moss green palette with bright cyan water, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "3c9d2947-13ed-4a7c-8492-b66b60f298b4"
+    },
+    {
+      "file": "diem/cua_bi_canh.png",
+      "description": "Đảo nổi cho điểm Cửa bí cảnh (cua_bi_canh) trên bản đồ vùng: cổng đá cổ phủ rêu, vòng trận tím phát sáng trước cổng. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top an ancient mossy stone gate arch with a glowing purple and cyan magic circle formation on the ground in front of it, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese xianxia fantasy, earthy brown and moss green palette with glowing purple runes, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "870f66f8-4fb4-414a-821a-7b416687a9aa"
+    },
+    {
+      "file": "diem/hang_di_thu.png",
+      "description": "Đảo nổi cho điểm Hang dị thú (hang_di_thu) trên bản đồ vùng: cửa hang tối, sọ thú có sừng, xương rải rác, kiếm gỉ cắm đất. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a dark cave mouth in a rocky mound, a huge horned beast skull and scattered bones in front of it, a rusty sword stuck in the ground, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese xianxia fantasy, earthy brown and moss green palette, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass and colors",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "92cf0894-3f7f-4b84-8885-947db16c1775"
+    },
+    {
+      "file": "diem/deo.png",
+      "description": "Đảo nổi cho điểm Đèo (deo) trên bản đồ vùng: cổng ải mái ngói giữa hai vách núi đá. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mountain pass, a fortified wooden gate tower with a curved tile roof standing in the gap between two steep grey rocky cliffs, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese xianxia fantasy, earthy brown and moss green palette, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass and colors",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "c7829540-7275-42d6-81c5-8c683e4b571f"
+    },
+    {
+      "file": "diem/ben_do.png",
+      "description": "Đảo nổi cho điểm Bến đò (ben_do) trên bản đồ vùng: bến gỗ có cột đèn, thuyền nhỏ có mui đậu cạnh. Bản 2 (seed 1); bản 1 e2f66e36-b7f7-49a9-b2fa-735ffa57cee0 bỏ vì thuyền trông như thùng gỗ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a small wooden sampan rowboat with a pointed curved hull and a little straw canopy moored alongside the pier, a lantern post at the pier end, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese xianxia fantasy, earthy brown and moss green palette, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass and colors",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-02",
+      "pixellab_id": "fad7de81-6af0-4fbd-b1c2-c12ca8bbbbc0"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xem trước đảo nổi</title>
+<style>
+  body { margin: 0; padding: 16px; background: #2b241c; color: #eadcc0; font: 14px/1.5 system-ui, sans-serif; }
+  h2 { margin: 24px 0 8px; font-size: 16px; }
+  canvas { display: block; max-width: 100%; image-rendering: pixelated; background: #000; }
+  #trang_thai { color: #c9b48a; }
+</style>
+</head>
+<body>
+<!-- Ghép 10 hình đảo nổi (assets/pixellab/diem/<mã>.png) lên ảnh nền vùng Lôi Đình Cốc.
+     Mở qua máy chủ tĩnh đặt gốc ở thư mục repo; thêm ?luu=1 để gửi ảnh PNG về POST /luu. -->
+<div id="trang_thai">Đang tải…</div>
+<h2>Bảng hình (×4)</h2>
+<canvas id="bang_hinh"></canvas>
+<h2>Quanh thành chủ (×2)</h2>
+<canvas id="quanh_thanh_chu"></canvas>
+<h2>Toàn vùng (360 điểm, hình cỡ gốc 64)</h2>
+<canvas id="toan_vung"></canvas>
+<h2>Toàn vùng, hình ½ cỡ (32)</h2>
+<canvas id="toan_vung_nua"></canvas>
+<script type="module">
+const LOAI = ["thanh_chu", "son_mon", "mo_linh_thach", "mo_quang", "mo_duoc", "linh_tuyen", "cua_bi_canh", "hang_di_thu", "deo", "ben_do"];
+const TEN = { thanh_chu: "Thành chủ", son_mon: "Sơn môn", mo_linh_thach: "Mỏ linh thạch", mo_quang: "Mỏ quặng", mo_duoc: "Mỏ dược", linh_tuyen: "Linh tuyền", cua_bi_canh: "Cửa bí cảnh", hang_di_thu: "Hang dị thú", deo: "Đèo", ben_do: "Bến đò" };
+const DIEM = "/data/maps/ha_diem_loi_dinh_coc.json";
+const NEN = "/data/maps/ha_nen_loi_dinh_coc.webp";
+const params = new URLSearchParams(location.search);
+const trangThai = document.getElementById("trang_thai");
+
+const taiAnh = (src) => new Promise((done) => { const img = new Image(); img.onload = () => done(img); img.onerror = () => done(null); img.src = src; });
+
+// Hình chưa có thì vẽ chỗ giữ: hình tròn có mã loại, cùng cỡ 64.
+function choGiu(loai) {
+  const c = new OffscreenCanvas(64, 64), g = c.getContext("2d");
+  g.fillStyle = "rgba(160,40,40,0.8)"; g.beginPath(); g.arc(32, 44, 18, 0, Math.PI * 2); g.fill();
+  g.fillStyle = "#fff"; g.font = "9px sans-serif"; g.textAlign = "center"; g.fillText(loai.slice(0, 10), 32, 47);
+  return c;
+}
+
+const [duLieu, nen, ...hinhs] = await Promise.all([fetch(DIEM).then((r) => r.json()), taiAnh(NEN), ...LOAI.map((l) => taiAnh(`/assets/pixellab/diem/${l}.png`))]);
+const hinh = Object.fromEntries(LOAI.map((l, i) => [l, hinhs[i] ?? choGiu(l)]));
+const thieu = LOAI.filter((l, i) => !hinhs[i]);
+const [fx0, fy0, fx1] = duLieu.map.frame;
+const tiLe = nen.width / (fx1 - fx0);
+const viTri = (p) => [(p.x - fx0) * tiLe, (p.y - fy0) * tiLe];
+// Điểm phía trên vẽ trước để hình phía dưới đè lên, neo giữa cạnh dưới; thành chủ vẽ sau cùng cho khỏi bị che.
+const diem = [...duLieu.points].sort((a, b) => (a.type === "thanh_chu") - (b.type === "thanh_chu") || a.y - b.y || a.id - b.id);
+
+// k: phóng cả nền lẫn vị trí; s: cỡ hình so với cỡ gốc 64 (½ để thử khi điểm sát nhau).
+function veDiem(g, dx, dy, k, s = 1) {
+  for (const p of diem) {
+    const h = hinh[p.type], [x, y] = viTri(p), w = h.width * k * s, ht = h.height * k * s;
+    g.drawImage(h, Math.round((x - dx) * k - w / 2), Math.round((y - dy) * k - ht), w, ht);
+  }
+}
+
+// Toàn vùng, tỉ lệ 1:1 với ảnh nền; bản thứ hai cùng nền nhưng hình ½ cỡ.
+function veToan(id, s) {
+  const c = document.getElementById(id);
+  c.width = nen.width; c.height = nen.height;
+  const g = c.getContext("2d"); g.imageSmoothingEnabled = false;
+  g.drawImage(nen, 0, 0);
+  veDiem(g, 0, 0, 1, s);
+  return c;
+}
+const toan = veToan("toan_vung", 1);
+const toanNua = veToan("toan_vung_nua", 0.5);
+
+// Phóng ×2 một khung 480×360 quanh thành chủ.
+const tc = duLieu.points.find((p) => p.type === "thanh_chu");
+const [tx, ty] = viTri(tc);
+const W = 480, H = 360, K = 2;
+const cx = Math.max(0, Math.min(nen.width - W, Math.round(tx - W / 2)));
+const cy = Math.max(0, Math.min(nen.height - H, Math.round(ty - H / 2)));
+const quanh = document.getElementById("quanh_thanh_chu");
+quanh.width = W * K; quanh.height = H * K;
+const gq = quanh.getContext("2d"); gq.imageSmoothingEnabled = false;
+gq.drawImage(nen, cx, cy, W, H, 0, 0, W * K, H * K);
+veDiem(gq, cx, cy, K);
+
+// Bảng 10 hình ×4 trên màu giấy, kèm tên và số điểm.
+const bang = document.getElementById("bang_hinh");
+const O = 64 * 4, CHU = 40, COT = 5;
+bang.width = COT * O; bang.height = Math.ceil(LOAI.length / COT) * (O + CHU);
+const gb = bang.getContext("2d"); gb.imageSmoothingEnabled = false;
+gb.fillStyle = "#d8c49a"; gb.fillRect(0, 0, bang.width, bang.height);
+LOAI.forEach((l, i) => {
+  const x = (i % COT) * O, y = Math.floor(i / COT) * (O + CHU);
+  gb.strokeStyle = "rgba(90,60,30,0.35)"; gb.strokeRect(x + 0.5, y + 0.5, O - 1, O + CHU - 1);
+  gb.drawImage(hinh[l], x, y, O, O);
+  gb.fillStyle = "#3a2a18"; gb.font = "bold 16px system-ui"; gb.textAlign = "center";
+  gb.fillText(`${TEN[l]} (${duLieu.counts[l]})`, x + O / 2, y + O + 18);
+  gb.font = "12px monospace"; gb.fillText(l, x + O / 2, y + O + 34);
+});
+
+trangThai.textContent = `${duLieu.points.length} điểm, ảnh nền ${nen.width}×${nen.height}, tỉ lệ ×${tiLe}.` + (thieu.length ? ` Chưa có hình: ${thieu.join(", ")}.` : " Đủ 10 hình.");
+
+if (params.get("luu")) {
+  for (const c of [bang, quanh, toan, toanNua]) {
+    const blob = await new Promise((done) => c.toBlob(done, "image/png"));
+    await fetch(`/luu?ten=${c.id}.png`, { method: "POST", body: blob });
+  }
+  trangThai.textContent += " Đã lưu PNG.";
+}
+document.body.dataset.xong = "1";
+</script>
+</body>
+</html>
