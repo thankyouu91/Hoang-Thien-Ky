@@ -199,3 +199,17 @@ test("Tu dược hồi máu nhận +10%; Tu đan, Tu rèn, Tu kim tiền không 
 test("tối đa 2 tài năng", () => {
   assert.throws(() => new Battle({ seed: 1, teamA: [unit(1, 0, [tech("can_don", "kim")], { talents: ["tu_the", "tu_phap", "tu_tran"] })], teamB: [inert(101)] }));
 });
+
+// Phản bội tông môn (GDD mục 6)
+
+test("công pháp của tông đã phản bội đánh người tông đó chỉ còn 50% sát thương", () => {
+  const loss = (forsakenSect: string | undefined, targetSect: string) => {
+    const t = { ...tech("can_don", "kim"), forsakenSect };
+    const { b } = firstHit({ seed: 1, teamA: [unit(1, 0, [t])], teamB: [inert(101, { sectId: targetSect })] });
+    const target = get(b, 101);
+    return target.hp - target.curHp;
+  };
+  const normal = loss(undefined, "t");
+  assert.equal(loss("t", "x"), normal); // người tông khác: đủ sát thương
+  assert.equal(loss("t", "t"), mul(normal, 500));
+});

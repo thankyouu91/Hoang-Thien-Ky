@@ -33,6 +33,8 @@ export interface Technique {
   rangeBonus: number; // milli-ô
   combo: number; // hệ số tổ hợp t, phần nghìn
   effects: TechniqueEffect[];
+  /** Tông người dùng đã phản bội (rules gắn vào); đánh người của tông đó chỉ gây 50% sát thương (GDD mục 6). */
+  forsakenSect?: string;
 }
 
 /**

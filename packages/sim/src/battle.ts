@@ -28,6 +28,7 @@ export interface UnitSpec {
   techniques: Technique[]; // 1–4 công pháp, theo thứ tự ưu tiên
   manaMax?: number; // mặc định BATTLE.manaMax
   boss?: boolean; // miễn tuyệt sát
+  sectId?: string; // tông môn, để xét công pháp của kẻ phản bội
 }
 export interface BattleInput {
   seed: number;
@@ -83,6 +84,7 @@ export interface Unit {
   def: number; // sau buff
   resist: Partial<Record<Element, number>>;
   boss: boolean;
+  sectId: string | null;
   b: UnitBonuses;
   curHp: number;
   pos: number;
@@ -185,7 +187,7 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
   const manaMax = mul(spec.manaMax ?? BATTLE.manaMax, ONE + b.manaMax) * ONE;
   return {
     id: spec.id, team, level: spec.level, element: spec.element,
-    hp, atk: spec.atk, def: mul(spec.def, ONE + b.def), resist: spec.resist ?? {}, boss: spec.boss ?? false, b,
+    hp, atk: spec.atk, def: mul(spec.def, ONE + b.def), resist: spec.resist ?? {}, boss: spec.boss ?? false, sectId: spec.sectId ?? null, b,
     curHp: hp,
     pos: team === 0 ? startA : BATTLE.fieldLength - startA,
     mana: manaMax,
@@ -420,9 +422,10 @@ export class Battle {
         continue;
       }
       const crit = this.rng.chance(s.tech.critPerMille + u.b.critBonus + critBonus);
-      const dmg = hitDamage(u, s.tech, t, crit, ult, {
+      let dmg = hitDamage(u, s.tech, t, crit, ult, {
         damage: s.bonus, critDamage: u.b.critDamage, armorPen: fx.armorPen, resistPen: fx.resistPen + u.b.resistPen,
       });
+      if (s.tech.forsakenSect !== undefined && s.tech.forsakenSect === t.sectId) dmg = Math.max(1, mul(dmg, BATTLE.betrayalDamage));
       this.hurt(t, dmg);
       const drain = fx.healOfDamage + fx.lifesteal + u.b.lifesteal;
       if (drain > 0) this.restore(u, u, mul(dmg, drain));

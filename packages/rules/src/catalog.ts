@@ -32,7 +32,7 @@ const ELEMENT_PREFIX: Record<Element, string> = {
   loi: "Tử Điện", phong: "Cửu Tiêu", cuc_duong: "Thuần Dương", cuc_am: "Cửu U", cuc_han: "Huyền Băng",
   quang: "Phá Hiểu", am_lanh: "U Lãnh",
 };
-const TYPE_SUFFIX: Record<SkillType, string> = {
+export const TYPE_SUFFIX: Record<SkillType, string> = {
   can_don: "Trảm", can_quet: "Liên Hoàn", tam_xa: "Châm", dien_rong: "Cuồng Vũ", ho_the: "Cố Bản",
   bua_chu: "Phù", tran_phap: "Trận", hoi_phuc: "Hồi Xuân", khong_che: "Tỏa", than_phap: "Bộ",
 };
@@ -60,8 +60,12 @@ export const SCROLL_KINDS: readonly ScrollKind[] = buildCatalog();
 const BY_ID: Record<string, ScrollKind> = {};
 for (const k of SCROLL_KINDS) BY_ID[k.id] = k;
 
+export function findScrollKind(id: string): ScrollKind | undefined {
+  return Object.prototype.hasOwnProperty.call(BY_ID, id) ? BY_ID[id] : undefined;
+}
+
 export function scrollKind(id: string): ScrollKind {
-  const k = BY_ID[id];
+  const k = findScrollKind(id);
   if (!k) throw new Error(`Không có tàn quyển ${id}`);
   return k;
 }
