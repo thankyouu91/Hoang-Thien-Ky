@@ -105,59 +105,59 @@
   },
   {
     "no": 14,
-    "name": "Kim Âm Cuồng Vũ Quyết",
+    "name": "Kim U Cuồng Vũ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "kim.dien_rong.bao",
     "grade": 1,
-    "subs": ["am_lanh.dien_rong.ben"]
+    "subs": ["cuc_am.dien_rong.ben"]
   },
   {
     "no": 15,
-    "name": "Kim U Cố Bản Quyết",
+    "name": "Kim Băng Cố Bản Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "kim.ho_the.ben",
     "grade": 1,
-    "subs": ["cuc_am.ho_the.linh"]
+    "subs": ["cuc_han.ho_the.linh"]
   },
   {
     "no": 16,
-    "name": "Kim Băng Phù Quyết",
+    "name": "Kim Thủy Phù Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "kim.bua_chu.bao",
     "grade": 1,
-    "subs": ["cuc_han.bua_chu.toc"]
+    "subs": ["thuy.bua_chu.toc"]
   },
   {
     "no": 17,
-    "name": "Kim Thủy Trận Quyết",
+    "name": "Kim Thổ Trận Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "kim.tran_phap.toc",
     "grade": 1,
-    "subs": ["thuy.tran_phap.ben"]
+    "subs": ["tho.tran_phap.ben"]
   },
   {
     "no": 18,
-    "name": "Kim Thổ Hồi Xuân Quyết",
+    "name": "Kim Lôi Hồi Xuân Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "kim.hoi_phuc.ben",
     "grade": 1,
-    "subs": ["tho.hoi_phuc.linh"]
+    "subs": ["loi.hoi_phuc.linh"]
   },
   {
     "no": 19,
-    "name": "Kim Lôi Tỏa Quyết",
+    "name": "Kim U Tỏa Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "kim.khong_che.linh",
     "grade": 1,
-    "subs": ["loi.khong_che.toc"]
+    "subs": ["cuc_am.khong_che.toc"]
   },
   {
     "no": 20,
-    "name": "Kim Âm Bộ Quyết",
+    "name": "Kim Băng Bộ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "kim.than_phap.toc",
     "grade": 1,
-    "subs": ["am_lanh.than_phap.bao"]
+    "subs": ["cuc_han.than_phap.bao"]
   },
   {
     "no": 21,
@@ -177,27 +177,27 @@
   },
   {
     "no": 23,
-    "name": "Kim Lôi Âm Cuồng Vũ Quyết",
+    "name": "Kim Lôi U Cuồng Vũ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "kim.dien_rong.bao",
     "grade": 1,
-    "subs": ["loi.dien_rong.ben","am_lanh.dien_rong.linh"]
+    "subs": ["loi.dien_rong.ben","cuc_am.dien_rong.linh"]
   },
   {
     "no": 24,
-    "name": "Kim Âm U Trận Quyết",
+    "name": "Kim U Băng Trận Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "kim.tran_phap.toc",
     "grade": 1,
-    "subs": ["am_lanh.tran_phap.ben","cuc_am.tran_phap.linh"]
+    "subs": ["cuc_am.tran_phap.ben","cuc_han.tran_phap.linh"]
   },
   {
     "no": 25,
-    "name": "Kim U Băng Bộ Quyết",
+    "name": "Kim Băng Thủy Bộ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "kim.than_phap.toc",
     "grade": 1,
-    "subs": ["cuc_am.than_phap.bao","cuc_han.than_phap.linh"]
+    "subs": ["cuc_han.than_phap.bao","thuy.than_phap.linh"]
   },
   {
     "no": 26,
@@ -705,59 +705,59 @@
   },
   {
     "no": 89,
-    "name": "Hỏa Quang Cuồng Vũ Quyết",
+    "name": "Hỏa Dương Cuồng Vũ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "hoa.dien_rong.bao",
     "grade": 1,
-    "subs": ["quang.dien_rong.ben"]
+    "subs": ["cuc_duong.dien_rong.ben"]
   },
   {
     "no": 90,
-    "name": "Hỏa Dương Cố Bản Quyết",
+    "name": "Hỏa U Cố Bản Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "hoa.ho_the.ben",
     "grade": 1,
-    "subs": ["cuc_duong.ho_the.linh"]
+    "subs": ["cuc_am.ho_the.linh"]
   },
   {
     "no": 91,
-    "name": "Hỏa U Phù Quyết",
+    "name": "Hỏa Mộc Phù Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "hoa.bua_chu.bao",
     "grade": 1,
-    "subs": ["cuc_am.bua_chu.toc"]
+    "subs": ["moc.bua_chu.toc"]
   },
   {
     "no": 92,
-    "name": "Hỏa Mộc Trận Quyết",
+    "name": "Hỏa Thổ Trận Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "hoa.tran_phap.toc",
     "grade": 1,
-    "subs": ["moc.tran_phap.ben"]
+    "subs": ["tho.tran_phap.ben"]
   },
   {
     "no": 93,
-    "name": "Hỏa Thổ Hồi Xuân Quyết",
+    "name": "Hỏa Phong Hồi Xuân Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "hoa.hoi_phuc.ben",
     "grade": 1,
-    "subs": ["tho.hoi_phuc.linh"]
+    "subs": ["phong.hoi_phuc.linh"]
   },
   {
     "no": 94,
-    "name": "Hỏa Phong Tỏa Quyết",
+    "name": "Hỏa Dương Tỏa Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "hoa.khong_che.linh",
     "grade": 1,
-    "subs": ["phong.khong_che.toc"]
+    "subs": ["cuc_duong.khong_che.toc"]
   },
   {
     "no": 95,
-    "name": "Hỏa Quang Bộ Quyết",
+    "name": "Hỏa U Bộ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "hoa.than_phap.toc",
     "grade": 1,
-    "subs": ["quang.than_phap.bao"]
+    "subs": ["cuc_am.than_phap.bao"]
   },
   {
     "no": 96,
@@ -777,27 +777,27 @@
   },
   {
     "no": 98,
-    "name": "Hỏa Phong Quang Cuồng Vũ Quyết",
+    "name": "Hỏa Phong Dương Cuồng Vũ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "hoa.dien_rong.bao",
     "grade": 1,
-    "subs": ["phong.dien_rong.ben","quang.dien_rong.linh"]
+    "subs": ["phong.dien_rong.ben","cuc_duong.dien_rong.linh"]
   },
   {
     "no": 99,
-    "name": "Hỏa Quang Dương Trận Quyết",
+    "name": "Hỏa Dương U Trận Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "hoa.tran_phap.toc",
     "grade": 1,
-    "subs": ["quang.tran_phap.ben","cuc_duong.tran_phap.linh"]
+    "subs": ["cuc_duong.tran_phap.ben","cuc_am.tran_phap.linh"]
   },
   {
     "no": 100,
-    "name": "Hỏa Dương U Bộ Quyết",
+    "name": "Hỏa U Mộc Bộ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "hoa.than_phap.toc",
     "grade": 1,
-    "subs": ["cuc_duong.than_phap.bao","cuc_am.than_phap.linh"]
+    "subs": ["cuc_am.than_phap.bao","moc.than_phap.linh"]
   },
   {
     "no": 101,
@@ -1305,59 +1305,59 @@
   },
   {
     "no": 164,
-    "name": "Phong Quang Cuồng Vũ Quyết",
+    "name": "Phong Dương Cuồng Vũ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "phong.dien_rong.bao",
     "grade": 1,
-    "subs": ["quang.dien_rong.ben"]
+    "subs": ["cuc_duong.dien_rong.ben"]
   },
   {
     "no": 165,
-    "name": "Phong Dương Cố Bản Quyết",
+    "name": "Phong Băng Cố Bản Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "phong.ho_the.ben",
     "grade": 1,
-    "subs": ["cuc_duong.ho_the.linh"]
+    "subs": ["cuc_han.ho_the.linh"]
   },
   {
     "no": 166,
-    "name": "Phong Băng Phù Quyết",
+    "name": "Phong Mộc Phù Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "phong.bua_chu.bao",
     "grade": 1,
-    "subs": ["cuc_han.bua_chu.toc"]
+    "subs": ["moc.bua_chu.toc"]
   },
   {
     "no": 167,
-    "name": "Phong Mộc Trận Quyết",
+    "name": "Phong Thủy Trận Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "phong.tran_phap.toc",
     "grade": 1,
-    "subs": ["moc.tran_phap.ben"]
+    "subs": ["thuy.tran_phap.ben"]
   },
   {
     "no": 168,
-    "name": "Phong Thủy Hồi Xuân Quyết",
+    "name": "Phong Hỏa Hồi Xuân Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "phong.hoi_phuc.ben",
     "grade": 1,
-    "subs": ["thuy.hoi_phuc.linh"]
+    "subs": ["hoa.hoi_phuc.linh"]
   },
   {
     "no": 169,
-    "name": "Phong Hỏa Tỏa Quyết",
+    "name": "Phong Dương Tỏa Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "phong.khong_che.linh",
     "grade": 1,
-    "subs": ["hoa.khong_che.toc"]
+    "subs": ["cuc_duong.khong_che.toc"]
   },
   {
     "no": 170,
-    "name": "Phong Quang Bộ Quyết",
+    "name": "Phong Băng Bộ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "phong.than_phap.toc",
     "grade": 1,
-    "subs": ["quang.than_phap.bao"]
+    "subs": ["cuc_han.than_phap.bao"]
   },
   {
     "no": 171,
@@ -1377,27 +1377,27 @@
   },
   {
     "no": 173,
-    "name": "Phong Hỏa Quang Cuồng Vũ Quyết",
+    "name": "Phong Hỏa Dương Cuồng Vũ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "phong.dien_rong.bao",
     "grade": 1,
-    "subs": ["hoa.dien_rong.ben","quang.dien_rong.linh"]
+    "subs": ["hoa.dien_rong.ben","cuc_duong.dien_rong.linh"]
   },
   {
     "no": 174,
-    "name": "Phong Quang Dương Trận Quyết",
+    "name": "Phong Dương Băng Trận Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "phong.tran_phap.toc",
     "grade": 1,
-    "subs": ["quang.tran_phap.ben","cuc_duong.tran_phap.linh"]
+    "subs": ["cuc_duong.tran_phap.ben","cuc_han.tran_phap.linh"]
   },
   {
     "no": 175,
-    "name": "Phong Dương Băng Bộ Quyết",
+    "name": "Phong Băng Mộc Bộ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "phong.than_phap.toc",
     "grade": 1,
-    "subs": ["cuc_duong.than_phap.bao","cuc_han.than_phap.linh"]
+    "subs": ["cuc_han.than_phap.bao","moc.than_phap.linh"]
   },
   {
     "no": 176,
@@ -1481,35 +1481,35 @@
   },
   {
     "no": 186,
-    "name": "Quang Hỏa Trảm Quyết",
+    "name": "Quang Lôi Trảm Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "quang.can_don.bao",
     "grade": 1,
-    "subs": ["hoa.can_don.toc"]
+    "subs": ["loi.can_don.toc"]
   },
   {
     "no": 187,
-    "name": "Quang Lôi Liên Hoàn Quyết",
+    "name": "Quang Âm Liên Hoàn Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "quang.can_quet.linh",
     "grade": 1,
-    "subs": ["loi.can_quet.ben"]
+    "subs": ["am_lanh.can_quet.ben"]
   },
   {
     "no": 188,
-    "name": "Quang Phong Châm Quyết",
+    "name": "Quang Lôi Châm Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "quang.tam_xa.linh",
     "grade": 1,
-    "subs": ["phong.tam_xa.ben"]
+    "subs": ["loi.tam_xa.ben"]
   },
   {
     "no": 189,
-    "name": "Quang Hỏa Cuồng Vũ Quyết",
+    "name": "Quang Âm Cuồng Vũ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "quang.dien_rong.bao",
     "grade": 1,
-    "subs": ["hoa.dien_rong.ben"]
+    "subs": ["am_lanh.dien_rong.ben"]
   },
   {
     "no": 190,
@@ -1521,83 +1521,83 @@
   },
   {
     "no": 191,
-    "name": "Quang Phong Phù Quyết",
+    "name": "Quang Âm Phù Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "quang.bua_chu.bao",
     "grade": 1,
-    "subs": ["phong.bua_chu.toc"]
+    "subs": ["am_lanh.bua_chu.toc"]
   },
   {
     "no": 192,
-    "name": "Quang Hỏa Trận Quyết",
+    "name": "Quang Lôi Trận Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "quang.tran_phap.toc",
     "grade": 1,
-    "subs": ["hoa.tran_phap.ben"]
+    "subs": ["loi.tran_phap.ben"]
   },
   {
     "no": 193,
-    "name": "Quang Lôi Hồi Xuân Quyết",
+    "name": "Quang Âm Hồi Xuân Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "quang.hoi_phuc.ben",
     "grade": 1,
-    "subs": ["loi.hoi_phuc.linh"]
+    "subs": ["am_lanh.hoi_phuc.linh"]
   },
   {
     "no": 194,
-    "name": "Quang Phong Tỏa Quyết",
+    "name": "Quang Lôi Tỏa Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "quang.khong_che.linh",
     "grade": 1,
-    "subs": ["phong.khong_che.toc"]
+    "subs": ["loi.khong_che.toc"]
   },
   {
     "no": 195,
-    "name": "Quang Hỏa Bộ Quyết",
+    "name": "Quang Âm Bộ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "quang.than_phap.toc",
     "grade": 1,
-    "subs": ["hoa.than_phap.bao"]
+    "subs": ["am_lanh.than_phap.bao"]
   },
   {
     "no": 196,
-    "name": "Quang Hỏa Lôi Trảm Quyết",
+    "name": "Quang Lôi Âm Trảm Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "quang.can_don.bao",
     "grade": 1,
-    "subs": ["hoa.can_don.toc","loi.can_don.linh"]
+    "subs": ["loi.can_don.toc","am_lanh.can_don.linh"]
   },
   {
     "no": 197,
-    "name": "Quang Lôi Phong Châm Quyết",
+    "name": "Quang Âm Lôi Châm Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "quang.tam_xa.linh",
     "grade": 1,
-    "subs": ["loi.tam_xa.ben","phong.tam_xa.linh"]
+    "subs": ["am_lanh.tam_xa.ben","loi.tam_xa.linh"]
   },
   {
     "no": 198,
-    "name": "Quang Phong Hỏa Cuồng Vũ Quyết",
+    "name": "Quang Lôi Âm Cuồng Vũ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "quang.dien_rong.bao",
     "grade": 1,
-    "subs": ["phong.dien_rong.ben","hoa.dien_rong.linh"]
+    "subs": ["loi.dien_rong.ben","am_lanh.dien_rong.linh"]
   },
   {
     "no": 199,
-    "name": "Quang Hỏa Lôi Trận Quyết",
+    "name": "Quang Âm Lôi Trận Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "quang.tran_phap.toc",
     "grade": 1,
-    "subs": ["hoa.tran_phap.ben","loi.tran_phap.linh"]
+    "subs": ["am_lanh.tran_phap.ben","loi.tran_phap.linh"]
   },
   {
     "no": 200,
-    "name": "Quang Lôi Phong Bộ Quyết",
+    "name": "Quang Lôi Âm Bộ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "quang.than_phap.toc",
     "grade": 1,
-    "subs": ["loi.than_phap.bao","phong.than_phap.linh"]
+    "subs": ["loi.than_phap.bao","am_lanh.than_phap.linh"]
   },
   {
     "no": 201,
@@ -1681,123 +1681,123 @@
   },
   {
     "no": 211,
-    "name": "Âm Kim Trảm Quyết",
+    "name": "Âm Quang Trảm Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.can_don.bao",
     "grade": 1,
-    "subs": ["kim.can_don.toc"]
+    "subs": ["quang.can_don.toc"]
   },
   {
     "no": 212,
-    "name": "Âm U Liên Hoàn Quyết",
+    "name": "Âm Kim Liên Hoàn Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.can_quet.linh",
     "grade": 1,
-    "subs": ["cuc_am.can_quet.ben"]
+    "subs": ["kim.can_quet.ben"]
   },
   {
     "no": 213,
-    "name": "Âm Kim Xạ Quyết",
+    "name": "Âm Quang Xạ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.tam_xa.linh",
     "grade": 1,
-    "subs": ["kim.tam_xa.ben"]
+    "subs": ["quang.tam_xa.ben"]
   },
   {
     "no": 214,
-    "name": "Âm U Cuồng Vũ Quyết",
+    "name": "Âm Kim Cuồng Vũ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.dien_rong.bao",
     "grade": 1,
-    "subs": ["cuc_am.dien_rong.ben"]
+    "subs": ["kim.dien_rong.ben"]
   },
   {
     "no": 215,
-    "name": "Âm Kim Cố Bản Quyết",
+    "name": "Âm Quang Cố Bản Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.ho_the.ben",
     "grade": 1,
-    "subs": ["kim.ho_the.linh"]
+    "subs": ["quang.ho_the.linh"]
   },
   {
     "no": 216,
-    "name": "Âm U Phù Quyết",
+    "name": "Âm Kim Phù Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.bua_chu.bao",
     "grade": 1,
-    "subs": ["cuc_am.bua_chu.toc"]
+    "subs": ["kim.bua_chu.toc"]
   },
   {
     "no": 217,
-    "name": "Âm Kim Trận Quyết",
+    "name": "Âm Quang Trận Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.tran_phap.toc",
     "grade": 1,
-    "subs": ["kim.tran_phap.ben"]
+    "subs": ["quang.tran_phap.ben"]
   },
   {
     "no": 218,
-    "name": "Âm U Hồi Xuân Quyết",
+    "name": "Âm Kim Hồi Xuân Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.hoi_phuc.ben",
     "grade": 1,
-    "subs": ["cuc_am.hoi_phuc.linh"]
+    "subs": ["kim.hoi_phuc.linh"]
   },
   {
     "no": 219,
-    "name": "Âm Kim Chỉ Quyết",
+    "name": "Âm Quang Chỉ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.khong_che.linh",
     "grade": 1,
-    "subs": ["kim.khong_che.toc"]
+    "subs": ["quang.khong_che.toc"]
   },
   {
     "no": 220,
-    "name": "Âm U Bộ Quyết",
+    "name": "Âm Kim Bộ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "am_lanh.than_phap.toc",
     "grade": 1,
-    "subs": ["cuc_am.than_phap.bao"]
+    "subs": ["kim.than_phap.bao"]
   },
   {
     "no": 221,
-    "name": "Âm Kim U Trảm Quyết",
+    "name": "Âm Quang Kim Trảm Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "am_lanh.can_don.bao",
     "grade": 1,
-    "subs": ["kim.can_don.toc","cuc_am.can_don.linh"]
+    "subs": ["quang.can_don.toc","kim.can_don.linh"]
   },
   {
     "no": 222,
-    "name": "Âm U Kim Xạ Quyết",
+    "name": "Âm Kim Quang Xạ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "am_lanh.tam_xa.linh",
     "grade": 1,
-    "subs": ["cuc_am.tam_xa.ben","kim.tam_xa.linh"]
+    "subs": ["kim.tam_xa.ben","quang.tam_xa.linh"]
   },
   {
     "no": 223,
-    "name": "Âm Kim U Cuồng Vũ Quyết",
+    "name": "Âm Quang Kim Cuồng Vũ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "am_lanh.dien_rong.bao",
     "grade": 1,
-    "subs": ["kim.dien_rong.ben","cuc_am.dien_rong.linh"]
+    "subs": ["quang.dien_rong.ben","kim.dien_rong.linh"]
   },
   {
     "no": 224,
-    "name": "Âm U Kim Trận Quyết",
+    "name": "Âm Kim Quang Trận Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "am_lanh.tran_phap.toc",
     "grade": 1,
-    "subs": ["cuc_am.tran_phap.ben","kim.tran_phap.linh"]
+    "subs": ["kim.tran_phap.ben","quang.tran_phap.linh"]
   },
   {
     "no": 225,
-    "name": "Âm Kim U Bộ Quyết",
+    "name": "Âm Quang Kim Bộ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "am_lanh.than_phap.toc",
     "grade": 1,
-    "subs": ["kim.than_phap.bao","cuc_am.than_phap.linh"]
+    "subs": ["quang.than_phap.bao","kim.than_phap.linh"]
   },
   {
     "no": 226,
@@ -2113,51 +2113,51 @@
   },
   {
     "no": 265,
-    "name": "U Âm Cố Bản Quyết",
+    "name": "U Kim Cố Bản Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "cuc_am.ho_the.ben",
     "grade": 1,
-    "subs": ["am_lanh.ho_the.linh"]
+    "subs": ["kim.ho_the.linh"]
   },
   {
     "no": 266,
-    "name": "U Kim Phù Quyết",
+    "name": "U Hỏa Phù Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "cuc_am.bua_chu.bao",
     "grade": 1,
-    "subs": ["kim.bua_chu.toc"]
+    "subs": ["hoa.bua_chu.toc"]
   },
   {
     "no": 267,
-    "name": "U Hỏa Trận Quyết",
+    "name": "U Thổ Trận Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "cuc_am.tran_phap.toc",
     "grade": 1,
-    "subs": ["hoa.tran_phap.ben"]
+    "subs": ["tho.tran_phap.ben"]
   },
   {
     "no": 268,
-    "name": "U Thổ Hồi Xuân Quyết",
+    "name": "U Lôi Hồi Xuân Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "cuc_am.hoi_phuc.ben",
     "grade": 1,
-    "subs": ["tho.hoi_phuc.linh"]
+    "subs": ["loi.hoi_phuc.linh"]
   },
   {
     "no": 269,
-    "name": "U Lôi Tỏa Quyết",
+    "name": "U Kim Tỏa Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "cuc_am.khong_che.linh",
     "grade": 1,
-    "subs": ["loi.khong_che.toc"]
+    "subs": ["kim.khong_che.toc"]
   },
   {
     "no": 270,
-    "name": "U Âm Bộ Quyết",
+    "name": "U Hỏa Bộ Quyết",
     "group": "2 quyển, ghép hệ",
     "main": "cuc_am.than_phap.toc",
     "grade": 1,
-    "subs": ["am_lanh.than_phap.bao"]
+    "subs": ["hoa.than_phap.bao"]
   },
   {
     "no": 271,
@@ -2185,19 +2185,19 @@
   },
   {
     "no": 274,
-    "name": "U Lôi Âm Trận Quyết",
+    "name": "U Lôi Kim Trận Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "cuc_am.tran_phap.toc",
     "grade": 1,
-    "subs": ["loi.tran_phap.ben","am_lanh.tran_phap.linh"]
+    "subs": ["loi.tran_phap.ben","kim.tran_phap.linh"]
   },
   {
     "no": 275,
-    "name": "U Âm Kim Bộ Quyết",
+    "name": "U Kim Hỏa Bộ Quyết",
     "group": "3 quyển, cấp tông môn 100",
     "main": "cuc_am.than_phap.toc",
     "grade": 1,
-    "subs": ["am_lanh.than_phap.bao","kim.than_phap.linh"]
+    "subs": ["kim.than_phap.bao","hoa.than_phap.linh"]
   },
   {
     "no": 276,

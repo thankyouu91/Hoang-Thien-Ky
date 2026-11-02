@@ -58,17 +58,16 @@ export const SUFFIX_OVERRIDE: Partial<Record<Element, Partial<Record<SkillType, 
 };
 
 /**
- * Cặp tương hợp (×1,10). Lôi + Quang là ví dụ trong GDD mục 9; bốn cặp còn lại là đề xuất: GDD mục 3 nói vùng kề nhau có hệ
- * tương sinh hoặc tương hợp, và trên vòng 12 vùng Hạ vị (data/maps/ha_toa_do.json) bốn cặp kề nhau này không tương sinh.
+ * Cặp tương hợp, cùng hệ số với tương sinh: chỉ Lôi + Quang (ví dụ GDD mục 9), như comboRelation ở technique.ts.
+ * Bốn cặp kề nhau trên vòng vùng Hạ vị (Phong + Quang, Quang + Hỏa, Cực âm + Âm lãnh, Âm lãnh + Kim) từng được đề xuất,
+ * người dùng chọn để Trung tính ngày 2026-11-02 vì hai cặp trùng vòng khắc một chiều trong trận và cân bằng đã đo không có chúng.
  */
-export const HARMONY: [Element, Element][] = [
-  ["loi", "quang"], ["phong", "quang"], ["quang", "hoa"], ["cuc_am", "am_lanh"], ["am_lanh", "kim"],
-];
+export const HARMONY: [Element, Element][] = [["loi", "quang"]];
 
 export const RELATIONS = [
   { id: "thuan", name: "Thuần", example: "Lôi + Lôi", rule: "Cùng hệ" },
   { id: "tuong_sinh", name: "Tương sinh", example: "Mộc + Hỏa", rule: "Ngũ Hành sinh nhau (biến dị tính như hệ gốc), hoặc hệ gốc với biến dị của nó" },
-  { id: "tuong_hop", name: "Tương hợp", example: "Lôi + Quang", rule: "Lôi + Quang (GDD); Phong + Quang, Quang + Hỏa, Cực âm + Âm lãnh, Âm lãnh + Kim (đề xuất: kề nhau trên vòng vùng Hạ vị)" },
+  { id: "tuong_hop", name: "Tương hợp", example: "Lôi + Quang", rule: "Lôi + Quang (ví dụ GDD mục 9)" },
   { id: "trung_tinh", name: "Trung tính", example: "Lôi + Âm lãnh", rule: "Các cặp còn lại" },
   { id: "tuong_khac", name: "Tương khắc", example: "Kim + Mộc", rule: "Ngũ Hành khắc nhau (biến dị tính như hệ gốc)" },
   { id: "doi_cuc", name: "Đối cực", example: "Cực dương + Cực âm", rule: "Cực dương + Cực âm, Quang + Âm lãnh" },

@@ -23,7 +23,7 @@ export const XLSX_URL = new URL("data/he_thong/KhaiTongLapPhai_HeThong_v1.xlsx",
 // ---------- quan hệ tổ hợp ----------
 
 export type RelationId = (typeof N.RELATIONS)[number]["id"];
-/** Quan hệ giữa hệ chủ và hệ phụ: quy tắc tạm của technique.ts cộng các cặp tương hợp trong noi_dung.ts. */
+/** Quan hệ giữa hệ chủ và hệ phụ, cùng quy tắc với comboRelation ở technique.ts; cặp tương hợp lấy từ noi_dung.ts. */
 export function relation(a: Element, b: Element): RelationId {
   if (a === b) return "thuan";
   if (isOpposite(a, b)) return "doi_cuc";
@@ -74,7 +74,12 @@ export function recipes(): Recipe[] {
   const id = (e: Element, t: SkillType, v: Variant) => `${e}.${t}.${v}`;
   const short = (e: Element) => N.HE_INFO[e].short;
   for (const e of N.ELEMENT_ORDER) {
-    const partners = N.ELEMENT_ORDER.filter((p) => p !== e && (relation(e, p) === "tuong_sinh" || relation(e, p) === "tuong_hop"));
+    // Bạn ghép: hệ tương sinh, tương hợp; hệ nào có ít hơn 2 (Quang, Âm lãnh) thì thêm hệ đối cực, rồi hệ trung tính.
+    const others = N.ELEMENT_ORDER.filter((p) => p !== e);
+    const partners = others.filter((p) => relation(e, p) === "tuong_sinh" || relation(e, p) === "tuong_hop");
+    for (const r of ["doi_cuc", "trung_tinh"] as const) {
+      for (const p of others) if (partners.length < 2 && relation(e, p) === r) partners.push(p);
+    }
     SKILL_TYPES.forEach((t) => {
       out.push({
         name: `Thuần ${short(e)} ${suffix(e, t)} Quyết`, group: "2 quyển, thuần hệ",

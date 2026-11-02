@@ -7,13 +7,7 @@
     "manaMul": 1000,
     "rule": "Ngũ Hành sinh nhau (biến dị tính như hệ gốc), hoặc hệ gốc với biến dị của nó"
   },
-  "tuong_hop": {
-    "id": "tuong_hop",
-    "name": "Tương hợp",
-    "t": 1050,
-    "manaMul": 1000,
-    "rule": "Lôi + Quang (GDD); Phong + Quang, Quang + Hỏa, Cực âm + Âm lãnh, Âm lãnh + Kim (đề xuất: kề nhau trên vòng vùng Hạ vị)"
-  },
+  "tuong_hop": {"id":"tuong_hop","name":"Tương hợp","t":1050,"manaMul":1000,"rule":"Lôi + Quang (ví dụ GDD mục 9)"},
   "trung_tinh": {"id":"trung_tinh","name":"Trung tính","t":1000,"manaMul":1000,"rule":"Các cặp còn lại"},
   "tuong_khac": {"id":"tuong_khac","name":"Tương khắc","t":920,"manaMul":1000,"rule":"Ngũ Hành khắc nhau (biến dị tính như hệ gốc)"},
   "doi_cuc": {"id":"doi_cuc","name":"Đối cực","t":1120,"manaMul":1500,"rule":"Cực dương + Cực âm, Quang + Âm lãnh"}

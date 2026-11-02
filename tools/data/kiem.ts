@@ -69,6 +69,7 @@ export function kiem(d: Any, raw: Raw): Report {
     if (t !== code && a < b) comboDiff.push(`${names(a)} + ${names(b)} ×${t / 1000} (code ×${code / 1000})`);
   }
   if (comboDiff.length) warnings.push(`Hệ số tổ hợp khác quy tắc tạm ở technique.ts (${comboDiff.length} cặp): ${comboDiff.join("; ")}`);
+  else notes.push("Tổ hợp: 144 ô khớp comboRelation ở packages/sim/src/technique.ts");
 
   // Hai ví dụ GDD mục 9, tính bằng số trong file và bằng packages/sim. Lôi Quang ra 105 từ khi chốt hệ số tổ hợp mới
   // ngày 2026-11-02 (tương hợp ×1,05; GDD rev 150), trước đó là 110.
