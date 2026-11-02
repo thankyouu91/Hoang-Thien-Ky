@@ -25,4 +25,6 @@ export const BALANCE = {
   choiceMax: 650,
   /** Hòa tính bao nhiêu phần trận thắng. */
   drawScore: 500,
+  /** Ô cách ngưỡng tiêu chí dưới 1,5 lần sai số được đánh thêm số cặp gấp bấy nhiêu lần (seed khác) rồi gộp. */
+  confirmFactor: 3,
 };

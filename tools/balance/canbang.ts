@@ -51,31 +51,43 @@ function fnv(s: string): number {
 
 const withIds = (team: Member[], base: number) => team.map((u, i) => ({ ...u, id: base + i }));
 
+/** Mỗi ô nhớ đội của nó để kiểm lại khi sát ngưỡng. */
+interface Run { key: string; plan: Plan; foe: Plan; weaker: number; cell: Cell }
+const runs: Run[] = [];
+
 /** Đội `plan` (yếu hơn `weaker`) đánh đội `foe` cùng khung, `PAIRS` cặp, mỗi cặp hai lần đổi bên. */
 function play(key: string, plan: Plan, foe: Plan, weaker = 0): Cell {
-  const cell = emptyCell();
-  const base = (BALANCE.seed ^ fnv(key)) >>> 0;
-  for (let k = 0; k < PAIRS; k++) {
+  const run: Run = { key, plan, foe, weaker, cell: emptyCell() };
+  runs.push(run);
+  playPairs(run, 0, PAIRS);
+  return run.cell;
+}
+
+/** Đánh các cặp số `from` tới `from + count − 1` của ô, cộng vào kết quả ô. */
+function playPairs(run: Run, from: number, count: number): void {
+  const base = (BALANCE.seed ^ fnv(run.key)) >>> 0;
+  for (let k = from; k < from + count; k++) {
     const seed = (base ^ Math.imul(k + 1, 0x9e3779b1)) >>> 0;
     const r = new Rng(seed);
     const frame = makeFrame(r);
-    const mine = buildTeam(r, plan, frame, weaker), theirs = buildTeam(r, foe, frame);
+    const mine = buildTeam(r, run.plan, frame, run.weaker), theirs = buildTeam(r, run.foe, frame);
     for (const swap of [false, true]) {
       const t = performance.now();
       const res = simulate({ seed, teamA: withIds(swap ? theirs : mine, 1), teamB: withIds(swap ? mine : theirs, 101) });
       simMs += performance.now() - t;
+      const one = emptyCell();
+      one.n = 1;
+      one.ticks = res.ticks;
       if (res.winner === "draw") {
-        cell.draw++;
-        if (res.ticks >= MAX_TICKS) cell.timeout++;
-      } else if (res.winner === (swap ? "B" : "A")) cell.win++;
-      else cell.loss++;
-      cell.n++;
-      cell.ticks += res.ticks;
+        one.draw = 1;
+        if (res.ticks >= MAX_TICKS) one.timeout = 1;
+      } else if (res.winner === (swap ? "B" : "A")) one.win = 1;
+      else one.loss = 1;
+      addCell(run.cell, one);
+      addCell(all, one);
       hash = Math.imul(hash ^ res.hash, 0x01000193) >>> 0;
     }
   }
-  addCell(all, cell);
-  return cell;
 }
 
 /** Tỷ lệ thắng theo phần nghìn, hòa tính `drawScore`. */
@@ -115,24 +127,14 @@ interface Choice { table: string; label: string; cell: Cell }
 const choices: Choice[] = [];
 
 const byElement = ELEMENTS.map((e) => ({ e, cell: play(`he:${e}`, { element: e }, {}) }));
-writeCsv("theo_he.csv", ["Hệ", "Mã", ...CELL_HEAD], byElement.map(({ e, cell }) => [ELEMENT_NAMES[e], e, ...cellCols(cell)]));
 for (const { e, cell } of byElement) choices.push({ table: "Hệ", label: ELEMENT_NAMES[e], cell });
 progress("Xong theo hệ");
 
 const byType = SKILL_TYPES.map((t) => ({ t, cell: play(`loai:${t}`, { firstType: t }, {}) }));
-writeCsv("theo_loai_chieu.csv", ["Loại chiêu ở ưu tiên 1", "Mã", ...CELL_HEAD], byType.map(({ t, cell }) => [SKILL_TYPE_NAMES[t], t, ...cellCols(cell)]));
 for (const { t, cell } of byType) choices.push({ table: "Loại chiêu", label: SKILL_TYPE_NAMES[t], cell });
 progress("Xong theo loại chiêu");
 
 const combos = ELEMENTS.flatMap((x) => ELEMENTS.map((z) => ({ x, z, cell: play(`tohop:${x}:${z}`, { element: x, sub: z }, {}) })));
-writeCsv(
-  "theo_to_hop.csv",
-  ["Hệ chủ", "Hệ phụ", "Quan hệ", "Hệ số tổ hợp", "Mana ×", ...CELL_HEAD],
-  combos.map(({ x, z, cell }) => {
-    const rel = comboRelation(x, z);
-    return [ELEMENT_NAMES[x], ELEMENT_NAMES[z], relationName(x, z), (rel.t / ONE).toFixed(2), (rel.manaMul / ONE).toFixed(1), ...cellCols(cell)];
-  }),
-);
 for (const { x, z, cell } of combos) choices.push({ table: "Tổ hợp", label: `${ELEMENT_NAMES[x]} + ${ELEMENT_NAMES[z]}`, cell });
 progress("Xong theo tổ hợp hệ chủ–phụ");
 
@@ -142,6 +144,30 @@ const counters = ELEMENTS.flatMap((y) =>
     x, y, oneWay: elementMultiplier(y, x) < KHAC, cell: play(`khac:${x}:${y}`, { element: x }, { element: y }, BALANCE.weaker),
   })),
 );
+progress("Xong khắc hệ");
+
+// Kiểm lại ô sát ngưỡng: 166 lựa chọn với sai số ±4–5 điểm thì vài ô sẽ vượt ngưỡng chỉ vì nhiễu.
+// Ô cách ngưỡng dưới 1,5 lần sai số được đánh thêm `confirmFactor` lần số cặp (seed khác) rồi gộp.
+function confirm(cell: Cell, threshold: number): boolean {
+  if (Math.abs(rate(cell) - threshold) > (margin(cell) * 3) / 2) return false;
+  playPairs(runs.find((r) => r.cell === cell)!, PAIRS, PAIRS * BALANCE.confirmFactor);
+  return true;
+}
+let confirmed = 0;
+for (const c of choices) if (confirm(c.cell, BALANCE.choiceMax)) confirmed++;
+for (const c of counters) if (confirm(c.cell, BALANCE.counterMin)) confirmed++;
+progress(`Xong kiểm lại ${confirmed} ô sát ngưỡng`);
+
+writeCsv("theo_he.csv", ["Hệ", "Mã", ...CELL_HEAD], byElement.map(({ e, cell }) => [ELEMENT_NAMES[e], e, ...cellCols(cell)]));
+writeCsv("theo_loai_chieu.csv", ["Loại chiêu ở ưu tiên 1", "Mã", ...CELL_HEAD], byType.map(({ t, cell }) => [SKILL_TYPE_NAMES[t], t, ...cellCols(cell)]));
+writeCsv(
+  "theo_to_hop.csv",
+  ["Hệ chủ", "Hệ phụ", "Quan hệ", "Hệ số tổ hợp", "Mana ×", ...CELL_HEAD],
+  combos.map(({ x, z, cell }) => {
+    const rel = comboRelation(x, z);
+    return [ELEMENT_NAMES[x], ELEMENT_NAMES[z], relationName(x, z), (rel.t / ONE).toFixed(2), (rel.manaMul / ONE).toFixed(1), ...cellCols(cell)];
+  }),
+);
 writeCsv(
   "khac_che.csv",
   ["Hệ khắc (yếu hơn)", "Hệ bị khắc", "Loại", "Khắc đánh bị khắc ×", "Bị khắc đánh lại ×", ...CELL_HEAD],
@@ -150,7 +176,6 @@ writeCsv(
     (elementMultiplier(x, y) / ONE).toFixed(2), (elementMultiplier(y, x) / ONE).toFixed(2), ...cellCols(cell),
   ]),
 );
-progress("Xong khắc hệ");
 const elapsedMs = performance.now() - t0;
 
 // Bản tóm tắt.
@@ -164,6 +189,7 @@ say(
   `${BALANCE.teamSize} đấu ${BALANCE.teamSize}, cấp ${BALANCE.levelMin}–${BALANCE.levelMax} (hai đội cùng cấp), chỉ số chuẩn ±${BALANCE.statSpread / 10}% ` +
     `như nhau ở hai đội, mỗi người 4 công pháp chọn từ bộ truyền thụ của tông cấp ${BALANCE.sectLevel}. ` +
     `${PAIRS} cặp đội mỗi ô, mỗi cặp đánh hai lần đổi bên; hòa tính ${BALANCE.drawScore / 10}% trận thắng; seed ${BALANCE.seed}. ` +
+    `${confirmed} ô cách ngưỡng dưới 1,5 lần sai số được đánh thêm ${PAIRS * BALANCE.confirmFactor} cặp rồi gộp. ` +
     `Tham số ở tools/balance/config.ts.`,
 );
 say();
