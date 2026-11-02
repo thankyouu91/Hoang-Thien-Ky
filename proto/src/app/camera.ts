@@ -35,6 +35,10 @@ export class Camera {
     return { x: (sx - this.cx(v)) / this.zoom + this.x, y: (sy - this.cy(v)) / this.zoom + this.y };
   }
 
+  toScreen(wx: number, wy: number, v: View): { x: number; y: number } {
+    return { x: (wx - this.x) * this.zoom + this.cx(v), y: (wy - this.y) * this.zoom + this.cy(v) };
+  }
+
   /** Vùng thế giới đang thấy trên màn hình. */
   visible(v: View): Rect {
     const a = this.toWorld(0, 0, v);

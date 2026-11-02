@@ -48,6 +48,10 @@ export type ReplayEvent =
       /** Chiêu có vùng: tâm và bán kính vùng đánh trên trục, milli-ô. */
       center?: number;
       radius?: number;
+      /** Hệ của các phụ quyển trong công pháp (GDD mục 9) */
+      subElements?: ElementId[];
+      /** Đòn mang chiêu cuối tông chủ */
+      ult?: boolean;
     }
   | { tick: number; kind: "hit"; unit: number; src: number; amount: number; crit: boolean; hp: number }
   | { tick: number; kind: "heal"; unit: number; src: number; amount: number; hp: number }

@@ -32,11 +32,18 @@ export function replayFromSim(input: BattleInput): Replay {
   const prev = battle.units.map((u) => ({ hp: u.curHp, pos: u.pos, mana: u.mana }));
   // Tâm vùng của chiêu đang vận công, chốt lúc bắt đầu; sim chỉ ghi sự kiện lúc chiêu phát.
   const centers = new Map<number, number>();
+  // Chiêu cuối tông chủ: sim không ghi cờ trên sự kiện, nên suy ra từ lúc `ultReady` bị dùng mất.
+  const commands = [...(input.commands ?? [])].sort((a, b) => a.tick - b.tick);
+  const ultUsedAt = new Map<number, number>();
+  let ci = 0;
   let logged = 0;
 
   while (!battle.finished) {
     const tick = battle.tick;
+    const armed = new Set(battle.units.filter((u) => u.ultReady).map((u) => u.id));
+    for (; ci < commands.length && commands[ci].tick <= tick; ci++) armed.add(commands[ci].unitId);
     battle.step();
+    for (const u of battle.units) if (armed.has(u.id) && !u.ultReady && u.curHp > 0) ultUsedAt.set(u.id, tick);
 
     // Người đánh của từng mục tiêu trong tick này, để số sát thương lệch theo người đánh.
     const hitBy = new Map<number, number>();
@@ -44,7 +51,13 @@ export function replayFromSim(input: BattleInput): Replay {
       const e = battle.events[logged];
       const slot = battle.units.find((u) => u.id === e.unitId)!.slots[e.slot];
       const zone = slot.radius > 0 ? { start: e.startTick, center: centers.get(e.unitId), radius: slot.radius } : {};
-      events.push({ tick: e.tick, kind: "cast", unit: e.unitId, skill: slot.tech.type, element: slot.tech.element, targets: e.targets, ...zone });
+      const subs = slot.tech.subElements.length > 0 ? { subElements: [...slot.tech.subElements] } : {};
+      const ult = ultUsedAt.get(e.unitId) === e.startTick;
+      if (ult) ultUsedAt.delete(e.unitId);
+      events.push({
+        tick: e.tick, kind: "cast", unit: e.unitId, skill: slot.tech.type, element: slot.tech.element, targets: e.targets,
+        ...zone, ...subs, ...(ult ? { ult } : {}),
+      });
       for (const t of e.targets) if (!hitBy.has(t)) hitBy.set(t, e.unitId);
     }
     for (const u of battle.units) if (u.channel) centers.set(u.id, u.channel.center);

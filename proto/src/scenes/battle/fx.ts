@@ -2,8 +2,8 @@
 // Mọi hiệu ứng là hàm của thời điểm phát t: tua tới lui vẫn thấy y hệt. Hạt sinh theo seed của từng sự kiện.
 import { SKILL_RULES } from "@ktlp/sim";
 import { between, type ReplayIndex } from "../../replay/timeline.ts";
-import type { ReplayEvent, SkillId } from "../../replay/types.ts";
-import { ELEMENT_STYLE } from "../../theme/elements.ts";
+import type { ElementId, ReplayEvent, SkillId } from "../../replay/types.ts";
+import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
 import { burst, drawMotif, next, particle, seed, unit01 } from "./motifs.ts";
 
 type Cast = Extract<ReplayEvent, { kind: "cast" }>;
@@ -27,10 +27,19 @@ export interface FxFrame {
   at: (unit: number, time?: number) => Point | null;
   /** Vùng đánh trên sân thành hình elip theo toạ độ thế giới */
   zone: (center: number, radius: number) => Zone;
+  /** Toạ độ thế giới ra toạ độ màn hình (px CSS), cho nhãn công pháp luôn đọc được dù zoom */
+  toScreen: (p: Point) => Point;
+  zoom: number;
+  dpr: number;
+  /** Hình PixelLab theo khoá, ví dụ chieu/bua_chu; thiếu thì vẽ chữ */
+  image: (key: string) => HTMLImageElement | undefined;
 }
 
 const MELEE = new Set<SkillId>(["can_don", "can_quet", "than_phap"]);
 const PROJECTILE = new Set<SkillId>(["tam_xa", "bua_chu", "khong_che"]);
+/** Đòn thường hồi chiêu ngắn: không hiện nhãn công pháp để màn hình khỏi rối (trừ khi mang chiêu cuối). */
+const NO_CALLOUT = new Set<SkillId>(["can_don", "can_quet", "tam_xa"]);
+const GOLD = "#ffd34d";
 /** Chiêu bày lâu nhất (trận pháp 5 s) cộng dư, tick */
 const MAX_LEAD = 120;
 /** Đạn bay lâu nhất (bùa chú), tick */
@@ -49,12 +58,25 @@ export class FxLayer {
   private upcoming: Cast[] = [];
   private states: Cast[] = [];
 
-  /** Gọi đầu mỗi khung hình, trước lunges/ground/air. */
+  /** Gọi đầu mỗi khung hình, trước shake/lunges/ground/air/callouts. */
   prepare(f: FxFrame): void {
     this.f = f;
     this.recent = between(f.index.casts, f.t - f.life(1), f.t);
     this.upcoming = between(f.index.casts, f.t, f.t + MAX_LEAD);
     this.states = between(f.index.casts, f.t - STATE_WINDOW, f.t).filter((c) => c.skill === "khong_che" || c.skill === "than_phap");
+  }
+
+  /** Độ rung màn hình (px CSS) khi trận pháp phát và khi có chiêu cuối tông chủ; tính từ t nên tua lại vẫn y hệt. */
+  shake(): Point {
+    const { t, life } = this.f;
+    let amp = 0;
+    for (const c of this.recent) {
+      const strength = c.ult ? 7 : c.skill === "tran_phap" ? 5 : 0;
+      if (!strength) continue;
+      const a = (t - c.tick) / life(0.4);
+      if (a >= 0 && a < 1) amp += strength * (1 - a) * (1 - a);
+    }
+    return amp ? { x: Math.sin(t * 7.3) * amp, y: Math.cos(t * 9.1) * amp } : { x: 0, y: 0 };
   }
 
   /** Người đánh cận chiến nhích về phía mục tiêu rồi lùi lại. */
@@ -199,16 +221,18 @@ export class FxLayer {
         const tail = point(Math.max(0, p - 0.35));
         bolt(ctx, color, tail, head, seed(Math.floor(t), c.unit, id));
       } else {
+        // Đuôi đạn xen màu hệ chủ và các hệ phụ; hạt họa tiết ở đuôi mang hệ phụ đầu tiên.
+        const pal = palette(c);
         for (let k = 3; k >= 1; k--) {
           const q = p - k * 0.07;
           if (q < 0) continue;
           const tp = point(q);
-          glowAt(ctx, color, tp.x, tp.y, 6 - k, 0.45 - k * 0.1);
+          glowAt(ctx, ELEMENT_STYLE[pal[k % pal.length]].color, tp.x, tp.y, 6 - k, 0.45 - k * 0.1);
         }
         const mq = p - 0.14;
         if (mq > 0) {
           const mp = point(mq);
-          drawMotif(ctx, c.element, mp.x, mp.y, 4.5, mq * 8, 0.75);
+          drawMotif(ctx, pal[1] ?? c.element, mp.x, mp.y, 4.5, mq * 8, 0.75);
         }
       }
       glowAt(ctx, color, head.x, head.y, 10, 1);
@@ -231,15 +255,32 @@ export class FxLayer {
   private after(c: Cast): void {
     const { ctx, t, life, at, zone, size } = this.f;
     const color = ELEMENT_STYLE[c.element].color;
+    const pal = palette(c);
+    // Lõi vệt chém mang màu hệ phụ đầu tiên; công pháp thuần một hệ thì lõi trắng.
+    const inner = pal[1] ? ELEMENT_STYLE[pal[1]].color : "#ffffff";
     const src = at(c.unit);
     if (!src) return;
+
+    if (c.ult) {
+      // Chiêu cuối tông chủ: hào quang vàng bùng quanh người tung chiêu.
+      const a = (t - c.tick) / life(0.6);
+      if (a < 1) {
+        glowAt(ctx, GOLD, src.x, src.y, size * (0.9 + a), 0.9 * (1 - a));
+        ctx.globalAlpha = 1 - a;
+        ctx.strokeStyle = GOLD;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(src.x, src.y, size * (0.6 + 1.2 * a), 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
 
     switch (c.skill) {
       case "can_quet": {
         // Cung quét trước mặt, phủ các mục tiêu.
         const a = (t - c.tick) / life(0.25);
         const dst = aim(c, at);
-        if (a < 1 && dst) swoosh(ctx, color, src.x, src.y, 50, Math.atan2(dst.y - src.y, dst.x - src.x), 1.2, a, 10);
+        if (a < 1 && dst) swoosh(ctx, color, inner, src.x, src.y, 50, Math.atan2(dst.y - src.y, dst.x - src.x), 1.2, a, 10);
         break;
       }
       case "can_don": {
@@ -248,7 +289,7 @@ export class FxLayer {
         const dst = at(c.targets[0]);
         if (a < 1 && dst) {
           const dir = Math.atan2(dst.y - src.y, dst.x - src.x);
-          swoosh(ctx, color, dst.x - Math.cos(dir) * 12, dst.y - Math.sin(dir) * 12, 26, dir, 1.1, a, 7);
+          swoosh(ctx, color, inner, dst.x - Math.cos(dir) * 12, dst.y - Math.sin(dir) * 12, 26, dir, 1.1, a, 7);
         }
         break;
       }
@@ -272,7 +313,7 @@ export class FxLayer {
         const dst = at(c.targets[0]);
         if (b < 1 && dst) {
           const dir = Math.atan2(dst.y - src.y, dst.x - src.x);
-          swoosh(ctx, color, dst.x - Math.cos(dir) * 12, dst.y - Math.sin(dir) * 12, 28, dir + 0.6, 1.3, b, 8);
+          swoosh(ctx, color, inner, dst.x - Math.cos(dir) * 12, dst.y - Math.sin(dir) * 12, 28, dir + 0.6, 1.3, b, 8);
         }
         break;
       }
@@ -314,7 +355,7 @@ export class FxLayer {
           ctx.beginPath();
           ctx.arc(d.x, d.y, size * 0.7, ang, ang + 0.8);
           ctx.stroke();
-          burst(ctx, c.element, d.x, d.y, a, seed(c.tick, c.unit, id), 3, size * 0.8, 4);
+          burst(ctx, pal[1] ?? c.element, d.x, d.y, a, seed(c.tick, c.unit, id), 3, size * 0.8, 4);
         }
         break;
       }
@@ -336,7 +377,7 @@ export class FxLayer {
           const ang = unit01(s) * Math.PI * 2;
           s = next(s);
           const r = 0.2 + 0.7 * unit01(s);
-          particle(ctx, c.element, z.x + Math.cos(ang) * z.rx * r, z.y + Math.sin(ang) * z.ry * r, a, ang, 7, k);
+          particle(ctx, pal[k % pal.length], z.x + Math.cos(ang) * z.rx * r, z.y + Math.sin(ang) * z.ry * r, a, ang, 7, k);
         }
         break;
       }
@@ -355,8 +396,15 @@ export class FxLayer {
         ctx.beginPath();
         ctx.arc(d.x, d.y, 6 + 18 * a, 0, Math.PI * 2);
         ctx.stroke();
+        // Chùm hạt chủ yếu mang hệ chủ, thêm 2 hạt của hệ phụ để thấy công pháp ghép từ những hệ nào.
         const s = seed(c.tick, c.unit, id);
-        burst(ctx, c.element, d.x, d.y, a, s, c.skill === "bua_chu" ? 7 : 5, 28, 5);
+        const n = c.skill === "bua_chu" ? 7 : 5;
+        if (pal[1]) {
+          burst(ctx, c.element, d.x, d.y, a, s, n - 2, 28, 5);
+          burst(ctx, pal[1], d.x, d.y, a, next(s ^ 0x5bd1e995), 2, 24, 4.5);
+        } else {
+          burst(ctx, c.element, d.x, d.y, a, s, n, 28, 5);
+        }
         if (c.skill === "bua_chu") {
           glowAt(ctx, SEAL, d.x, d.y, 26 * (0.6 + a), 0.7 * (1 - a));
           let p = next(s);
@@ -369,6 +417,60 @@ export class FxLayer {
         }
       }
     }
+  }
+
+  /**
+   * Nhãn công pháp hiện thoáng trên đầu người ra chiêu: họa tiết hệ chủ và hệ phụ, tên loại chiêu (icon nếu có).
+   * Vẽ theo toạ độ màn hình để đọc được dù zoom; chiêu vận công hiện từ lúc bắt đầu vận. Gọi sau cùng.
+   */
+  callouts(): void {
+    const { ctx, t, life, at, toScreen, zoom, dpr, size, image } = this.f;
+    const seen = new Set<Cast>();
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    for (const c of [...this.recent, ...this.upcoming]) {
+      if (seen.has(c) || (NO_CALLOUT.has(c.skill) && !c.ult)) continue;
+      seen.add(c);
+      const a = (t - (c.start ?? c.tick)) / life(0.9);
+      if (a < 0 || a >= 1) continue;
+      const w = at(c.unit);
+      if (!w) continue;
+      const s = toScreen(w);
+      const pal = palette(c);
+      const label = c.ult ? `Chiêu cuối · ${SKILL_NAME[c.skill]}` : SKILL_NAME[c.skill];
+      const icon = image("chieu/" + c.skill);
+      ctx.font = "bold 11px system-ui, sans-serif";
+      const textW = ctx.measureText(label).width;
+      const iconsW = 14 + (pal.length - 1) * 11 + (icon ? 16 : 0);
+      const boxW = iconsW + textW + 14;
+      const x = Math.round(s.x - boxW / 2);
+      const y = Math.round(s.y - (size / 2 + 18) * zoom - 16 - a * 8);
+      ctx.globalAlpha = a < 0.12 ? a / 0.12 : 1 - ((a - 0.12) / 0.88) ** 3;
+      ctx.fillStyle = "rgba(20, 17, 15, 0.88)";
+      ctx.strokeStyle = c.ult ? GOLD : ELEMENT_STYLE[c.element].color;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(x, y - 9, boxW, 18, 9);
+      ctx.fill();
+      ctx.stroke();
+      const alpha = ctx.globalAlpha;
+      let cx = x + 6;
+      if (icon) {
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(icon, cx, y - 7, 14, 14);
+        cx += 16;
+      }
+      pal.forEach((el, i) => {
+        const r = i === 0 ? 6.5 : 5;
+        drawMotif(ctx, el, cx + r, y, r, 0, alpha);
+        cx += 2 * r + 1;
+      });
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = c.ult ? GOLD : "#efe6d6";
+      ctx.fillText(label, cx + 2, y + 0.5);
+    }
+    ctx.globalAlpha = 1;
   }
 
   /** Sao choáng quay trên đầu người bị khống chế. */
@@ -395,6 +497,13 @@ function alive(f: FxFrame, id: number): boolean {
 
 function clamp(x: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, x));
+}
+
+/** Hệ chủ rồi các hệ phụ khác hệ chủ, không lặp. */
+function palette(c: Cast): ElementId[] {
+  const out: ElementId[] = [c.element];
+  for (const e of c.subElements ?? []) if (!out.includes(e)) out.push(e);
+  return out;
 }
 
 /** Điểm nhắm: giữa các mục tiêu. */
@@ -449,7 +558,7 @@ function formation(ctx: CanvasRenderingContext2D, z: Zone, rot: number): void {
 
 /** Vệt chém hình cung quanh (x, y), quét dần theo a từ 0 tới 1, mỏng dần rồi tắt. */
 function swoosh(
-  ctx: CanvasRenderingContext2D, color: string,
+  ctx: CanvasRenderingContext2D, color: string, inner: string,
   x: number, y: number, r: number, dir: number, half: number, a: number, width: number,
 ): void {
   const from = dir - half;
@@ -460,7 +569,7 @@ function swoosh(
   ctx.beginPath();
   ctx.arc(x, y, r, from, to);
   ctx.stroke();
-  ctx.strokeStyle = "#ffffff";
+  ctx.strokeStyle = inner;
   ctx.lineWidth = (width * (1 - a)) / 3 + 0.5;
   ctx.stroke();
 }

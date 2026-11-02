@@ -8,6 +8,7 @@ import type { ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 import { ReplayControls } from "./controls.ts";
 import { FxLayer, type Point } from "./fx.ts";
+import { drawMotif } from "./motifs.ts";
 
 const CELL = 64; // đơn vị thế giới mỗi ô sân
 const LANE = 60; // khoảng cách ngang giữa hai người cùng hàng
@@ -95,12 +96,10 @@ export class BattleScene implements Scene {
     const t = player.t;
     const tps = index.replay.tps;
 
-    this.camera.apply(v);
-    this.drawField(ctx, index.replay.fieldLength);
-
     const life = (s: number) => Math.min(2 * tps, s * tps * player.speed);
+    const cam = this.camera;
     this.fx.prepare({
-      ctx, index, t, life, size: SIZE,
+      ctx, index, t, life, size: SIZE, zoom: cam.zoom, dpr: v.dpr,
       at: (id, time = t) => {
         const ut = index.byId.get(id);
         return ut ? this.place(ut.pos.moving(time), this.lateral.get(id) ?? 0) : null;
@@ -111,7 +110,15 @@ export class BattleScene implements Scene {
         const half = 3.5 * LANE;
         return this.vertical ? { ...p, rx: half, ry: along } : { ...p, rx: along, ry: half };
       },
+      toScreen: (p) => cam.toScreen(p.x, p.y, v),
+      image: (key) => this.sprites.get(key),
     });
+
+    cam.apply(v);
+    // Rung màn hình khi có đòn lớn: dời cả sân theo px màn hình.
+    const shake = this.fx.shake();
+    if (shake.x || shake.y) ctx.translate(shake.x / cam.zoom, shake.y / cam.zoom);
+    this.drawField(ctx, index.replay.fieldLength);
     this.fx.ground();
 
     // Ai vừa trúng đòn trong 3 tick gần nhất thì nháy trắng.
@@ -121,6 +128,7 @@ export class BattleScene implements Scene {
 
     this.fx.air();
     this.drawNumbers(ctx, index, t, life(NUMBER_LIFE));
+    this.fx.callouts();
     this.drawScore(v, index, t, player);
   }
 
@@ -216,15 +224,36 @@ export class BattleScene implements Scene {
     ctx.imageSmoothingEnabled = false; // giữ nét pixel art khi phóng to
 
     if (sprite) {
-      // Có hình tu sĩ: vòng đội dưới chân, hình đứng trên vòng, icon hệ ở góc.
+      // Có hình tu sĩ: vòng đội dưới chân, hình đứng trên vòng, dấu hệ ở góc.
       ctx.lineWidth = 3;
       ctx.strokeStyle = TEAM_RING[u.team];
       ctx.stroke();
       if (flash && !dead) ctx.globalAlpha = 0.5;
       const s = SIZE * 1.4;
-      ctx.drawImage(sprite, x - s / 2, y + h - s, s, s);
+      // Hình PixelLab nhìn hướng đông nam; đội B lật ngang để hai đội quay mặt vào nhau.
+      if (u.team === 1) {
+        ctx.save();
+        ctx.translate(x, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(sprite, -s / 2, y + h - s, s, s);
+        ctx.restore();
+      } else {
+        ctx.drawImage(sprite, x - s / 2, y + h - s, s, s);
+      }
       ctx.globalAlpha = dead ? 0.25 : 1;
-      if (icon) ctx.drawImage(icon, x - h - 4, y - h - 4, 16, 16);
+      const bx = x - h - 2;
+      const by = y - h + 2;
+      if (icon) {
+        ctx.drawImage(icon, bx - 8, by - 8, 16, 16);
+      } else {
+        // Chưa có icon hệ của PixelLab: dùng họa tiết hệ trên nền tròn tối.
+        ctx.fillStyle = "rgba(20, 17, 15, 0.8)";
+        ctx.beginPath();
+        ctx.arc(bx, by, 8, 0, Math.PI * 2);
+        ctx.fill();
+        drawMotif(ctx, u.element, bx, by, 6.5, 0, dead ? 0.25 : 1);
+        ctx.globalAlpha = dead ? 0.25 : 1;
+      }
     } else {
       ctx.beginPath();
       ctx.roundRect(x - h, y - h, SIZE, SIZE, 8);

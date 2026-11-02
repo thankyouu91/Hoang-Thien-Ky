@@ -157,7 +157,11 @@ export function mockReplay(seed = 7): Replay {
       const zone = id === "dien_rong" || id === "tran_phap"
         ? { start: Math.max(0, tick - (id === "tran_phap" ? 100 : 20)), center: targets[0].pos, radius: 2000 }
         : {};
-      events.push({ tick, kind: "cast", unit: f.id, skill: id, element: f.element, targets: targets.map((t) => t.id), ...zone });
+      // Công pháp đặc biệt ghép thêm một hệ phụ (chọn cố định theo id để không đổi trận giả).
+      const subs = cast === 0
+        ? { subElements: [ELEMENT_IDS[(ELEMENT_IDS.indexOf(f.element) + 1 + (f.id % 5)) % ELEMENT_IDS.length]] }
+        : {};
+      events.push({ tick, kind: "cast", unit: f.id, skill: id, element: f.element, targets: targets.map((t) => t.id), ...zone, ...subs });
 
       if (id === "than_phap") {
         f.pos = foes[0].pos + (f.team === 0 ? -500 : 500);
