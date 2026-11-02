@@ -9,14 +9,46 @@ export type Anim = "dung" | "ra_chieu" | "trung_don" | "nga";
 const FOOT = 80;
 
 /**
- * Ngoại hình tạm khi đội hình chưa có trường ngoại hình: hàng trước thân khỏe cầm kiếm,
- * hàng sau thân mảnh đội mũ ô sa; nam, nữ xen kẽ theo id.
+ * Ngoại hình tạm khi đội hình chưa có trường ngoại hình, để hai đội nhìn là phân biệt:
+ * đội A mặc đạo bào xanh, đội B mặc võ phục đỏ sẫm; hàng trước thân khỏe cầm kiếm hoặc đao,
+ * hàng sau thân mảnh cầm trượng hoặc tay không; mũ đổi theo người; tông chủ (id nhỏ nhất của đội) đội vương miện.
+ * Người đã có `look` thì giữ nguyên.
  */
-export function defaultLook(u: ReplayUnit): Look {
-  const sex = u.id % 2 === 0 ? "nu" : "nam";
-  return u.row === 0
-    ? { body: `${sex}_khoe`, outfit: "dao_bao", weapon: "kiem" }
-    : { body: `${sex}_manh`, outfit: "dao_bao", hat: "o_sa" };
+export function assignLooks(units: ReplayUnit[]): Map<number, Look> {
+  const out = new Map<number, Look>();
+  for (const team of [0, 1]) {
+    const us = units.filter((u) => u.team === team).sort((a, b) => a.id - b.id);
+    us.forEach((u, i) => {
+      if (u.look) {
+        out.set(u.id, u.look);
+        return;
+      }
+      const sex = i % 2 === 0 ? "nam" : "nu";
+      const outfit = team === 0 ? "dao_bao" : "vo_phuc";
+      const leader = i === 0;
+      if (u.row === 0) {
+        out.set(u.id, {
+          body: `${sex}_khoe`, outfit,
+          weapon: i % 2 === 0 ? "kiem" : "dao",
+          hat: leader ? "ngoc_quan" : i % 3 === 2 ? "non_la" : undefined,
+        });
+      } else {
+        out.set(u.id, {
+          body: `${sex}_manh`, outfit,
+          weapon: i % 2 === 0 ? "truong" : undefined,
+          hat: leader ? "ngoc_quan" : i % 2 === 0 ? "o_sa" : "non_la",
+        });
+      }
+    });
+  }
+  return out;
+}
+
+/** Ngoại hình vẽ được với hình đang có: thiếu bộ áo thì thử đạo bào; vẫn thiếu thì undefined. */
+export function resolveLook(sprites: Sprites, look: Look): Look | undefined {
+  if (animInfo(sprites, look, "dung")) return look;
+  const fallback = { ...look, outfit: "dao_bao" };
+  return look.outfit !== "dao_bao" && animInfo(sprites, fallback, "dung") ? fallback : undefined;
 }
 
 /** Số khung và fps của một hoạt ảnh, để chọn khung theo thời gian; undefined nếu chưa có hình. */

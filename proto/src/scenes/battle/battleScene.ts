@@ -6,7 +6,7 @@ import { ReplayPlayer } from "../../replay/player.ts";
 import { between, ReplayIndex, type UnitTimeline } from "../../replay/timeline.ts";
 import type { Look, ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
-import { animInfo, defaultLook, drawCharacter, type Anim } from "./character.ts";
+import { animInfo, assignLooks, drawCharacter, resolveLook, type Anim } from "./character.ts";
 import { ReplayControls } from "./controls.ts";
 import { FxLayer, type Point } from "./fx.ts";
 import { drawMotif } from "./motifs.ts";
@@ -54,6 +54,8 @@ export class BattleScene implements Scene {
   private lateral = new Map<number, number>();
   /** Mốc ra chiêu và trúng đòn nặng theo id, xếp tăng dần */
   private marks = new Map<number, { casts: number[]; hits: number[] }>();
+  /** Ngoại hình ghép theo id (tạm theo đội và hàng khi replay chưa có) */
+  private looks = new Map<number, Look>();
   /** Trục sân dọc khi màn hình đứng, ngang khi màn hình nằm */
   private vertical: boolean | null = null;
 
@@ -99,6 +101,7 @@ export class BattleScene implements Scene {
         this.controls.bind(this.player);
         this.layoutLanes();
         this.buildMarks();
+        this.looks = assignLooks(replay.units);
         this.vertical = null;
       },
       (e: unknown) => {
@@ -298,8 +301,9 @@ export class BattleScene implements Scene {
     const dead = t >= ut.death;
     const style = ELEMENT_STYLE[u.element];
     const h = SIZE / 2;
-    const look = u.look ?? defaultLook(u);
-    const pose = this.pose(ut, t, look);
+    const wanted = this.looks.get(u.id);
+    const look = wanted && resolveLook(this.sprites, wanted);
+    const pose = look ? this.pose(ut, t, look) : null;
     const sprite = pose ? undefined : this.sprites.get(u.sprite);
     const icon = this.sprites.get("he/" + u.element);
 
@@ -317,7 +321,7 @@ export class BattleScene implements Scene {
       ctx.strokeStyle = TEAM_RING[u.team];
       ctx.stroke();
       const s = SIZE * 1.4;
-      if (pose) {
+      if (pose && look) {
         // Nhân vật ghép có hoạt ảnh: ngã xong thì mờ dần; trúng đòn nháy nhẹ.
         const tps = this.index!.replay.tps;
         ctx.globalAlpha = dead ? Math.max(0.35, 1 - (t - ut.death) / (1.5 * tps)) : flash ? 0.7 : 1;
