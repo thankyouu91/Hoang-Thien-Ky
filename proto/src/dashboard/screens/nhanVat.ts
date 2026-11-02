@@ -111,10 +111,14 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   private statsTab(v: NhanVatView): string {
     return `<section class="card"><ul class="list">${v.stats
       .map(
+        // Nguồn hiện ngay dưới tên để không cần chạm lần thứ ba; chạm vẫn mở bảng nguồn đầy đủ.
         (s) => `<li><button type="button" class="row" data-act="stat" data-stat="${s.id}">
-          <span class="grow">${esc(s.label)}</span><b>${statText(s)}</b><span class="muted" aria-hidden="true">›</span></button></li>`,
+          <span class="grow">${esc(s.label)}<span class="muted block">${s.sources
+            .filter((x) => x.value !== 0)
+            .map((x) => `${esc(x.label)} ${statText(s, x.value)}`)
+            .join(" · ") || "Chưa có nguồn"}</span></span><b>${statText(s)}</b><span class="muted" aria-hidden="true">›</span></button></li>`,
       )
-      .join("")}</ul><p class="muted">Chạm một chỉ số để xem nguồn: gốc theo cấp, đồ, ngọc, thú, tài năng, buff linh căn.</p></section>`;
+      .join("")}</ul><p class="muted">Nguồn: gốc theo cấp, đồ, ngọc, thú, tài năng, buff linh căn. Chạm để xem bảng đầy đủ.</p></section>`;
   }
 
   private mountTab(v: NhanVatView): string {
