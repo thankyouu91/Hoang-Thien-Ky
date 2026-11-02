@@ -6,3 +6,6 @@ dist/
 # Bản đồ Azgaar: Full JSON quá lớn, tools/mapgen dùng bản rút gọn *_azgaar.json.gz; ảnh xem trước sinh lại bằng tools/mapgen/kiem.ts
 data/maps/*_azgaar_full.json
 data/maps/*_diem_*.svg
+
+# Kết quả công cụ cân bằng, sinh lại bằng npm run balance
+tools/balance/out/
