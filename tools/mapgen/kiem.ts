@@ -6,7 +6,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
 import { assignCells, loadRegions, slug } from "./vung.ts";
-import { DANGER_MAX, MAX_DEO, MIN_BORDER, lairBands, regionCounts, stagesFrom } from "./diem.ts";
+import { DANGER_MAX, LAIR_NEAR, MAX_DEO, MIN_BORDER, lairBands, regionCounts, stagesFrom } from "./diem.ts";
 
 interface FilePoint {
   id: number;
@@ -94,6 +94,8 @@ function check(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, co
     return points.some(inBand) && lairs.filter(inBand).length < b.min;
   });
   ok("đủ hang mỗi bậc cấp", !short.length, short.length ? `thiếu ở ${short.map((b) => `${b.from}–${b.to - 1}`).join(", ")}` : `${lairs.length} hang, cấp ${Math.min(...lairs.map((p) => p.danger))}–${Math.max(...lairs.map((p) => p.danger))}`);
+  const nearLairs = lairs.filter((p) => p.stages <= LAIR_NEAR.stages);
+  ok("hang gần thành chủ", nearLairs.length >= LAIR_NEAR.min, `${nearLairs.length} hang trong ${LAIR_NEAR.stages} chặng (cấp ${nearLairs.map((p) => p.danger).join(", ")})`);
   ok("có vị trí rìa ngoài ↔ lòng giữa", points.every((p) => p.ring >= 0 && p.ring <= 1), `ring ${Math.min(...points.map((p) => p.ring))}–${Math.max(...points.map((p) => p.ring))}`);
   return results;
 }

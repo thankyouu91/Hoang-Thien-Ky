@@ -30,19 +30,20 @@ export function regionCounts(region: Int8Array, k: number) {
 }
 
 /** Hang dị thú là bãi quái, cấp bãi = cấp nguy hiểm của điểm (người dùng chốt qua phiên nhiệm vụ, 2026-11-02): nhiệm vụ kéo
- * tới cấp 60, sau đó lên cấp chủ yếu bằng luyện bãi. Đề xuất: ít nhất LAIR_LOW.min hang dưới cấp LAIR_LOW.below cho nhiệm
- * vụ, và LAIR_PER_BAND hang cho mỗi bậc LAIR_BAND cấp từ đó tới DANGER_MAX */
-export const LAIR_LOW = { below: 60, min: 6 };
+ * tới cấp 60, sau đó lên cấp chủ yếu bằng luyện bãi. Đề xuất của phiên nhiệm vụ: ít nhất LAIR_NEAR.min hang trong
+ * LAIR_NEAR.stages chặng từ thành chủ (nhiệm vụ đầu game, thuần phục thú đầu tiên), và LAIR_PER_BAND hang cho mỗi bậc
+ * LAIR_BAND cấp từ LAIR_BAND tới DANGER_MAX */
+export const LAIR_NEAR = { stages: 2, min: 2 };
 export const LAIR_BAND = 10;
 export const LAIR_PER_BAND = 2;
 /** Các bậc cấp nguy hiểm cần có hang: [từ, tới) và số hang tối thiểu; bậc cuối gồm cả DANGER_MAX */
 export function lairBands(): { from: number; to: number; min: number }[] {
-  const bands = [{ from: 1, to: LAIR_LOW.below, min: LAIR_LOW.min }];
-  for (let from = LAIR_LOW.below; from < DANGER_MAX; from += LAIR_BAND)
+  const bands: { from: number; to: number; min: number }[] = [];
+  for (let from = LAIR_BAND; from < DANGER_MAX; from += LAIR_BAND)
     bands.push({ from, to: Math.min(from + LAIR_BAND, DANGER_MAX) + (from + LAIR_BAND >= DANGER_MAX ? 1 : 0), min: LAIR_PER_BAND });
   return bands;
 }
-const lairsNeeded = () => lairBands().reduce((s, b) => s + b.min, 0);
+const lairsNeeded = () => LAIR_NEAR.min + lairBands().reduce((s, b) => s + b.min, 0);
 /** Cấp nguy hiểm theo số chặng tới thành chủ: 1 ở thành chủ, DANGER_MAX ở điểm xa nhất (đề xuất) */
 export const dangerOf = (stages: number, maxStages: number) => 1 + Math.round((stages / maxStages) * (DANGER_MAX - 1));
 const BEN_DO_GAP = 3; // hai bến đò cách nhau ít nhất 3 ô
@@ -271,11 +272,11 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
   const maxStages = Math.max(...stages);
   const lairFit = (c: number) => (hasMarker(c, BEAST_MARKERS) ? 3 : 0) + (isForest(c) ? 1 : 0) + (isHigh(c) ? 1 : 0);
   const lairDist = new Int32Array(N).fill(-1);
-  const pickLair = (accept: (danger: number) => boolean) => {
+  const pickLair = (accept: (stage: number) => boolean) => {
     let best: { cell: number; anchor: number; path: number[] } | undefined, bestScore = -Infinity;
     for (const anchor of points) {
-      const lairStages = stages[anchor.id] + 1;
-      if (anchor.type === "hang_di_thu" || lairStages > maxStages || !accept(dangerOf(lairStages, maxStages))) continue;
+      const stage = stages[anchor.id] + 1; // số chặng của hang nếu nối vào điểm này
+      if (anchor.type === "hang_di_thu" || stage > maxStages || !accept(stage)) continue;
       const prev = new Map<number, number>([[anchor.cell, -1]]);
       let frontier = [anchor.cell];
       for (let hop = 1; hop <= LAIR_REACH; hop++) {
@@ -297,12 +298,14 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
     const { anchor, path } = best;
     edges.push({ a: Math.min(anchor, lair.id), b: Math.max(anchor, lair.id), kind: "loi_mon", cells: path.length - 1, danger: 0, path: path.map((c) => cells[c].p) });
     relax(lairDist, best.cell);
+    lairStages.push(stages[anchor] + 1);
     return true;
   };
-  let lairs = 0;
-  for (const band of lairBands())
-    for (let j = 0; j < band.min && pickLair((d) => d >= band.from && d < band.to); j++) lairs++;
-  while (lairs < counts.hang_di_thu && pickLair(() => true)) lairs++;
+  const lairStages: number[] = [];
+  const inBand = (band: { from: number; to: number }) => (s: number) => dangerOf(s, maxStages) >= band.from && dangerOf(s, maxStages) < band.to;
+  while (lairStages.filter((s) => s <= LAIR_NEAR.stages).length < LAIR_NEAR.min && pickLair((s) => s <= LAIR_NEAR.stages));
+  for (const band of lairBands()) while (lairStages.filter(inBand(band)).length < band.min && pickLair(inBand(band)));
+  while (lairStages.length < counts.hang_di_thu && pickLair(() => true));
   edges.sort((a, b) => a.a - b.a || a.b - b.b);
 
   return { points, edges, capital, counts };
