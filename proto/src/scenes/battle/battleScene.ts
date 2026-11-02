@@ -102,7 +102,7 @@ export class BattleScene implements Scene {
       ctx, index, t, life, size: SIZE, zoom: cam.zoom, dpr: v.dpr,
       at: (id, time = t) => {
         const ut = index.byId.get(id);
-        return ut ? this.place(ut.pos.moving(time), this.lateral.get(id) ?? 0) : null;
+        return ut ? this.place(ut.pos.moving(time), this.lat(id)) : null;
       },
       zone: (center, radius) => {
         const p = this.place(center, 0);
@@ -144,6 +144,16 @@ export class BattleScene implements Scene {
         us.forEach((u, i) => this.lateral.set(u.unit.id, (i - (us.length - 1) / 2) * LANE + (row === 1 ? LANE / 2 : 0)));
       }
     }
+  }
+
+  /**
+   * Toạ độ ngang của một người. Hình tu sĩ nhìn hướng đông nam và đội B lật ngang, nên khi sân dọc
+   * đội A dời sang trái, đội B dời sang phải nửa làn để hai đội nhìn chéo vào nhau thay vì cùng nhìn xuống.
+   */
+  private lat(id: number): number {
+    const base = this.lateral.get(id) ?? 0;
+    if (!this.vertical) return base;
+    return base + (this.index?.byId.get(id)?.unit.team === 1 ? LANE / 2 : -LANE / 2);
   }
 
   /** Vị trí trên trục (milli-ô) và toạ độ ngang ra toạ độ thế giới; đội A luôn ở dưới hoặc bên trái. */
@@ -207,7 +217,7 @@ export class BattleScene implements Scene {
 
   private drawUnit(ctx: CanvasRenderingContext2D, ut: UnitTimeline, t: number, flash: boolean, lunge?: Point): void {
     const u = ut.unit;
-    const p = this.place(ut.pos.moving(t), this.lateral.get(u.id) ?? 0);
+    const p = this.place(ut.pos.moving(t), this.lat(u.id));
     const x = p.x + (lunge?.x ?? 0);
     const y = p.y + (lunge?.y ?? 0);
     const dead = t >= ut.death;
@@ -301,7 +311,7 @@ export class BattleScene implements Scene {
       const ut = index.byId.get(e.unit);
       if (!ut) continue;
       const age = (t - e.tick) / life;
-      const p = this.place(ut.pos.step(e.tick), this.lateral.get(e.unit) ?? 0);
+      const p = this.place(ut.pos.step(e.tick), this.lat(e.unit));
       // Nhiều đòn cùng lúc vào một người thì lệch ngang theo người đánh để khỏi đè nhau.
       const x = p.x + (((e.src * 37) % 25) - 12);
       const y = p.y - SIZE / 2 - 18 - age * 34;
