@@ -6,7 +6,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
 import { assignCells, loadRegions, slug } from "./vung.ts";
-import { COUNTS, DANGER_MAX, MAX_DEO, MIN_BORDER, stagesFrom } from "./diem.ts";
+import { DANGER_MAX, MAX_DEO, MIN_BORDER, regionCounts, stagesFrom } from "./diem.ts";
 
 interface FilePoint {
   id: number;
@@ -44,12 +44,14 @@ function check(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, co
   const ok = (name: string, pass: boolean, detail: string) => results.push([name, pass, detail]);
   const { points, edges } = file;
   const count = (type: string) => points.filter((p) => p.type === type).length;
+  const { scale, maxBenDo, total, ...perType } = regionCounts(region, k);
 
   ok("có số phiên bản", typeof file.version === "number", `version ${file.version}`);
-  ok("tổng số điểm", points.length === COUNTS.total, `${points.length} / ${COUNTS.total}`);
+  ok("tổng số điểm theo diện tích", points.length === total, `${points.length} / ${total} (×${scale.toFixed(3)} vùng trung bình)`);
   ok("một thành chủ", count("thanh_chu") === 1, `${count("thanh_chu")}`);
-  for (const [type, n] of Object.entries(COUNTS)) if (type !== "total") ok(`số ${type}`, count(type) === n, `${count(type)} / ${n}`);
+  for (const [type, n] of Object.entries(perType)) ok(`số ${type}`, count(type) === n, `${count(type)} / ${n}`);
   ok("có vị trí sơn môn", count("son_mon") > 0, `${count("son_mon")}`);
+  ok("bến đò không quá mức", count("ben_do") <= maxBenDo, `${count("ben_do")} / tối đa ${maxBenDo}`);
   ok("id liên tục", points.every((p, i) => p.id === i), "");
   ok("mỗi điểm một ô", new Set(points.map((p) => p.cell)).size === points.length, "");
   const outside = points.filter((p) => region[p.cell] !== k);
@@ -77,8 +79,12 @@ function check(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, co
   ok("cấp nguy hiểm tăng theo chặng", sorted.every((p, i) => p.danger >= 1 && p.danger <= DANGER_MAX && (i === 0 || p.danger >= sorted[i - 1].danger)),
     `${sorted[0].danger} → ${sorted.at(-1)!.danger}`);
   ok("cấp nguy hiểm của chặng", edges.every((e) => e.danger === Math.max(points[e.a].danger, points[e.b].danger)), "");
+  // Vùng ít rừng thì mỏ dược được ra ngoài rừng, nhưng chỉ khi không còn ô rừng nào trống
   const herbs = points.filter((p) => p.type === "mo_duoc");
-  ok("mỏ dược trong rừng", herbs.every((p) => FOREST.includes(p.biome)), `${herbs.filter((p) => FOREST.includes(p.biome)).length} / ${herbs.length}`);
+  const used = new Set(points.map((p) => p.cell));
+  const freeForest = map.cells.filter((c) => region[c.i] === k && !used.has(c.i) && FOREST.includes(map.biomes[c.biome])).length;
+  const inForest = herbs.filter((p) => FOREST.includes(p.biome)).length;
+  ok("mỏ dược dùng hết rừng trước", inForest === herbs.length || freeForest === 0, `${inForest} / ${herbs.length} trong rừng, ${freeForest} ô rừng còn trống`);
   return results;
 }
 

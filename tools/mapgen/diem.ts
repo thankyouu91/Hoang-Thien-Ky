@@ -11,10 +11,21 @@ import { assignCells, loadRegions, slug } from "./vung.ts";
 const VERSION = 1; // tăng khi đổi định dạng file
 const SEED = 20261102;
 
-/** Số điểm mỗi vùng Hạ vị: tổng khoảng 450 (GDD mục 3), số mỏ và linh tuyền theo mục 12. Đèo và bến đò tuỳ địa hình,
- * vị trí sơn môn lấy phần còn lại cho đủ tổng. Hang dị thú và số bến đò tối đa là đề xuất */
-export const COUNTS = { total: 450, mo_linh_thach: 120, mo_quang: 80, mo_duoc: 80, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
+/** Số điểm của một vùng Hạ vị có diện tích trung bình: tổng khoảng 450 (GDD mục 3), số mỏ và linh tuyền theo mục 12. Đèo và
+ * bến đò tuỳ địa hình, vị trí sơn môn lấy phần còn lại cho đủ tổng. Hang dị thú và số bến đò tối đa là đề xuất */
+const MEAN_COUNTS = { total: 450, mo_linh_thach: 120, mo_quang: 80, mo_duoc: 80, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
 const MAX_BEN_DO = 12;
+
+/** Số điểm theo diện tích (người dùng chọn ngày 2026-11-02): mọi loại nhân với số ô của vùng chia số ô trung bình của các
+ * vùng, nên mật độ điểm và số mỏ trên mỗi vị trí sơn môn như nhau ở mọi vùng */
+export function regionCounts(region: Int8Array, k: number) {
+  const sizes = new Map<number, number>();
+  for (const r of region) if (r >= 0) sizes.set(r, (sizes.get(r) ?? 0) + 1);
+  const scale = sizes.get(k)! / ([...sizes.values()].reduce((a, b) => a + b, 0) / sizes.size);
+  const of = (n: number) => Math.max(1, Math.round(n * scale));
+  const counts = Object.fromEntries(Object.entries(MEAN_COUNTS).map(([type, n]) => [type, of(n)])) as typeof MEAN_COUNTS;
+  return { scale, maxBenDo: of(MAX_BEN_DO), ...counts };
+}
 const BEN_DO_GAP = 3; // hai bến đò cách nhau ít nhất 3 ô
 export const MAX_DEO = 2; // đèo tối đa sang mỗi vùng kề
 const DEO_GAP = 8; // hai đèo sang cùng một vùng cách nhau ít nhất 8 ô
@@ -60,6 +71,7 @@ interface Edge {
 export function placePoints(map: AzgaarMap, region: Int8Array, k: number, regionCodes: string[], element: string) {
   const { cells } = map;
   const N = cells.length;
+  const counts = regionCounts(region, k);
   const inRegion = (c: number) => region[c] === k;
   const own = cells.filter((c) => inRegion(c.i)).map((c) => c.i);
   const rnd = mulberry32(SEED + k);
@@ -131,17 +143,19 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
     }
   };
 
-  /** Chọn n ô điểm cao nhất, tránh ô kề một điểm cùng loại; thiếu thì bỏ điều kiện đó */
-  const rank = (type: PointType, n: number, score: (c: number) => number) => {
+  /** Chọn n ô điểm cao nhất, tránh ô kề một điểm cùng loại; thiếu thì bỏ điều kiện đó. Có `tier` thì dùng hết ô của bậc
+   * trên (kể cả ô kề nhau) rồi mới xuống bậc dưới */
+  const rank = (type: PointType, n: number, score: (c: number) => number, tier: (c: number) => number = () => 0) => {
     const order = own.filter(free).sort((a, b) => score(b) + jitter[b] * 0.01 - (score(a) + jitter[a] * 0.01));
     const touchesSame = (c: number) => cells[c].c.some((x) => points[taken.get(x) ?? -1]?.type === type);
     let placed = 0;
-    for (const strict of [true, false])
-      for (const c of order) {
-        if (placed === n) return;
-        if (!free(c) || (strict && touchesSame(c))) continue;
-        add(type, c), placed++;
-      }
+    for (const level of [...new Set(order.map(tier))].sort((a, b) => b - a))
+      for (const strict of [true, false])
+        for (const c of order) {
+          if (placed === n) return;
+          if (tier(c) !== level || !free(c) || (strict && touchesSame(c))) continue;
+          add(type, c), placed++;
+        }
   };
 
   // 1. Thành chủ ở thị trấn lớn nhất của vùng
@@ -176,14 +190,14 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
   const fordDist = new Int32Array(N).fill(-1);
   let ferries = 0;
   for (const c of fords) {
-    if (ferries === MAX_BEN_DO || (fordDist[c] >= 0 && fordDist[c] < BEN_DO_GAP)) continue;
+    if (ferries === counts.maxBenDo || (fordDist[c] >= 0 && fordDist[c] < BEN_DO_GAP)) continue;
     add("ben_do", c), relax(fordDist, c), ferries++;
   }
 
   // 4–5. Trải đều cửa bí cảnh và linh tuyền; ưu tiên chỗ có điểm đánh dấu hoặc địa hình hợp
   const springs = new Set(map.rivers.map((r) => r.cells[0]));
-  spread("cua_bi_canh", COUNTS.cua_bi_canh, (c) => (hasMarker(c, RELIC_MARKERS) ? 5 : 0));
-  spread("linh_tuyen", COUNTS.linh_tuyen, (c) => (springs.has(c) ? 4 : 0) + (map.biomes[cells[c].biome] === "Wetland" ? 1 : 0));
+  spread("cua_bi_canh", counts.cua_bi_canh, (c) => (hasMarker(c, RELIC_MARKERS) ? 5 : 0));
+  spread("linh_tuyen", counts.linh_tuyen, (c) => (springs.has(c) ? 4 : 0) + (map.biomes[cells[c].biome] === "Wetland" ? 1 : 0));
 
   // 6. Vị trí sơn môn trải đều, đặt trước các mỏ để còn chỗ núi cao. Mỗi ô có điểm 0–1 cho từng địa thế; khi trải đều thì
   // ưu tiên ô đạt (điểm 1) một địa thế chưa đủ phần, để các địa thế có trong vùng chia gần đều nhau
@@ -204,8 +218,8 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
   const terrainScore = new Map(own.map((c) => [c, scoreTerrain(c)]));
   const present = TERRAINS.filter((t) => own.some((c) => free(c) && terrainScore.get(c)![t] === 1));
   const pool = present.length ? present : [...TERRAINS];
-  const later = COUNTS.hang_di_thu + COUNTS.mo_quang + COUNTS.mo_duoc + COUNTS.mo_linh_thach;
-  const sects = COUNTS.total - points.length - later; // vị trí sơn môn lấy phần còn lại cho đủ tổng
+  const later = counts.hang_di_thu + counts.mo_quang + counts.mo_duoc + counts.mo_linh_thach;
+  const sects = counts.total - points.length - later; // vị trí sơn môn lấy phần còn lại cho đủ tổng
   const quota = Math.ceil(sects / pool.length);
   const used = Object.fromEntries(TERRAINS.map((t) => [t, 0])) as Record<Terrain, number>;
   const open = (c: number) => pool.filter((t) => terrainScore.get(c)![t] === 1 && used[t] < quota);
@@ -221,16 +235,18 @@ export function placePoints(map: AzgaarMap, region: Int8Array, k: number, region
   });
 
   // 7. Hang dị thú trải đều, ưu tiên điểm đánh dấu quái, rừng, núi
-  spread("hang_di_thu", COUNTS.hang_di_thu, (c) => (hasMarker(c, BEAST_MARKERS) ? 4 : 0) + (isForest(c) ? 1 : 0) + (isHigh(c) ? 1 : 0));
+  spread("hang_di_thu", counts.hang_di_thu, (c) => (hasMarker(c, BEAST_MARKERS) ? 4 : 0) + (isForest(c) ? 1 : 0) + (isHigh(c) ? 1 : 0));
 
   // 8–9. Mỏ quặng nơi cao, mỏ dược trong rừng (gần nước tốt hơn)
-  rank("mo_quang", COUNTS.mo_quang, (c) => cells[c].h);
-  rank("mo_duoc", COUNTS.mo_duoc, (c) => (isForest(c) ? 10 : 0) + (map.biomes[cells[c].biome] === "Wetland" ? 4 : 0) + (near(c, (n) => cells[n].r > 0) ? 2 : 0));
+  rank("mo_quang", counts.mo_quang, (c) => cells[c].h);
+  // Vùng khô hoặc thảo nguyên có ít ô rừng hơn số mỏ dược: dùng hết rừng rồi mới tới đầm lầy, ven sông
+  const herbScore = (c: number) => (map.biomes[cells[c].biome] === "Wetland" ? 4 : 0) + (near(c, (n) => cells[n].r > 0) ? 2 : 0);
+  rank("mo_duoc", counts.mo_duoc, herbScore, (c) => (isForest(c) ? 1 : 0));
 
   // 10. Mỏ linh thạch lấp đều phần còn trống
-  spread("mo_linh_thach", COUNTS.mo_linh_thach);
+  spread("mo_linh_thach", counts.mo_linh_thach);
 
-  return { points, edges: connect(map, region, k, points, taken, road), capital };
+  return { points, edges: connect(map, region, k, points, taken, road), capital, counts };
 }
 
 /** Nối điểm theo đường Azgaar; điểm không nằm trên đường thì nối tới điểm gần nhất; cuối cùng nối các mảng rời vào mảng có thành chủ */
@@ -324,7 +340,7 @@ if (import.meta.main) {
   const k = codes.indexOf(code);
   if (k < 0) throw new Error(`Không có vùng ${code}; các mã: ${codes.join(", ")}`);
   const region = assignCells(map, regions);
-  const { points, edges } = placePoints(map, region, k, codes, slug(regions.elements[k]));
+  const { points, edges, counts: targets } = placePoints(map, region, k, codes, slug(regions.elements[k]));
 
   const capital = points.find((p) => p.type === "thanh_chu")!;
   const stages = stagesFrom(capital.id, points.length, edges);
@@ -347,6 +363,7 @@ if (import.meta.main) {
     region: { code, name: regions.names[k], element: slug(regions.elements[k]) },
     source: { azgaar: `${plane}_azgaar.map`, azgaarSeed: map.seed, seed: SEED },
     map: { width: map.width, height: map.height, bbox: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)].map(round) },
+    targets: { ...targets, scale: Math.round(targets.scale * 1000) / 1000 }, // số cần đặt theo diện tích
     counts,
     terrains,
     points: points.map((p) => ({ ...p, x: round(p.x), y: round(p.y) })),
