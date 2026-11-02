@@ -115,10 +115,12 @@ html, body {
 #tabbar button {
   flex: 1;
   border: 0;
+  min-width: 0;
+  padding: 0 2px;
   background: none;
   color: var(--muted);
   font: inherit;
-  font-size: 15px;
+  font-size: 14px;
 }
 #tabbar button[aria-selected="true"] {
   color: var(--ink);
