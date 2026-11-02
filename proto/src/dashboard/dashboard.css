@@ -400,3 +400,25 @@ details.dev select { height: 36px; border: 1px solid var(--line); border-radius:
 .card.preview { margin: 8px 0; border-color: var(--gold); }
 .card.flash { animation: flash 1.2s ease-out; }
 @keyframes flash { from { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold); } }
+
+/* Liên minh */
+.swatch { width: 14px; height: 14px; border-radius: 3px; flex: 0 0 auto; }
+.actions.inline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.bar.boss > i { background: var(--bad); }
+.chat-log { max-height: 240px; overflow-y: auto; }
+.chat-log li { padding: 6px 0; border-top: 1px solid #2c251e; font-size: 15px; }
+.chat-log li:first-child { border-top: 0; }
+.page button.small-link { font-size: 13px; color: var(--muted); min-height: 28px; }
+.chat-form { display: flex; gap: 8px; margin-top: 8px; }
+.chat-form input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #241f1a;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}

@@ -90,16 +90,18 @@ export class MapScene implements Scene {
     this.ctx.topbar.set(d.top);
     this.data = d;
     if (this.region?.region.code !== d.map.region) {
-      this.region = await loadRegion(d.map.region);
-      const url = await regionBackground(d.map.region);
-      if (url) {
+      const region = await loadRegion(d.map.region);
+      const [x0, y0, x1, y1] = region.map.frame;
+      this.camera.bounds = { x: 0, y: 0, w: (x1 - x0) * BG_SCALE, h: (y1 - y0) * BG_SCALE };
+      this.region = region;
+      this.bg = undefined;
+      this.fitted = false;
+      void regionBackground(d.map.region).then((url) => {
+        if (!url) return;
         const img = new Image();
         img.src = url;
         img.decode().then(() => (this.bg = img), () => console.warn("Không nạp được ảnh nền", url));
-      }
-      const [x0, y0, x1, y1] = this.region.map.frame;
-      this.camera.bounds = { x: 0, y: 0, w: (x1 - x0) * BG_SCALE, h: (y1 - y0) * BG_SCALE };
-      this.fitted = false;
+      });
     }
     this.buildFog();
     if (!this.fitted && this.v) {
@@ -178,8 +180,8 @@ export class MapScene implements Scene {
     const m = this.region;
     const d = this.data;
     const ctx = v.ctx;
-    if (!m || !d) return;
     const cam = this.camera;
+    if (!m || !d || !cam.bounds) return;
     cam.apply(v);
     const b = cam.bounds!;
     if (this.bg) ctx.drawImage(this.bg, 0, 0, b.w, b.h);
