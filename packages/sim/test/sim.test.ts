@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { simulate, elementMultiplier, levelGapMultiplier, Rng } from "../src/index.ts";
+import { simulate, elementMultiplier, levelGapMultiplier, Rng, ALLY_SKILLS, type BattleInput } from "../src/index.ts";
 import { randomBattle } from "./fixtures.ts";
 
 test("khắc chế 12 hệ đúng GDD mục 8", () => {
@@ -39,8 +39,12 @@ test("cùng đầu vào cho cùng mã băm (10.000 trận ngẫu nhiên)", () =>
 });
 
 test("đổi seed hoặc nhật ký lệnh thì kết quả đổi", () => {
-  const input = randomBattle(7);
+  // Chiêu cuối chỉ có tác dụng với người mang chiêu đánh, nên chọn trận có người như vậy ở đội A.
+  const attacker = (i: BattleInput) => i.teamA.find((u) => u.techniques.some((t) => !ALLY_SKILLS.includes(t.type)));
+  let seed = 7;
+  let input = randomBattle(seed);
+  while (!attacker(input)) input = randomBattle(++seed);
   const base = simulate(input).hash;
-  assert.notEqual(simulate({ ...input, seed: 8 }).hash, base);
-  assert.notEqual(simulate({ ...input, commands: [{ tick: 0, unitId: input.teamA[0].id }] }).hash, base);
+  assert.notEqual(simulate({ ...input, seed: seed + 1 }).hash, base);
+  assert.notEqual(simulate({ ...input, commands: [{ tick: 0, unitId: attacker(input)!.id }] }).hash, base);
 });

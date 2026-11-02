@@ -14,12 +14,31 @@ const PARENT: Partial<Record<Element, Element>> = {
 const BEATS: Partial<Record<Element, Element>> = {
   kim: "moc", moc: "tho", tho: "thuy", thuy: "hoa", hoa: "kim",
 };
+/** Ngũ Hành sinh: A sinh B (Mộc → Hỏa → Thổ → Kim → Thủy → Mộc) */
+const GENERATES: Partial<Record<Element, Element>> = {
+  moc: "hoa", hoa: "tho", tho: "kim", kim: "thuy", thuy: "moc",
+};
 const OPPOSITE: Partial<Record<Element, Element>> = {
   cuc_duong: "cuc_am", cuc_am: "cuc_duong", quang: "am_lanh", am_lanh: "quang",
 };
 
-function base(e: Element): Element {
+/** Hệ biến dị quy về hệ gốc; hệ khác giữ nguyên. */
+export function baseElement(e: Element): Element {
   return PARENT[e] ?? e;
+}
+export function parentOf(e: Element): Element | undefined {
+  return PARENT[e];
+}
+export function isOpposite(a: Element, b: Element): boolean {
+  return OPPOSITE[a] === b;
+}
+/** Hai hệ gốc Ngũ Hành sinh nhau theo một trong hai chiều. */
+export function generatesEither(a: Element, b: Element): boolean {
+  return GENERATES[a] === b || GENERATES[b] === a;
+}
+/** Hai hệ gốc Ngũ Hành khắc nhau theo một trong hai chiều. */
+export function beatsEither(a: Element, b: Element): boolean {
+  return BEATS[a] === b || BEATS[b] === a;
 }
 
 /** Hệ số sát thương khi hệ `atk` đánh hệ `def`, theo phần nghìn. */
@@ -27,7 +46,7 @@ export function elementMultiplier(atk: Element, def: Element): number {
   if (OPPOSITE[atk] === def) return 1500; // đối cực hai chiều
   if (PARENT[atk] === def) return 1200; // biến dị đánh hệ gốc
   if (PARENT[def] === atk) return 900; // hệ gốc đánh biến dị
-  const a = base(atk), d = base(def);
+  const a = baseElement(atk), d = baseElement(def);
   if (a === "quang" || a === "am_lanh" || d === "quang" || d === "am_lanh") return 1000;
   if (BEATS[a] === d) return 1500; // khắc
   if (BEATS[d] === a) return 700; // bị khắc

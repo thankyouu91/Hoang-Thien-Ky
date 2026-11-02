@@ -1,17 +1,35 @@
-import { Rng, ELEMENTS, type UnitSpec, type BattleInput } from "../src/index.ts";
-export function randomBattle(seed: number): BattleInput {
+import {
+  Rng, ELEMENTS, SKILL_TYPES, VARIANTS, TALENTS, composeTechnique,
+  type UnitSpec, type BattleInput, type Scroll, type Technique, type Talent,
+} from "../src/index.ts";
+
+function randomTechnique(r: Rng): Technique {
+  const scroll = (): Scroll => ({ element: ELEMENTS[r.int(12)], type: SKILL_TYPES[r.int(10)], variant: VARIANTS[r.int(4)], grade: 1 + r.int(4) });
+  const main = scroll();
+  return composeTechnique(main, r.int(3) === 0 ? [scroll(), scroll()] : [scroll()]);
+}
+
+/** Trận ngẫu nhiên; `size` = số người mỗi đội, 0 = ngẫu nhiên 1–10. */
+export function randomBattle(seed: number, size = 0): BattleInput {
   const r = new Rng(seed ^ 0x9e3779b9);
   const team = (base: number): UnitSpec[] =>
-    Array.from({ length: 1 + r.int(10) }, (_, i) => ({
-      id: base + i,
-      level: 1 + r.int(250),
-      element: ELEMENTS[r.int(12)],
-      hp: 5000 + r.int(50000),
-      atk: 300 + r.int(3000),
-      def: r.int(2000),
-      cooldownTicks: 10 + r.int(30),
-      critPerMille: 50 + r.int(200),
-    }));
+    Array.from({ length: size || 1 + r.int(10) }, (_, i) => {
+      const talents: Talent[] = [TALENTS[r.int(8)]];
+      if (r.int(4) === 0) talents.push(TALENTS[r.int(8)]); // đã tẩy tủy
+      return {
+        id: base + i,
+        level: 1 + r.int(250),
+        element: ELEMENTS[r.int(12)],
+        element2: r.int(2) === 0 ? ELEMENTS[r.int(12)] : undefined,
+        talents,
+        hp: 5000 + r.int(50000),
+        atk: 300 + r.int(1200),
+        def: r.int(2000),
+        resist: r.int(3) === 0 ? { [ELEMENTS[r.int(12)]]: r.int(300) } : undefined,
+        row: r.int(2) as 0 | 1,
+        techniques: Array.from({ length: 1 + r.int(4) }, () => randomTechnique(r)),
+      };
+    });
   const teamA = team(1), teamB = team(101);
   const commands = Array.from({ length: r.int(4) }, () => ({ tick: r.int(600), unitId: teamA[r.int(teamA.length)].id }));
   return { seed, teamA, teamB, commands };

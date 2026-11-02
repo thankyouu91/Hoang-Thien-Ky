@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "test": "node --experimental-strip-types --no-warnings --test test/sim.test.ts",
+    "test": "node --experimental-strip-types --no-warnings --test \"test/**/*.test.ts\"",
     "bench": "node --experimental-strip-types --no-warnings test/bench.ts"
   }
 }
