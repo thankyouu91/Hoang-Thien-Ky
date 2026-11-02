@@ -385,3 +385,18 @@ details.dev summary { cursor: pointer; min-height: 28px; }
 details.dev label { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
 details.dev select { height: 36px; border: 1px solid var(--line); border-radius: 6px; background: #241f1a; color: var(--ink); font: inherit; }
 #sheet .actions button .block { font-size: 12px; font-weight: 400; }
+
+/* Công pháp */
+.nowrap { white-space: nowrap; }
+.loadout { list-style: none; margin: 0; padding: 0; }
+.loadout li { border-top: 1px solid #2c251e; }
+.loadout li:first-child { border-top: 0; }
+.slot-row.empty { border: 1px dashed var(--line); border-radius: 8px; padding: 6px 10px; margin: 6px 0; }
+.prio { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: #2b241c; text-align: center; line-height: 26px; font-weight: 700; color: var(--gold); }
+.tech { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; padding: 4px 0; }
+.tech-top { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.tech-top .chip.el:not(:first-child) { padding-right: 2px; }
+.list .row.picked { background: #2a2016; border-radius: 8px; }
+.card.preview { margin: 8px 0; border-color: var(--gold); }
+.card.flash { animation: flash 1.2s ease-out; }
+@keyframes flash { from { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold); } }

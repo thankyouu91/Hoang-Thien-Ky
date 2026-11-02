@@ -632,12 +632,19 @@ export class MockDashboardSource implements DashboardSource {
         const t = this.sect.techniques[this.sect.techniques.length - 1];
         return r.ok ? { ok: true, message: `Ghép được ${t.name}` } : r;
       }
-      case "dat_bo_truyen_thu":
-        return rule({ type: "dat_bo_truyen_thu", actor: PLAYER, techniqueIds: cmd.techniqueIds });
-      case "hoc_cong_phap":
-        return rule({ type: "hoc_cong_phap", actor: PLAYER, techniqueId: cmd.techniqueId });
-      case "mang_vao_tran":
-        return rule({ type: "mang_vao_tran", actor: PLAYER, techniqueIds: cmd.techniqueIds });
+      case "dat_bo_truyen_thu": {
+        const r = rule({ type: "dat_bo_truyen_thu", actor: PLAYER, techniqueIds: cmd.techniqueIds });
+        return r.ok ? { ok: true, message: `Bộ truyền thụ có ${cmd.techniqueIds.length} công pháp` } : r;
+      }
+      case "hoc_cong_phap": {
+        const r = rule({ type: "hoc_cong_phap", actor: PLAYER, techniqueId: cmd.techniqueId });
+        const t = this.sect.techniques.find((x) => x.id === cmd.techniqueId);
+        return r.ok ? { ok: true, message: `Đã học ${t?.name ?? "công pháp"}, tầng 1` } : r;
+      }
+      case "mang_vao_tran": {
+        const r = rule({ type: "mang_vao_tran", actor: PLAYER, techniqueIds: cmd.techniqueIds });
+        return r.ok ? { ok: true, message: `Mang ${cmd.techniqueIds.length}/${RULES.loadoutSize} công pháp vào trận` } : r;
+      }
       case "cho_xuat_su": {
         const r = rule({ type: "cho_xuat_su", actor: PLAYER, memberId: cmd.memberId });
         return r.ok ? { ok: true, message: `${w.names[cmd.memberId]} đã xuất sư` } : r;
