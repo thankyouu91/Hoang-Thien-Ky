@@ -46,8 +46,24 @@ html, body {
   background: var(--panel);
   border-top: 1px solid var(--line);
 }
+.replay .top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.replay .source {
+  max-width: 40%;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #241f1a;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+}
 .replay .seek {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   height: 28px;
   margin: 0;
   accent-color: var(--seal);
@@ -77,7 +93,7 @@ html, body {
 @media (orientation: landscape) and (max-height: 500px) {
   :root { --bar-h: 44px; }
   .replay { display: flex; align-items: center; gap: 10px; padding: 4px 12px; }
-  .replay .seek { flex: 1; }
+  .replay .top { flex: 1; }
   .replay .time { flex: 0 0 auto; }
 }
 .replay .speeds button[aria-pressed="true"] {

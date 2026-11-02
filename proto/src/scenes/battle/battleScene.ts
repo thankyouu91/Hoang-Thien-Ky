@@ -23,35 +23,54 @@ export class BattleScene implements Scene {
   readonly label = "Trận";
   readonly camera = new Camera();
   readonly hud: HTMLElement;
-  private controls = new ReplayControls();
+  private controls: ReplayControls;
   private source: ReplaySource;
   private sprites: Sprites;
   private index: ReplayIndex | null = null;
   private player: ReplayPlayer | null = null;
   private error = "";
+  /** Số lần đã nạp; kết quả của lần nạp cũ về muộn thì bỏ. */
+  private loads = 0;
   /** Toạ độ ngang của từng người, theo id */
   private lateral = new Map<number, number>();
   /** Trục sân dọc khi màn hình đứng, ngang khi màn hình nằm */
   private vertical: boolean | null = null;
 
-  constructor(source: ReplaySource, sprites: Sprites) {
-    this.source = source;
+  /** sources[0] mở mặc định; người xem đổi nguồn ở ô chọn trên thanh điều khiển. */
+  constructor(sources: ReplaySource[], sprites: Sprites) {
+    this.source = sources[0];
     this.sprites = sprites;
+    this.controls = new ReplayControls(sources.map((s) => s.label), (i) => this.load(sources[i]));
     this.hud = this.controls.el;
   }
 
   enter(v: View): void {
-    if (this.index || this.error) return this.fitIfRotated(v);
-    this.source.load().then(
+    if (this.loads === 0) this.load(this.source);
+    this.fitIfRotated(v);
+  }
+
+  private load(source: ReplaySource): void {
+    const n = ++this.loads;
+    const speed = this.player?.speed ?? 1;
+    this.source = source;
+    this.index = null;
+    this.player = null;
+    this.error = "";
+    this.controls.loading();
+    source.load().then(
       (replay) => {
+        if (n !== this.loads) return;
         this.index = new ReplayIndex(replay);
         // Chừa 1 giây sau đòn cuối để số sát thương bay hết.
         this.player = new ReplayPlayer(replay.tps, replay.ticks + replay.tps);
+        this.player.speed = speed;
         this.controls.bind(this.player);
         this.layoutLanes();
         this.vertical = null;
       },
-      (e: unknown) => (this.error = String(e)),
+      (e: unknown) => {
+        if (n === this.loads) this.error = String(e);
+      },
     );
   }
 
@@ -93,6 +112,7 @@ export class BattleScene implements Scene {
   /** Mỗi hàng của mỗi đội dàn ngang quanh trục; hàng sau lệch nửa làn để không che hàng trước. */
   private layoutLanes(): void {
     const index = this.index!;
+    this.lateral.clear();
     for (const team of [0, 1]) {
       for (const row of [0, 1]) {
         const us = index.units.filter((u) => u.unit.team === team && u.unit.row === row).sort((a, b) => a.unit.id - b.unit.id);

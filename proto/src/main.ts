@@ -1,6 +1,8 @@
 import { App } from "./app/app.ts";
 import { Sprites } from "./assets/sprites.ts";
 import { mockReplaySource } from "./mock/mockReplay.ts";
+import { sampleBattle } from "./mock/sampleBattle.ts";
+import { simReplaySource } from "./replay/simSource.ts";
 import { BattleScene } from "./scenes/battle/battleScene.ts";
 import { PlaceholderScene } from "./scenes/placeholder.ts";
 
@@ -16,7 +18,14 @@ const app = new App(
   [
     new PlaceholderScene("ban-do", "Bản đồ", "Sprint 4"),
     new PlaceholderScene("son-mon", "Sơn môn", "Sprint 5"),
-    new BattleScene(mockReplaySource, sprites),
+    // Trận thật của @ktlp/sim với vài seed của đội hình mẫu, và trận giả để so.
+    new BattleScene(
+      [
+        ...[11, 2, 3].map((seed) => simReplaySource(`Sim · seed ${seed}`, () => sampleBattle(seed))),
+        mockReplaySource,
+      ],
+      sprites,
+    ),
   ],
 );
 app.start();

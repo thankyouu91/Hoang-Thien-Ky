@@ -193,6 +193,6 @@ export function mockReplay(seed = 7): Replay {
 }
 
 export const mockReplaySource: ReplaySource = {
-  label: "Replay giả 10 đấu 10",
+  label: "Trận giả",
   load: async () => mockReplay(),
 };
