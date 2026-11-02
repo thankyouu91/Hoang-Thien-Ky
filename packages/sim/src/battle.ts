@@ -172,7 +172,8 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
       fx: techniqueFx(tech),
       range: s.range + tech.rangeBonus,
       radius: s.radius,
-      cost: tech.manaCost * ONE,
+      // Không công pháp nào tốn hơn mana tối đa chuẩn, để ghép đối cực (mana ×1,5) không tạo chiêu không bao giờ ra được (đề xuất).
+      cost: Math.min(tech.manaCost, BATTLE.manaMax) * ONE,
       cooldown,
       cd: mul(cooldown * ONE, BATTLE.initialCooldown),
       bonus: b.damage + (MELEE.includes(tech.type) ? b.melee : 0) + (RANGED.includes(tech.type) ? b.ranged : 0),
@@ -415,6 +416,7 @@ export class Battle {
   /** Đánh từng mục tiêu và áp hiệu ứng hệ; `execute` = trận pháp, mỗi mục tiêu có thể bị tuyệt sát. */
   private strike(u: Unit, s: Slot, targets: Unit[], ult: boolean, critBonus: number, execute: boolean): void {
     const fx = s.fx;
+    const ramp = this.rampMultiplier();
     for (const t of targets) {
       if (t.curHp <= 0) continue;
       if (execute && !t.boss && realm(t.level) <= realm(u.level) && this.rng.chance(R.executeChance + u.b.executeBonus)) {
@@ -426,6 +428,7 @@ export class Battle {
         damage: s.bonus, critDamage: u.b.critDamage, armorPen: fx.armorPen, resistPen: fx.resistPen + u.b.resistPen,
       });
       if (s.tech.forsakenSect !== undefined && s.tech.forsakenSect === t.sectId) dmg = Math.max(1, mul(dmg, BATTLE.betrayalDamage));
+      if (ramp !== ONE) dmg = mul(dmg, ramp);
       this.hurt(t, dmg);
       const drain = fx.healOfDamage + fx.lifesteal + u.b.lifesteal;
       if (drain > 0) this.restore(u, u, mul(dmg, drain));
@@ -459,6 +462,12 @@ export class Battle {
     if (fx.knockback) t.pos = clamp(t.pos + (t.pos >= u.pos ? fx.knockback : -fx.knockback), 0, BATTLE.fieldLength);
     if (fx.paralyze && crit) this.control(t, this.controlTicks(u, fx.paralyze));
     if (fx.freezeChance && this.rng.chance(fx.freezeChance)) this.control(t, this.controlTicks(u, fx.freezeTicks));
+  }
+
+  /** Trận quá `rampStartTicks` thì sát thương tăng dần theo từng nấc để trận phân thắng bại (chống hòa). */
+  private rampMultiplier(): number {
+    if (this.tick < BATTLE.rampStartTicks) return ONE;
+    return ONE + BATTLE.rampPerStep * (1 + Math.trunc((this.tick - BATTLE.rampStartTicks) / BATTLE.rampStepTicks));
   }
 
   /** Thời gian khống chế sau buff Cực hàn. */

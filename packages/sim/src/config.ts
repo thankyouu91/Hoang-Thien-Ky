@@ -74,6 +74,10 @@ export const BATTLE = {
   initialCooldown: 500, // đầu trận mọi công pháp đã hồi 50%
   ultMultiplier: 2500, // chiêu cuối tông chủ ×2,5
   betrayalDamage: 500, // công pháp của tông đã phản bội đánh người tông đó còn 50% (GDD mục 6, đã chốt)
+  // Chống hòa (đề xuất, chọn 2026-11-02): trận quá 45 s thì mọi sát thương +20% mỗi 5 s, cộng dồn; hồi máu không tăng.
+  rampStartTicks: 45 * SEC,
+  rampStepTicks: 5 * SEC,
+  rampPerStep: 200,
   critDamage: 1500, // sát thương chí mạng ×1,5
   defScale: 1000, // phòng thủ giảm def / (def + 1000)
   defCap: 800, // giảm tối đa 80%
