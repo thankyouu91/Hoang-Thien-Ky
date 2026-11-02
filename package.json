@@ -1,0 +1,12 @@
+{
+  "name": "khai-tong-lap-phai",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Khai Tông Lập Phái — mã nguồn game (monorepo)",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "test": "npm run test -w @ktlp/sim",
+    "bench": "npm run bench -w @ktlp/sim"
+  },
+  "engines": { "node": ">=22.6" }
+}

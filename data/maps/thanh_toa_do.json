@@ -1,0 +1,18 @@
+{
+ "W": 2400,
+ "H": 1600,
+ "title": "Thánh vực",
+ "centres": [
+  {
+   "name": "Thánh vực 1",
+   "x": 855,
+   "y": 770
+  },
+  {
+   "name": "Thánh vực 2",
+   "x": 1608,
+   "y": 825
+  }
+ ],
+ "center": null
+}
