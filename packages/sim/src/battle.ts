@@ -215,6 +215,7 @@ export class Battle {
   private readonly cmds: { tick: number; unitId: number }[];
   private ci = 0;
   private readonly alive: [number, number];
+  private readonly teams: [Unit[], Unit[]]; // theo id; tìm địch chỉ duyệt đội bên kia
   private readonly record: boolean;
 
   /** `record` = ghi lại từng lần ra chiêu vào `events`. */
@@ -222,6 +223,7 @@ export class Battle {
     this.record = record;
     this.rng = new Rng(input.seed);
     this.units = [...input.teamA.map((u) => makeUnit(u, 0)), ...input.teamB.map((u) => makeUnit(u, 1))].sort((x, y) => x.id - y.id);
+    this.teams = [this.units.filter((u) => u.team === 0), this.units.filter((u) => u.team === 1)];
     this.cmds = [...(input.commands ?? [])].sort((x, y) => x.tick - y.tick || x.unitId - y.unitId);
     this.alive = [input.teamA.length, input.teamB.length];
   }
@@ -358,8 +360,8 @@ export class Battle {
   private nearestEnemy(u: Unit): Unit | undefined {
     let best: Unit | undefined;
     let bestDist = 0;
-    for (const e of this.units) {
-      if (e.team === u.team || e.curHp <= 0 || this.tick < e.stealthUntil) continue;
+    for (const e of this.teams[1 - u.team]) {
+      if (e.curHp <= 0 || this.tick < e.stealthUntil) continue;
       const d = Math.abs(e.pos - u.pos);
       if (!best || d < bestDist || (d === bestDist && (e.curHp < best.curHp || (e.curHp === best.curHp && e.id < best.id)))) {
         best = e;
@@ -373,8 +375,8 @@ export class Battle {
   private pickEnemies(u: Unit, s: Slot, center: number, reach: number): Unit[] {
     const tick = this.tick;
     const list: Unit[] = [];
-    for (const e of this.units) {
-      if (e.team !== u.team && e.curHp > 0 && tick >= e.stealthUntil && Math.abs(e.pos - center) <= reach) list.push(e);
+    for (const e of this.teams[1 - u.team]) {
+      if (e.curHp > 0 && tick >= e.stealthUntil && Math.abs(e.pos - center) <= reach) list.push(e);
     }
     const exposedFirst = s.radius === 0;
     list.sort(
@@ -389,8 +391,8 @@ export class Battle {
   /** Đồng minh (kể cả bản thân) đang mất máu, trong tầm, % máu thấp nhất trước. */
   private pickAllies(u: Unit, s: Slot): Unit[] {
     const list: Unit[] = [];
-    for (const a of this.units) {
-      if (a.team === u.team && a.curHp > 0 && a.curHp < a.hp && Math.abs(a.pos - u.pos) <= s.range) list.push(a);
+    for (const a of this.teams[u.team]) {
+      if (a.curHp > 0 && a.curHp < a.hp && Math.abs(a.pos - u.pos) <= s.range) list.push(a);
     }
     list.sort((a, b) => a.curHp * b.hp - b.curHp * a.hp || a.id - b.id);
     if (list.length > s.tech.targets) list.length = s.tech.targets;
@@ -400,8 +402,8 @@ export class Battle {
   /** Hộ thể che các đồng minh (kể cả bản thân) đứng gần địch nhất, rồi % máu thấp nhất. */
   private pickGuarded(u: Unit, s: Slot, foe: Unit): Unit[] {
     const list: Unit[] = [];
-    for (const a of this.units) {
-      if (a.team === u.team && a.curHp > 0 && Math.abs(a.pos - u.pos) <= s.range) list.push(a);
+    for (const a of this.teams[u.team]) {
+      if (a.curHp > 0 && Math.abs(a.pos - u.pos) <= s.range) list.push(a);
     }
     list.sort((a, b) => Math.abs(a.pos - foe.pos) - Math.abs(b.pos - foe.pos) || a.curHp * b.hp - b.curHp * a.hp || a.id - b.id);
     if (list.length > s.tech.targets) list.length = s.tech.targets;

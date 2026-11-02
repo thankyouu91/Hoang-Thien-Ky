@@ -1,5 +1,6 @@
 // Tham số trận đấu. Số lấy thẳng từ GDD ghi kèm mục; số GDD ghi "đề xuất" hoặc chưa có thì ghi "đề xuất".
 // Đơn vị: tỷ lệ theo phần nghìn (1000 = 100%), thời gian theo tick (20 tick = 1 giây), khoảng cách theo milli-ô (1000 = 1 ô).
+import { mul, ONE } from "./fixed.ts";
 import type { Element } from "./elements.ts";
 
 const SEC = 20; // tick mỗi giây, khớp TICKS_PER_SECOND ở battle.ts
@@ -72,6 +73,30 @@ export const BATTLE = {
   defScale: 1000, // phòng thủ giảm def / (def + 1000)
   defCap: 800, // giảm tối đa 80%
 };
+
+/**
+ * Chỉ số chuẩn của nhân vật theo cấp (Hạ vị 1–250), chưa tính đồ, tài năng và buff; đề xuất.
+ * Đã chốt 2026-11-02: trận 10 đấu 10 trung bình khoảng 30 giây. `hpBase` và `hpPerLevel` được dò bằng đội mẫu
+ * (mỗi người 4 công pháp, chỉ số ±20%): trung bình 29,6 giây, gần như không đổi theo cấp (28,9 giây ở cấp 1–50, 32,8 giây ở cấp 201–250).
+ */
+export const UNIT_CURVE = {
+  hpBase: 4100, // máu ở cấp 0
+  hpPerLevel: 18, // máu tăng 1,8% của hpBase mỗi cấp
+  atkBase: 100, // công lực ở cấp 0
+  atkPerLevel: 4,
+  defPerLevel: 5, // cấp 100: phòng thủ 500, giảm 33% sát thương
+};
+export function baseStats(level: number): { hp: number; atk: number; def: number } {
+  return {
+    hp: mul(UNIT_CURVE.hpBase, ONE + UNIT_CURVE.hpPerLevel * level),
+    atk: UNIT_CURVE.atkBase + UNIT_CURVE.atkPerLevel * level,
+    def: UNIT_CURVE.defPerLevel * level,
+  };
+}
+/** Phẩm công pháp cao nhất học được theo cấp ở Hạ vị (GDD mục 6, đề xuất): Phàm từ 1, Hoàng từ 50, Huyền từ 100, Địa từ 150. */
+export function maxGradeAtLevel(level: number): number {
+  return level >= 150 ? 4 : level >= 100 ? 3 : level >= 50 ? 2 : 1;
+}
 
 /** Kháng hệ (từ ngọc) giảm tối đa 80% sát thương của hệ đó; đề xuất. */
 export const RESIST_CAP = 800;

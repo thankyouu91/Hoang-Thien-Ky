@@ -1,17 +1,15 @@
-// FNV-1a 32 bit trên dãy số nguyên: dùng để so trạng thái giữa client và worker xác minh.
+// Băm dãy số nguyên kiểu FNV-1a theo từng số 32 bit: dùng để so trạng thái giữa client và worker xác minh.
+// Mỗi bước (xor rồi nhân số lẻ) là song ánh, nên hai dãy khác nhau ở một vị trí luôn cho mã khác nhau.
 export class Hasher {
   private h = 0x811c9dc5;
   add(n: number): void {
-    // Trải vòng 4 byte cho nhanh; kết quả giống hệt vòng lặp byte thấp trước.
-    const v = n | 0;
-    let h = this.h;
-    h = Math.imul(h ^ (v & 0xff), 0x01000193);
-    h = Math.imul(h ^ ((v >>> 8) & 0xff), 0x01000193);
-    h = Math.imul(h ^ ((v >>> 16) & 0xff), 0x01000193);
-    h = Math.imul(h ^ (v >>> 24), 0x01000193);
-    this.h = h >>> 0;
+    this.h = Math.imul(this.h ^ (n | 0), 0x01000193);
   }
+  /** Trộn thêm một lượt (fmix32 của MurmurHash3) cho các bit phân bố đều. */
   value(): number {
-    return this.h >>> 0;
+    let h = this.h;
+    h = Math.imul(h ^ (h >>> 16), 0x85ebca6b);
+    h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+    return (h ^ (h >>> 16)) >>> 0;
   }
 }
