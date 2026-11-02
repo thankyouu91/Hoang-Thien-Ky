@@ -6,7 +6,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
 import { assignCells, loadRegions, slug } from "./vung.ts";
-import { DANGER_MAX, GATE_TIERS, LAIR_NEAR, LAIR_PER_BAND, MAX_DEO, MIN_BORDER, lairBands, regionCounts, stagesFrom } from "./diem.ts";
+import { DANGER_MAX, GATE_LOW, GATE_TIERS, LAIR_NEAR, LAIR_PER_BAND, MAX_DEO, MIN_BORDER, lairBands, regionCounts, stagesFrom } from "./diem.ts";
 
 interface FilePoint {
   id: number;
@@ -108,6 +108,7 @@ function check(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, co
   const level = (p: FilePoint) => (GATE_TIERS as readonly string[]).indexOf(p.tier ?? "");
   ok("bậc cửa bí cảnh", gates.every((p) => level(p) >= 0) && (gates.length < 3 || new Set(gates.map(level)).size === 3) && gates.every((p, i) => i === 0 || level(p) >= level(gates[i - 1])),
     gates.map((p) => `${p.tier} ${p.danger}`).join(", "));
+  ok("có cửa bí cảnh cấp thấp", gates.length > 0 && gates[0].danger < GATE_LOW.below, `cửa thấp nhất cấp ${gates[0]?.danger}, cần dưới ${GATE_LOW.below}`);
   return results;
 }
 

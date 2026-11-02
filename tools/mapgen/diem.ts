@@ -18,6 +18,22 @@ const SEED = 20261102;
 const MEAN_COUNTS = { total: 350, mo_linh_thach: 60, mo_quang: 80, mo_duoc: 40, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
 /** Bậc cửa bí cảnh (người dùng chia ngày 2026-11-02; hình cửa xanh, vàng, đỏ) */
 export const GATE_TIERS = ["thap", "vua", "cao"] as const;
+/** Mỗi vùng ít nhất một cửa bí cảnh dưới cấp nguy hiểm này, cho nhiệm vụ đầu game (đề xuất của phiên nhiệm vụ: nhiệm vụ
+ * 1.6 cấp 25 tìm cửa bậc thấp không quá cấp người chơi + 10); nếu phải đổi thì nhắm cửa ở quanh cấp GATE_LOW.aim */
+export const GATE_LOW = { below: 50, aim: 30 };
+
+/** Thiếu cửa cấp thấp thì đổi nhãn cửa gần thành chủ nhất với mỏ linh thạch có cấp gần GATE_LOW.aim nhất. Hai loại này
+ * không ràng buộc địa hình, nên đổi nhãn không làm lệch đường, cấp nguy hiểm hay số lượng */
+function ensureLowGate(points: { id: number; type: string; danger: number }[]): void {
+  const gates = points.filter((p) => p.type === "cua_bi_canh").sort((a, b) => a.danger - b.danger || a.id - b.id);
+  if (!gates.length || gates[0].danger < GATE_LOW.below) return;
+  const stone = points
+    .filter((p) => p.type === "mo_linh_thach" && p.danger < GATE_LOW.below)
+    .sort((a, b) => Math.abs(a.danger - GATE_LOW.aim) - Math.abs(b.danger - GATE_LOW.aim) || a.id - b.id)[0];
+  if (!stone) return; // kiem.ts sẽ báo
+  stone.type = "cua_bi_canh";
+  gates[0].type = "mo_linh_thach";
+}
 const MAX_BEN_DO = 12;
 const LAIR_REACH = 3; // hang dị thú nối vào điểm cách tối đa 3 ô
 
@@ -422,6 +438,7 @@ if (import.meta.main) {
   }
   for (const e of edges) e.danger = Math.max(points[e.a].danger, points[e.b].danger);
   const ring = ringPosition(map, region);
+  ensureLowGate(points);
   // Bậc cửa bí cảnh theo cấp nguy hiểm trong vùng: một phần ba cửa gần thành chủ nhất là thấp, xa nhất là cao, nên vùng
   // nào cũng có đủ ba bậc. Loại bí cảnh (GDD mục 11, tỷ lệ rơi 4–50%) sẽ ghép theo bậc: loại càng hiếm thì bậc càng cao
   const gates = points.filter((p) => p.type === "cua_bi_canh").sort((a, b) => a.danger - b.danger || a.id - b.id);
