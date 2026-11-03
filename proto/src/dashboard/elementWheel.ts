@@ -5,7 +5,11 @@ import { beatsEither, ELEMENTS, generatesEither, isOpposite, parentOf, type Elem
 import { ELEMENT_STYLE } from "../theme/elements.ts";
 import { assetUrl } from "./ui.ts";
 
-const C = 100;
+/** Tâm và cỡ vòng theo đơn vị viewBox 200 × 200; cảnh three của Pháp tướng (art/phapTuong.ts) dùng cùng bố cục. */
+export const C = 100;
+/** Bán kính hai vòng tròn mảnh và của ô hệ. */
+export const RINGS = [62, 94] as const;
+export const NODE_R = 11;
 const ANGLE: Record<Element, number> = {
   moc: -90, hoa: -18, tho: 54, kim: 126, thuy: 198,
   phong: -90, cuc_duong: -18, cuc_am: 54, loi: 126, cuc_han: 198,
@@ -13,14 +17,16 @@ const ANGLE: Record<Element, number> = {
 };
 const RADIUS = (e: Element) => (parentOf(e) || e === "quang" || e === "am_lanh" ? 80 : 46);
 
-function at(e: Element): { x: number; y: number } {
+export function at(e: Element): { x: number; y: number } {
   const a = (ANGLE[e] * Math.PI) / 180;
   return { x: C + RADIUS(e) * Math.cos(a), y: C + RADIUS(e) * Math.sin(a) };
 }
 
 /** Các cặp hệ có quan hệ, mỗi cặp một lần. */
-function links(): { a: Element; b: Element; kind: "sinh" | "khac" | "bien" | "cuc" }[] {
-  const out: { a: Element; b: Element; kind: "sinh" | "khac" | "bien" | "cuc" }[] = [];
+export type LinkKind = "sinh" | "khac" | "bien" | "cuc";
+
+function links(): { a: Element; b: Element; kind: LinkKind }[] {
+  const out: { a: Element; b: Element; kind: LinkKind }[] = [];
   for (let i = 0; i < ELEMENTS.length; i++)
     for (let j = i + 1; j < ELEMENTS.length; j++) {
       const a = ELEMENTS[i];
@@ -34,7 +40,7 @@ function links(): { a: Element; b: Element; kind: "sinh" | "khac" | "bien" | "cu
   return out;
 }
 
-const LINKS = links();
+export const LINKS = links();
 
 /** SVG vòng hệ, `roots` là linh căn của nhân vật. */
 export function elementWheel(roots: Element[]): string {
@@ -50,8 +56,8 @@ export function elementWheel(roots: Element[]): string {
     const st = ELEMENT_STYLE[e];
     const on = lit.has(e);
     return `<g class="wn${on ? " on" : ""}" transform="translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})"><title>${st.name}${on ? " · linh căn" : ""}</title>
-      ${on ? `<circle r="15" class="halo"/>` : ""}<circle r="11" style="stroke:${st.color}"/>
+      ${on ? `<circle r="15" class="halo"/>` : ""}<circle r="${NODE_R}" style="stroke:${st.color}"/>
       <image href="${assetUrl(`he/${e}`)}" x="-8" y="-8" width="16" height="16"/></g>`;
   }).join("");
-  return `<svg class="pt-wheel" viewBox="0 0 200 200" aria-hidden="true"><circle class="ring" cx="${C}" cy="${C}" r="94"/><circle class="ring" cx="${C}" cy="${C}" r="62"/>${lines}${nodes}</svg>`;
+  return `<svg class="pt-wheel" viewBox="0 0 200 200" aria-hidden="true">${RINGS.map((r) => `<circle class="ring" cx="${C}" cy="${C}" r="${r}"/>`).join("")}${lines}${nodes}</svg>`;
 }

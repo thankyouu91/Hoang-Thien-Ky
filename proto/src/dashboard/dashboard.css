@@ -690,6 +690,11 @@ button.nv-row:hover { background: var(--c-sunken); }
 .pt-wheel .wn circle { fill: var(--c-surface); stroke-width: 1.2; }
 .pt-wheel .wn .halo { fill: none; stroke: var(--c-accent); stroke-width: 1.4; }
 .pt-wheel image { image-rendering: pixelated; }
+/* Cảnh three (art/phapTuong.ts) nằm dưới tu sĩ và ô trang bị; có cảnh thì ẩn vòng SVG dự phòng */
+/* Khung vẽ cao hơn .pt-stage 32 px mỗi phía (vòng 320 px không bị cắt), cùng tâm nên khớp chỗ các ô */
+.pt-three { position: absolute; inset: -32px 0; z-index: 0; pointer-events: none; }
+.nv-form > .nv-sub, .page .nv-form > .nv-h { position: relative; z-index: 1; }
+.pt-stage.live .pt-wheel { display: none; }
 .pt-stage .doll { grid-column: 2; grid-row: 1; justify-self: center; position: relative; width: 100%; max-width: 160px; height: 220px; }
 .pt-gear { position: relative; z-index: 1; grid-row: 1; display: flex; flex-direction: column; gap: 10px; }
 .pt-gear.left { grid-column: 1; }

@@ -9,6 +9,7 @@
 // tiết; việc nào cũng trong 2 chạm.
 import type { Element } from "@ktlp/sim";
 import type { Sprites } from "../../assets/sprites.ts";
+import { hasWebGL, mountProgram, type LiveMount } from "../../three/index.ts";
 import { animInfo, drawCharacter } from "../../scenes/battle/character.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { elementWheel } from "../elementWheel.ts";
@@ -59,6 +60,10 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   private frame = 0;
   /** Vừa thả xong một món: bỏ qua cú nhấp đi kèm. */
   private dropped = false;
+  /** Lớp cảnh three của Pháp tướng: giữ qua các lần vẽ lại, mỗi lần chỉ chèn lại vào .pt-stage mới. */
+  private ptLayer: HTMLElement;
+  private ptLive: LiveMount | null = null;
+  private ptRoots?: string;
 
   constructor(ctx: DashCtx, sprites: Sprites) {
     super("nhan-vat", "Nhân vật", ctx);
@@ -71,6 +76,9 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       if (this.data) this.render(this.data);
     });
     this.page.addEventListener("pointerdown", (e) => this.dragStart(e));
+    this.ptLayer = document.createElement("div");
+    this.ptLayer.className = "pt-three";
+    this.ptLayer.setAttribute("aria-hidden", "true");
   }
 
   setTab(t: NhanVatTab): void {
@@ -114,8 +122,28 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         </div>
       </section>`;
     this.doll = this.page.querySelector<HTMLCanvasElement>(".doll") ?? undefined;
+    const stage = this.page.querySelector<HTMLElement>(".pt-stage");
+    if (stage) {
+      stage.prepend(this.ptLayer);
+      stage.classList.toggle("live", !!this.ptLive);
+    }
+    void this.mountPhapTuong(v.roots);
     cropIcons(this.page);
     this.drawDoll();
+  }
+
+  /**
+   * Cảnh three của Pháp tướng (art/phapTuong.ts: vòng hệ có chiều sâu, nét mực, hạt linh khí), nạp động lần đầu.
+   * Máy không có WebGL2 thì giữ vòng hệ SVG; đổi linh căn thì thay chương trình vẽ, giữ chỗ gắn.
+   */
+  private async mountPhapTuong(roots: Element[]): Promise<void> {
+    const key = roots.join(",");
+    if (!hasWebGL() || key === this.ptRoots) return;
+    this.ptRoots = key;
+    const { phapTuong } = await import("../art/phapTuong.ts");
+    if (this.ptLive) this.ptLive.replace((h) => phapTuong(h, roots));
+    else this.ptLive = await mountProgram(this.ptLayer, (h) => phapTuong(h, roots));
+    this.page.querySelector(".pt-stage")?.classList.toggle("live", !!this.ptLive);
   }
 
   // ---- Cột trái: thông tin ---------------------------------------------------------------------------------------
