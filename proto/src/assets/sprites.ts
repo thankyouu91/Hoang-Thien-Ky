@@ -47,8 +47,8 @@ export interface Asset {
   meta: ManifestEntry;
 }
 
-/** Hình nền của các màn DOM (dashboard nạp qua CSS khi cần): bộ nạp này bỏ qua để khỏi tải cả trăm ảnh lớn. */
-export const SKIP_GROUPS = ["cong_trinh/", "diem_nen/", "bang_mau/"];
+/** Hình của các màn DOM (dashboard nạp qua CSS khi cần: hình nền, khung cuộn giấy): bộ nạp này bỏ qua để khỏi tải thừa. */
+export const SKIP_GROUPS = ["cong_trinh/", "diem_nen/", "bang_mau/", "ui/"];
 
 export class Sprites {
   private assets = new Map<string, Asset>();
