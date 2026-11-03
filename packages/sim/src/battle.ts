@@ -29,6 +29,7 @@ export interface UnitSpec {
   techniques: Technique[]; // 1–4 công pháp, theo thứ tự ưu tiên
   manaMax?: number; // mặc định BATTLE.manaMax
   boss?: boolean; // miễn tuyệt sát
+  monster?: boolean; // dị thú (PvE), nhận sát thương cộng thêm của set săn thú; boss cũng tính là dị thú
   sectId?: string; // tông môn, để xét công pháp của kẻ phản bội
   /** Cộng thêm vào chỉ số trận từ trang bị và set (phần nghìn; hp, atk, def, manaMax là % của chỉ số gốc). */
   bonuses?: Partial<Record<BuffStat, number>>;
@@ -89,6 +90,7 @@ export interface Unit {
   def: number; // sau buff
   resist: Partial<Record<Element, number>>;
   boss: boolean;
+  monster: boolean;
   sectId: string | null;
   b: UnitBonuses;
   curHp: number;
@@ -174,9 +176,13 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
     const s = SKILL_SPECS[tech.type];
     const cut = b.cooldownCut + (tech.type === "than_phap" ? b.dashCooldownCut : 0);
     const cooldown = Math.max(1, mul(tech.cooldownTicks, ONE - cut));
+    // Set đồ chỉ làm mạnh hiệu ứng hệ công pháp đã có: tê liệt của Lôi, xuyên giáp của Kim.
+    const fx = techniqueFx(tech);
+    if (fx.paralyze) fx.paralyze += b.paralyzeTicks;
+    if (fx.armorPen) fx.armorPen += b.armorPen;
     return {
       tech,
-      fx: techniqueFx(tech),
+      fx,
       range: s.range + tech.rangeBonus,
       radius: s.radius,
       // Không công pháp nào tốn hơn mana tối đa chuẩn, để ghép đối cực (mana ×1,5) không tạo chiêu không bao giờ ra được (đề xuất).
@@ -196,7 +202,8 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
   const manaMax = mul(spec.manaMax ?? BATTLE.manaMax, ONE + b.manaMax) * ONE;
   return {
     id: spec.id, team, level: spec.level, element: spec.element,
-    hp, atk: mul(spec.atk, ONE + b.atk), def: mul(spec.def, ONE + b.def), resist: spec.resist ?? {}, boss: spec.boss ?? false, sectId: spec.sectId ?? null, b,
+    hp, atk: mul(spec.atk, ONE + b.atk), def: mul(spec.def, ONE + b.def), resist: spec.resist ?? {}, boss: spec.boss ?? false,
+    monster: (spec.monster ?? false) || (spec.boss ?? false), sectId: spec.sectId ?? null, b,
     curHp: hp,
     pos: team === 0 ? startA : BATTLE.fieldLength - startA,
     mana: manaMax,
@@ -327,7 +334,7 @@ export class Battle {
         u.channel = {
           slot: i,
           startTick: this.tick,
-          resolveTick: this.tick + (formation ? mul(R.formationCastTicks, ONE - u.b.formationCut) : R.aoeCastTicks),
+          resolveTick: this.tick + (formation ? Math.max(1, mul(R.formationCastTicks, ONE - u.b.formationCut) + u.b.formationTicks) : R.aoeCastTicks),
           center: foe.pos,
           ult: this.takeUlt(u),
           interruptible: !formation || R.formationInterruptible,
@@ -437,7 +444,7 @@ export class Battle {
       }
       const crit = this.rng.chance(s.tech.critPerMille + u.b.critBonus + critBonus);
       let dmg = hitDamage(u, s.tech, t, crit, ult, {
-        damage: s.bonus, critDamage: u.b.critDamage, armorPen: fx.armorPen, resistPen: fx.resistPen + u.b.resistPen,
+        damage: s.bonus + (t.monster ? u.b.monsterDamage : 0), critDamage: u.b.critDamage, armorPen: fx.armorPen, resistPen: fx.resistPen + u.b.resistPen,
       });
       if (s.tech.forsakenSect !== undefined && s.tech.forsakenSect === t.sectId) dmg = Math.max(1, mul(dmg, BATTLE.betrayalDamage));
       if (ramp !== ONE) dmg = mul(dmg, ramp);
@@ -512,9 +519,9 @@ export class Battle {
     t.curHp = Math.min(t.hp, t.curHp + a);
   }
 
-  /** Khiên không cộng dồn, giữ khiên lớn hơn; nhân hiệu quả khiên của người tạo. */
+  /** Khiên không cộng dồn, giữ khiên lớn hơn; nhân hiệu quả khiên của người tạo và khiên nhận được của người nhận. */
   private addShield(src: Unit, t: Unit, amount: number): void {
-    t.shield = Math.max(t.shield, mul(amount, ONE + src.b.healPower));
+    t.shield = Math.max(t.shield, mul(mul(amount, ONE + src.b.healPower), ONE + t.b.shieldTaken));
     t.shieldUntil = this.tick + R.shieldTicks;
   }
 

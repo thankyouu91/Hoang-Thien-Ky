@@ -217,3 +217,40 @@ test("công pháp của tông đã phản bội đánh người tông đó chỉ
   assert.equal(loss("t", "x"), normal); // người tông khác: đủ sát thương
   assert.equal(loss("t", "t"), mul(normal, 500));
 });
+
+// Chỉ số trận từ trang bị và set (UnitSpec.bonuses)
+
+test("khiên nhận được: khiên Thổ 5% máu × 1,06", () => {
+  const { b } = firstHit({ seed: 1, teamA: [unit(1, 0, [tech("can_don", "tho")], { bonuses: { shieldTaken: 60 } })], teamB: [inert(101)] });
+  assert.equal(get(b, 1).shield, 1060);
+});
+
+test("set chỉ làm mạnh hiệu ứng hệ đã có: tê liệt Lôi +5 tick, xuyên giáp Kim +3%", () => {
+  const bonuses = { paralyzeTicks: 5, armorPen: 30 };
+  const b = new Battle({ seed: 1, teamA: [unit(1, 0, [tech("can_don", "loi"), tech("can_don", "kim")], { bonuses })], teamB: [inert(101)] });
+  const [loi, kim] = get(b, 1).slots;
+  assert.deepEqual([loi.fx.paralyze, loi.fx.armorPen], [15, 0]);
+  assert.deepEqual([kim.fx.paralyze, kim.fx.armorPen], [0, 130]);
+});
+
+test("bày trận nhanh hơn theo tick, cộng sau Tu trận", () => {
+  const cast = (extra: Partial<UnitSpec>) => {
+    const { b } = firstHit({ seed: 1, teamA: [unit(1, 0, [tech("tran_phap", "kim")], extra)], teamB: [inert(101)] });
+    const e = b.events.find((e) => e.unitId === 1)!;
+    return e.tick - e.startTick;
+  };
+  assert.equal(cast({ bonuses: { formationTicks: -10 } }), 90);
+  assert.equal(cast({ talents: ["tu_tran"], bonuses: { formationTicks: -10 } }), 60);
+});
+
+test("sát thương lên dị thú và boss chỉ tính khi mục tiêu là dị thú", () => {
+  const loss = (target: Partial<UnitSpec>, monsterDamage: number) => {
+    const { b } = firstHit({ seed: 1, teamA: [unit(1, 0, [tech("can_don", "kim")], { bonuses: { monsterDamage } })], teamB: [inert(101, target)] });
+    const t = get(b, 101);
+    return t.hp - t.curHp;
+  };
+  const normal = loss({}, 0);
+  assert.equal(loss({}, 50), normal);
+  assert.ok(loss({ monster: true }, 50) > normal);
+  assert.equal(loss({ boss: true }, 50), loss({ monster: true }, 50));
+});

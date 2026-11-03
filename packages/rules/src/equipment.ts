@@ -1,10 +1,13 @@
 // Chỉ số trang bị và ngọc khảm (đặc tả của phiên set đồ; số trong data/trang_bi, mọi số là đề xuất).
 // Món: chỉ số chính và phụ của ô × độ hiếm × (1 + 3% mỗi nấc) × (1 + thưởng bí cảnh). Độ bền 0 thì món không cộng gì.
 // Ngọc: ô "công" cộng sát thương cho công pháp cùng hệ chủ, ô "thủ" cộng kháng hệ; trùng linh căn ×1,2.
-// Ấn bộ và Ý châu chiếm dòng khảm nhưng tính ở bước set và Ý châu.
-import { baseStats, mul, BATTLE, type Element, type BuffStat, type UnitSpec } from "@ktlp/sim";
+// Set: ấn bộ khảm ở một dòng; đủ 2/4/7 món cùng ấn (còn độ bền) thì mở mốc. Bước này áp hiệu ứng loại chi_so;
+// các loại khác (kinh tế, hành vi, khắc chế, hộ trận) chỉ được liệt kê trong `sets` để các bước sau dùng.
+// Ý châu chiếm dòng khảm nhưng tính ở bước Ý châu.
+import { baseStats, mul, BATTLE, ELEMENTS, type Element, type BuffStat, type UnitSpec } from "@ktlp/sim";
 import TRANG_BI from "../../../data/trang_bi/trang_bi.json" with { type: "json" };
 import NGOC from "../../../data/trang_bi/ngoc.json" with { type: "json" };
+import SET from "../../../data/trang_bi/set.json" with { type: "json" };
 import { GEAR } from "./config.ts";
 
 export type SlotId = "vu_khi" | "mu" | "ao" | "dai" | "bao_tay" | "giay" | "ngoc_boi";
@@ -18,7 +21,18 @@ export interface EquipItem {
   nac: number; // cường hóa +0 … +50
   doBen: number; // độ bền 0–100
   biCanh: number; // thưởng bí cảnh 40–80 (phần nghìn), 0 nếu không phải đồ bí cảnh
+  dongThem: number; // dòng khảm thêm của đồ bí cảnh, 1 hoặc 2 (quay khi rơi); 0 nếu không phải đồ bí cảnh
   kham: InlayLine[];
+}
+
+/** Một hiệu ứng set như trong set.json. */
+export interface SetEffect { so: number; loai: string; mo_ta: string; tham_so: Record<string, number | boolean> }
+/** Một bộ đang mở: bộ nào, mấy món, mốc cao nhất đạt được và hiệu ứng của mọi mốc đã đạt. */
+export interface ActiveSet {
+  bo: string;
+  mon: number;
+  moc: number;
+  hieuUng: SetEffect[];
 }
 
 /** Tổng cộng của bộ đồ đang mặc. hp, atk, def, manaMax là số cộng thẳng; bonuses theo phần nghìn như UnitBonuses. */
@@ -30,6 +44,10 @@ export interface GearStats {
   bonuses: Partial<Record<BuffStat, number>>;
   resist: Partial<Record<Element, number>>;
   elementDamage: Partial<Record<Element, number>>;
+  /** Các bộ đang mở, theo id bộ. */
+  sets: ActiveSet[];
+  /** Chỉ số từ set không dùng trong trận (thú cưỡi, pháp bảo, đan dược), phần nghìn, theo khóa trong set.json. */
+  outside: Record<string, number>;
 }
 
 interface SlotRow { id: string; chinh: { stat: string; gia_tri: number }; phu: { stat: string; gia_tri: number }; ngoc: string }
@@ -43,6 +61,35 @@ for (const r of TRANG_BI.do_hiem as RarityRow[]) RARITIES[r.id] = r;
 const KIEU: Record<string, KieuRow> = {};
 for (const k of TRANG_BI.kieu as KieuRow[]) KIEU[k.ma_vp] = k;
 const GEM_VALUE: number[] = (NGOC.cap as { gia_tri: number }[]).map((c) => c.gia_tri);
+interface SetRow { id: string; an: string; moc: SetEffect[] }
+const SETS: Record<string, SetRow> = {};
+const SEAL_SET: Record<string, string> = {}; // mã ấn → id bộ
+for (const b of SET.bo as unknown as SetRow[]) {
+  SETS[b.id] = b;
+  SEAL_SET[b.an] = b.id;
+}
+
+/** Khóa tham_so của hiệu ứng chi_so đổi sang chỉ số trận; kháng hệ đổi sang kháng; khóa ngoài trận giữ nguyên tên. */
+const SET_STAT: Record<string, BuffStat> = {
+  healTaken: "healTaken", def: "def", manaMax: "manaMax", healPower: "healPower", controlTime: "controlTime",
+  critBonus: "critBonus", critDamage: "critDamage", atk: "atk",
+  khienNhan: "shieldTaken", satThuongPvE: "monsterDamage", xuyenGiap: "armorPen", teLietTicks: "paralyzeTicks", bayTranTicks: "formationTicks",
+};
+const SET_RESIST: Record<string, Element[]> = { khangLoi: ["loi"], khangMoiHe: ELEMENTS.slice() };
+const SET_OUTSIDE = ["hoiChieuKichPhat", "kichPhat", "linhLucPhapBao", "danTuDung"];
+const has = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
+
+/** Khóa chỉ số của set có chỗ áp không: trong trận, kháng, hoặc ngoài trận. */
+export function isKnownSetStat(key: string): boolean {
+  return has(SET_STAT, key) || has(SET_RESIST, key) || SET_OUTSIDE.indexOf(key) >= 0;
+}
+
+/** Mốc đạt được với n món cùng ấn: 3 món tính mốc 2, 5–6 món tính mốc 4; dưới 2 món là 0. */
+export function setTier(count: number): number {
+  let tier = 0;
+  for (const m of SET.moc as number[]) if (count >= m) tier = m;
+  return tier;
+}
 
 /** Chỉ số cộng thẳng theo chỉ số chuẩn cùng cấp; các chỉ số khác là phần nghìn cộng vào UnitBonuses. */
 const FLAT = ["hp", "atk", "def", "manaMax"];
@@ -53,20 +100,28 @@ export function kieuInfo(ma: string): { o: SlotId; doHiem: RarityId; ten: string
   return { o: k.o as SlotId, doHiem: k.do_hiem as RarityId, ten: k.ten };
 }
 
-/** Số dòng khảm tối đa của một món: theo độ hiếm, đồ bí cảnh thêm tối đa 2, không quá 5. */
+/** Số dòng khảm tối đa của một món: theo độ hiếm, cộng dòng thêm của đồ bí cảnh, không quá 5. */
 export function maxInlayLines(item: EquipItem): number {
   const r = RARITIES[kieuInfo(item.kieu).doHiem];
-  return Math.min(GEAR.maxLines, r.dong_kham + (item.biCanh > 0 ? GEAR.secretExtraLines : 0));
+  return Math.min(GEAR.maxLines, r.dong_kham + item.dongThem);
 }
 
 function validate(item: EquipItem): void {
   if (item.nac !== Math.floor(item.nac) || item.nac < 0 || item.nac > GEAR.maxEnhance) throw new Error(`${item.kieu}: nấc cường hóa ${item.nac} sai`);
   if (item.doBen < 0 || item.doBen > 100) throw new Error(`${item.kieu}: độ bền ${item.doBen} sai`);
   if (item.biCanh !== 0 && (item.biCanh < GEAR.secretBonusMin || item.biCanh > GEAR.secretBonusMax)) throw new Error(`${item.kieu}: thưởng bí cảnh ${item.biCanh} sai`);
+  const extraOk = item.biCanh === 0 ? item.dongThem === 0 : item.dongThem >= 1 && item.dongThem <= GEAR.secretExtraLines;
+  if (!extraOk) throw new Error(`${item.kieu}: dòng khảm thêm ${item.dongThem} sai`);
   if (item.kham.length > maxInlayLines(item)) throw new Error(`${item.kieu}: quá số dòng khảm`);
+  let seals = 0;
   for (const line of item.kham) {
     if (line && line.loai === "ngoc" && (line.cap < 1 || line.cap > GEM_VALUE.length)) throw new Error(`${item.kieu}: ngọc cấp ${line.cap} sai`);
+    if (line && line.loai === "an") {
+      if (!has(SEAL_SET, line.ma)) throw new Error(`${item.kieu}: không có ấn bộ ${line.ma}`);
+      seals++;
+    }
   }
+  if (seals > 1) throw new Error(`${item.kieu}: mỗi món giữ tối đa 1 ấn bộ`);
 }
 
 /** Hệ số nhân của một món theo phần nghìn: độ hiếm × (1 + 3% mỗi nấc) × (1 + thưởng bí cảnh). */
@@ -83,8 +138,9 @@ function statAmount(stat: string, giaTri: number, factor: number, level: number)
 
 /** Cộng chỉ số chính, phụ và ngọc của các món đang mặc (mỗi ô tối đa một món). */
 export function gearStats(items: EquipItem[], level: number, roots: Element[]): GearStats {
-  const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {} };
+  const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {} };
   const used: string[] = [];
+  const pieces: Record<string, number> = {}; // id bộ → số món còn độ bền mang ấn bộ đó
   for (const item of items) {
     validate(item);
     const info = kieuInfo(item.kieu);
@@ -99,6 +155,7 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[]): 
       else out.bonuses[part.stat as BuffStat] = (out.bonuses[part.stat as BuffStat] ?? 0) + v;
     }
     for (const line of item.kham) {
+      if (line && line.loai === "an") pieces[SEAL_SET[line.ma]] = (pieces[SEAL_SET[line.ma]] ?? 0) + 1;
       if (!line || line.loai !== "ngoc") continue;
       let v = GEM_VALUE[line.cap - 1];
       if (roots.indexOf(line.he) >= 0) v = mul(v, GEAR.rootGemBonus);
@@ -106,7 +163,27 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[]): 
       target[line.he] = (target[line.he] ?? 0) + v;
     }
   }
+  // 7 ô, mỗi món tối đa 1 ấn, nên tối đa 3 bộ cùng mở (2+2+2 hoặc 2+2+3) và chỉ một bộ đạt mốc 7.
+  for (const bo of Object.keys(pieces).sort()) {
+    const moc = setTier(pieces[bo]);
+    if (moc === 0) continue;
+    const hieuUng = SETS[bo].moc.filter((m) => m.so <= moc);
+    out.sets.push({ bo, mon: pieces[bo], moc, hieuUng });
+    for (const m of hieuUng) if (m.loai === "chi_so") addSetStats(out, bo, m.tham_so);
+  }
   return out;
+}
+
+/** Cộng một hiệu ứng chi_so của set vào chỉ số trận, kháng, hoặc chỉ số ngoài trận. */
+function addSetStats(out: GearStats, bo: string, params: Record<string, number | boolean>): void {
+  for (const key of Object.keys(params)) {
+    const v = params[key];
+    if (typeof v !== "number") throw new Error(`Set ${bo}: ${key} không phải số`);
+    if (has(SET_STAT, key)) out.bonuses[SET_STAT[key]] = (out.bonuses[SET_STAT[key]] ?? 0) + v;
+    else if (has(SET_RESIST, key)) for (const e of SET_RESIST[key]) out.resist[e] = (out.resist[e] ?? 0) + v;
+    else if (SET_OUTSIDE.indexOf(key) >= 0) out.outside[key] = (out.outside[key] ?? 0) + v;
+    else throw new Error(`Set ${bo}: chưa biết áp chỉ số ${key}`);
+  }
 }
 
 /** Áp bộ đồ vào một đơn vị trong trận; linh căn lấy từ `element` và `element2` của đơn vị. */

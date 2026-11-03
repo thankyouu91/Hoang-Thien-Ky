@@ -1,10 +1,24 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { Battle, baseStats, composeTechnique, type UnitSpec } from "@ktlp/sim";
-import { gearStats, withGear, kieuInfo, maxInlayLines, type EquipItem, type InlayLine } from "../src/index.ts";
+import { gearStats, withGear, kieuInfo, maxInlayLines, setTier, isKnownSetStat, type EquipItem, type InlayLine } from "../src/index.ts";
+import SET from "../../../data/trang_bi/set.json" with { type: "json" };
+import NGOC from "../../../data/trang_bi/ngoc.json" with { type: "json" };
 
-const item = (kieu: string, extra: Partial<EquipItem> = {}): EquipItem => ({ kieu, nac: 0, doBen: 100, biCanh: 0, kham: [], ...extra });
+const item = (kieu: string, extra: Partial<EquipItem> = {}): EquipItem => ({ kieu, nac: 0, doBen: 100, biCanh: 0, dongThem: 0, kham: [], ...extra });
 const gem = (he: "kim" | "hoa" | "loi", cap: number): InlayLine => ({ loai: "ngoc", he, cap });
+const seal = (ma: string): InlayLine => ({ loai: "an", ma });
+const SLOT_KIEU = ["TB-KI-001", "TB-MU-001", "TB-AO-001", "TB-DA-001", "TB-BT-001", "TB-GI-001", "TB-NB-001"];
+/** Mặc lần lượt các ô, mỗi món mang một ấn theo danh sách. */
+const sealed = (...seals: string[]): EquipItem[] => seals.map((ma, i) => item(SLOT_KIEU[i], { kham: [seal(ma)] }));
+/** Phần chỉ số trận do set cộng: so với chính các món đó khi gỡ hết ấn. */
+const setBonuses = (items: EquipItem[]): Record<string, number> => {
+  const all: Record<string, number> = gearStats(items, LV, []).bonuses;
+  const bare: Record<string, number> = gearStats(items.map((it) => ({ ...it, kham: it.kham.filter((l) => !l || l.loai !== "an") })), LV, []).bonuses;
+  const out: Record<string, number> = {};
+  for (const k of Object.keys(all)) if (all[k] !== (bare[k] ?? 0)) out[k] = all[k] - (bare[k] ?? 0);
+  return out;
+};
 const LV = 100; // chỉ số chuẩn cấp 100: máu 7.140, công lực 500, phòng thủ 500
 
 test("kiểu trang bị cho ô và độ hiếm", () => {
@@ -20,7 +34,7 @@ test("vũ khí lục +0: công lực 8% chỉ số chuẩn, sát thương chí m
 });
 
 test("vũ khí đỏ +30 rơi bí cảnh (+8%): × 1,55 × 1,9 × 1,08", () => {
-  const g = gearStats([item("TB-KI-058", { nac: 30, biCanh: 80 })], LV, []);
+  const g = gearStats([item("TB-KI-058", { nac: 30, biCanh: 80, dongThem: 2 })], LV, []);
   assert.equal(g.atk, 127); // 500 × 8% × 3,18
   assert.equal(g.bonuses.critDamage, 127);
 });
@@ -33,7 +47,7 @@ test("mũ: máu theo chỉ số chuẩn, mana theo mana tối đa chuẩn", () =
 
 test("độ bền 0 thì món không cộng gì, kể cả ngọc", () => {
   const g = gearStats([item("TB-KI-001", { doBen: 0, kham: [gem("kim", 5)] })], LV, []);
-  assert.deepEqual(g, { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {} });
+  assert.deepEqual(g, { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {} });
 });
 
 test("ngọc: ô công cộng sát thương hệ, ô thủ cộng kháng hệ, trùng linh căn ×1,2", () => {
@@ -44,11 +58,15 @@ test("ngọc: ô công cộng sát thương hệ, ô thủ cộng kháng hệ, t
   assert.deepEqual(gearStats([armor], LV, []).resist, { hoa: 30 });
 });
 
-test("dòng khảm theo độ hiếm, đồ bí cảnh thêm 2, tối đa 5", () => {
+test("dòng khảm theo độ hiếm, đồ bí cảnh thêm 1 hoặc 2 dòng theo từng món, tối đa 5", () => {
   assert.equal(maxInlayLines(item("TB-KI-001")), 1);
-  assert.equal(maxInlayLines(item("TB-KI-001", { biCanh: 50 })), 3);
-  assert.equal(maxInlayLines(item("TB-KI-058", { biCanh: 50 })), 5);
+  assert.equal(maxInlayLines(item("TB-KI-001", { biCanh: 50, dongThem: 1 })), 2);
+  assert.equal(maxInlayLines(item("TB-KI-001", { biCanh: 50, dongThem: 2 })), 3);
+  assert.equal(maxInlayLines(item("TB-KI-058", { biCanh: 50, dongThem: 2 })), 5);
   assert.throws(() => gearStats([item("TB-KI-001", { kham: [gem("kim", 1), gem("kim", 1)] })], LV, []));
+  assert.throws(() => gearStats([item("TB-KI-001", { biCanh: 50, dongThem: 3 })], LV, []));
+  assert.throws(() => gearStats([item("TB-KI-001", { biCanh: 50 })], LV, [])); // đồ bí cảnh phải có dòng thêm
+  assert.throws(() => gearStats([item("TB-KI-001", { dongThem: 1 })], LV, [])); // đồ thường không có dòng thêm
 });
 
 test("món sai thì báo lỗi: trùng ô, nấc, thưởng bí cảnh, cấp ngọc", () => {
@@ -59,7 +77,7 @@ test("món sai thì báo lỗi: trùng ô, nấc, thưởng bí cảnh, cấp ng
 });
 
 test("bộ đỏ +30 rơi bí cảnh đủ 7 ô: công lực, máu, phòng thủ mỗi thứ cộng khoảng 35–40%", () => {
-  const full = ["TB-KI-058", "TB-MU-058", "TB-AO-058", "TB-DA-058", "TB-BT-058", "TB-GI-058", "TB-NB-058"].map((k) => item(k, { nac: 30, biCanh: 80 }));
+  const full = ["TB-KI-058", "TB-MU-058", "TB-AO-058", "TB-DA-058", "TB-BT-058", "TB-GI-058", "TB-NB-058"].map((k) => item(k, { nac: 30, biCanh: 80, dongThem: 2 }));
   const g = gearStats(full, LV, []);
   const s = baseStats(LV);
   for (const [name, add, base] of [["công lực", g.atk, s.atk], ["máu", g.hp, s.hp], ["phòng thủ", g.def, s.def]] as const) {
@@ -79,4 +97,69 @@ test("áp bộ đồ vào đơn vị trong trận", () => {
   const u = b.units.find((x) => x.id === 1)!;
   assert.equal(u.slots[0].bonus, 90); // ngọc Kim cấp 5 trùng linh căn Kim
   assert.equal(u.b.critDamage, 120 + 40); // buff Kim (luyện đúng hệ) + sát thương chí mạng của vũ khí
+});
+
+// Set đồ: ấn bộ trên dòng khảm, mốc 2/4/7 (set.json; mọi số là đề xuất)
+
+test("mốc set theo số món: 3 món tính mốc 2, 5–6 món tính mốc 4", () => {
+  assert.deepEqual([0, 1, 2, 3, 4, 5, 6, 7].map(setTier), [0, 0, 2, 2, 4, 4, 4, 7]);
+});
+
+test("dữ liệu set: mỗi bộ một ấn khớp ngoc.json, mọi khóa chỉ số đều có chỗ áp", () => {
+  for (const b of SET.bo) {
+    const an = NGOC.an_bo.find((a) => a.ma_vp === b.an);
+    assert.equal(an?.bo, b.id, b.id);
+    for (const m of b.moc) if (m.loai === "chi_so") for (const k of Object.keys(m.tham_so)) assert.ok(isKnownSetStat(k), `${b.id}: ${k}`);
+  }
+});
+
+test("Vạn Kiếm 2 món: công lực +2%; 1 món hoặc món hết độ bền thì không mở", () => {
+  assert.deepEqual(setBonuses(sealed("NG-AN-017", "NG-AN-017")), { atk: 20 });
+  assert.deepEqual(gearStats(sealed("NG-AN-017"), LV, []).sets, []);
+  const broken = sealed("NG-AN-017", "NG-AN-017");
+  broken[1].doBen = 0;
+  assert.deepEqual(setBonuses(broken), {});
+});
+
+test("Lôi Trì 5 món là mốc 4: chí mạng +2%, tê liệt +5 tick, xuyên giáp +3%", () => {
+  const items = sealed(...Array(5).fill("NG-AN-010"));
+  assert.deepEqual(gearStats(items, LV, []).sets.map((s) => [s.bo, s.mon, s.moc, s.hieuUng.length]), [["loi_tri", 5, 4, 2]]);
+  assert.deepEqual(setBonuses(items), { critBonus: 20, paralyzeTicks: 5, armorPen: 30 });
+});
+
+test("kháng từ set cộng với kháng từ ngọc; Hỗn Độn kháng mọi hệ", () => {
+  const items = sealed("NG-AN-016", "NG-AN-016", "NG-AN-020", "NG-AN-020");
+  items[2].kham = [gem("loi", 3)]; // áo: ô thủ, ngọc Lôi cấp 3 = 30, thay ấn Hỗn Độn
+  items.push(item("TB-GI-001", { kham: [seal("NG-AN-020")] }));
+  const g = gearStats(items, LV, []);
+  assert.equal(g.resist.loi, 40 + 30 + 20);
+  assert.equal(g.resist.kim, 20);
+  assert.equal(g.resist.cuc_han, 20);
+});
+
+test("chỉ số ngoài trận để riêng; bộ chỉ có hiệu ứng kinh tế vẫn được liệt kê", () => {
+  const items = sealed("NG-AN-011", "NG-AN-011", "NG-AN-011", "NG-AN-011", "NG-AN-001", "NG-AN-001");
+  const g = gearStats(items, LV, []);
+  assert.deepEqual(g.outside, { hoiChieuKichPhat: -50, kichPhat: 100 });
+  assert.deepEqual(setBonuses(items), {});
+  assert.deepEqual(g.sets.map((s) => [s.bo, s.moc]), [["ngu_thu", 4], ["tu_bao", 2]]);
+});
+
+test("ba bộ cùng mở 2+2+3; mỗi món tối đa 1 ấn, ấn phải có trong danh mục", () => {
+  const items = sealed("NG-AN-017", "NG-AN-017", "NG-AN-005", "NG-AN-005", "NG-AN-008", "NG-AN-008", "NG-AN-008");
+  assert.deepEqual(gearStats(items, LV, []).sets.map((s) => [s.bo, s.moc]), [["linh_tuyen", 2], ["thiet_ky", 2], ["van_kiem", 2]]);
+  assert.deepEqual(setBonuses(items), { atk: 20, def: 30, healPower: 40 });
+  const twoSeals = item("TB-KI-058", { kham: [seal("NG-AN-017"), seal("NG-AN-005")] });
+  assert.throws(() => gearStats([twoSeals], LV, []));
+  assert.throws(() => gearStats([item("TB-KI-001", { kham: [seal("NG-AN-999")] })], LV, []));
+});
+
+test("set vào trận: Lôi Trì mốc 4 làm tê liệt của công pháp Lôi dài thêm 5 tick", () => {
+  const loi = composeTechnique({ element: "loi", type: "can_don", variant: "bao", grade: 1 }, [{ element: "loi", type: "can_don", variant: "ben", grade: 1 }]);
+  const spec: UnitSpec = { id: 1, level: LV, element: "loi", row: 0, ...baseStats(LV), techniques: [loi] };
+  const geared = withGear(spec, sealed(...Array(4).fill("NG-AN-010")));
+  const b = new Battle({ seed: 1, teamA: [geared], teamB: [{ ...spec, id: 101 }] });
+  const plain = new Battle({ seed: 1, teamA: [spec], teamB: [{ ...spec, id: 101 }] });
+  const fx = (x: Battle) => x.units.find((u) => u.id === 1)!.slots[0].fx.paralyze;
+  assert.equal(fx(b), fx(plain) + 5);
 });

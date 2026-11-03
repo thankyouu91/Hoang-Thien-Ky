@@ -125,10 +125,15 @@ export function maxGradeAtLevel(level: number): number {
 /** Kháng hệ (từ ngọc) giảm tối đa 80% sát thương của hệ đó; đề xuất. */
 export const RESIST_CAP = 800;
 
-/** Chỉ số nhân vật mà buff linh căn và tài năng cộng vào, theo phần nghìn. */
+/**
+ * Chỉ số nhân vật mà buff linh căn, tài năng, trang bị và set cộng vào, theo phần nghìn trừ các chỉ số ghi tick.
+ * shieldTaken: khiên nhận được; monsterDamage: sát thương lên dị thú và boss; armorPen: cộng vào xuyên giáp Kim của công pháp;
+ * paralyzeTicks: cộng tick vào tê liệt khi chí mạng của Lôi; formationTicks: cộng tick vào thời gian bày trận (âm là nhanh hơn).
+ */
 export type BuffStat =
   | "hp" | "atk" | "def" | "manaMax" | "damage" | "critBonus" | "critDamage" | "attackSpeed" | "cooldownCut"
-  | "healPower" | "healTaken" | "lifesteal" | "resistPen" | "dot" | "controlTime";
+  | "healPower" | "healTaken" | "lifesteal" | "resistPen" | "dot" | "controlTime"
+  | "shieldTaken" | "monsterDamage" | "armorPen" | "paralyzeTicks" | "formationTicks";
 
 /**
  * Buff khi luyện đúng hệ (GDD mục 9), áp cho cả nhân vật, mỗi hệ một lần. Trùng hệ chủ quyển nhận đủ, trùng hệ phụ quyển nhận một nửa.

@@ -34,7 +34,7 @@ export const GEAR = {
   /** Thưởng chỉ số của đồ rơi trong bí cảnh: 4–8% (chốt). */
   secretBonusMin: 40,
   secretBonusMax: 80,
-  /** Đồ bí cảnh thêm 1–2 dòng khảm (chốt), tối đa 5 dòng. */
+  /** Đồ bí cảnh thêm 1–2 dòng khảm (chốt; số dòng quay khi rơi, lưu ở từng món), tối đa 5 dòng. */
   secretExtraLines: 2,
   maxLines: 5,
   /** Ngọc khảm trùng hệ linh căn hiệu quả +20%. */
