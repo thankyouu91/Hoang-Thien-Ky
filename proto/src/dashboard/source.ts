@@ -379,6 +379,6 @@ export interface DashboardSource {
   /** Thư đầy đủ, mở từ thẻ Tin báo; đánh dấu đã đọc. */
   mail(id: number): Promise<{ from: string; title: string; body: string } | undefined>;
   /** Đầu vào trận của một chiến báo để màn Trận phát lại (nhật ký lệnh, GDD mục 16). */
-  battle(id: number): Promise<{ label: string; input: BattleInput } | undefined>;
+  battle(id: number): Promise<{ label: string; input: BattleInput; arena?: string } | undefined>;
   send(cmd: DashboardCommand): Promise<CommandResult>;
 }

@@ -17,7 +17,10 @@ const canvas = document.getElementById("view") as HTMLCanvasElement;
 // Trận không có tab riêng (GDD mục 14): mở từ chiến báo trên Động phủ; vẫn vào thẳng được bằng #tran để thử trận.
 // Ô chọn nguồn giữ trận thật của @ktlp/sim với vài seed của đội hình mẫu, và trận giả để so.
 const battle = new BattleScene(
-  [...[11, 2, 3].map((seed) => simReplaySource(`Sim · seed ${seed}`, () => sampleBattle(seed))), mockReplaySource],
+  [
+    ...([[11], [2, "cao_nguyen"], [3, "mo_linh_thach"]] as const).map(([seed, arena]) => simReplaySource(`Sim · seed ${seed}`, () => sampleBattle(seed), arena)),
+    mockReplaySource,
+  ],
   sprites,
 );
 const dashboard = createDashboard(sprites, canvas, battle);

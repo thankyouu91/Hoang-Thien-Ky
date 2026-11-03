@@ -71,7 +71,8 @@ export interface World {
   jobs: Job[];
   buildings: Building[];
   travel: { from: number; to: number; startsAt: number; endsAt: number };
-  reports: { id: number; seed: number; title: string; at: number }[];
+  /** arena: nền sân PixelLab san_dau/<tên> của màn Trận; bỏ trống là võ trường. */
+  reports: { id: number; seed: number; title: string; at: number; arena?: string }[];
   mail: { id: number; from: string; title: string; body: string; unread: boolean }[];
   alliance: { joined: boolean; name: string; leader: string };
   chat: { id: number; from: string; text: string; at: number; reported?: boolean }[];
@@ -241,8 +242,8 @@ export function createWorld(region: RegionMap, now: number): World {
     // Đang đi từ thành chủ về sơn môn, còn 14 phút.
     travel: { from: thanhChu, to: SON_MON, startsAt: now - 9 * MIN, endsAt: now + 14 * MIN },
     reports: [
-      { id: 1, seed: 11, title: "Thủ mỏ linh thạch trước Huyết Sát Môn", at: now - 2 * H },
-      { id: 2, seed: 2, title: "Hang dị thú cấp 58", at: now - 5 * H },
+      { id: 1, seed: 11, title: "Thủ mỏ linh thạch trước Huyết Sát Môn", at: now - 2 * H, arena: "mo_linh_thach" },
+      { id: 2, seed: 2, title: "Hang dị thú cấp 58", at: now - 5 * H, arena: "cao_nguyen" },
       { id: 3, seed: 3, title: "Tranh cửa bí cảnh 12:00", at: now - 9 * H },
     ],
     mail: [
