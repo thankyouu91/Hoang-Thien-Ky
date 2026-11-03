@@ -49,6 +49,14 @@
   --el-cuc_am: #4a3370;
   --el-cuc_han: #a8e6f5;
 
+  /* Độ hiếm vật phẩm (người dùng chốt 2026-11-03): lục (đồ shop) < lam < tím < vàng < đỏ. Màu nền ô, viền cùng màu đậm hơn;
+     chữ tên độ hiếm dùng bản -ink (đạt AA trên --c-surface). Khung chi tiết luôn ghi chữ độ hiếm, không chỉ dựa vào màu. */
+  --rar-luc: #7fa36c; --rar-luc-bg: #e4eed8; --rar-luc-ink: #3f6b33;
+  --rar-lam: #6f93c2; --rar-lam-bg: #dfe8f3; --rar-lam-ink: #2c5487;
+  --rar-tim: #9f7cc0; --rar-tim-bg: #ece1f3; --rar-tim-ink: #6d3a8e;
+  --rar-vang: #c3962f; --rar-vang-bg: #f6e8c1; --rar-vang-ink: #7a5a0c;
+  --rar-do: #c25446; --rar-do-bg: #f7ddd6; --rar-do-ink: #9a2a1e;
+
   /* Phẩm đồ (viền ô, có chữ phẩm đi kèm nên không chỉ dựa vào màu) */
   --tier-linh: #3f8a4a;
   --tier-thien: #2f6fb0;

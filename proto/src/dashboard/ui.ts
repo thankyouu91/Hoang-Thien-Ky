@@ -85,6 +85,11 @@ export function tickCountdowns(root: HTMLElement, now: number): number {
   return running;
 }
 
+/** Icon vật phẩm vẽ (Canva, assets/icon_ve) theo mã ảnh, ví dụ "trang_bi/ao/26". */
+export function artUrl(ma: string): string {
+  return `${import.meta.env.BASE_URL}icon_ve/${ma}.webp`;
+}
+
 /** Icon PixelLab theo khoá manifest, ví dụ "he/loi". */
 export function assetUrl(key: string): string {
   return `${import.meta.env.BASE_URL}pixellab/${key}.png`;

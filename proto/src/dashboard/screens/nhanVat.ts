@@ -2,7 +2,7 @@
 //  - Thông tin: các nhóm thu gọn được (thân phận, linh căn và tài năng, chỉ số chiến đấu, tu luyện, tài khoản), nhãn trái
 //    giá trị phải; nút lớn Bế quan hoặc Đột phá ở đáy.
 //  - Pháp tướng (theo mẫu người dùng gửi 2026-11-03): bóng lớn của chính nhân vật vẽ màu mực nâu mờ dần vào núi sương
-//    (nướng bằng three), tu sĩ đứng trước, 6 ô trang bị hai bên, 4 ô công pháp mang vào trận, 5 ô thú (ô đang cưỡi có dấu
+//    (nướng bằng three), tu sĩ đứng trước, 7 ô trang bị hai bên (icon vẽ assets/icon_ve, nền màu theo độ hiếm), 4 ô công pháp mang vào trận, 5 ô thú (ô đang cưỡi có dấu
 //    yên), chú giải một dòng ở đáy. Vòng 12 hệ (elementWheel.ts) chỉ hiện khi bấm "Vòng hệ".
 //  - Túi: 50 ô, lọc theo loại và theo phẩm, khung chi tiết món đang chọn.
 // Màn rộng (từ 1100 px) hiện đủ ba cột và kéo thả bằng chuột: kéo đồ hay công pháp từ túi vào ô để mặc, kéo ra túi để
@@ -16,16 +16,21 @@ import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { elementWheel } from "../elementWheel.ts";
 import { icon, type IconName } from "../icons.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
-import type { BagItem, GearItem, GearSlot, ItemGrade, ItemKind, NhanVatView, StatLine, TechniqueCard } from "../source.ts";
+import type { BagItem, GearItem, GearSlot, ItemGrade, ItemKind, NhanVatView, Rarity, StatLine, TechniqueCard } from "../source.ts";
 import { REALM_TERM, term } from "../terms.ts";
-import { assetUrl, cd, closeSheet, cropIcons, elementChip, esc, fmt, openSheet, pctText, ROLE_NAMES, skillChip, toast } from "../ui.ts";
+import { artUrl, assetUrl, cd, closeSheet, cropIcons, elementChip, esc, fmt, openSheet, pctText, ROLE_NAMES, skillChip, toast } from "../ui.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 
 export type NhanVatTab = "thong-tin" | "phap-tuong" | "tui";
 
 const SLOT_NAMES: Record<GearSlot, string> = { vu_khi: "Vũ khí", mu: "Mũ", ao: "Áo", dai: "Đai", bao_tay: "Bao tay", giay: "Giày", ngoc_boi: "Ngọc bội" };
-const LEFT: GearSlot[] = ["vu_khi", "mu", "ao"];
-const RIGHT: GearSlot[] = ["dai", "giay", "ngoc_boi"];
+/** 7 ô (người dùng chốt 2026-11-03, thêm bao tay): bên trái theo thân từ đầu xuống chân, bên phải tay cầm và đeo. */
+const LEFT: GearSlot[] = ["mu", "ao", "dai", "giay"];
+const RIGHT: GearSlot[] = ["vu_khi", "bao_tay", "ngoc_boi"];
+/** Độ hiếm hiện bằng màu nền ô (lục là đồ shop); khung chi tiết ghi chữ. */
+const RARITY_NAMES: Record<Rarity, string> = { luc: "Lục", lam: "Lam", tim: "Tím", vang: "Vàng", do: "Đỏ" };
+/** Lớp màu của ô món: độ hiếm nếu có, không thì phẩm. */
+const tone = (it: { rarity?: Rarity; grade: ItemGrade }) => (it.rarity ? `r-${it.rarity}` : `g-${it.grade}`);
 const TIER_NAMES = { linh: "Linh", thien: "Thiên", than: "Thần" };
 const STAT_KEYS: Record<string, string> = { hp: "Máu", atk: "Công lực", def: "Phòng thủ", mana: "Mana" };
 /** Chỉ số hiện ở nhóm Chỉ số chiến đấu, đúng thứ tự (số từ @ktlp/sim qua nguồn đọc). */
@@ -38,7 +43,7 @@ const GRADE_NAMES: Record<ItemGrade, string> = { ha: "Hạ phẩm", trung: "Trun
 const KIND_GLYPH: Record<ItemKind, IconName> = {
   trang_bi: "sword", cong_phap: "scroll", tan_quyen: "scroll", ngoc: "gem", dan: "dan", nguyen_lieu: "quang", phu: "phu", trung_thu: "trung",
 };
-const SLOT_GLYPH: Record<GearSlot, IconName> = { vu_khi: "sword", mu: "shield", ao: "ao", dai: "dai", bao_tay: "shield", giay: "giay", ngoc_boi: "ngoc_boi" };
+const SLOT_GLYPH: Record<GearSlot, IconName> = { vu_khi: "sword", mu: "shield", ao: "ao", dai: "dai", bao_tay: "bao_tay", giay: "giay", ngoc_boi: "ngoc_boi" };
 /** Độ bền dưới mức này tô đỏ (cùng mức với thẻ Việc nên làm). */
 const LOW = 20;
 const WIDE = "(min-width: 1100px)";
@@ -216,8 +221,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const g = v.gear[s];
     if (!g) return `<button type="button" class="pt-slot empty" data-act="slot" data-slot="${s}" data-drop="gear:${s}"><span class="lbl">${SLOT_NAMES[s]}</span></button>`;
     const dur = g.durability / g.durabilityMax;
-    return `<button type="button" class="pt-slot tier-${g.tier}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}`)}">
-      ${g.icon ? `<img src="${assetUrl(g.icon)}" alt="" data-crop>` : icon(SLOT_GLYPH[s], "glyph")}
+    return `<button type="button" class="pt-slot tier-${g.tier}${g.rarity ? ` r-${g.rarity}` : ""}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}`)}">
+      ${g.art ? `<img class="ve" src="${artUrl(g.art)}" alt="">` : g.icon ? `<img src="${assetUrl(g.icon)}" alt="" data-crop>` : icon(SLOT_GLYPH[s], "glyph")}
       <span class="plus">+${g.plus}</span>
       ${g.sockets ? `<span class="gems">◆${g.gems.length}/${g.sockets}</span>` : ""}
       <span class="dur${g.durability < LOW ? " low" : ""}"><i style="width:${(dur * 100).toFixed(0)}%"></i></span>
@@ -257,12 +262,13 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   }
 
   private cell(it: BagItem): string {
-    return `<button type="button" class="bag-cell g-${it.grade}${it.uid === this.selected ? " sel" : ""}" data-act="item" data-uid="${it.uid}"${it.gear || it.technique ? ` data-drag="item:${it.uid}"` : ""} aria-label="${esc(`${it.name}${it.count > 1 ? ` × ${it.count}` : ""}`)}" title="${esc(it.name)}">
+    return `<button type="button" class="bag-cell ${tone(it)}${it.uid === this.selected ? " sel" : ""}" data-act="item" data-uid="${it.uid}"${it.gear || it.technique ? ` data-drag="item:${it.uid}"` : ""} aria-label="${esc(`${it.name}${it.count > 1 ? ` × ${it.count}` : ""}`)}" title="${esc(it.name)}">
       ${this.itemIcon(it)}${it.count > 1 ? `<span class="n">${it.count}</span>` : ""}${it.kind === "cong_phap" ? `<span class="learned">Đã học</span>` : ""}
     </button>`;
   }
 
   private itemIcon(it: BagItem): string {
+    if (it.art) return `<img class="ve" src="${artUrl(it.art)}" alt="">`;
     if (it.icon) return `<img src="${assetUrl(it.icon)}" alt=""${it.gear ? " data-crop" : ""}>`;
     const glyph = it.gear ? SLOT_GLYPH[it.gear.slot] : KIND_GLYPH[it.kind];
     return `<span class="glyph-wrap"${it.element ? ` style="color:${ELEMENT_STYLE[it.element as Element].color}"` : ""}>${icon(glyph, "glyph")}</span>`;
@@ -270,8 +276,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
 
   /** Khung chi tiết món: tên theo màu phẩm, loại và phẩm, công dụng, chỉ số, nút dùng. */
   private detail(it: BagItem, v: NhanVatView): string {
-    const head = `<div class="bd-head"><span class="bag-cell g-${it.grade}">${this.itemIcon(it)}</span><span class="grow"><b class="g-${it.grade}">${esc(it.name)}</b>
-      <span class="block muted">${KIND_NAMES[it.kind]} · ${esc(it.gradeLabel)}${it.count > 1 ? ` · × ${it.count}` : ""}</span></span>${it.element ? elementChip(it.element as Element) : ""}</div>`;
+    const head = `<div class="bd-head"><span class="bag-cell ${tone(it)}">${this.itemIcon(it)}</span><span class="grow"><b class="${tone(it)}">${esc(it.name)}</b>
+      <span class="block muted">${KIND_NAMES[it.kind]} · ${esc(it.gradeLabel)}${it.rarity ? ` · <span class="rar r-${it.rarity}">${RARITY_NAMES[it.rarity]}</span>` : ""}${it.count > 1 ? ` · × ${it.count}` : ""}</span></span>${it.element ? elementChip(it.element as Element) : ""}</div>`;
     let body = `<p class="nv-note">${esc(it.detail)}</p>`;
     let act = "";
     if (it.gear) {
@@ -410,7 +416,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       "Màn Nhân vật",
       `<ul class="list nv-help">
         <li><b>Thông tin</b>: thân phận, linh căn, chỉ số chiến đấu, tu luyện. Chạm một chỉ số để xem nguồn.</li>
-        <li><b>Pháp tướng</b>: 6 ô trang bị quanh hình, 4 ô công pháp mang vào trận, 5 ô thú. Bấm "Vòng hệ" để xem 12 hệ: hệ linh căn sáng, vạch xanh là tương sinh, vạch đỏ là tương khắc, nét đứt là đối cực.</li>
+        <li><b>Pháp tướng</b>: 7 ô trang bị quanh hình (màu nền ô là độ hiếm: lục, lam, tím, vàng, đỏ), 4 ô công pháp mang vào trận, 5 ô thú. Bấm "Vòng hệ" để xem 12 hệ: hệ linh căn sáng, vạch xanh là tương sinh, vạch đỏ là tương khắc, nét đứt là đối cực.</li>
         <li><b>Túi</b>: 50 ô gốc, lọc theo loại và phẩm. Màn rộng kéo món sang ô để mặc, kéo về túi để tháo; điện thoại chạm ô hoặc chạm món rồi chọn.</li>
       </ul>`,
     );
@@ -441,7 +447,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       g ? `${SLOT_NAMES[slot]}: ${g.name}` : SLOT_NAMES[slot],
       `${g ? this.gearDetail(g) : `<p class="muted">Chưa mặc món nào. Đồ rơi ở bí cảnh hoặc rèn ở lò rèn.</p>`}
        ${spare.length ? `<h3>Trong túi</h3><ul class="list">${spare
-         .map((it) => `<li class="row"><span class="bag-cell g-${it.grade}">${this.itemIcon(it)}</span><span class="grow"><b>${esc(it.name)}</b><span class="muted block">${esc(it.gradeLabel)} · +${it.gear!.plus}</span></span><button type="button" class="btn small" data-a="wear" data-uid="${it.uid}">Mặc</button></li>`)
+         .map((it) => `<li class="row"><span class="bag-cell ${tone(it)}">${this.itemIcon(it)}</span><span class="grow"><b>${esc(it.name)}</b><span class="muted block">${esc(it.gradeLabel)} · +${it.gear!.plus}</span></span><button type="button" class="btn small" data-a="wear" data-uid="${it.uid}">Mặc</button></li>`)
          .join("")}</ul>` : ""}
        ${g ? `<div class="actions"><button type="button" data-a="off">Tháo về túi</button><button type="button" data-a="ren">Rèn</button></div>` : ""}`,
     );
@@ -464,6 +470,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const gems = g.gems.map((gem) => `<li class="row">${elementChip(gem.element)} <span class="grow">Ngọc cấp ${gem.level}</span><span class="muted">+${pctText(2.5 * gem.level * (gem.level + 1))}</span></li>`).join("");
     return `<dl class="kv">
         <dt>Cấp đồ</dt><dd>${TIER_NAMES[g.tier]}</dd>
+        ${g.rarity ? `<dt>Độ hiếm</dt><dd class="rar r-${g.rarity}">${RARITY_NAMES[g.rarity]}</dd>` : ""}
         <dt>Cường hóa</dt><dd>+${g.plus} / +30</dd>
         <dt>Độ bền</dt><dd class="${g.durability < LOW ? "bad" : ""}">${g.durability} / ${g.durabilityMax}</dd>
         ${stats}

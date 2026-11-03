@@ -725,7 +725,7 @@ button.nv-row:hover { background: var(--c-sunken); }
 .page .nv-h > span { color: var(--c-ink-3); font-weight: 400; }
 /* Núi sương nướng bằng three dưới đáy cột, mờ dần lên trên */
 .pt-mist { position: absolute; left: -8px; right: -8px; bottom: -8px; height: 70%; z-index: 0; opacity: 0.5; pointer-events: none; -webkit-mask-image: linear-gradient(to top, #000 30%, transparent 80%); mask-image: linear-gradient(to top, #000 30%, transparent 80%); }
-.pt-stage { position: relative; display: grid; grid-template-columns: 58px minmax(0, 1fr) 58px; align-items: center; gap: 6px; min-height: 250px; }
+.pt-stage { position: relative; display: grid; grid-template-columns: 58px minmax(0, 1fr) 58px; align-items: center; gap: 6px; min-height: 262px; }
 /* Bóng pháp tướng: chính nhân vật phóng to, mực nâu, nhòe, mờ dần xuống chân */
 .pt-ghost { position: absolute; left: -6%; right: -6%; top: -44px; bottom: -10px; width: 112%; height: calc(100% + 54px); pointer-events: none; opacity: 0.17; filter: grayscale(1) sepia(0.6) contrast(0.85) blur(3px); -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent 92%); mask-image: linear-gradient(to bottom, #000 35%, transparent 92%); }
 /* Vòng 12 hệ (SVG) chỉ hiện khi bật */
@@ -804,6 +804,25 @@ button.nv-row:hover { background: var(--c-sunken); }
 .g-ha { --g: #93b282; --g-bg: #e9f0dd; }
 .g-trung { --g: #8aa6c8; --g-bg: #e3eaf2; }
 .g-cao { --g: #b58fcb; --g-bg: #efe4f2; }
+/* Độ hiếm: ô túi tô cả nền và viền; ô trang bị chỉ tô nền (viền vẫn theo cấp đồ Linh, Thiên, Thần) */
+.r-luc, .pt-slot.r-luc { --g: var(--rar-luc); --g-bg: var(--rar-luc-bg); --tb: var(--rar-luc-bg); }
+.r-lam, .pt-slot.r-lam { --g: var(--rar-lam); --g-bg: var(--rar-lam-bg); --tb: var(--rar-lam-bg); }
+.r-tim, .pt-slot.r-tim { --g: var(--rar-tim); --g-bg: var(--rar-tim-bg); --tb: var(--rar-tim-bg); }
+.r-vang, .pt-slot.r-vang { --g: var(--rar-vang); --g-bg: var(--rar-vang-bg); --tb: var(--rar-vang-bg); }
+.r-do, .pt-slot.r-do { --g: var(--rar-do); --g-bg: var(--rar-do-bg); --tb: var(--rar-do-bg); }
+b.r-luc, .rar.r-luc { color: var(--rar-luc-ink); }
+b.r-lam, .rar.r-lam { color: var(--rar-lam-ink); }
+b.r-tim, .rar.r-tim { color: var(--rar-tim-ink); }
+b.r-vang, .rar.r-vang { color: var(--rar-vang-ink); }
+b.r-do, .rar.r-do { color: var(--rar-do-ink); }
+/* Icon vẽ (Canva, 512 px nền trong): không làm nhòe kiểu điểm ảnh, đổ bóng nhẹ cho nổi trên nền màu */
+img.ve { image-rendering: auto !important; object-fit: contain; filter: drop-shadow(0 1px 1.5px rgba(42, 32, 24, 0.3)); }
+.pt-slot img.ve { left: 8px; top: 4px; width: 42px; height: 42px; }
+/* Nhãn số trên ô có hình vẽ: nền giấy nhỏ để đọc được trên hình */
+.pt-slot .plus, .pt-slot .gems { z-index: 1; padding: 0 2px; border-radius: 2px; background: rgba(255, 250, 240, 0.86); line-height: 1.3; }
+.pt-slot .plus { right: 2px; top: 2px; }
+.pt-slot .gems { left: 2px; bottom: 7px; }
+.bag-cell img.ve { width: 86%; height: 86%; }
 b.g-ha { color: #3f6b33; }
 b.g-trung { color: #2c5487; }
 b.g-cao { color: #6d3a8e; }
