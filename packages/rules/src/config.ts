@@ -24,3 +24,19 @@ export const RULES = {
   outerMaxLearned: 2,
   outerMaxGrade: 2,
 };
+
+/** Trang bị (GDD mục 12, tab Trang bị; data/trang_bi). Mọi số là đề xuất trừ chỗ ghi chốt. */
+export const GEAR = {
+  /** Cường hóa mỗi nấc +3% chỉ số gốc của món. */
+  enhancePerLevel: 30,
+  /** Trần cường hóa: +30 ở Hạ vị và Trung vị, +50 ở thượng vị (chốt). */
+  maxEnhance: 50,
+  /** Thưởng chỉ số của đồ rơi trong bí cảnh: 4–8% (chốt). */
+  secretBonusMin: 40,
+  secretBonusMax: 80,
+  /** Đồ bí cảnh thêm 1–2 dòng khảm (chốt), tối đa 5 dòng. */
+  secretExtraLines: 2,
+  maxLines: 5,
+  /** Ngọc khảm trùng hệ linh căn hiệu quả +20%. */
+  rootGemBonus: 1200,
+};

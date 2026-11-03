@@ -127,7 +127,7 @@ export const RESIST_CAP = 800;
 
 /** Chỉ số nhân vật mà buff linh căn và tài năng cộng vào, theo phần nghìn. */
 export type BuffStat =
-  | "hp" | "def" | "manaMax" | "damage" | "critBonus" | "critDamage" | "attackSpeed" | "cooldownCut"
+  | "hp" | "atk" | "def" | "manaMax" | "damage" | "critBonus" | "critDamage" | "attackSpeed" | "cooldownCut"
   | "healPower" | "healTaken" | "lifesteal" | "resistPen" | "dot" | "controlTime";
 
 /**

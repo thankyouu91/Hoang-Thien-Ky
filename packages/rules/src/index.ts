@@ -4,4 +4,5 @@ export * from "./state.ts";
 export * from "./library.ts";
 export * from "./transmission.ts";
 export * from "./departure.ts";
+export * from "./equipment.ts";
 export * from "./apply.ts";

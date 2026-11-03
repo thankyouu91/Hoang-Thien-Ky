@@ -29,7 +29,7 @@ export function rootBuffLevels(roots: Element[], techniques: Technique[]): Parti
 
 export function unitBonuses(roots: Element[], talents: Talent[], techniques: Technique[]): UnitBonuses {
   const b: UnitBonuses = {
-    hp: 0, def: 0, manaMax: 0, damage: 0, critBonus: 0, critDamage: 0, attackSpeed: 0, cooldownCut: 0,
+    hp: 0, atk: 0, def: 0, manaMax: 0, damage: 0, critBonus: 0, critDamage: 0, attackSpeed: 0, cooldownCut: 0,
     healPower: 0, healTaken: 0, lifesteal: 0, resistPen: 0, dot: 0, controlTime: 0,
     melee: 0, ranged: 0, extraTalismans: 0, formationCut: 0, executeBonus: 0, stealthTicks: 0, dashCooldownCut: 0,
   };

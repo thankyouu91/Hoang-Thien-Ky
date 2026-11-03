@@ -3,7 +3,7 @@ import { mul, clamp, ONE } from "./fixed.ts";
 import { Rng } from "./rng.ts";
 import { Hasher } from "./hash.ts";
 import { elementMultiplier, type Element } from "./elements.ts";
-import { BATTLE, SKILL_SPECS, ALLY_SKILLS, SKILL_RULES as R, RESIST_CAP, type SkillType, type Talent } from "./config.ts";
+import { BATTLE, SKILL_SPECS, ALLY_SKILLS, SKILL_RULES as R, RESIST_CAP, type SkillType, type Talent, type BuffStat } from "./config.ts";
 import { techniqueFx, type Technique, type TechniqueFx } from "./technique.ts";
 import { unitBonuses, type UnitBonuses } from "./stats.ts";
 
@@ -30,6 +30,10 @@ export interface UnitSpec {
   manaMax?: number; // mặc định BATTLE.manaMax
   boss?: boolean; // miễn tuyệt sát
   sectId?: string; // tông môn, để xét công pháp của kẻ phản bội
+  /** Cộng thêm vào chỉ số trận từ trang bị và set (phần nghìn; hp, atk, def, manaMax là % của chỉ số gốc). */
+  bonuses?: Partial<Record<BuffStat, number>>;
+  /** Sát thương cộng thêm cho công pháp có hệ chủ là hệ đó (ngọc ở ô công), phần nghìn. */
+  elementDamage?: Partial<Record<Element, number>>;
 }
 export interface BattleInput {
   seed: number;
@@ -165,6 +169,7 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
   if (talents.length > 2) throw new Error(`Đơn vị ${spec.id} có tối đa 2 tài năng`);
   const roots = spec.element2 && spec.element2 !== spec.element ? [spec.element, spec.element2] : [spec.element];
   const b = unitBonuses(roots, talents, spec.techniques);
+  if (spec.bonuses) for (const k of Object.keys(spec.bonuses) as BuffStat[]) b[k] += spec.bonuses[k] ?? 0;
   const slots: Slot[] = spec.techniques.map((tech) => {
     const s = SKILL_SPECS[tech.type];
     const cut = b.cooldownCut + (tech.type === "than_phap" ? b.dashCooldownCut : 0);
@@ -178,7 +183,8 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
       cost: Math.min(tech.manaCost, BATTLE.manaMax) * ONE,
       cooldown,
       cd: mul(cooldown * ONE, BATTLE.initialCooldown),
-      bonus: b.damage + (MELEE.includes(tech.type) ? b.melee : 0) + (RANGED.includes(tech.type) ? b.ranged : 0),
+      bonus: b.damage + (MELEE.includes(tech.type) ? b.melee : 0) + (RANGED.includes(tech.type) ? b.ranged : 0) +
+        (spec.elementDamage?.[tech.element] ?? 0),
       ally: ALLY_SKILLS.includes(tech.type),
       uses: tech.type === "bua_chu" ? R.talismanUses + b.extraTalismans : -1,
     };
@@ -190,7 +196,7 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
   const manaMax = mul(spec.manaMax ?? BATTLE.manaMax, ONE + b.manaMax) * ONE;
   return {
     id: spec.id, team, level: spec.level, element: spec.element,
-    hp, atk: spec.atk, def: mul(spec.def, ONE + b.def), resist: spec.resist ?? {}, boss: spec.boss ?? false, sectId: spec.sectId ?? null, b,
+    hp, atk: mul(spec.atk, ONE + b.atk), def: mul(spec.def, ONE + b.def), resist: spec.resist ?? {}, boss: spec.boss ?? false, sectId: spec.sectId ?? null, b,
     curHp: hp,
     pos: team === 0 ? startA : BATTLE.fieldLength - startA,
     mana: manaMax,
