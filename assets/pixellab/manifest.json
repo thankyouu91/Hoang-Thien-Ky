@@ -6912,45 +6912,18 @@
     },
     {
       "file": "cong_trinh/loi_loi_tri_phong/chinh_dien.png",
-      "description": "Hình nền công trình Chính Điện (chinh_dien) của mô hình tông môn Lôi Trì Phong (loi_loi_tri_phong, hệ Lôi), dùng ở tab Sơn môn và đầu màn Tông môn. Cả bộ 11 hình chung mô tả nền, seed và bảng màu ép 22 màu (tím chạng vạng, đèn vàng ấm) để đồng bộ.",
-      "tool": "create_image_pixflux",
+      "description": "Hình nền công trình Chính Điện (chinh_dien) của mô hình tông môn Lôi Trì Phong (loi_loi_tri_phong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
       "params": {
-        "description": "Pixel art game background, wide landscape scene at dusk. A xianxia cultivation sect called Thunder Pool Peak built on misty mountain cliffs, dark purple storm clouds with thin violet lightning in the sky, layered silhouettes of distant mountains, soft mist between the peaks. Ancient Chinese architecture with curved dark tiled roofs. No people, no text, no UI. Main subject in the center foreground: a grand main hall with a two-tier curved roof, wide stone stairs, red pillars and glowing lanterns, a stone courtyard in front.",
+        "description": "Pixel art game background, wide landscape scene at dusk. A xianxia cultivation sect called Thunder Pool Peak, built on misty mountain cliffs, dark purple storm clouds with thin violet lightning in the sky, layered silhouettes of distant mountains, soft mist between the peaks. No people, no text, no UI. Main subject in the center foreground: the sect's grand main hall with a two-tier curved roof, wide stone stairs and glowing lanterns, a stone courtyard in front.",
         "width": 320,
         "height": 192,
         "no_background": false,
-        "view": "side",
-        "detail": "highly detailed",
-        "shading": "medium shading",
-        "outline": "selective outline",
-        "seed": 7,
-        "forced_palette": [
-          "#0e0b14",
-          "#17121f",
-          "#211a30",
-          "#2e2443",
-          "#3d2f5c",
-          "#55407f",
-          "#7a4fd0",
-          "#a57bff",
-          "#d9c6ff",
-          "#2a2530",
-          "#3b3442",
-          "#544a5a",
-          "#1a1614",
-          "#33281f",
-          "#5a4535",
-          "#8a3b2e",
-          "#c9533c",
-          "#e0913a",
-          "#ffcf7a",
-          "#e8e0f0",
-          "#2f4a3a",
-          "#4f7a52"
-        ]
+        "seed": 7
       },
       "created": "2026-11-03",
-      "pixellab_id": "5f3462e6-f57c-4ca0-a69f-5c40ee86e70b"
+      "pixellab_id": "c37d38af-1266-42b1-8074-e824f9096c22",
+      "api": "REST v2 generate-image-v2"
     },
     {
       "file": "cong_trinh/loi_loi_tri_phong/tang_kinh_cac.png",
@@ -11347,6 +11320,156 @@
       },
       "created": "2026-11-03",
       "pixellab_id": "6c306037-6912-4ab6-845d-a3e771fcc6c8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/ho_son_dai_tran.png",
+      "description": "Hình nền công trình Hộ Sơn Đại Trận (ho_son_dai_tran) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: a huge translucent glowing protective barrier dome covering the sect buildings on the mountain, a ring of glowing rune array circles and hexagon patterns on the ground around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "e12663eb-327f-4437-b454-a7920fb9eb02",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/dien_vo_truong.png",
+      "description": "Hình nền công trình Diễn Võ Trường (dien_vo_truong) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: a large open stone martial arts training plaza, rows of wooden training dummies, weapon racks with spears and swords, tall banners on poles.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "4a36eaf4-1370-4b58-8960-977dd2a22a97",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/tang_kinh_cac.png",
+      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: a tall slender five-storey library pagoda with stacked curved roofs, shelves of scroll books visible through lit windows.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "5fb602fc-cfe2-4677-af3d-052d64407c1b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/luyen_dan_phong.png",
+      "description": "Hình nền công trình Luyện Đan Phòng (luyen_dan_phong) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: an alchemy house beside a big bronze three-legged pill cauldron, fire burning beneath the cauldron, thick fragrant smoke rising into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "27033501-2c91-4cea-8676-8a46de174afe",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/bao_kho.png",
+      "description": "Hình nền công trình Bảo Khố (bao_kho) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: a fortified stone treasury vault built into the rock, a heavy round bronze vault door with glowing runes, wooden treasure chests stacked outside.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "3ca1a834-89b9-4b25-af6d-aedfb44adb3e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/luyen_khi_cac.png",
+      "description": "Hình nền công trình Luyện Khí Các (luyen_khi_cac) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: a blacksmith forge workshop with a tall stone chimney, a glowing furnace, a large anvil outside and bright sparks flying.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "2f760519-ddea-4903-9173-795c7189d99a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/thuong_hoi.png",
+      "description": "Hình nền công trình Thương hội (thuong_hoi) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: a small trading guild market street with wooden stalls under colorful cloth awnings and strings of glowing paper lanterns.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "d4a59249-b7da-4c95-a881-2bfe8ef8a710",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/truyen_tong_tran.png",
+      "description": "Hình nền công trình Truyền Tống Trận (truyen_tong_tran) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: a circular stone teleportation array platform surrounded by tall stone pillars, glowing runes on the floor, a bright beam of light shooting straight up into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "12734c86-4281-4526-9561-5bd5acf164bd",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/linh_duoc_vien.png",
+      "description": "Hình nền công trình Linh Dược Viên (linh_duoc_vien) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: terraced fields of softly glowing spirit herbs on the hillside, a small clear spring pond, a small wooden herb hut.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "1caf071e-f333-4529-a44c-a3dea9ef0c42",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/chung/phi_thang_dai.png",
+      "description": "Hình nền công trình Phi Thăng Đài (phi_thang_dai) dùng chung cho mọi mô hình tông môn ở tab Sơn môn; Chính Điện vẫn riêng từng mô hình (người dùng chốt 2026-11-03). Cả bộ chung một bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a calm misty morning. A xianxia cultivation sect called Cloud Mountain Sect, built on green mountain peaks among pine trees and drifting clouds, buildings of grey stone and dark wood with curved grey tiled roofs, stone stairs and small bridges. No people, no text, no UI. Main subject in the center foreground: a huge man-made ascension altar, a tall stepped stone pyramid platform with long straight stairways and carved stone railings, a small pavilion on its flat top, a pillar of bright light rising from the top into the clouds, glowing rings of light in the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "83dbb9cc-d2eb-4d9d-8aef-4f14f838f09b",
       "api": "REST v2 generate-image-v2"
     }
   ]
