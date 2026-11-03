@@ -73,6 +73,8 @@ export interface World {
   sects: OtherSect[];
   applicants: { id: string; name: string; level: number }[];
   wars: { id: number; with: string; direction: "di" | "den"; startsAt: number }[];
+  /** Yêu Triều (GDD mục 17): yêu thú tràn vào vùng biên trong một khung giờ; maxRing chọn các điểm sát rìa ngoài. */
+  tides: { title: string; startsAt: number; endsAt: number; maxRing: number }[];
   jobs: Job[];
   buildings: Building[];
   travel: { from: number; to: number; startsAt: number; endsAt: number };
@@ -265,6 +267,8 @@ export function createWorld(region: RegionMap, now: number): World {
       { id: "a2", name: "Thạch Đầu", level: 9 },
     ],
     wars: [{ id: 1, with: "Thanh Phong Các", direction: "den", startsAt: todayAt(now, 21) }],
+    // Đang có một đợt Yêu Triều để thấy nhấp nháy đỏ trên bản đồ (bản mẫu; mùa Yêu Triều là đề xuất ở GDD mục 17).
+    tides: [{ title: "Yêu Triều tràn vào rìa Lôi Đình Cốc", startsAt: now - 15 * MIN, endsAt: now + 45 * MIN, maxRing: 0.15 }],
     jobs: [
       { kind: "xay", title: "Tàng Kinh Các lên cấp 6", detail: "Hàng xây ở sơn môn", startsAt: now - 2 * H, endsAt: now + 1 * H + 25 * MIN },
       { kind: "ren", title: "Kiếm Tử Điện +8 → +9", detail: "Lò rèn thành chủ", startsAt: now - 20 * MIN, endsAt: now + 6 * MIN },

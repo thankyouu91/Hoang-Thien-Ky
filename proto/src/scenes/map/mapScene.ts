@@ -65,6 +65,8 @@ interface Cand {
   t: number;
   /** Điểm động: hiện bất kể z. */
   dyn: boolean;
+  /** Điểm của sự kiện đang diễn ra (chiến tranh, Yêu Triều): nhấp nháy đỏ. */
+  alert?: { title: string; endsAt: number };
 }
 
 export class MapScene implements Scene {
@@ -309,6 +311,7 @@ export class MapScene implements Scene {
     const revealed = new Set(d.map.revealed);
     const gates = new Set(d.map.openGates);
     const hereId = this.hereId(d);
+    const alerts = new Map(d.map.alerts.flatMap((a) => a.points.map((id) => [id, { title: a.title, endsAt: a.endsAt }] as const)));
     const hidden = (p: RegionPoint) => this.hidden.has(p.type) || (p.type === "cua_bi_canh" && !!p.tier && this.hidden.has(`cua_bi_canh:${p.tier}`));
     const out: Cand[] = [];
     for (const r of w.regions) {
@@ -322,13 +325,15 @@ export class MapScene implements Scene {
         continue;
       }
       for (const p of m.points) {
-        if (home && this.prefs.fog && !revealed.has(p.id) && p.type !== "thanh_chu") continue;
+        // Điểm của sự kiện đang diễn ra hiện cả trong sương (sự kiện được báo cho cả vùng).
+        const alert = home ? alerts.get(p.id) : undefined;
+        if (home && this.prefs.fog && !revealed.has(p.id) && p.type !== "thanh_chu" && !alert) continue;
         const own = home ? d.owners[p.id] : undefined;
         const mine = home && p.id === d.map.sonMon;
-        // Sơn môn của mình, điểm đang bị đánh và chỗ mình đứng không bị lọc mất.
-        if (hidden(p) && !mine && !own?.attacked && !(home && p.id === hereId)) continue;
+        // Sơn môn của mình, điểm đang bị đánh, điểm của sự kiện và chỗ mình đứng không bị lọc mất.
+        if (hidden(p) && !mine && !own?.attacked && !alert && !(home && p.id === hereId)) continue;
         const name = p.type === "son_mon" && own ? own.name : (p.name ?? POINT_NAMES[p.type]);
-        out.push(this.cand(w, r, p, p.type, name, p.x, p.y, { own, gate: home && gates.has(p.id), mine, here: home && p.id === hereId, z: zt?.z[p.id], t: zt?.t[p.id] }));
+        out.push(this.cand(w, r, p, p.type, name, p.x, p.y, { own, gate: home && gates.has(p.id), mine, here: home && p.id === hereId, alert, z: zt?.z[p.id], t: zt?.t[p.id] }));
       }
     }
     out.sort((a, b) => a.prio - b.prio || a.order - b.order);
@@ -337,18 +342,18 @@ export class MapScene implements Scene {
 
   private cand(
     w: WorldMap, r: WorldRegion, p: RegionPoint | undefined, type: PointType, name: string, x: number, y: number,
-    o: { own?: PointOwner; gate?: boolean; mine?: boolean; here?: boolean; z?: number | null; t?: number | null } = {},
+    o: { own?: PointOwner; gate?: boolean; mine?: boolean; here?: boolean; alert?: Cand["alert"]; z?: number | null; t?: number | null } = {},
   ): Cand {
     const { own, gate = false, mine = false } = o;
     const prio =
-      type === "thanh_chu" || mine ? 0 : own || gate || type === "cua_bi_canh" ? 1 : type === "deo" || type === "ben_do" || type === "linh_tuyen" ? 2 : 3;
+      type === "thanh_chu" || mine ? 0 : own || gate || o.alert || type === "cua_bi_canh" ? 1 : type === "deo" || type === "ben_do" || type === "linh_tuyen" ? 2 : 3;
     const color = type === "cua_bi_canh" && p?.tier ? w.tiers[p.tier].color : w.types[type].color;
-    const order = (own?.attacked ? 0 : 1) * 1e7 + TYPE_ORDER.indexOf(type) * 1e5 + (p?.id ?? 0);
-    const dyn = mine || !!own || gate || !!o.here;
+    const order = (own?.attacked || o.alert ? 0 : 1) * 1e7 + TYPE_ORDER.indexOf(type) * 1e5 + (p?.id ?? 0);
+    const dyn = mine || !!own || gate || !!o.here || !!o.alert;
     // Mỏ của mình hay đang bị đánh vẽ thành ô nút cho dễ thấy, mỏ khác là chấm.
     const form = dyn ? "nut" : (this.labels?.forms[type] ?? "nut");
     const z = o.z ?? Infinity;
-    return { region: r, p, type, name, x, y, prio, order, color, big: type === "thanh_chu" || mine, own, gate, form, z, t: o.t ?? z, dyn };
+    return { region: r, p, type, name, x, y, prio, order, color, big: type === "thanh_chu" || mine, own, gate, form, z, t: o.t ?? z, dyn, alert: o.alert };
   }
 
   /** Điểm mình đứng; đang trên đường thì điểm đang đi tới. */
@@ -510,17 +515,24 @@ export class MapScene implements Scene {
     const pad = NODE_BIG;
     const placed: typeof this.placed = [];
     const labels: { text: string; x: number; y: number; big: boolean; px: number }[] = [];
-    /** Hộp tên dưới ô; take = false thì chỉ thử. */
+    /** Hộp tên dưới ô (điểm động và thành chủ thử thêm phía trên nếu dưới đã kín); take = false thì chỉ thử. */
     const label = (c: Cand, x: number, y: number, size: number, take = true) => {
       const px = c.form === "cham" ? B.dotFont : c.big ? 12 : B.font;
       ctx.font = `${c.big ? 700 : 600} ${px}px ${FONT}`;
       const tw = ctx.measureText(c.name).width;
-      const top = y + size / 2 + B.below;
-      const box = [x - tw / 2 - 2, top, x + tw / 2 + 2, top + B.line] as const;
-      if (!take) return placer.fits(...box);
-      if (!placer.take(...box)) return false;
-      labels.push({ text: c.name, x, y: top, big: c.big, px });
-      return true;
+      const tops = [y + size / 2 + B.below];
+      if (c.dyn || c.big) tops.push(y - size / 2 - B.below - B.line);
+      for (const top of tops) {
+        const box = [x - tw / 2 - 2, top, x + tw / 2 + 2, top + B.line] as const;
+        if (!take) {
+          if (placer.fits(...box)) return true;
+          continue;
+        }
+        if (!placer.take(...box)) continue;
+        labels.push({ text: c.name, x, y: top, big: c.big, px });
+        return true;
+      }
+      return false;
     };
     // Bậc xếp chỗ: 0 thành chủ và sơn môn mình, 1 điểm động, 2 điểm khác (theo z/t tính sẵn). Dấu của mình (ghim và tên
     // phía trên) giữ chỗ ngay sau bậc 0, nên điểm động và điểm khác né tên mình, còn thành chủ không bị ghim che mất.
@@ -598,9 +610,9 @@ export class MapScene implements Scene {
       }
       const img = this.sprites.get(c.color, c.region.element, size, v.dpr);
       ctx.drawImage(img, x - size / 2, y - size / 2, img.width / v.dpr, img.height / v.dpr);
-      if (c.gate || c.own?.attacked) {
+      if (c.gate || c.own?.attacked || c.alert) {
         ctx.lineWidth = 2;
-        ctx.strokeStyle = c.own?.attacked ? (blink ? "#ff5a4f" : "rgba(255, 90, 79, 0.35)") : `rgba(134, 220, 200, ${0.55 + 0.45 * Math.sin(this.t * 4)})`;
+        ctx.strokeStyle = c.own?.attacked || c.alert ? (blink ? "#ff5a4f" : "rgba(255, 90, 79, 0.35)") : `rgba(134, 220, 200, ${0.55 + 0.45 * Math.sin(this.t * 4)})`;
         ctx.strokeRect(x - size / 2 - 3, y - size / 2 - 3, size + 6, size + 6);
       }
       if (c.own) {
@@ -673,7 +685,7 @@ export class MapScene implements Scene {
     }
     const w = this.world!;
     const kind = c.type === "cua_bi_canh" && c.p?.tier ? w.tiers[c.p.tier].label : w.types[c.type].label;
-    this.tip.innerHTML = `<b>${esc(c.name)}</b><span>${kind} · ${esc(c.region.name)}</span>${c.p ? `<span>Cấp nguy hiểm ${c.p.danger}</span>` : ""}${c.own && c.type !== "son_mon" ? `<span>Chủ: ${esc(c.own.name)}</span>` : ""}`;
+    this.tip.innerHTML = `<b>${esc(c.name)}</b><span>${kind} · ${esc(c.region.name)}</span>${c.p ? `<span>Cấp nguy hiểm ${c.p.danger}</span>` : ""}${c.own && c.type !== "son_mon" ? `<span>Chủ: ${esc(c.own.name)}</span>` : ""}${c.alert ? `<span class="bad">${esc(c.alert.title)}</span>` : ""}`;
     this.tip.hidden = false;
     const r = this.tip.getBoundingClientRect();
     this.tip.style.left = `${Math.min(cx + 14, window.innerWidth - r.width - 8)}px`;
@@ -712,6 +724,7 @@ export class MapScene implements Scene {
     if (p.tier) rows.push(["Bậc cửa", w.tiers[p.tier].label]);
     if (p.terrain) rows.push(["Địa thế", w.terrains[p.terrain] ?? p.terrain]);
     if (own?.attacked) rows.push(["Đang bị đánh", `${esc(own.attacked.by)}, còn ${cd(own.attacked.endsAt)}`]);
+    if (c.alert) rows.push(["Sự kiện", `${esc(c.alert.title)}, còn ${cd(c.alert.endsAt)}`]);
     if (!lit) rows.push(["Sương mù", "Chưa mở, chỉ thấy vị trí"]);
     const inRange = home && d.inRange.includes(p.id);
     const canTake = home && d.can.chiem && HOLDABLE.includes(p.type) && own?.owner !== "minh" && own?.owner !== "dong_minh";

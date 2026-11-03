@@ -211,7 +211,21 @@ export class MockDashboardSource implements DashboardSource {
     const t = w.travel;
     const progress = Math.max(0, Math.min(1, (now - t.startsAt) / (t.endsAt - t.startsAt)));
     const openGates = this.calendarOpen(now) ? w.region.points.filter((p) => p.type === "cua_bi_canh" && revealed.has(p.id)).map((p) => p.id) : [];
-    return { region: REGION, marks, sonMon: w.sonMon, self: { from: t.from, to: t.to, progress }, openGates, revealed: [...revealed], focus };
+    // Sự kiện đang diễn ra: chiến tranh 21:00–22:00 (điểm của mình và của tông địch), Yêu Triều (hang dị thú sát rìa ngoài).
+    const alerts: MiniMapView["alerts"] = [];
+    for (const war of w.wars) {
+      if (now < war.startsAt || now >= war.startsAt + H) continue;
+      const foe = w.sects.find((s) => s.name === war.with);
+      alerts.push({
+        kind: "chien_tranh", title: `Chiến tranh với ${war.with}`, endsAt: war.startsAt + H,
+        points: [w.sonMon, ...w.held.map((h) => h.pointId), ...(foe ? [foe.sonMon, ...foe.points] : [])],
+      });
+    }
+    for (const tide of w.tides) {
+      if (now < tide.startsAt || now >= tide.endsAt) continue;
+      alerts.push({ kind: "yeu_trieu", title: tide.title, endsAt: tide.endsAt, points: w.region.points.filter((p) => p.type === "hang_di_thu" && p.ring < tide.maxRing).map((p) => p.id) });
+    }
+    return { region: REGION, marks, sonMon: w.sonMon, self: { from: t.from, to: t.to, progress }, openGates, revealed: [...revealed], focus, alerts };
   }
 
   /** Bí cảnh mở 12:00 và 20:00, mỗi lần 30 phút (sheet Tham số: opensPerDay, openMinutes). */

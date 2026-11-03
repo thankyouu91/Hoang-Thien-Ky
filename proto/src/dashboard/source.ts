@@ -52,6 +52,12 @@ export interface MiniMapView {
   revealed: number[];
   /** Thu khung về lãnh thổ: tông môn hoặc liên minh; không có thì cả vùng. */
   focus?: number[];
+  /**
+   * Sự kiện đang diễn ra trên vùng: điểm của nó nhấp nháy đỏ trên bản đồ mini và bản đồ tranh, khung mini viền đỏ nhấp
+   * nháy; hết giờ thì không còn trong danh sách. Chiến tranh địa bàn (GDD mục 10): điểm của mình và của tông địch.
+   * Yêu Triều (GDD mục 17): yêu thú tràn từ Hư Không Hải vào vùng biên, các hang dị thú sát rìa ngoài.
+   */
+  alerts: { kind: "chien_tranh" | "yeu_trieu"; title: string; endsAt: number; points: number[] }[];
 }
 
 /** Một việc đang chạy, kèm mốc kết thúc theo giờ server. */

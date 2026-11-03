@@ -1,6 +1,7 @@
 // Bản đồ mini (GDD mục 14): cảnh vùng thu nhỏ làm nền (data/maps/ha_mini/<vùng>.webp, rừng, đồng cỏ, sa mạc và viền vùng
 // nét mực đã vẽ sẵn), sương mù giấy nhạt để vẫn thấy cảnh, và ít chấm có viền mực: vị trí của mình, sơn môn của mình,
 // thành chủ, điểm có chủ, điểm đang bị đánh (nhấp nháy), cửa bí cảnh đang mở; khung đỏ mảnh là phần bản đồ tranh đang xem.
+// Đang có chiến tranh hay Yêu Triều thì điểm của sự kiện nhấp nháy đỏ và viền khung mini nhấp nháy đỏ.
 import { loadRegion, miniUrl, type RegionMap } from "../scenes/map/region.ts";
 import type { MiniMapView, Owner } from "./source.ts";
 
@@ -90,7 +91,7 @@ export class MiniMap {
     this.stop();
     this.timer = window.setInterval(() => {
       this.blink = !this.blink;
-      if (this.data?.marks.some((m) => m.attacked)) this.draw();
+      if (this.data?.marks.some((m) => m.attacked) || this.data?.alerts.length) this.draw();
     }, 500);
   }
 
@@ -185,6 +186,17 @@ export class MiniMap {
         ctx.strokeStyle = DOT_EDGE;
       }
     }
+    // Điểm của sự kiện đang diễn ra (chiến tranh, Yêu Triều): chấm đỏ nhấp nháy có vòng.
+    for (const id of new Set(d.alerts.flatMap((a) => a.points))) {
+      const p = m.points[id];
+      ctx.beginPath();
+      ctx.arc(X(p.x), Y(p.y), this.blink ? 3 : 2.2, 0, Math.PI * 2);
+      ctx.fillStyle = this.blink ? ATTACKED : "rgba(217, 45, 32, 0.45)";
+      ctx.fill();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = DOT_EDGE;
+      ctx.stroke();
+    }
     // Cửa bí cảnh đang mở
     for (const id of d.openGates) {
       const p = m.points[id];
@@ -224,6 +236,12 @@ export class MiniMap {
     ctx.strokeStyle = INK;
     ctx.stroke();
 
+    // Có sự kiện: viền khung đỏ nhấp nháy để nhìn từ dashboard là biết.
+    if (d.alerts.length && this.blink) {
+      ctx.strokeStyle = ATTACKED;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(1, 1, w - 2, h - 2);
+    }
     // Phần bản đồ tranh đang xem: nét đỏ mảnh.
     const v = this.viewport;
     if (v) {
