@@ -39,4 +39,8 @@ export const GEAR = {
   maxLines: 5,
   /** Ngọc khảm trùng hệ linh căn hiệu quả +20%. */
   rootGemBonus: 1200,
+  /** Mỗi vũ khí khảm 1 viên Ý châu (tab Trang bị, phần 5). */
+  maxYChau: 1,
+  /** Hồi phục tốn mana gấp 3 (GDD mục 8); hệ số mana của Cầm Ý (×2,7) tính trên mức này. */
+  healManaTimes: 3000,
 };

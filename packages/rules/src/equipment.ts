@@ -4,8 +4,11 @@
 // Ngọc: ô "công" cộng sát thương cho công pháp cùng hệ chủ, ô "thủ" cộng kháng hệ; trùng linh căn ×1,2.
 // Set: ấn bộ khảm ở một dòng; đủ 2/4/7 món cùng ấn (còn độ bền) thì mở mốc. Bước này áp hiệu ứng loại chi_so;
 // các loại khác (kinh tế, hành vi, khắc chế, hộ trận) chỉ được liệt kê trong `sets` để các bước sau dùng.
-// Ý châu chiếm dòng khảm nhưng tính ở bước Ý châu.
-import { baseStats, mul, ONE, BATTLE, ELEMENTS, type Element, type BuffStat, type UnitSpec } from "@ktlp/sim";
+// Ý châu: chỉ khảm vũ khí, mỗi vũ khí 1 viên; đổi hành vi một loại chiêu cho mọi công pháp loại đó (sim: UnitSpec.skillMods).
+import {
+  baseStats, mul, ONE, BATTLE, ELEMENTS,
+  type Element, type BuffStat, type UnitSpec, type SkillType, type SkillMod, type TargetPick,
+} from "@ktlp/sim";
 import TRANG_BI from "../../../data/he_thong/json/trang_bi.json" with { type: "json" };
 import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
 import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
@@ -49,6 +52,8 @@ export interface GearStats {
   sets: ActiveSet[];
   /** Chỉ số từ set không dùng trong trận (thú cưỡi, pháp bảo, đan dược), phần nghìn, theo khóa trong set.json. */
   outside: Record<string, number>;
+  /** Hành vi theo loại chiêu từ Ý châu trên vũ khí. */
+  skillMods: Partial<Record<SkillType, SkillMod>>;
 }
 
 interface SlotRow { id: string; chinh: { stat: string; gia_tri: number }; phu: { stat: string; gia_tri: number }; ngoc: string }
@@ -62,6 +67,13 @@ for (const r of TRANG_BI.do_hiem as RarityRow[]) RARITIES[r.id] = r;
 const KIEU: Record<string, KieuRow> = {};
 for (const k of TRANG_BI.kieu as KieuRow[]) KIEU[k.ma_vp] = k;
 const GEM_VALUE: number[] = (NGOC.cap as { gia_tri: number }[]).map((c) => c.gia_tri);
+interface YChauRow { ma_vp: string; loai_chieu: string; chi_kham_vao: string; tham_so: Record<string, number | string> }
+const Y_CHAU: Record<string, YChauRow> = {};
+for (const y of NGOC.y_chau as unknown as YChauRow[]) Y_CHAU[y.ma_vp] = y;
+/** Cách chọn mục tiêu trong ngoc.json → trong sim. */
+const PICKS: Record<string, TargetPick> = {
+  bi_nham_nhieu_nhat: "most_targeted", mau_thap_nhat: "lowest_hp", dang_van_cong: "channeling", hang_sau_mau_thap_nhat: "back_row_lowest_hp",
+};
 interface SetRow { id: string; an: string; moc: SetEffect[] }
 const SETS: Record<string, SetRow> = {};
 const SEAL_SET: Record<string, string> = {}; // mã ấn → id bộ
@@ -118,14 +130,50 @@ function validate(item: EquipItem): void {
   if (!extraOk) throw new Error(`${item.kieu}: dòng khảm thêm ${item.dongThem} sai`);
   if (item.kham.length > maxInlayLines(item)) throw new Error(`${item.kieu}: quá số dòng khảm`);
   let seals = 0;
+  let yChau = 0;
   for (const line of item.kham) {
     if (line && line.loai === "ngoc" && (line.cap < 1 || line.cap > GEM_VALUE.length)) throw new Error(`${item.kieu}: ngọc cấp ${line.cap} sai`);
     if (line && line.loai === "an") {
       if (!has(SEAL_SET, line.ma)) throw new Error(`${item.kieu}: không có ấn bộ ${line.ma}`);
       seals++;
     }
+    if (line && line.loai === "y_chau") {
+      if (!has(Y_CHAU, line.ma)) throw new Error(`${item.kieu}: không có Ý châu ${line.ma}`);
+      if (Y_CHAU[line.ma].chi_kham_vao !== kieuInfo(item.kieu).o) throw new Error(`${item.kieu}: ${line.ma} chỉ khảm vào ${Y_CHAU[line.ma].chi_kham_vao}`);
+      yChau++;
+    }
   }
   if (seals > 1) throw new Error(`${item.kieu}: mỗi món giữ tối đa 1 ấn bộ`);
+  if (yChau > GEAR.maxYChau) throw new Error(`${item.kieu}: mỗi vũ khí khảm tối đa ${GEAR.maxYChau} Ý châu`);
+}
+
+/** Đổi tham_so của một Ý châu trong ngoc.json thành cách chỉnh loại chiêu của sim. */
+export function yChauMod(ma: string): { loai: SkillType; mod: SkillMod } {
+  if (!has(Y_CHAU, ma)) throw new Error(`Không có Ý châu ${ma}`);
+  const y = Y_CHAU[ma];
+  const loai = y.loai_chieu as SkillType;
+  const mod: SkillMod = {};
+  for (const key of Object.keys(y.tham_so)) {
+    const v = y.tham_so[key];
+    const num = (): number => {
+      if (typeof v !== "number") throw new Error(`${ma}: ${key} phải là số`);
+      return v;
+    };
+    if (key === "xuyenKhien") mod.shieldPierce = num();
+    else if (key === "themMucTieu") mod.extraTargets = num();
+    else if (key === "heSoMucTieuThem") mod.extraTargetDamage = num();
+    else if (key === "tamMilliO") mod.rangeBonus = num();
+    else if (key === "vanCongTicks" || key === "bayTranTicks") mod.castTicks = num();
+    else if (key === "soLan") mod.pickUses = num();
+    else if (key === "heSoMana") {
+      if (loai !== "hoi_phuc") throw new Error(`${ma}: heSoMana chỉ dùng cho hồi phục`);
+      mod.manaCost = Math.trunc((num() * ONE) / GEAR.healManaTimes);
+    } else if (key === "chonMucTieu") {
+      if (typeof v !== "string" || !has(PICKS, v)) throw new Error(`${ma}: chưa biết cách chọn mục tiêu ${v}`);
+      mod.pick = PICKS[v];
+    } else throw new Error(`${ma}: chưa biết áp ${key}`);
+  }
+  return { loai, mod };
 }
 
 /** Hệ số nhân của một món theo phần nghìn: độ hiếm × (1 + 3% mỗi nấc) × (1 + thưởng bí cảnh). */
@@ -142,7 +190,7 @@ function statAmount(stat: string, giaTri: number, factor: number, level: number)
 
 /** Cộng chỉ số chính, phụ và ngọc của các món đang mặc (mỗi ô tối đa một món). */
 export function gearStats(items: EquipItem[], level: number, roots: Element[]): GearStats {
-  const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {} };
+  const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {} };
   const used: string[] = [];
   const pieces: Record<string, number> = {}; // id bộ → số món còn độ bền mang ấn bộ đó
   for (const item of items) {
@@ -160,6 +208,10 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[]): 
     }
     for (const line of item.kham) {
       if (line && line.loai === "an") pieces[SEAL_SET[line.ma]] = (pieces[SEAL_SET[line.ma]] ?? 0) + 1;
+      if (line && line.loai === "y_chau") {
+        const y = yChauMod(line.ma);
+        out.skillMods[y.loai] = y.mod;
+      }
       if (!line || line.loai !== "ngoc") continue;
       let v = GEM_VALUE[line.cap - 1];
       if (roots.indexOf(line.he) >= 0) v = mul(v, GEAR.rootGemBonus);
@@ -208,5 +260,6 @@ export function withGear(spec: UnitSpec, items: EquipItem[]): UnitSpec {
     def: spec.def + g.def,
     manaMax: (spec.manaMax ?? BATTLE.manaMax) + g.manaMax,
     bonuses, resist, elementDamage,
+    skillMods: { ...spec.skillMods, ...g.skillMods },
   };
 }

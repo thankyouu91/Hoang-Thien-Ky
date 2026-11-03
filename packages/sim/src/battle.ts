@@ -3,7 +3,9 @@ import { mul, clamp, ONE } from "./fixed.ts";
 import { Rng } from "./rng.ts";
 import { Hasher } from "./hash.ts";
 import { elementMultiplier, type Element } from "./elements.ts";
-import { BATTLE, SKILL_SPECS, ALLY_SKILLS, SKILL_RULES as R, CAST_FLOOR, RESIST_CAP, type SkillType, type Talent, type BuffStat } from "./config.ts";
+import {
+  BATTLE, SKILL_SPECS, ALLY_SKILLS, SKILL_RULES as R, CAST_FLOOR, RESIST_CAP, MAX_RANGE_BONUS, type SkillType, type Talent, type BuffStat,
+} from "./config.ts";
 import { techniqueFx, type Technique, type TechniqueFx } from "./technique.ts";
 import { unitBonuses, type UnitBonuses } from "./stats.ts";
 
@@ -14,6 +16,21 @@ const NEVER = -1_000_000; // mốc tick "chưa từng xảy ra"
 const MELEE: SkillType[] = ["can_don", "can_quet", "ho_the"]; // Tu thể +10%
 const CLOSE_RANGE: SkillType[] = ["can_don", "can_quet", "ho_the", "than_phap"]; // đánh sát người: không đẩy lùi
 const RANGED: SkillType[] = ["tam_xa", "dien_rong"]; // Tu pháp +15%
+
+/** Cách chọn mục tiêu thay cho mặc định của loại chiêu. "Máu thấp nhất" là % máu, hòa thì máu còn ít hơn, rồi id. */
+export type TargetPick = "most_targeted" | "lowest_hp" | "channeling" | "back_row_lowest_hp";
+
+/** Ý châu: đổi hành vi một loại chiêu, áp cho mọi công pháp loại đó người cầm mang (tab Trang bị, phần 5). */
+export interface SkillMod {
+  shieldPierce?: number; // phần nghìn sát thương đi thẳng vào máu, bỏ qua khiên
+  extraTargets?: number; // thêm mục tiêu; các mục tiêu thêm nhận `extraTargetDamage`
+  extraTargetDamage?: number; // phần nghìn
+  rangeBonus?: number; // milli-ô, chung trần MAX_RANGE_BONUS với tầm của hệ
+  castTicks?: number; // cộng tick vận công hoặc bày trận (âm là nhanh hơn), sau phần cắt % của tài năng, không dưới CAST_FLOOR
+  manaCost?: number; // phần nghìn mana của chiêu
+  pick?: TargetPick;
+  pickUses?: number; // số lần ra chiêu đầu mỗi trận dùng `pick`; không ghi là mọi lần
+}
 
 export interface UnitSpec {
   id: number; // duy nhất trong trận, quyết định thứ tự cập nhật
@@ -35,6 +52,8 @@ export interface UnitSpec {
   bonuses?: Partial<Record<BuffStat, number>>;
   /** Sát thương cộng thêm cho công pháp có hệ chủ là hệ đó (ngọc ở ô công), phần nghìn. */
   elementDamage?: Partial<Record<Element, number>>;
+  /** Đổi hành vi theo loại chiêu (Ý châu trên vũ khí). */
+  skillMods?: Partial<Record<SkillType, SkillMod>>;
 }
 export interface BattleInput {
   seed: number;
@@ -70,6 +89,9 @@ interface Slot {
   bonus: number; // sát thương cộng thêm của công pháp này (Hỏa, Tu thể, Tu pháp)
   ally: boolean;
   uses: number; // số lần còn dùng trong trận, -1 = không giới hạn
+  maxTargets: number; // số mục tiêu của loại chiêu cộng mục tiêu thêm của Ý châu
+  mod: SkillMod;
+  pickLeft: number; // số lần còn dùng `mod.pick`, -1 = mọi lần
 }
 /** Chiêu đang vận công (diện rộng) hoặc đang bày (trận pháp). */
 interface Channel {
@@ -91,6 +113,7 @@ export interface Unit {
   resist: Partial<Record<Element, number>>;
   boss: boolean;
   monster: boolean;
+  row: 0 | 1;
   sectId: string | null;
   b: UnitBonuses;
   curHp: number;
@@ -180,19 +203,24 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
     const fx = techniqueFx(tech);
     if (fx.paralyze) fx.paralyze += b.paralyzeTicks;
     if (fx.armorPen) fx.armorPen += b.armorPen;
+    const mod = spec.skillMods?.[tech.type] ?? {};
     return {
       tech,
       fx,
-      range: s.range + tech.rangeBonus,
+      // Cung Ý không cộng dồn với tầm của hệ: mỗi công pháp tối đa +1 ô.
+      range: s.range + Math.min(MAX_RANGE_BONUS, tech.rangeBonus + (mod.rangeBonus ?? 0)),
       radius: s.radius,
       // Không công pháp nào tốn hơn mana tối đa chuẩn, để ghép đối cực (mana ×1,5) không tạo chiêu không bao giờ ra được (đề xuất).
-      cost: Math.min(tech.manaCost, BATTLE.manaMax) * ONE,
+      cost: mul(Math.min(tech.manaCost, BATTLE.manaMax), mod.manaCost ?? ONE) * ONE,
       cooldown,
       cd: mul(cooldown * ONE, BATTLE.initialCooldown),
       bonus: b.damage + (MELEE.includes(tech.type) ? b.melee : 0) + (RANGED.includes(tech.type) ? b.ranged : 0) +
         (spec.elementDamage?.[tech.element] ?? 0),
       ally: ALLY_SKILLS.includes(tech.type),
       uses: tech.type === "bua_chu" ? R.talismanUses + b.extraTalismans : -1,
+      maxTargets: tech.targets + (mod.extraTargets ?? 0),
+      mod,
+      pickLeft: mod.pick ? mod.pickUses ?? -1 : 0,
     };
   });
   const firstAttack = slots.find((s) => !s.ally);
@@ -203,7 +231,7 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
   return {
     id: spec.id, team, level: spec.level, element: spec.element,
     hp, atk: mul(spec.atk, ONE + b.atk), def: mul(spec.def, ONE + b.def), resist: spec.resist ?? {}, boss: spec.boss ?? false,
-    monster: spec.monster ?? false, sectId: spec.sectId ?? null, b,
+    monster: spec.monster ?? false, row: spec.row, sectId: spec.sectId ?? null, b,
     curHp: hp,
     pos: team === 0 ? startA : BATTLE.fieldLength - startA,
     mana: manaMax,
@@ -316,14 +344,17 @@ export class Battle {
       if (!s.ally && dist > s.range) continue;
       const type = s.tech.type;
       let targets: Unit[] = [];
+      const pick = s.pickLeft !== 0 ? s.mod.pick : undefined;
+      // Hồi phục mặc định đã chọn % máu thấp nhất, nên `lowest_hp` của Cầm Ý không đổi gì.
       if (type === "hoi_phuc") targets = this.pickAllies(u, s);
-      else if (type === "ho_the") targets = this.pickGuarded(u, s, foe);
-      else if (s.radius === 0) targets = this.pickEnemies(u, s, u.pos, s.range);
+      else if (type === "ho_the") targets = this.pickGuarded(u, s, foe, pick);
+      else if (s.radius === 0) targets = this.pickEnemies(u, s, u.pos, s.range, pick);
       if (targets.length === 0 && s.radius === 0) continue;
 
       u.mana -= s.cost;
       s.cd = s.cooldown * ONE;
       if (s.uses > 0) s.uses--;
+      if (pick && s.pickLeft > 0) s.pickLeft--;
       if (s.fx.selfShield && this.tick >= u.selfShieldNext) {
         this.addShield(u, u, mul(u.hp, s.fx.selfShield));
         u.selfShieldNext = this.tick + R.selfShieldCooldownTicks;
@@ -335,8 +366,8 @@ export class Battle {
           slot: i,
           startTick: this.tick,
           resolveTick: this.tick + (formation
-            ? Math.max(CAST_FLOOR.formationTicks, mul(R.formationCastTicks, ONE - u.b.formationCut) + u.b.formationTicks)
-            : Math.max(CAST_FLOOR.channelTicks, R.aoeCastTicks + u.b.channelTicks)),
+            ? Math.max(CAST_FLOOR.formationTicks, mul(R.formationCastTicks, ONE - u.b.formationCut) + u.b.formationTicks + (s.mod.castTicks ?? 0))
+            : Math.max(CAST_FLOOR.channelTicks, R.aoeCastTicks + u.b.channelTicks + (s.mod.castTicks ?? 0))),
           center: foe.pos,
           ult: this.takeUlt(u),
           interruptible: !formation || R.formationInterruptible,
@@ -395,20 +426,36 @@ export class Battle {
     return best;
   }
 
-  /** Địch trong khoảng `reach` quanh `center`: chiêu đơn ưu tiên kẻ đang lộ vị trí, rồi gần nhất → máu thấp → id. */
-  private pickEnemies(u: Unit, s: Slot, center: number, reach: number): Unit[] {
+  /**
+   * Địch trong khoảng `reach` quanh `center`: chiêu đơn ưu tiên kẻ đang lộ vị trí, rồi gần nhất → máu thấp → id.
+   * `pick` của Ý châu thay thứ tự: % máu thấp nhất, kẻ đang vận công trước, hoặc hàng sau % máu thấp nhất (không có ai hàng sau thì như mặc định).
+   */
+  private pickEnemies(u: Unit, s: Slot, center: number, reach: number, pick?: TargetPick): Unit[] {
     const tick = this.tick;
-    const list: Unit[] = [];
+    let list: Unit[] = [];
     for (const e of this.teams[1 - u.team]) {
       if (e.curHp > 0 && tick >= e.stealthUntil && Math.abs(e.pos - center) <= reach) list.push(e);
     }
+    let byHp = pick === "lowest_hp";
+    if (pick === "back_row_lowest_hp") {
+      const back = list.filter((e) => e.row === 1);
+      if (back.length > 0) {
+        list = back;
+        byHp = true;
+      }
+    }
     const exposedFirst = s.radius === 0;
-    list.sort(
-      (a, b) =>
-        (exposedFirst ? (b.exposedUntil > tick ? 1 : 0) - (a.exposedUntil > tick ? 1 : 0) : 0) ||
-        Math.abs(a.pos - center) - Math.abs(b.pos - center) || a.curHp - b.curHp || a.id - b.id,
-    );
-    if (list.length > s.tech.targets) list.length = s.tech.targets;
+    const channelFirst = pick === "channeling";
+    if (byHp) list.sort((a, b) => a.curHp * b.hp - b.curHp * a.hp || a.curHp - b.curHp || a.id - b.id);
+    else {
+      list.sort(
+        (a, b) =>
+          (channelFirst ? (b.channel ? 1 : 0) - (a.channel ? 1 : 0) : 0) ||
+          (exposedFirst ? (b.exposedUntil > tick ? 1 : 0) - (a.exposedUntil > tick ? 1 : 0) : 0) ||
+          Math.abs(a.pos - center) - Math.abs(b.pos - center) || a.curHp - b.curHp || a.id - b.id,
+      );
+    }
+    if (list.length > s.maxTargets) list.length = s.maxTargets;
     return list;
   }
 
@@ -423,14 +470,29 @@ export class Battle {
     return list;
   }
 
-  /** Hộ thể che các đồng minh (kể cả bản thân) đứng gần địch nhất, rồi % máu thấp nhất. */
-  private pickGuarded(u: Unit, s: Slot, foe: Unit): Unit[] {
+  /**
+   * Hộ thể che các đồng minh (kể cả bản thân) đứng gần địch nhất, rồi % máu thấp nhất.
+   * Côn Ý (`most_targeted`): trước hết là đồng minh bị nhiều địch nhắm nhất, tính là địch gần nhất của từng kẻ địch.
+   */
+  private pickGuarded(u: Unit, s: Slot, foe: Unit, pick?: TargetPick): Unit[] {
     const list: Unit[] = [];
     for (const a of this.teams[u.team]) {
       if (a.curHp > 0 && Math.abs(a.pos - u.pos) <= s.range) list.push(a);
     }
-    list.sort((a, b) => Math.abs(a.pos - foe.pos) - Math.abs(b.pos - foe.pos) || a.curHp * b.hp - b.curHp * a.hp || a.id - b.id);
-    if (list.length > s.tech.targets) list.length = s.tech.targets;
+    const aimed: Record<number, number> = {};
+    if (pick === "most_targeted") {
+      for (const e of this.teams[1 - u.team]) {
+        if (e.curHp <= 0) continue;
+        const t = this.nearestEnemy(e);
+        if (t) aimed[t.id] = (aimed[t.id] ?? 0) + 1;
+      }
+    }
+    list.sort(
+      (a, b) =>
+        (aimed[b.id] ?? 0) - (aimed[a.id] ?? 0) ||
+        Math.abs(a.pos - foe.pos) - Math.abs(b.pos - foe.pos) || a.curHp * b.hp - b.curHp * a.hp || a.id - b.id,
+    );
+    if (list.length > s.maxTargets) list.length = s.maxTargets;
     return list;
   }
 
@@ -438,7 +500,8 @@ export class Battle {
   private strike(u: Unit, s: Slot, targets: Unit[], ult: boolean, critBonus: number, execute: boolean): void {
     const fx = s.fx;
     const ramp = this.rampMultiplier();
-    for (const t of targets) {
+    for (let i = 0; i < targets.length; i++) {
+      const t = targets[i];
       if (t.curHp <= 0) continue;
       if (execute && !t.boss && realm(t.level) <= realm(u.level) && this.rng.chance(R.executeChance + u.b.executeBonus)) {
         this.hurt(t, t.curHp + t.shield);
@@ -448,9 +511,11 @@ export class Battle {
       let dmg = hitDamage(u, s.tech, t, crit, ult, {
         damage: s.bonus + (t.monster ? u.b.monsterDamage : 0), critDamage: u.b.critDamage, armorPen: fx.armorPen, resistPen: fx.resistPen + u.b.resistPen,
       });
+      // Mục tiêu thêm của Đao Ý (sau số mục tiêu của loại chiêu) nhận ít sát thương hơn.
+      if (i >= s.tech.targets) dmg = Math.max(1, mul(dmg, s.mod.extraTargetDamage ?? ONE));
       if (s.tech.forsakenSect !== undefined && s.tech.forsakenSect === t.sectId) dmg = Math.max(1, mul(dmg, BATTLE.betrayalDamage));
       if (ramp !== ONE) dmg = mul(dmg, ramp);
-      this.hurt(t, dmg);
+      this.hurt(t, dmg, s.mod.shieldPierce ?? 0);
       const drain = fx.healOfDamage + mul(fx.lifesteal, ONE + u.b.lifesteal);
       if (drain > 0) this.restore(u, u, mul(dmg, drain));
       if (t.curHp <= 0) continue;
@@ -498,10 +563,10 @@ export class Battle {
     return mul(ticks, ONE + u.b.controlTime);
   }
 
-  /** Trừ khiên trước, rồi trừ máu. */
-  private hurt(t: Unit, dmg: number): void {
+  /** Trừ khiên trước, rồi trừ máu; phần `pierce` (phần nghìn) của sát thương đi thẳng vào máu. */
+  private hurt(t: Unit, dmg: number, pierce = 0): void {
     if (t.shield > 0) {
-      const absorbed = Math.min(t.shield, dmg);
+      const absorbed = Math.min(t.shield, dmg - (pierce > 0 ? mul(dmg, pierce) : 0));
       t.shield -= absorbed;
       dmg -= absorbed;
     }

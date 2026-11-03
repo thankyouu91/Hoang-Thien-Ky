@@ -258,3 +258,135 @@ test("sát thương lên dị thú chỉ tính khi mục tiêu có cờ dị th�
   assert.equal(loss({ boss: true }, 50), normal);
   assert.equal(loss({ boss: true, monster: true }, 50), loss({ monster: true }, 50));
 });
+
+// Ý châu (UnitSpec.skillMods): đổi hành vi một loại chiêu (tab Trang bị, phần 5)
+
+/** Cho công pháp đầu của đơn vị 1 sẵn sàng ngay, chỉnh trận trước tick đầu, chạy 1 tick; trả về mục tiêu lần ra chiêu đó. */
+const castNow = (input: BattleInput, setup: (b: Battle) => void = () => {}) => {
+  const b = new Battle(input, true);
+  get(b, 1).slots[0].cd = 0;
+  setup(b);
+  b.step();
+  return { b, targets: b.events.find((e) => e.unitId === 1)?.targets ?? [] };
+};
+const place = (b: Battle, pos: Record<number, number>) => {
+  for (const id of Object.keys(pos)) get(b, Number(id)).pos = pos[Number(id)];
+};
+const noCrit = { critBonus: -2000 };
+
+test("Kiếm Ý: 15% sát thương cận chiến đơn đi thẳng vào máu dù có khiên", () => {
+  const run = (shieldPierce: number) => {
+    const { b } = castNow(
+      { seed: 1, teamA: [unit(1, 0, [tech("can_don", "kim")], { skillMods: { can_don: { shieldPierce } } })], teamB: [inert(101)] },
+      (x) => {
+        place(x, { 1: 5000, 101: 5500 });
+        get(x, 101).shield = 1_000_000;
+        get(x, 101).shieldUntil = 1_000_000;
+      },
+    );
+    const t = get(b, 101);
+    return { hpLoss: t.hp - t.curHp, total: t.hp - t.curHp + 1_000_000 - t.shield };
+  };
+  assert.equal(run(0).hpLoss, 0);
+  const r = run(150);
+  assert.ok(r.hpLoss > 0);
+  assert.equal(r.hpLoss, mul(r.total, 150));
+});
+
+test("Đao Ý: cận chiến quét trúng 6 mục tiêu, mục tiêu thứ 6 nhận 50%", () => {
+  const foes = [101, 102, 103, 104, 105, 106].map((id) => inert(id));
+  const { b, targets } = castNow(
+    { seed: 1, teamA: [unit(1, 0, [tech("can_quet", "kim")], { bonuses: noCrit, skillMods: { can_quet: { extraTargets: 1, extraTargetDamage: 500 } } })], teamB: foes },
+    (x) => place(x, { 1: 5000, 101: 5500, 102: 5500, 103: 5500, 104: 5500, 105: 5500, 106: 5500 }),
+  );
+  assert.deepEqual(targets, [101, 102, 103, 104, 105, 106]);
+  const loss = (id: number) => get(b, id).hp - get(b, id).curHp;
+  assert.equal(loss(105), loss(101));
+  assert.equal(loss(106), mul(loss(101), 500));
+});
+
+test("Cung Ý: tầm xa +1 ô, không cộng dồn với tầm +1 ô của Âm lãnh", () => {
+  const range = (t: Technique) => {
+    const b = new Battle({ seed: 1, teamA: [unit(1, 1, [t], { skillMods: { tam_xa: { rangeBonus: 1000 } } })], teamB: [inert(101)] });
+    return get(b, 1).slots[0].range;
+  };
+  assert.equal(range(tech("tam_xa", "kim")), 5000);
+  assert.equal(range(tech("tam_xa", "am_lanh")), 5000);
+});
+
+test("Phiến Ý, Kỳ Ý: vận công, bày trận nhanh hơn, cộng với set, không dưới sàn", () => {
+  const cast = (type: "tran_phap" | "dien_rong", extra: Partial<UnitSpec>) => {
+    const { b } = firstHit({ seed: 1, teamA: [unit(1, 0, [tech(type, "kim")], extra)], teamB: [inert(101)] });
+    const e = b.events.find((e) => e.unitId === 1)!;
+    return e.tick - e.startTick;
+  };
+  assert.equal(cast("dien_rong", { skillMods: { dien_rong: { castTicks: -6 } } }), 14);
+  assert.equal(cast("dien_rong", { bonuses: { channelTicks: -6 }, skillMods: { dien_rong: { castTicks: -6 } } }), 10);
+  assert.equal(cast("tran_phap", { skillMods: { tran_phap: { castTicks: -10 } } }), 90);
+  assert.equal(cast("tran_phap", { talents: ["tu_tran"], bonuses: { formationTicks: -10 }, skillMods: { tran_phap: { castTicks: -10 } } }), 50);
+});
+
+test("Cầm Ý: hồi phục tốn 90% mana (×2,7 thay ×3)", () => {
+  const t = tech("hoi_phuc", "moc");
+  const b = new Battle({ seed: 1, teamA: [unit(1, 1, [t], { skillMods: { hoi_phuc: { manaCost: 900, pick: "lowest_hp" } } })], teamB: [inert(101)] });
+  assert.equal(get(b, 1).slots[0].cost, mul(t.manaCost, 900) * 1000);
+});
+
+test("Bút Ý: lần bùa chú đầu nhắm địch % máu thấp nhất trong tầm, lần sau như mặc định", () => {
+  const input = {
+    seed: 1, teamA: [unit(1, 1, [tech("bua_chu", "kim")], { skillMods: { bua_chu: { pick: "lowest_hp" as const, pickUses: 1 } } })],
+    teamB: [inert(101), inert(102)],
+  };
+  const { b, targets } = castNow(input, (x) => {
+    place(x, { 1: 4000, 101: 6000, 102: 7000 });
+    get(x, 102).curHp = get(x, 102).hp / 2;
+  });
+  assert.deepEqual(targets, [102]);
+  get(b, 1).slots[0].cd = 0;
+  get(b, 1).mana = get(b, 1).manaMax;
+  b.step();
+  assert.deepEqual(b.events.filter((e) => e.unitId === 1).map((e) => e.targets[0]), [102, 101]);
+});
+
+test("Tiêu Ý: khống chế ưu tiên địch đang vận công", () => {
+  const run = (pick?: "channeling") =>
+    castNow({ seed: 1, teamA: [unit(1, 1, [tech("khong_che", "kim")], { skillMods: pick ? { khong_che: { pick } } : {} })], teamB: [inert(101), inert(102)] }, (x) => {
+      place(x, { 1: 4000, 101: 5000, 102: 6000 });
+      get(x, 102).channel = { slot: 0, startTick: 0, resolveTick: 1_000_000, center: 4000, ult: false, interruptible: true };
+    }).targets;
+  assert.deepEqual(run(), [101]);
+  assert.deepEqual(run("channeling"), [102]);
+});
+
+test("Thương Ý: thân pháp lướt tới địch hàng sau % máu thấp nhất; không có ai hàng sau thì như mặc định", () => {
+  const run = (back: boolean) =>
+    castNow(
+      {
+        seed: 1, teamA: [unit(1, 0, [tech("than_phap", "kim")], { skillMods: { than_phap: { pick: "back_row_lowest_hp" } } })],
+        teamB: [inert(101), inert(102, { row: back ? 1 : 0 }), inert(103, { row: back ? 1 : 0 })],
+      },
+      (x) => {
+        place(x, { 1: 4000, 101: 5000, 102: 8000, 103: 9000 });
+        get(x, 103).curHp = get(x, 103).hp / 2;
+      },
+    ).targets;
+  assert.deepEqual(run(true), [103]);
+  assert.deepEqual(run(false), [101]);
+});
+
+test("Côn Ý: hộ thể che trước đồng minh bị nhiều địch nhắm nhất", () => {
+  const ally = (id: number) => unit(id, 0, [tech("can_don", "kim")], { manaMax: 0 });
+  const run = (pick?: "most_targeted") => {
+    const { b } = castNow(
+      {
+        seed: 1, teamA: [unit(1, 0, [tech("ho_the", "kim")], { skillMods: pick ? { ho_the: { pick } } : {} }), ally(2), ally(3), ally(4), ally(5)],
+        teamB: [inert(101), inert(102), inert(103), inert(104)],
+      },
+      // Địch 101 đứng gần nhóm 2–4; ba địch còn lại vòng ra sau, ai cũng gần đơn vị 5 nhất.
+      (x) => place(x, { 1: 4000, 2: 5000, 3: 4800, 4: 4600, 5: 2600, 101: 5500, 102: 2000, 103: 2000, 104: 2000 }),
+    );
+    return [1, 2, 3, 4, 5].filter((id) => get(b, id).shield > 0);
+  };
+  assert.deepEqual(run(), [2, 3, 4]);
+  assert.deepEqual(run("most_targeted"), [2, 3, 5]);
+});

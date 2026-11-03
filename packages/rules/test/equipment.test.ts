@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { Battle, baseStats, composeTechnique, type UnitSpec } from "@ktlp/sim";
-import { gearStats, withGear, kieuInfo, maxInlayLines, setTier, isKnownSetStat, type EquipItem, type InlayLine } from "../src/index.ts";
+import { gearStats, withGear, kieuInfo, maxInlayLines, setTier, isKnownSetStat, yChauMod, type EquipItem, type InlayLine } from "../src/index.ts";
 import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
 import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
 
@@ -51,7 +51,7 @@ test("mũ: máu theo chỉ số chuẩn, mana theo mana tối đa chuẩn", () =
 
 test("độ bền 0 thì món không cộng gì, kể cả ngọc", () => {
   const g = gearStats([item("TB-KI-001", { doBen: 0, kham: [gem("kim", 5)] })], LV, []);
-  assert.deepEqual(g, { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {} });
+  assert.deepEqual(g, { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {} });
 });
 
 test("ngọc: ô công cộng sát thương hệ, ô thủ cộng kháng hệ, trùng linh căn ×1,2", () => {
@@ -169,4 +169,33 @@ test("set vào trận: Lôi Trì mốc 4 làm tê liệt của công pháp Lôi 
   const plain = new Battle({ seed: 1, teamA: [spec], teamB: [{ ...spec, id: 101 }] });
   const fx = (x: Battle) => x.units.find((u) => u.id === 1)!.slots[0].fx.paralyze;
   assert.equal(fx(b), fx(plain) + 5);
+});
+
+// Ý châu: chỉ khảm vũ khí, mỗi vũ khí 1 viên (tab Trang bị, phần 5)
+
+const yc = (ma: string): InlayLine => ({ loai: "y_chau", ma });
+
+test("mọi Ý châu trong ngoc.json đổi được sang cách chỉnh loại chiêu của sim", () => {
+  for (const y of NGOC.y_chau) assert.equal(yChauMod(y.ma_vp).loai, y.loai_chieu, y.ma_vp);
+  assert.deepEqual(yChauMod("NG-YC-001").mod, { shieldPierce: 150 });
+  assert.deepEqual(yChauMod("NG-YC-002").mod, { extraTargets: 1, extraTargetDamage: 500 });
+  assert.deepEqual(yChauMod("NG-YC-004").mod, { castTicks: -6 });
+  assert.deepEqual(yChauMod("NG-YC-006").mod, { pick: "lowest_hp", pickUses: 1 });
+  assert.deepEqual(yChauMod("NG-YC-008").mod, { pick: "lowest_hp", manaCost: 900 }); // ×2,7 thay ×3
+  assert.deepEqual(yChauMod("NG-YC-010").mod, { pick: "back_row_lowest_hp" });
+});
+
+test("Ý châu chỉ vào vũ khí, mỗi vũ khí 1 viên; món hết độ bền thì không tính", () => {
+  assert.deepEqual(gearStats([item("TB-KI-001", { kham: [yc("NG-YC-002")] })], LV, []).skillMods, { can_quet: { extraTargets: 1, extraTargetDamage: 500 } });
+  assert.throws(() => gearStats([item("TB-AO-001", { kham: [yc("NG-YC-002")] })], LV, []));
+  assert.throws(() => gearStats([item("TB-KI-025", { kham: [yc("NG-YC-002"), yc("NG-YC-003")] })], LV, []));
+  assert.throws(() => gearStats([item("TB-KI-001", { kham: [yc("NG-YC-999")] })], LV, []));
+  assert.deepEqual(gearStats([item("TB-KI-001", { doBen: 0, kham: [yc("NG-YC-002")] })], LV, []).skillMods, {});
+});
+
+test("Ý châu vào trận: Cung Ý cho tầm xa thêm 1 ô", () => {
+  const bow = composeTechnique({ element: "kim", type: "tam_xa", variant: "bao", grade: 1 }, [{ element: "kim", type: "tam_xa", variant: "ben", grade: 1 }]);
+  const spec: UnitSpec = { id: 1, level: LV, element: "kim", row: 1, ...baseStats(LV), techniques: [bow] };
+  const range = (s: UnitSpec) => new Battle({ seed: 1, teamA: [s], teamB: [{ ...spec, id: 101 }] }).units.find((u) => u.id === 1)!.slots[0].range;
+  assert.equal(range(withGear(spec, [item("TB-KI-001", { kham: [yc("NG-YC-003")] })])), range(spec) + 1000);
 });
