@@ -49,11 +49,12 @@ export function renderBackground(kind: BgKind, element: ElementId, seed: number 
   const w = opts.width ?? 320;
   const h = opts.height ?? 192;
   const dpr = opts.dpr ?? deviceDpr(DPR_CAP.bake);
-  const key = [kind, element, seed, opts.variant ?? "", w, h, dpr].join("|");
+  const tone = opts.tone ?? "giay";
+  const key = [kind, element, seed, opts.variant ?? "", w, h, dpr, tone].join("|");
   let p = bgCache.get(key);
   if (!p) {
     p = load()
-      .then((e) => enqueue(() => e.getHost().bake(e.placeFactory(kind, element, seed, opts.variant), w, h, dpr)))
+      .then((e) => enqueue(() => e.getHost().bake(e.placeFactory(kind, element, seed, opts.variant, tone), w, h, dpr)))
       .then(toUrl)
       .catch((err) => {
         console.warn("renderBackground lỗi", key, err);

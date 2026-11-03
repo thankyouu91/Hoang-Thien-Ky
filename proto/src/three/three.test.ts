@@ -5,6 +5,7 @@ import { test } from "node:test";
 import { ELEMENT_IDS } from "../replay/types.ts";
 import { hashSeed, makeNoise, NOISE_SIZE, rng } from "./engine/noise.ts";
 import { LOCATION_PIECES, POINT_PIECES } from "./scenes/places.ts";
+import { toPaper } from "./scenes/paper.ts";
 import { ELEMENT_RECIPES, sonThuy } from "./scenes/recipes.ts";
 
 const noise = makeNoise(7);
@@ -91,4 +92,16 @@ test("đủ 11 công trình (GDD mục 5) và 10 loại điểm bản đồ", ()
     "ben_do", "cua_bi_canh", "deo", "hang_di_thu", "linh_tuyen", "mo_duoc", "mo_linh_thach", "mo_quang", "son_mon", "thanh_chu",
   ]);
   for (const list of [...Object.values(LOCATION_PIECES), ...Object.values(POINT_PIECES)]) assert.ok(list.length > 0);
+});
+
+test("tông kem: 12 hệ đổi sang nền sáng, màu hợp lệ, không hạt cộng sáng, không sao", () => {
+  for (const el of ELEMENT_IDS) {
+    const r = toPaper(ELEMENT_RECIPES[el](), el);
+    for (const [p, c] of colors(r)) assert.match(c, HEX, `${el}${p}`);
+    assert.equal(r.sky.stars, 0, el);
+    for (const p of r.particles ?? []) assert.equal(p.additive, false, el);
+    // trời sáng: kênh nhỏ nhất của màu đỉnh trời vẫn trên 200/255
+    const top = parseInt(r.sky.top.slice(1), 16);
+    assert.ok(Math.min(top >> 16, (top >> 8) & 255, top & 255) > 200, `${el} trời ${r.sky.top}`);
+  }
 });

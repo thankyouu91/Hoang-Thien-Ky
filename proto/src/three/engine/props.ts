@@ -401,8 +401,9 @@ export function forest(s: Stage, variants: Built[], spots: () => { x: number; y:
 // ---- cổng / trận pháp ----------------------------------------------------------------------------------------------
 
 export function portal(s: Stage, o: { x: number; y: number; r: number; color: string; color2: string; squash?: number; ring?: number; alpha?: number; depth?: number }): Mesh {
-  const m = s.material(G.QUAD_VERT, G.PORTAL_FRAG, { uR: o.r, uColor: col(o.color), uColor2: col(o.color2), uAlpha: o.alpha ?? 1, uRing: o.ring ?? 1 });
-  setAdditiveOne(m);
+  const ink = s.tone === "giay";
+  const m = s.material(G.QUAD_VERT, G.PORTAL_FRAG, { uR: o.r, uColor: col(o.color), uColor2: col(o.color2), uAlpha: o.alpha ?? 1, uRing: o.ring ?? 1, uInk: ink ? 1 : 0 });
+  if (!ink) setAdditiveOne(m);
   const mesh = s.add(new Mesh(new PlaneGeometry(o.r * 3, o.r * 3), m), o.depth ?? 0.5);
   mesh.scale.y = o.squash ?? 1;
   s.place(mesh, o.x, o.y);
@@ -501,10 +502,12 @@ void main() {
 const BOLT_FRAG = /* glsl */ `
 uniform vec3 uColor;
 uniform float uAlpha;
+uniform float uInk;
 varying float vE;
 void main() {
   float k = 1.0 - vE * vE;
-  gl_FragColor = vec4(uColor * k * uAlpha, 0.0);
+  // nền kem: tia chớp là nét mực màu hệ (hòa thường); nền tối: cộng sáng
+  gl_FragColor = uInk > 0.5 ? vec4(uColor, k * uAlpha) : vec4(uColor * k * uAlpha, 0.0);
 }
 `;
 
@@ -512,7 +515,9 @@ void main() {
  * Tia chớp: đường gấp khúc chia đôi giữa đoạn, hai nhánh phụ; mỗi lần đánh dựng lại hình, nháy 2–3 nhịp,
  * đẩy uFlash của sân khấu để trời, mây, sống núi sáng theo. Khung tĩnh (dt = 0) luôn có một tia.
  */
-export function lightning(s: Stage, o: { color: string; glow: string; top: number; bottom: number; every?: [number, number]; depth?: number }): void {
+export function lightning(s: Stage, o: { color: string; glow: string; top: number; bottom: number; every?: [number, number]; depth?: number; paper?: { color: string; glow: string } }): void {
+  const ink = s.tone === "giay" && !!o.paper;
+  if (ink) o = { ...o, ...o.paper };
   const PTS = 33;
   const BR = 17;
   const lines = [PTS, BR, BR];
@@ -536,8 +541,8 @@ export function lightning(s: Stage, o: { color: string; glow: string; top: numbe
       base += n;
     }
     g.setIndex(idx);
-    const m = s.material(BOLT_VERT, BOLT_FRAG, { uColor: col(color), uAlpha: 0 });
-    setAdditiveOne(m);
+    const m = s.material(BOLT_VERT, BOLT_FRAG, { uColor: col(color), uAlpha: 0, uInk: ink ? 1 : 0 });
+    if (!ink) setAdditiveOne(m);
     const mesh = s.add(new Mesh(g, m), o.depth ?? 0.2);
     return { mesh, width, alpha, m };
   };

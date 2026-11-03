@@ -437,6 +437,7 @@ uniform vec3 uColor;
 uniform vec3 uColor2;
 uniform float uAlpha;
 uniform float uRing;
+uniform float uInk;
 void main() {
   float r = length(vP) / uR;
   float ang = atan(vP.y, vP.x);
@@ -446,6 +447,13 @@ void main() {
   float marks = uRing * smoothstep(0.6, 0.95, abs(cos(ang * 4.0))) * exp(-pow((r - 0.78) * 30.0, 2.0)) * 0.7;
   float glow = exp(-max(r - 0.95, 0.0) * 6.0) * 0.35;
   vec3 col = mix(uColor2, uColor, sw) * (inner + glow) + uColor * (ring + marks) * 1.3;
+  if (uInk > 0.5) {
+    // nền kem: vòng và vân xoáy là nét màu hệ hòa thường, lòng cổng nhạt
+    float a = clamp((inner + glow) * 0.55 + (ring + marks) * 1.2, 0.0, 1.0) * uAlpha;
+    if (a < 0.004) discard;
+    gl_FragColor = vec4(mix(uColor2, uColor, sw * 0.6 + (ring + marks)), a);
+    return;
+  }
   gl_FragColor = vec4(col * uAlpha, 0.0);
 }
 `;

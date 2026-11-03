@@ -49,7 +49,7 @@ document.body.innerHTML = `
   <div id="bar">
     <button data-mode="dong">Động</button><button data-mode="nuong">Nướng</button><button data-mode="nen">Ảnh nền</button><button data-mode="san">Sân đấu</button><button data-mode="tran">Trận</button><button data-mode="do">Đo</button>
     <select id="scene">${SCENES.map((s) => `<option value="${s.id}">${s.name}</option>`).join("")}</select>
-    <select id="tone"><option value="chang_vang">Chạng vạng</option><option value="giay">Giấy</option></select>
+    <select id="tone"><option value="giay">Giấy (kem)</option><option value="chang_vang">Chạng vạng</option></select>
     <label><input type="checkbox" id="lk"> linh khí</label>
     <input id="seed" type="number" value="1" min="1" style="width:56px">
   </div>
@@ -98,6 +98,9 @@ async function render(): Promise<void> {
   const live = mode === "dong" || mode === "nuong";
   stage.hidden = !live;
   grid.hidden = live;
+  // nền trang như dashboard: kem khi tông giấy
+  grid.style.background = mode === "nen" && toneSel.value === "giay" ? "#f6efdf" : "";
+  grid.style.color = mode === "nen" && toneSel.value === "giay" ? "#2a2018" : "";
   if (!hasWebGL()) stat.textContent = "Không có WebGL2: các API trả null, màn giữ nền 2D";
   if (mode === "dong") {
     if (scene === "linh_khi") {
@@ -127,10 +130,10 @@ async function render(): Promise<void> {
       }
     };
     const t0 = performance.now();
-    section(`Công trình · ${ELEMENT_STYLE[el].name}`, LOCATIONS.map((v) => ({ label: v, url: renderBackground("cong_trinh", el, seed, { variant: v }) })));
-    section(`Điểm bản đồ · ${ELEMENT_STYLE[el].name}`, POINTS.map((v) => ({ label: v, url: renderBackground("diem", el, seed, { variant: v }) })));
-    section("Nền vùng · 12 hệ", ELEMENT_IDS.map((e) => ({ label: ELEMENT_STYLE[e].name, url: renderBackground("vung", e, seed) })));
-    void renderBackground("vung", "am_lanh", seed).then(() => (stat.textContent = `33 ảnh 320×192 nướng xong sau ${Math.round(performance.now() - t0)} ms`));
+    section(`Công trình · ${ELEMENT_STYLE[el].name}`, LOCATIONS.map((v) => ({ label: v, url: renderBackground("cong_trinh", el, seed, { variant: v, tone: params().tone }) })));
+    section(`Điểm bản đồ · ${ELEMENT_STYLE[el].name}`, POINTS.map((v) => ({ label: v, url: renderBackground("diem", el, seed, { variant: v, tone: params().tone }) })));
+    section("Nền vùng · 12 hệ", ELEMENT_IDS.map((e) => ({ label: ELEMENT_STYLE[e].name, url: renderBackground("vung", e, seed, { tone: params().tone }) })));
+    void renderBackground("vung", "am_lanh", seed, { tone: params().tone }).then(() => (stat.textContent = `33 ảnh 320×192 nướng xong sau ${Math.round(performance.now() - t0)} ms`));
   } else if (mode === "do") {
     grid.insertAdjacentHTML("beforeend", `<h2>Thời gian vẽ một khung, 375 × 812 px, dpr 1,5 (CPU + GPU máy này)</h2><pre id="bench"></pre>`);
     const out = grid.querySelector("#bench")!;

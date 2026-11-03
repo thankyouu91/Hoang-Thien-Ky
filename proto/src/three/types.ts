@@ -6,7 +6,10 @@ export type { ElementId };
 /** Cảnh nền: sơn thủy thủy mặc, 12 cảnh theo hệ (mã như ELEMENT_IDS), hoặc lớp hạt linh khí (nền trong suốt). */
 export type SceneName = "son_thuy" | ElementId | "linh_khi";
 
-/** Tông màu của sơn thủy: chạng vạng hợp nền tối của dashboard, giấy là tranh mực trên giấy sáng. */
+/**
+ * Tông màu: "giay" (mặc định) là nền kem sáng hợp dashboard màu kem (nét mực nhạt, sương trắng, màu hệ làm điểm nhấn);
+ * "chang_vang" là bản tối (trời đêm, cộng sáng).
+ */
 export type Tone = "chang_vang" | "giay";
 
 export interface SceneParams {
@@ -36,6 +39,8 @@ export interface BackgroundOptions {
   height?: number;
   /** Mật độ điểm ảnh; mặc định devicePixelRatio, tối đa 2. */
   dpr?: number;
+  /** Mặc định "giay" (kem sáng). */
+  tone?: Tone;
 }
 
 /** Ba loại sân đấu, cùng tên với nền PixelLab san_dau/<tên>. */

@@ -56,6 +56,8 @@ export interface ComposeExtra {
   afterNear?: (s: Stage, refs: Refs) => void;
   /** Bỏ hạt (ảnh nướng nhỏ cho thẻ: hạt thành lấm tấm bẩn). */
   noParticles?: boolean;
+  /** Nhân số hạt (ảnh nướng nhỏ trên nền kem nên thưa hơn). */
+  particleScale?: number;
 }
 
 const TREES: Record<TreeKind, (r: () => number) => Built> = { pine, broad: broadleaf, dead: deadTree };
@@ -106,7 +108,7 @@ export function compose(s: Stage, r: Recipe, extra: ComposeExtra = {}): Refs {
   extra.afterNear?.(s, refs);
   if (r.nearMist) mist(s, { ...r.nearMist, depth: 0.72 });
   if (r.fore) ridge(s, { ...r.fore, depth: 1 });
-  if (!extra.noParticles) for (const p of r.particles ?? []) particles(s, { ...p, depth: 0.85 });
+  if (!extra.noParticles) for (const p of r.particles ?? []) particles(s, { ...p, count: Math.max(1, Math.round(p.count * (extra.particleScale ?? 1))), depth: 0.85 });
   r.hooks?.end?.(s, refs);
   if (r.vignette) vignette(s, r.vignette);
   return refs;

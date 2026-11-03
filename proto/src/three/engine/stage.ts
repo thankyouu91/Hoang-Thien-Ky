@@ -1,6 +1,7 @@
 // Sân khấu 2D nhiều lớp: camera trực giao, khung cao 1 đơn vị (y 0..1), rộng theo tỉ lệ khung.
 // Mỗi lớp có độ sâu 0 (xa, đứng yên) .. 1 (gần, trôi nhiều nhất) để làm thị sai theo con trỏ, độ nghiêng máy và cuộn.
 import { Mesh, Object3D, OrthographicCamera, Scene, ShaderMaterial, Vector3, type WebGLRenderer, type WebGLRenderTarget } from "three";
+import type { Tone } from "../types.ts";
 import type { Host } from "./host.ts";
 import { hashSeed, rng } from "./noise.ts";
 import type { Program } from "./program.ts";
@@ -46,6 +47,8 @@ export class Stage implements Program {
   /** Cảnh trong suốt (lớp phủ): xoá về alpha 0. Cảnh nền thì lớp trời phủ kín, khỏi xoá màu. */
   transparent = false;
   animated = true;
+  /** Tông màu: "giay" là nền kem sáng của dashboard (nét mực nhạt, cộng màu không thấy được nên dùng hòa màu thường). */
+  tone: Tone = "chang_vang";
   aspect = 1;
   w = 1;
   h = 1;

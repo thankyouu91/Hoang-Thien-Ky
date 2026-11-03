@@ -3,8 +3,9 @@
 import type { ElementId, Tone } from "../types.ts";
 import { ridgeAt, wave } from "../engine/layers.ts";
 import { grass, lightning, place, stele, sword } from "../engine/props.ts";
-import type { Stage } from "../engine/stage.ts";
 import type { Recipe, Refs } from "./compose.ts";
+import { mixHex as onKem, type Stage } from "../engine/stage.ts";
+import { INK, paperInk, PAPER, SURFACE } from "./paper.ts";
 
 // ---- sơn thủy ------------------------------------------------------------------------------------------------------
 
@@ -12,9 +13,10 @@ import type { Recipe, Refs } from "./compose.ts";
 export function sonThuy(tone: Tone): Recipe {
   if (tone === "giay") {
     return {
-      sky: { top: "#e6d8bb", mid: "#efe3c9", bottom: "#f4ead6", midAt: 0.45, glow: { x: 0, y: 0.35, r: 0.5, color: "#0a0804" }, grain: 0.035 },
-      disc: { x: 0.55, y: 0.84, r: 0.035, color: "#b23a2a", glow: "#c46a4a", glowSize: 0.6, glowAmt: 0.25 },
-      high: [{ y0: 0.72, y1: 0.98, color: "#f6eedd", color2: "#ddd0b5", alpha: 0.55, speed: 0.003, thresh: 0.38, soft: 0.25, shade: 0.6 }],
+      // nền theo token dashboard kem: --c-surface #fffaf0 trên cao, --c-bg #f6efdf, ấn son #b3261e làm mặt trời
+      sky: { top: "#fffaf0", mid: "#f6efdf", bottom: "#efe4cc", midAt: 0.45, glow: { x: 0, y: 0.35, r: 0.5, color: "#060402" }, grain: 0.03 },
+      disc: { x: 0.55, y: 0.84, r: 0.035, color: "#b3261e", glow: "#d9826a", glowSize: 0.6, glowAmt: 0.25 },
+      high: [{ y0: 0.72, y1: 0.98, color: "#fffaf0", color2: "#e2d6bd", alpha: 0.55, speed: 0.003, thresh: 0.38, soft: 0.25, shade: 0.6 }],
       far: { base: 0.4, amp: 0.36, freq: 1.2, sharp: 0.7, ink: "#9c978c", wash: "#d9d0be", fog: "#efe4cc", fogAmt: 0.25, fade: 0.16, dissolve: 0.7, cun: 0.25, edge: 0.35 },
       farMist: { y0: 0.3, y1: 0.55, color: "#f3ead6", color2: "#e2d6bd", alpha: 0.8, speed: 0.0035, thresh: 0.2, soft: 0.35 },
       mid: { base: 0.27, amp: 0.44, freq: 1.6, sharp: 0.75, ink: "#55524c", wash: "#b8b0a0", fog: "#efe4cc", fogAmt: 0.05, fade: 0.2, dissolve: 0.65, cun: 0.45, edge: 0.75,
@@ -55,11 +57,14 @@ function swords(layer: "mid" | "near", n: number, h: [number, number], color: st
   return (s, refs) => {
     const ref = refs[layer];
     if (!ref) return;
+    const kem = s.tone === "giay";
+    const c1 = kem ? paperInk("kim", layer === "mid" ? 0.74 : 0.9) : color;
+    const c2 = kem ? paperInk("kim", 0.42) : color2;
     for (let i = 0; i < n; i++) {
       const f = (i + 0.5) / n + (s.rand() - 0.5) * 0.08;
       const sc = h[0] + (h[1] - h[0]) * s.rand();
       const rot = (s.rand() - 0.5) * 0.35;
-      const p = place(s, sword(s.rand), { color, color2, glow: "#f2f6fa", glowAlpha: 0.35, flicker: 0, scale: sc, sheen, depth: layer === "mid" ? 0.34 : 0.62, fadeFrom: ref.shape.base, fadeTo: ref.shape.base + ref.shape.amp + sc });
+      const p = place(s, sword(s.rand), { color: c1, color2: c2, glow: "#f2f6fa", glowAlpha: kem ? 0.12 : 0.35, flicker: 0, scale: sc, sheen: kem ? sheen * 0.25 : sheen, depth: layer === "mid" ? 0.34 : 0.62, fadeFrom: ref.shape.base, fadeTo: ref.shape.base + ref.shape.amp + sc });
       s.onResize((a) => {
         const x = (f * 2 - 1) * (a / 2 + 0.04);
         p.at(x, ridgeAt(s, ref.shape, x) - sc * 0.18, rot);
@@ -72,11 +77,12 @@ function steles(n: number, color: string): Hook {
   return (s, refs) => {
     const ref = refs.mid;
     if (!ref) return;
+    const c = s.tone === "giay" ? paperInk("tho", 0.75) : color;
     for (let i = 0; i < n; i++) {
       const f = s.rand();
       const sc = 0.05 + s.rand() * 0.04;
       const rot = (s.rand() - 0.5) * 0.1;
-      const p = place(s, stele(s.rand), { color, scale: sc, depth: 0.35 });
+      const p = place(s, stele(s.rand), { color: c, scale: sc, depth: 0.35 });
       s.onResize((a) => {
         const x = (f * 2 - 1) * (a / 2);
         p.at(x, ridgeAt(s, ref.shape, x) - 0.006, rot);
@@ -94,7 +100,7 @@ export const ELEMENT_RECIPES: Record<ElementId, () => Recipe> = {
       { y0: 0.5, y1: 0.8, color: "#3a2d55", color2: "#0e0a17", alpha: 0.7, speed: 0.016, thresh: 0.3, soft: 0.25, shade: 1, flash: "#b9a0ff" },
     ],
     far: { base: 0.3, amp: 0.2, freq: 1.4, sharp: 0.6, ink: "#2a2240", wash: "#3d3358", fog: "#3a2f52", fogAmt: 0.35, fade: 0.15, dissolve: 0.6, edge: 0.3, flash: "#8f74e0" },
-    hooks: { afterFar: (s) => lightning(s, { color: "#f2ecff", glow: "#9d6bff", top: 0.84, bottom: 0.36, depth: 0.2 }) },
+    hooks: { afterFar: (s) => lightning(s, { color: "#f2ecff", glow: "#9d6bff", top: 0.84, bottom: 0.36, depth: 0.2, paper: { color: onKem(INK, "#8a3ffc", 0.55), glow: onKem(PAPER, "#8a3ffc", 0.55) } }) },
     mid: { base: 0.2, amp: 0.28, freq: 1.8, sharp: 0.8, ink: "#17121f", wash: "#2c2340", fog: "#2d2244", fogAmt: 0.1, fade: 0.2, dissolve: 0.55, edge: 0.6, cun: 0.4, rim: "#8a3ffc", rimAmt: 0.12, flash: "#a68cf0" },
     midMist: { y0: 0.12, y1: 0.34, color: "#4b3d6b", color2: "#1c1430", alpha: 0.5, speed: 0.01, thresh: 0.25, soft: 0.3, flash: "#b9a0ff" },
     near: { base: 0.04, amp: 0.2, freq: 2.6, sharp: 0.9, ink: "#0b0910", wash: "#1d1729", fog: "#000000", fade: 0.3, cun: 0.5, edge: 0.9, flash: "#7c5ad6" },
@@ -152,7 +158,16 @@ export const ELEMENT_RECIPES: Record<ElementId, () => Recipe> = {
           [0.17, 0.04, 7, "#1f4fa8", "#0f2a5c", "#dceaf8", 60],
           [0.05, 0.06, 5, "#2357b5", "#0c2452", "#eef5ff", 44],
         ];
-        bands.forEach(([y, amp, k, water, deep, foam, lines], i) => wave(s, { y, amp, k, w: 0.5 + i * 0.12, water, deep, foam, lines, depth: 0.2 + i * 0.18 }));
+        const kem = s.tone === "giay";
+        const sea = onKem(INK, "#1f4fa8", 0.55);
+        bands.forEach(([y, amp, k, water, deep, foam, lines], i) =>
+          wave(s, {
+            y, amp, k, w: 0.5 + i * 0.12, lines, depth: 0.2 + i * 0.18,
+            water: kem ? onKem(PAPER, sea, 0.14 + i * 0.07) : water,
+            deep: kem ? onKem(PAPER, sea, 0.3 + i * 0.1) : deep,
+            foam: kem ? SURFACE : foam,
+          }),
+        );
       },
     },
     particles: [{ count: 50, area: [-0.5, 0.02, 0.5, 0.3], vel: [0.03, 0.02], size: 0.008, color: "#eef5ff", sway: 0.01, twinkle: 1, life: 0.5, alpha: 0.7, additive: true }],
@@ -187,8 +202,10 @@ export const ELEMENT_RECIPES: Record<ElementId, () => Recipe> = {
       trees: { kind: "broad", color: "#163a35", count: 6, h: [0.05, 0.08] } },
     midMist: { y0: 0.2, y1: 0.36, color: "#d2f0e8", color2: "#4d8a82", alpha: 0.45, speed: 0.02, thresh: 0.25, soft: 0.3 },
     hooks: {
-      afterMid: (s) => grass(s, { count: 700, y0: 0.18, y1: 0.36, h: [0.02, 0.05], base: "#173f3a", tip: "#7cc9b6", wind: 1, depth: 0.45 }),
-      afterNear: (s) => grass(s, { count: 1100, y0: -0.02, y1: 0.3, h: [0.06, 0.2], base: "#0b2421", tip: "#8fe0cb", wind: 1.25, depth: 0.85 }),
+      afterMid: (s) => grass(s, { count: 700, y0: 0.18, y1: 0.36, h: [0.02, 0.05], wind: 1, depth: 0.45,
+        ...(s.tone === "giay" ? { base: paperInk("phong", 0.45), tip: onKem(PAPER, "#4fae98", 0.5) } : { base: "#173f3a", tip: "#7cc9b6" }) }),
+      afterNear: (s) => grass(s, { count: 1100, y0: -0.02, y1: 0.3, h: [0.06, 0.2], wind: 1.25, depth: 0.85,
+        ...(s.tone === "giay" ? { base: paperInk("phong", 0.75), tip: onKem(PAPER, "#3f9a84", 0.75) } : { base: "#0b2421", tip: "#8fe0cb" }) }),
     },
     particles: [
       { count: 34, area: [-0.5, 0.15, 0.5, 0.95], vel: [0.32, 0.01], size: 0.07, color: "#e6fff8", shape: 3, angle: 1.5708, sway: 0.05, swayF: 2.2, alpha: 0.4, life: 0.3, additive: true },

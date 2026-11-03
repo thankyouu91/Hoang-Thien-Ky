@@ -25,6 +25,7 @@ import {
 } from "../engine/props.ts";
 import { mixHex, type Stage } from "../engine/stage.ts";
 import { compose, type Recipe, type Refs } from "./compose.ts";
+import { accentOnPaper, paperInk, PAPER, SURFACE, toPaper } from "./paper.ts";
 import { ELEMENT_RECIPES } from "./recipes.ts";
 
 const LAMP = "#ffc56a";
@@ -34,7 +35,9 @@ interface Ctx {
   refs: Refs;
   recipe: Recipe;
   ink: string;
+  /** Màu hệ; trên nền kem đã kéo về phía mực cho đọc được. */
   accent: string;
+  el: ElementId;
 }
 
 interface Piece {
@@ -70,12 +73,13 @@ function onPeak(b: Shape, scale: number, o: { range?: [number, number]; sink?: n
 }
 
 /** Vật ở chân khung, trước núi gần: x theo nửa bề rộng, y theo đơn vị khung. */
-function atFoot(b: Shape, scale: number, x: number, y: number, o: { color?: string; glow?: (c: Ctx) => string; glowAlpha?: number } = {}): Piece {
+function atFoot(b: Shape, scale: number, x: number, y: number, o: { color?: (c: Ctx) => string; glow?: (c: Ctx) => string; glowAlpha?: number } = {}): Piece {
   return {
     at: "near",
     run: (c) => {
       const p = place(c.s, b(c.s.rand), {
-        color: o.color ?? mixHex(c.ink, "#000000", 0.35),
+        // nền tối: vật tiền cảnh gần đen; nền kem: mực đậm như công trình
+        color: o.color?.(c) ?? (c.s.tone === "giay" ? c.ink : mixHex(c.ink, "#000000", 0.35)),
         glow: o.glow?.(c) ?? LAMP,
         glowAlpha: o.glowAlpha,
         scale,
@@ -91,7 +95,8 @@ function ring(o: { x: number; y: number; r: number; squash?: number; onRidge?: b
   return {
     at: o.at ?? "mid",
     run: (c) => {
-      const color = o.tint ? mixHex(c.accent, o.tint, 0.5) : c.accent;
+      const tint = o.tint && c.s.tone === "giay" ? accentOnPaper(o.tint, c.el) : o.tint;
+      const color = tint ? mixHex(c.accent, tint, 0.5) : c.accent;
       const m = portal(c.s, { x: 0, y: o.y, r: o.r, color, color2: mixHex(color, "#000000", 0.5), squash: o.squash, depth: o.at === "near" ? 0.66 : 0.35 });
       c.s.onResize((a) => {
         const x = (o.x * a) / 2;
@@ -127,13 +132,19 @@ const water: Piece = {
   at: "near",
   run: (c) => {
     const w = mixHex(ELEMENT_STYLE.thuy.color, c.ink, 0.45);
-    wave(c.s, { y: 0.15, amp: 0.016, k: 12, water: w, deep: mixHex(w, "#000000", 0.5), foam: mixHex(w, "#ffffff", 0.6), lines: 90, depth: 0.66 });
+    const kem = c.s.tone === "giay";
+    wave(c.s, {
+      y: 0.15, amp: 0.016, k: 12, lines: 90, depth: 0.66,
+      water: kem ? mixHex(PAPER, w, 0.25) : w,
+      deep: kem ? mixHex(PAPER, w, 0.45) : mixHex(w, "#000000", 0.5),
+      foam: kem ? SURFACE : mixHex(w, "#ffffff", 0.6),
+    });
   },
 };
 
 const steam: Piece = {
   at: "near",
-  run: (c) => void particles(c.s, { count: 20, area: [-0.2, 0.06, 0.2, 0.45], vel: [0.004, 0.04], size: 0.07, color: "#e8f2f0", sway: 0.02, swayF: 0.5, alpha: 0.18, life: 0.15, depth: 0.7 }),
+  run: (c) => void particles(c.s, { count: 20, area: [-0.2, 0.06, 0.2, 0.45], vel: [0.004, 0.04], size: 0.07, color: c.s.tone === "giay" ? "#9aa6a2" : "#e8f2f0", sway: 0.02, swayF: 0.5, alpha: 0.18, life: 0.15, depth: 0.7 }),
 };
 
 /** 11 công trình, GDD mục 5 (mã như LocationId của dashboard/art/sectScene.ts). */
@@ -157,7 +168,10 @@ export const POINT_PIECES: Record<string, Piece[]> = {
   son_mon: [onPeak(gate, 0.24, { sink: 0.02 })],
   ben_do: [water, atFoot(pier, 0.34, 0.05, 0.13)],
   deo: [onPeak(tower, 0.26, { range: [-0.15, 0.15] })],
-  hang_di_thu: [atFoot(cave, 0.62, 0.05, -0.03, { color: "#0a0806" }), atFoot(caveMouth, 0.62, 0.05, -0.03, { color: "#030202", glow: (c) => c.accent })],
+  hang_di_thu: [
+    atFoot(cave, 0.62, 0.05, -0.03, { color: (c) => (c.s.tone === "giay" ? paperInk(c.el, 0.62) : "#0a0806") }),
+    atFoot(caveMouth, 0.62, 0.05, -0.03, { color: (c) => (c.s.tone === "giay" ? paperInk(c.el, 0.95) : "#030202"), glow: (c) => (c.s.tone === "giay" ? "#ffd27a" : c.accent) }),
+  ],
   linh_tuyen: [atFoot(spring, 0.5, 0, 0.05, { glow: (c) => mixHex(c.accent, "#ffffff", 0.3), glowAlpha: 0.85 }), steam],
   mo_duoc: [onPeak(terraces, 0.26, { sink: 0.15 })],
   mo_linh_thach: [atFoot((r) => crystals(r, 7), 0.48, 0.1, 0.02, { glow: (c) => mixHex(c.accent, "#7fe8ff", 0.5), glowAlpha: 0.9 }), ring({ x: 0.1, y: 0.07, r: 0.26, squash: 0.4, at: "near", tint: "#7fe8ff" })],
@@ -167,11 +181,15 @@ export const POINT_PIECES: Record<string, Piece[]> = {
 
 /** Ghép cảnh hệ với công trình hoặc điểm. variant không có trong bảng thì chỉ còn cảnh hệ. */
 export function composePlace(s: Stage, kind: BgKind, el: ElementId, variant?: string): void {
-  const recipe = ELEMENT_RECIPES[el]();
+  const recipe = s.tone === "giay" ? toPaper(ELEMENT_RECIPES[el](), el) : ELEMENT_RECIPES[el]();
   const table = kind === "cong_trinh" ? LOCATION_PIECES : kind === "diem" ? POINT_PIECES : {};
   const pieces = (variant && table[variant]) || [];
-  const ctx = (st: Stage, refs: Refs): Ctx => ({ s: st, refs, recipe, ink: mixHex(recipe.mid?.ink ?? "#0c0a08", "#000000", 0.35), accent: ELEMENT_STYLE[el].color });
+  // Bóng công trình đậm hơn núi giữa một bậc: nền tối thì gần đen, nền kem thì mực đậm 85%.
+  const ink = s.tone === "giay" ? paperInk(el, 0.85) : mixHex(recipe.mid?.ink ?? "#0c0a08", "#000000", 0.35);
+  const accent = s.tone === "giay" ? accentOnPaper(ELEMENT_STYLE[el].color, el) : ELEMENT_STYLE[el].color;
+  const ctx = (st: Stage, refs: Refs): Ctx => ({ s: st, refs, recipe, ink, accent, el });
   compose(s, recipe, {
+    particleScale: s.tone === "giay" ? 0.45 : 1,
     afterMid: (st, refs) => pieces.filter((p) => p.at === "mid").forEach((p) => p.run(ctx(st, refs))),
     afterNear: (st, refs) => pieces.filter((p) => p.at === "near").forEach((p) => p.run(ctx(st, refs))),
   });
