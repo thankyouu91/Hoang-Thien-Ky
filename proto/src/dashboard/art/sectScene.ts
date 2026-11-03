@@ -466,21 +466,63 @@ export function sectSceneUrl(input: SceneInput): string {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(sectSceneSvg(input))}`;
 }
 
+type Manifest = { assets: { file: string; description?: string }[] };
+let manifest: Promise<Manifest> | undefined;
+const loadManifest = () =>
+  (manifest ??= fetch(`${import.meta.env.BASE_URL}pixellab/manifest.json`)
+    .then((r) => r.json() as Promise<Manifest>)
+    .catch(() => ({ assets: [] })));
+
 let models: Promise<SectModel[]> | undefined;
 
 /** 50 mô hình tông môn, đọc từ các dòng tong_mon/ của manifest PixelLab (tên nằm đầu mô tả). */
 export function sectModels(): Promise<SectModel[]> {
-  return (models ??= fetch(`${import.meta.env.BASE_URL}pixellab/manifest.json`)
-    .then((r) => r.json() as Promise<{ assets: { file: string; description?: string }[] }>)
-    .then((m) =>
-      m.assets
-        .filter((a) => a.file.startsWith("tong_mon/"))
-        .map((a) => {
-          const id = a.file.slice("tong_mon/".length).replace(/\.png$/, "");
-          const name = a.description?.match(/^([^()]+?) \(/)?.[1] ?? id;
-          const element = (Object.keys(ELEMENT_STYLE) as Element[]).sort((x, y) => y.length - x.length).find((e) => id.startsWith(`${e}_`)) ?? "quang";
-          return { id, name, element };
-        }),
-    )
-    .catch(() => []));
+  return (models ??= loadManifest().then((m) =>
+    m.assets
+      .filter((a) => a.file.startsWith("tong_mon/"))
+      .map((a) => {
+        const id = a.file.slice("tong_mon/".length).replace(/\.png$/, "");
+        const name = a.description?.match(/^([^()]+?) \(/)?.[1] ?? id;
+        const element = (Object.keys(ELEMENT_STYLE) as Element[]).sort((x, y) => y.length - x.length).find((e) => id.startsWith(`${e}_`)) ?? "quang";
+        return { id, name, element };
+      }),
+  ));
+}
+
+// ---- hình PixelLab khi có -----------------------------------------------------------------------------------------
+// Hình vẽ tay bằng PixelLab nằm ở assets/pixellab/cong_trinh/<mô hình>/<công trình>.png (có dòng trong manifest).
+// Công trình nào có thì dùng, không thì dùng bản vẽ code ở trên. Hiện mới có bộ 11 hình của Lôi Trì Phong.
+
+let pixelArt = new Set<string>();
+let pointPixelArt = new Set<string>();
+let pixelArtOn = true;
+
+/** Đọc manifest một lần để biết công trình nào có hình PixelLab; gọi trước khi vẽ màn. */
+export function loadLocationArt(): Promise<void> {
+  return loadManifest().then((m) => {
+    pixelArt = new Set(m.assets.filter((a) => a.file.startsWith("cong_trinh/")).map((a) => a.file.slice("cong_trinh/".length).replace(/\.png$/, "")));
+    pointPixelArt = new Set(m.assets.filter((a) => a.file.startsWith("diem_nen/")).map((a) => a.file.slice("diem_nen/".length).replace(/\.png$/, "")));
+  });
+}
+
+/** Công cụ thử: bật tắt hình PixelLab để so với bản vẽ code. */
+export function setPixelArt(on: boolean): void {
+  pixelArtOn = on;
+}
+
+export function pixelArtEnabled(): boolean {
+  return pixelArtOn;
+}
+
+/** Hình nền của một loại điểm bản đồ trong vùng (assets/pixellab/diem_nen/<vùng>/<loại>.png), nếu đã có. */
+export function pointArt(region: string, type: string): string | undefined {
+  const key = `${region}/${type}`;
+  return pixelArtOn && pointPixelArt.has(key) ? `${import.meta.env.BASE_URL}pixellab/diem_nen/${key}.png` : undefined;
+}
+
+/** Hình nền của một công trình: hình PixelLab nếu có, không thì SVG vẽ code. */
+export function locationArt(input: SceneInput): { url: string; pixel: boolean } {
+  const key = `${input.model.id}/${input.location}`;
+  if (pixelArtOn && pixelArt.has(key)) return { url: `${import.meta.env.BASE_URL}pixellab/cong_trinh/${key}.png`, pixel: true };
+  return { url: sectSceneUrl(input), pixel: false };
 }

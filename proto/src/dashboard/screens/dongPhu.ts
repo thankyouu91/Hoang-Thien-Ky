@@ -1,4 +1,5 @@
 // Động phủ: dashboard của người chơi, mở sẵn khi vào game (GDD mục 14). Trả lời câu hỏi hôm nay cần làm gì.
+import { loadLocationArt, pointArt } from "../art/sectScene.ts";
 import { icon, type IconName } from "../icons.ts";
 import { MiniMap } from "../minimap.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
@@ -17,8 +18,9 @@ export class DongPhuScene extends PageScene<DongPhuView> {
     this.mini = new MiniMap((x, y) => ctx.nav.go({ screen: "ban-do", at: { x, y } }));
   }
 
-  protected read(): Promise<DongPhuView> {
-    return this.ctx.source.dongPhu();
+  protected async read(): Promise<DongPhuView> {
+    const [v] = await Promise.all([this.ctx.source.dongPhu(), loadLocationArt()]);
+    return v;
   }
 
   override enter(): void {
@@ -40,6 +42,7 @@ export class DongPhuScene extends PageScene<DongPhuView> {
   protected render(v: DongPhuView): void {
     this.gos = [];
     const now = v.serverNow;
+    const cityArt = pointArt(v.miniMap.region, "thanh_chu");
     const calendar = v.calendar
       .map((c) => {
         const state = now >= c.endsAt ? "past" : now >= c.startsAt ? "open" : "next";
@@ -82,7 +85,7 @@ export class DongPhuScene extends PageScene<DongPhuView> {
           <h2>Bản đồ mini</h2>
           <div class="mini-slot"></div>
         </section>
-        <section class="card city">
+        <section class="card city${cityArt ? " has-art" : ""}"${cityArt ? ` style="--art:url('${cityArt}')"` : ""}>
           <h2><button type="button" class="link" data-act="city" aria-label="${esc(v.city.name)}">Thành chủ</button></h2>
           <ul class="plain">${v.city.facilities.map((f) => `<li><button type="button" class="link" data-act="city">${esc(f)}</button></li>`).join("")}</ul>
         </section>
@@ -134,9 +137,10 @@ export class DongPhuScene extends PageScene<DongPhuView> {
 
   /** Thành chủ: chợ, sàn, kho, lò rèn, nhiệm vụ NPC (GDD mục 14: cách Động phủ 2 chạm). */
   private openCity(v: DongPhuView): void {
+    const art = pointArt(v.miniMap.region, "thanh_chu");
     const body = openSheet(
       v.city.name,
-      `<ul class="list">${v.city.facilities
+      `${art ? `<div class="loc-hero pix" style="background-image:url('${art}')" role="img" aria-label="${esc(v.city.name)}"></div>` : ""}<ul class="list">${v.city.facilities
         .map((f) => `<li class="row"><span class="grow"><b>${esc(f)}</b><span class="muted block">Có ở khối MVP (chợ, kho, lò rèn: M6)</span></span></li>`)
         .join("")}</ul>
        <button type="button" class="wide" data-map>Xem thành chủ trên bản đồ</button>`,

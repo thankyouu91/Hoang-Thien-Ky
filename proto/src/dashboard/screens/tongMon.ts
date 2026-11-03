@@ -2,7 +2,7 @@
 // Thẻ Bảo Khố đặt ngay dưới Lãnh thổ và đếm số ngày còn đủ linh thạch trả phí duy trì (mục 10).
 import type { Role } from "@ktlp/rules";
 import { POINT_NAMES } from "../../scenes/map/region.ts";
-import { LOCATIONS, sectModels, sectSceneUrl } from "../art/sectScene.ts";
+import { loadLocationArt, locationArt, LOCATIONS, pixelArtEnabled, pointArt, sectModels, setPixelArt } from "../art/sectScene.ts";
 import { MiniMap } from "../minimap.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { TongMonView } from "../source.ts";
@@ -33,8 +33,10 @@ export class TongMonScene extends PageScene<TongMonView> {
     }
   }
 
-  protected read(): Promise<TongMonView> {
-    return this.ctx.source.tongMon();
+  protected async read(): Promise<TongMonView> {
+    // Biết công trình nào có hình PixelLab trước khi vẽ (manifest đọc một lần).
+    const [v] = await Promise.all([this.ctx.source.tongMon(), loadLocationArt()]);
+    return v;
   }
 
   override enter(): void {
@@ -51,9 +53,9 @@ export class TongMonScene extends PageScene<TongMonView> {
     const s = v.sect;
     const shield = s.shieldUntil && s.shieldUntil > v.serverNow ? `khiên còn ${cd(s.shieldUntil)}` : "không khiên";
     // Đầu màn là hình Chính Điện của mô hình tông môn; tên, cấp và XP nằm trên chân hình.
-    const hero = sectSceneUrl({ model: s.model, terrain: s.terrainId, location: "chinh_dien" });
+    const hero = locationArt({ model: s.model, terrain: s.terrainId, location: "chinh_dien" });
     this.page.innerHTML = `
-      <section class="sect-hero" style="background-image:url('${hero}')">
+      <section class="sect-hero${hero.pixel ? " pix" : ""}" style="background-image:url('${hero.url}')">
         <div class="hero-body">
           <img class="island" src="${assetUrl(s.island)}" alt="">
           <div class="grow">
@@ -81,6 +83,10 @@ export class TongMonScene extends PageScene<TongMonView> {
       const role = (e.target as HTMLSelectElement).value as Role;
       void this.send({ type: "dev_chuc_vi", role }).then(() => toast(`Đang xem với chức vị ${ROLE_NAMES[role]}`));
     });
+    this.page.querySelector<HTMLInputElement>("[data-dev=pixel]")?.addEventListener("change", (e) => {
+      setPixelArt((e.target as HTMLInputElement).checked);
+      if (this.data) this.setTab(this.tab);
+    });
     // Đổi mô hình tông môn để xem mỗi mô hình có bộ hình nền công trình riêng.
     const pick = this.page.querySelector<HTMLSelectElement>("[data-dev=model]");
     if (pick && v) {
@@ -95,6 +101,7 @@ export class TongMonScene extends PageScene<TongMonView> {
   }
 
   private overview(v: TongMonView): string {
+    const thumb = (url?: string) => (url ? `<span class="pt-thumb pix" style="background-image:url('${url}')"></span>` : "");
     const t = v.territory;
     const now = v.serverNow;
     const pending = t.held.reduce((a, h) => a + (h.level > 0 ? Math.floor(h.perHour * Math.min(MINE_CAP_HOURS, (now - h.uncollectedSince) / H)) : 0), 0);
@@ -117,7 +124,7 @@ export class TongMonScene extends PageScene<TongMonView> {
         <ul class="list">${t.held
           .map(
             (h) => `<li><button type="button" class="row" data-act="point" data-id="${h.pointId}">
-              <span class="grow"><b>${POINT_NAMES[h.type]}</b>${h.level ? ` cấp ${h.level}` : ""}${h.attacked ? `<span class="bad block">${esc(h.attacked.by)} đang đánh, còn ${cd(h.attacked.endsAt)}</span>` : ""}</span>
+              ${thumb(pointArt(v.sect.region, h.type))}<span class="grow"><b>${POINT_NAMES[h.type]}</b>${h.level ? ` cấp ${h.level}` : ""}${h.attacked ? `<span class="bad block">${esc(h.attacked.by)} đang đánh, còn ${cd(h.attacked.endsAt)}</span>` : ""}</span>
               <span class="muted">${h.level ? `${fmt(h.perHour)}/giờ` : ""}</span></button></li>`,
           )
           .join("")}</ul>
@@ -151,14 +158,14 @@ export class TongMonScene extends PageScene<TongMonView> {
         <h2>Công trình <span class="right">${esc(v.sect.model.name)}</span></h2>
         <div class="loc-grid">${v.buildings
           .map((b) => {
-            const bg = sectSceneUrl({ model: v.sect.model, terrain: v.sect.terrainId, location: b.id });
-            const state = b.level === 0 ? "locked" : busy(b.upgradingUntil) ? "busy" : "";
+            const art = locationArt({ model: v.sect.model, terrain: v.sect.terrainId, location: b.id });
+            const state = `${b.level === 0 ? "locked" : busy(b.upgradingUntil) ? "busy" : ""}${art.pixel ? " pix" : ""}`;
             const lv = b.level === 0 ? "Chưa xây" : busy(b.upgradingUntil) ? `${cd(b.upgradingUntil!)}` : `Cấp ${b.level}`;
-            return `<button type="button" class="loc ${state}" data-act="loc" data-id="${b.id}" style="background-image:url('${bg}')">
+            return `<button type="button" class="loc ${state}" data-act="loc" data-id="${b.id}" style="background-image:url('${art.url}')">
               <span class="lv">${lv}</span><span class="loc-name">${esc(b.name)}</span></button>`;
           })
           .join("")}</div>
-        <p class="muted">Cảnh 2D công trình dựng theo mẫu Watabou ở Sprint 5; hình nền này vẽ bằng code theo mô hình tông môn.</p>
+        <p class="muted">Cảnh 2D công trình dựng theo mẫu Watabou ở Sprint 5. Mô hình có hình PixelLab thì dùng hình đó, chưa có thì dùng hình vẽ bằng code.</p>
       </section>`;
   }
 
@@ -168,10 +175,10 @@ export class TongMonScene extends PageScene<TongMonView> {
     const meta = LOCATIONS.find((x) => x.id === id);
     if (!b || !meta) return;
     const busy = b.upgradingUntil !== undefined && b.upgradingUntil > v.serverNow;
-    const bg = sectSceneUrl({ model: v.sect.model, terrain: v.sect.terrainId, location: b.id });
+    const art = locationArt({ model: v.sect.model, terrain: v.sect.terrainId, location: b.id });
     const body = openSheet(
       b.name,
-      `<div class="loc-hero" style="background-image:url('${bg}')" role="img" aria-label="${esc(`${b.name} của ${v.sect.name}`)}"></div>
+      `<div class="loc-hero${art.pixel ? " pix" : ""}" style="background-image:url('${art.url}')" role="img" aria-label="${esc(`${b.name} của ${v.sect.name}`)}"></div>
        <p>${esc(meta.role)}</p>
        <dl class="kv">
          <dt>Cấp</dt><dd>${b.level === 0 ? "Chưa xây" : b.level}</dd>
@@ -232,7 +239,8 @@ export class TongMonScene extends PageScene<TongMonView> {
       <label>Xem với chức vị <select data-dev="role">${(["tong_chu", "pho_tong_chu", "truong_lao", "noi_mon", "ngoai_mon"] as Role[])
         .map((r) => `<option value="${r}" ${r === role ? "selected" : ""}>${ROLE_NAMES[r]}</option>`)
         .join("")}</select></label>
-      <label>Mô hình tông môn <select data-dev="model"><option>Đang tải…</option></select></label></details>`;
+      <label>Mô hình tông môn <select data-dev="model"><option>Đang tải…</option></select></label>
+      <label><input type="checkbox" data-dev="pixel" ${pixelArtEnabled() ? "checked" : ""}> Dùng hình PixelLab khi có (tắt để so với bản vẽ code)</label></details>`;
   }
 
   protected override act(name: string, el: HTMLElement): void {

@@ -422,6 +422,9 @@ details.dev select { height: 36px; max-width: 60vw; border: 0; border-radius: 8p
 .loc .loc-name .muted { display: block; font-size: 11px; font-weight: 500; color: var(--ink-2); }
 .loc .lv { position: absolute; right: 8px; top: 8px; z-index: 1; padding: 1px 7px; border-radius: 999px; background: rgba(13, 11, 9, 0.6); font-size: 11px; font-weight: 600; }
 .loc.busy .lv { color: var(--gold); }
+/* Hình PixelLab: khung đã sát công trình nên phủ cả ô, giữ điểm ảnh sắc */
+.loc.pix { background-size: cover; background-position: center 60%; }
+.pix { image-rendering: pixelated; }
 .loc.locked { filter: grayscale(0.7) brightness(0.7); }
 .loc-hero { width: 100%; aspect-ratio: 5 / 3; border-radius: 12px; background: var(--s2) center / cover no-repeat; }
 
@@ -587,3 +590,10 @@ details.dev select { height: 36px; max-width: 60vw; border: 0; border-radius: 8p
 .login-card .check { display: flex; align-items: center; gap: 10px; margin: 6px 0 8px; color: var(--ink-2); font-size: 14px; }
 .login-card .check input { width: 20px; height: 20px; accent-color: var(--seal); }
 .login-foot { color: var(--ink-3); font-size: 11px; text-align: center; }
+
+/* Hình nền điểm bản đồ (PixelLab): ảnh nhỏ trong danh sách Lãnh thổ, nền thẻ Thành chủ */
+.pt-thumb { flex: 0 0 auto; width: 56px; height: 34px; border-radius: 8px; background: var(--s2) center / cover no-repeat; }
+.card.city.has-art { position: relative; overflow: hidden; background: var(--s1); }
+.card.city.has-art::before { content: ""; position: absolute; inset: 0; background: var(--art) center 70% / cover no-repeat; image-rendering: pixelated; opacity: 0.35; }
+.card.city.has-art > * { position: relative; }
+#sheet .loc-hero { margin: 6px 0 4px; }

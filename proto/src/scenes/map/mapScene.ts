@@ -7,6 +7,7 @@ import type { View } from "../../app/view.ts";
 import { MiniMap, OWNER_COLOR } from "../../dashboard/minimap.ts";
 import type { DashCtx } from "../../dashboard/shell.ts";
 import type { BanDoView, Go } from "../../dashboard/source.ts";
+import { loadLocationArt, pointArt } from "../../dashboard/art/sectScene.ts";
 import { cd, closeSheet, esc, fmt, openSheet, toast } from "../../dashboard/ui.ts";
 import { IslandImages, regionLayers, type RegionLayers } from "./layers.ts";
 import { BG_SCALE, HOLDABLE, POINT_NAMES, toImage, type RegionMap, type RegionPoint } from "./region.ts";
@@ -112,7 +113,7 @@ export class MapScene implements Scene {
   }
 
   private async reload(): Promise<void> {
-    const d = await this.ctx.source.banDo();
+    const [d] = await Promise.all([this.ctx.source.banDo(), loadLocationArt()]);
     this.ctx.clock.sync(d.serverNow);
     this.ctx.topbar.set(d.top);
     this.data = d;
@@ -319,9 +320,11 @@ export class MapScene implements Scene {
     const inRange = d.inRange.includes(p.id);
     const canTake = d.can.chiem && HOLDABLE.includes(p.type) && own?.owner !== "minh" && own?.owner !== "dong_minh";
     const canWar = d.can.tuyenChien && own?.owner === "dich";
+    const art = pointArt(d.map.region, p.type);
     const body = openSheet(
       `${POINT_NAMES[p.type]} #${p.id}`,
-      `<dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
+      `${art ? `<div class="loc-hero pix" style="background-image:url('${art}')" role="img" aria-label="${POINT_NAMES[p.type]}"></div>` : ""}
+       <dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
        <div class="actions">
          <button type="button" class="seal" data-a="di">Đi tới</button>
          ${canTake ? `<button type="button" data-a="chiem" ${inRange && d.held < d.maxHeld ? "" : "disabled"}>Chiếm</button>` : ""}
