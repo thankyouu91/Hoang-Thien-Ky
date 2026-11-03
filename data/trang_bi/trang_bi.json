@@ -218,9 +218,8 @@
    "so": 2,
    "ten": "Kiếm Thiết Phong",
    "do_hiem": "luc",
-   "khi_hinh": "dao",
-   "ten_de_xuat": "Đao Thiết Phong",
-   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -231,9 +230,8 @@
    "so": 3,
    "ten": "Kiếm Thanh Đồng",
    "do_hiem": "luc",
-   "khi_hinh": "thuong",
-   "ten_de_xuat": "Thương Thanh Đồng",
-   "mo_ta": "Trường thương, lao tới đâm xuyên",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -244,9 +242,8 @@
    "so": 4,
    "ten": "Kiếm Đào Mộc",
    "do_hiem": "luc",
-   "khi_hinh": "con",
-   "ten_de_xuat": "Côn Đào Mộc",
-   "mo_ta": "Côn dài, thủ thế che thân và che bạn",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -257,9 +254,8 @@
    "so": 5,
    "ten": "Kiếm Trúc Ảnh",
    "do_hiem": "luc",
-   "khi_hinh": "cung",
-   "ten_de_xuat": "Cung Trúc Ảnh",
-   "mo_ta": "Cung và tên, bắn từ hàng sau",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -270,9 +266,8 @@
    "so": 6,
    "ten": "Kiếm Bạch Cương",
    "do_hiem": "luc",
-   "khi_hinh": "phien",
-   "ten_de_xuat": "Phiến Bạch Cương",
-   "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -283,9 +278,8 @@
    "so": 7,
    "ten": "Kiếm Hắc Thiết",
    "do_hiem": "luc",
-   "khi_hinh": "but",
-   "ten_de_xuat": "Bút Lang Hào",
-   "mo_ta": "Phù bút vẽ bùa, điểm huyệt",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -296,9 +290,8 @@
    "so": 8,
    "ten": "Kiếm Khách Hành",
    "do_hiem": "luc",
-   "khi_hinh": "ky",
-   "ten_de_xuat": "Kỳ Hoàng Bố",
-   "mo_ta": "Trận kỳ cắm đất bày trận",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -309,9 +302,8 @@
    "so": 9,
    "ten": "Kiếm Song Nhận",
    "do_hiem": "luc",
-   "khi_hinh": "cam",
-   "ten_de_xuat": "Cầm Ngô Đồng",
-   "mo_ta": "Đàn cổ, tiếng đàn dưỡng thương",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -322,9 +314,8 @@
    "so": 10,
    "ten": "Kiếm Thạch Văn",
    "do_hiem": "luc",
-   "khi_hinh": "tieu",
-   "ten_de_xuat": "Tiêu Tử Trúc",
-   "mo_ta": "Sáo trúc, tiếng tiêu mê hồn trói chân địch",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -347,9 +338,8 @@
    "so": 12,
    "ten": "Kiếm Liễu Diệp",
    "do_hiem": "luc",
-   "khi_hinh": "dao",
-   "ten_de_xuat": "Đao Liễu Diệp",
-   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -360,9 +350,8 @@
    "so": 13,
    "ten": "Kiếm Thư Sinh",
    "do_hiem": "luc",
-   "khi_hinh": "thuong",
-   "ten_de_xuat": "Thương Hồng Anh",
-   "mo_ta": "Trường thương, lao tới đâm xuyên",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -373,9 +362,8 @@
    "so": 14,
    "ten": "Kiếm Sơn Dã",
    "do_hiem": "luc",
-   "khi_hinh": "con",
-   "ten_de_xuat": "Côn Tề Mi",
-   "mo_ta": "Côn dài, thủ thế che thân và che bạn",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -386,9 +374,8 @@
    "so": 15,
    "ten": "Kiếm Hồng Anh",
    "do_hiem": "luc",
-   "khi_hinh": "cung",
-   "ten_de_xuat": "Cung Sơn Dã",
-   "mo_ta": "Cung và tên, bắn từ hàng sau",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -399,9 +386,8 @@
    "so": 16,
    "ten": "Kiếm Thiết Cốt",
    "do_hiem": "luc",
-   "khi_hinh": "phien",
-   "ten_de_xuat": "Phiến Thiết Cốt",
-   "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -412,9 +398,8 @@
    "so": 17,
    "ten": "Kiếm Đồng Hoàn",
    "do_hiem": "luc",
-   "khi_hinh": "but",
-   "ten_de_xuat": "Bút Thư Sinh",
-   "mo_ta": "Phù bút vẽ bùa, điểm huyệt",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -425,9 +410,8 @@
    "so": 18,
    "ten": "Kiếm Ô Mộc",
    "do_hiem": "luc",
-   "khi_hinh": "ky",
-   "ten_de_xuat": "Kỳ Thanh Bố",
-   "mo_ta": "Trận kỳ cắm đất bày trận",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -438,9 +422,8 @@
    "so": 19,
    "ten": "Kiếm Tế Vũ",
    "do_hiem": "luc",
-   "khi_hinh": "cam",
-   "ten_de_xuat": "Cầm Tế Vũ",
-   "mo_ta": "Đàn cổ, tiếng đàn dưỡng thương",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -451,9 +434,8 @@
    "so": 20,
    "ten": "Kiếm Quân Doanh",
    "do_hiem": "luc",
-   "khi_hinh": "tieu",
-   "ten_de_xuat": "Tiêu Thanh Trúc",
-   "mo_ta": "Sáo trúc, tiếng tiêu mê hồn trói chân địch",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -476,9 +458,8 @@
    "so": 22,
    "ten": "Kiếm Ngân Tuyến",
    "do_hiem": "luc",
-   "khi_hinh": "dao",
-   "ten_de_xuat": "Đao Quân Doanh",
-   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -489,9 +470,8 @@
    "so": 23,
    "ten": "Kiếm Thanh Hà",
    "do_hiem": "luc",
-   "khi_hinh": "thuong",
-   "ten_de_xuat": "Thương Thiết Kỵ",
-   "mo_ta": "Trường thương, lao tới đâm xuyên",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -502,9 +482,8 @@
    "so": 24,
    "ten": "Kiếm Tùng Văn",
    "do_hiem": "luc",
-   "khi_hinh": "con",
-   "ten_de_xuat": "Côn Hắc Thiết",
-   "mo_ta": "Côn dài, thủ thế che thân và che bạn",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "shop_npc"
    ]
@@ -529,9 +508,8 @@
    "so": 26,
    "ten": "Kiếm Hạc Vũ",
    "do_hiem": "lam",
-   "khi_hinh": "dao",
-   "ten_de_xuat": "Đao Hổ Khiếu",
-   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -544,9 +522,8 @@
    "so": 27,
    "ten": "Kiếm Thanh Liên",
    "do_hiem": "lam",
-   "khi_hinh": "thuong",
-   "ten_de_xuat": "Thương Ngân Long",
-   "mo_ta": "Trường thương, lao tới đâm xuyên",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -559,9 +536,8 @@
    "so": 28,
    "ten": "Kiếm Bích Lạc",
    "do_hiem": "lam",
-   "khi_hinh": "con",
-   "ten_de_xuat": "Côn Bàn Long",
-   "mo_ta": "Côn dài, thủ thế che thân và che bạn",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -574,9 +550,8 @@
    "so": 29,
    "ten": "Kiếm Nguyệt Ảnh",
    "do_hiem": "lam",
-   "khi_hinh": "cung",
-   "ten_de_xuat": "Cung Hạc Vũ",
-   "mo_ta": "Cung và tên, bắn từ hàng sau",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -589,9 +564,8 @@
    "so": 30,
    "ten": "Kiếm Tinh Thần",
    "do_hiem": "lam",
-   "khi_hinh": "phien",
-   "ten_de_xuat": "Phiến Thu Thủy",
-   "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -604,9 +578,9 @@
    "so": 31,
    "ten": "Kiếm Hổ Phách",
    "do_hiem": "lam",
-   "khi_hinh": "but",
-   "ten_de_xuat": "Bút Phán Quan",
-   "mo_ta": "Phù bút vẽ bùa, điểm huyệt",
+   "khi_hinh": "dao",
+   "ten_de_xuat": "Đao Hổ Khiếu",
+   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -619,9 +593,9 @@
    "so": 32,
    "ten": "Kiếm Long Ngâm",
    "do_hiem": "lam",
-   "khi_hinh": "ky",
-   "ten_de_xuat": "Kỳ Ngũ Hành",
-   "mo_ta": "Trận kỳ cắm đất bày trận",
+   "khi_hinh": "thuong",
+   "ten_de_xuat": "Thương Ngân Long",
+   "mo_ta": "Trường thương, lao tới đâm xuyên",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -634,9 +608,9 @@
    "so": 33,
    "ten": "Kiếm Thu Hồ",
    "do_hiem": "lam",
-   "khi_hinh": "cam",
-   "ten_de_xuat": "Cầm Lưu Thủy",
-   "mo_ta": "Đàn cổ, tiếng đàn dưỡng thương",
+   "khi_hinh": "con",
+   "ten_de_xuat": "Côn Bàn Long",
+   "mo_ta": "Côn dài, thủ thế che thân và che bạn",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -649,9 +623,9 @@
    "so": 34,
    "ten": "Kiếm Phi Yến",
    "do_hiem": "lam",
-   "khi_hinh": "tieu",
-   "ten_de_xuat": "Tiêu Bích Ngọc",
-   "mo_ta": "Sáo trúc, tiếng tiêu mê hồn trói chân địch",
+   "khi_hinh": "cung",
+   "ten_de_xuat": "Cung Hạc Vũ",
+   "mo_ta": "Cung và tên, bắn từ hàng sau",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -664,8 +638,9 @@
    "so": 35,
    "ten": "Kiếm Mai Hoa",
    "do_hiem": "lam",
-   "khi_hinh": "kiem",
-   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+   "khi_hinh": "phien",
+   "ten_de_xuat": "Phiến Thu Thủy",
+   "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -678,9 +653,9 @@
    "so": 36,
    "ten": "Kiếm Trường Hồng",
    "do_hiem": "lam",
-   "khi_hinh": "dao",
-   "ten_de_xuat": "Đao Nguyệt Nha",
-   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+   "khi_hinh": "but",
+   "ten_de_xuat": "Bút Phán Quan",
+   "mo_ta": "Phù bút vẽ bùa, điểm huyệt",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -693,9 +668,9 @@
    "so": 37,
    "ten": "Kiếm Tử Trúc",
    "do_hiem": "lam",
-   "khi_hinh": "thuong",
-   "ten_de_xuat": "Thương Truy Phong",
-   "mo_ta": "Trường thương, lao tới đâm xuyên",
+   "khi_hinh": "ky",
+   "ten_de_xuat": "Kỳ Ngũ Hành",
+   "mo_ta": "Trận kỳ cắm đất bày trận",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -708,9 +683,9 @@
    "so": 38,
    "ten": "Kiếm Kỳ Lân",
    "do_hiem": "lam",
-   "khi_hinh": "con",
-   "ten_de_xuat": "Côn Huyền Thiết",
-   "mo_ta": "Côn dài, thủ thế che thân và che bạn",
+   "khi_hinh": "cam",
+   "ten_de_xuat": "Cầm Lưu Thủy",
+   "mo_ta": "Đàn cổ, tiếng đàn dưỡng thương",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -723,9 +698,9 @@
    "so": 39,
    "ten": "Kiếm Huyền Quy",
    "do_hiem": "lam",
-   "khi_hinh": "cung",
-   "ten_de_xuat": "Cung Lạc Nhạn",
-   "mo_ta": "Cung và tên, bắn từ hàng sau",
+   "khi_hinh": "tieu",
+   "ten_de_xuat": "Tiêu Bích Ngọc",
+   "mo_ta": "Sáo trúc, tiếng tiêu mê hồn trói chân địch",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -738,9 +713,9 @@
    "so": 40,
    "ten": "Kiếm Thanh Hồng",
    "do_hiem": "lam",
-   "khi_hinh": "phien",
-   "ten_de_xuat": "Phiến Thanh Phong",
-   "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
+   "khi_hinh": "dao",
+   "ten_de_xuat": "Đao Nguyệt Nha",
+   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
    "nguon": [
     "co_chien_truong",
     "roi_ngoai_bi_canh",
@@ -767,9 +742,8 @@
    "so": 42,
    "ten": "Kiếm Tử Vân",
    "do_hiem": "tim",
-   "khi_hinh": "dao",
-   "ten_de_xuat": "Đao Hàn Nguyệt",
-   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+   "khi_hinh": "kiem",
+   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
    "nguon": [
     "van_kiem_trung",
     "luyen_khi_di_chi",
@@ -902,8 +876,9 @@
    "so": 51,
    "ten": "Kiếm Tử Điện",
    "do_hiem": "tim",
-   "khi_hinh": "kiem",
-   "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+   "khi_hinh": "dao",
+   "ten_de_xuat": "Đao Hàn Nguyệt",
+   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
    "nguon": [
     "van_kiem_trung",
     "luyen_khi_di_chi",
@@ -916,9 +891,9 @@
    "so": 52,
    "ten": "Kiếm Huyễn Ảnh",
    "do_hiem": "tim",
-   "khi_hinh": "dao",
-   "ten_de_xuat": "Đao Huyễn Ảnh",
-   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+   "khi_hinh": "thuong",
+   "ten_de_xuat": "Thương Truy Phong",
+   "mo_ta": "Trường thương, lao tới đâm xuyên",
    "nguon": [
     "van_kiem_trung",
     "luyen_khi_di_chi",
@@ -947,9 +922,9 @@
    "so": 54,
    "ten": "Kiếm Thái Hư",
    "do_hiem": "vang",
-   "khi_hinh": "dao",
-   "ten_de_xuat": "Đao Thái Hư",
-   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+   "khi_hinh": "cung",
+   "ten_de_xuat": "Cung Xạ Nhật",
+   "mo_ta": "Cung và tên, bắn từ hàng sau",
    "nguon": [
     "tien_nhan_dong_phu",
     "thuong_co_chien_truong",
@@ -964,9 +939,9 @@
    "so": 55,
    "ten": "Kiếm Xích Tiêu",
    "do_hiem": "vang",
-   "khi_hinh": "thuong",
-   "ten_de_xuat": "Thương Toái Tinh",
-   "mo_ta": "Trường thương, lao tới đâm xuyên",
+   "khi_hinh": "phien",
+   "ten_de_xuat": "Phiến Thái Hư",
+   "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
    "nguon": [
     "tien_nhan_dong_phu",
     "thuong_co_chien_truong",
@@ -1030,9 +1005,9 @@
    "so": 59,
    "ten": "Kiếm Phần Thiên",
    "do_hiem": "do",
-   "khi_hinh": "cung",
-   "ten_de_xuat": "Cung Xạ Nhật",
-   "mo_ta": "Cung và tên, bắn từ hàng sau",
+   "khi_hinh": "dao",
+   "ten_de_xuat": "Đao Phần Thiên",
+   "mo_ta": "Đao một lưỡi bản rộng, chém quét",
    "nguon": [
     "thuong_co_chien_truong",
     "hon_don_bi_canh",

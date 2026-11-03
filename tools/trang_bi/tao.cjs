@@ -59,24 +59,17 @@ const KHI_HINH = [
   ["thuong", "Thương", "than_phap", "Trường thương, lao tới đâm xuyên"],
 ];
 
-// [số kiểu, khí hình, tên đề xuất]. Giữ nguyên tên ở các ô khí hình kiếm (01, 41, 53 đã vẽ); 51 ô còn lại đổi tên theo khí hình.
-const VU_KHI = [
-  [1, "kiem", "Kiếm Thanh Cương"], [2, "dao", "Đao Thiết Phong"], [3, "thuong", "Thương Thanh Đồng"], [4, "con", "Côn Đào Mộc"],
-  [5, "cung", "Cung Trúc Ảnh"], [6, "phien", "Phiến Bạch Cương"], [7, "but", "Bút Lang Hào"], [8, "ky", "Kỳ Hoàng Bố"],
-  [9, "cam", "Cầm Ngô Đồng"], [10, "tieu", "Tiêu Tử Trúc"], [11, "kiem", "Kiếm Thô Phong"], [12, "dao", "Đao Liễu Diệp"],
-  [13, "thuong", "Thương Hồng Anh"], [14, "con", "Côn Tề Mi"], [15, "cung", "Cung Sơn Dã"], [16, "phien", "Phiến Thiết Cốt"],
-  [17, "but", "Bút Thư Sinh"], [18, "ky", "Kỳ Thanh Bố"], [19, "cam", "Cầm Tế Vũ"], [20, "tieu", "Tiêu Thanh Trúc"],
-  [21, "kiem", "Kiếm Thiết Lân"], [22, "dao", "Đao Quân Doanh"], [23, "thuong", "Thương Thiết Kỵ"], [24, "con", "Côn Hắc Thiết"],
-  [25, "kiem", "Kiếm Lưu Vân"], [26, "dao", "Đao Hổ Khiếu"], [27, "thuong", "Thương Ngân Long"], [28, "con", "Côn Bàn Long"],
-  [29, "cung", "Cung Hạc Vũ"], [30, "phien", "Phiến Thu Thủy"], [31, "but", "Bút Phán Quan"], [32, "ky", "Kỳ Ngũ Hành"],
-  [33, "cam", "Cầm Lưu Thủy"], [34, "tieu", "Tiêu Bích Ngọc"], [35, "kiem", "Kiếm Mai Hoa"], [36, "dao", "Đao Nguyệt Nha"],
-  [37, "thuong", "Thương Truy Phong"], [38, "con", "Côn Huyền Thiết"], [39, "cung", "Cung Lạc Nhạn"], [40, "phien", "Phiến Thanh Phong"],
-  [41, "kiem", "Kiếm Bạch Ngọc"], [42, "dao", "Đao Hàn Nguyệt"], [43, "thuong", "Thương Lôi Minh"], [44, "con", "Côn Kim Cang"],
-  [45, "cung", "Cung Truy Tinh"], [46, "phien", "Phiến Hàn Băng"], [47, "but", "Bút Xuân Thu"], [48, "ky", "Kỳ Thất Tinh"],
-  [49, "cam", "Cầm Tiêu Vĩ"], [50, "tieu", "Tiêu Phượng Minh"], [51, "kiem", "Kiếm Tử Điện"], [52, "dao", "Đao Huyễn Ảnh"],
-  [53, "kiem", "Kiếm Hoàng Long"], [54, "dao", "Đao Thái Hư"], [55, "thuong", "Thương Toái Tinh"], [56, "cam", "Cầm Thiên Lại"],
-  [57, "ky", "Kỳ Vạn Tượng"], [58, "kiem", "Kiếm Huyết Long"], [59, "cung", "Cung Xạ Nhật"], [60, "phien", "Phiến Hỗn Độn"],
-];
+// Khí hình của 26 kiểu chưa vẽ (lam trở lên), tên đề xuất. Các số khác giữ khí hình kiếm và tên ở danh_sach.json,
+// vì phiên icon đã vẽ 34 kiểu kiếm (01–30, 41, 42, 53, 58) tới commit 1c11379.
+const KHI_HINH_MOI = {
+  31: ["dao", "Đao Hổ Khiếu"], 32: ["thuong", "Thương Ngân Long"], 33: ["con", "Côn Bàn Long"], 34: ["cung", "Cung Hạc Vũ"],
+  35: ["phien", "Phiến Thu Thủy"], 36: ["but", "Bút Phán Quan"], 37: ["ky", "Kỳ Ngũ Hành"], 38: ["cam", "Cầm Lưu Thủy"],
+  39: ["tieu", "Tiêu Bích Ngọc"], 40: ["dao", "Đao Nguyệt Nha"], 43: ["thuong", "Thương Lôi Minh"], 44: ["con", "Côn Kim Cang"],
+  45: ["cung", "Cung Truy Tinh"], 46: ["phien", "Phiến Hàn Băng"], 47: ["but", "Bút Xuân Thu"], 48: ["ky", "Kỳ Thất Tinh"],
+  49: ["cam", "Cầm Tiêu Vĩ"], 50: ["tieu", "Tiêu Phượng Minh"], 51: ["dao", "Đao Hàn Nguyệt"], 52: ["thuong", "Thương Truy Phong"],
+  54: ["cung", "Cung Xạ Nhật"], 55: ["phien", "Phiến Thái Hư"], 56: ["cam", "Cầm Thiên Lại"], 57: ["ky", "Kỳ Vạn Tượng"],
+  59: ["dao", "Đao Phần Thiên"], 60: ["phien", "Phiến Hỗn Độn"],
+};
 
 // Ý châu: ngọc đặc biệt chỉ khảm vào vũ khí, đổi hành vi một loại chiêu. Thứ tự như KHI_HINH.
 const Y_CHAU = [
@@ -144,7 +137,7 @@ for (const m of ICON) {
   const so = Number(m.ma_vp.split("-")[2]);
   const k = { ma_vp: m.ma_vp, o: o.id, so, ten: m.ten, do_hiem: m.do_hiem };
   if (o.id === "vu_khi") {
-    const [, kh, ten] = VU_KHI[so - 1];
+    const [kh, ten] = KHI_HINH_MOI[so] || ["kiem", m.ten];
     const khi = KHI_HINH.find((x) => x[0] === kh);
     k.khi_hinh = kh;
     if (ten !== m.ten) k.ten_de_xuat = ten;
@@ -175,11 +168,11 @@ const vuKhi = {
   ghi_chu: [
     "Trả lời câu hỏi mục 20 (đề xuất): vũ khí vẫn là một loại khi rơi, rèn và bán. 60 kiểu chia 10 khí hình để icon và tên trong túi đa dạng; cầm lên vẫn hiện nhóm vũ khí theo tài năng (đã chốt ở mục 6).",
     "Khí hình không mang chỉ số. Mối nối với 10 loại chiêu nằm ở Ý châu (ngọc đặc biệt, chỉ khảm vào vũ khí). Ý châu trùng khí hình thì món phát sáng theo màu ý châu, chỉ là hình.",
-    "ten_de_xuat ở data/trang_bi/trang_bi.json là tên mới cho 51 kiểu chưa vẽ; phiên icon cập nhật trang_bi_ten.cjs và danh_sach.json. Mã TB-KI giữ nguyên.",
+    "34 kiểu đã vẽ (01–30, 41, 42, 53, 58) giữ khí hình kiếm. ten_de_xuat ở trang_bi.json là tên mới cho 26 kiểu lam trở lên chưa vẽ, chia cho 9 khí hình còn lại; chờ người dùng duyệt rồi phiên icon cập nhật trang_bi_ten.cjs và danh_sach.json. Mã TB-KI giữ nguyên.",
   ],
   khi_hinh: KHI_HINH.map(([id, ten, loai_chieu, mo_ta], i) => ({
     id, ten, loai_chieu, mo_ta, y_chau: `NG-YC-${String(i + 1).padStart(3, "0")}`,
-    so_kieu: VU_KHI.filter((v) => v[1] === id).length,
+    so_kieu: kieu.filter((k) => k.khi_hinh === id).length,
   })),
   hinh_khi_cam: [
     ["tu_the", "Quyền giáp", "VK-TN-001"], ["tu_phap", "Pháp trượng", "VK-TN-002"], ["tu_tran", "Trận bàn", "VK-TN-003"],
@@ -346,11 +339,10 @@ const tatCaMa = [
 ];
 for (const m of tatCaMa) { if (maDaCo.has(m)) loi.push("Trùng mã " + m); maDaCo.add(m); }
 const tenVK = new Set();
-for (const v of VU_KHI) { if (tenVK.has(v[2])) loi.push("Trùng tên vũ khí " + v[2]); tenVK.add(v[2]); }
+for (const k of kieu.filter((k) => k.o === "vu_khi")) { const t = k.ten_de_xuat || k.ten; if (tenVK.has(t)) loi.push("Trùng tên vũ khí " + t); tenVK.add(t); }
 if (kieu.length !== 420) loi.push("Số kiểu trang bị " + kieu.length);
 for (const b of SET.bo) if (b.moc.length !== 3) loi.push("Bộ thiếu mốc " + b.id);
 const dem = (nhom) => KHAC.dan.filter((d) => d.ma_vp.startsWith(nhom)).length;
 if (dem("DA-DD") !== 50 || dem("DA-LD") !== 40 || dem("DA-TD") !== 30) loi.push(`Số đan ${dem("DA-DD")}/${dem("DA-LD")}/${dem("DA-TD")}`);
-for (const v of VU_KHI) if (HIEM[ICON.find((m) => m.ma_vp === `TB-KI-${String(v[0]).padStart(3, "0")}`).do_hiem] === undefined) loi.push("Độ hiếm " + v[0]);
 console.log(`Kiểu trang bị ${kieu.length}, đổi tên vũ khí ${kieu.filter((k) => k.ten_de_xuat).length}, pháp bảo ${phapBao.mon.length}+${phapBao.tran_giao.length}, pháp khí ${phapKhi.mon.length}, ý châu ${ngoc.y_chau.length}, bộ ${SET.bo.length}, phù ${KHAC.phu.length}, đan ${KHAC.dan.length}, nguyên liệu ${KHAC.nguyen_lieu.length}, mã ${tatCaMa.length}`);
 if (loi.length) { console.error(loi.join("\n")); process.exit(1); }
