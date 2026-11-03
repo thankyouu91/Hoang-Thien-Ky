@@ -7648,6 +7648,26 @@
       },
       "created": "2026-11-03",
       "pixellab_id": "0d18e70b-ace6-5aed-a869-6b8ac231f202"
+    },
+    {
+      "file": "san_dau/cao_nguyen.png",
+      "description": "Nền sân đấu cao nguyên núi nhìn thẳng từ trên xuống: cỏ ngắn xanh lẫn mảng vàng đất, đá dẹt rải rác, hoa trắng, sương mờ, lối mòn đất giữa sân. Dùng cho trận ngoài trời (arena: cao_nguyen). Vẽ ngang theo trục sân; màn đứng xoay 90 độ.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view of a high mountain plateau meadow used as a battle arena floor in a xianxia world: short wind-swept grass in soft greens and ochre, scattered flat grey stones and pebbles, small patches of bare earth, a few white wildflowers, a faint worn footpath running straight across the middle from top to bottom dividing left and right halves, drifting mist shadows. Muted ink-wash palette, low contrast so characters stand out. Flat ground only, orthographic view from straight above, evenly lit, no characters, no trees, no buildings, no text.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "style_image": "tu_si/tu_the.png",
+        "style_copy": [
+          "outline",
+          "detail",
+          "shading"
+        ],
+        "job_id": "2e4d3d96-99f5-4707-bbd6-bef95bff8e43"
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "bcc60def-9eff-5f67-9c2a-bf149729fe92"
     }
   ]
 }
