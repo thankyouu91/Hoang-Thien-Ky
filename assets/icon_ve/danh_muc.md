@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ.
 
-Tổng 519 món, đã vẽ 44.
+Tổng 519 món, đã vẽ 117.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -27,9 +27,9 @@ Tổng 519 món, đã vẽ 44.
 | Mã | Tên | Độ hiếm | File | Hình |
 |---|---|---|---|---|
 | TB-KI-001 | Kiếm Thanh Cương | Lục | trang_bi/kiem/01.webp | ✓ |
-| TB-KI-002 | Kiếm Thiết Phong | Lục | trang_bi/kiem/02.webp |  |
-| TB-KI-003 | Kiếm Thanh Đồng | Lục | trang_bi/kiem/03.webp |  |
-| TB-KI-004 | Kiếm Đào Mộc | Lục | trang_bi/kiem/04.webp |  |
+| TB-KI-002 | Kiếm Thiết Phong | Lục | trang_bi/kiem/02.webp | ✓ |
+| TB-KI-003 | Kiếm Thanh Đồng | Lục | trang_bi/kiem/03.webp | ✓ |
+| TB-KI-004 | Kiếm Đào Mộc | Lục | trang_bi/kiem/04.webp | ✓ |
 | TB-KI-005 | Kiếm Trúc Ảnh | Lục | trang_bi/kiem/05.webp |  |
 | TB-KI-006 | Kiếm Bạch Cương | Lục | trang_bi/kiem/06.webp |  |
 | TB-KI-007 | Kiếm Hắc Thiết | Lục | trang_bi/kiem/07.webp |  |
@@ -50,8 +50,8 @@ Tổng 519 món, đã vẽ 44.
 | TB-KI-022 | Kiếm Ngân Tuyến | Lục | trang_bi/kiem/22.webp |  |
 | TB-KI-023 | Kiếm Thanh Hà | Lục | trang_bi/kiem/23.webp |  |
 | TB-KI-024 | Kiếm Tùng Văn | Lục | trang_bi/kiem/24.webp |  |
-| TB-KI-025 | Kiếm Lưu Vân | Lam | trang_bi/kiem/25.webp |  |
-| TB-KI-026 | Kiếm Hạc Vũ | Lam | trang_bi/kiem/26.webp |  |
+| TB-KI-025 | Kiếm Lưu Vân | Lam | trang_bi/kiem/25.webp | ✓ |
+| TB-KI-026 | Kiếm Hạc Vũ | Lam | trang_bi/kiem/26.webp | ✓ |
 | TB-KI-027 | Kiếm Thanh Liên | Lam | trang_bi/kiem/27.webp |  |
 | TB-KI-028 | Kiếm Bích Lạc | Lam | trang_bi/kiem/28.webp |  |
 | TB-KI-029 | Kiếm Nguyệt Ảnh | Lam | trang_bi/kiem/29.webp |  |
@@ -67,7 +67,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-KI-039 | Kiếm Huyền Quy | Lam | trang_bi/kiem/39.webp |  |
 | TB-KI-040 | Kiếm Thanh Hồng | Lam | trang_bi/kiem/40.webp |  |
 | TB-KI-041 | Kiếm Bạch Ngọc | Tím | trang_bi/kiem/41.webp | ✓ |
-| TB-KI-042 | Kiếm Tử Vân | Tím | trang_bi/kiem/42.webp |  |
+| TB-KI-042 | Kiếm Tử Vân | Tím | trang_bi/kiem/42.webp | ✓ |
 | TB-KI-043 | Kiếm Phượng Vĩ | Tím | trang_bi/kiem/43.webp |  |
 | TB-KI-044 | Kiếm Thất Tinh | Tím | trang_bi/kiem/44.webp |  |
 | TB-KI-045 | Kiếm Thiên Hà | Tím | trang_bi/kiem/45.webp |  |
@@ -83,7 +83,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-KI-055 | Kiếm Xích Tiêu | Vàng | trang_bi/kiem/55.webp |  |
 | TB-KI-056 | Kiếm Hiên Viên | Vàng | trang_bi/kiem/56.webp |  |
 | TB-KI-057 | Kiếm Vạn Tượng | Vàng | trang_bi/kiem/57.webp |  |
-| TB-KI-058 | Kiếm Huyết Long | Đỏ | trang_bi/kiem/58.webp |  |
+| TB-KI-058 | Kiếm Huyết Long | Đỏ | trang_bi/kiem/58.webp | ✓ |
 | TB-KI-059 | Kiếm Phần Thiên | Đỏ | trang_bi/kiem/59.webp |  |
 | TB-KI-060 | Kiếm Hỗn Độn | Đỏ | trang_bi/kiem/60.webp |  |
 
@@ -92,9 +92,9 @@ Tổng 519 món, đã vẽ 44.
 | Mã | Tên | Độ hiếm | File | Hình |
 |---|---|---|---|---|
 | TB-MU-001 | Ô Sa Mặc Ngọc | Lục | trang_bi/mu/01.webp | ✓ |
-| TB-MU-002 | Nón Lá Trúc Ti | Lục | trang_bi/mu/02.webp |  |
-| TB-MU-003 | Đấu Lạp Phong Trần | Lục | trang_bi/mu/03.webp |  |
-| TB-MU-004 | Khăn Vấn Thanh Bố | Lục | trang_bi/mu/04.webp |  |
+| TB-MU-002 | Nón Lá Trúc Ti | Lục | trang_bi/mu/02.webp | ✓ |
+| TB-MU-003 | Đấu Lạp Phong Trần | Lục | trang_bi/mu/03.webp | ✓ |
+| TB-MU-004 | Khăn Vấn Thanh Bố | Lục | trang_bi/mu/04.webp | ✓ |
 | TB-MU-005 | Đạo Quan Mộc Trâm | Lục | trang_bi/mu/05.webp |  |
 | TB-MU-006 | Mũ Da Thú | Lục | trang_bi/mu/06.webp |  |
 | TB-MU-007 | Khôi Thiết Phiến | Lục | trang_bi/mu/07.webp |  |
@@ -115,8 +115,8 @@ Tổng 519 món, đã vẽ 44.
 | TB-MU-022 | Mũ Lính Tuần | Lục | trang_bi/mu/22.webp |  |
 | TB-MU-023 | Khăn Chít Mặc Sắc | Lục | trang_bi/mu/23.webp |  |
 | TB-MU-024 | Mũ Mềm Bố Y | Lục | trang_bi/mu/24.webp |  |
-| TB-MU-025 | Ngọc Quan Tử Vân | Lam | trang_bi/mu/25.webp |  |
-| TB-MU-026 | Khôi Ưng Dực | Lam | trang_bi/mu/26.webp |  |
+| TB-MU-025 | Ngọc Quan Tử Vân | Lam | trang_bi/mu/25.webp | ✓ |
+| TB-MU-026 | Khôi Ưng Dực | Lam | trang_bi/mu/26.webp | ✓ |
 | TB-MU-027 | Ô Sa Lôi Văn | Lam | trang_bi/mu/27.webp |  |
 | TB-MU-028 | Đạo Quan Liên Hoa | Lam | trang_bi/mu/28.webp |  |
 | TB-MU-029 | Khôi Hổ Đầu | Lam | trang_bi/mu/29.webp |  |
@@ -132,7 +132,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-MU-039 | Phát Quan Song Long | Lam | trang_bi/mu/39.webp |  |
 | TB-MU-040 | Khăn Tử La | Lam | trang_bi/mu/40.webp |  |
 | TB-MU-041 | Bạch Ngọc Quan | Tím | trang_bi/mu/41.webp | ✓ |
-| TB-MU-042 | Khôi Kỳ Lân | Tím | trang_bi/mu/42.webp |  |
+| TB-MU-042 | Khôi Kỳ Lân | Tím | trang_bi/mu/42.webp | ✓ |
 | TB-MU-043 | Quan Tinh Tú | Tím | trang_bi/mu/43.webp |  |
 | TB-MU-044 | Mạo Lưu Ly | Tím | trang_bi/mu/44.webp |  |
 | TB-MU-045 | Phượng Quan Tử Tinh | Tím | trang_bi/mu/45.webp |  |
@@ -148,7 +148,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-MU-055 | Quan Diệu Nhật | Vàng | trang_bi/mu/55.webp |  |
 | TB-MU-056 | Quan Cửu Châu | Vàng | trang_bi/mu/56.webp |  |
 | TB-MU-057 | Khôi Thiên Tướng | Vàng | trang_bi/mu/57.webp |  |
-| TB-MU-058 | Quan Xích Phượng | Đỏ | trang_bi/mu/58.webp |  |
+| TB-MU-058 | Quan Xích Phượng | Đỏ | trang_bi/mu/58.webp | ✓ |
 | TB-MU-059 | Khôi Ma Thần | Đỏ | trang_bi/mu/59.webp |  |
 | TB-MU-060 | Quan Đế Vương | Đỏ | trang_bi/mu/60.webp |  |
 
@@ -156,10 +156,10 @@ Tổng 519 món, đã vẽ 44.
 
 | Mã | Tên | Độ hiếm | File | Hình |
 |---|---|---|---|---|
-| TB-AO-001 | Bố Y Thô | Lục | trang_bi/ao/01.webp |  |
-| TB-AO-002 | Sam Thanh Bố | Lục | trang_bi/ao/02.webp |  |
-| TB-AO-003 | Đạo Bào Tro | Lục | trang_bi/ao/03.webp |  |
-| TB-AO-004 | Giáp Da Thú | Lục | trang_bi/ao/04.webp |  |
+| TB-AO-001 | Bố Y Thô | Lục | trang_bi/ao/01.webp | ✓ |
+| TB-AO-002 | Sam Thanh Bố | Lục | trang_bi/ao/02.webp | ✓ |
+| TB-AO-003 | Đạo Bào Tro | Lục | trang_bi/ao/03.webp | ✓ |
+| TB-AO-004 | Giáp Da Thú | Lục | trang_bi/ao/04.webp | ✓ |
 | TB-AO-005 | Giáp Đồng Phiến | Lục | trang_bi/ao/05.webp |  |
 | TB-AO-006 | Áo Bông Kép | Lục | trang_bi/ao/06.webp |  |
 | TB-AO-007 | Sam Trắng Thư Sinh | Lục | trang_bi/ao/07.webp |  |
@@ -196,8 +196,8 @@ Tổng 519 món, đã vẽ 44.
 | TB-AO-038 | Bào Trúc Lâm | Lam | trang_bi/ao/38.webp |  |
 | TB-AO-039 | Sam Tử La | Lam | trang_bi/ao/39.webp |  |
 | TB-AO-040 | Giáp Long Lân | Lam | trang_bi/ao/40.webp |  |
-| TB-AO-041 | Pháp Y Tinh Hà | Tím | trang_bi/ao/41.webp |  |
-| TB-AO-042 | Giáp Kỳ Lân | Tím | trang_bi/ao/42.webp |  |
+| TB-AO-041 | Pháp Y Tinh Hà | Tím | trang_bi/ao/41.webp | ✓ |
+| TB-AO-042 | Giáp Kỳ Lân | Tím | trang_bi/ao/42.webp | ✓ |
 | TB-AO-043 | Bào Phượng Vũ | Tím | trang_bi/ao/43.webp |  |
 | TB-AO-044 | Y Lưu Ly | Tím | trang_bi/ao/44.webp |  |
 | TB-AO-045 | Giáp Huyễn Ảnh | Tím | trang_bi/ao/45.webp |  |
@@ -213,7 +213,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-AO-055 | Bào Cửu Long | Vàng | trang_bi/ao/55.webp |  |
 | TB-AO-056 | Giáp Thiên Tướng | Vàng | trang_bi/ao/56.webp |  |
 | TB-AO-057 | Pháp Y Thái Hư | Vàng | trang_bi/ao/57.webp |  |
-| TB-AO-058 | Bào Xích Hoàng | Đỏ | trang_bi/ao/58.webp |  |
+| TB-AO-058 | Bào Xích Hoàng | Đỏ | trang_bi/ao/58.webp | ✓ |
 | TB-AO-059 | Giáp Huyết Long | Đỏ | trang_bi/ao/59.webp |  |
 | TB-AO-060 | Y Phần Thiên | Đỏ | trang_bi/ao/60.webp |  |
 
@@ -222,9 +222,9 @@ Tổng 519 món, đã vẽ 44.
 | Mã | Tên | Độ hiếm | File | Hình |
 |---|---|---|---|---|
 | TB-DA-001 | Đai Da Ngọc Khấu | Lục | trang_bi/dai/01.webp | ✓ |
-| TB-DA-002 | Đai Vải Bố | Lục | trang_bi/dai/02.webp |  |
-| TB-DA-003 | Đai Dây Thừng | Lục | trang_bi/dai/03.webp |  |
-| TB-DA-004 | Đai Da Trâu | Lục | trang_bi/dai/04.webp |  |
+| TB-DA-002 | Đai Vải Bố | Lục | trang_bi/dai/02.webp | ✓ |
+| TB-DA-003 | Đai Dây Thừng | Lục | trang_bi/dai/03.webp | ✓ |
+| TB-DA-004 | Đai Da Trâu | Lục | trang_bi/dai/04.webp | ✓ |
 | TB-DA-005 | Đai Đồng Khấu | Lục | trang_bi/dai/05.webp |  |
 | TB-DA-006 | Đai Lụa Lam | Lục | trang_bi/dai/06.webp |  |
 | TB-DA-007 | Đai Trúc Phiến | Lục | trang_bi/dai/07.webp |  |
@@ -246,7 +246,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-DA-023 | Đai Mây Trắng | Lục | trang_bi/dai/23.webp |  |
 | TB-DA-024 | Đai Sừng Thú | Lục | trang_bi/dai/24.webp |  |
 | TB-DA-025 | Đai Lôi Văn | Lam | trang_bi/dai/25.webp | ✓ |
-| TB-DA-026 | Đai Ngân Hạc | Lam | trang_bi/dai/26.webp |  |
+| TB-DA-026 | Đai Ngân Hạc | Lam | trang_bi/dai/26.webp | ✓ |
 | TB-DA-027 | Đai Thanh Ngọc | Lam | trang_bi/dai/27.webp |  |
 | TB-DA-028 | Đai Hổ Đầu | Lam | trang_bi/dai/28.webp |  |
 | TB-DA-029 | Đai Lưu Vân | Lam | trang_bi/dai/29.webp |  |
@@ -261,8 +261,8 @@ Tổng 519 món, đã vẽ 44.
 | TB-DA-038 | Đai Thất Hoàn | Lam | trang_bi/dai/38.webp |  |
 | TB-DA-039 | Đai Tử Trúc | Lam | trang_bi/dai/39.webp |  |
 | TB-DA-040 | Đai Bạch Lân | Lam | trang_bi/dai/40.webp |  |
-| TB-DA-041 | Đai Tinh Tú | Tím | trang_bi/dai/41.webp |  |
-| TB-DA-042 | Đai Kỳ Lân | Tím | trang_bi/dai/42.webp |  |
+| TB-DA-041 | Đai Tinh Tú | Tím | trang_bi/dai/41.webp | ✓ |
+| TB-DA-042 | Đai Kỳ Lân | Tím | trang_bi/dai/42.webp | ✓ |
 | TB-DA-043 | Đai Phượng Vĩ | Tím | trang_bi/dai/43.webp |  |
 | TB-DA-044 | Đai Lưu Ly | Tím | trang_bi/dai/44.webp |  |
 | TB-DA-045 | Đai Tử Vân | Tím | trang_bi/dai/45.webp |  |
@@ -278,7 +278,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-DA-055 | Đai Diệu Nhật | Vàng | trang_bi/dai/55.webp |  |
 | TB-DA-056 | Đai Thiên Tướng | Vàng | trang_bi/dai/56.webp |  |
 | TB-DA-057 | Đai Vạn Tượng | Vàng | trang_bi/dai/57.webp |  |
-| TB-DA-058 | Đai Xích Long | Đỏ | trang_bi/dai/58.webp |  |
+| TB-DA-058 | Đai Xích Long | Đỏ | trang_bi/dai/58.webp | ✓ |
 | TB-DA-059 | Đai Huyết Phượng | Đỏ | trang_bi/dai/59.webp |  |
 | TB-DA-060 | Đai Hỗn Nguyên | Đỏ | trang_bi/dai/60.webp |  |
 
@@ -286,10 +286,10 @@ Tổng 519 món, đã vẽ 44.
 
 | Mã | Tên | Độ hiếm | File | Hình |
 |---|---|---|---|---|
-| TB-BT-001 | Găng Da Thô | Lục | trang_bi/bao_tay/01.webp |  |
-| TB-BT-002 | Hộ Uyển Vải | Lục | trang_bi/bao_tay/02.webp |  |
-| TB-BT-003 | Thủ Sáo Bố | Lục | trang_bi/bao_tay/03.webp |  |
-| TB-BT-004 | Hộ Thủ Đồng | Lục | trang_bi/bao_tay/04.webp |  |
+| TB-BT-001 | Găng Da Thô | Lục | trang_bi/bao_tay/01.webp | ✓ |
+| TB-BT-002 | Hộ Uyển Vải | Lục | trang_bi/bao_tay/02.webp | ✓ |
+| TB-BT-003 | Thủ Sáo Bố | Lục | trang_bi/bao_tay/03.webp | ✓ |
+| TB-BT-004 | Hộ Thủ Đồng | Lục | trang_bi/bao_tay/04.webp | ✓ |
 | TB-BT-005 | Găng Da Trâu | Lục | trang_bi/bao_tay/05.webp |  |
 | TB-BT-006 | Hộ Uyển Da | Lục | trang_bi/bao_tay/06.webp |  |
 | TB-BT-007 | Găng Thợ Rèn | Lục | trang_bi/bao_tay/07.webp |  |
@@ -310,8 +310,8 @@ Tổng 519 món, đã vẽ 44.
 | TB-BT-022 | Găng Thợ Săn | Lục | trang_bi/bao_tay/22.webp |  |
 | TB-BT-023 | Hộ Uyển Gấm | Lục | trang_bi/bao_tay/23.webp |  |
 | TB-BT-024 | Găng Vải Bông | Lục | trang_bi/bao_tay/24.webp |  |
-| TB-BT-025 | Hộ Thủ Thiết Lân | Lam | trang_bi/bao_tay/25.webp |  |
-| TB-BT-026 | Hộ Uyển Lưu Vân | Lam | trang_bi/bao_tay/26.webp |  |
+| TB-BT-025 | Hộ Thủ Thiết Lân | Lam | trang_bi/bao_tay/25.webp | ✓ |
+| TB-BT-026 | Hộ Uyển Lưu Vân | Lam | trang_bi/bao_tay/26.webp | ✓ |
 | TB-BT-027 | Hộ Thủ Hổ Trảo | Lam | trang_bi/bao_tay/27.webp |  |
 | TB-BT-028 | Thủ Sáo Hạc Văn | Lam | trang_bi/bao_tay/28.webp |  |
 | TB-BT-029 | Hộ Uyển Long Văn | Lam | trang_bi/bao_tay/29.webp |  |
@@ -326,8 +326,8 @@ Tổng 519 món, đã vẽ 44.
 | TB-BT-038 | Hộ Uyển Tùng Hạc | Lam | trang_bi/bao_tay/38.webp |  |
 | TB-BT-039 | Hộ Thủ Ngân Lân | Lam | trang_bi/bao_tay/39.webp |  |
 | TB-BT-040 | Thủ Sáo Tử La | Lam | trang_bi/bao_tay/40.webp |  |
-| TB-BT-041 | Hộ Thủ Kỳ Lân | Tím | trang_bi/bao_tay/41.webp |  |
-| TB-BT-042 | Hộ Uyển Tinh Tú | Tím | trang_bi/bao_tay/42.webp |  |
+| TB-BT-041 | Hộ Thủ Kỳ Lân | Tím | trang_bi/bao_tay/41.webp | ✓ |
+| TB-BT-042 | Hộ Uyển Tinh Tú | Tím | trang_bi/bao_tay/42.webp | ✓ |
 | TB-BT-043 | Thủ Sáo Lưu Ly | Tím | trang_bi/bao_tay/43.webp |  |
 | TB-BT-044 | Hộ Thủ Giao Long | Tím | trang_bi/bao_tay/44.webp |  |
 | TB-BT-045 | Hộ Uyển Phượng Vũ | Tím | trang_bi/bao_tay/45.webp |  |
@@ -338,12 +338,12 @@ Tổng 519 món, đã vẽ 44.
 | TB-BT-050 | Hộ Thủ Bích Lân | Tím | trang_bi/bao_tay/50.webp |  |
 | TB-BT-051 | Hộ Uyển Tử Vân | Tím | trang_bi/bao_tay/51.webp |  |
 | TB-BT-052 | Thủ Sáo Nguyệt Hoa | Tím | trang_bi/bao_tay/52.webp |  |
-| TB-BT-053 | Hộ Thủ Hoàng Long | Vàng | trang_bi/bao_tay/53.webp |  |
+| TB-BT-053 | Hộ Thủ Hoàng Long | Vàng | trang_bi/bao_tay/53.webp | ✓ |
 | TB-BT-054 | Hộ Uyển Diệu Nhật | Vàng | trang_bi/bao_tay/54.webp |  |
 | TB-BT-055 | Hộ Thủ Thiên Tướng | Vàng | trang_bi/bao_tay/55.webp |  |
 | TB-BT-056 | Hộ Uyển Cửu Châu | Vàng | trang_bi/bao_tay/56.webp |  |
 | TB-BT-057 | Thủ Sáo Vạn Tượng | Vàng | trang_bi/bao_tay/57.webp |  |
-| TB-BT-058 | Hộ Thủ Xích Long | Đỏ | trang_bi/bao_tay/58.webp |  |
+| TB-BT-058 | Hộ Thủ Xích Long | Đỏ | trang_bi/bao_tay/58.webp | ✓ |
 | TB-BT-059 | Hộ Thủ Ma Thần | Đỏ | trang_bi/bao_tay/59.webp |  |
 | TB-BT-060 | Hộ Uyển Phần Thiên | Đỏ | trang_bi/bao_tay/60.webp |  |
 
@@ -352,9 +352,9 @@ Tổng 519 món, đã vẽ 44.
 | Mã | Tên | Độ hiếm | File | Hình |
 |---|---|---|---|---|
 | TB-GI-001 | Ngoa Vải Đen | Lục | trang_bi/giay/01.webp | ✓ |
-| TB-GI-002 | Hài Cỏ | Lục | trang_bi/giay/02.webp |  |
-| TB-GI-003 | Giày Vải Bố | Lục | trang_bi/giay/03.webp |  |
-| TB-GI-004 | Ngoa Da Thú | Lục | trang_bi/giay/04.webp |  |
+| TB-GI-002 | Hài Cỏ | Lục | trang_bi/giay/02.webp | ✓ |
+| TB-GI-003 | Giày Vải Bố | Lục | trang_bi/giay/03.webp | ✓ |
+| TB-GI-004 | Ngoa Da Thú | Lục | trang_bi/giay/04.webp | ✓ |
 | TB-GI-005 | Guốc Gỗ | Lục | trang_bi/giay/05.webp |  |
 | TB-GI-006 | Ngoa Quân Sĩ | Lục | trang_bi/giay/06.webp |  |
 | TB-GI-007 | Hài Thư Sinh | Lục | trang_bi/giay/07.webp |  |
@@ -376,7 +376,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-GI-023 | Ngoa Thợ Săn | Lục | trang_bi/giay/23.webp |  |
 | TB-GI-024 | Dép Tre Sơn Dã | Lục | trang_bi/giay/24.webp |  |
 | TB-GI-025 | Giày Đạp Vân | Lam | trang_bi/giay/25.webp | ✓ |
-| TB-GI-026 | Ngoa Hạc Vũ | Lam | trang_bi/giay/26.webp |  |
+| TB-GI-026 | Ngoa Hạc Vũ | Lam | trang_bi/giay/26.webp | ✓ |
 | TB-GI-027 | Ngoa Thiết Lân | Lam | trang_bi/giay/27.webp |  |
 | TB-GI-028 | Hài Lưu Vân | Lam | trang_bi/giay/28.webp |  |
 | TB-GI-029 | Ngoa Hổ Văn | Lam | trang_bi/giay/29.webp |  |
@@ -391,8 +391,8 @@ Tổng 519 món, đã vẽ 44.
 | TB-GI-038 | Ngoa Quy Giáp | Lam | trang_bi/giay/38.webp |  |
 | TB-GI-039 | Ngoa Tùng Hạc | Lam | trang_bi/giay/39.webp |  |
 | TB-GI-040 | Hài Bích Hải | Lam | trang_bi/giay/40.webp |  |
-| TB-GI-041 | Ngoa Kỳ Lân | Tím | trang_bi/giay/41.webp |  |
-| TB-GI-042 | Ngoa Tinh Tú | Tím | trang_bi/giay/42.webp |  |
+| TB-GI-041 | Ngoa Kỳ Lân | Tím | trang_bi/giay/41.webp | ✓ |
+| TB-GI-042 | Ngoa Tinh Tú | Tím | trang_bi/giay/42.webp | ✓ |
 | TB-GI-043 | Hài Lưu Ly | Tím | trang_bi/giay/43.webp |  |
 | TB-GI-044 | Ngoa Giao Long | Tím | trang_bi/giay/44.webp |  |
 | TB-GI-045 | Ngoa Huyễn Ảnh | Tím | trang_bi/giay/45.webp |  |
@@ -403,7 +403,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-GI-050 | Ngoa Bích Lân | Tím | trang_bi/giay/50.webp |  |
 | TB-GI-051 | Ngoa Tử Vân | Tím | trang_bi/giay/51.webp |  |
 | TB-GI-052 | Hài Vạn Hoa | Tím | trang_bi/giay/52.webp |  |
-| TB-GI-053 | Ngoa Hoàng Long | Vàng | trang_bi/giay/53.webp |  |
+| TB-GI-053 | Ngoa Hoàng Long | Vàng | trang_bi/giay/53.webp | ✓ |
 | TB-GI-054 | Ngoa Thiên Tướng | Vàng | trang_bi/giay/54.webp |  |
 | TB-GI-055 | Hài Diệu Nhật | Vàng | trang_bi/giay/55.webp |  |
 | TB-GI-056 | Ngoa Cửu Châu | Vàng | trang_bi/giay/56.webp |  |
@@ -417,9 +417,9 @@ Tổng 519 món, đã vẽ 44.
 | Mã | Tên | Độ hiếm | File | Hình |
 |---|---|---|---|---|
 | TB-NB-001 | Bội Bích Hoàn | Lục | trang_bi/ngoc_boi/01.webp | ✓ |
-| TB-NB-002 | Bội Đá Thanh | Lục | trang_bi/ngoc_boi/02.webp |  |
-| TB-NB-003 | Bội Gỗ Đào | Lục | trang_bi/ngoc_boi/03.webp |  |
-| TB-NB-004 | Bội Đồng Tiền | Lục | trang_bi/ngoc_boi/04.webp |  |
+| TB-NB-002 | Bội Đá Thanh | Lục | trang_bi/ngoc_boi/02.webp | ✓ |
+| TB-NB-003 | Bội Gỗ Đào | Lục | trang_bi/ngoc_boi/03.webp | ✓ |
+| TB-NB-004 | Bội Đồng Tiền | Lục | trang_bi/ngoc_boi/04.webp | ✓ |
 | TB-NB-005 | Bội Xương Thú | Lục | trang_bi/ngoc_boi/05.webp |  |
 | TB-NB-006 | Bội Ngọc Thô | Lục | trang_bi/ngoc_boi/06.webp |  |
 | TB-NB-007 | Bội Hồ Lô | Lục | trang_bi/ngoc_boi/07.webp |  |
@@ -440,8 +440,8 @@ Tổng 519 món, đã vẽ 44.
 | TB-NB-022 | Bội Phù Gỗ | Lục | trang_bi/ngoc_boi/22.webp |  |
 | TB-NB-023 | Bội Hạt Châu | Lục | trang_bi/ngoc_boi/23.webp |  |
 | TB-NB-024 | Bội Đá Vân | Lục | trang_bi/ngoc_boi/24.webp |  |
-| TB-NB-025 | Bội Mã Não | Lam | trang_bi/ngoc_boi/25.webp |  |
-| TB-NB-026 | Bội Bạch Hạc | Lam | trang_bi/ngoc_boi/26.webp |  |
+| TB-NB-025 | Bội Mã Não | Lam | trang_bi/ngoc_boi/25.webp | ✓ |
+| TB-NB-026 | Bội Bạch Hạc | Lam | trang_bi/ngoc_boi/26.webp | ✓ |
 | TB-NB-027 | Bội Song Long | Lam | trang_bi/ngoc_boi/27.webp |  |
 | TB-NB-028 | Bội Lan Hoa | Lam | trang_bi/ngoc_boi/28.webp |  |
 | TB-NB-029 | Bội Ngân Tỏa | Lam | trang_bi/ngoc_boi/29.webp |  |
@@ -457,7 +457,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-NB-039 | Bội Thanh Điền | Lam | trang_bi/ngoc_boi/39.webp |  |
 | TB-NB-040 | Bội Tùng Hạc | Lam | trang_bi/ngoc_boi/40.webp |  |
 | TB-NB-041 | Bội Kỳ Lân | Tím | trang_bi/ngoc_boi/41.webp | ✓ |
-| TB-NB-042 | Bội Tử Tinh | Tím | trang_bi/ngoc_boi/42.webp |  |
+| TB-NB-042 | Bội Tử Tinh | Tím | trang_bi/ngoc_boi/42.webp | ✓ |
 | TB-NB-043 | Bội Nguyệt Quang | Tím | trang_bi/ngoc_boi/43.webp |  |
 | TB-NB-044 | Bội Thất Tinh | Tím | trang_bi/ngoc_boi/44.webp |  |
 | TB-NB-045 | Bội Phượng Lưu Ly | Tím | trang_bi/ngoc_boi/45.webp |  |
@@ -473,7 +473,7 @@ Tổng 519 món, đã vẽ 44.
 | TB-NB-055 | Bội Diệu Nhật | Vàng | trang_bi/ngoc_boi/55.webp |  |
 | TB-NB-056 | Bội Cửu Châu | Vàng | trang_bi/ngoc_boi/56.webp |  |
 | TB-NB-057 | Bội Thái Hư | Vàng | trang_bi/ngoc_boi/57.webp |  |
-| TB-NB-058 | Bội Xích Long | Đỏ | trang_bi/ngoc_boi/58.webp |  |
+| TB-NB-058 | Bội Xích Long | Đỏ | trang_bi/ngoc_boi/58.webp | ✓ |
 | TB-NB-059 | Bội Huyết Ngọc | Đỏ | trang_bi/ngoc_boi/59.webp |  |
 | TB-NB-060 | Bội Hỗn Nguyên | Đỏ | trang_bi/ngoc_boi/60.webp |  |
 
@@ -498,18 +498,18 @@ Tổng 519 món, đã vẽ 44.
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
-| TQ-HE-001 | Tàn quyển hệ Kim | tan_quyen/kim.webp |  |
-| TQ-HE-002 | Tàn quyển hệ Mộc | tan_quyen/moc.webp |  |
-| TQ-HE-003 | Tàn quyển hệ Thủy | tan_quyen/thuy.webp |  |
-| TQ-HE-004 | Tàn quyển hệ Hỏa | tan_quyen/hoa.webp |  |
-| TQ-HE-005 | Tàn quyển hệ Thổ | tan_quyen/tho.webp |  |
+| TQ-HE-001 | Tàn quyển hệ Kim | tan_quyen/kim.webp | ✓ |
+| TQ-HE-002 | Tàn quyển hệ Mộc | tan_quyen/moc.webp | ✓ |
+| TQ-HE-003 | Tàn quyển hệ Thủy | tan_quyen/thuy.webp | ✓ |
+| TQ-HE-004 | Tàn quyển hệ Hỏa | tan_quyen/hoa.webp | ✓ |
+| TQ-HE-005 | Tàn quyển hệ Thổ | tan_quyen/tho.webp | ✓ |
 | TQ-HE-006 | Tàn quyển hệ Lôi | tan_quyen/loi.webp | ✓ |
-| TQ-HE-007 | Tàn quyển hệ Phong | tan_quyen/phong.webp |  |
-| TQ-HE-008 | Tàn quyển hệ Quang | tan_quyen/quang.webp |  |
-| TQ-HE-009 | Tàn quyển hệ Âm lãnh | tan_quyen/am_lanh.webp |  |
-| TQ-HE-010 | Tàn quyển hệ Cực dương | tan_quyen/cuc_duong.webp |  |
-| TQ-HE-011 | Tàn quyển hệ Cực âm | tan_quyen/cuc_am.webp |  |
-| TQ-HE-012 | Tàn quyển hệ Cực hàn | tan_quyen/cuc_han.webp |  |
+| TQ-HE-007 | Tàn quyển hệ Phong | tan_quyen/phong.webp | ✓ |
+| TQ-HE-008 | Tàn quyển hệ Quang | tan_quyen/quang.webp | ✓ |
+| TQ-HE-009 | Tàn quyển hệ Âm lãnh | tan_quyen/am_lanh.webp | ✓ |
+| TQ-HE-010 | Tàn quyển hệ Cực dương | tan_quyen/cuc_duong.webp | ✓ |
+| TQ-HE-011 | Tàn quyển hệ Cực âm | tan_quyen/cuc_am.webp | ✓ |
+| TQ-HE-012 | Tàn quyển hệ Cực hàn | tan_quyen/cuc_han.webp | ✓ |
 
 ## Linh thạch (4)
 
@@ -534,10 +534,10 @@ Tổng 519 món, đã vẽ 44.
 | Mã | Tên | File | Hình |
 |---|---|---|---|
 | DL-TH-001 | Linh thảo | duoc/linh_thao.webp | ✓ |
-| DL-TH-002 | Huyền chi (đề xuất) | duoc/huyen_chi.webp |  |
-| DL-TH-003 | Ngọc sâm (đề xuất) | duoc/ngoc_sam.webp |  |
-| DL-TH-004 | Thần liên (đề xuất) | duoc/than_lien.webp |  |
-| DL-HI-001 | Tử Lôi Thảo | duoc/tu_loi_thao.webp |  |
+| DL-TH-002 | Huyền chi (đề xuất) | duoc/huyen_chi.webp | ✓ |
+| DL-TH-003 | Ngọc sâm (đề xuất) | duoc/ngoc_sam.webp | ✓ |
+| DL-TH-004 | Thần liên (đề xuất) | duoc/than_lien.webp | ✓ |
+| DL-HI-001 | Tử Lôi Thảo | duoc/tu_loi_thao.webp | ✓ |
 | DL-HI-002 | Long Tủy Thảo | duoc/long_tuy_thao.webp |  |
 | DL-HI-003 | Thiên Địa Linh Tủy | duoc/thien_dia_linh_tuy.webp |  |
 | DL-HI-004 | Đan thú | duoc/dan_thu.webp |  |
@@ -552,8 +552,8 @@ Tổng 519 món, đã vẽ 44.
 | DA-DD-004 | Đan dược giải độc | dan/dan_duoc_giai_doc.webp |  |
 | DA-LD-001 | Linh đan trị thương | dan/linh_dan_tri_thuong.webp |  |
 | DA-LD-002 | Linh đan tăng kinh nghiệm | dan/linh_dan_kinh_nghiem.webp |  |
-| DA-LD-003 | Linh đan tăng tốc tu luyện (Tụ Linh Đan) | dan/linh_dan_tu_luyen.webp |  |
-| DA-TD-001 | Thần đan vượt cảnh giới (Phá Cảnh Đan) | dan/than_dan_pha_canh.webp |  |
+| DA-LD-003 | Linh đan tăng tốc tu luyện (Tụ Linh Đan) | dan/linh_dan_tu_luyen.webp | ✓ |
+| DA-TD-001 | Thần đan vượt cảnh giới (Phá Cảnh Đan) | dan/than_dan_pha_canh.webp | ✓ |
 | DA-TD-002 | Thần đan tăng ngộ đạo | dan/than_dan_ngo_dao.webp |  |
 | DA-TD-003 | Thần đan giảm lôi kiếp | dan/than_dan_giam_loi_kiep.webp |  |
 | DA-DB-001 | Tẩy Tủy Đan | dan/tay_tuy_dan.webp |  |
@@ -571,10 +571,10 @@ Tổng 519 món, đã vẽ 44.
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
-| PH-CH-001 | Phù chống sét | phu/chong_set.webp |  |
-| PH-CH-002 | Phù bảo ngọc | phu/bao_ngoc.webp |  |
-| PH-CH-003 | Phù bảo hộ | phu/bao_ho.webp |  |
-| PH-CH-004 | Phù tăng thành | phu/tang_thanh.webp |  |
+| PH-CH-001 | Phù chống sét | phu/chong_set.webp | ✓ |
+| PH-CH-002 | Phù bảo ngọc | phu/bao_ngoc.webp | ✓ |
+| PH-CH-003 | Phù bảo hộ | phu/bao_ho.webp | ✓ |
+| PH-CH-004 | Phù tăng thành | phu/tang_thanh.webp | ✓ |
 | PH-CH-005 | Phù hộ thân | phu/ho_than.webp |  |
 | PH-CH-006 | Phù độn thổ | phu/don_tho.webp |  |
 | PH-CH-007 | Ngự Thú Phù | phu/ngu_thu.webp |  |
