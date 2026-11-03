@@ -121,7 +121,6 @@ export interface DongPhuView extends Stamped {
 export type GearSlot = "vu_khi" | "mu" | "ao" | "dai" | "bao_tay" | "giay" | "ngoc_boi";
 /** Độ hiếm, hiện bằng màu nền ô (người dùng chốt 2026-11-03): lục là đồ shop < lam < tím < vàng < đỏ. */
 export type Rarity = "luc" | "lam" | "tim" | "vang" | "do";
-export type GearTier = "linh" | "thien" | "than";
 
 export interface Gem {
   element: Element;
@@ -131,7 +130,6 @@ export interface Gem {
 export interface GearItem {
   slot: GearSlot;
   name: string;
-  tier: GearTier;
   plus: number; // nấc cường hóa
   durability: number;
   durabilityMax: number;
