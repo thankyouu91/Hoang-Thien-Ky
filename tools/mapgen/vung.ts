@@ -106,8 +106,8 @@ export function ringPosition(map: AzgaarMap, region: Int8Array): (x: number, y: 
   };
 }
 
-const FOREST = new Set(["Tropical seasonal forest", "Temperate deciduous forest", "Tropical rainforest", "Temperate rainforest", "Taiga"]);
-const HIGH = 62; // như azgaar-patch.ts
+export const FOREST = new Set(["Tropical seasonal forest", "Temperate deciduous forest", "Tropical rainforest", "Temperate rainforest", "Taiga"]);
+export const HIGH = 62; // như azgaar-patch.ts
 
 if (import.meta.main) {
   const plane = process.argv[2] ?? "ha";

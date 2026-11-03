@@ -171,9 +171,11 @@ type Rect = [number, number, number, number];
 type Tile = { href: string; x: number; y: number; w: number; h: number };
 type PlaneIndex = { map: { width: number; height: number }; background: { tile: number; path: string; levels: { level: number; cols: number; rows: number }[] } };
 
-/** Ô ảnh nền (data URI, toạ độ bản đồ) ở mức chi tiết nhất phủ khung nhìn, theo mục background của <vị diện>_vi_dien.json */
-function backgroundTiles({ map, background }: PlaneIndex, dataDir: URL) {
-  const { level, cols, rows } = background.levels.reduce((a, b) => (b.level > a.level ? b : a));
+/** Ô ảnh nền (data URI, toạ độ bản đồ) phủ khung nhìn, theo mục background của <vị diện>_vi_dien.json: mức nhỏ nhất không dưới
+ * `want` px ảnh mỗi đơn vị bản đồ (mặc định mức chi tiết nhất) */
+export function backgroundTiles({ map, background }: PlaneIndex, dataDir: URL, want = Infinity) {
+  const levels = [...background.levels].sort((a, b) => a.level - b.level);
+  const { level, cols, rows } = levels.find((l) => l.level >= want) ?? levels.at(-1)!;
   const span = background.tile / level;
   return ([x0, y0, x1, y1]: Rect): Tile[] => {
     const tiles: Tile[] = [];

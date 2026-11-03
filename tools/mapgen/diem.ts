@@ -437,7 +437,7 @@ export function stagesFrom(start: number, n: number, edges: { a: number; b: numb
   return dist;
 }
 
-function mulberry32(seed: number) {
+export function mulberry32(seed: number) {
   let s = seed >>> 0;
   return () => {
     s = (s + 0x6d2b79f5) >>> 0;
