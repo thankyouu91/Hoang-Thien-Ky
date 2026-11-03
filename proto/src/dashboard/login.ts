@@ -1,10 +1,8 @@
 // Màn đăng nhập (FTUE bước 1, dưới 1 phút): số điện thoại → mã OTP → ngày sinh lần đầu (dưới 16 tuổi thêm người giám hộ).
-// Nền là hình Phi Thăng Đài vẽ bằng code của tông mẫu; chân màn có nhãn tuổi và lời nhắc sức khỏe theo G1.
-import { sectSceneUrl, type SectModel } from "./art/sectScene.ts";
+// Nền sáng kiểu thủy mặc (núi mực loang vào sương) và dấu ấn triện 開宗立派; chân màn có nhãn tuổi và lời nhắc sức khỏe theo G1.
+import { inkwashSvg } from "./art/inkwash.ts";
 import { ageOn, GUARDIAN_AGE, maskPhone, normalizePhone, type AuthSource } from "./auth.ts";
 import { esc } from "./ui.ts";
-
-const BACKDROP: SectModel = { id: "loi_loi_tri_phong", name: "Lôi Trì Phong", element: "loi" };
 
 type Step = { kind: "phone" } | { kind: "otp"; phone: string; resendAfter: number; devCode?: string } | { kind: "profile"; phone: string };
 
@@ -12,10 +10,10 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
   const root = document.createElement("div");
   root.id = "login";
   root.innerHTML = `
-    <div class="login-art" style="background-image:url('${sectSceneUrl({ model: BACKDROP, terrain: "co_tich", location: "phi_thang_dai" })}')"></div>
+    <div class="login-art">${inkwashSvg("#f6efdf")}</div>
     <span class="age-badge" title="Nhãn phân loại độ tuổi">${esc(ageLabel)}</span>
     <header class="login-brand">
-      <p class="eyebrow">Tông môn tiên hiệp</p>
+      <span class="login-seal" aria-hidden="true"><span>開</span><span>宗</span><span>立</span><span>派</span></span>
       <h1>Khai Tông Lập Phái</h1>
       <p class="tag">Lập tông, giữ mỏ, ghép công pháp.</p>
     </header>

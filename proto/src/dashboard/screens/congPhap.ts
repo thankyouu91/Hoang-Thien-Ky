@@ -2,24 +2,36 @@
 // Tàng Kinh Các để ghép, từ trưởng lão trở lên. Mọi nút đi qua lệnh của @ktlp/rules (mang_vao_tran, hoc_cong_phap,
 // nop_tan_quyen, ghep_cong_phap, dat_bo_truyen_thu); bản xem trước khi ghép dùng chính hàm của rules.
 import { GRADE_NAMES, scrollKind, techniqueName, techniqueOf, VARIANT_NAMES } from "@ktlp/rules";
-import { TICKS_PER_SECOND } from "@ktlp/sim";
+import { TICKS_PER_SECOND, type Element } from "@ktlp/sim";
+import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { CongPhapView, ScrollCard, TechniqueCard } from "../source.ts";
 import { term } from "../terms.ts";
-import { closeSheet, elementChip, esc, fmt, openSheet, skillChip } from "../ui.ts";
+import { assetUrl, closeSheet, esc, fmt, openSheet } from "../ui.ts";
 
 export type CongPhapSection = "mang" | "truyen-thu" | "tui" | "tang-kinh";
 
+/** Icon hệ chủ (to) và hệ phụ (nhỏ); tên hệ ghi bằng chữ ở dòng dưới, nên không chỉ dựa vào màu (GDD mục 15). */
+function elementIcons(main: Element, subs: Element[] = []): string {
+  const img = (e: Element, cls = "") => `<img${cls} src="${assetUrl(`he/${e}`)}" alt="" title="${esc(ELEMENT_STYLE[e].name)}" onerror="this.remove()">`;
+  return `<span class="tech-els">${img(main)}${subs.map((e) => img(e, ` class="sub"`)).join("")}</span>`;
+}
+
+/** Một công pháp gọn ba dòng: tên · hệ, phẩm, loại chiêu, tầng · số liệu. */
 function techHtml(t: TechniqueCard): string {
+  const els = [t.element, ...t.subElements].map((e) => ELEMENT_STYLE[e].name).join(" + ");
   return `<span class="tech">
-    <span class="tech-top">${elementChip(t.element)}${t.subElements.map((e) => elementChip(e, false)).join("")} <b>${esc(t.name)}</b></span>
-    <span class="muted block">${esc(t.gradeName)} · ${skillChip(t.type)}${t.layer ? ` · tầng ${t.layer}/10${t.frozen ? " (dừng)" : ""}` : ""}</span>
-    <span class="muted block">${esc(t.summary)}</span>
+    <span class="tech-top">${elementIcons(t.element, t.subElements)}<b>${esc(t.name)}</b>${t.layer ? `<span class="layer${t.frozen ? " frozen" : ""}">tầng ${t.layer}/10${t.frozen ? " · dừng" : ""}</span>` : ""}</span>
+    <span class="tech-meta">${esc(els)} · ${esc(t.gradeName)} · ${esc(SKILL_NAME[t.type])}</span>
+    <span class="tech-sum">${esc(t.summary)}</span>
   </span>`;
 }
 
 function scrollHtml(s: ScrollCard): string {
-  return `<span class="grow">${elementChip(s.element, false)} <b>${esc(s.name)}</b><span class="muted block">${esc(s.gradeName)} · ${skillChip(s.type)} · ${VARIANT_NAMES[scrollKind(s.kind).variant]}</span></span>`;
+  return `<span class="tech">
+    <span class="tech-top">${elementIcons(s.element)}<b>${esc(s.name)}</b></span>
+    <span class="tech-meta">${esc(ELEMENT_STYLE[s.element].name)} · ${esc(s.gradeName)} · ${esc(SKILL_NAME[s.type])} · ${VARIANT_NAMES[scrollKind(s.kind).variant]}</span>
+  </span>`;
 }
 
 export class CongPhapScene extends PageScene<CongPhapView> {
@@ -40,44 +52,46 @@ export class CongPhapScene extends PageScene<CongPhapView> {
   }
 
   protected render(v: CongPhapView): void {
-    this.page.innerHTML = `
-      <section class="card" id="cp-mang">
-        <h2>Mang vào trận <span class="right">${v.loadout.filter(Boolean).length} / ${v.loadout.length}</span></h2>
+    // Việc chính: 4 ô mang vào trận. "Đã học" lặp lại phần lớn các ô này nên gập lại.
+    const loadout = `<section class="card primary" id="cp-mang">
+        <h2>Mang vào trận <span class="right"><b>${v.loadout.filter(Boolean).length}</b> / ${v.loadout.length}</span></h2>
         <ol class="list loadout">${v.loadout
           .map(
-            (t, i) => `<li><button type="button" class="row slot-row${t ? "" : " empty"}" data-act="slot" data-i="${i}">
-              <span class="prio">${i + 1}</span>${t ? techHtml(t) : `<span class="grow muted">Ô trống · chạm để chọn công pháp đã học</span>`}</button></li>`,
+            (t, i) => `<li><button type="button" class="row${t ? "" : " empty"}" data-act="slot" data-i="${i}">
+              <span class="prio">${i + 1}</span>${t ? techHtml(t) : `<span class="grow">Ô trống · chạm để chọn công pháp đã học</span>`}</button></li>`,
           )
           .join("")}</ol>
-        <p class="muted">Thứ tự là thứ tự ưu tiên ra chiêu trong trận.</p>
-      </section>
-      <section class="card">
-        <h2>Đã học <span class="right">${v.learned.length}</span></h2>
-        <ul class="list">${v.learned.map((t) => `<li class="row">${techHtml(t)}</li>`).join("") || `<li class="muted">Chưa học công pháp nào.</li>`}</ul>
-      </section>
-      <section class="card" id="cp-truyen-thu">
+        <p class="note">Thứ tự là thứ tự ưu tiên ra chiêu trong trận.</p>
+        <details class="fold">
+          <summary>Đã học <span class="right">${v.learned.length}</span></summary>
+          <ul class="list">${v.learned.map((t) => `<li class="row">${techHtml(t)}</li>`).join("") || `<li class="empty-note">Chưa học công pháp nào.</li>`}</ul>
+        </details>
+      </section>`;
+    const transmission = `<section class="card" id="cp-truyen-thu">
         <h2>${term("Bộ truyền thụ", "bo_truyen_thu")} <span class="right">${v.transmission.length} / ${v.transmissionSlots} suất</span></h2>
         <ul class="list">${v.transmission
           .map(
             (t) => `<li class="row">${techHtml(t)}
-              ${t.learned ? `<span class="muted">Đã học</span>` : t.blocked ? `<span class="muted nowrap">${esc(t.blocked)}</span>` : `<button type="button" class="seal small" data-act="learn" data-id="${t.id}">Học</button>`}</li>`,
+              ${t.learned ? `<span class="muted nowrap">Đã học</span>` : t.blocked ? `<span class="muted">${esc(t.blocked)}</span>` : `<button type="button" class="seal small" data-act="learn" data-id="${t.id}">Học</button>`}</li>`,
           )
           .join("")}</ul>
         ${v.can.truyenThu ? `<button type="button" class="wide" data-act="edit-transmission">Chọn bộ truyền thụ</button>` : ""}
-      </section>
-      <section class="card" id="cp-tui">
-        <h2>${term("Tàn quyển", "tan_quyen")} trong túi <span class="right">cống hiến ${fmt(v.contribution)}</span></h2>
+      </section>`;
+    const bag = `<section class="card" id="cp-tui">
+        <h2>${term("Tàn quyển", "tan_quyen")} trong túi <span class="right">${term("cống hiến", "cong_hien")} <b>${fmt(v.contribution)}</b></span></h2>
         <ul class="list">${v.bag
           .map((s) => `<li class="row">${scrollHtml(s)}<button type="button" class="btn small" data-act="deposit" data-uid="${s.uid}">Nộp +${fmt(s.contribution)}</button></li>`)
-          .join("") || `<li class="muted">Túi trống.</li>`}</ul>
-        <p class="muted">Tàn quyển nhặt được thuộc về người nhặt; nộp vào Tàng Kinh Các để đổi cống hiến.</p>
-      </section>
-      <section class="card" id="cp-tang-kinh">
+          .join("") || `<li class="empty-note">Túi trống.</li>`}</ul>
+        <p class="note">Tàn quyển nhặt được thuộc về người nhặt; nộp vào Tàng Kinh Các để đổi cống hiến.</p>
+      </section>`;
+    const library = `<section class="card" id="cp-tang-kinh">
         <h2>${term("Tàng Kinh Các", "tang_kinh_cac")} <span class="right">${v.library.length} quyển · ${v.sectTechniques.length} công pháp</span></h2>
         ${v.can.ghep
-          ? `<button type="button" class="wide seal" data-act="compose" ${v.library.length >= 2 ? "" : "disabled"}>Ghép công pháp</button>`
-          : `<p class="muted">Trưởng lão trở lên mới ghép công pháp ở Tàng Kinh Các.</p>`}
+          ? `<p class="muted">Ghép 1 chủ quyển với ${v.maxSubs === 2 ? "1–2" : "1"} phụ quyển thành công pháp mới cho tông môn.</p>
+             <button type="button" class="wide seal" data-act="compose" ${v.library.length >= 2 ? "" : "disabled"}>Ghép công pháp</button>`
+          : `<p class="note">Trưởng lão trở lên mới ghép công pháp ở Tàng Kinh Các.</p>`}
       </section>`;
+    this.page.innerHTML = `<div class="cols"><div class="col">${loadout}</div><div class="col">${transmission}${bag}${library}</div></div>`;
   }
 
   protected override mounted(): void {
@@ -109,7 +123,7 @@ export class CongPhapScene extends PageScene<CongPhapView> {
     const body = openSheet(
       `Ô ${i + 1}`,
       `<ul class="list">${v.learned
-        .map((t) => `<li><button type="button" class="row" data-pick="${t.id}">${techHtml(t)}${current.includes(t.id) ? `<span class="muted nowrap">Ô ${current.indexOf(t.id) + 1}</span>` : ""}</button></li>`)
+        .map((t) => `<li><button type="button" class="row${current[i] === t.id ? " picked" : ""}" data-pick="${t.id}">${techHtml(t)}${current.includes(t.id) ? `<span class="pick-tag">Ô ${current.indexOf(t.id) + 1}</span>` : ""}</button></li>`)
         .join("")}</ul>
        ${current[i] !== null ? `<button type="button" class="wide" data-pick="none">Bỏ khỏi ô này</button>` : ""}`,
     );
@@ -138,8 +152,8 @@ export class CongPhapScene extends PageScene<CongPhapView> {
         const recipe = { main: { kind: main.kind, grade: main.grade }, subs: subs.map((s) => ({ kind: s.kind, grade: s.grade })) };
         const t = techniqueOf(recipe);
         const grade = Math.min(...scrolls.map((s) => s.grade));
-        preview = `<div class="card preview"><b>${esc(techniqueName(main.kind, subs.map((s) => s.kind)))}</b>
-          <span class="muted block">${GRADE_NAMES[grade - 1]} · ${skillChip(t.type)} · D ${Math.round(t.damage / 1000)} · ${t.targets} mục tiêu · hồi ${(t.cooldownTicks / TICKS_PER_SECOND).toLocaleString("vi-VN")} s · ${t.manaCost} mana</span>
+        preview = `<div class="preview"><b>${esc(techniqueName(main.kind, subs.map((s) => s.kind)))}</b>
+          <span class="muted block">${GRADE_NAMES[grade - 1]} · ${esc(SKILL_NAME[t.type])} · D ${Math.round(t.damage / 1000)} · ${t.targets} mục tiêu · hồi ${(t.cooldownTicks / TICKS_PER_SECOND).toLocaleString("vi-VN")} s · ${t.manaCost} mana</span>
           <span class="muted block">Phẩm theo quyển thấp nhất; các quyển đem ghép bị tiêu hao.</span></div>`;
       }
       body.innerHTML = `
@@ -147,7 +161,7 @@ export class CongPhapScene extends PageScene<CongPhapView> {
         <ul class="list">${v.library
           .map((s) => {
             const at = pick.indexOf(s.uid);
-            return `<li><button type="button" class="row${at >= 0 ? " picked" : ""}" data-uid="${s.uid}">${scrollHtml(s)}<span class="nowrap">${at === 0 ? "Chủ" : at > 0 ? "Phụ" : ""}</span></button></li>`;
+            return `<li><button type="button" class="row${at >= 0 ? " picked" : ""}" data-uid="${s.uid}">${scrollHtml(s)}<span class="pick-tag">${at === 0 ? "Chủ" : at > 0 ? "Phụ" : ""}</span></button></li>`;
           })
           .join("")}</ul>
         <div class="actions"><button type="button" class="seal" data-go ${pick.length >= 2 ? "" : "disabled"}>Ghép</button></div>`;
@@ -176,7 +190,7 @@ export class CongPhapScene extends PageScene<CongPhapView> {
     const draw = () => {
       body.innerHTML = `<p class="muted">${chosen.size} / ${v.transmissionSlots} suất. Công pháp đã học không bị ảnh hưởng khi bỏ khỏi bộ.</p>
         <ul class="list">${v.sectTechniques
-          .map((t) => `<li><button type="button" class="row${chosen.has(t.id) ? " picked" : ""}" data-id="${t.id}">${techHtml(t)}<span class="nowrap">${chosen.has(t.id) ? "✓" : ""}</span></button></li>`)
+          .map((t) => `<li><button type="button" class="row${chosen.has(t.id) ? " picked" : ""}" data-id="${t.id}">${techHtml(t)}<span class="pick-tag">${chosen.has(t.id) ? "✓" : ""}</span></button></li>`)
           .join("")}</ul>
         <div class="actions"><button type="button" class="seal" data-save>Lưu</button></div>`;
     };

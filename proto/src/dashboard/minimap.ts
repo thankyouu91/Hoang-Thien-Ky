@@ -4,16 +4,19 @@
 import { HOLDABLE, loadRegion, type RegionMap } from "../scenes/map/region.ts";
 import type { MiniMapView, Owner } from "./source.ts";
 
+// Bảng màu sáng (giấy kem, 2026-11-03): đất sáng hơn nền khung, sương là lớp giấy đục, chấm có viền mực mảnh.
 export const OWNER_COLOR: Record<Owner, string> = {
-  minh: "#f2c230", // màu tông môn mình
-  dong_minh: "#5aa9e6", // màu liên minh
-  dich: "#b07a6a",
-  npc: "#7d7366",
+  minh: "#e0a020", // màu tông môn mình
+  dong_minh: "#2f6fb0", // màu liên minh
+  dich: "#a0523c",
+  npc: "#8c7f6c",
 };
-const ATTACKED = "#ff5a4f";
-const LAND = "#2b241c";
-const EDGE = "#5d4f3e";
-const FOG = "rgba(14, 12, 10, 0.78)";
+const ATTACKED = "#d92d20";
+const LAND = "#fbf5e8";
+const EDGE = "#a8916f";
+const FOG = "rgba(222, 210, 186, 0.86)";
+const INK = "#2a2018";
+const DOT_EDGE = "rgba(42, 32, 24, 0.55)";
 
 export interface Viewport {
   /** Phần bản đồ tranh đang xem, theo toạ độ điểm của vùng. */
@@ -123,11 +126,16 @@ export class MiniMap {
     this.oy = (h - (y1 - y0) * this.scale) / 2 - y0 * this.scale;
     const X = (x: number) => this.ox + x * this.scale;
     const Y = (y: number) => this.oy + y * this.scale;
-    const dot = (x: number, y: number, r: number, color: string) => {
+    const dot = (x: number, y: number, r: number, color: string, edge = false) => {
       ctx.beginPath();
       ctx.arc(X(x), Y(y), r, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
+      if (edge) {
+        ctx.lineWidth = 0.8;
+        ctx.strokeStyle = DOT_EDGE;
+        ctx.stroke();
+      }
     };
 
     // Hình vùng
@@ -151,7 +159,7 @@ export class MiniMap {
       ctx.moveTo(X(a.x), Y(a.y));
       ctx.lineTo(X(b.x), Y(b.y));
     }
-    ctx.strokeStyle = "rgba(168, 156, 136, 0.18)";
+    ctx.strokeStyle = "rgba(118, 99, 79, 0.2)";
     ctx.stroke();
 
     // Sương mù: phủ cả hình vùng rồi khoét quanh các điểm đã mở.
@@ -185,12 +193,12 @@ export class MiniMap {
     const owned = new Map(d.marks.map((k) => [k.pointId, k]));
     for (const id of revealed) {
       const p = m.points[id];
-      if (!owned.has(id) && HOLDABLE.includes(p.type)) dot(p.x, p.y, 1.4, "rgba(239, 230, 214, 0.35)");
+      if (!owned.has(id) && HOLDABLE.includes(p.type)) dot(p.x, p.y, 1.4, "rgba(118, 99, 79, 0.4)");
     }
     // Điểm có chủ
     for (const k of d.marks) {
       const p = m.points[k.pointId];
-      dot(p.x, p.y, 2.8, k.attacked && this.blink ? ATTACKED : OWNER_COLOR[k.owner]);
+      dot(p.x, p.y, 2.8, k.attacked && this.blink ? ATTACKED : OWNER_COLOR[k.owner], true);
       if (k.attacked) {
         ctx.beginPath();
         ctx.arc(X(p.x), Y(p.y), this.blink ? 7 : 5, 0, Math.PI * 2);
@@ -204,7 +212,7 @@ export class MiniMap {
       const p = m.points[id];
       ctx.beginPath();
       ctx.arc(X(p.x), Y(p.y), 4, 0, Math.PI * 2);
-      ctx.strokeStyle = "#86dcc8";
+      ctx.strokeStyle = "#2b8a78";
       ctx.lineWidth = 1.5;
       ctx.stroke();
     }
@@ -213,12 +221,12 @@ export class MiniMap {
     ctx.save();
     ctx.translate(X(city.x), Y(city.y));
     ctx.rotate(Math.PI / 4);
-    ctx.fillStyle = "#efe6d6";
+    ctx.fillStyle = INK;
     ctx.fillRect(-3.5, -3.5, 7, 7);
     ctx.restore();
     const home = m.points[d.sonMon];
     ctx.fillStyle = OWNER_COLOR.minh;
-    ctx.strokeStyle = "#14110f";
+    ctx.strokeStyle = INK;
     ctx.lineWidth = 1;
     ctx.fillRect(X(home.x) - 4, Y(home.y) - 4, 8, 8);
     ctx.strokeRect(X(home.x) - 4, Y(home.y) - 4, 8, 8);
@@ -233,16 +241,16 @@ export class MiniMap {
     ctx.lineTo(X(sx) + 4.5, Y(sy) + 3);
     ctx.lineTo(X(sx) - 4.5, Y(sy) + 3);
     ctx.closePath();
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = "#fffaf0";
     ctx.fill();
-    ctx.strokeStyle = "#14110f";
+    ctx.strokeStyle = INK;
     ctx.stroke();
 
     // Phần bản đồ tranh đang xem
     const v = this.viewport;
     if (v) {
       ctx.setLineDash([3, 3]);
-      ctx.strokeStyle = "rgba(239, 230, 214, 0.8)";
+      ctx.strokeStyle = "rgba(42, 32, 24, 0.55)";
       ctx.lineWidth = 1;
       ctx.strokeRect(X(v.x), Y(v.y), v.w * this.scale, v.h * this.scale);
       ctx.setLineDash([]);

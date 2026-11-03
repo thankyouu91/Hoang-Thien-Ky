@@ -1,6 +1,7 @@
 // Tiện ích DOM cho các màn dashboard: chuỗi HTML an toàn, đồng hồ đếm ngược theo giờ server, bảng trượt, thông báo.
 import type { Element, SkillType } from "@ktlp/sim";
 import { ELEMENT_STYLE, SKILL_NAME } from "../theme/elements.ts";
+import { icon } from "./icons.ts";
 
 export function esc(s: unknown): string {
   return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -167,8 +168,8 @@ export function toast(text: string, bad = false): void {
 }
 
 /**
- * Bảng trượt từ dưới lên cho chi tiết (món đồ, thẻ điểm, Thành chủ, Tàng Kinh Các).
- * Chạm nền tối hoặc nút Đóng để tắt; trả về phần thân để màn gắn sự kiện.
+ * Bảng trượt từ dưới lên cho chi tiết (món đồ, thẻ điểm, Thành chủ, Tàng Kinh Các); trên máy tính là hộp thoại giữa màn.
+ * Chạm nền mờ, nút × hoặc phím Esc để tắt; trả về phần thân để màn gắn sự kiện.
  */
 export function openSheet(title: string, html: string, onClose?: () => void): HTMLElement {
   closeSheet();
@@ -177,7 +178,7 @@ export function openSheet(title: string, html: string, onClose?: () => void): HT
   wrap.innerHTML = `
     <div class="sheet-bg" data-close></div>
     <section class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-      <header><h2>${esc(title)}</h2><button type="button" class="ghost" data-close aria-label="Đóng">Đóng</button></header>
+      <header><h2>${esc(title)}</h2><button type="button" class="icon-btn" data-close aria-label="Đóng">${icon("close")}</button></header>
       <div class="sheet-body">${html}</div>
     </section>`;
   wrap.addEventListener("click", (e) => {
@@ -187,8 +188,13 @@ export function openSheet(title: string, html: string, onClose?: () => void): HT
     }
   });
   document.body.append(wrap);
+  wrap.querySelector<HTMLElement>(".icon-btn")?.focus({ preventScroll: true });
   return wrap.querySelector(".sheet-body")!;
 }
+
+addEventListener("keydown", (e) => {
+  if (e.key === "Escape") document.querySelector<HTMLElement>("#sheet [data-close].icon-btn")?.click();
+});
 
 export function closeSheet(): void {
   document.getElementById("sheet")?.remove();
