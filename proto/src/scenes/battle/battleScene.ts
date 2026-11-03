@@ -61,6 +61,8 @@ export class BattleScene implements Scene {
   private looks = new Map<number, Look>();
   /** Trục sân dọc khi màn hình đứng, ngang khi màn hình nằm */
   private vertical: boolean | null = null;
+  /** Vùng nhìn và camera lúc căn sân lần cuối */
+  private fitted: { w: number; h: number; x: number; y: number; zoom: number } | null = null;
 
   /** sources[0] mở mặc định; người xem đổi nguồn ở ô chọn trên thanh điều khiển. */
   constructor(sources: ReplaySource[], sprites: Sprites) {
@@ -252,14 +254,24 @@ export class BattleScene implements Scene {
     return this.vertical ? { x: -half, y: 0, w: 2 * half, h: len } : { x: 0, y: -half, w: len, h: 2 * half };
   }
 
+  /**
+   * Căn sân vừa màn hình khi xoay màn hình, hoặc khi vùng nhìn đổi cỡ mà người xem chưa kéo hay zoom
+   * (pane hiện ra, thanh bên của khung mới bật tắt). Bỏ qua lúc canvas chưa có kích thước.
+   */
   private fitIfRotated(v: View): void {
-    if (!this.index) return;
-    const vertical = v.h - v.bottom >= v.w;
-    if (vertical === this.vertical) return;
+    const h = v.h - v.bottom;
+    if (!this.index || v.w <= 0 || h <= 0) return;
+    const vertical = h >= v.w;
+    const cam = this.camera;
+    const f = this.fitted;
+    const untouched = !!f && cam.zoom === f.zoom && cam.x === f.x && cam.y === f.y;
+    const resized = !!f && (f.w !== v.w || f.h !== h);
+    if (vertical === this.vertical && !(resized && untouched)) return;
     this.vertical = vertical;
     const r = this.fieldRect();
-    this.camera.fit(r, v, 8);
-    this.camera.bounds = r;
+    cam.fit(r, v, 8);
+    cam.bounds = r;
+    this.fitted = { w: v.w, h, x: cam.x, y: cam.y, zoom: cam.zoom };
   }
 
   // ---- vẽ ----
