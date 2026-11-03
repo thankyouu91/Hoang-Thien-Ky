@@ -39,6 +39,27 @@ import { col, Stage } from "../engine/stage.ts";
 
 const LANE = 12;
 const TILT = (32 * Math.PI) / 180;
+/** Đơn vị thế giới của màn Trận mỗi ô (scenes/battle/battleScene.ts: CELL). */
+export const BATTLE_CELL = 64;
+
+/** Khung nướng theo toạ độ thế giới màn Trận: trục sân 0..768 (12 ô × 64), ngang -210..210. */
+export interface WorldFrame {
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+  /** Dài trục sân và nửa bề ngang sân, đơn vị thế giới màn Trận. */
+  length: number;
+  halfCross: number;
+}
+
+/** Nguồn sáng (đèn, linh thạch) theo toạ độ thế giới màn Trận, để vẽ nhịp sáng 2D mỗi khung. */
+export interface ArenaLight {
+  x: number;
+  y: number;
+  r: number;
+  color: string;
+}
 
 // ---- shader 3D -----------------------------------------------------------------------------------------------------
 
@@ -153,7 +174,10 @@ void main() {
   vec2 p = lane(vW);
   vec3 col;
   if (n.y > 0.5) {
-    col = top(p) * pool(p);
+    // Dải giữa làn (chỗ người đứng) phẳng và ít tương phản để người, hiệu ứng nổi lên.
+    float calm = exp(-pow(p.y / 1.5, 2.0));
+    vec3 calmCol = mix(uA, uB, 0.42);
+    col = mix(top(p), calmCol, calm * 0.42) * pool(p);
   } else {
     float along = uVertical > 0.5 ? (abs(n.x) > 0.5 ? vW.z : vW.x) : (abs(n.z) > 0.5 ? vW.x : vW.z);
     float strata = nG(vec2(along * 0.25, vW.y * 0.9)) * 0.6 + nB(vec2(along * 1.4, vW.y * 2.5)) * 0.4;
@@ -275,12 +299,31 @@ class ArenaBack implements Program {
   private vertical: boolean;
   private seed: number;
   private built = "";
+  private frame: WorldFrame | null;
+  /** Nguồn sáng ghi lại lúc dựng vật (toạ độ 3D), đổi sang toạ độ màn Trận bằng lights(). */
+  private lamps: { X: number; h: number; Z: number; r: number; color: string }[] = [];
 
-  constructor(host: Host, kind: ArenaKind, vertical: boolean, seed: number) {
+  constructor(host: Host, kind: ArenaKind, vertical: boolean, seed: number, frame: WorldFrame | null = null) {
     this.host = host;
     this.kind = kind;
     this.vertical = vertical;
     this.seed = seed;
+    this.frame = frame;
+  }
+
+  /**
+   * Toạ độ 3D → toạ độ thế giới màn Trận. Mặt đất ánh xạ sao cho chiếu qua camera nghiêng ra đúng chỗ màn Trận vẽ
+   * người: trục màn hình ngang 1 đơn vị 3D = 64, trục dọc 1 đơn vị 3D = 64 × cos(nghiêng) (đất bị chiếu ngắn lại).
+   */
+  toBattle(X: number, h: number, Z: number): { x: number; y: number } {
+    const f = this.frame;
+    const half = f ? f.length / 2 : 384;
+    const down = (Z * Math.cos(TILT) - h * Math.sin(TILT)) * BATTLE_CELL;
+    return this.vertical ? { x: X * BATTLE_CELL, y: down + half } : { x: X * BATTLE_CELL + half, y: down };
+  }
+
+  lights(): ArenaLight[] {
+    return this.lamps.map((l) => ({ ...this.toBattle(l.X, l.h, l.Z), r: l.r * BATTLE_CELL, color: l.color }));
   }
 
   /** (l, c) theo làn → (x, z) thế giới. */
@@ -290,6 +333,31 @@ class ArenaBack implements Program {
 
   resize(w: number, h: number, _dpr: number): void {
     const cam = this.camera;
+    const f = this.frame;
+    if (f) {
+      // Khung theo toạ độ màn Trận: tâm khung là điểm mặt đất nằm giữa ảnh.
+      const c = Math.cos(TILT);
+      const fw = (f.x1 - f.x0) / BATTLE_CELL;
+      const fh = (f.y1 - f.y0) / BATTLE_CELL;
+      cam.left = -fw / 2;
+      cam.right = fw / 2;
+      cam.top = fh / 2;
+      cam.bottom = -fh / 2;
+      const cx = (f.x0 + f.x1) / 2;
+      const cy = (f.y0 + f.y1) / 2;
+      const tx = this.vertical ? cx / BATTLE_CELL : (cx - f.length / 2) / BATTLE_CELL;
+      const tz = this.vertical ? (cy - f.length / 2) / (BATTLE_CELL * c) : cy / (BATTLE_CELL * c);
+      cam.position.set(tx, 100 * Math.cos(TILT), tz + 100 * Math.sin(TILT));
+      cam.lookAt(tx, 0, tz);
+      cam.updateProjectionMatrix();
+      const crossVis = this.vertical ? f.halfCross / BATTLE_CELL : f.halfCross / (BATTLE_CELL * c);
+      const key = crossVis.toFixed(3);
+      if (key !== this.built) {
+        this.build(crossVis);
+        this.built = key;
+      }
+      return;
+    }
     let fw: number;
     let fh: number;
     if (this.vertical) {
@@ -336,6 +404,7 @@ class ArenaBack implements Program {
 
   private build(crossVis: number): void {
     this.dispose();
+    this.lamps = [];
     this.scene = new Scene();
     const st = STYLES[this.kind];
     const r = rng(hashSeed("arena", this.kind, this.seed));
@@ -404,6 +473,11 @@ class ArenaBack implements Program {
     this.scene.add(mesh);
   }
 
+  private lamp(l: number, c: number, h: number, r: number, color: string): void {
+    const [X, Z] = this.w(l, c);
+    this.lamps.push({ X, h, Z, r, color });
+  }
+
   private halo(l: number, c: number, y: number, size: number, color: string, alpha: number): void {
     const m = new ShaderMaterial({ uniforms: { uColor: { value: col(color) }, uAlpha: { value: alpha } }, vertexShader: G.QUAD_VERT, fragmentShader: HALO_FRAG, transparent: true, depthWrite: false });
     setAdditiveOne(m);
@@ -436,6 +510,7 @@ class ArenaBack implements Program {
           this.put(roofM, l, c, gy + 1.09);
           this.shadow(l, c, gy, 0.8);
           this.halo(l, c, gy, 2.2, "#ffb64a", 0.35);
+          this.lamp(l, c, gy + 0.83, 0.75, "#ffb64a");
         }
         for (const l of [-2.6, 2.6]) {
           const c = sd * (half + 0.45);
@@ -501,6 +576,7 @@ class ArenaBack implements Program {
             ci++;
           }
           this.halo(lc, cc, 0, 3.2, "#3fe0d0", 0.55);
+          this.lamp(lc, cc, 0.45, 1.1, "#3fe0d0");
         }
       }
       cr.count = ci;
@@ -620,4 +696,30 @@ export function arenaBackFactory(kind: ArenaKind, vertical: boolean, seed: numbe
 
 export function arenaFrontFactory(kind: ArenaKind, vertical: boolean, seed: number) {
   return (host: Host): Program => arenaFront(host, kind, vertical, seed);
+}
+
+/** Nướng mặt sân theo khung thế giới màn Trận, `k` điểm ảnh mỗi đơn vị; trả ảnh và nguồn sáng (toạ độ màn Trận). */
+export function bakeArenaWorld(host: Host, kind: ArenaKind, vertical: boolean, seed: number, frame: WorldFrame, k: number): { canvas: HTMLCanvasElement; lights: ArenaLight[] } {
+  const hold: { p: ArenaBack | null } = { p: null };
+  const canvas = host.bake((h) => (hold.p = new ArenaBack(h, kind, vertical, seed, frame)), (frame.x1 - frame.x0) * k, (frame.y1 - frame.y0) * k, 1);
+  return { canvas, lights: hold.p?.lights() ?? [] };
+}
+
+const HAZE: Record<ArenaKind, [string, string]> = {
+  vo_truong: ["#efe6d4", "#a89e8a"],
+  mo_linh_thach: ["#a6f0e6", "#2c4e4c"],
+  cao_nguyen: ["#ffffff", "#c9d3df"],
+};
+
+/** Ảnh sương trong suốt (vô hướng) để màn Trận cho trôi bằng drawImage mỗi khung, khỏi vẽ WebGL. */
+export function hazeFactory(kind: ArenaKind) {
+  return (host: Host): Program => {
+    const s = new Stage(host, `haze|${kind}`);
+    s.transparent = true;
+    s.animated = false;
+    const [a, b] = HAZE[kind];
+    mist(s, { y0: -0.15, y1: 1.15, color: a, color2: b, alpha: 1, thresh: 0.34, soft: 0.32, scale: 1.3, shade: 0.5 });
+    s.resize(1, 1, 1);
+    return s;
+  };
 }

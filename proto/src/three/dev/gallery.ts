@@ -3,10 +3,11 @@
 //   #nuong/<cảnh>        cùng cảnh ở chế độ nướng (ảnh tĩnh, nướng lại khi đổi cỡ)
 //   #nen/<hệ>            renderBackground: 11 công trình, 10 điểm, nền vùng của một hệ
 //   #san                 renderArena: 3 sân, ngang và đứng, có chấm người mẫu giữa hai lớp
+//   #tran/<sân>          createArenaBackdrop như màn Trận: camera kéo, zoom chậm, vẽ nền, chấm người, lớp trước mỗi khung
 //   #do                  đo thời gian vẽ một khung của mọi cảnh động ở 375 × 812, dpr 1,5 (mức tối đa của chế độ động)
 import { ELEMENT_IDS } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
-import { benchScene, hasWebGL, mountBakedScene, mountScene, prefersReducedMotion, renderArena, renderBackground, threeStats, type ArenaKind, type SceneHandle, type SceneName, type Tone } from "../index.ts";
+import { benchScene, createArenaBackdrop, hasWebGL, type ArenaBackdrop, mountBakedScene, mountScene, prefersReducedMotion, renderArena, renderBackground, threeStats, type ArenaKind, type SceneHandle, type SceneName, type Tone } from "../index.ts";
 
 const LOCATIONS = ["chinh_dien", "tang_kinh_cac", "ho_son_dai_tran", "dien_vo_truong", "luyen_dan_phong", "luyen_khi_cac", "linh_duoc_vien", "bao_kho", "truyen_tong_tran", "thuong_hoi", "phi_thang_dai"];
 const POINTS = ["thanh_chu", "son_mon", "ben_do", "deo", "hang_di_thu", "linh_tuyen", "mo_duoc", "mo_linh_thach", "mo_quang", "cua_bi_canh"];
@@ -46,7 +47,7 @@ document.body.innerHTML = `
   <div id="stage"><div id="title">Khai Tông Lập Phái</div><div id="card"><h1>Động phủ</h1><p>Chữ trên thẻ giấy phải đọc được trên mọi cảnh nền.</p></div></div>
   <div id="grid" hidden></div>
   <div id="bar">
-    <button data-mode="dong">Động</button><button data-mode="nuong">Nướng</button><button data-mode="nen">Ảnh nền</button><button data-mode="san">Sân đấu</button><button data-mode="do">Đo</button>
+    <button data-mode="dong">Động</button><button data-mode="nuong">Nướng</button><button data-mode="nen">Ảnh nền</button><button data-mode="san">Sân đấu</button><button data-mode="tran">Trận</button><button data-mode="do">Đo</button>
     <select id="scene">${SCENES.map((s) => `<option value="${s.id}">${s.name}</option>`).join("")}</select>
     <select id="tone"><option value="chang_vang">Chạng vạng</option><option value="giay">Giấy</option></select>
     <label><input type="checkbox" id="lk"> linh khí</label>
@@ -64,6 +65,7 @@ const seedIn = $<HTMLInputElement>("seed");
 const stat = $<HTMLDivElement>("stat");
 
 let handle: SceneHandle | null = null;
+let backdrop: ArenaBackdrop | null = null;
 let overlay: SceneHandle | null = null;
 
 function state(): { mode: string; scene: string } {
@@ -79,6 +81,8 @@ function clear(): void {
   handle?.dispose();
   overlay?.dispose();
   handle = overlay = null;
+  backdrop?.dispose();
+  backdrop = null;
   grid.innerHTML = "";
 }
 
@@ -138,6 +142,62 @@ async function render(): Promise<void> {
 `;
       }
     }
+  } else if (mode === "tran") {
+    const kind: ArenaKind = (ARENAS as string[]).includes(scene) ? (scene as ArenaKind) : "vo_truong";
+    grid.insertAdjacentHTML("beforeend", `<h2>${ARENAS.map((k) => (k === kind ? `<b>${k}</b>` : `<a style="color:#d9b45a" href="#tran/${k}">${k}</a>`)).join(" · ")}</h2>`);
+    const cv = document.createElement("canvas");
+    grid.append(cv);
+    const W = Math.min(innerWidth - 24, 640);
+    const H = Math.max(240, innerHeight - 150);
+    const dpr = Math.min(devicePixelRatio, 2);
+    cv.style.width = `${W}px`;
+    cv.style.height = `${H}px`;
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    const vertical = H > W;
+    const bd = createArenaBackdrop(kind, { seed: params().seed });
+    backdrop = bd;
+    const field = vertical ? { x: -210, y: 0, w: 420, h: 768 } : { x: 0, y: -210, w: 768, h: 420 };
+    const zoom0 = Math.min((W - 16) / field.w, (H - 16) / field.h);
+    const ctx = cv.getContext("2d", { alpha: false })!;
+    let spent = 0;
+    let frames = 0;
+    const loop = (now: number) => {
+      if (backdrop !== bd) return;
+      const t = now / 1000;
+      const zoom = zoom0 * (1 + 0.18 * Math.sin(t * 0.3));
+      const camX = field.x + field.w / 2 + Math.sin(t * 0.21) * 50;
+      const camY = field.y + field.h / 2 + Math.cos(t * 0.17) * 50;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = "#14110f";
+      ctx.fillRect(0, 0, cv.width, cv.height);
+      const sc = dpr * zoom;
+      ctx.setTransform(sc, 0, 0, sc, dpr * (W / 2 - camX * zoom), dpr * (H / 2 - camY * zoom));
+      const t0 = performance.now();
+      const ok = bd.draw(ctx, t, vertical);
+      spent += performance.now() - t0;
+      // người mẫu: 5 mỗi đội dọc trục, lệch nửa làn như màn Trận
+      for (let i = 0; i < 10; i++) {
+        const along = (i < 5 ? 1 + i * 0.9 : 7.4 + (i - 5) * 0.9) * 64;
+        const lat = i % 2 ? 30 : -30;
+        const x = vertical ? lat : along;
+        const y = vertical ? 768 - along : lat;
+        ctx.fillStyle = i < 5 ? "#5aa9e6" : "#ec5b4f";
+        ctx.beginPath();
+        ctx.arc(x, y, 16, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      const t1 = performance.now();
+      bd.drawFront(ctx, t, vertical);
+      spent += performance.now() - t1;
+      frames++;
+      if (frames % 60 === 0) {
+        stat.textContent = ok ? `nền Trận: ${(spent / frames).toFixed(2)} ms JS mỗi khung (draw + drawFront)` : "đang nướng nền...";
+        spent = frames = 0;
+      }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
   } else if (mode === "san") {
     const box = document.createElement("div");
     box.className = "arena";

@@ -4,10 +4,12 @@
 //   renderBackground(loại, hệ, seed, { variant })  → URL ảnh (blob) cho chỗ chưa có hình PixelLab, hoặc null
 //   mountBakedScene(container, cảnh)               → nền tĩnh nướng một lần, nướng lại khi đổi cỡ (màn DOM)
 //   mountScene(container, cảnh)                    → cảnh động (mây trôi, hạt, thị sai); một canvas dùng chung
-//   renderArena(loại sân, w, h, { vertical })      → hai lớp back/front cho màn Trận
+//   createArenaBackdrop(loại sân)                  → nền sân màn Trận vẽ theo toạ độ thế giới mỗi khung (draw/drawFront)
+//   renderArena(loại sân, w, h, { vertical })      → hai lớp back/front nướng theo khung chữ nhật (ảnh tĩnh)
 //   mountProgram(container, factory)               → gắn cảnh three riêng (Pháp tướng) vào renderer dùng chung
 //
 // Không có WebGL: các hàm trả null / ready = false và không đụng container, màn giữ nền 2D đang có.
+import { enqueue, load, loaded } from "./lazy.ts";
 import { deviceDpr, DPR_CAP, hasWebGL } from "./support.ts";
 import type {
   ArenaKind,
@@ -28,34 +30,7 @@ export type * from "./types.ts";
 export type { Program } from "./engine/program.ts";
 export type { Host, LiveMount } from "./engine/host.ts";
 export { hasWebGL, prefersReducedMotion } from "./support.ts";
-
-type Engine = typeof import("./engine/entry.ts");
-let engine: Promise<Engine> | undefined;
-
-function load(): Promise<Engine> {
-  return (engine ??= import("./engine/entry.ts"));
-}
-
-// ---- hàng đợi nướng: mỗi ảnh một lượt, nhường luồng giữa hai ảnh để cuộn danh sách không giật -------------------
-
-let queue: Promise<unknown> = Promise.resolve();
-
-function enqueue<T>(job: () => T): Promise<T> {
-  const p = queue.then(
-    () =>
-      new Promise<T>((resolve, reject) =>
-        setTimeout(() => {
-          try {
-            resolve(job());
-          } catch (e) {
-            reject(e);
-          }
-        }, 0),
-      ),
-  );
-  queue = p.catch(() => undefined);
-  return p;
-}
+export { createArenaBackdrop, type ArenaBackdrop, type ArenaBackdropOptions, type BackdropRenderOptions } from "./backdrop.ts";
 
 function toUrl(canvas: HTMLCanvasElement): Promise<string | null> {
   return new Promise((resolve) => canvas.toBlob((b) => resolve(b ? URL.createObjectURL(b) : null), "image/webp", 0.88));
@@ -256,8 +231,9 @@ export async function benchScene(name: SceneName, params: SceneParams, w: number
 
 /** Số liệu cho trang thử: số khung đã vẽ ở chế độ động, tỉ lệ độ phân giải hiện tại. */
 export async function threeStats(): Promise<{ frames: number; scale: number } | null> {
-  if (!engine) return null;
-  const e = await engine;
+  const p = loaded();
+  if (!p) return null;
+  const e = await p;
   const h = e.getHost();
   return { frames: h.frames, scale: h.resolutionScale };
 }
