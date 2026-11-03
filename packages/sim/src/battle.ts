@@ -445,16 +445,12 @@ export class Battle {
       }
     }
     const exposedFirst = s.radius === 0;
-    const channelFirst = pick === "channeling";
+    const order = (a: Unit, b: Unit) =>
+      (exposedFirst ? (b.exposedUntil > tick ? 1 : 0) - (a.exposedUntil > tick ? 1 : 0) : 0) ||
+      Math.abs(a.pos - center) - Math.abs(b.pos - center) || a.curHp - b.curHp || a.id - b.id;
     if (byHp) list.sort((a, b) => a.curHp * b.hp - b.curHp * a.hp || a.curHp - b.curHp || a.id - b.id);
-    else {
-      list.sort(
-        (a, b) =>
-          (channelFirst ? (b.channel ? 1 : 0) - (a.channel ? 1 : 0) : 0) ||
-          (exposedFirst ? (b.exposedUntil > tick ? 1 : 0) - (a.exposedUntil > tick ? 1 : 0) : 0) ||
-          Math.abs(a.pos - center) - Math.abs(b.pos - center) || a.curHp - b.curHp || a.id - b.id,
-      );
-    }
+    else if (pick === "channeling") list.sort((a, b) => (b.channel ? 1 : 0) - (a.channel ? 1 : 0) || order(a, b));
+    else list.sort(order);
     if (list.length > s.maxTargets) list.length = s.maxTargets;
     return list;
   }
@@ -479,19 +475,17 @@ export class Battle {
     for (const a of this.teams[u.team]) {
       if (a.curHp > 0 && Math.abs(a.pos - u.pos) <= s.range) list.push(a);
     }
-    const aimed: Record<number, number> = {};
+    const order = (a: Unit, b: Unit) =>
+      Math.abs(a.pos - foe.pos) - Math.abs(b.pos - foe.pos) || a.curHp * b.hp - b.curHp * a.hp || a.id - b.id;
     if (pick === "most_targeted") {
+      const aimed: Record<number, number> = {};
       for (const e of this.teams[1 - u.team]) {
         if (e.curHp <= 0) continue;
         const t = this.nearestEnemy(e);
         if (t) aimed[t.id] = (aimed[t.id] ?? 0) + 1;
       }
-    }
-    list.sort(
-      (a, b) =>
-        (aimed[b.id] ?? 0) - (aimed[a.id] ?? 0) ||
-        Math.abs(a.pos - foe.pos) - Math.abs(b.pos - foe.pos) || a.curHp * b.hp - b.curHp * a.hp || a.id - b.id,
-    );
+      list.sort((a, b) => (aimed[b.id] ?? 0) - (aimed[a.id] ?? 0) || order(a, b));
+    } else list.sort(order);
     if (list.length > s.maxTargets) list.length = s.maxTargets;
     return list;
   }
