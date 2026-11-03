@@ -22,6 +22,56 @@
       "created": "2026-11-03"
     },
     {
+      "file": "duoc/linh_thao.webp",
+      "ten": "Linh thảo",
+      "description": "Game inventory item icon: a bundle of fresh green spirit herbs tied with straw string, dewdrops on the leaves. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1n-G3nw",
+      "canva_media_tach_nen": "MAHZ1v1gRGc",
+      "canva_design": "DAHZ1iamT_w trang 45",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "linh_thach/cuc.webp",
+      "ten": "Linh thạch cực phẩm",
+      "description": "Game inventory item icon: a flawless radiant golden spirit crystal cluster blazing with dense spiritual energy and tiny floating motes. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1kKP1x0",
+      "canva_media_tach_nen": "MAHZ1msQuBA",
+      "canva_design": "DAHZ1iamT_w trang 40",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "linh_thach/ha.webp",
+      "ten": "Linh thạch hạ phẩm",
+      "description": "Game inventory item icon: a small rough cluster of pale translucent spirit crystals with a faint white glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1h4_aRo",
+      "canva_media_tach_nen": "MAHZ1swbrtA",
+      "canva_design": "DAHZ1iamT_w trang 37",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "linh_thach/thuong.webp",
+      "ten": "Linh thạch thượng phẩm",
+      "description": "Game inventory item icon: a large cluster of brilliant violet spirit crystals pulsing with bright energy. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1imEFsE",
+      "canva_media_tach_nen": "MAHZ1hGDORM",
+      "canva_design": "DAHZ1iamT_w trang 39",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "linh_thach/trung.webp",
+      "ten": "Linh thạch trung phẩm",
+      "description": "Game inventory item icon: a cluster of clear blue-green spirit crystals with a steady soft glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1kU5ZqA",
+      "canva_media_tach_nen": "MAHZ1vDaDJg",
+      "canva_design": "DAHZ1iamT_w trang 38",
+      "created": "2026-11-03"
+    },
+    {
       "file": "lo_dinh/trung.webp",
       "ten": "Lô đỉnh cấp 5–8",
       "description": "Game inventory item icon: an ornate bronze alchemy cauldron (ding) inlaid with green jade, a coiled dragon on the lid, flames beneath. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
@@ -33,6 +83,36 @@
       "ghi_chu": "Mẫu đã duyệt, do phiên trước sinh trên Canva; không lưu lời mô tả gốc nên description là khuôn tả lại."
     },
     {
+      "file": "ngoc/am_lanh.webp",
+      "ten": "Ngọc Âm lãnh",
+      "description": "Game inventory item icon: a faceted cold grey-blue spirit gemstone set in an ornate silver filigree setting, a ghostly will-o'-wisp flame symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1skqG-k",
+      "canva_media_tach_nen": "MAHZ1ps6bgU",
+      "canva_design": "DAHZ1iamT_w trang 34",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "ngoc/cuc_am.webp",
+      "ten": "Ngọc Cực âm",
+      "description": "Game inventory item icon: a faceted dark charcoal purple spirit gemstone set in an ornate silver filigree setting, a crescent moon symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1r2G_fE",
+      "canva_media_tach_nen": "MAHZ1kqios0",
+      "canva_design": "DAHZ1iamT_w trang 36",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "ngoc/cuc_duong.webp",
+      "ten": "Ngọc Cực dương",
+      "description": "Game inventory item icon: a faceted blazing orange spirit gemstone set in an ornate silver filigree setting, a blazing sun disc symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1gZ4Ok0",
+      "canva_media_tach_nen": "MAHZ1kKpvjA",
+      "canva_design": "DAHZ1iamT_w trang 35",
+      "created": "2026-11-03"
+    },
+    {
       "file": "ngoc/cuc_han.webp",
       "ten": "Ngọc Cực hàn",
       "description": "Game inventory item icon: a faceted icy pale blue spirit gemstone set in an ornate silver filigree setting, a snowflake symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
@@ -42,6 +122,126 @@
       "canva_design": "DAHZ1iamT_w trang 4",
       "created": "2026-11-03",
       "ghi_chu": "Mẫu đã duyệt, do phiên trước sinh trên Canva; không lưu lời mô tả gốc nên description là khuôn tả lại."
+    },
+    {
+      "file": "ngoc/hoa.webp",
+      "ten": "Ngọc Hỏa",
+      "description": "Game inventory item icon: a faceted vermilion red spirit gemstone set in an ornate silver filigree setting, a blazing flame symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1rqSTJA",
+      "canva_media_tach_nen": "MAHZ1okh1aM",
+      "canva_design": "DAHZ1iamT_w trang 29",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "ngoc/kim.webp",
+      "ten": "Ngọc Kim",
+      "description": "Game inventory item icon: a faceted silver-white spirit gemstone set in an ornate silver filigree setting, a perfect circle symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1h3s4dU",
+      "canva_media_tach_nen": "MAHZ1kYPsnA",
+      "canva_design": "DAHZ1iamT_w trang 26",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "ngoc/loi.webp",
+      "ten": "Ngọc Lôi",
+      "description": "Game inventory item icon: a faceted electric violet spirit gemstone set in an ornate silver filigree setting, a lightning bolt symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1lARaDw",
+      "canva_media_tach_nen": "MAHZ1uBpFS0",
+      "canva_design": "DAHZ1iamT_w trang 31",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "ngoc/moc.webp",
+      "ten": "Ngọc Mộc",
+      "description": "Game inventory item icon: a faceted verdant green spirit gemstone set in an ornate silver filigree setting, a sprouting leaf symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1sIk1rQ",
+      "canva_media_tach_nen": "MAHZ1oGLTmM",
+      "canva_design": "DAHZ1iamT_w trang 27",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "ngoc/phong.webp",
+      "ten": "Ngọc Phong",
+      "description": "Game inventory item icon: a faceted pale jade teal spirit gemstone set in an ornate silver filigree setting, a spiral whirlwind symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1tfPFzw",
+      "canva_media_tach_nen": "MAHZ1llZpRA",
+      "canva_design": "DAHZ1iamT_w trang 32",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "ngoc/quang.webp",
+      "ten": "Ngọc Quang",
+      "description": "Game inventory item icon: a faceted radiant gold spirit gemstone set in an ornate silver filigree setting, radiating light rays symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1n7AGOs",
+      "canva_media_tach_nen": "MAHZ1qUD4W8",
+      "canva_design": "DAHZ1iamT_w trang 33",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "ngoc/tho.webp",
+      "ten": "Ngọc Thổ",
+      "description": "Game inventory item icon: a faceted earthy ochre yellow spirit gemstone set in an ornate silver filigree setting, a solid square symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1kmHW44",
+      "canva_media_tach_nen": "MAHZ1ncnIS4",
+      "canva_design": "DAHZ1iamT_w trang 30",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "ngoc/thuy.webp",
+      "ten": "Ngọc Thủy",
+      "description": "Game inventory item icon: a faceted deep blue spirit gemstone set in an ornate silver filigree setting, flowing wave ripples symbol glowing inside the crystal, a silk tassel hanging below. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1tVM0bc",
+      "canva_media_tach_nen": "MAHZ1mrLwnU",
+      "canva_design": "DAHZ1iamT_w trang 28",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "quang/huyen_thiet.webp",
+      "ten": "Huyền thiết",
+      "description": "Game inventory item icon: a heavy chunk of black mysterious iron ore with deep blue metallic sheen. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1oSK6-A",
+      "canva_media_tach_nen": "MAHZ1kJVKsA",
+      "canva_design": "DAHZ1iamT_w trang 42",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "quang/than_kim.webp",
+      "ten": "Thần kim",
+      "description": "Game inventory item icon: a chunk of divine metal ore glowing white-gold with ethereal runes on its surface. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1vM9-2Y",
+      "canva_media_tach_nen": "MAHZ1gzyV0Y",
+      "canva_design": "DAHZ1iamT_w trang 44",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "quang/thiet_tinh.webp",
+      "ten": "Thiết tinh",
+      "description": "Game inventory item icon: a chunk of dark refined iron ore with metallic grey veins. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1kjw8JU",
+      "canva_media_tach_nen": "MAHZ1l_kUVA",
+      "canva_design": "DAHZ1iamT_w trang 41",
+      "created": "2026-11-03"
+    },
+    {
+      "file": "quang/tinh_kim.webp",
+      "ten": "Tinh kim",
+      "description": "Game inventory item icon: a chunk of star-gold ore, pale gold metal with twinkling starlike specks. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1voqkGA",
+      "canva_media_tach_nen": "MAHZ1lFsHI4",
+      "canva_design": "DAHZ1iamT_w trang 43",
+      "created": "2026-11-03"
     },
     {
       "file": "tan_quyen/loi.webp",
