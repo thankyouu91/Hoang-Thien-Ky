@@ -166,7 +166,8 @@ Kiểm tra trước khi tạo hàng loạt: giá theo gói và điều khoản d
 
 - Ảnh lưu ở `assets/pixellab/<nhóm>/<tên>.png`; mỗi ảnh có một dòng trong `assets/pixellab/manifest.json` ghi mô tả, công cụ, tham số, ngày tạo, id của PixelLab. Biết nguồn gốc từng ảnh để làm hồ sơ bản quyền và để thay dần bằng hình của họa sĩ.
 - Khoá phong cách trước: tạo 1 tu sĩ mẫu, bạn duyệt, rồi các hình sau dùng hình đó làm tham chiếu. Màu theo bảng 12 hệ ở mục 15.
-- Không dùng PixelLab cho bản đồ tranh từng vùng (vẽ bằng code trên khung `ha_khung.png`), khung UI cuộn giấy, logo và key art.
+- Không dùng PixelLab cho bản đồ tranh từng vùng (vẽ bằng code trên khung `ha_khung.png`), logo và key art.
+- Đổi ngày 2026-11-03 theo yêu cầu người dùng ("dùng pixel labs xây dựng dashboard ui ux người dùng"): khung UI cuộn giấy của dashboard làm bằng PixelLab, gồm 5 mảnh ở `assets/pixellab/ui/` ghép bằng CSS `border-image`. Hình nền công trình (`cong_trinh/`) và điểm bản đồ (`diem_nen/`) cũng làm bằng PixelLab, 1 lượt mỗi hình. Ba nhóm này nạp qua CSS, không qua `Sprites`.
 
 | Nhóm | Số lượng | Công cụ PixelLab | Cỡ | Sprint |
 |---|---|---|---|---|

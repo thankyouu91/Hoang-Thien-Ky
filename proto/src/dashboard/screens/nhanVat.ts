@@ -4,6 +4,8 @@
 import type { Sprites } from "../../assets/sprites.ts";
 import { animInfo, drawCharacter } from "../../scenes/battle/character.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
+import { REALM_TERM, term } from "../terms.ts";
+import { setTheme, theme } from "../theme.ts";
 import { icon } from "../icons.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { GearItem, GearSlot, NhanVatView, StatLine } from "../source.ts";
@@ -66,11 +68,11 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     this.page.innerHTML = `
       <button type="button" class="ghost back-link" data-act="back">${icon("back")}Quay lại</button>
       <section class="card nv-id">
-        <div class="nv-line">${v.roots.map((e) => elementChip(e)).join(" ")} <span class="chip sk" title="${esc(v.talent.combat)}">${esc(v.talent.name)}</span></div>
+        <div class="nv-line">${term("Linh căn", "linh_can")} ${v.roots.map((e) => elementChip(e)).join(" ")} · ${term("Tài năng", "tai_nang")} <span class="chip sk">${esc(v.talent.name)}</span></div>
         <div class="nv-line"><b>${esc(v.sect.name)}</b> · ${esc(v.sect.role ? ROLE_NAMES[v.sect.role] : "Chưa vào tông")}${v.satNghiep > 0 ? ` · <span class="bad">Sát nghiệp ${fmt(v.satNghiep)}</span>` : ""}</div>
-        <div class="nv-line"><b>Cấp ${v.level}</b> <span class="muted">${fmt(v.exp)} / ${fmt(v.expToNext)} kinh nghiệm</span></div>
+        <div class="nv-line"><b>Cấp ${v.level}</b> ${term(v.top.realm, REALM_TERM[v.top.realm] ?? "")} <span class="muted">${fmt(v.exp)} / ${fmt(v.expToNext)} kinh nghiệm</span></div>
         <div class="bar"><i style="width:${(exp * 100).toFixed(1)}%"></i></div>
-        <div class="nv-power"><span class="muted">Lực chiến</span> <b>${fmt(v.power.total)}</b></div>
+        <div class="nv-power"><span class="muted">${term("Lực chiến", "luc_chien")}</span> <b>${fmt(v.power.total)}</b></div>
         <div class="power-bar">${v.power.parts.map((p) => `<i class="p-${p.id}" style="flex:${p.value / total}" title="${esc(p.label)}"></i>`).join("")}</div>
         <div class="power-legend">${v.power.parts
           .map((p) => `<span class="p-${p.id}"><i></i>${esc(p.label)} ${Math.round((p.value / total) * 100)}%${p.cap ? ` <span class="muted">(trần ${Math.round(p.cap * 100)}%)</span>` : ""}</span>`)
@@ -92,7 +94,10 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const group = age < GUARDIAN_AGE ? "Dưới 16 tuổi, có người giám hộ" : age < ADULT_AGE ? "Dưới 18 tuổi, giới hạn giờ chơi" : "Từ 18 tuổi";
     return `<section class="card"><h2>Tài khoản</h2>
       <div class="account"><span class="grow"><b>${esc(s.phoneMasked)}</b><span class="muted block">${group}${s.guardian ? ` · giám hộ ${esc(s.guardian.name)}` : ""}</span></span>
-      <button type="button" class="btn small" data-act="logout">${icon("logout")} Đăng xuất</button></div></section>`;
+      <button type="button" class="btn small" data-act="logout">${icon("logout")} Đăng xuất</button></div>
+      <div class="account theme-row"><span class="grow">Giao diện<span class="muted block">Cuộn giấy dùng khung PixelLab; tối giản là bản phẳng</span></span>
+      <button type="button" class="${theme() === "scroll" ? "seal" : "btn"} small" data-act="theme" data-theme="scroll">Cuộn giấy</button>
+      <button type="button" class="${theme() === "minimal" ? "seal" : "btn"} small" data-act="theme" data-theme="minimal">Tối giản</button></div></section>`;
   }
 
   private slot(v: NhanVatView, s: GearSlot): string {
@@ -190,7 +195,10 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const v = this.data;
     if (!v) return;
     if (name === "back") this.ctx.nav.back();
-    else if (name === "logout") {
+    else if (name === "theme") {
+      setTheme(el.dataset.theme === "minimal" ? "minimal" : "scroll");
+      this.render(v);
+    } else if (name === "logout") {
       this.ctx.auth.logout();
       location.reload();
     }

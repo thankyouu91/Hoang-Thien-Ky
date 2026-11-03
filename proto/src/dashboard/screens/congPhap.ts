@@ -5,6 +5,7 @@ import { GRADE_NAMES, scrollKind, techniqueName, techniqueOf, VARIANT_NAMES } fr
 import { TICKS_PER_SECOND } from "@ktlp/sim";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { CongPhapView, ScrollCard, TechniqueCard } from "../source.ts";
+import { term } from "../terms.ts";
 import { closeSheet, elementChip, esc, fmt, openSheet, skillChip } from "../ui.ts";
 
 export type CongPhapSection = "mang" | "truyen-thu" | "tui" | "tang-kinh";
@@ -55,7 +56,7 @@ export class CongPhapScene extends PageScene<CongPhapView> {
         <ul class="list">${v.learned.map((t) => `<li class="row">${techHtml(t)}</li>`).join("") || `<li class="muted">Chưa học công pháp nào.</li>`}</ul>
       </section>
       <section class="card" id="cp-truyen-thu">
-        <h2>Bộ truyền thụ <span class="right">${v.transmission.length} / ${v.transmissionSlots} suất</span></h2>
+        <h2>${term("Bộ truyền thụ", "bo_truyen_thu")} <span class="right">${v.transmission.length} / ${v.transmissionSlots} suất</span></h2>
         <ul class="list">${v.transmission
           .map(
             (t) => `<li class="row">${techHtml(t)}
@@ -65,14 +66,14 @@ export class CongPhapScene extends PageScene<CongPhapView> {
         ${v.can.truyenThu ? `<button type="button" class="wide" data-act="edit-transmission">Chọn bộ truyền thụ</button>` : ""}
       </section>
       <section class="card" id="cp-tui">
-        <h2>Tàn quyển trong túi <span class="right">cống hiến ${fmt(v.contribution)}</span></h2>
+        <h2>${term("Tàn quyển", "tan_quyen")} trong túi <span class="right">cống hiến ${fmt(v.contribution)}</span></h2>
         <ul class="list">${v.bag
           .map((s) => `<li class="row">${scrollHtml(s)}<button type="button" class="btn small" data-act="deposit" data-uid="${s.uid}">Nộp +${fmt(s.contribution)}</button></li>`)
           .join("") || `<li class="muted">Túi trống.</li>`}</ul>
         <p class="muted">Tàn quyển nhặt được thuộc về người nhặt; nộp vào Tàng Kinh Các để đổi cống hiến.</p>
       </section>
       <section class="card" id="cp-tang-kinh">
-        <h2>Tàng Kinh Các <span class="right">${v.library.length} quyển · ${v.sectTechniques.length} công pháp</span></h2>
+        <h2>${term("Tàng Kinh Các", "tang_kinh_cac")} <span class="right">${v.library.length} quyển · ${v.sectTechniques.length} công pháp</span></h2>
         ${v.can.ghep
           ? `<button type="button" class="wide seal" data-act="compose" ${v.library.length >= 2 ? "" : "disabled"}>Ghép công pháp</button>`
           : `<p class="muted">Trưởng lão trở lên mới ghép công pháp ở Tàng Kinh Các.</p>`}

@@ -15,6 +15,8 @@ import { MapScene } from "../scenes/map/mapScene.ts";
 import { MockAuth } from "./auth.ts";
 import { icon, type IconName } from "./icons.ts";
 import { showLogin } from "./login.ts";
+import { attachTerms } from "./terms.ts";
+import { applyTheme, startRestReminder } from "./theme.ts";
 import { AGE_LABEL, MockDashboardSource } from "./mock/source.ts";
 import { CongPhapScene } from "./screens/congPhap.ts";
 import { DongPhuScene } from "./screens/dongPhu.ts";
@@ -99,6 +101,9 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
   document.body.prepend(topbar.el);
 
   const auth = new MockAuth();
+  applyTheme();
+  attachTerms();
+  startRestReminder(auth);
   const ctx: DashCtx = {
     source: lazySource(() => MockDashboardSource.create(Date.now(), auth)),
     auth,

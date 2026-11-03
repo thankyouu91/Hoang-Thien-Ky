@@ -38,7 +38,7 @@ export class TopBar {
 
   set(t: TopBarView): void {
     const minor = t.playMinutesLeft !== undefined ? `<span class="pill play" title="Thời gian chơi còn lại hôm nay">${icon("clock")}${t.playMinutesLeft}′</span>` : "";
-    const sat = t.satNghiep > 0 ? `<span class="pill sat" title="Sát nghiệp">${icon("sword")}${fmt(t.satNghiep)}</span>` : "";
+    const sat = t.satNghiep > 0 ? `<span class="pill sat" data-term="sat_nghiep">${icon("sword")}${fmt(t.satNghiep)}</span>` : "";
     this.el.querySelector(".content")!.innerHTML = `
       <button type="button" class="portrait" aria-label="${esc(t.name)}: mở màn Nhân vật">
         <span class="avatar"><img src="${assetUrl(t.portrait)}" alt=""></span>
@@ -46,8 +46,8 @@ export class TopBar {
       </button>
       <span class="pills">
         ${minor}${sat}
-        <span class="pill stone" title="Linh thạch hạ phẩm">${icon("gem")}${fmt(t.linhThach)}</span>
-        <span class="pill jade" title="Tiên ngọc">${icon("jade")}${fmt(t.tienNgoc)}</span>
+        <span class="pill stone" data-term="linh_thach">${icon("gem")}${fmt(t.linhThach)}</span>
+        <span class="pill jade" data-term="tien_ngoc">${icon("jade")}${fmt(t.tienNgoc)}</span>
         <span class="age" title="Nhãn phân loại độ tuổi">${esc(t.ageLabel)}</span>
       </span>`;
   }

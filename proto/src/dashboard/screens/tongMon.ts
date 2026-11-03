@@ -6,6 +6,7 @@ import { loadLocationArt, locationArt, LOCATIONS, pixelArtEnabled, pointArt, sec
 import { MiniMap } from "../minimap.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { TongMonView } from "../source.ts";
+import { term } from "../terms.ts";
 import { assetUrl, cd, closeSheet, esc, fmt, openSheet, ROLE_NAMES, toast } from "../ui.ts";
 
 export type TongMonTab = "tong-quan" | "son-mon" | "thanh-vien" | "chien-su";
@@ -114,7 +115,7 @@ export class TongMonScene extends PageScene<TongMonView> {
         <div class="land-grid">
           <dl class="kv tight">
             <dt>Điểm giữ</dt><dd>${t.held.length} / ${t.max}</dd>
-            <dt>Tầm Truyền Tống</dt><dd>${t.range} chặng</dd>
+            <dt>Tầm ${term("Truyền Tống", "truyen_tong_tran")}</dt><dd>${t.range} chặng</dd>
             <dt>Linh thạch</dt><dd>${fmt(t.perHour.linhThach)}/giờ</dd>
             <dt>Quặng</dt><dd>${fmt(t.perHour.quang)}/giờ</dd>
             <dt>Dược</dt><dd>${fmt(t.perHour.duoc)}/giờ</dd>
@@ -131,7 +132,7 @@ export class TongMonScene extends PageScene<TongMonView> {
         <button type="button" class="wide${pending > 0 ? " seal" : ""}" data-act="collect" ${pending > 0 ? "" : "disabled"}>Thu mỏ (khoảng ${fmt(pending)})</button>
       </section>
       <section class="card vault${low ? " warn" : ""}">
-        <h2>Bảo Khố <span class="right">${Number.isFinite(vault.daysLeft) ? `còn đủ <b>${vault.daysLeft}</b> ngày` : ""}</span></h2>
+        <h2>${term("Bảo Khố", "bao_kho")} <span class="right">${Number.isFinite(vault.daysLeft) ? `còn đủ <b>${vault.daysLeft}</b> ngày` : ""}</span></h2>
         <dl class="kv tight">
           <dt>Tồn kho</dt><dd>${fmt(vault.linhThach)} linh thạch</dd>
           <dt>Phí duy trì mỗi ngày</dt><dd>${fmt(vault.upkeepPerDay)}</dd>

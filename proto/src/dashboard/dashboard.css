@@ -597,3 +597,158 @@ details.dev select { height: 36px; max-width: 60vw; border: 0; border-radius: 8p
 .card.city.has-art::before { content: ""; position: absolute; inset: 0; background: var(--art) center 70% / cover no-repeat; image-rendering: pixelated; opacity: 0.35; }
 .card.city.has-art > * { position: relative; }
 #sheet .loc-hero { margin: 6px 0 4px; }
+
+/* ===== Giao diện cuộn giấy (GDD mục 15: "UI dạng cuộn giấy; nút xác nhận là ấn triện đỏ") =====
+   Năm mảnh PixelLab ở assets/pixellab/ui/ ghép bằng border-image 9 lát, giữ 1 px ảnh = 1 px CSS cho nét sắc.
+   Bật bằng lớp body.theme-scroll (mặc định), tắt ở màn Nhân vật để so với giao diện tối giản. */
+body.theme-scroll {
+  --paper-ink: #2a1d14;
+  --paper-ink-2: #5a3d27;
+  --paper-ink-3: #7a5535;
+  --paper-accent: #8a1f16;
+  --paper-hair: rgba(42, 29, 20, 0.16);
+  --paper-tint: rgba(122, 85, 53, 0.12);
+}
+body.theme-scroll .page .card,
+body.theme-scroll #sheet .sheet {
+  border: 20px solid transparent;
+  border-image: url("/pixellab/ui/khung_giay.png") 20 fill / 20px / 0 stretch;
+  border-radius: 0;
+  background: none;
+  color: var(--paper-ink);
+  image-rendering: pixelated;
+}
+body.theme-scroll .page .card { padding: 2px 4px 4px; margin-bottom: 6px; }
+body.theme-scroll #sheet .sheet { padding: 0 6px calc(6px + env(safe-area-inset-bottom)); }
+body.theme-scroll #sheet .sheet::before { display: none; }
+body.theme-scroll #sheet header { background: none; }
+body.theme-scroll .page .card .muted,
+body.theme-scroll #sheet .muted,
+body.theme-scroll .page .card dl.kv dt,
+body.theme-scroll #sheet dl.kv dt { color: var(--paper-ink-3); }
+body.theme-scroll .page .card b,
+body.theme-scroll #sheet b { color: var(--paper-ink); }
+/* Tiêu đề thẻ là một cuộn giấy nhỏ nằm đè lên mép trên */
+body.theme-scroll .page .card > h2:first-child {
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  min-width: 62%;
+  max-width: 100%;
+  margin: -32px auto 8px;
+  height: 32px;
+  padding: 0 4px;
+  border: solid transparent;
+  border-width: 7px 26px 7px 24px;
+  border-image: url("/pixellab/ui/cuon_tieu_de.png") 7 26 7 24 fill / 7px 26px 7px 24px / 0 stretch;
+  color: var(--paper-ink);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+  white-space: nowrap;
+}
+body.theme-scroll .page .card > h2:first-child .right { display: none; }
+body.theme-scroll .page .card > h2:first-child .link { color: var(--paper-ink); }
+body.theme-scroll .list > li,
+body.theme-scroll .mounts li,
+body.theme-scroll .chat-log li { border-top-color: var(--paper-hair); }
+body.theme-scroll .list .icon { background: var(--paper-tint); color: var(--paper-accent); }
+body.theme-scroll .cd-wrap,
+body.theme-scroll .page h2 .right b,
+body.theme-scroll .nv-power b { color: var(--paper-accent); }
+body.theme-scroll .cd.done { color: #2f6b2a; }
+body.theme-scroll .todo-item { background: var(--paper-tint); box-shadow: inset 3px 0 0 var(--paper-accent); color: var(--paper-ink); }
+body.theme-scroll .page .link, body.theme-scroll #sheet .link { color: var(--paper-accent); }
+body.theme-scroll .report.thang .badge { color: #2f6b2a; }
+body.theme-scroll .report.thua .badge { color: var(--paper-accent); }
+body.theme-scroll .bar { background: rgba(42, 29, 20, 0.15); }
+body.theme-scroll .bar > i { background: var(--paper-accent); }
+body.theme-scroll .chip.sk { background: var(--paper-tint); color: var(--paper-ink-2); }
+body.theme-scroll .chip.el { background: color-mix(in srgb, var(--c) 30%, #f1e4c3); color: color-mix(in srgb, var(--c) 55%, #2a1d14); }
+body.theme-scroll .minimap { box-shadow: 0 0 0 2px #3d2a1c; }
+body.theme-scroll .stat-tile, body.theme-scroll .slot, body.theme-scroll .seg button[aria-pressed="true"] { background: var(--paper-tint); color: var(--paper-ink); }
+body.theme-scroll .slot { box-shadow: inset 0 0 0 2px var(--tier, #7a5535); }
+body.theme-scroll .stat-tile .muted, body.theme-scroll .slot .slot-glyph { color: var(--paper-ink-3); }
+/* Nút: ấn triện đỏ cho xác nhận, tấm gỗ cho nút thường */
+body.theme-scroll .page .seal, body.theme-scroll #sheet .seal, body.theme-scroll .login-card .primary {
+  border: 9px solid transparent;
+  border-image: url("/pixellab/ui/nut_an_trien.png") 9 fill / 9px / 0 stretch;
+  border-radius: 0;
+  background: none;
+  color: #fff3dc;
+  text-shadow: 0 1px 0 #5a0f0a;
+  padding: 0 8px;
+  image-rendering: pixelated;
+}
+body.theme-scroll .page .btn, body.theme-scroll .page .wide:not(.seal), body.theme-scroll #sheet .actions button:not(.seal), body.theme-scroll #sheet .wide:not(.seal) {
+  border: 6px solid transparent;
+  border-image: url("/pixellab/ui/nut_go.png") 6 fill / 6px / 0 stretch;
+  border-radius: 0;
+  background: none;
+  color: #f1e4c3;
+  padding: 0 10px;
+  image-rendering: pixelated;
+}
+body.theme-scroll .page .seal.small, body.theme-scroll .page .btn.small { min-height: 38px; }
+/* Thanh dưới và thanh trên: gỗ sơn mài viền đồng */
+body.theme-scroll #tabbar {
+  border: solid transparent;
+  border-width: 12px 13px 8px;
+  border-image: url("/pixellab/ui/thanh_duoi.png") 12 13 8 fill / 12px 13px 8px / 0 stretch;
+  background: #1a120c;
+  image-rendering: pixelated;
+  padding-top: 0;
+}
+body.theme-scroll #tabbar button { margin-top: -8px; color: #b8913f; }
+body.theme-scroll #tabbar button[aria-selected="true"] { color: #f1e4c3; }
+body.theme-scroll #tabbar button[aria-selected="true"] .tab-ic { color: #e0bf6a; }
+body.theme-scroll:not([data-scene="tran"]) #topbar { background: #1a120c; border-bottom: 2px solid #8a6a2e; }
+body.theme-scroll .pill { background: #2a1d14; box-shadow: inset 0 0 0 1px #5a3d27; }
+/* Trang: nền tối như mực, để giấy nổi lên */
+body.theme-scroll #pages > .page { background: #120d09 radial-gradient(ellipse at 50% 0%, rgba(184, 145, 63, 0.08), transparent 60%); }
+body.theme-scroll .page .card + .card, body.theme-scroll .pair { margin-top: 18px; }
+body.theme-scroll .pair > .card { margin-top: 0; }
+body.theme-scroll .seg { background: #2a1d14; box-shadow: inset 0 0 0 1px #5a3d27; }
+body.theme-scroll .seg button { color: #b8913f; }
+body.theme-scroll .seg button[aria-pressed="true"] { background: #f1e4c3; color: var(--paper-ink); }
+
+/* Chú thích thuật ngữ Hán Việt (GDD mục 14): chạm để xem */
+.term { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline dotted; text-underline-offset: 3px; cursor: help; }
+#term-pop {
+  position: fixed;
+  z-index: 70;
+  max-width: min(300px, calc(100vw - 24px));
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #24201a;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px var(--hair);
+  color: var(--ink);
+  font: 14px/1.45 var(--font);
+}
+#term-pop b { color: var(--gold); }
+body.theme-scroll #term-pop { background: #f1e4c3; color: var(--paper-ink); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 2px #5a3d27; }
+body.theme-scroll #term-pop b { color: var(--paper-accent); }
+/* Lời nhắc sức khỏe mỗi 30 phút (G1) */
+#rest-reminder { position: fixed; inset: 0; z-index: 65; display: grid; place-items: center; padding: 24px; background: rgba(0, 0, 0, 0.6); font-family: var(--font); }
+#rest-reminder .box { max-width: 340px; padding: 20px; border-radius: 16px; background: var(--s1); color: var(--ink); text-align: center; }
+#rest-reminder p { margin: 8px 0 16px; color: var(--ink-2); }
+#rest-reminder button { min-height: 44px; padding: 0 20px; border: 0; border-radius: 10px; background: var(--seal); color: #fff; font: 600 15px var(--font); }
+/* Chữ trong nút nằm trên giấy dùng mực tối */
+body.theme-scroll .page .card .list .row,
+body.theme-scroll .page .card .todo-item,
+body.theme-scroll .page .card .plain button,
+body.theme-scroll .page .card .row,
+body.theme-scroll #sheet .list .row,
+body.theme-scroll .page .card .ghost,
+body.theme-scroll #sheet .ghost { color: var(--paper-ink); }
+body.theme-scroll .page .card p { color: var(--paper-ink-2); }
+body.theme-scroll .chat-form input { background: #f8efd6; color: var(--paper-ink); border-color: #b8913f; }
+body.theme-scroll .page .back-link { color: #e2cfa1; }
+body.theme-scroll .sect-meta { color: #b8913f; }
+/* Thẻ nửa bề ngang: cuộn tiêu đề co lại, không cắt chữ; thẻ Thành chủ bỏ nền mờ trên giấy */
+body.theme-scroll .pair > .card > h2:first-child { min-width: 0; max-width: calc(100% + 24px); margin-left: -12px; margin-right: -12px; align-self: center; font-size: 12px; border-width: 7px 18px 7px 16px; border-image-width: 7px 18px 7px 16px; }
+body.theme-scroll .pair > .card { display: flex; flex-direction: column; }
+body.theme-scroll .card.city.has-art { overflow: visible; }
+body.theme-scroll .card.city.has-art::before { display: none; }
+body.theme-scroll .power-legend { color: var(--paper-ink-2); }
+body.theme-scroll .power-legend .muted { color: var(--paper-ink-3); }
