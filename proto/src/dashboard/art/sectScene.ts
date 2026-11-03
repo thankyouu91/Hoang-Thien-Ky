@@ -491,7 +491,8 @@ export function sectModels(): Promise<SectModel[]> {
 
 // ---- hình PixelLab khi có -----------------------------------------------------------------------------------------
 // Hình vẽ tay bằng PixelLab nằm ở assets/pixellab/cong_trinh/<mô hình>/<công trình>.png (có dòng trong manifest).
-// Công trình nào có thì dùng, không thì dùng bản vẽ code ở trên. Hiện mới có bộ 11 hình của Lôi Trì Phong.
+// Công trình nào có thì dùng, không thì dùng bản vẽ code ở trên. Bộ hình đang vẽ lại bằng PixelLab Pro (create_image_pro, 320×192)
+// theo thứ tự: Chính Điện của mọi mô hình, điểm bản đồ của mọi vùng, rồi các công trình còn lại; hình chưa tới lượt còn bản pixflux.
 
 let pixelArt = new Set<string>();
 let pointPixelArt = new Set<string>();
