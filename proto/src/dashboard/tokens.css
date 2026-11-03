@@ -28,6 +28,10 @@
   --c-ok-soft: #e3eedb;
   --c-warn: #8a5a00;
   --c-info: #2f5f9e;
+  /* Nền trang sau tấm giấy (như tấm bản đồ cũ sau bảng trong mẫu) và nét khung đỏ mảnh */
+  --c-page: #efe6d3;
+  --c-frame: rgba(138, 31, 22, 0.55);
+  --c-frame-soft: rgba(138, 31, 22, 0.35);
   /* Phủ nền hộp thoại */
   --c-scrim: rgba(42, 32, 24, 0.42);
 
@@ -51,9 +55,9 @@
   --tier-than: #b07a1c;
 
   /* Chữ */
-  --font: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  /* Chữ có chân cho màn kiểu tranh giấy (Nhân vật, theo mẫu người dùng gửi); Noto Serif OFL, có đủ dấu tiếng Việt */
-  --font-serif: "Noto Serif", Cambria, "Times New Roman", serif;
+  /* Chữ có chân cho cả dashboard, theo mẫu tranh giấy người dùng gửi (2026-11-03); Noto Serif OFL, đủ dấu tiếng Việt */
+  --font: "Noto Serif", Cambria, "Times New Roman", serif;
+  --font-serif: var(--font);
   --fs-xs: 12px;
   --fs-sm: 13px;
   --fs-md: 15px;
@@ -73,10 +77,11 @@
   --gutter: 16px;
 
   /* Bo góc */
-  --r-xs: 6px;
-  --r-sm: 10px;
-  --r-md: 14px;
-  --r-lg: 18px;
+  /* Góc gần vuông như giấy cắt; chỉ ô tròn (chân dung, chấm trạng thái) mới bo tròn */
+  --r-xs: 2px;
+  --r-sm: 3px;
+  --r-md: 3px;
+  --r-lg: 4px;
   --r-pill: 999px;
 
   /* Bóng: nhẹ, ấm, không viền đậm */

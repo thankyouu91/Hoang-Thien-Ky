@@ -142,10 +142,10 @@ export class DongPhuScene extends PageScene<DongPhuView> {
         </button>
       </div>`;
     // Điện thoại: một cột theo order trong CSS. Máy tính: cột trái việc cần làm và tin, cột phải lịch và quanh mình.
-    this.page.innerHTML = `<div class="cols">
+    this.page.innerHTML = `<div class="panel"><div class="cols">
         <div class="col">${todo}${running}${news}</div>
         <div class="col">${calendar}${around}</div>
-      </div>`;
+      </div></div>`;
     this.page.querySelector(".mini-slot")!.append(this.mini.el);
     this.page.prepend(this.backdropEl);
   }

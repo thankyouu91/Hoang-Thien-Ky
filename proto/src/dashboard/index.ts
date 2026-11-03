@@ -1,9 +1,5 @@
 // Ghép dashboard vào khung proto (GDD mục 14): thanh dưới Động phủ · Bản đồ · Tông môn · Công pháp · Liên minh,
 // thanh trên ở mọi màn chính, màn Nhân vật mở từ thanh trên, Trận mở từ chiến báo.
-import "@fontsource/be-vietnam-pro/400.css";
-import "@fontsource/be-vietnam-pro/500.css";
-import "@fontsource/be-vietnam-pro/600.css";
-import "@fontsource/be-vietnam-pro/700.css";
 import "@fontsource/noto-serif/400.css";
 import "@fontsource/noto-serif/600.css";
 import "@fontsource/noto-serif/700.css";

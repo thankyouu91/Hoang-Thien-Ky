@@ -91,7 +91,7 @@ export class CongPhapScene extends PageScene<CongPhapView> {
              <button type="button" class="wide seal" data-act="compose" ${v.library.length >= 2 ? "" : "disabled"}>Ghép công pháp</button>`
           : `<p class="note">Trưởng lão trở lên mới ghép công pháp ở Tàng Kinh Các.</p>`}
       </section>`;
-    this.page.innerHTML = `<div class="cols"><div class="col">${loadout}</div><div class="col">${transmission}${bag}${library}</div></div>`;
+    this.page.innerHTML = `<div class="panel"><div class="cols"><div class="col">${loadout}</div><div class="col">${transmission}${bag}${library}</div></div></div>`;
   }
 
   protected override mounted(): void {

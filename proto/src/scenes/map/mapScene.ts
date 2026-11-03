@@ -22,7 +22,8 @@ const ROAD_ZOOM = 1.2;
 const LABEL_ZOOM = 1.4;
 /** Tên vùng hiện khi thu nhỏ dưới mức này. */
 const REGION_LABEL_ZOOM = 1.3;
-const FONT = '"Be Vietnam Pro", system-ui, sans-serif';
+// Tên địa danh dùng cùng chữ có chân với dashboard (mẫu tranh giấy, 2026-11-03).
+const FONT = '"Noto Serif", Cambria, "Times New Roman", serif';
 const INK = "#2a1d14";
 const HALO = "rgba(243, 231, 201, 0.92)";
 const TYPE_ORDER: PointType[] = ["thanh_chu", "son_mon", "cua_bi_canh", "deo", "ben_do", "linh_tuyen", "mo_linh_thach", "mo_quang", "mo_duoc", "hang_di_thu"];

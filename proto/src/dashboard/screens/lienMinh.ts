@@ -29,7 +29,7 @@ export class LienMinhScene extends PageScene<LienMinhView> {
   }
 
   protected render(v: LienMinhView): void {
-    this.page.innerHTML = `${v.alliance ? this.joined(v) : this.none(v)}
+    this.page.innerHTML = `<div class="panel">${v.alliance ? this.joined(v) : this.none(v)}</div>
       <details class="dev"><summary>Công cụ thử (prototype)</summary>
         <label><input type="checkbox" data-dev="joined" ${v.alliance ? "checked" : ""}> Tông môn đã vào liên minh</label>
       </details>`;

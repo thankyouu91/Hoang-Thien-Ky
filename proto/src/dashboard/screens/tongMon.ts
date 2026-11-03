@@ -56,7 +56,7 @@ export class TongMonScene extends PageScene<TongMonView> {
     const shield = s.shieldUntil && s.shieldUntil > v.serverNow ? `khiên còn ${cd(s.shieldUntil)}` : "không khiên";
     // Đầu màn: hình Chính Điện của mô hình tông môn; tên, cấp, XP và nút Hiến tế nằm dưới hình để chữ không đè lên tranh.
     const hero = locationArt({ model: s.model, terrain: s.terrainId, location: "chinh_dien" });
-    this.page.innerHTML = `
+    this.page.innerHTML = `<div class="panel">
       <section class="card sect-head">
         <div class="sect-banner${hero.pixel ? " pix" : ""}" style="background-image:url('${hero.url}')" role="img" aria-label="${esc(`Chính Điện của ${s.name}`)}"></div>
         <div class="sect-id">
@@ -69,6 +69,7 @@ export class TongMonScene extends PageScene<TongMonView> {
       </section>
       <div class="seg" role="tablist" aria-label="Tab con">${TABS.map(([id, label]) => `<button type="button" role="tab" data-act="tab" data-tab="${id}" aria-selected="${this.tab === id}">${label}</button>`).join("")}</div>
       ${this.tab === "tong-quan" ? this.overview(v) : this.tab === "son-mon" ? this.sonMon(v) : this.tab === "thanh-vien" ? this.members(v) : this.wars(v)}
+      </div>
       ${this.devTools(v.viewerRole)}`;
   }
 
