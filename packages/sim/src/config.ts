@@ -79,7 +79,7 @@ export const SKILL_RULES = {
 
 /**
  * Sàn thời gian ra chiêu sau mọi phần giảm (Tu trận, set, Ý châu): bày trận 1 s, vận công diện rộng 0,5 s
- * (đề xuất của phiên set đồ, 2026-11-03). Chưa có trong tham_so.json nên chưa có test so với file số liệu.
+ * (đề xuất của phiên set đồ, 2026-11-03). Nhóm CAST_FLOOR trong tham_so.json.
  */
 export const CAST_FLOOR = {
   formationTicks: 1 * SEC,
