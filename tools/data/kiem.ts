@@ -3,7 +3,7 @@
 //   Cần xem: chỗ dữ liệu khác code đang chạy (code chưa đọc JSON), khác mốc trong GDD, hoặc Excel chưa tính lại công thức.
 import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, ROOT_BUFFS, GRADE_POW, LINH_EFFECT_POWER,
-  SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, BASE_CRIT_PER_MILLE,
+  SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, BASE_CRIT_PER_MILLE,
   elementMultiplier, comboRelation, composeTechnique, mul, ONE, type Element, type SkillType, type Variant,
 } from "@ktlp/sim";
 import { existsSync, readFileSync } from "node:fs";
@@ -250,7 +250,7 @@ export function kiem(d: Any, raw: Raw): Report {
     cmp(`Hệ ${e}.rootBuff.value`, he[e]?.rootBuff?.value, ROOT_BUFFS[e].value);
   }
   const ts = d["tham_so.json"];
-  const groups = { SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES } as Record<string, Record<string, number | boolean>>;
+  const groups = { SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES } as Record<string, Record<string, number | boolean>>;
   for (const [g, obj] of Object.entries(groups)) for (const [k, v] of Object.entries(obj)) cmp(`${g}.${k}`, ts[g]?.[k], v);
   cmp("cong_phap.baseCrit", ts.cong_phap?.baseCrit, BASE_CRIT_PER_MILLE);
   if (diff.length) warnings.push(`Khác số đang chạy trong packages/sim (${diff.length} chỗ): ${diff.join("; ")}`);

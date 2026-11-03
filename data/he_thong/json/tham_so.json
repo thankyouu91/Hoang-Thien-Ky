@@ -123,6 +123,7 @@
     "selfShieldCooldownTicks": 120,
     "meleeKnockback": false
   },
+  "CAST_FLOOR": {"formationTicks":20,"channelTicks":10},
   "BATTLE": {
     "fieldLength": 12000,
     "frontPos": 4500,

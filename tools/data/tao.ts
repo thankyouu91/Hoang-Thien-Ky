@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   SKILL_TYPES, VARIANTS, TALENTS, SKILL_SPECS, ALLY_SKILLS, VARIANT_STATS, LINH_EFFECT_POWER, ELEMENT_STATS, ELEMENT_EFFECTS,
-  ROOT_BUFFS, COMBO, BASE_CRIT_PER_MILLE, RESIST_CAP, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES,
+  ROOT_BUFFS, COMBO, BASE_CRIT_PER_MILLE, RESIST_CAP, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, CAST_FLOOR,
   elementMultiplier, comboRelation, parentOf, baseElement, isOpposite, generatesEither, beatsEither,
   type Element, type SkillType, type Variant,
 } from "@ktlp/sim";
@@ -187,8 +187,8 @@ export function build(petCsv: string): SheetOut[] {
   pushParam("cong_phap", "resistCap", "Kháng hệ (từ ngọc) giảm tối đa", RESIST_CAP / 1000, "%", "", "code");
   extra("roi_do");
   extra("thu_cuoi");
-  const codeObjs: Record<keyof typeof N.CODE_PARAMS, Record<string, number | boolean>> = { SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES };
-  for (const g of Object.keys(N.CODE_PARAMS) as (keyof typeof N.CODE_PARAMS)[]) {
+  const codeObjs: Record<keyof typeof N.CODE_PARAMS, Record<string, number | boolean>> = { SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES };
+  for (const g of ["SKILL_RULES", "CAST_FLOOR", "BATTLE", "UNIT_CURVE", "TALENT_RULES"] as const) {
     const obj = codeObjs[g];
     const seen = new Set<string>();
     for (const [key, name, kieu, muc, src] of N.CODE_PARAMS[g]) {
@@ -437,7 +437,9 @@ export function build(petCsv: string): SheetOut[] {
   });
 
   // Trang bị, pháp bảo, ngọc, set đồ, vật phẩm: dựng từ data/trang_bi của phiên set đồ
-  const tb = TB.sourceRows(new URL("data/trang_bi/", ROOT));
+  // data/trang_bi đã bỏ (e79c326) thì lấy từ data/he_thong/json, vốn xuất từ chính file Excel nên dựng lại ra đúng nội dung cũ
+  const tbOld = new URL("data/trang_bi/", ROOT);
+  const tb = TB.sourceRows(existsSync(new URL("trang_bi.json", tbOld)) ? tbOld : new URL("data/he_thong/json/", ROOT));
   const TB_SHEETS = TB.PARTS.filter((p) => tb[p.def.sheet]).map((p) => table(p.def, tb[p.def.sheet]));
 
   return [
@@ -507,7 +509,7 @@ function noteSheet(): SheetOut {
     [],
     t("Các sheet", { bold: true }),
     ...[
-      ["Tham số", "Hằng số chung: kinh tế, ghép công pháp, rơi đồ, thú cưỡi, và các nhóm trận đấu lấy từ code (SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES)"],
+      ["Tham số", "Hằng số chung: kinh tế, ghép công pháp, rơi đồ, thú cưỡi, và các nhóm trận đấu lấy từ code (SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES)"],
       ["Hệ", "12 hệ: hiệu ứng đặc trưng, chỉ số kèm, buff luyện đúng hệ (GDD mục 3, 9)"],
       ["Khắc chế", "Ma trận 12 × 12 hệ số sát thương (GDD mục 8)"],
       ["Quan hệ tổ hợp, Tổ hợp", "6 quan hệ với hệ số t và ma trận 12 × 12 quan hệ hệ chủ – hệ phụ (GDD mục 9)"],

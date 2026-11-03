@@ -343,7 +343,12 @@ export const PARAMS_EXTRA: [string, string, string, number | string, string, str
 ];
 
 /** Mô tả tham số lấy từ code: [khóa, tên, kiểu, mục GDD (trống = chỉ có trong code), nguồn]. */
-export const CODE_PARAMS: Record<"SKILL_RULES" | "BATTLE" | "UNIT_CURVE" | "TALENT_RULES", [string, string, string, string, Src][]> = {
+export const CODE_PARAMS: Record<"SKILL_RULES" | "CAST_FLOOR" | "BATTLE" | "UNIT_CURVE" | "TALENT_RULES", [string, string, string, string, Src][]> = {
+  /** Sàn sau mọi phần giảm (Tu trận, set, Ý châu); đề xuất của phiên set đồ 2026-11-03, sim c72b41f. */
+  CAST_FLOOR: [
+    ["formationTicks", "Trận pháp: bày trận ngắn nhất sau mọi phần giảm (Tu trận, set, Ý châu)", "giây", "", "de_xuat"],
+    ["channelTicks", "Diện rộng: vận công ngắn nhất sau mọi phần giảm", "giây", "", "de_xuat"],
+  ],
   SKILL_RULES: [
     ["aoeCastTicks", "Diện rộng: thời gian vận công", "giây", "8", "gdd"],
     ["shieldOfBase", "Hộ thể: khiên theo sát thương gốc", "hệ số", "8", "gdd"],

@@ -10,6 +10,6 @@ node --experimental-strip-types --no-warnings tools/data/xuat.ts
 
 Lệnh này ghi lại `json/` (mỗi sheet một file, đơn vị như code: phần nghìn, tick 20 mỗi giây, milli-ô) và chạy phép kiểm. Có lỗi thì lệnh trả mã 1.
 
-Từ 2026-11-03 file có thêm 20 sheet trang bị, pháp bảo, pháp khí, ngọc, set đồ và vật phẩm, dựng từ `data/trang_bi` của phiên set đồ. Các sheet này ghép lại thành 7 file `trang_bi.json`, `vu_khi.json`, `ngoc.json`, `set.json`, `phap_bao.json`, `phap_khi.json`, `vat_pham.json`, cùng cấu trúc với `data/trang_bi`, nên code chỉ cần đổi thư mục đọc. Còn thư mục `data/trang_bi` thì phép kiểm so với nó và báo chỗ khác.
+Từ 2026-11-03 file có thêm 20 sheet trang bị, pháp bảo, pháp khí, ngọc, set đồ và vật phẩm, dựng lần đầu từ bản nháp `data/trang_bi` của phiên set đồ (bản nháp đã bỏ ở e79c326). Các sheet này ghép lại thành 7 file `trang_bi.json`, `vu_khi.json`, `ngoc.json`, `set.json`, `phap_bao.json`, `phap_khi.json`, `vat_pham.json`. Không còn `data/trang_bi` thì `tao.ts` dựng các sheet đó từ 7 file JSON này.
 
 `tools/data/tao.ts` chỉ dùng để dựng file lần đầu; chạy lại cần `--ghi-de` và sẽ xóa mọi chỗ đã sửa tay trong Excel.
