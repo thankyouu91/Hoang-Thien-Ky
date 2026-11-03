@@ -88,15 +88,4 @@
   --safe-top: env(safe-area-inset-top);
   --page-max: 680px;
   --page-max-wide: 1080px;
-
-  /* Tên cũ còn dùng ở màn Nhân vật (chờ bàn giao), trỏ sang bảng mới */
-  --paper: var(--c-surface);
-  --paper-ink: var(--c-ink);
-  --paper-ink-2: var(--c-ink-2);
-  --paper-ink-3: var(--c-ink-3);
-  --paper-accent: var(--c-accent);
-  --paper-ok: var(--c-ok);
-  --paper-hair: var(--c-line);
-  --paper-tint: var(--c-sunken);
-  --bronze-2: var(--tier-than);
 }

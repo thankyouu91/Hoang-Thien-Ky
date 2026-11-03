@@ -1,8 +1,8 @@
-// Màn Nhân vật (GDD mục 14): mở bằng chân dung trên thanh trên. Một bảng giấy ba cột:
+// Màn Nhân vật (GDD mục 14): mở bằng chân dung trên thanh trên. Một thẻ ba cột:
 //  - Thông tin: các nhóm thu gọn được (thân phận, linh căn và tài năng, chỉ số chiến đấu, tu luyện, tài khoản), nhãn trái
 //    giá trị phải; nút lớn Bế quan hoặc Đột phá ở đáy.
 //  - Pháp tướng: hình nhân vật đứng giữa vòng 12 hệ (elementWheel.ts), 6 ô trang bị hai bên, 4 ô công pháp mang vào trận,
-//    5 ô thú (ô đang cưỡi có dấu yên), chú giải ở đáy.
+//    5 ô thú (ô đang cưỡi có dấu yên), chú giải thu gọn ở đáy.
 //  - Túi: 50 ô, lọc theo loại và theo phẩm, khung chi tiết món đang chọn.
 // Màn rộng (từ 1100 px) hiện đủ ba cột và kéo thả bằng chuột: kéo đồ hay công pháp từ túi vào ô để mặc, kéo ra túi để
 // tháo. Điện thoại đổi thành ba thẻ Thông tin · Pháp tướng · Túi và dùng chạm: chạm ô mở bảng chọn món, chạm món mở chi
@@ -184,7 +184,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         )
         .join("")}</div>
       ${combos.length ? `<p class="pt-combos">${combos.map((k) => `<span class="chip sk" title="${esc(k.effect)}">${esc(k.name)}</span>`).join("")}</p>` : ""}
-      <ul class="pt-legend">
+      <details class="fold pt-legend-fold"><summary>Chú giải</summary><ul class="pt-legend">
         <li><i class="lg-root"></i>Linh căn</li>
         <li><i class="lg-sinh"></i>Tương sinh</li>
         <li><i class="lg-khac"></i>Tương khắc</li>
@@ -193,7 +193,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         <li><b class="lg-plus">+8</b>Nấc rèn</li>
         <li><i class="lg-dur"></i>Độ bền</li>
         <li><span class="lg-yen">${icon("yen")}</span>Thú cưỡi</li>
-      </ul>`;
+      </ul></details>`;
   }
 
   private gearSlot(v: NhanVatView, s: GearSlot): string {
