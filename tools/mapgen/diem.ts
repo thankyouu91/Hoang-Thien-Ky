@@ -495,7 +495,12 @@ if (import.meta.main) {
     terrains,
     // ring: 0 sát rìa ngoài (Hư Không Hải), 1 sát lòng giữa (Linh Hải) của vị diện
     points: points.map((p) => ({ ...p, x: round(p.x), y: round(p.y), ring: Math.round(ring(p.x, p.y) * 100) / 100 })),
-    edges: edges.map((e) => ({ ...e, path: e.path.map(([x, y]) => [round(x), round(y)]) })),
+    // path luôn đi từ điểm a tới điểm b (lúc tìm đường có thể đi từ b), để proto cho ghim bám đường không phải đoán chiều
+    edges: edges.map((e) => {
+      const a = points[e.a], [x0, y0] = e.path[0], [x1, y1] = e.path.at(-1)!;
+      const path = Math.hypot(x0 - a.x, y0 - a.y) <= Math.hypot(x1 - a.x, y1 - a.y) ? e.path : [...e.path].reverse();
+      return { ...e, path: path.map(([x, y]) => [round(x), round(y)]) };
+    }),
   };
   const file = new URL(`${plane}_diem_${code}.json`, dataDir);
   writeFileSync(file, JSON.stringify(out));

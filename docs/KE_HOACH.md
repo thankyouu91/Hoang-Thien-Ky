@@ -109,6 +109,12 @@ Xong khi: trận 10 đấu 10 chạy 60 khung/giây trên một máy Android t�
     - Thu nhỏ từ ảnh nền từng vùng đã cất về ×1,5 theo khung `regions[].frame`, màu đậm hơn chút. Ngoài vùng phủ giấy mờ, viền vùng nét mực.
     - Sinh bằng `tools/mapgen/mini.ts` (Node, tính đường viền) rồi `mini-trang.ts` (chạy trong trang proto, gửi thẳng qua `nhan-file.ts`).
     - `ha_vi_dien.json` thêm `mini: { path, scale }`. Phần khung mini nhỏ lại và vẽ ảnh này giao phiên dashboard.
+- Kiểm ngày 2026-11-03 (người dùng: nhấn từng vị trí phải đúng, kiểm theo dõi di chuyển và điểm nhấn). Bấm thử trên proto ở 1366×860:
+    - 28/28 ô và chấm đang hiện, bấm ở tâm hay sát mép đều mở đúng thẻ, đúng vùng; tên khi rê chuột cũng khớp. Thành chủ vùng khác mở sau khi tải file điểm của vùng đó.
+    - Bản đồ mini: bấm đâu thì khung đang xem nhảy tới đúng tâm chỗ đó, chỉ lệch 1 px do viền khung.
+    - Lỗi: ghim nhân vật đi theo đường thẳng nối hai đầu chuyến chứ không theo đường đi, lệch tới 7 đơn vị bản đồ.
+    - Dữ liệu sửa: `edges[].path` giờ luôn đi từ điểm a tới b (trước đó 1.778/5.165 đường lưu ngược chiều), file điểm 12 vùng chỉ đổi chiều path.
+    - Phần proto (ghim bám đường, vùng chạm rộng hơn trên màn cảm ứng, chạm vào tên cũng mở điểm, viền khung mini) giao phiên dashboard.
 - Diện tích 12 vùng trong khung chênh nhau tới 2,5 lần (Bích Ba Hải nhỏ nhất, Cuồng Phong Nguyên lớn nhất). Đã chọn ngày 2026-11-02: chia số điểm theo diện tích (xem `diem.ts` ở trên).
 - Prototype vẽ bản đồ, kéo và zoom, sương mù theo số chặng.
 - PixelLab: icon 10 loại điểm.
