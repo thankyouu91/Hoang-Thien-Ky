@@ -724,7 +724,7 @@ button.nv-row:hover { background: var(--c-sunken); }
 .page .nv-h { display: flex; justify-content: space-between; gap: 8px; margin: var(--sp-4) 0 6px; color: var(--c-ink); font-size: 14px; font-weight: 600; }
 .page .nv-h > span { color: var(--c-ink-3); font-weight: 400; }
 /* Núi sương nướng bằng three dưới đáy cột, mờ dần lên trên */
-.pt-mist { position: absolute; left: -8px; right: -8px; bottom: -8px; height: 70%; z-index: 0; opacity: 0.5; pointer-events: none; -webkit-mask-image: linear-gradient(to top, #000 12%, transparent 52%); mask-image: linear-gradient(to top, #000 12%, transparent 52%); }
+.pt-mist { position: absolute; left: -8px; right: -8px; bottom: -8px; height: 70%; z-index: 0; opacity: 0.5; pointer-events: none; -webkit-mask-image: linear-gradient(to top, #000 30%, transparent 80%); mask-image: linear-gradient(to top, #000 30%, transparent 80%); }
 .pt-stage { position: relative; display: grid; grid-template-columns: 58px minmax(0, 1fr) 58px; align-items: center; gap: 6px; min-height: 250px; }
 /* Bóng pháp tướng: chính nhân vật phóng to, mực nâu, nhòe, mờ dần xuống chân */
 .pt-ghost { position: absolute; left: -6%; right: -6%; top: -44px; bottom: -10px; width: 112%; height: calc(100% + 54px); pointer-events: none; opacity: 0.17; filter: grayscale(1) sepia(0.6) contrast(0.85) blur(3px); -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent 92%); mask-image: linear-gradient(to bottom, #000 35%, transparent 92%); }

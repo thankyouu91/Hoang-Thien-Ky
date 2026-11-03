@@ -128,7 +128,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     this.ghost = this.page.querySelector<HTMLCanvasElement>(".pt-ghost") ?? undefined;
     this.page.querySelector(".nv-form")?.prepend(this.mistEl);
     // Máy không có WebGL2 thì mountBakedScene không gắn gì: cột giữa chỉ còn bóng pháp tướng trên giấy.
-    this.mist ??= mountBakedScene(this.mistEl, "son_thuy", { tone: "giay", seed: 3 });
+    this.mist ??= mountBakedScene(this.mistEl, "son_thuy", { tone: "giay", seed: 3, sky: false });
     cropIcons(this.page);
     this.drawDoll();
   }

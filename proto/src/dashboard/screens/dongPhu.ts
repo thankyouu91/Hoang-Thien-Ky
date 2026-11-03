@@ -38,11 +38,11 @@ export class DongPhuScene extends PageScene<DongPhuView> {
   override enter(): void {
     super.enter();
     this.mini.start();
-    // Nền sơn thủy tông giấy nướng một lần (không tốn GPU khi đứng yên), để mờ và chỉ lộ ra ở khe giữa các thẻ.
+    // Nền sơn thủy tông giấy không có trời (chỉ núi và sương, nền trong suốt), nướng một lần, để mờ dưới tấm giấy.
     // Gắn lúc rảnh sau lần mở đầu để three không tranh đường tải với dữ liệu màn.
     if (!this.backdrop) {
       const idle = (fn: () => void) => ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 2000 }) : setTimeout(fn, 800));
-      idle(() => (this.backdrop ??= mountBakedScene(this.backdropEl, "son_thuy", { tone: "giay" })));
+      idle(() => (this.backdrop ??= mountBakedScene(this.backdropEl, "son_thuy", { tone: "giay", sky: false })));
     }
   }
 
