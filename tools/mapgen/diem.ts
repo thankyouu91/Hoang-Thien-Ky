@@ -7,6 +7,7 @@
 import { writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
 import { assignCells, loadRegions, regionFrame, ringPosition, slug } from "./vung.ts";
+import { namePoints } from "./ten.ts";
 
 const VERSION = 1; // tăng khi đổi định dạng file
 const SEED = 20261102;
@@ -101,6 +102,7 @@ interface Point {
   terrain?: Terrain;
   tier?: (typeof GATE_TIERS)[number]; // cửa bí cảnh: thấp, vừa, cao
   neighbour?: string; // đèo: mã vùng bên kia
+  name?: string; // tên Hán Việt (ten.ts)
   azgaarName?: string; // thành chủ: tên thị trấn Azgaar, chỉ để tra
 }
 interface Edge {
@@ -473,6 +475,7 @@ if (import.meta.main) {
   // nào cũng có đủ ba bậc. Loại bí cảnh (GDD mục 11, tỷ lệ rơi 4–50%) sẽ ghép theo bậc: loại càng hiếm thì bậc càng cao
   const gates = points.filter((p) => p.type === "cua_bi_canh").sort((a, b) => a.danger - b.danger || a.id - b.id);
   gates.forEach((p, i) => (p.tier = GATE_TIERS[Math.floor((i * GATE_TIERS.length) / gates.length)]));
+  namePoints(points, slug(regions.elements[k]), mulberry32(SEED + 1000 + k)); // tên hiện khi rê chuột vào điểm
 
   const round = (v: number) => Math.round(v * 10) / 10;
   const xs = points.map((p) => p.x), ys = points.map((p) => p.y);

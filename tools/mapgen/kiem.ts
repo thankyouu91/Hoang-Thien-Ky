@@ -22,6 +22,7 @@ interface FilePoint {
   terrain?: string;
   tier?: string;
   neighbour?: string;
+  name?: string;
 }
 interface FileEdge {
   a: number;
@@ -113,6 +114,8 @@ function check(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, co
   ok("bậc cửa bí cảnh", gates.every((p) => level(p) >= 0) && (gates.length < 3 || new Set(gates.map(level)).size === 3) && gates.every((p, i) => i === 0 || level(p) >= level(gates[i - 1])),
     gates.map((p) => `${p.tier} ${p.danger}`).join(", "));
   ok("có cửa bí cảnh cấp thấp", gates.length > 0 && gates[0].danger < GATE_LOW.below, `cửa thấp nhất cấp ${gates[0]?.danger}, cần dưới ${GATE_LOW.below}`);
+  const names = points.map((p) => p.name ?? "");
+  ok("điểm nào cũng có tên, không trùng", names.every((n) => n.length > 0) && new Set(names).size === names.length, `${new Set(names).size} tên`);
   return results;
 }
 

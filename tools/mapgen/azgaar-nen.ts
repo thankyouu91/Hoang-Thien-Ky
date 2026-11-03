@@ -5,6 +5,8 @@
 // heightmap.ts chép file này (đã bỏ kiểu) thành public/ktlp/nen.js, cùng <vị diện>_azgaar.map. Mở bản đồ đã lưu rồi vẽ:
 //   const { Load } = await import("/services/io/load.ts"); Load.uploadMap(await (await fetch("/ktlp/ha_azgaar.map")).blob())
 //   await (await import("/ktlp/nen.js")).render("ha_nen_loi_dinh_coc", [249, 172, 570, 479])
+// Cả bản đồ chia ô theo mức phóng (lệnh do vi_dien.ts in ra):
+//   await (await import("/ktlp/nen.js")).renderTiles("ha_nen", [1, 2, 4, 6], 1024)
 // Nhiều vùng một lần tải (một file ZIP):
 //   await (await import("/ktlp/nen.js")).renderZip("ha_nen", [{ name: "ha_nen_loi_dinh_coc", frame: [249, 172, 570, 479] }, …])
 // Ảnh nền không có nhãn, thị trấn, quốc gia hay đường của Azgaar: điểm và chặng do proto vẽ theo file điểm.
@@ -41,6 +43,31 @@ export async function renderZip(zipName: string, items: { name: string; frame: F
   return { kb: sizes, zipKb: Math.round(archive.size / 1024) };
 }
 
+/** Ảnh nền cả bản đồ chia ô cho từng mức phóng (vi_dien.ts in sẵn lệnh): ô (col, row) ở mức `level` phủ khung bản đồ
+ * [col, row, col + 1, row + 1] × tile / level, ô ở mép cắt gọn theo bản đồ. Tải một file ZIP x<level>/<col>_<row>.webp;
+ * `dryRun` chỉ vẽ và trả kích thước. Tiến độ ở window.__tiles */
+export async function renderTiles(zipName: string, levels: number[], tile: number, dryRun = false) {
+  const { default: JSZip } = await import(/* @vite-ignore */ "/@id/jszip");
+  const graph = (window as unknown as { FMG: { options: { map: { graph: { width: number; height: number } } } } }).FMG.options.map.graph;
+  const jobs = levels.flatMap((level) => {
+    const cols = Math.ceil((graph.width * level) / tile), rows = Math.ceil((graph.height * level) / tile);
+    return Array.from({ length: cols * rows }, (_, i) => ({ level, col: i % cols, row: Math.floor(i / cols) }));
+  });
+  const progress = { done: 0, total: jobs.length, kb: 0 };
+  (window as unknown as { __tiles: typeof progress }).__tiles = progress;
+  const zip = new JSZip();
+  for (const { level, col, row } of jobs) {
+    const span = tile / level;
+    const frame: Frame = [col * span, row * span, Math.min(graph.width, (col + 1) * span), Math.min(graph.height, (row + 1) * span)];
+    const blob = await draw(frame, level);
+    zip.file(`x${level}/${col}_${row}.webp`, blob);
+    (progress.done += 1), (progress.kb += Math.round(blob.size / 1024));
+  }
+  const archive: Blob = await zip.generateAsync({ type: "blob" });
+  if (!dryRun) download(archive, `${zipName}.zip`);
+  return { ...progress, zipKb: Math.round(archive.size / 1024) };
+}
+
 async function draw(frame: Frame, scale: number): Promise<Blob> {
   const fmg = (window as unknown as { FMG: Fmg }).FMG;
   const { StylePreset } = await import(/* @vite-ignore */ "/controllers/style/style-preset.ts");
@@ -58,8 +85,8 @@ async function draw(frame: Frame, scale: number): Promise<Blob> {
   const image = new Image(); // không dùng image.decode(): nó không xong khi khung trình duyệt đang ẩn
   await new Promise((done, fail) => ((image.onload = done), (image.onerror = fail), (image.src = url)));
   const canvas = document.createElement("canvas");
-  canvas.width = region.width * scale;
-  canvas.height = region.height * scale;
+  canvas.width = Math.round(region.width * scale);
+  canvas.height = Math.round(region.height * scale);
   canvas.getContext("2d")!.drawImage(image, 0, 0, canvas.width, canvas.height);
   return new Promise<Blob>((done, fail) => canvas.toBlob((b) => (b ? done(b) : fail(new Error("Không vẽ được ảnh"))), "image/webp", QUALITY));
 }
