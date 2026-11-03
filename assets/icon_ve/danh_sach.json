@@ -1,0 +1,1026 @@
+{
+  "ghi_chu": [
+    "Danh sách icon vật phẩm vẽ bằng Canva (phong cách tranh vẽ 3D, nền trong). Nhân vật, thú, đảo vẫn là pixel art PixelLab.",
+    "Lời mô tả gửi Canva: 'Game inventory item icon: <mo_ta>. ' + duoi_loi_mo_ta.",
+    "Phẩm, cấp (1–10) và nấc cường hóa hiện bằng viền và số trên UI, không vẽ riêng. Trang bị chỉ vẽ theo cấp linh, thiên, thần.",
+    "uu_tien 1: món đang hiện trong prototype (túi, 6 ô trang bị, Bảo Khố, Công pháp). 2: phần còn lại của GDD. 3: làm sau.",
+    "File ảnh: assets/icon_ve/<ma>.webp, 512 px; nguồn gốc từng ảnh ở manifest.json cùng thư mục."
+  ],
+  "duoi_loi_mo_ta": "Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+  "ty_le": "SQUARE_1_1",
+  "mau_he": {
+    "kim": {
+      "ten": "Kim",
+      "mau": "silver-white"
+    },
+    "moc": {
+      "ten": "Mộc",
+      "mau": "verdant green"
+    },
+    "thuy": {
+      "ten": "Thủy",
+      "mau": "deep blue"
+    },
+    "hoa": {
+      "ten": "Hỏa",
+      "mau": "vermilion red"
+    },
+    "tho": {
+      "ten": "Thổ",
+      "mau": "earthy ochre yellow"
+    },
+    "loi": {
+      "ten": "Lôi",
+      "mau": "electric violet"
+    },
+    "phong": {
+      "ten": "Phong",
+      "mau": "pale jade teal"
+    },
+    "quang": {
+      "ten": "Quang",
+      "mau": "radiant gold"
+    },
+    "am_lanh": {
+      "ten": "Âm lãnh",
+      "mau": "cold grey-blue"
+    },
+    "cuc_duong": {
+      "ten": "Cực dương",
+      "mau": "blazing orange"
+    },
+    "cuc_am": {
+      "ten": "Cực âm",
+      "mau": "dark charcoal purple"
+    },
+    "cuc_han": {
+      "ten": "Cực hàn",
+      "mau": "icy pale blue"
+    }
+  },
+  "so_luong": {
+    "tong": 117,
+    "uu_tien_1": 64,
+    "uu_tien_2": 44,
+    "uu_tien_3": 9
+  },
+  "icon": [
+    {
+      "ma": "trang_bi/vu_khi_linh",
+      "nhom": "trang_bi",
+      "ten": "Vũ khí linh cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a plain but well-forged cultivator's straight sword (jian) with a steel blade and a simple bronze guard, red silk tassel on the pommel"
+    },
+    {
+      "ma": "trang_bi/vu_khi_thien",
+      "nhom": "trang_bi",
+      "ten": "Vũ khí thiên cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "an elegant spirit sword (jian) with a blade of translucent white jade and silver cloud engravings, faint blue glow along the edge"
+    },
+    {
+      "ma": "trang_bi/vu_khi_than",
+      "nhom": "trang_bi",
+      "ten": "Vũ khí thần vật",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a legendary divine sword (jian) with a radiant golden blade, dragon-carved hilt and swirling celestial aura, glowing runes along the blade"
+    },
+    {
+      "ma": "trang_bi/mu_linh",
+      "nhom": "trang_bi",
+      "ten": "Mũ linh cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a black lacquered gauze scholar-official cap (wusha hat) with two short side wings and a small jade bead"
+    },
+    {
+      "ma": "trang_bi/mu_thien",
+      "nhom": "trang_bi",
+      "ten": "Mũ thiên cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "an ornate jade crown hairpiece (guan) of carved white jade with a silver hairpin through it"
+    },
+    {
+      "ma": "trang_bi/mu_than",
+      "nhom": "trang_bi",
+      "ten": "Mũ thần vật",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a divine golden crown of a celestial immortal, phoenix and cloud filigree, glowing pearl at the front and soft golden aura"
+    },
+    {
+      "ma": "trang_bi/ao_linh",
+      "nhom": "trang_bi",
+      "ten": "Áo linh cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a flowing Taoist cultivator robe folded and displayed upright, deep indigo silk with silver cloud embroidery and a jade clasp at the collar"
+    },
+    {
+      "ma": "trang_bi/ao_thien",
+      "nhom": "trang_bi",
+      "ten": "Áo thiên cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a heavy dark iron lamellar armor vest with bronze-trimmed plates and shoulder guards, xianxia warrior style"
+    },
+    {
+      "ma": "trang_bi/ao_than",
+      "nhom": "trang_bi",
+      "ten": "Áo thần vật",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a divine immortal's robe of shimmering white and gold silk woven with feathers of light, floating ribbons and a soft radiant aura"
+    },
+    {
+      "ma": "trang_bi/dai_linh",
+      "nhom": "trang_bi",
+      "ten": "Đai linh cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a coiled leather cultivator belt with a carved green jade buckle and a small hanging pouch"
+    },
+    {
+      "ma": "trang_bi/dai_thien",
+      "nhom": "trang_bi",
+      "ten": "Đai thiên cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "an ornate silver-plated belt engraved with thunder-cloud patterns and a round dark jade buckle"
+    },
+    {
+      "ma": "trang_bi/dai_than",
+      "nhom": "trang_bi",
+      "ten": "Đai thần vật",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a divine golden dragon belt laid out in a gentle S-curve, a long strap of linked golden plates with dragon-scale engraving, the buckle shaped like a dragon head holding a glowing pearl, celestial aura"
+    },
+    {
+      "ma": "trang_bi/giay_linh",
+      "nhom": "trang_bi",
+      "ten": "Giày linh cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a pair of black cloth cultivator boots with white soles and simple stitched cloud motif"
+    },
+    {
+      "ma": "trang_bi/giay_thien",
+      "nhom": "trang_bi",
+      "ten": "Giày thiên cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a pair of cloud-stepping boots of pale blue silk with silver cloud embroidery and wisps of mist around the soles"
+    },
+    {
+      "ma": "trang_bi/giay_than",
+      "nhom": "trang_bi",
+      "ten": "Giày thần vật",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a pair of divine phoenix-feather boots in crimson and gold with flame-like plumes at the heels, soft golden aura"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi_linh",
+      "nhom": "trang_bi",
+      "ten": "Ngọc bội linh cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a round carved green jade pendant disc (bi) with a hole in the center, hanging from a red knotted cord"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi_thien",
+      "nhom": "trang_bi",
+      "ten": "Ngọc bội thiên cấp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "an intricately carved white jade pendant shaped like a coiled qilin, silver cap and a blue silk tassel"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi_than",
+      "nhom": "trang_bi",
+      "ten": "Ngọc bội thần vật",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
+      "mo_ta": "a divine glowing jade pendant carved with a dragon and phoenix, radiating soft golden light, golden tassel"
+    },
+    {
+      "ma": "ngoc/kim",
+      "nhom": "ngoc",
+      "ten": "Ngọc Kim",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted silver-white spirit gemstone set in an ornate silver filigree setting, a perfect circle symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/moc",
+      "nhom": "ngoc",
+      "ten": "Ngọc Mộc",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted verdant green spirit gemstone set in an ornate silver filigree setting, a sprouting leaf symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/thuy",
+      "nhom": "ngoc",
+      "ten": "Ngọc Thủy",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted deep blue spirit gemstone set in an ornate silver filigree setting, flowing wave ripples symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/hoa",
+      "nhom": "ngoc",
+      "ten": "Ngọc Hỏa",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted vermilion red spirit gemstone set in an ornate silver filigree setting, a blazing flame symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/tho",
+      "nhom": "ngoc",
+      "ten": "Ngọc Thổ",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted earthy ochre yellow spirit gemstone set in an ornate silver filigree setting, a solid square symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/loi",
+      "nhom": "ngoc",
+      "ten": "Ngọc Lôi",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted electric violet spirit gemstone set in an ornate silver filigree setting, a lightning bolt symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/phong",
+      "nhom": "ngoc",
+      "ten": "Ngọc Phong",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted pale jade teal spirit gemstone set in an ornate silver filigree setting, a spiral whirlwind symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/quang",
+      "nhom": "ngoc",
+      "ten": "Ngọc Quang",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted radiant gold spirit gemstone set in an ornate silver filigree setting, radiating light rays symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/am_lanh",
+      "nhom": "ngoc",
+      "ten": "Ngọc Âm lãnh",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted cold grey-blue spirit gemstone set in an ornate silver filigree setting, a ghostly will-o'-wisp flame symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/cuc_duong",
+      "nhom": "ngoc",
+      "ten": "Ngọc Cực dương",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted blazing orange spirit gemstone set in an ornate silver filigree setting, a blazing sun disc symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/cuc_am",
+      "nhom": "ngoc",
+      "ten": "Ngọc Cực âm",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted dark charcoal purple spirit gemstone set in an ornate silver filigree setting, a crescent moon symbol glowing inside the crystal, a silk tassel hanging below"
+    },
+    {
+      "ma": "ngoc/cuc_han",
+      "nhom": "ngoc",
+      "ten": "Ngọc Cực hàn",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a faceted icy pale blue spirit gemstone set in an ornate silver filigree setting, a snowflake symbol glowing inside the crystal, a silk tassel hanging below",
+      "mau_da_duyet": "MAHZ1s6bCF0"
+    },
+    {
+      "ma": "tan_quyen/kim",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Kim",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a perfect circle sigil drawn on it glowing gleaming silver, gleaming silver energy around it"
+    },
+    {
+      "ma": "tan_quyen/moc",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Mộc",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a sprouting leaf sigil drawn on it glowing living green, living green energy around it"
+    },
+    {
+      "ma": "tan_quyen/thuy",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Thủy",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, flowing wave ripples sigil drawn on it glowing deep sapphire blue, deep sapphire blue energy around it"
+    },
+    {
+      "ma": "tan_quyen/hoa",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Hỏa",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a blazing flame sigil drawn on it glowing fiery vermilion, fiery vermilion energy around it"
+    },
+    {
+      "ma": "tan_quyen/tho",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Thổ",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a solid square sigil drawn on it glowing earthy ochre, earthy ochre energy around it"
+    },
+    {
+      "ma": "tan_quyen/loi",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Lôi",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a lightning bolt sigil drawn on it glowing crackling violet, crackling violet energy around it",
+      "mau_da_duyet": "MAHZ1mhFoQs"
+    },
+    {
+      "ma": "tan_quyen/phong",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Phong",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a spiral whirlwind sigil drawn on it glowing pale jade-teal, pale jade-teal energy around it"
+    },
+    {
+      "ma": "tan_quyen/quang",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Quang",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, radiating light rays sigil drawn on it glowing radiant golden, radiant golden energy around it"
+    },
+    {
+      "ma": "tan_quyen/am_lanh",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Âm lãnh",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a ghostly will-o'-wisp flame sigil drawn on it glowing eerie grey-blue, eerie grey-blue energy around it"
+    },
+    {
+      "ma": "tan_quyen/cuc_duong",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Cực dương",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a blazing sun disc sigil drawn on it glowing blazing orange, blazing orange energy around it"
+    },
+    {
+      "ma": "tan_quyen/cuc_am",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Cực âm",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a crescent moon sigil drawn on it glowing shadowy charcoal-purple, shadowy charcoal-purple energy around it"
+    },
+    {
+      "ma": "tan_quyen/cuc_han",
+      "nhom": "tan_quyen",
+      "ten": "Tàn quyển hệ Cực hàn",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9; data/he_thong/json/tan_quyen.json",
+      "mo_ta": "a torn ancient cultivation scroll fragment, aged parchment unrolling from a carved bronze rod, a snowflake sigil drawn on it glowing frosty ice-blue, frosty ice-blue energy around it"
+    },
+    {
+      "ma": "linh_thach/ha",
+      "nhom": "linh_thach",
+      "ten": "Linh thạch hạ phẩm",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (mỗi vị diện một phẩm linh thạch)",
+      "mo_ta": "a small rough cluster of pale translucent spirit crystals with a faint white glow"
+    },
+    {
+      "ma": "linh_thach/trung",
+      "nhom": "linh_thach",
+      "ten": "Linh thạch trung phẩm",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (mỗi vị diện một phẩm linh thạch)",
+      "mo_ta": "a cluster of clear blue-green spirit crystals with a steady soft glow"
+    },
+    {
+      "ma": "linh_thach/thuong",
+      "nhom": "linh_thach",
+      "ten": "Linh thạch thượng phẩm",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (mỗi vị diện một phẩm linh thạch)",
+      "mo_ta": "a large cluster of brilliant violet spirit crystals pulsing with bright energy"
+    },
+    {
+      "ma": "linh_thach/cuc",
+      "nhom": "linh_thach",
+      "ten": "Linh thạch cực phẩm",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (mỗi vị diện một phẩm linh thạch)",
+      "mo_ta": "a flawless radiant golden spirit crystal cluster blazing with dense spiritual energy and tiny floating motes"
+    },
+    {
+      "ma": "quang/thiet_tinh",
+      "nhom": "quang",
+      "ten": "Thiết tinh",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Chất lượng theo vị diện)",
+      "mo_ta": "a chunk of dark refined iron ore with metallic grey veins"
+    },
+    {
+      "ma": "quang/huyen_thiet",
+      "nhom": "quang",
+      "ten": "Huyền thiết",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Chất lượng theo vị diện)",
+      "mo_ta": "a heavy chunk of black mysterious iron ore with deep blue metallic sheen"
+    },
+    {
+      "ma": "quang/tinh_kim",
+      "nhom": "quang",
+      "ten": "Tinh kim",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Chất lượng theo vị diện)",
+      "mo_ta": "a chunk of star-gold ore, pale gold metal with twinkling starlike specks"
+    },
+    {
+      "ma": "quang/than_kim",
+      "nhom": "quang",
+      "ten": "Thần kim",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Chất lượng theo vị diện)",
+      "mo_ta": "a chunk of divine metal ore glowing white-gold with ethereal runes on its surface"
+    },
+    {
+      "ma": "duoc/linh_thao",
+      "nhom": "duoc",
+      "ten": "Linh thảo",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6, 11, 12",
+      "mo_ta": "a bundle of fresh green spirit herbs tied with straw string, dewdrops on the leaves"
+    },
+    {
+      "ma": "duoc/huyen_chi",
+      "nhom": "duoc",
+      "ten": "Huyền chi (đề xuất)",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6, 11, 12",
+      "mo_ta": "a dark purple lingzhi mushroom with glossy concentric rings and a faint mystical glow",
+      "ghi_chu": "Tên bậc 2 là đề xuất"
+    },
+    {
+      "ma": "duoc/ngoc_sam",
+      "nhom": "duoc",
+      "ten": "Ngọc sâm (đề xuất)",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6, 11, 12",
+      "mo_ta": "a translucent jade-white ginseng root shaped like a tiny person, soft green glow",
+      "ghi_chu": "Tên bậc 3 là đề xuất"
+    },
+    {
+      "ma": "duoc/than_lien",
+      "nhom": "duoc",
+      "ten": "Thần liên (đề xuất)",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6, 11, 12",
+      "mo_ta": "a divine lotus flower with luminous white and gold petals and a glowing seed pod, floating motes of light",
+      "ghi_chu": "Tên bậc 4 là đề xuất"
+    },
+    {
+      "ma": "duoc/tu_loi_thao",
+      "nhom": "duoc",
+      "ten": "Tử Lôi Thảo",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6, 11, 12",
+      "mo_ta": "a violet spirit herb with jagged lightning-shaped leaves crackling with small purple sparks",
+      "ghi_chu": "Có trong túi mẫu của prototype"
+    },
+    {
+      "ma": "duoc/long_tuy_thao",
+      "nhom": "duoc",
+      "ten": "Long Tủy Thảo",
+      "uu_tien": 2,
+      "nguon": "GDD mục 6, 11, 12",
+      "mo_ta": "a rare crimson spirit herb with scale-like leaves coiling like a small dragon, a golden glowing bulb at the root",
+      "ghi_chu": "Nguyên liệu tẩy tủy (GDD mục 6)"
+    },
+    {
+      "ma": "duoc/thien_dia_linh_tuy",
+      "nhom": "duoc",
+      "ten": "Thiên Địa Linh Tủy",
+      "uu_tien": 2,
+      "nguon": "GDD mục 6, 11, 12",
+      "mo_ta": "a small crystal vial holding a glowing milky-white liquid of condensed heaven and earth essence, swirling light inside",
+      "ghi_chu": "Nguyên liệu tẩy tủy (GDD mục 6)"
+    },
+    {
+      "ma": "duoc/dan_thu",
+      "nhom": "duoc",
+      "ten": "Đan thú",
+      "uu_tien": 2,
+      "nguon": "GDD mục 6, 11, 12",
+      "mo_ta": "a glowing beast core, a round amber-red inner pill of a spirit beast with swirling energy and claw-like veins",
+      "ghi_chu": "Rơi ở Thú Lâm (GDD mục 11), luyện linh đơn"
+    },
+    {
+      "ma": "dan/dan_duoc_hoi_mau",
+      "nhom": "dan",
+      "ten": "Đan dược hồi máu (Bổ Huyết Đan)",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "three round crimson red healing pills on a small white porcelain dish"
+    },
+    {
+      "ma": "dan/dan_duoc_hoi_mana",
+      "nhom": "dan",
+      "ten": "Đan dược hồi mana (Hồi Khí Đan)",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "three round sky-blue qi recovery pills on a small white porcelain dish, faint blue mist"
+    },
+    {
+      "ma": "dan/dan_duoc_tang_chi_so",
+      "nhom": "dan",
+      "ten": "Đan dược tăng chỉ số tạm thời",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "three round amber-orange strength pills on a small white porcelain dish, faint orange glow"
+    },
+    {
+      "ma": "dan/dan_duoc_giai_doc",
+      "nhom": "dan",
+      "ten": "Đan dược giải độc",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "three round pale green antidote pills on a small white porcelain dish, a sprig of herb beside them"
+    },
+    {
+      "ma": "dan/linh_dan_tri_thuong",
+      "nhom": "dan",
+      "ten": "Linh đan trị thương",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "a single glowing rose-red spirit pill resting on silk inside an open carved green jade box"
+    },
+    {
+      "ma": "dan/linh_dan_kinh_nghiem",
+      "nhom": "dan",
+      "ten": "Linh đan tăng kinh nghiệm",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "a single glowing golden-yellow spirit pill resting on silk inside an open carved green jade box"
+    },
+    {
+      "ma": "dan/linh_dan_tu_luyen",
+      "nhom": "dan",
+      "ten": "Linh đan tăng tốc tu luyện (Tụ Linh Đan)",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "a single glowing cyan spirit pill with swirling qi resting on silk inside an open carved green jade box"
+    },
+    {
+      "ma": "dan/than_dan_pha_canh",
+      "nhom": "dan",
+      "ten": "Thần đan vượt cảnh giới (Phá Cảnh Đan)",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "a radiant divine pill with nine golden pill-patterns on its surface, floating above a golden lotus pedestal, blazing aura"
+    },
+    {
+      "ma": "dan/than_dan_ngo_dao",
+      "nhom": "dan",
+      "ten": "Thần đan tăng ngộ đạo",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "a radiant translucent white divine pill with a tiny taiji swirl inside, floating above a golden lotus pedestal, soft aura"
+    },
+    {
+      "ma": "dan/than_dan_giam_loi_kiep",
+      "nhom": "dan",
+      "ten": "Thần đan giảm lôi kiếp",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "a radiant deep violet divine pill wrapped in tiny lightning arcs, floating above a golden lotus pedestal"
+    },
+    {
+      "ma": "dan/tay_tuy_dan",
+      "nhom": "dan",
+      "ten": "Tẩy Tủy Đan",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "a pearl-white marrow-cleansing pill glowing with rainbow iridescence inside a small open celadon porcelain bottle gourd"
+    },
+    {
+      "ma": "dan/dich_dung_dan",
+      "nhom": "dan",
+      "ten": "Dịch Dung Đan",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13",
+      "mo_ta": "a shimmering iridescent face-changing pill that reflects many colors, resting in a small lacquered black box with a mirror lid"
+    },
+    {
+      "ma": "linh_don/duong_linh_don",
+      "nhom": "linh_don",
+      "ten": "Dưỡng Linh Đơn",
+      "uu_tien": 2,
+      "nguon": "GDD mục 6 (Luyện linh đơn); data/he_thong/json/linh_don.json",
+      "mo_ta": "a cluster of small round jade-green beast nourishing pills with paw-print markings in a little woven bamboo basket"
+    },
+    {
+      "ma": "linh_don/pha_canh_don",
+      "nhom": "linh_don",
+      "ten": "Phá Cảnh Đơn (thú)",
+      "uu_tien": 2,
+      "nguon": "GDD mục 6 (Luyện linh đơn); data/he_thong/json/linh_don.json",
+      "mo_ta": "a large crimson and gold beast breakthrough pill with a beast-claw pattern, crackling energy, on a stone pedestal"
+    },
+    {
+      "ma": "linh_don/hoi_linh_don",
+      "nhom": "linh_don",
+      "ten": "Hồi Linh Đơn",
+      "uu_tien": 2,
+      "nguon": "GDD mục 6 (Luyện linh đơn); data/he_thong/json/linh_don.json",
+      "mo_ta": "a soft glowing light-blue beast healing pill wrapped in a green leaf"
+    },
+    {
+      "ma": "phu/chong_set",
+      "nhom": "phu",
+      "ten": "Phù chống sét",
+      "uu_tien": 1,
+      "nguon": "GDD mục 7 (lôi kiếp)",
+      "mo_ta": "a yellow paper talisman with red cinnabar calligraphy-like seal patterns (no readable text), a small lightning rod motif, faint violet sparks"
+    },
+    {
+      "ma": "phu/bao_ngoc",
+      "nhom": "phu",
+      "ten": "Phù bảo ngọc",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a yellow paper talisman with red cinnabar seal patterns (no readable text) wrapped around a small glowing blue gemstone"
+    },
+    {
+      "ma": "phu/bao_ho",
+      "nhom": "phu",
+      "ten": "Phù bảo hộ",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Trang bị)",
+      "mo_ta": "a yellow paper talisman with red cinnabar seal patterns (no readable text) and a golden protective shield glyph glowing on it"
+    },
+    {
+      "ma": "phu/tang_thanh",
+      "nhom": "phu",
+      "ten": "Phù tăng thành",
+      "uu_tien": 1,
+      "nguon": "GDD mục 12 (Ngọc và khảm)",
+      "mo_ta": "a yellow paper talisman with red cinnabar seal patterns (no readable text) and a rising golden arrow-like glow, small sparkles"
+    },
+    {
+      "ma": "phu/ho_than",
+      "nhom": "phu",
+      "ten": "Phù hộ thân",
+      "uu_tien": 2,
+      "nguon": "GDD mục 3 (Hành trình)",
+      "mo_ta": "a yellow paper talisman with red cinnabar seal patterns (no readable text) folded into a triangle amulet on a red string, faint white aura"
+    },
+    {
+      "ma": "phu/don_tho",
+      "nhom": "phu",
+      "ten": "Phù độn thổ",
+      "uu_tien": 2,
+      "nguon": "GDD mục 3 (Hành trình)",
+      "mo_ta": "a brown earth-colored paper talisman with ochre seal patterns (no readable text) half sinking into a swirl of soil and dust"
+    },
+    {
+      "ma": "phu/ngu_thu",
+      "nhom": "phu",
+      "ten": "Ngự Thú Phù",
+      "uu_tien": 2,
+      "nguon": "GDD mục 6 (Thú cưỡi)",
+      "mo_ta": "a yellow paper talisman with red cinnabar seal patterns (no readable text) and a glowing beast paw sigil, a small leather leash charm attached"
+    },
+    {
+      "ma": "trung_thu/thuong",
+      "nhom": "trung_thu",
+      "ten": "Trứng thú",
+      "uu_tien": 1,
+      "nguon": "GDD mục 6 (Nguồn thú)",
+      "mo_ta": "a large pearly white spirit beast egg with faint silver cloud patterns on the shell, resting on a small nest of straw",
+      "ghi_chu": "Một hình chung; hệ hiện bằng viền và chip hệ trên UI"
+    },
+    {
+      "ma": "trung_thu/hiem",
+      "nhom": "trung_thu",
+      "ten": "Trứng thú hiếm (Yêu Thú Sào Huyệt)",
+      "uu_tien": 2,
+      "nguon": "GDD mục 6, 11",
+      "mo_ta": "a large dark spirit beast egg with glowing golden cracks and ancient runes on the shell, wisps of energy rising from it",
+      "ghi_chu": "Trứng hiếm, khóa vào nhân vật"
+    },
+    {
+      "ma": "lo_dinh/so",
+      "nhom": "lo_dinh",
+      "ten": "Lô đỉnh cấp 1–4",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (lô đỉnh 10 cấp)",
+      "mo_ta": "a simple small bronze alchemy cauldron (ding) on three legs, plain design with a lid, a small fire beneath"
+    },
+    {
+      "ma": "lo_dinh/trung",
+      "nhom": "lo_dinh",
+      "ten": "Lô đỉnh cấp 5–8",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12",
+      "mo_ta": "an ornate bronze alchemy cauldron (ding) inlaid with green jade, a coiled dragon on the lid, flames beneath",
+      "ghi_chu": "Mẫu đã duyệt; lời mô tả ở đây là tả lại",
+      "mau_da_duyet": "MAHZ1p5PxeA"
+    },
+    {
+      "ma": "lo_dinh/cao",
+      "nhom": "lo_dinh",
+      "ten": "Lô đỉnh cấp 9–10",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12",
+      "mo_ta": "a legendary golden alchemy cauldron (ding) with nine dragons coiling around it, celestial flames in white and gold beneath, radiant aura"
+    },
+    {
+      "ma": "lo_ren/so",
+      "nhom": "lo_ren",
+      "ten": "Lò rèn cấp 1–4",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12 (Lò rèn)",
+      "mo_ta": "a small stone blacksmith forge with an anvil and a hammer resting on it, glowing coals"
+    },
+    {
+      "ma": "lo_ren/trung",
+      "nhom": "lo_ren",
+      "ten": "Lò rèn cấp 5–8",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12",
+      "mo_ta": "a large bronze xianxia forge furnace with a tiger-head chimney, glowing molten metal and an anvil"
+    },
+    {
+      "ma": "lo_ren/cao",
+      "nhom": "lo_ren",
+      "ten": "Lò rèn cấp 9–10",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12",
+      "mo_ta": "a divine forge furnace of black and gold metal with phoenix carvings, blue-white celestial fire, floating sparks"
+    },
+    {
+      "ma": "manh/lo_dinh",
+      "nhom": "manh",
+      "ten": "Mảnh lô đỉnh",
+      "uu_tien": 2,
+      "nguon": "GDD mục 11 (Đan Tiên Động Phủ)",
+      "mo_ta": "a broken bronze fragment of an ancient alchemy cauldron with jade inlay and engraved patterns, faint glow on the broken edge"
+    },
+    {
+      "ma": "manh/lo_ren",
+      "nhom": "manh",
+      "ten": "Mảnh lò rèn",
+      "uu_tien": 2,
+      "nguon": "GDD mục 11 (Luyện Khí Di Chỉ)",
+      "mo_ta": "a broken fragment of an ancient forge furnace, dark metal with ember-red glowing cracks"
+    },
+    {
+      "ma": "manh/phap_bao_tran_giao",
+      "nhom": "manh",
+      "ten": "Mảnh pháp bảo trấn giáo",
+      "uu_tien": 2,
+      "nguon": "GDD mục 11 (Thượng Cổ Chiến Trường)",
+      "mo_ta": "a shattered golden fragment of a sacred sect-guarding artifact, carved with ancient seal patterns, radiating soft light"
+    },
+    {
+      "ma": "dac_biet/kim_bai_mien_tu",
+      "nhom": "dac_biet",
+      "ten": "Kim Bài Miễn Tử",
+      "uu_tien": 2,
+      "nguon": "GDD mục 3 (Đồ sát, lao tù)",
+      "mo_ta": "a gold imperial pardon token plaque with a carved tiger head and cloud border, red silk tassel, no readable text"
+    },
+    {
+      "ma": "dac_biet/chien_thuyen",
+      "nhom": "dac_biet",
+      "ten": "Chiến thuyền",
+      "uu_tien": 2,
+      "nguon": "GDD mục 10 (Hộ trận và công thành)",
+      "mo_ta": "a small flying war junk ship with red sails and a bronze ram prow, carved dragon figurehead, floating on clouds"
+    },
+    {
+      "ma": "dac_biet/tien_ngoc",
+      "nhom": "dac_biet",
+      "ten": "Tiên ngọc",
+      "uu_tien": 2,
+      "nguon": "GDD mục 12, 13",
+      "mo_ta": "a single luminous celestial jade bead, rounded and polished, pale green with an inner golden glow and tiny sparkles"
+    },
+    {
+      "ma": "dac_biet/phap_bao_tran_giao",
+      "nhom": "dac_biet",
+      "ten": "Pháp bảo trấn giáo",
+      "uu_tien": 2,
+      "nguon": "GDD mục 10 (NPC và pháp bảo trấn giáo)",
+      "mo_ta": "a sacred sect-guarding treasure, a small golden bell-shaped pagoda floating above a jade base, radiating protective golden light"
+    },
+    {
+      "ma": "dac_biet/dan_phuong",
+      "nhom": "dac_biet",
+      "ten": "Đan phương",
+      "uu_tien": 2,
+      "nguon": "GDD mục 11 (Đan Tiên Động Phủ)",
+      "mo_ta": "a rolled bamboo slip pill recipe tied with a red cord, a small pill drawing on the visible slip, no readable text"
+    },
+    {
+      "ma": "dac_biet/thien_tai_lenh",
+      "nhom": "dac_biet",
+      "ten": "Thiên Tài Lệnh",
+      "uu_tien": 3,
+      "nguon": "GDD mục 13 (Thiên Đạo Lệnh)",
+      "mo_ta": "an ornate jade command token plaque with golden trim and a cloud-and-sun carving, purple tassel, no readable text"
+    },
+    {
+      "ma": "cong_phap/kim",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Kim",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a silver-white silk cover and a perfect circle emblem glowing gleaming silver on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/moc",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Mộc",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a verdant green silk cover and a sprouting leaf emblem glowing living green on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/thuy",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Thủy",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a deep blue silk cover and flowing wave ripples emblem glowing deep sapphire blue on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/hoa",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Hỏa",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a vermilion red silk cover and a blazing flame emblem glowing fiery vermilion on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/tho",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Thổ",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a earthy ochre yellow silk cover and a solid square emblem glowing earthy ochre on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/loi",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Lôi",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a electric violet silk cover and a lightning bolt emblem glowing crackling violet on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/phong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Phong",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a pale jade teal silk cover and a spiral whirlwind emblem glowing pale jade-teal on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/quang",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Quang",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a radiant gold silk cover and radiating light rays emblem glowing radiant golden on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a cold grey-blue silk cover and a ghostly will-o'-wisp flame emblem glowing eerie grey-blue on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Cực dương",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a blazing orange silk cover and a blazing sun disc emblem glowing blazing orange on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Cực âm",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a dark charcoal purple silk cover and a crescent moon emblem glowing shadowy charcoal-purple on the cover, slightly open"
+    },
+    {
+      "ma": "cong_phap/cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp hệ Cực hàn",
+      "uu_tien": 2,
+      "nguon": "GDD mục 9 (Ghép công pháp)",
+      "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a icy pale blue silk cover and a snowflake emblem glowing frosty ice-blue on the cover, slightly open"
+    },
+    {
+      "ma": "vu_khi_tai_nang/quyen_giap",
+      "nhom": "vu_khi_tai_nang",
+      "ten": "Quyền giáp (Tu thể)",
+      "uu_tien": 3,
+      "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
+      "mo_ta": "a pair of heavy bronze battle gauntlets with knuckle spikes",
+      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+    },
+    {
+      "ma": "vu_khi_tai_nang/phap_truong",
+      "nhom": "vu_khi_tai_nang",
+      "ten": "Pháp trượng (Tu pháp)",
+      "uu_tien": 3,
+      "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
+      "mo_ta": "a tall wooden magic staff topped with a glowing crystal orb held by carved branches",
+      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+    },
+    {
+      "ma": "vu_khi_tai_nang/tran_ban",
+      "nhom": "vu_khi_tai_nang",
+      "ten": "Trận bàn (Tu trận)",
+      "uu_tien": 3,
+      "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
+      "mo_ta": "a round bronze formation array disc engraved with trigram and rune circles, faint glowing lines",
+      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+    },
+    {
+      "ma": "vu_khi_tai_nang/ho_lo",
+      "nhom": "vu_khi_tai_nang",
+      "ten": "Hồ lô (Tu đan)",
+      "uu_tien": 3,
+      "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
+      "mo_ta": "a lacquered red calabash gourd bottle with a cork stopper and a cord, wisps of medicinal mist",
+      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+    },
+    {
+      "ma": "vu_khi_tai_nang/song_chuy_thu",
+      "nhom": "vu_khi_tai_nang",
+      "ten": "Song chủy thủ (Sát thủ)",
+      "uu_tien": 3,
+      "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
+      "mo_ta": "a pair of crossed sleek black daggers with curved blades and dark red wrapped handles",
+      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+    },
+    {
+      "ma": "vu_khi_tai_nang/bua_ren",
+      "nhom": "vu_khi_tai_nang",
+      "ten": "Búa rèn (Tu rèn)",
+      "uu_tien": 3,
+      "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
+      "mo_ta": "a heavy forging hammer with a bronze head engraved with fire patterns and a wooden handle",
+      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+    },
+    {
+      "ma": "vu_khi_tai_nang/liem_hai_thuoc",
+      "nhom": "vu_khi_tai_nang",
+      "ten": "Liềm hái thuốc (Tu dược)",
+      "uu_tien": 3,
+      "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
+      "mo_ta": "a small curved herb-gathering sickle with a jade handle and a sprig of spirit herb tied to it",
+      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+    },
+    {
+      "ma": "vu_khi_tai_nang/ban_tinh",
+      "nhom": "vu_khi_tai_nang",
+      "ten": "Bàn tính (Tu kim tiền)",
+      "uu_tien": 3,
+      "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
+      "mo_ta": "an ornate golden abacus with jade beads and a carved rosewood frame",
+      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+    }
+  ]
+}
