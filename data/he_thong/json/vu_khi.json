@@ -2,7 +2,7 @@
   "ghi_chu": [
     "Trả lời câu hỏi mục 20 (đề xuất): vũ khí vẫn là một loại khi rơi, rèn và bán. 60 kiểu chia 10 khí hình để icon và tên trong túi đa dạng; cầm lên vẫn hiện nhóm vũ khí theo tài năng (đã chốt ở mục 6).",
     "Khí hình không mang chỉ số. Mối nối với 10 loại chiêu nằm ở Ý châu (ngọc đặc biệt, chỉ khảm vào vũ khí). Ý châu trùng khí hình thì món phát sáng theo màu ý châu, chỉ là hình.",
-    "ten_de_xuat ở data/trang_bi/trang_bi.json là tên mới cho 51 kiểu chưa vẽ; phiên icon cập nhật trang_bi_ten.cjs và danh_sach.json. Mã TB-KI giữ nguyên."
+    "34 kiểu đã vẽ (01–30, 41, 42, 53, 58) giữ khí hình kiếm. ten_de_xuat ở trang_bi.json là tên mới cho 26 kiểu lam trở lên chưa vẽ, chia cho 9 khí hình còn lại; chờ người dùng duyệt rồi phiên icon cập nhật trang_bi_ten.cjs và danh_sach.json. Mã TB-KI giữ nguyên."
   ],
   "khi_hinh": [
     {
@@ -11,7 +11,7 @@
       "loai_chieu": "can_don",
       "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
       "y_chau": "NG-YC-001",
-      "so_kieu": 9
+      "so_kieu": 34
     },
     {
       "id": "dao",
@@ -19,7 +19,7 @@
       "loai_chieu": "can_quet",
       "mo_ta": "Đao một lưỡi bản rộng, chém quét",
       "y_chau": "NG-YC-002",
-      "so_kieu": 8
+      "so_kieu": 4
     },
     {
       "id": "cung",
@@ -27,7 +27,7 @@
       "loai_chieu": "tam_xa",
       "mo_ta": "Cung và tên, bắn từ hàng sau",
       "y_chau": "NG-YC-003",
-      "so_kieu": 6
+      "so_kieu": 3
     },
     {
       "id": "phien",
@@ -35,7 +35,7 @@
       "loai_chieu": "dien_rong",
       "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
       "y_chau": "NG-YC-004",
-      "so_kieu": 6
+      "so_kieu": 4
     },
     {
       "id": "con",
@@ -43,7 +43,7 @@
       "loai_chieu": "ho_the",
       "mo_ta": "Côn dài, thủ thế che thân và che bạn",
       "y_chau": "NG-YC-005",
-      "so_kieu": 6
+      "so_kieu": 2
     },
     {
       "id": "but",
@@ -51,16 +51,16 @@
       "loai_chieu": "bua_chu",
       "mo_ta": "Phù bút vẽ bùa, điểm huyệt",
       "y_chau": "NG-YC-006",
-      "so_kieu": 4
+      "so_kieu": 2
     },
-    {"id":"ky","ten":"Kỳ","loai_chieu":"tran_phap","mo_ta":"Trận kỳ cắm đất bày trận","y_chau":"NG-YC-007","so_kieu":5},
+    {"id":"ky","ten":"Kỳ","loai_chieu":"tran_phap","mo_ta":"Trận kỳ cắm đất bày trận","y_chau":"NG-YC-007","so_kieu":3},
     {
       "id": "cam",
       "ten": "Cầm",
       "loai_chieu": "hoi_phuc",
       "mo_ta": "Đàn cổ, tiếng đàn dưỡng thương",
       "y_chau": "NG-YC-008",
-      "so_kieu": 5
+      "so_kieu": 3
     },
     {
       "id": "tieu",
@@ -68,7 +68,7 @@
       "loai_chieu": "khong_che",
       "mo_ta": "Sáo trúc, tiếng tiêu mê hồn trói chân địch",
       "y_chau": "NG-YC-009",
-      "so_kieu": 4
+      "so_kieu": 2
     },
     {
       "id": "thuong",
@@ -76,7 +76,7 @@
       "loai_chieu": "than_phap",
       "mo_ta": "Trường thương, lao tới đâm xuyên",
       "y_chau": "NG-YC-010",
-      "so_kieu": 7
+      "so_kieu": 3
     }
   ],
   "hinh_khi_cam": [
