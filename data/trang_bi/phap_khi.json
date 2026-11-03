@@ -1,0 +1,459 @@
+{
+ "ghi_chu": [
+  "Pháp khí là công cụ ngoài trận, nằm ở ô pháp khí riêng (1 ô). Không có tác dụng trong trận, không tính vào set, không có độ bền.",
+  "Ai cũng dùng được; người có đúng tài năng nhận gấp đôi. Chỉ có lục, lam, tím; bán được trên chợ.",
+  "Trần kinh tế từ đồ: pháp khí cộng hiệu ứng kinh tế của set không quá +10% mỗi loại sản lượng hay tỷ lệ; tỷ lệ luyện đan tính chung trần +15% của phù (mục 13).",
+  "Hình pháp khí dùng lại hình vũ khí theo tài năng (VK-TN) khi trùng: trận bàn, búa rèn, liềm, bàn tính."
+ ],
+ "o": 1,
+ "mon": [
+  {
+   "ma_vp": "PK-CU-001",
+   "ten": "Thiết Cuốc",
+   "loai": "Cuốc",
+   "do_hiem": "luc",
+   "tai_nang_hop": "tu_the",
+   "chinh": {
+    "ten": "Khai khoáng thủ công",
+    "gia_tri": 20,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "shop_npc"
+   ]
+  },
+  {
+   "ma_vp": "PK-CU-002",
+   "ten": "Huyền Thiết Cuốc",
+   "loai": "Cuốc",
+   "do_hiem": "lam",
+   "tai_nang_hop": "tu_the",
+   "chinh": {
+    "ten": "Khai khoáng thủ công",
+    "gia_tri": 30,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_luyen_khi_cac",
+    "cho"
+   ]
+  },
+  {
+   "ma_vp": "PK-CU-003",
+   "ten": "Khai Sơn Thần Cuốc",
+   "loai": "Cuốc",
+   "do_hiem": "tim",
+   "tai_nang_hop": "tu_the",
+   "chinh": {
+    "ten": "Khai khoáng thủ công",
+    "gia_tri": 40,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_lo_5_tro_len",
+    "bi_canh_the_manh_cung_nghe"
+   ]
+  },
+  {
+   "ma_vp": "PK-LB-001",
+   "ten": "Đồng La Bàn",
+   "loai": "La bàn",
+   "do_hiem": "luc",
+   "tai_nang_hop": "tu_phap",
+   "chinh": {
+    "ten": "Cơ hội gặp tài bảo trên chặng đang đi",
+    "gia_tri": 50,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "shop_npc"
+   ]
+  },
+  {
+   "ma_vp": "PK-LB-002",
+   "ten": "Tầm Bảo La Bàn",
+   "loai": "La bàn",
+   "do_hiem": "lam",
+   "tai_nang_hop": "tu_phap",
+   "chinh": {
+    "ten": "Cơ hội gặp tài bảo trên chặng đang đi",
+    "gia_tri": 80,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_luyen_khi_cac",
+    "cho"
+   ]
+  },
+  {
+   "ma_vp": "PK-LB-003",
+   "ten": "Thiên Cơ La Bàn",
+   "loai": "La bàn",
+   "do_hiem": "tim",
+   "tai_nang_hop": "tu_phap",
+   "chinh": {
+    "ten": "Cơ hội gặp tài bảo trên chặng đang đi",
+    "gia_tri": 120,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_lo_5_tro_len",
+    "bi_canh_the_manh_cung_nghe"
+   ]
+  },
+  {
+   "ma_vp": "PK-TB-001",
+   "ten": "Mộc Trận Bàn",
+   "loai": "Trận bàn",
+   "do_hiem": "luc",
+   "tai_nang_hop": "tu_tran",
+   "chinh": {
+    "ten": "Tốc độ xây và sửa trận nhãn, Truyền Tống Trận",
+    "gia_tri": 30,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "shop_npc"
+   ]
+  },
+  {
+   "ma_vp": "PK-TB-002",
+   "ten": "Ngọc Trận Bàn",
+   "loai": "Trận bàn",
+   "do_hiem": "lam",
+   "tai_nang_hop": "tu_tran",
+   "chinh": {
+    "ten": "Tốc độ xây và sửa trận nhãn, Truyền Tống Trận",
+    "gia_tri": 50,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_luyen_khi_cac",
+    "cho"
+   ]
+  },
+  {
+   "ma_vp": "PK-TB-003",
+   "ten": "Tinh Đấu Trận Bàn",
+   "loai": "Trận bàn",
+   "do_hiem": "tim",
+   "tai_nang_hop": "tu_tran",
+   "chinh": {
+    "ten": "Tốc độ xây và sửa trận nhãn, Truyền Tống Trận",
+    "gia_tri": 70,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_lo_5_tro_len",
+    "bi_canh_the_manh_cung_nghe"
+   ]
+  },
+  {
+   "ma_vp": "PK-QP-001",
+   "ten": "Bồ Phiến",
+   "loai": "Quạt lửa",
+   "do_hiem": "luc",
+   "tai_nang_hop": "tu_dan",
+   "chinh": {
+    "ten": "Tỷ lệ luyện đan thành công",
+    "gia_tri": 10,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "shop_npc"
+   ]
+  },
+  {
+   "ma_vp": "PK-QP-002",
+   "ten": "Khống Hỏa Phiến",
+   "loai": "Quạt lửa",
+   "do_hiem": "lam",
+   "tai_nang_hop": "tu_dan",
+   "chinh": {
+    "ten": "Tỷ lệ luyện đan thành công",
+    "gia_tri": 20,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_luyen_khi_cac",
+    "cho"
+   ]
+  },
+  {
+   "ma_vp": "PK-QP-003",
+   "ten": "Tam Muội Hỏa Phiến",
+   "loai": "Quạt lửa",
+   "do_hiem": "tim",
+   "tai_nang_hop": "tu_dan",
+   "chinh": {
+    "ten": "Tỷ lệ luyện đan thành công",
+    "gia_tri": 30,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_lo_5_tro_len",
+    "bi_canh_the_manh_cung_nghe"
+   ]
+  },
+  {
+   "ma_vp": "PK-AT-001",
+   "ten": "Ẩn Tức Thạch",
+   "loai": "Ngọc ẩn tức",
+   "do_hiem": "luc",
+   "tai_nang_hop": "sat_thu",
+   "chinh": {
+    "ten": "Giảm cơ hội gặp sự kiện xấu khi hành trình",
+    "gia_tri": 50,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "shop_npc"
+   ]
+  },
+  {
+   "ma_vp": "PK-AT-002",
+   "ten": "Ẩn Tức Ngọc",
+   "loai": "Ngọc ẩn tức",
+   "do_hiem": "lam",
+   "tai_nang_hop": "sat_thu",
+   "chinh": {
+    "ten": "Giảm cơ hội gặp sự kiện xấu khi hành trình",
+    "gia_tri": 80,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_luyen_khi_cac",
+    "cho"
+   ]
+  },
+  {
+   "ma_vp": "PK-AT-003",
+   "ten": "Vô Ảnh Ngọc",
+   "loai": "Ngọc ẩn tức",
+   "do_hiem": "tim",
+   "tai_nang_hop": "sat_thu",
+   "chinh": {
+    "ten": "Giảm cơ hội gặp sự kiện xấu khi hành trình",
+    "gia_tri": 120,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_lo_5_tro_len",
+    "bi_canh_the_manh_cung_nghe"
+   ]
+  },
+  {
+   "ma_vp": "PK-CR-001",
+   "ten": "Thiết Chùy",
+   "loai": "Chùy rèn",
+   "do_hiem": "luc",
+   "tai_nang_hop": "tu_ren",
+   "chinh": {
+    "ten": "Giảm quặng tốn khi rèn và giá sửa đồ",
+    "gia_tri": 20,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "shop_npc"
+   ]
+  },
+  {
+   "ma_vp": "PK-CR-002",
+   "ten": "Huyền Thiết Chùy",
+   "loai": "Chùy rèn",
+   "do_hiem": "lam",
+   "tai_nang_hop": "tu_ren",
+   "chinh": {
+    "ten": "Giảm quặng tốn khi rèn và giá sửa đồ",
+    "gia_tri": 30,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_luyen_khi_cac",
+    "cho"
+   ]
+  },
+  {
+   "ma_vp": "PK-CR-003",
+   "ten": "Bách Luyện Chùy",
+   "loai": "Chùy rèn",
+   "do_hiem": "tim",
+   "tai_nang_hop": "tu_ren",
+   "chinh": {
+    "ten": "Giảm quặng tốn khi rèn và giá sửa đồ",
+    "gia_tri": 50,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_lo_5_tro_len",
+    "bi_canh_the_manh_cung_nghe"
+   ]
+  },
+  {
+   "ma_vp": "PK-LI-001",
+   "ten": "Thiết Liêm",
+   "loai": "Liềm",
+   "do_hiem": "luc",
+   "tai_nang_hop": "tu_duoc",
+   "chinh": {
+    "ten": "Sản lượng thu tay ở mỏ dược",
+    "gia_tri": 20,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "shop_npc"
+   ]
+  },
+  {
+   "ma_vp": "PK-LI-002",
+   "ten": "Thải Dược Liêm",
+   "loai": "Liềm",
+   "do_hiem": "lam",
+   "tai_nang_hop": "tu_duoc",
+   "chinh": {
+    "ten": "Sản lượng thu tay ở mỏ dược",
+    "gia_tri": 30,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_luyen_khi_cac",
+    "cho"
+   ]
+  },
+  {
+   "ma_vp": "PK-LI-003",
+   "ten": "Ngọc Cốt Liêm",
+   "loai": "Liềm",
+   "do_hiem": "tim",
+   "tai_nang_hop": "tu_duoc",
+   "chinh": {
+    "ten": "Sản lượng thu tay ở mỏ dược",
+    "gia_tri": 40,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_lo_5_tro_len",
+    "bi_canh_the_manh_cung_nghe"
+   ]
+  },
+  {
+   "ma_vp": "PK-BA-001",
+   "ten": "Mộc Bàn Tính",
+   "loai": "Bàn tính",
+   "do_hiem": "luc",
+   "tai_nang_hop": "tu_kim_tien",
+   "chinh": {
+    "ten": "Lợi nhuận bán trên chợ",
+    "gia_tri": 10,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "shop_npc"
+   ]
+  },
+  {
+   "ma_vp": "PK-BA-002",
+   "ten": "Kim Châu Bàn Tính",
+   "loai": "Bàn tính",
+   "do_hiem": "lam",
+   "tai_nang_hop": "tu_kim_tien",
+   "chinh": {
+    "ten": "Lợi nhuận bán trên chợ",
+    "gia_tri": 20,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_luyen_khi_cac",
+    "cho"
+   ]
+  },
+  {
+   "ma_vp": "PK-BA-003",
+   "ten": "Thông Bảo Bàn Tính",
+   "loai": "Bàn tính",
+   "do_hiem": "tim",
+   "tai_nang_hop": "tu_kim_tien",
+   "chinh": {
+    "ten": "Lợi nhuận bán trên chợ",
+    "gia_tri": 30,
+    "don_vi": "phan_nghin"
+   },
+   "phu": {
+    "dung_tai_nang": "×2"
+   },
+   "nguon": [
+    "ren_lo_5_tro_len",
+    "bi_canh_the_manh_cung_nghe"
+   ]
+  }
+ ]
+}

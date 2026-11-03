@@ -1,0 +1,575 @@
+{
+ "ghi_chu": [
+  "12 hệ cấp 1–10 (chốt). gia_tri: phần nghìn, = 0,25 × k × (k + 1)% (mục 12, đề xuất). Khảm trùng hệ linh căn hiệu quả +20%.",
+  "Ô 'cong' (vũ khí, bao tay, ngọc bội): tăng sát thương chiêu có hệ chủ là hệ ngọc. Ô 'thu' (mũ, áo, đai, giày): kháng hệ ngọc, trần kháng 80% (RESIST_CAP).",
+  "Nén 3 viên cùng hệ cùng cấp lên 1 viên cấp trên; ty_le_nen_len là tỷ lệ đậu khi nén lên cấp đó (đề xuất). Ngọc từ cấp 7 khóa vào nhân vật (chốt mục 13).",
+  "Cấp là thuộc tính của từng viên, không nằm trong mã. Mã NG-KH giữ như danh_sach.json; ten_han_viet là tên hiện trong tooltip (đề xuất)."
+ ],
+ "he": [
+  {
+   "ma_vp": "NG-KH-001",
+   "he": "kim",
+   "ten": "Ngọc Kim",
+   "ten_han_viet": "Canh Kim Thạch",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "loi_tri",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-002",
+   "he": "moc",
+   "ten": "Ngọc Mộc",
+   "ten_han_viet": "Thanh Mộc Tinh",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-003",
+   "he": "thuy",
+   "ten": "Ngọc Thủy",
+   "ten_han_viet": "Huyền Thủy Châu",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "bang_phach_cung",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-004",
+   "he": "hoa",
+   "ten": "Ngọc Hỏa",
+   "ten_han_viet": "Xích Diễm Thạch",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-005",
+   "he": "tho",
+   "ten": "Ngọc Thổ",
+   "ten_han_viet": "Hậu Thổ Tinh",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-006",
+   "he": "loi",
+   "ten": "Ngọc Lôi",
+   "ten_han_viet": "Tử Lôi Tinh",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "loi_tri",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-007",
+   "he": "phong",
+   "ten": "Ngọc Phong",
+   "ten_han_viet": "Thanh Phong Ngọc",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-008",
+   "he": "quang",
+   "ten": "Ngọc Quang",
+   "ten_han_viet": "Diệu Quang Thạch",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-009",
+   "he": "am_lanh",
+   "ten": "Ngọc Âm lãnh",
+   "ten_han_viet": "U Lãnh Ngọc",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-010",
+   "he": "cuc_duong",
+   "ten": "Ngọc Cực dương",
+   "ten_han_viet": "Thuần Dương Tinh",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-011",
+   "he": "cuc_am",
+   "ten": "Ngọc Cực âm",
+   "ten_han_viet": "Huyền Âm Tinh",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  },
+  {
+   "ma_vp": "NG-KH-012",
+   "he": "cuc_han",
+   "ten": "Ngọc Cực hàn",
+   "ten_han_viet": "Hàn Tủy Ngọc",
+   "nguon": [
+    "ngoc_tuy_dong",
+    "bang_phach_cung",
+    "roi_bi_canh_cap_1_3",
+    "nen_ngoc"
+   ]
+  }
+ ],
+ "cap": [
+  {
+   "cap": 1,
+   "gia_tri": 5,
+   "ty_le_nen_len": null,
+   "khoa": false
+  },
+  {
+   "cap": 2,
+   "gia_tri": 15,
+   "ty_le_nen_len": 1000,
+   "khoa": false
+  },
+  {
+   "cap": 3,
+   "gia_tri": 30,
+   "ty_le_nen_len": 900,
+   "khoa": false
+  },
+  {
+   "cap": 4,
+   "gia_tri": 50,
+   "ty_le_nen_len": 800,
+   "khoa": false
+  },
+  {
+   "cap": 5,
+   "gia_tri": 75,
+   "ty_le_nen_len": 650,
+   "khoa": false
+  },
+  {
+   "cap": 6,
+   "gia_tri": 105,
+   "ty_le_nen_len": 500,
+   "khoa": false
+  },
+  {
+   "cap": 7,
+   "gia_tri": 140,
+   "ty_le_nen_len": 350,
+   "khoa": true
+  },
+  {
+   "cap": 8,
+   "gia_tri": 180,
+   "ty_le_nen_len": 200,
+   "khoa": true
+  },
+  {
+   "cap": 9,
+   "gia_tri": 225,
+   "ty_le_nen_len": 100,
+   "khoa": true
+  },
+  {
+   "cap": 10,
+   "gia_tri": 275,
+   "ty_le_nen_len": 50,
+   "khoa": true
+  }
+ ],
+ "y_chau": [
+  {
+   "ma_vp": "NG-YC-001",
+   "ten": "Kiếm Ý Châu",
+   "khi_hinh": "kiem",
+   "loai_chieu": "can_don",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Cận chiến đơn xuyên 15% khiên của mục tiêu",
+   "tham_so": {
+    "xuyenKhien": 150
+   },
+   "ban_cho": true,
+   "nguon": [
+    "van_kiem_trung",
+    "luyen_khi_di_chi"
+   ]
+  },
+  {
+   "ma_vp": "NG-YC-002",
+   "ten": "Đao Ý Châu",
+   "khi_hinh": "dao",
+   "loai_chieu": "can_quet",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Cận chiến quét trúng thêm 1 mục tiêu (5 thành 6); mục tiêu thêm nhận 50% sát thương",
+   "tham_so": {
+    "themMucTieu": 1,
+    "heSoMucTieuThem": 500
+   },
+   "ban_cho": true,
+   "nguon": [
+    "van_kiem_trung",
+    "luyen_khi_di_chi"
+   ]
+  },
+  {
+   "ma_vp": "NG-YC-003",
+   "ten": "Cung Ý Châu",
+   "khi_hinh": "cung",
+   "loai_chieu": "tam_xa",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Tầm xa +1 ô; không cộng dồn với tầm +1 ô của Âm lãnh (mỗi công pháp tối đa +1 ô)",
+   "tham_so": {
+    "tamMilliO": 1000
+   },
+   "ban_cho": true,
+   "nguon": [
+    "van_kiem_trung",
+    "luyen_khi_di_chi"
+   ]
+  },
+  {
+   "ma_vp": "NG-YC-004",
+   "ten": "Phiến Ý Châu",
+   "khi_hinh": "phien",
+   "loai_chieu": "dien_rong",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Diện rộng vận công 0,7 s thay 1 s",
+   "tham_so": {
+    "vanCongTicks": 14
+   },
+   "ban_cho": true,
+   "nguon": [
+    "tang_kinh_dong",
+    "luyen_khi_di_chi"
+   ]
+  },
+  {
+   "ma_vp": "NG-YC-005",
+   "ten": "Côn Ý Châu",
+   "khi_hinh": "con",
+   "loai_chieu": "ho_the",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Hộ thể đặt khiên lên đồng đội đang bị nhiều kẻ địch nhắm nhất thay vì đồng đội gần nhất",
+   "tham_so": {
+    "chonMucTieu": "bi_nham_nhieu_nhat"
+   },
+   "ban_cho": true,
+   "nguon": [
+    "tang_kinh_dong",
+    "luyen_khi_di_chi"
+   ]
+  },
+  {
+   "ma_vp": "NG-YC-006",
+   "ten": "Bút Ý Châu",
+   "khi_hinh": "but",
+   "loai_chieu": "bua_chu",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Lần Bùa chú đầu tiên mỗi trận nhắm kẻ địch máu thấp nhất",
+   "tham_so": {
+    "chonMucTieu": "mau_thap_nhat",
+    "soLan": 1
+   },
+   "ban_cho": true,
+   "nguon": [
+    "tang_kinh_dong",
+    "luyen_khi_di_chi"
+   ]
+  },
+  {
+   "ma_vp": "NG-YC-007",
+   "ten": "Kỳ Ý Châu",
+   "khi_hinh": "ky",
+   "loai_chieu": "tran_phap",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Trận pháp bày trong 4,5 s thay 5 s",
+   "tham_so": {
+    "bayTranTicks": 90
+   },
+   "ban_cho": true,
+   "nguon": [
+    "tang_kinh_dong",
+    "luyen_khi_di_chi"
+   ]
+  },
+  {
+   "ma_vp": "NG-YC-008",
+   "ten": "Cầm Ý Châu",
+   "khi_hinh": "cam",
+   "loai_chieu": "hoi_phuc",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Hồi phục chọn đồng đội máu thấp nhất trước; tốn mana ×2,7 thay ×3",
+   "tham_so": {
+    "chonMucTieu": "mau_thap_nhat",
+    "heSoMana": 2700
+   },
+   "ban_cho": true,
+   "nguon": [
+    "tang_kinh_dong",
+    "luyen_khi_di_chi"
+   ]
+  },
+  {
+   "ma_vp": "NG-YC-009",
+   "ten": "Tiêu Ý Châu",
+   "khi_hinh": "tieu",
+   "loai_chieu": "khong_che",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Khống chế ưu tiên kẻ địch đang vận công (diện rộng, trận pháp)",
+   "tham_so": {
+    "chonMucTieu": "dang_van_cong"
+   },
+   "ban_cho": true,
+   "nguon": [
+    "tang_kinh_dong",
+    "luyen_khi_di_chi"
+   ]
+  },
+  {
+   "ma_vp": "NG-YC-010",
+   "ten": "Thương Ý Châu",
+   "khi_hinh": "thuong",
+   "loai_chieu": "than_phap",
+   "chi_kham_vao": "vu_khi",
+   "mo_ta": "Thân pháp lướt tới kẻ địch hàng sau có máu thấp nhất",
+   "tham_so": {
+    "chonMucTieu": "hang_sau_mau_thap_nhat"
+   },
+   "ban_cho": true,
+   "nguon": [
+    "van_kiem_trung",
+    "luyen_khi_di_chi"
+   ]
+  }
+ ],
+ "an_bo": [
+  {
+   "ma_vp": "NG-AN-001",
+   "ten": "Ấn Tụ Bảo",
+   "bo": "tu_bao",
+   "ban_cho": true,
+   "nguon": [
+    "linh_thach_quat",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-002",
+   "ten": "Ấn Bách Thảo",
+   "bo": "bach_thao",
+   "ban_cho": true,
+   "nguon": [
+    "duoc_coc",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-003",
+   "ten": "Ấn Bàn Thạch",
+   "bo": "ban_thach",
+   "ban_cho": true,
+   "nguon": [
+    "khoang_mach_dong",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-004",
+   "ten": "Ấn Liệp Thú",
+   "bo": "liep_thu",
+   "ban_cho": true,
+   "nguon": [
+    "thu_lam",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-005",
+   "ten": "Ấn Thiết Kỵ",
+   "bo": "thiet_ky",
+   "ban_cho": true,
+   "nguon": [
+    "co_chien_truong",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-006",
+   "ten": "Ấn Văn Uyên",
+   "bo": "van_uyen",
+   "ban_cho": true,
+   "nguon": [
+    "tang_kinh_dong",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-007",
+   "ten": "Ấn Ngọc Tủy",
+   "bo": "ngoc_tuy",
+   "ban_cho": true,
+   "nguon": [
+    "ngoc_tuy_dong",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-008",
+   "ten": "Ấn Linh Tuyền",
+   "bo": "linh_tuyen",
+   "ban_cho": true,
+   "nguon": [
+    "linh_tuyen_dong",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-009",
+   "ten": "Ấn Băng Phách",
+   "bo": "bang_phach",
+   "ban_cho": true,
+   "nguon": [
+    "bang_phach_cung",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-010",
+   "ten": "Ấn Lôi Trì",
+   "bo": "loi_tri",
+   "ban_cho": true,
+   "nguon": [
+    "loi_tri",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-011",
+   "ten": "Ấn Ngự Thú",
+   "bo": "ngu_thu",
+   "ban_cho": true,
+   "nguon": [
+    "yeu_thu_sao_huyet",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-012",
+   "ten": "Ấn Cổ Tông",
+   "bo": "co_tong",
+   "ban_cho": true,
+   "nguon": [
+    "co_tong_di_tich",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-013",
+   "ten": "Ấn Đan Tiên",
+   "bo": "dan_tien",
+   "ban_cho": true,
+   "nguon": [
+    "dan_tien_dong_phu",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-014",
+   "ten": "Ấn Thiên Công",
+   "bo": "thien_cong",
+   "ban_cho": true,
+   "nguon": [
+    "luyen_khi_di_chi",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-015",
+   "ten": "Ấn Huyết Ảnh",
+   "bo": "huyet_anh",
+   "ban_cho": true,
+   "nguon": [
+    "huyet_sat_ma_quat",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-016",
+   "ten": "Ấn Độ Kiếp",
+   "bo": "do_kiep",
+   "ban_cho": true,
+   "nguon": [
+    "thien_loi_dai",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-017",
+   "ten": "Ấn Vạn Kiếm",
+   "bo": "van_kiem",
+   "ban_cho": true,
+   "nguon": [
+    "van_kiem_trung",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-018",
+   "ten": "Ấn Chu Thiên",
+   "bo": "chu_thien",
+   "ban_cho": false,
+   "nguon": [
+    "tien_nhan_dong_phu",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-019",
+   "ten": "Ấn Phá Quân",
+   "bo": "pha_quan",
+   "ban_cho": false,
+   "nguon": [
+    "thuong_co_chien_truong",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  },
+  {
+   "ma_vp": "NG-AN-020",
+   "ten": "Ấn Hỗn Độn",
+   "bo": "hon_don",
+   "ban_cho": false,
+   "nguon": [
+    "hon_don_bi_canh",
+    "doi_cong_hien_khi_tong_giu_bi_canh"
+   ]
+  }
+ ]
+}
