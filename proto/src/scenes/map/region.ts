@@ -62,14 +62,45 @@ export interface WorldMap {
   borders: { between: [string, string | null]; path: [number, number][] }[];
 }
 
+/** Hình của điểm: "nut" ô nút có ký hiệu hệ, "cham" chấm nhỏ (ba loại mỏ). */
+export type PointForm = "nut" | "cham";
+
+/**
+ * Sàng lọc điểm và nhãn tính sẵn cho cả vị diện (data/maps/ha_nhan.json, tools/mapgen/nhan.ts). Độ phóng tính như
+ * camera.zoom (px CSS mỗi đơn vị bản đồ); null là tới độ phóng tối đa vẫn không tự hiện.
+ */
+export interface MapLabels {
+  version: number;
+  zoom: { max: number };
+  /** Cỡ hộp giữ chỗ dùng khi tính (px CSS); chữ rộng charW × cỡ chữ mỗi ký tự. */
+  boxes: { node: number; big: number; gap: number; dot: number; dotGap: number; font: number; dotFont: number; charW: number; line: number; below: number };
+  /** Loại điểm theo thứ tự quan trọng. */
+  order: PointType[];
+  forms: Record<PointType, PointForm>;
+  /** Theo mã vùng, chỉ số là id điểm: z độ phóng bắt đầu hiện hình, t độ phóng bắt đầu hiện tên. */
+  points: Record<string, { z: (number | null)[]; t: (number | null)[] }>;
+  /** Chỗ rộng nhất của vùng, đặt tên vùng ở đây. */
+  regions: { code: string; name: string; x: number; y: number; r: number }[];
+  /** Tên địa hình (rừng, đồng cỏ, sa mạc, đầm lầy, núi, băng nguyên), đã né điểm. */
+  features: { region: string; kind: string; name: string; x: number; y: number; r: number; z: number | null }[];
+  /** Tên sông, path đặt chiều trái sang phải để chữ chạy dọc sông; chưa né điểm. */
+  rivers: { region: string; kind: string; name: string; z: number | null; path: [number, number][] }[];
+}
+
 const WORLD_FILE = import.meta.glob<WorldMap>("../../../../data/maps/ha_vi_dien.json", { import: "default" });
+const LABEL_FILE = import.meta.glob<MapLabels>("../../../../data/maps/ha_nhan.json", { import: "default" });
 const POINT_FILES = import.meta.glob<RegionMap>("../../../../data/maps/ha_diem_*.json", { import: "default" });
 const TILE_FILES = import.meta.glob<string>("../../../../data/maps/ha_nen/x*/*.webp", { query: "?url", import: "default" });
 
 let world: Promise<WorldMap> | undefined;
+let labels: Promise<MapLabels> | undefined;
 
 export function loadWorld(): Promise<WorldMap> {
   return (world ??= WORLD_FILE["../../../../data/maps/ha_vi_dien.json"]());
+}
+
+export function loadLabels(): Promise<MapLabels> {
+  return (labels ??= LABEL_FILE["../../../../data/maps/ha_nhan.json"]());
 }
 
 const cache = new Map<string, Promise<RegionMap>>();
