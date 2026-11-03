@@ -522,27 +522,30 @@ export class MapScene implements Scene {
       labels.push({ text: c.name, x, y: top, big: c.big, px });
       return true;
     };
-    // Dấu của mình (ghim và tên phía trên) giữ chỗ ngay sau thành chủ và điểm động, trước các điểm khác.
+    // Bậc xếp chỗ: 0 thành chủ và sơn môn mình, 1 điểm động, 2 điểm khác (theo z/t tính sẵn). Dấu của mình (ghim và tên
+    // phía trên) giữ chỗ ngay sau bậc 0, nên điểm động và điểm khác né tên mình, còn thành chủ không bị ghim che mất.
     const home = this.regions.get(d.map.region);
     const me = home && cam.toScreen(this.selfAt(home, d).x, this.selfAt(home, d).y, v);
     const meTip = me ? me.y - NODE_BIG / 2 - 2 : 0;
     ctx.font = `700 12px ${FONT}`;
     const meHalf = Math.max(8, ctx.measureText(d.top.name).width / 2 + 3);
-    for (const pass of [0, 1]) {
-      if (pass === 1 && me) placer.take(me.x - meHalf, meTip - 28, me.x + meHalf, meTip);
+    const tier = (c: Cand) => (c.big ? 0 : c.dyn ? 1 : 2);
+    for (const pass of [0, 1, 2]) {
+      if (pass === 1 && me) placer.reserve(me.x - meHalf, meTip - 28, me.x + meHalf, meTip);
       for (const c of this.cands) {
-        if ((pass === 0) !== (c.big || c.dyn)) continue;
-        if (pass === 1 && (filtered ? c.prio > maxPrio : z < c.z)) continue;
+        if (tier(c) !== pass) continue;
+        if (pass === 2 && (filtered ? c.prio > maxPrio : z < c.z)) continue;
         const s = cam.toScreen(c.x, c.y, v);
         if (s.x < -pad || s.y < -pad || s.x > v.w + pad || s.y > v.h + pad) continue;
         const dot = c.form === "cham";
         const size = dot ? B.dot : c.big ? NODE_BIG : NODE;
-        // Đã lọc thì xếp lại tại chỗ: ô nút chỉ hiện khi tên cũng có chỗ, như bản tính sẵn.
-        const needName = pass === 1 && filtered && !dot && this.prefs.names;
+        // Điểm khác: ô nút chỉ hiện khi tên cũng có chỗ (va chạm chỉ xảy ra quanh điểm động, hay khi đã lọc thì xếp lại
+        // tại chỗ); chấm mỏ thì chỉ bỏ tên.
+        const needName = pass === 2 && !dot && this.prefs.names && (filtered || z >= c.t);
         if (needName && !label(c, s.x, s.y, size, false)) continue;
         if (!placer.node(s.x, s.y, size, dot ? B.dotGap : B.gap)) continue;
         placed.push({ c, x: s.x, y: s.y, size });
-        if (this.prefs.names && (pass === 0 || needName || (!filtered && z >= c.t))) label(c, s.x, s.y, size);
+        if (this.prefs.names && (pass < 2 || needName || (!filtered && z >= c.t))) label(c, s.x, s.y, size);
       }
     }
     this.placed = placed;
@@ -574,8 +577,10 @@ export class MapScene implements Scene {
       ctx.letterSpacing = "0px";
     }
     if (this.prefs.terrain) {
-      drawFeatureNames(ctx, this.labels!.features, cam, v, z, placer);
-      drawRiverNames(ctx, this.labels!.rivers, cam, v, z, placer);
+      // Bật sương mù thì chỉ hiện tên sông và địa hình của vùng mình, như cách lọc điểm.
+      const seen = (x: { region: string }) => !this.prefs.fog || x.region === d.map.region;
+      drawFeatureNames(ctx, this.labels!.features.filter(seen), cam, v, z, placer);
+      drawRiverNames(ctx, this.labels!.rivers.filter(seen), cam, v, z, placer);
     }
 
     // Ô nút, chấm mỏ, dấu chủ điểm, điểm đang bị đánh, cửa bí cảnh đang mở.

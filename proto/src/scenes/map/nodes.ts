@@ -103,6 +103,12 @@ export class Placer {
   /** Thử đặt hình chữ nhật; trống thì giữ chỗ và trả true. */
   take(x0: number, y0: number, x1: number, y1: number): boolean {
     if (!this.fits(x0, y0, x1, y1)) return false;
+    this.reserve(x0, y0, x1, y1);
+    return true;
+  }
+
+  /** Giữ chỗ dù đã có gì ở đó (dấu của mình luôn hiện, những thứ đặt sau phải né). */
+  reserve(x0: number, y0: number, x1: number, y1: number): void {
     const c = this.cell;
     const cx0 = Math.floor(x0 / c);
     const cx1 = Math.floor(x1 / c);
@@ -116,7 +122,6 @@ export class Placer {
         if (list) list.push(r);
         else this.grid.set(k, [r]);
       }
-    return true;
   }
 
   /** Giữ chỗ cho ô nút (hay chấm) tâm (x, y), chừa khoảng trống `gap` quanh ô. */
