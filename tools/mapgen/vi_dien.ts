@@ -7,6 +7,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap } from "./azgaar.ts";
 import { assignCells, loadRegions, slug } from "./vung.ts";
+import { SCALE as MINI_SCALE } from "./mini.ts";
 
 const VERSION = 1;
 /** Ảnh nền chia ô: mỗi mức là số điểm ảnh ảnh nền trên một điểm ảnh bản đồ; ô vuông TILE điểm ảnh. Mức 6 khớp ảnh từng vùng cũ */
@@ -111,6 +112,8 @@ if (import.meta.main) {
     map: { width, height },
     // ô (col, row) ở mức `level` phủ khung bản đồ [col, row, col + 1, row + 1] × tile / level
     background: { tile: TILE, path: `${plane}_nen/x{level}/{col}_{row}.webp`, levels: tiles },
+    // ảnh nền bản đồ mini của từng vùng (mini.ts): phủ đúng regions[].frame, điểm (x, y) ở ((x − x0) × scale, (y − y0) × scale)
+    mini: { path: `${plane}_mini/{code}.webp`, scale: MINI_SCALE },
     types: TYPES,
     tiers: TIERS,
     terrains: TERRAINS,

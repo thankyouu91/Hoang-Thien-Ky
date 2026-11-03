@@ -105,6 +105,10 @@ Xong khi: trận 10 đấu 10 chạy 60 khung/giây trên một máy Android t�
     - Mỗi điểm có `z` (độ phóng hiện hình) và `t` (hiện tên), tính trước bằng hộp giữ chỗ cỡ px của proto, xếp chung cả vị diện. Cả vị diện thấy 24 điểm ở độ phóng 0,5; 195 ở 1,5; 337 ở 2; 2.648 ở 5. Kiểm vét cạn ở 11 độ phóng 0,4–5: không hai hình hay tên nào chồng nhau.
     - Tên vùng đặt ở chỗ rộng nhất của vùng. 78 mảng địa hình (rừng "… Lâm", đồng cỏ "… Dã", sa mạc "… Sa/Mạc", đầm lầy "… Trạch/Đàm", núi "… Sơn/Lĩnh/Phong", băng nguyên) có tên Hán Việt theo hệ, đặt ở chỗ rộng nhất của mảng, kèm độ phóng hiện. 69 sông ("… Khê", "… Hà/Thủy", "… Giang" theo lưu lượng) có đường đi trong vùng để chữ chạy dọc sông.
     - Phần giao diện (bảng lớp, chú giải lọc theo loại, thanh "Đang ở … · Vào") giao phiên dashboard. Khi người chơi lọc bớt loại điểm thì `z`/`t` tính sẵn quá chặt, proto xếp lại lúc chạy như hiện nay.
+- Đổi ngày 2026-11-03 (người dùng): "mini map nhìn đơn điệu quá, thiết kế mini map nhỏ lại nhưng vẫn hiện cảnh map". Ảnh nền bản đồ mini từng vùng `data/maps/ha_mini/<mã vùng>.webp` (35–88 KB, tổng 0,6 MB):
+    - Thu nhỏ từ ảnh nền từng vùng đã cất về ×1,5 theo khung `regions[].frame`, màu đậm hơn chút. Ngoài vùng phủ giấy mờ, viền vùng nét mực.
+    - Sinh bằng `tools/mapgen/mini.ts` (Node, tính đường viền) rồi `mini-trang.ts` (chạy trong trang proto, gửi thẳng qua `nhan-file.ts`).
+    - `ha_vi_dien.json` thêm `mini: { path, scale }`. Phần khung mini nhỏ lại và vẽ ảnh này giao phiên dashboard.
 - Diện tích 12 vùng trong khung chênh nhau tới 2,5 lần (Bích Ba Hải nhỏ nhất, Cuồng Phong Nguyên lớn nhất). Đã chọn ngày 2026-11-02: chia số điểm theo diện tích (xem `diem.ts` ở trên).
 - Prototype vẽ bản đồ, kéo và zoom, sương mù theo số chặng.
 - PixelLab: icon 10 loại điểm.
