@@ -57,11 +57,6 @@
   --rar-vang: #c3962f; --rar-vang-bg: #f6e8c1; --rar-vang-ink: #7a5a0c;
   --rar-do: #c25446; --rar-do-bg: #f7ddd6; --rar-do-ink: #9a2a1e;
 
-  /* Phẩm đồ (viền ô, có chữ phẩm đi kèm nên không chỉ dựa vào màu) */
-  --tier-linh: #3f8a4a;
-  --tier-thien: #2f6fb0;
-  --tier-than: #b07a1c;
-
   /* Chữ */
   /* Chữ có chân cho cả dashboard, theo mẫu tranh giấy người dùng gửi (2026-11-03); Noto Serif OFL, đủ dấu tiếng Việt */
   --font: "Noto Serif", Cambria, "Times New Roman", serif;

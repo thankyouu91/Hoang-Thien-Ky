@@ -31,8 +31,6 @@ const RIGHT: GearSlot[] = ["vu_khi", "bao_tay", "ngoc_boi"];
 const RARITY_NAMES: Record<Rarity, string> = { luc: "Lục", lam: "Lam", tim: "Tím", vang: "Vàng", do: "Đỏ" };
 /** Lớp màu của ô món: độ hiếm nếu có, không thì phẩm. */
 const tone = (it: { rarity?: Rarity; grade: ItemGrade }) => (it.rarity ? `r-${it.rarity}` : `g-${it.grade}`);
-/** Cấp đồ cũ, chỉ còn dùng khi món chưa có độ hiếm (độ hiếm đã thay hẳn cấp đồ, GDD rev 217). */
-const TIER_NAMES = { linh: "Linh", thien: "Thiên", than: "Thần" };
 const STAT_KEYS: Record<string, string> = { hp: "Máu", atk: "Công lực", def: "Phòng thủ", mana: "Mana" };
 /** Chỉ số hiện ở nhóm Chỉ số chiến đấu, đúng thứ tự (số từ @ktlp/sim qua nguồn đọc). */
 const COMBAT = ["hp", "mana", "atk", "def", "crit", "critDamage", "attackSpeed"];
@@ -225,7 +223,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const g = v.gear[s];
     if (!g) return `<button type="button" class="pt-slot empty" data-act="slot" data-slot="${s}" data-drop="gear:${s}"><span class="lbl">${SLOT_NAMES[s]}</span></button>`;
     const dur = g.durability / g.durabilityMax;
-    return `<button type="button" class="pt-slot ${g.rarity ? `r-${g.rarity}` : `tier-${g.tier}`}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}`)}">
+    return `<button type="button" class="pt-slot r-${g.rarity}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}`)}">
       ${g.art ? `<img class="ve" src="${artUrl(g.art)}" alt="">` : g.icon ? `<img src="${assetUrl(g.icon)}" alt="" data-crop>` : icon(SLOT_GLYPH[s], "glyph")}
       <span class="plus">+${g.plus}</span>
       ${g.sockets ? `<span class="gems">◆${g.gems.length}/${g.sockets}</span>` : ""}
@@ -478,7 +476,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       .join("");
     const gems = g.gems.map((gem) => `<li class="row">${elementChip(gem.element)} <span class="grow">Ngọc cấp ${gem.level}</span><span class="muted">+${pctText(2.5 * gem.level * (gem.level + 1))}</span></li>`).join("");
     return `<dl class="kv">
-        ${g.rarity ? `<dt>Độ hiếm</dt><dd class="rar r-${g.rarity}">${RARITY_NAMES[g.rarity]}</dd>` : `<dt>Cấp đồ</dt><dd>${TIER_NAMES[g.tier]}</dd>`}
+        <dt>Độ hiếm</dt><dd class="rar r-${g.rarity}">${RARITY_NAMES[g.rarity]}</dd>
         <dt>Cường hóa</dt><dd>+${g.plus} / +30</dd>
         <dt>Độ bền</dt><dd class="${g.durability < LOW ? "bad" : ""}">${g.durability} / ${g.durabilityMax}</dd>
         ${stats}

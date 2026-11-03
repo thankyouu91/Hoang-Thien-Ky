@@ -751,9 +751,6 @@ button.nv-row:hover { background: var(--c-sunken); }
 /* Ô vuông kiểu mẫu: nền nhạt theo phẩm, viền mảnh đậm hơn, hình phủ gần kín ô; ô trống viền đứt và tên ô */
 .pt-slot, .pt-tslot, .pt-pet { --t: var(--c-line-2); --tb: var(--c-raised); }
 .pt-slot { position: relative; width: 58px; height: 58px; padding: 0; border: 1px solid var(--t); border-radius: 3px; background: var(--tb); overflow: hidden; }
-.pt-slot.tier-linh { --t: #7fa36c; --tb: #e6eedb; }
-.pt-slot.tier-thien { --t: #7d9cc2; --tb: #e2e9f1; }
-.pt-slot.tier-than { --t: #c19a4a; --tb: #f3e6c8; }
 .pt-slot img { position: absolute; left: 7px; top: 5px; width: 44px; height: 44px; image-rendering: pixelated; }
 .pt-slot .glyph { position: absolute; left: 50%; top: 46%; width: 24px; height: 24px; transform: translate(-50%, -50%); color: var(--c-ink-2); }
 .pt-slot .lbl { position: absolute; inset: 0; display: grid; place-items: center; color: var(--c-ink-3); font-size: 12.5px; }
