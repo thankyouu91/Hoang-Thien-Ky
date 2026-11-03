@@ -175,7 +175,7 @@ void main() {
   vec3 col;
   if (n.y > 0.5) {
     // Dải giữa làn (chỗ người đứng) phẳng và ít tương phản để người, hiệu ứng nổi lên.
-    float calm = exp(-pow(p.y / 1.5, 2.0));
+    float calm = exp(-pow(p.y / (uHalf.y * 0.75), 2.0));
     vec3 calmCol = mix(uA, uB, 0.42);
     col = mix(top(p), calmCol, calm * 0.42) * pool(p);
   } else {
@@ -287,6 +287,9 @@ const STYLES: Record<ArenaKind, ArenaStyle> = {
     outside: ["#f4ede2", "#9aa6b8", "#f6d0a8"], height: 14, cross: 0.68,
   },
 };
+
+/** Phần nửa bề ngang sân mà mặt sân chiếm khi nướng theo khung màn Trận. */
+const FRAME_CROSS: Record<ArenaKind, number> = { vo_truong: 0.97, mo_linh_thach: 1, cao_nguyen: 1.08 };
 
 // ---- chương trình 3D (lớp back) ------------------------------------------------------------------------------------
 
@@ -408,7 +411,9 @@ class ArenaBack implements Program {
     this.scene = new Scene();
     const st = STYLES[this.kind];
     const r = rng(hashSeed("arena", this.kind, this.seed));
-    const half = crossVis * st.cross;
+    // Khung theo màn Trận: mặt sân phủ gần hết ±210 để cả cột người ngoài cùng (tới ±180 cộng nửa thân) đứng trên sân;
+    // cao nguyên nhích ra thêm vì mép lởm chởm. Đèn, cờ, cây nằm ở lề ngoài sân.
+    const half = crossVis * (this.frame ? FRAME_CROSS[this.kind] : st.cross);
     const deckU = (extra: Record<string, unknown> = {}) => this.uniforms(st, half, extra);
     const mat = (frag: string, extra: Record<string, unknown>, opts: Partial<ShaderMaterial> = {}) =>
       Object.assign(new ShaderMaterial({ uniforms: deckU(extra), vertexShader: WORLD_VERT, fragmentShader: frag }), opts);
@@ -645,47 +650,59 @@ class ArenaBack implements Program {
 
 // ---- lớp front (2D, trong suốt) ------------------------------------------------------------------------------------
 
-function arenaFront(host: Host, kind: ArenaKind, vertical: boolean, seed: number): Stage {
+/**
+ * Lớp front. field: vị trí khung sân trong ảnh (0..1, gốc trên trái) khi ảnh phủ rộng hơn sân (nướng theo khung màn
+ * Trận): cành, nhũ đá, dải sương đặt theo sân, dải sương kéo dài sang lề để không có vệt cắt ở mép sân, và bỏ viền tối
+ * (viền tối chỉ có khi ảnh đúng bằng sân).
+ */
+function arenaFront(host: Host, kind: ArenaKind, seed: number, field?: { u0: number; v0: number; u1: number; v1: number }): Stage {
   const s = new Stage(host, `arena-front|${kind}|${seed}`);
   s.transparent = true;
   s.animated = false;
-  // Cành, cây khô ở góc: co theo cạnh ngắn của khung để màn đứng hẹp không bị che làn.
-  const corner = (b: ReturnType<typeof pine>, color: string, fx: number, fy: number, scale: number, rot: number, flip: boolean) => {
+  const f = field ?? { u0: 0, v0: 0, u1: 1, v1: 1 };
+  const du = f.u1 - f.u0;
+  const dv = f.v1 - f.v0;
+  /** (fu, fv) trong sân (0..1, gốc trên trái) → toạ độ sân khấu. */
+  const at = (a: number, fu: number, fv: number) => ({ x: (f.u0 + fu * du - 0.5) * a, y: 1 - (f.v0 + fv * dv) });
+  /** Dải sương theo phần chiều cao sân tính từ đáy sân. */
+  const band = (y0: number, y1: number) => ({ y0: 1 - f.v1 + y0 * dv, y1: 1 - f.v1 + y1 * dv });
+  // Cành, cây khô ở góc: co theo cạnh ngắn của sân để màn đứng hẹp không bị che làn.
+  const corner = (b: ReturnType<typeof pine>, color: string, fu: number, fv: number, scale: number, rot: number, flip: boolean) => {
     const p = place(s, b, { color, scale, depth: 1, flip });
     (p.body.material as ShaderMaterial).uniforms.uOpacity.value = 0.92;
     s.onResize((a) => {
-      const k = scale * Math.min(1, a);
+      const k = scale * dv * Math.min(1, (a * du) / dv);
       p.body.scale.set(flip ? -k : k, k, 1);
-      p.at((fx * a) / 2, fy, rot);
+      const q = at(a, fu, fv);
+      p.at(q.x, q.y, rot);
     });
   };
   if (kind === "vo_truong") {
-    corner(pine(s.rand), "#0b0d09", -1.04, 0.9, 0.42, -1.3, false);
-    corner(pine(s.rand), "#0b0d09", 1.05, 0.06, 0.38, 1.9, true);
-    mist(s, { y0: 0.0, y1: 0.22, color: "#d8cdb8", color2: "#8a7f6c", alpha: 0.28, thresh: 0.3, soft: 0.35 });
-    particles(s, { count: 16, area: [-0.5, 0, 0.5, 1], vel: [0, 0], size: 0.008, color: "#ffd9a0", twinkle: 0.5, additive: true, alpha: 0.5 });
-    vignette(s, { color: "#0c0906", amt: 0.55 });
+    corner(pine(s.rand), "#0b0d09", -0.07, 0.06, 0.38, -1.3, false);
+    corner(pine(s.rand), "#0b0d09", 1.07, 0.97, 0.36, 1.9, true);
+    mist(s, { ...band(0, 0.22), color: "#d8cdb8", color2: "#8a7f6c", alpha: 0.28, thresh: 0.3, soft: 0.35 });
+    particles(s, { count: 16, area: [-0.5, 0, 0.5, 1], vel: [0, 0], size: 0.008 * dv, color: "#ffd9a0", twinkle: 0.5, additive: true, alpha: 0.5 });
   } else if (kind === "mo_linh_thach") {
-    // nhũ đá rủ từ mép trên (màn đứng: mép trên là phía đội B)
+    // nhũ đá rủ từ mép trên sân (màn đứng: mép trên là phía đội B)
     for (let i = 0; i < 16; i++) {
-      const f = (i + s.rand() * 0.6) / 16;
-      const len = 0.04 + s.rand() * 0.1;
-      const w = 0.01 + s.rand() * 0.018;
-      const b = { body: [poly([[-w, 0.06], [w, 0.06], [w * 0.15, -len], [-w * 0.2, -len * 0.9]])], glow: [] };
+      const fu = (i + s.rand() * 0.6) / 16;
+      const len = (0.04 + s.rand() * 0.1) * dv;
+      const w = (0.01 + s.rand() * 0.018) * dv;
+      const b = { body: [poly([[-w, 0.06 * dv], [w, 0.06 * dv], [w * 0.15, -len], [-w * 0.2, -len * 0.9]])], glow: [] };
       const p = place(s, b, { color: "#08070b", scale: 1, depth: 1 });
-      s.onResize((a) => p.at((f * 2 - 1) * (a / 2 + 0.02), 0.985));
+      s.onResize((a) => {
+        const q = at(a, fu, 0.015);
+        p.at(q.x, q.y);
+      });
     }
-    mist(s, { y0: 0.75, y1: 1.05, color: "#1a2a30", color2: "#05080a", alpha: 0.5, thresh: 0.2, soft: 0.4 });
-    particles(s, { count: 50, area: [-0.5, 0, 0.5, 1], vel: [0, 0], size: 0.009, color: "#7ff6ea", color2: "#c8fff8", twinkle: 1, additive: true, alpha: 0.8 });
-    vignette(s, { color: "#020306", amt: 0.85 });
+    mist(s, { ...band(0.75, 1.05), color: "#1a2a30", color2: "#05080a", alpha: 0.5, thresh: 0.2, soft: 0.4 });
+    particles(s, { count: 50, area: [-0.5, 0, 0.5, 1], vel: [0, 0], size: 0.009 * dv, color: "#7ff6ea", color2: "#c8fff8", twinkle: 1, additive: true, alpha: 0.8 });
   } else {
-    mist(s, { y0: -0.05, y1: 0.2, color: "#fbf6ee", color2: "#b9c3d2", alpha: 0.55, thresh: 0.25, soft: 0.35, shade: 0.6 });
-    mist(s, { y0: 0.82, y1: 1.06, color: "#fbf6ee", color2: "#b9c3d2", alpha: 0.4, thresh: 0.3, soft: 0.35, shade: 0.6 });
-    corner(deadTree(s.rand), "#151310", -1.02, 0.66, 0.34, -1.0, false);
-    particles(s, { count: 7, area: [-0.4, 0.62, 0.3, 0.9], vel: [0, 0], size: 0.012, color: "#1d1a17", alpha: 0.75 });
-    vignette(s, { color: "#0d0b09", amt: 0.4 });
+    mist(s, { ...band(-0.05, 0.2), color: "#fbf6ee", color2: "#b9c3d2", alpha: 0.55, thresh: 0.25, soft: 0.35, shade: 0.6 });
+    mist(s, { ...band(0.82, 1.06), color: "#fbf6ee", color2: "#b9c3d2", alpha: 0.4, thresh: 0.3, soft: 0.35, shade: 0.6 });
+    corner(deadTree(s.rand), "#151310", -0.01, 0.34, 0.34, -1.0, false);
   }
-  void vertical;
+  if (!field) vignette(s, { color: kind === "mo_linh_thach" ? "#020306" : kind === "vo_truong" ? "#0c0906" : "#0d0b09", amt: kind === "mo_linh_thach" ? 0.85 : kind === "vo_truong" ? 0.55 : 0.4 });
   s.resize(1, 1, 1);
   return s;
 }
@@ -694,8 +711,8 @@ export function arenaBackFactory(kind: ArenaKind, vertical: boolean, seed: numbe
   return (host: Host): Program => new ArenaBack(host, kind, vertical, seed);
 }
 
-export function arenaFrontFactory(kind: ArenaKind, vertical: boolean, seed: number) {
-  return (host: Host): Program => arenaFront(host, kind, vertical, seed);
+export function arenaFrontFactory(kind: ArenaKind, _vertical: boolean, seed: number, field?: { u0: number; v0: number; u1: number; v1: number }) {
+  return (host: Host): Program => arenaFront(host, kind, seed, field);
 }
 
 /** Nướng mặt sân theo khung thế giới màn Trận, `k` điểm ảnh mỗi đơn vị; trả ảnh và nguồn sáng (toạ độ màn Trận). */

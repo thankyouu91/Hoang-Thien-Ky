@@ -40,7 +40,7 @@ export interface ArenaBackdrop {
    * false khi chưa sẵn sàng (lần đầu gọi thì bắt đầu nướng): màn Trận vẽ nền dự phòng.
    */
   draw(ctx: CanvasRenderingContext2D, t: number, vertical: boolean): boolean;
-  /** Lớp trên người: cành, nhũ đá, mây, viền tối ở mép sân. Vẽ sau người, trước số và nhãn. */
+  /** Lớp trên người: cành, nhũ đá, sương ở mép sân (phủ cả lề). Vẽ sau người, trước số và nhãn. */
   drawFront(ctx: CanvasRenderingContext2D, t: number, vertical: boolean): boolean;
   /** Theo đề xuất của phiên màn Trận: canvas cỡ màn đã khớp camera (draw() vào một canvas riêng). null khi chưa có. */
   render(o: BackdropRenderOptions): HTMLCanvasElement | null;
@@ -144,7 +144,9 @@ export function createArenaBackdrop(kind: ArenaKind, opts: ArenaBackdropOptions 
       .then(async (e) => {
         const host = e.getHost();
         const back = await enqueue(() => e.bakeArenaWorld(host, kind, vertical, seed, frame, k));
-        const front = await enqueue(() => host.bake(e.arenaFrontFactory(kind, vertical, seed), field.w * k, field.h * k, 1, { transparent: true }));
+        // Lớp front phủ cả khung nướng (sương kéo sang lề, không có vệt cắt ở mép sân), độ phân giải 0,6 lần lớp back.
+        const inFrame = { u0: (field.x - frame.x0) / fw, v0: (field.y - frame.y0) / fh, u1: (field.x + field.w - frame.x0) / fw, v1: (field.y + field.h - frame.y0) / fh };
+        const front = await enqueue(() => host.bake(e.arenaFrontFactory(kind, vertical, seed, inFrame), fw * k * 0.6, fh * k * 0.6, 1, { transparent: true }));
         const haze = await enqueue(() => host.bake(e.hazeFactory(kind), fw * 0.3, fh * 0.3, 1, { transparent: true }));
         if (disposed) return false;
         baked[key] = { back: back.canvas, front, haze, frame, field, lights: back.lights, edge: edgeColor(back.canvas) };
@@ -207,7 +209,8 @@ export function createArenaBackdrop(kind: ArenaKind, opts: ArenaBackdropOptions 
   const drawFront = (ctx: CanvasRenderingContext2D, _t: number, vertical: boolean): boolean => {
     const b = get(vertical);
     if (!b) return false;
-    ctx.drawImage(b.front, b.field.x, b.field.y, b.field.w, b.field.h);
+    const f = b.frame;
+    ctx.drawImage(b.front, f.x0, f.y0, f.x1 - f.x0, f.y1 - f.y0);
     return true;
   };
 
