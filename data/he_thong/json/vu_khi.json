@@ -1,8 +1,8 @@
 {
   "ghi_chu": [
-    "Trả lời câu hỏi mục 20 (đề xuất): vũ khí vẫn là một loại khi rơi, rèn và bán. 60 kiểu chia 10 khí hình để icon và tên trong túi đa dạng; cầm lên vẫn hiện nhóm vũ khí theo tài năng (đã chốt ở mục 6).",
+    "Mục 20 đã chốt 2026-11-03: vũ khí vẫn là một loại khi rơi, rèn và bán. 60 kiểu chia 10 khí hình để icon và tên trong túi đa dạng; cầm lên vẫn hiện nhóm vũ khí theo tài năng (đã chốt ở mục 6).",
     "Khí hình không mang chỉ số. Mối nối với 10 loại chiêu nằm ở Ý châu (ngọc đặc biệt, chỉ khảm vào vũ khí). Ý châu trùng khí hình thì món phát sáng theo màu ý châu, chỉ là hình.",
-    "34 kiểu đã vẽ (01–30, 41, 42, 53, 58) giữ khí hình kiếm. ten_de_xuat ở trang_bi.json là tên mới cho 26 kiểu lam trở lên chưa vẽ, chia cho 9 khí hình còn lại; chờ người dùng duyệt rồi phiên icon cập nhật trang_bi_ten.cjs và danh_sach.json. Mã TB-KI giữ nguyên."
+    "34 kiểu đã vẽ (01–30, 41, 42, 53, 58) giữ khí hình kiếm. ten_de_xuat ở trang_bi.json là tên mới cho 26 kiểu lam trở lên chưa vẽ, chia cho 9 khí hình còn lại (người dùng chốt 2026-11-03); phiên icon cập nhật trang_bi_ten.cjs và danh_sach.json. Mã TB-KI giữ nguyên."
   ],
   "khi_hinh": [
     {
