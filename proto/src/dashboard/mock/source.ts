@@ -24,7 +24,7 @@ import type {
   MiniMapView, MountView, NhanVatView, ScrollCard, StatLine, StatSource, TechniqueCard, TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
 import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.ts";
-import { createWorld, PLAYER, REGION, SECT, todayAt, type World } from "./world.ts";
+import { createWorld, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, todayAt, type World } from "./world.ts";
 
 const H = 3600_000;
 const KT = THAM_SO.kinh_te;
@@ -60,11 +60,11 @@ const LINH_KHI_HA = 1;
 /** Uid ảo cho công pháp đã học khi hiện trong túi (không chiếm ô). */
 const LEARNED_UID = 1_000_000;
 
-/** Món trang bị đem vào túi, kèm phẩm lọc theo cấp đồ. */
+/** Món trang bị đem vào túi, phẩm lọc và nhãn theo độ hiếm. */
 function gearBagItem(uid: number, g: GearItem): BagItem {
   return {
-    uid, kind: "trang_bi", name: g.name, grade: g.tier === "linh" ? "ha" : g.tier === "thien" ? "trung" : "cao",
-    gradeLabel: { linh: "Linh", thien: "Thiên", than: "Thần" }[g.tier], count: 1, icon: g.icon, art: g.art, rarity: g.rarity, code: g.code, detail: "Đồ đã tháo.", gear: g,
+    uid, kind: "trang_bi", name: g.name, grade: RARITY_GRADE[g.rarity], gradeLabel: RARITY_LABEL[g.rarity],
+    count: 1, icon: g.icon, art: g.art, rarity: g.rarity, code: g.code, detail: "Đồ đã tháo.", gear: g,
   };
 }
 

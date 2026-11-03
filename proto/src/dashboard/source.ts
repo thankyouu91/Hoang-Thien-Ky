@@ -141,7 +141,8 @@ export interface GearItem {
   icon?: string;
   /** Hình vẽ Canva (assets/icon_ve/<art>.webp), mã như "trang_bi/ao/26". */
   art?: string;
-  rarity?: Rarity;
+  /** Độ hiếm thay cho 3 cấp linh, thiên, thần (GDD rev 217). */
+  rarity: Rarity;
   /** Mã vật phẩm cố định (ma_vp trong assets/icon_ve/danh_sach.json), ví dụ "TB-AO-026". */
   code?: string;
 }

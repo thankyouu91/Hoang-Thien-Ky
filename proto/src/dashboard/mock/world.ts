@@ -5,7 +5,7 @@
 import { addMember, addSect, apply, emptyState, type Command, type GameState, type Role } from "@ktlp/rules";
 import type { Element } from "@ktlp/sim";
 import type { SectModel } from "../art/sectScene.ts";
-import type { BagItem, Building, GearItem, GearSlot, PointType } from "../source.ts";
+import type { BagItem, Building, GearItem, GearSlot, PointType, Rarity } from "../source.ts";
 import { HOLDABLE, stagesFrom, type RegionMap } from "../../scenes/map/region.ts";
 
 export const PLAYER = "p1";
@@ -86,11 +86,15 @@ export interface World {
   nextChat: number;
 }
 
+/** Phẩm lọc túi theo độ hiếm (đề xuất GDD rev 217): lục, lam là hạ; tím là trung; vàng, đỏ là cao. */
+export const RARITY_GRADE: Record<Rarity, BagItem["grade"]> = { luc: "ha", lam: "ha", tim: "trung", vang: "cao", do: "cao" };
+export const RARITY_LABEL: Record<Rarity, string> = { luc: "Lục", lam: "Lam", tim: "Tím", vang: "Vàng", do: "Đỏ" };
+
 /** Túi mẫu: đồ dự phòng, ngọc, đan, nguyên liệu, phù và một trứng thú; uid từ 10.000 để khỏi trùng uid tàn quyển. */
 function sampleBag(): BagItem[] {
   let uid = 10_000;
   const gear = (g: Omit<GearItem, "durability" | "durabilityMax" | "gems"> & { durability?: number }, detail: string): BagItem => ({
-    uid: uid++, kind: "trang_bi", name: g.name, grade: g.tier === "linh" ? "ha" : g.tier === "thien" ? "trung" : "cao", gradeLabel: { linh: "Linh", thien: "Thiên", than: "Thần" }[g.tier],
+    uid: uid++, kind: "trang_bi", name: g.name, grade: RARITY_GRADE[g.rarity], gradeLabel: RARITY_LABEL[g.rarity],
     count: 1, icon: g.icon, art: g.art, rarity: g.rarity, code: g.code, detail, gear: { durability: 100, durabilityMax: 100, gems: [], ...g },
   });
   // art, code theo assets/icon_ve/danh_sach.json; ngọc giữ ký hiệu hệ PixelLab làm hình dự phòng.
@@ -98,8 +102,8 @@ function sampleBag(): BagItem[] {
     uid: uid++, kind, name, grade, gradeLabel, count, detail, element, art, code, icon: kind === "ngoc" && element ? `he/${element}` : undefined,
   });
   return [
-    gear({ slot: "vu_khi", name: "Đao Liệt Hỏa", tier: "linh", plus: 2, sockets: 1, stats: { atk: 90 }, icon: "do/vu_khi/dao" }, "Đao rèn ở lò thành chủ."),
-    gear({ slot: "vu_khi", name: "Trượng Thanh Mộc", tier: "thien", plus: 0, sockets: 2, stats: { atk: 105, mana: 40 }, icon: "do/vu_khi/truong" }, "Rơi ở bí cảnh Mộc."),
+    gear({ slot: "vu_khi", name: "Đao Liệt Hỏa", tier: "linh", plus: 2, sockets: 1, stats: { atk: 90 }, icon: "do/vu_khi/dao", rarity: "lam" }, "Đao rèn ở lò thành chủ."),
+    gear({ slot: "vu_khi", name: "Trượng Thanh Mộc", tier: "thien", plus: 0, sockets: 2, stats: { atk: 105, mana: 40 }, icon: "do/vu_khi/truong", rarity: "tim" }, "Rơi ở bí cảnh Mộc."),
     gear({ slot: "mu", name: "Nón Lá Tị Thủy", tier: "linh", plus: 1, sockets: 1, stats: { hp: 700, def: 25 }, icon: "do/mu/non_la", rarity: "luc", code: "TB-MU-010" }, "Nón lá đan bằng cỏ linh."),
     gear({ slot: "mu", name: "Ngọc Quan Tử Vân", tier: "thien", plus: 3, sockets: 2, stats: { hp: 1200, def: 40 }, icon: "do/mu/ngoc_quan", art: "trang_bi/mu/25", rarity: "lam", code: "TB-MU-025" }, "Mũ ngọc của chân truyền."),
     gear({ slot: "ao", name: "Giáp Huyền Thiết", tier: "thien", plus: 0, sockets: 2, stats: { hp: 2400, def: 90 }, art: "trang_bi/ao/26", rarity: "lam", code: "TB-AO-026" }, "Giáp nặng, thủ cao."),
