@@ -3,8 +3,15 @@ import type { ElementId } from "../replay/types.ts";
 
 export type { ElementId };
 
-/** Cảnh nền: sơn thủy thủy mặc, 12 cảnh theo hệ (mã như ELEMENT_IDS), hoặc lớp hạt linh khí (nền trong suốt). */
-export type SceneName = "son_thuy" | ElementId | "linh_khi";
+/** 8 tài năng (cách tu luyện), cùng mã với TALENTS của @ktlp/sim. */
+export const TALENT_IDS = ["tu_the", "tu_phap", "tu_tran", "tu_dan", "sat_thu", "tu_ren", "tu_duoc", "tu_kim_tien"] as const;
+export type TalentId = (typeof TALENT_IDS)[number];
+
+/**
+ * Cảnh nền: sơn thủy thủy mặc, 12 cảnh theo hệ (mã như ELEMENT_IDS), lớp hạt linh khí (nền trong suốt), hoặc nền bàn ô
+ * đặt đồ theo tài năng "tai_nang:<mã>" (giữa khung để thoáng cho bàn ô, chỉ tông giấy).
+ */
+export type SceneName = "son_thuy" | ElementId | "linh_khi" | `tai_nang:${TalentId}`;
 
 /**
  * Tông màu: "giay" (mặc định) là nền kem sáng hợp dashboard màu kem (nét mực nhạt, sương trắng, màu hệ làm điểm nhấn);
@@ -27,6 +34,8 @@ export interface SceneParams {
    * dưới thẻ. Cũng bỏ đĩa trời, tia sáng, viền tối.
    */
   sky?: boolean;
+  /** Nền tài năng: false bỏ lớp làm thoáng giữa (giấy dày ở giữa nhạt dần ra mép). */
+  wash?: boolean;
 }
 
 /** Loại hình nền cho renderBackground. */

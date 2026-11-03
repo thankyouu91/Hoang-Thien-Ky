@@ -4,10 +4,11 @@
 //   #nen/<hệ>            renderBackground: 11 công trình, 10 điểm, nền vùng của một hệ
 //   #san                 renderArena: 3 sân, ngang và đứng, có chấm người mẫu giữa hai lớp
 //   #tran/<sân>          createArenaBackdrop như màn Trận: camera kéo, zoom chậm, vẽ nền, chấm người, lớp trước mỗi khung
+//   #tai_nang            8 nền bàn ô đặt đồ theo tài năng, có khung bàn ô mẫu 70% ở giữa
 //   #do                  đo thời gian vẽ một khung của mọi cảnh động ở 375 × 812, dpr 1,5 (mức tối đa của chế độ động)
 import { ELEMENT_IDS } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
-import { benchScene, createArenaBackdrop, hasWebGL, type ArenaBackdrop, mountBakedScene, mountScene, prefersReducedMotion, renderArena, renderBackground, threeStats, type ArenaKind, type SceneHandle, type SceneName, type Tone } from "../index.ts";
+import { bakeScene, benchScene, createArenaBackdrop, hasWebGL, TALENT_IDS, type ArenaBackdrop, mountBakedScene, mountScene, prefersReducedMotion, renderArena, renderBackground, threeStats, type ArenaKind, type SceneHandle, type SceneName, type Tone } from "../index.ts";
 
 const LOCATIONS = ["chinh_dien", "tang_kinh_cac", "ho_son_dai_tran", "dien_vo_truong", "luyen_dan_phong", "luyen_khi_cac", "linh_duoc_vien", "bao_kho", "truyen_tong_tran", "thuong_hoi", "phi_thang_dai"];
 const POINTS = ["thanh_chu", "son_mon", "ben_do", "deo", "hang_di_thu", "linh_tuyen", "mo_duoc", "mo_linh_thach", "mo_quang", "cua_bi_canh"];
@@ -16,6 +17,7 @@ const SCENES: { id: SceneName; name: string }[] = [
   { id: "son_thuy", name: "Sơn thủy" },
   ...ELEMENT_IDS.map((e) => ({ id: e as SceneName, name: ELEMENT_STYLE[e].name })),
   { id: "linh_khi", name: "Linh khí (lớp phủ)" },
+  ...TALENT_IDS.map((t) => ({ id: `tai_nang:${t}` as SceneName, name: `Tài năng: ${t}` })),
 ];
 
 document.head.insertAdjacentHTML(
@@ -47,7 +49,7 @@ document.body.innerHTML = `
   <div id="stage"><div id="title">Khai Tông Lập Phái</div><div id="card"><h1>Động phủ</h1><p>Chữ trên thẻ giấy phải đọc được trên mọi cảnh nền.</p></div></div>
   <div id="grid" hidden></div>
   <div id="bar">
-    <button data-mode="dong">Động</button><button data-mode="nuong">Nướng</button><button data-mode="nen">Ảnh nền</button><button data-mode="san">Sân đấu</button><button data-mode="tran">Trận</button><button data-mode="do">Đo</button>
+    <button data-mode="dong">Động</button><button data-mode="nuong">Nướng</button><button data-mode="nen">Ảnh nền</button><button data-mode="san">Sân đấu</button><button data-mode="tran">Trận</button><button data-mode="tai_nang">Tài năng</button><button data-mode="do">Đo</button>
     <select id="scene">${SCENES.map((s) => `<option value="${s.id}">${s.name}</option>`).join("")}</select>
     <select id="tone"><option value="giay">Giấy (kem)</option><option value="chang_vang">Chạng vạng</option></select>
     <label><input type="checkbox" id="lk"> linh khí</label>
@@ -150,6 +152,32 @@ async function render(): Promise<void> {
         out.textContent += `${(sc.name + (lkOn ? " + linh khí" : "")).padEnd(24)} ${r ? `${r.avg.toFixed(2)} ms (JS ${r.cpu.toFixed(2)})` : "không có WebGL"}
 `;
       }
+    }
+  } else if (mode === "tai_nang") {
+    grid.style.background = "#f6efdf";
+    grid.style.color = "#2a2018";
+    grid.insertAdjacentHTML("beforeend", "<h2>Nền bàn ô đặt đồ, 440 × 400, khung đỏ là bàn ô mẫu 70%</h2>");
+    const box = document.createElement("div");
+    box.className = "tiles";
+    box.style.gridTemplateColumns = "repeat(auto-fill, minmax(300px, 1fr))";
+    grid.append(box);
+    const t0 = performance.now();
+    for (const t of TALENT_IDS) {
+      const tile = document.createElement("div");
+      tile.style.position = "relative";
+      tile.innerHTML = `<div style="font-size:12px;margin:4px 0">${t}</div>`;
+      box.append(tile);
+      void bakeScene(`tai_nang:${t}`, { seed: params().seed }, 440, 400).then((cv) => {
+        if (!cv) return;
+        cv.style.width = "100%";
+        cv.style.display = "block";
+        cv.style.borderRadius = "8px";
+        tile.append(cv);
+        const board = document.createElement("div");
+        Object.assign(board.style, { position: "absolute", left: "15%", right: "15%", top: "calc(12% + 20px)", bottom: "10%", border: "1.5px solid #b3261e", borderRadius: "6px", background: "rgba(255,250,240,.35)" });
+        tile.append(board);
+        stat.textContent = `8 nền tài năng: ${Math.round(performance.now() - t0)} ms`;
+      });
     }
   } else if (mode === "tran") {
     const kind: ArenaKind = (ARENAS as string[]).includes(scene) ? (scene as ArenaKind) : "vo_truong";

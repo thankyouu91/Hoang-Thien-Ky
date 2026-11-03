@@ -27,6 +27,7 @@ import type { Program } from "./engine/program.ts";
 import type { Host, LiveMount } from "./engine/host.ts";
 
 export type * from "./types.ts";
+export { TALENT_IDS } from "./types.ts";
 export type { Program } from "./engine/program.ts";
 export type { Host, LiveMount } from "./engine/host.ts";
 export { hasWebGL, prefersReducedMotion } from "./support.ts";
@@ -223,6 +224,17 @@ export function renderArena(kind: ArenaKind, w: number, h: number, opts: ArenaOp
     if (arenaCache.size > 6) arenaCache.delete(arenaCache.keys().next().value!);
   }
   return p;
+}
+
+/**
+ * Hàm dựng Program của một cảnh, để màn tự ghép vào Program của mình (vẽ nền rồi vẽ đè trong cùng một lần render), ví
+ * dụ bàn ô đặt đồ trên nền "tai_nang:<mã>". Program của cảnh: resize(w, h, dpr), render(renderer, target, t, dt) (tự xoá
+ * và vẽ kín khung), dispose(). null khi không có WebGL2.
+ */
+export async function loadSceneFactory(name: SceneName, params: SceneParams = {}): Promise<((host: Host) => Program) | null> {
+  if (!hasWebGL()) return null;
+  const e = await load();
+  return e.sceneFactory(name, params);
 }
 
 /** Trang thử: thời gian vẽ một khung của cảnh ở cỡ w × h px CSS, dpr cho trước (ms; cpu là phần JS gửi lệnh). */

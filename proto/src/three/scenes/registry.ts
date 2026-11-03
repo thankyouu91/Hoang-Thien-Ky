@@ -1,6 +1,6 @@
 // Tên cảnh → hàm dựng Stage. index.ts chỉ biết tới bảng này qua import() động.
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
-import type { BgKind, ElementId, SceneName, SceneParams, Tone } from "../types.ts";
+import type { BgKind, ElementId, SceneName, SceneParams, TalentId, Tone } from "../types.ts";
 import type { Host, ProgramFactory } from "../engine/host.ts";
 import { particles } from "../engine/layers.ts";
 import { mixHex, Stage } from "../engine/stage.ts";
@@ -8,6 +8,7 @@ import { compose } from "./compose.ts";
 import { composePlace } from "./places.ts";
 import { accentOnPaper, toPaper } from "./paper.ts";
 import { ELEMENT_RECIPES, sonThuy } from "./recipes.ts";
+import { talentScene } from "./talents.ts";
 
 /**
  * Hạt linh khí: chấm nhỏ bay lên lượn nhẹ, vài quả cầu mờ, vài vệt khí. Nền tối: cộng màu cho sáng lên; nền kem: cộng
@@ -31,8 +32,12 @@ export function sceneFactory(name: SceneName, p: SceneParams = {}): ProgramFacto
     if (name === "linh_khi") {
       s.transparent = true;
       linhKhi(s, p.element);
+    } else if (name.startsWith("tai_nang:")) {
+      s.tone = "giay";
+      talentScene(s, name.slice("tai_nang:".length) as TalentId, { wash: p.wash });
+      if (p.linhKhi) linhKhi(s, p.element, 0.5);
     } else {
-      const dark = name === "son_thuy" ? null : ELEMENT_RECIPES[name]();
+      const dark = name === "son_thuy" ? null : ELEMENT_RECIPES[name as ElementId]();
       s.transparent = p.sky === false;
       compose(s, dark === null ? sonThuy(s.tone) : s.tone === "giay" ? toPaper(dark, name as ElementId) : dark, { noDisc: p.disc === false, noSky: p.sky === false });
       if (p.linhKhi) linhKhi(s, p.element ?? (name === "son_thuy" ? undefined : (name as ElementId)), 0.6);

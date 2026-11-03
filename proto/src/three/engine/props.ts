@@ -36,7 +36,7 @@ export function poly(pts: [number, number][]): Shape {
   return s;
 }
 
-function ellipse(cx: number, cy: number, rx: number, ry: number, rot = 0): Shape {
+export function ellipse(cx: number, cy: number, rx: number, ry: number, rot = 0): Shape {
   const s = new Shape();
   s.absellipse(cx, cy, rx, ry, 0, Math.PI * 2, false, rot);
   return s;

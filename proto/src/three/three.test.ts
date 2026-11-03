@@ -105,3 +105,19 @@ test("tông kem: 12 hệ đổi sang nền sáng, màu hợp lệ, không hạt 
     assert.ok(Math.min(top >> 16, (top >> 8) & 255, top & 255) > 200, `${el} trời ${r.sky.top}`);
   }
 });
+
+test("8 nền tài năng dựng được (host giả, không cần GPU), đủ lớp, có lớp làm thoáng giữa", async () => {
+  const { Stage } = await import("./engine/stage.ts");
+  const { talentScene } = await import("./scenes/talents.ts");
+  const { TALENT_IDS } = await import("./types.ts");
+  const host = { noise, noiseTex: null } as unknown as import("./engine/host.ts").Host;
+  for (const t of TALENT_IDS) {
+    const s = new Stage(host, t);
+    talentScene(s, t);
+    s.resize(440, 400, 1);
+    assert.ok(s.scene.children.length >= 4, `${t}: ${s.scene.children.length} lớp`);
+    const without = new Stage(host, t);
+    talentScene(without, t, { wash: false });
+    assert.equal(without.scene.children.length, s.scene.children.length - 1, `${t}: wash là một lớp`);
+  }
+});
