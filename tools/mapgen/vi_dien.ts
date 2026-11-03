@@ -122,5 +122,5 @@ if (import.meta.main) {
   console.log(`${meta.title}: ${list.length} vùng, ${list.reduce((s, r) => s + r.points, 0)} điểm, ${out.borders.length} đoạn ranh giới`);
   console.log(`  ô ảnh nền: ${tiles.map((t) => `x${t.level} ${t.cols}×${t.rows}`).join(", ")} (${tiles.reduce((s, t) => s + t.cols * t.rows, 0)} ô)`);
   console.log(`  ghi ${file.pathname}`);
-  console.log(`  vẽ ảnh nền trong console Azgaar: await (await import("/ktlp/nen.js")).renderTiles("${plane}_nen", ${JSON.stringify(LEVELS)}, ${TILE})`);
+  console.log(`  vẽ ảnh nền: chạy tools/mapgen/nhan-file.ts, rồi trong console Azgaar: await (await import("/ktlp/nen.js")).renderTiles("${plane}_nen", ${JSON.stringify(LEVELS)}, ${TILE}, { sink: "<địa chỉ nhan-file.ts in ra>" })`);
 }
