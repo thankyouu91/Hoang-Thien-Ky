@@ -133,7 +133,7 @@ export const FILL_COLORS: Record<Exclude<Fill, "none">, string> = {
 };
 const FMT_ID: Record<Fmt, number> = { general: 0, int: 3, pct: 9, pct1: 164, pct2: 10, dec2: 2 };
 
-function esc(s: string): string {
+export function esc(s: string): string {
   return s
     .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "")
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -264,25 +264,35 @@ function textOf(xml: string): string {
   return [...xml.replace(/<rPh\b[\s\S]*?<\/rPh>/g, "").matchAll(/<t(?:\s[^>]*)?>([\s\S]*?)<\/t>/g)].map((m) => unesc(m[1])).join("");
 }
 
-export function readXlsx(buf: Buffer): SheetIn[] {
-  const files = unzip(buf);
-  const get = (name: string): string => {
-    const b = files.get(name.replace(/^\//, ""));
-    if (!b) throw new Error(`Thiếu ${name} trong file xlsx`);
-    return b.toString("utf8");
-  };
-  const shared: string[] = files.has("xl/sharedStrings.xml")
-    ? [...get("xl/sharedStrings.xml").matchAll(/<si>([\s\S]*?)<\/si>/g)].map((m) => textOf(m[1]))
-    : [];
+function getPart(files: Map<string, Buffer>, name: string): string {
+  const b = files.get(name.replace(/^\//, ""));
+  if (!b) throw new Error(`Thiếu ${name} trong file xlsx`);
+  return b.toString("utf8");
+}
+
+/** Tên sheet → đường dẫn file XML của sheet trong gói, theo thứ tự trong workbook. */
+export function sheetParts(files: Map<string, Buffer>): [string, string][] {
   const rels: Record<string, string> = {};
-  for (const m of get("xl/_rels/workbook.xml.rels").matchAll(/<Relationship\b([^>]*)\/?>/g)) {
+  for (const m of getPart(files, "xl/_rels/workbook.xml.rels").matchAll(/<Relationship\b([^>]*)\/?>/g)) {
     const a = attrs(m[1]);
     rels[a.Id] = a.Target.startsWith("/") ? a.Target.slice(1) : `xl/${a.Target}`;
   }
-  const out: SheetIn[] = [];
-  for (const m of get("xl/workbook.xml").matchAll(/<sheet\b([^>]*)\/?>/g)) {
+  return [...getPart(files, "xl/workbook.xml").matchAll(/<sheet\b([^>]*)\/?>/g)].map((m) => {
     const a = attrs(m[1]);
-    const xml = get(rels[a["r:id"]]);
+    return [a.name, rels[a["r:id"]]];
+  });
+}
+
+export function readXlsx(buf: Buffer): SheetIn[] {
+  const files = unzip(buf);
+  const get = (name: string): string => getPart(files, name);
+  const shared: string[] = files.has("xl/sharedStrings.xml")
+    ? [...get("xl/sharedStrings.xml").matchAll(/<si>([\s\S]*?)<\/si>/g)].map((m) => textOf(m[1]))
+    : [];
+  const out: SheetIn[] = [];
+  for (const [name, part] of sheetParts(files)) {
+    const a = { name };
+    const xml = get(part);
     const cells: Value[][] = [];
     const formulas: (string | null)[][] = [];
     for (const c of xml.matchAll(/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g)) {

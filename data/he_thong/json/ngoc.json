@@ -187,8 +187,8 @@
       "khi_hinh": "cam",
       "loai_chieu": "hoi_phuc",
       "chi_kham_vao": "vu_khi",
-      "mo_ta": "Hồi phục chọn đồng đội máu thấp nhất trước; tốn mana ×2,7 thay ×3",
-      "tham_so": {"chonMucTieu":"mau_thap_nhat","heSoMana":2700},
+      "mo_ta": "Phần hồi tràn quá máu tối đa thành khiên bằng 50% phần tràn, giữ 3 s; tốn mana ×2,7 thay ×3",
+      "tham_so": {"tranThanhKhien":500,"khienTicks":60,"heSoMana":2700},
       "ban_cho": true,
       "nguon": ["tang_kinh_dong","luyen_khi_di_chi"]
     },
