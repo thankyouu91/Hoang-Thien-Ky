@@ -1,5 +1,7 @@
 // Màn đăng nhập (FTUE bước 1, dưới 1 phút): số điện thoại → mã OTP → ngày sinh lần đầu (dưới 16 tuổi thêm người giám hộ).
-// Nền sáng kiểu thủy mặc (núi mực loang vào sương) và dấu ấn triện 開宗立派; chân màn có nhãn tuổi và lời nhắc sức khỏe theo G1.
+// Nền là cảnh sơn thủy động tông giấy của lớp three (máy không có WebGL2 thì giữ núi thủy mặc SVG) và dấu ấn triện
+// 開宗立派; chân màn có nhãn tuổi và lời nhắc sức khỏe theo G1.
+import { mountScene } from "../three/index.ts";
 import { inkwashSvg } from "./art/inkwash.ts";
 import { ageOn, GUARDIAN_AGE, maskPhone, normalizePhone, type AuthSource } from "./auth.ts";
 import { esc } from "./ui.ts";
@@ -20,6 +22,9 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
     <form class="login-card" novalidate></form>
     <footer class="login-foot">Chơi quá 180 phút một ngày sẽ ảnh hưởng xấu đến sức khỏe.</footer>`;
   document.body.append(root);
+  const art = root.querySelector<HTMLElement>(".login-art")!;
+  const scene = mountScene(art, "son_thuy", { tone: "giay", linhKhi: true });
+  void scene.ready.then((ok) => art.classList.toggle("live", ok));
   const form = root.querySelector<HTMLFormElement>("form")!;
   let step: Step = { kind: "phone" };
   let timer = 0;
@@ -152,7 +157,10 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
   const finish = () => {
     clearInterval(timer);
     root.classList.add("leaving");
-    setTimeout(() => root.remove(), 280);
+    setTimeout(() => {
+      scene.dispose();
+      root.remove();
+    }, 280);
     onDone();
   };
 

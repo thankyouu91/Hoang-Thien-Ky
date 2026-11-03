@@ -456,6 +456,10 @@ details.dev select { height: 36px; max-width: 60vw; padding: 0 8px; border: 0; b
 .minimap { display: block; width: 100%; height: 140px; border-radius: var(--r-sm); background: var(--c-sunken); cursor: pointer; }
 
 /* ---- Động phủ --------------------------------------------------------------------------------------------- */
+/* Nền sơn thủy (three, nướng sẵn) dưới các thẻ, để mờ cho khỏi rối */
+#pages > .page > .dp-backdrop { position: fixed; top: calc(var(--top-h) + var(--safe-top)); left: 0; right: 0; bottom: calc(var(--bar-h) + env(safe-area-inset-bottom)); width: auto; max-width: none; margin: 0; opacity: 0.32; pointer-events: none; }
+.page-dong-phu > .cols { position: relative; z-index: 1; }
+@media (min-width: 960px) { #pages > .page > .dp-backdrop { left: var(--rail-w); } }
 .page-dong-phu .todo { order: 1; }
 .page-dong-phu .running { order: 2; }
 .page-dong-phu .cal-card { order: 3; }
@@ -864,6 +868,9 @@ b.g-cao { color: #6d3a8e; }
 #login.leaving { opacity: 0; pointer-events: none; }
 #login .login-art { position: fixed; left: 0; right: 0; top: 0; height: 56vh; pointer-events: none; }
 #login .login-art svg { display: block; width: 100%; height: 100%; }
+/* Có cảnh three: phủ cả màn, bỏ SVG dự phòng */
+#login .login-art.live { height: 100%; }
+#login .login-art.live svg { display: none; }
 #login > :not(.login-art) { position: relative; }
 #login .age-badge { align-self: flex-end; padding: 1px 6px; border: 1px solid var(--c-line-2); border-radius: 4px; background: var(--c-surface); color: var(--c-ink-2); font-size: 12px; font-weight: 700; }
 .login-brand { margin: 5vh 0 auto; text-align: center; }
@@ -914,7 +921,8 @@ b.g-cao { color: #6d3a8e; }
 .login-card .guardian legend { padding: 0; font-size: var(--fs-md); font-weight: 600; }
 .login-card .check { display: flex; align-items: center; gap: 10px; margin: 6px 0 8px; color: var(--c-ink-2); font-size: 14px; }
 .login-card .check input { width: 20px; height: 20px; accent-color: var(--c-accent); }
-.login-foot { max-width: 400px; color: var(--c-ink-3); font-size: var(--fs-xs); text-align: center; }
+.login-foot { max-width: 400px; padding: 4px 10px; border-radius: var(--r-xs); background: color-mix(in srgb, var(--c-surface) 88%, transparent); color: var(--c-ink-2); font-size: var(--fs-xs); text-align: center; }
+.login-brand h1, .login-brand .tag { text-shadow: 0 0 14px var(--c-bg), 0 0 4px var(--c-bg); }
 @media (min-width: 960px) { .login-brand { margin-top: 9vh; } .login-brand h1 { font-size: 40px; } }
 
 /* ---- Chú thích thuật ngữ Hán Việt (GDD mục 14): chạm để xem ---------------------------------------------- */

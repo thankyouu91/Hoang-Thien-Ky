@@ -1,4 +1,5 @@
 // Động phủ: dashboard của người chơi, mở sẵn khi vào game (GDD mục 14). Trả lời câu hỏi hôm nay cần làm gì.
+import { mountBakedScene, type SceneHandle } from "../../three/index.ts";
 import { loadLocationArt, pointArt } from "../art/sectScene.ts";
 import { icon, type IconName } from "../icons.ts";
 import { MiniMap } from "../minimap.ts";
@@ -17,10 +18,16 @@ export class DongPhuScene extends PageScene<DongPhuView> {
   private mini: MiniMap;
   private gos: Go[] = [];
   private news: NewsTab = "bao";
+  private backdrop?: SceneHandle;
+  /** Lớp nền sơn thủy, giữ qua các lần vẽ lại để khỏi nướng lại ảnh. */
+  private backdropEl: HTMLElement;
 
   constructor(ctx: DashCtx) {
     super("dong-phu", "Động phủ", ctx);
     this.mini = new MiniMap((x, y) => ctx.nav.go({ screen: "ban-do", at: { x, y } }));
+    this.backdropEl = document.createElement("div");
+    this.backdropEl.className = "dp-backdrop";
+    this.backdropEl.setAttribute("aria-hidden", "true");
   }
 
   protected async read(): Promise<DongPhuView> {
@@ -31,6 +38,12 @@ export class DongPhuScene extends PageScene<DongPhuView> {
   override enter(): void {
     super.enter();
     this.mini.start();
+    // Nền sơn thủy tông giấy nướng một lần (không tốn GPU khi đứng yên), để mờ và chỉ lộ ra ở khe giữa các thẻ.
+    // Gắn lúc rảnh sau lần mở đầu để three không tranh đường tải với dữ liệu màn.
+    if (!this.backdrop) {
+      const idle = (fn: () => void) => ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 2000 }) : setTimeout(fn, 800));
+      idle(() => (this.backdrop ??= mountBakedScene(this.backdropEl, "son_thuy", { tone: "giay" })));
+    }
   }
 
   override leave(): void {
@@ -134,6 +147,7 @@ export class DongPhuScene extends PageScene<DongPhuView> {
         <div class="col">${calendar}${around}</div>
       </div>`;
     this.page.querySelector(".mini-slot")!.append(this.mini.el);
+    this.page.prepend(this.backdropEl);
   }
 
   protected override mounted(): void {
