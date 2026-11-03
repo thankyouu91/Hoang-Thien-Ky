@@ -18,6 +18,10 @@ Sửa nhanh vài ô mà không mở Excel (dùng cho yêu cầu từ các phiên
 node --experimental-strip-types --no-warnings tools/data/sua.ts "Ý châu" NG-YC-008 "Mô tả=..." "tham_so=heSoMana: 2700"
 ```
 
-Lệnh chỉ thay XML của đúng các ô đó, giữ nguyên định dạng, các sheet khác và chỗ đã sửa tay; không sửa ô công thức.
+Lệnh chỉ thay XML của đúng các ô đó, giữ nguyên định dạng, các sheet khác và chỗ đã sửa tay; không sửa ô công thức. Dòng có thể ghi bằng số dòng Excel (`"#9"`). Đổi màu ô khi một số được chốt (vàng → xanh lá), dòng nhận `*` và tiền tố như `TB-KI-*`:
+
+```
+node --experimental-strip-types --no-warnings tools/data/sua.ts --mau gdd "Kiểu trang bị" "TB-KI-*" khi_hinh ten_de_xuat
+```
 
 `tools/data/tao.ts` chỉ dùng để dựng file lần đầu; chạy lại cần `--ghi-de` và sẽ xóa mọi chỗ đã sửa tay trong Excel.
