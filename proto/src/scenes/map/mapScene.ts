@@ -148,9 +148,9 @@ export class MapScene implements Scene {
     canvas.addEventListener("wheel", () => (this.tween = undefined), { passive: true });
   }
 
-  /** Tải trước mục lục, ảnh nền cần trước và file điểm của vùng (gọi lúc rảnh từ dashboard). */
+  /** Tải trước mục lục, lớp ô lót của ảnh nền và file điểm của vùng (gọi lúc rảnh từ dashboard). */
   prefetch(code: string): void {
-    void this.ensureWorld().then((l) => l.prefetch(code));
+    void this.ensureWorld().then((l) => l.prefetch());
     void this.ensureRegion(code);
   }
 
@@ -214,7 +214,7 @@ export class MapScene implements Scene {
     this.ctx.clock.sync(d.serverNow);
     this.ctx.topbar.set(d.top);
     this.data = d;
-    layers.prefetch(d.map.region);
+    layers.prefetch();
     const home = await this.ensureRegion(d.map.region);
     layers.setRevealed(d.map.revealed.map((id) => home.points[id]));
     this.rebuild();

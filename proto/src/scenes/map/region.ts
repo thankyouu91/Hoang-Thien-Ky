@@ -1,6 +1,6 @@
 // Mục lục cả vị diện (data/maps/ha_vi_dien.json), file điểm của vùng (data/maps/ha_diem_<mã vùng>.json, định dạng bản 1
 // do tools/mapgen/diem.ts sinh) và ảnh nền. Toạ độ điểm là toạ độ bản đồ 1536 × 1024 chung cho cả vị diện, cũng là toạ độ
-// thế giới của màn bản đồ. Mỗi vùng là một chunk riêng, chỉ tải khi cần; ảnh nền là URL do Vite chép vào bản build.
+// thế giới của màn bản đồ. Mỗi vùng là một chunk riêng, chỉ tải khi cần; ô ảnh nền là URL do Vite chép vào bản build.
 import type { PointType } from "../../dashboard/source.ts";
 
 export interface RegionPoint {
@@ -62,12 +62,8 @@ export interface WorldMap {
   borders: { between: [string, string | null]; path: [number, number][] }[];
 }
 
-/** Ảnh nền từng vùng vẽ ở tỉ lệ ×6 theo khung `frame` (tools/mapgen/azgaar-nen.ts). */
-export const REGION_BG_SCALE = 6;
-
 const WORLD_FILE = import.meta.glob<WorldMap>("../../../../data/maps/ha_vi_dien.json", { import: "default" });
 const POINT_FILES = import.meta.glob<RegionMap>("../../../../data/maps/ha_diem_*.json", { import: "default" });
-const BG_FILES = import.meta.glob<string>("../../../../data/maps/ha_nen_*.webp", { query: "?url", import: "default" });
 const TILE_FILES = import.meta.glob<string>("../../../../data/maps/ha_nen/x*/*.webp", { query: "?url", import: "default" });
 
 let world: Promise<WorldMap> | undefined;
@@ -87,11 +83,6 @@ export function loadRegion(code: string): Promise<RegionMap> {
     cache.set(code, p);
   }
   return p;
-}
-
-/** URL ảnh nền của một vùng (khung `frame`, ×6), dùng khi chưa có ảnh nền chia ô. */
-export function regionBackground(code: string): (() => Promise<string>) | undefined {
-  return BG_FILES[`../../../../data/maps/ha_nen_${code}.webp`];
 }
 
 /** URL một ô ảnh nền theo `background.path` của mục lục; ô chưa có trong repo thì undefined. */
