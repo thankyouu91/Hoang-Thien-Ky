@@ -1,28 +1,33 @@
 /* Phần HUD bản đồ do mapScene.ts dựng thêm: lớp bọc, nút Chú giải với bảng lọc theo loại điểm, thanh "Đang ở".
-   Khung Lớp bản đồ, nút Toàn cảnh / Vị trí, bản đồ mini giữ kiểu .map-hud trong dashboard.css. Màu lấy token tokens.css. */
-.map-ui { position: absolute; left: 0; right: 0; bottom: 0; height: 0; pointer-events: none; }
+   Khung Lớp bản đồ, nút Toàn cảnh / Vị trí, bản đồ mini giữ kiểu .map-hud trong dashboard.css. Theo mẫu tranh giấy của
+   dashboard: chữ có chân, góc gần vuông, khung đỏ mảnh như .map-hud, nút xác nhận dùng .seal. Màu lấy token tokens.css. */
+.map-ui {
+  --map-frame: inset 0 0 0 1px var(--c-frame), 0 0 0 3px var(--c-surface), 0 0 0 4px rgba(138, 31, 22, 0.18), var(--sh-2);
+  position: absolute; left: 0; right: 0; bottom: 0; height: 0; pointer-events: none;
+}
 .map-ui > * { pointer-events: auto; }
-.map-left { position: absolute; left: 12px; right: 196px; bottom: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; pointer-events: none; }
+/* Bảng Chú giải mở ra có thể tràn sang hộp góc phải trên điện thoại: nằm trên hộp đó. */
+.map-left { position: absolute; z-index: 1; left: 14px; right: 200px; bottom: 14px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; pointer-events: none; }
 .map-left > * { pointer-events: auto; }
 
 .map-legend { position: relative; }
-.map-legend > summary { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 12px; border-radius: 2px; background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-frame), var(--sh-2); color: var(--c-accent-ink); font: 700 13px var(--font); list-style: none; cursor: pointer; }
+.map-legend > summary { display: inline-flex; align-items: center; min-height: 34px; padding: 0 12px; border-radius: var(--r-xs); background: var(--c-surface); box-shadow: var(--map-frame); color: var(--c-accent-ink); font: 700 13px var(--font); list-style: none; cursor: pointer; }
 .map-legend > summary::-webkit-details-marker { display: none; }
 .map-legend > summary:hover { background: var(--c-raised); }
-.map-legend-panel { position: absolute; left: 0; bottom: calc(100% + 6px); width: 220px; max-height: min(420px, 60vh); overflow-y: auto; padding: 8px; border-radius: 2px; background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-frame), var(--sh-2); color: var(--c-ink-2); font: 13px var(--font); }
+.map-legend-panel { position: absolute; left: 0; bottom: calc(100% + 10px); width: 220px; max-height: min(420px, 60vh); overflow-y: auto; padding: 8px; border-radius: var(--r-xs); background: var(--c-surface); box-shadow: var(--map-frame); color: var(--c-ink-2); font: 13px var(--font); }
 .map-legend-panel h3 { margin: 2px 4px 6px; color: var(--c-accent-ink); font-size: 13px; }
-.map-legend-panel label { display: flex; align-items: center; gap: 8px; min-height: 30px; padding: 0 4px; border-radius: 6px; cursor: pointer; }
+.map-legend-panel label { display: flex; align-items: center; gap: 8px; min-height: 30px; padding: 0 4px; border-radius: var(--r-xs); cursor: pointer; }
 .map-legend-panel label:hover { background: var(--c-sunken); color: var(--c-ink); }
 .map-legend-panel label.sub { padding-left: 24px; font-size: 12px; }
 .map-legend-panel input { width: 16px; height: 16px; margin: 0 0 0 auto; accent-color: var(--c-accent); }
-.map-legend-panel .sw { flex: 0 0 auto; width: 14px; height: 14px; border: 2px solid var(--sw); border-radius: 2px; background: #f3e7c9; box-shadow: 0 0 0 1px #2a1d14; }
+.map-legend-panel .sw { flex: 0 0 auto; width: 14px; height: 14px; border: 2px solid var(--sw); border-radius: var(--r-xs); background: #f3e7c9; box-shadow: 0 0 0 1px #2a1d14; }
 .map-legend-panel .sw.dot { width: 9px; height: 9px; margin: 0 2.5px; border: 0; border-radius: 50%; background: var(--sw); }
-.map-legend-panel .reset { width: 100%; min-height: 30px; margin-top: 6px; border: 1px solid var(--c-line-2); border-radius: 2px; background: var(--c-raised); color: var(--c-ink-2); font: 600 12px var(--font); cursor: pointer; }
+.map-legend-panel .reset { width: 100%; min-height: 32px; margin-top: 6px; border: 1px solid var(--c-line-2); border-radius: var(--r-xs); background: var(--c-raised); color: var(--c-ink-2); font: 600 12px var(--font); cursor: pointer; }
+.map-legend-panel .reset:hover { background: var(--c-surface); color: var(--c-ink); }
 
-.map-here { display: flex; align-items: center; gap: 8px; max-width: 100%; min-height: 40px; padding: 4px 4px 4px 12px; border-radius: 2px; background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-frame), var(--sh-2); color: var(--c-ink-2); font: 13px/1.3 var(--font); }
+.map-here { display: flex; align-items: center; gap: 10px; max-width: 100%; min-height: 44px; padding: 4px 4px 4px 12px; border-radius: var(--r-xs); background: var(--c-surface); box-shadow: var(--map-frame); color: var(--c-ink-2); font: 13px/1.3 var(--font); }
 .map-here[hidden] { display: none; }
 .map-here .txt { display: grid; min-width: 0; }
 .map-here small { color: var(--c-ink-3); font-size: 11.5px; }
 .map-here b { color: var(--c-ink); font-size: 14px; }
-.map-here button { flex: 0 0 auto; min-height: 32px; padding: 0 14px; border: 0; border-radius: 2px; background: var(--c-accent); color: var(--c-on-accent); font: 700 13px var(--font); cursor: pointer; }
-.map-here button:hover { background: var(--c-accent-hover); }
+.map-here .seal { flex: 0 0 auto; }

@@ -372,7 +372,7 @@ export class MapScene implements Scene {
     this.herePoint = this.cand(w, r, p, p.type, name, p.x, p.y, { own, mine: p.id === d.map.sonMon });
     this.here.hidden = false;
     this.here.innerHTML = `<span class="txt"><small>${moving ? "Đang đi tới" : "Đang ở"} · ${esc(w.types[p.type].label)}</small><b>${esc(name)}</b></span>
-      <button type="button" data-here>${moving ? "Xem" : "Vào"}</button>`;
+      <button type="button" class="seal small" data-here>${moving ? "Xem" : "Vào"}</button>`;
   }
 
   /** Vào điểm đang đứng: thành chủ, sơn môn của mình có màn riêng; điểm khác mở thẻ điểm. Đang đi thì bay tới chỗ đó. */
