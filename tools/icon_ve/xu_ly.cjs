@@ -9,7 +9,8 @@ const REPO = path.resolve(__dirname, "../..");
 const GOC = path.join(REPO, "assets/icon_ve");
 const DS = JSON.parse(fs.readFileSync(path.join(GOC, "danh_sach.json"), "utf8"));
 const MF = path.join(GOC, "manifest.json");
-const DESIGN = "DAHZ1iamT_w";
+// Tờ xuất 1 (DAHZ1iamT_w) đã đủ 100 trang; lô sau truyền tờ đang dùng qua biến môi trường DESIGN.
+const DESIGN = process.env.DESIGN || "DAHZ1iamT_w";
 const NGAY = new Date().toISOString().slice(0, 10);
 
 async function main() {
