@@ -184,8 +184,10 @@ export function mountScene(container: HTMLElement, name: SceneName, params: Scen
 /**
  * Gắn một chương trình vẽ riêng (ví dụ Pháp tướng ở màn Nhân vật) vào renderer dùng chung, để cả prototype chỉ có
  * một WebGL context. factory nhận Host (host.renderer là WebGLRenderer của three@0.186.1). null khi không có WebGL.
+ * driven: màn tự gọi LiveMount.render(dt, t) mỗi khung trong rAF của nó (hiệu ứng chiêu theo thời điểm replay);
+ * host không tự lặp, không áp khung tĩnh của giảm chuyển động.
  */
-export async function mountProgram(container: HTMLElement, factory: (host: Host) => Program, opts: Pick<MountOptions, "layer" | "scrollEl"> & { dprCap?: number } = {}): Promise<LiveMount | null> {
+export async function mountProgram(container: HTMLElement, factory: (host: Host) => Program, opts: Pick<MountOptions, "layer" | "scrollEl"> & { dprCap?: number; driven?: boolean } = {}): Promise<LiveMount | null> {
   if (!hasWebGL()) return null;
   const e = await load();
   return e.getHost().mount(container, factory, opts);

@@ -25,6 +25,12 @@ export interface LiveOptions {
   scrollEl?: HTMLElement | null;
   /** Ghi đè DPR_CAP.live cho cảnh nhẹ (lớp hạt) hay cảnh cần nét. */
   dprCap?: number;
+  /**
+   * Màn tự lái: host không tự lặp rAF cho chỗ gắn này, màn gọi LiveMount.render(dt, t) trong rAF của nó, cùng khung với
+   * phần vẽ 2D (hiệu ứng chiêu màn Trận theo thời điểm replay). Không áp khung tĩnh của prefers-reduced-motion, không
+   * thị sai. Khung nào màn không gọi render thì canvas giữ hình cũ.
+   */
+  driven?: boolean;
 }
 
 /** Tay cầm một container đã gắn ở chế độ động. */
@@ -32,6 +38,12 @@ export interface LiveMount {
   /** Đổi chương trình vẽ mà giữ chỗ gắn (đổi cảnh, đổi seed). */
   replace(factory: ProgramFactory): void;
   setScroll(screens: number): void;
+  /**
+   * Vẽ ngay một khung, đồng bộ (dùng cho chỗ gắn driven). dt: giây từ khung trước theo đồng hồ của màn (replay);
+   * t: thời điểm truyền cho Program, mặc định cộng dồn dt. Trả false khi chỗ gắn không đang giữ canvas (màn ẩn,
+   * chỗ gắn khác mới hơn) hoặc mất WebGL context.
+   */
+  render(dt: number, t?: number): boolean;
   dispose(): void;
 }
 
@@ -44,6 +56,9 @@ interface Mount {
   order: number;
   t0: number;
   scroll: number;
+  /** driven: đồng hồ cộng dồn dt và lúc gọi render trước (đo nhịp khung thật cho việc hạ độ phân giải). */
+  clock: number;
+  lastCall: number;
   io: IntersectionObserver;
   ro: ResizeObserver;
   onScroll?: () => void;
@@ -160,6 +175,8 @@ export class Host {
       order: ++this.order,
       t0: performance.now(),
       scroll: 0,
+      clock: 0,
+      lastCall: 0,
       io: new IntersectionObserver((entries) => {
         m.visible = entries[entries.length - 1].isIntersecting;
         this.pick();
@@ -201,6 +218,19 @@ export class Host {
       setScroll: (s) => {
         m.scroll = s;
         this.requestIfStatic();
+      },
+      render: (dt, t) => {
+        if (this.active !== m || !m.program || this.lost) return false;
+        const now = performance.now();
+        // Hạ độ phân giải theo nhịp khung thật (dt của màn có thể là thời gian replay nhân tốc độ); bỏ quãng dừng dài.
+        const real = m.lastCall ? (now - m.lastCall) / 1000 : 0;
+        m.lastCall = now;
+        if (real > 0 && real < 0.1) this.adapt(real);
+        if (this.needsResize) this.resizeActive();
+        m.clock += dt;
+        m.program.render(this.renderer, null, t ?? m.clock, dt);
+        this.frames++;
+        return true;
       },
       dispose: () => {
         m.io.disconnect();
@@ -251,7 +281,7 @@ export class Host {
   }
 
   private request(): void {
-    if (!this.raf && this.active && !document.hidden && !this.lost) this.raf = requestAnimationFrame(this.frame);
+    if (!this.raf && this.active && !this.active.options.driven && !document.hidden && !this.lost) this.raf = requestAnimationFrame(this.frame);
   }
 
   private requestIfStatic(): void {
@@ -269,7 +299,7 @@ export class Host {
   private frame = (now: number): void => {
     this.raf = 0;
     const m = this.active;
-    if (!m || !m.program || document.hidden || this.lost) return;
+    if (!m || !m.program || m.options.driven || document.hidden || this.lost) return;
     const dt = this.last ? Math.min(0.1, (now - this.last) / 1000) : 0;
     this.last = now;
     if (dt > 0) this.adapt(dt);
