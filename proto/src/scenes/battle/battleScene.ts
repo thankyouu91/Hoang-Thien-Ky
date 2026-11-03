@@ -1,4 +1,5 @@
 import type { Sprites } from "../../assets/sprites.ts";
+import { renderArena, type ArenaKind, type ArenaLayers } from "../../three/index.ts";
 import { Camera, type Rect } from "../../app/camera.ts";
 import type { Scene } from "../../app/scene.ts";
 import type { View } from "../../app/view.ts";
@@ -22,6 +23,7 @@ const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
 const HEAVY_HIT = 0.05; // đòn từ 5% máu tối đa trở lên mới diễn hoạt ảnh trúng đòn
 const BADGE = 12; // cạnh dấu hệ đặt trước thanh máu, đơn vị thế giới
 const DEFAULT_ARENA = "vo_truong"; // nền sân khi replay không nói trận đánh ở đâu
+const ARENA_MAX = 1600; // cạnh dài tối đa của nền sân Three.js khi nướng, px CSS (màn rộng không nướng ảnh quá lớn)
 
 /** Số tick từ mốc gần nhất không sau t trong `marks` (xếp tăng dần) tới t; undefined nếu chưa có mốc nào. */
 function since(marks: number[] | undefined, t: number): number | undefined {
@@ -63,6 +65,11 @@ export class BattleScene implements Scene {
   private vertical: boolean | null = null;
   /** Vùng nhìn và camera lúc căn sân lần cuối */
   private fitted: { w: number; h: number; x: number; y: number; zoom: number } | null = null;
+  /** Nền sân Three.js đã nướng gần nhất (back dưới người, front trên hiệu ứng), kèm loại sân và chiều trục lúc nướng */
+  private arena: { kind: string; vertical: boolean; layers: ArenaLayers } | null = null;
+  /** Bộ tham số nền sân đang cần; mỗi lúc chỉ nướng một bộ, đổi cỡ liên tục thì nướng bộ mới nhất khi bộ trước xong */
+  private arenaWant: { key: string; kind: string; vertical: boolean; w: number; h: number } | null = null;
+  private arenaBusy = false;
 
   /** sources[0] mở mặc định; người xem đổi nguồn ở ô chọn trên thanh điều khiển. */
   constructor(sources: ReplaySource[], sprites: Sprites) {
@@ -168,6 +175,13 @@ export class BattleScene implements Scene {
     for (const ut of index.units) this.drawUnit(ctx, ut, t, flashed.has(ut.unit.id), lunges.get(ut.unit.id));
 
     this.fx.air();
+    // Lớp trước của sân Three.js (sương, cành, nhũ đá, viền tối mép khung) phủ lên người và hiệu ứng, dưới số sát thương.
+    const arena = this.arenaLayers();
+    if (arena) {
+      const r = this.fieldRect();
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(arena.front, r.x, r.y, r.w, r.h);
+    }
     this.drawNumbers(ctx, index, t, life(NUMBER_LIFE));
     this.fx.callouts();
     this.drawScore(v, index, t, player);
@@ -274,14 +288,52 @@ export class BattleScene implements Scene {
     this.fitted = { w: v.w, h, x: cam.x, y: cam.y, zoom: cam.zoom };
   }
 
+  /**
+   * Hai lớp nền sân Three.js khớp loại sân và chiều trục hiện tại, null khi chưa nướng xong hoặc máy không có WebGL2
+   * (khi đó vẽ nền PixelLab). Nướng ở cỡ sân trên màn lúc căn (fieldRect × zoom), nướng lại khi đổi trận, xoay màn
+   * hay đổi cỡ vùng nhìn; trong lúc chờ, bộ cũ cùng chiều trục vẫn dùng được vì fieldRect giữ nguyên tỉ lệ.
+   */
+  private arenaLayers(): ArenaLayers | null {
+    if (!this.index || this.vertical === null) return null;
+    const kind = this.index.replay.arena ?? DEFAULT_ARENA;
+    const r = this.fieldRect();
+    const zoom = Math.min(this.fitted?.zoom ?? 1, ARENA_MAX / Math.max(r.w, r.h));
+    const w = Math.round(r.w * zoom);
+    const h = Math.round(r.h * zoom);
+    const key = [kind, this.vertical, w, h].join("|");
+    if (this.arenaWant?.key !== key) {
+      this.arenaWant = { key, kind, vertical: this.vertical, w, h };
+      if (!this.arenaBusy) this.bakeArena();
+    }
+    const a = this.arena;
+    return a && a.kind === kind && a.vertical === this.vertical ? a.layers : null;
+  }
+
+  private bakeArena(): void {
+    const want = this.arenaWant;
+    if (!want) return;
+    this.arenaBusy = true;
+    // Loại sân ngoài ArenaKind thì lớp Three.js trả null, màn giữ nền PixelLab.
+    void renderArena(want.kind as ArenaKind, want.w, want.h, { vertical: want.vertical }).then((layers) => {
+      this.arenaBusy = false;
+      if (layers) this.arena = { kind: want.kind, vertical: want.vertical, layers };
+      if (this.arenaWant !== want) this.bakeArena();
+    });
+  }
+
   // ---- vẽ ----
 
   private drawField(ctx: CanvasRenderingContext2D, fieldLength: number): void {
     const r = this.fieldRect();
     const cells = fieldLength / 1000;
-    // Nền sân PixelLab (san_dau/<tên>, vẽ ngang theo chiều trục sân); màn đứng xoay 90 độ. Chưa có hình thì nền tối.
-    const bg = this.sprites.get("san_dau/" + (this.index?.replay.arena ?? DEFAULT_ARENA));
-    if (bg) {
+    // Nền sân Three.js nếu đã nướng (đúng chiều sẵn, không cần phủ tối); không thì nền PixelLab (san_dau/<tên>,
+    // vẽ ngang theo chiều trục sân, màn đứng xoay 90 độ); chưa có hình nào thì nền tối.
+    const layers = this.arenaLayers();
+    const bg = layers ? undefined : this.sprites.get("san_dau/" + (this.index?.replay.arena ?? DEFAULT_ARENA));
+    if (layers) {
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(layers.back, r.x, r.y, r.w, r.h);
+    } else if (bg) {
       ctx.imageSmoothingEnabled = false;
       if (this.vertical) {
         ctx.save();
@@ -294,14 +346,16 @@ export class BattleScene implements Scene {
       }
       // Phủ tối nhẹ để người và hiệu ứng nổi trên nền.
       ctx.fillStyle = "rgba(20, 17, 15, 0.25)";
+      ctx.fillRect(r.x, r.y, r.w, r.h);
     } else {
       ctx.fillStyle = "#1f1a15";
+      ctx.fillRect(r.x, r.y, r.w, r.h);
     }
-    ctx.fillRect(r.x, r.y, r.w, r.h);
-    // Nền đá lát đã có ô để ước khoảng cách: chỉ kẻ ô khi chưa có nền, vạch giữa sân thì luôn giữ (mờ hơn khi có nền).
-    ctx.globalAlpha = bg ? 0.5 : 1;
+    // Nền đã có ô hay vân để ước khoảng cách: chỉ kẻ ô khi chưa có nền, vạch giữa sân thì luôn giữ (mờ hơn khi có nền).
+    const plain = !layers && !bg;
+    ctx.globalAlpha = plain ? 1 : 0.5;
     ctx.beginPath();
-    for (let i = 0; i <= (bg ? -1 : cells); i++) {
+    for (let i = 0; i <= (plain ? cells : -1); i++) {
       const a = this.place(i * 1000, 0);
       if (this.vertical) {
         ctx.moveTo(r.x, a.y);
