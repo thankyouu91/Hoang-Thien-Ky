@@ -5,6 +5,7 @@
 // heightmap.ts chép file này (đã bỏ kiểu) thành public/ktlp/nen.js, cùng <vị diện>_azgaar.map. Mở bản đồ đã lưu rồi vẽ:
 //   const { Load } = await import("/services/io/load.ts"); Load.uploadMap(await (await fetch("/ktlp/ha_azgaar.map")).blob())
 //   await (await import("/ktlp/nen.js")).render("ha_nen_loi_dinh_coc", [249, 172, 570, 479])
+// (ảnh nền từng vùng đã vẽ cất ở data/maps/ha_nen_vung/; bản đồ dùng ảnh chia ô của renderTiles)
 // Cả bản đồ chia ô theo mức phóng (lệnh do vi_dien.ts in ra):
 //   await (await import("/ktlp/nen.js")).renderTiles("ha_nen", [1, 2, 4, 6], 1024, { sink: "http://127.0.0.1:5199/<mã>/" })
 // (sink là máy nhận file nhan-file.ts, ghi thẳng vào data/maps; bỏ sink thì tải một file ZIP qua hộp thoại)
