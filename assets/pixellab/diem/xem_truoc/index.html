@@ -26,11 +26,13 @@
 <h2>Toàn vùng, hình ½ cỡ (32)</h2>
 <canvas id="toan_vung_nua"></canvas>
 <script type="module">
-const LOAI = ["thanh_chu", "son_mon", "mo_linh_thach", "mo_quang", "mo_duoc", "linh_tuyen", "cua_bi_canh", "hang_di_thu", "deo", "ben_do"];
-const DIEM = "/data/maps/ha_diem_loi_dinh_coc.json";
-const NEN = "/data/maps/ha_nen_vung/ha_nen_loi_dinh_coc.webp";
-const MANIFEST = "/assets/pixellab/manifest.json";
+const LOAI = ["thanh_chu", "son_mon", "mo_linh_thach", "mo_quang", "mo_duoc", "linh_tuyen", "cua_bi_canh", "hang_di_thu", "hang_thu_hoang", "deo", "ben_do"];
 const params = new URLSearchParams(location.search);
+// ?vung=<mã vùng> chọn file điểm và ảnh nền vùng khác (mặc định Lôi Đình Cốc).
+const VUNG = params.get("vung") ?? "loi_dinh_coc";
+const DIEM = `/data/maps/ha_diem_${VUNG}.json`;
+const NEN = `/data/maps/ha_nen_vung/ha_nen_${VUNG}.webp`;
+const MANIFEST = "/assets/pixellab/manifest.json";
 const trangThai = document.getElementById("trang_thai");
 
 const taiAnh = (src) => new Promise((done) => { const img = new Image(); img.onload = () => done(img); img.onerror = () => done(null); img.src = src; });
@@ -91,8 +93,9 @@ function veToan(id, s) {
 const toan = veToan("toan_vung", 1);
 const toanNua = veToan("toan_vung_nua", 0.5);
 
-// Phóng ×2 một khung 480×360 quanh thành chủ.
-const tc = duLieu.points.find((p) => p.type === "thanh_chu");
+// Phóng ×2 một khung 480×360 quanh thành chủ; vùng không có thành chủ (Cấm Khu) thì quanh hang Thú Hoàng đầu tiên.
+const tc = duLieu.points.find((p) => p.type === "thanh_chu") ?? duLieu.points.find((p) => p.type === "hang_thu_hoang") ?? duLieu.points[0];
+document.getElementById("quanh_thanh_chu").previousElementSibling.textContent = `Quanh ${tc.name ?? tc.type} (×2)`;
 const [tx, ty] = viTri(tc);
 const W = 480, H = 360, K = 2;
 const cx = Math.max(0, Math.min(nen.width - W, Math.round(tx - W / 2)));

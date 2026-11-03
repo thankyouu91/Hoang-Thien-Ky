@@ -11471,6 +11471,46 @@
       "created": "2026-11-03",
       "pixellab_id": "83dbb9cc-d2eb-4d9d-8aef-4f14f838f09b",
       "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "he/hon_don.png",
+      "description": "Icon hệ Hỗn độn (vùng Linh Hải Cấm Khu): mắt đỏ đồng tử dọc giữa sương tím đen, 32 px nền trong. Dùng thay chữ Hán trên ô nút các điểm có region.element = \"hon_don\".",
+      "tool": "create_image_pixflux",
+      "params": {
+        "description": "game icon of a single menacing horizontal almond-shaped eye, glowing blood red iris with a black vertical slit pupil, dark purple-black eye shape with wisps of black mist trailing from both corners, no circle, no disc, simple bold shape centered, readable at small size",
+        "width": 32,
+        "height": 32,
+        "no_background": true,
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "seed": 1
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "6698687a-3e5c-4132-b880-deace37a7ba4"
+    },
+    {
+      "file": "diem/hang_thu_hoang.png",
+      "description": "Đảo nổi cho điểm Hang Thú Hoàng (hang_thu_hoang) trong Linh Hải Cấm Khu: hang tối có nanh lớn và sọ thú sừng cong phía trên, ánh đỏ máu trong hang, cờ đỏ rách, xương, vết nứt đỏ dưới đáy. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới khi đặt lên bản đồ.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top the dark cave lair of a beast king in a rocky mound, the cave mouth framed by giant curved fangs with a huge horned beast skull above it, an ominous blood red glow inside the cave, giant claw marks on the rocks, scattered bones, tattered dark red banners on poles, dark mossy green grass top, jagged brown rock underside tapering to a point with dangling roots and faint glowing crimson cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading, grass and colors",
+        "style_options": {
+          "color_palette": true,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "e1397dee-9530-4cb1-a5c1-c4e01df5a706"
     }
   ]
 }
