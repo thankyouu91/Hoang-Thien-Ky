@@ -5,7 +5,7 @@
 // Set: ấn bộ khảm ở một dòng; đủ 2/4/7 món cùng ấn (còn độ bền) thì mở mốc. Bước này áp hiệu ứng loại chi_so;
 // các loại khác (kinh tế, hành vi, khắc chế, hộ trận) chỉ được liệt kê trong `sets` để các bước sau dùng.
 // Ý châu chiếm dòng khảm nhưng tính ở bước Ý châu.
-import { baseStats, mul, BATTLE, ELEMENTS, type Element, type BuffStat, type UnitSpec } from "@ktlp/sim";
+import { baseStats, mul, ONE, BATTLE, ELEMENTS, type Element, type BuffStat, type UnitSpec } from "@ktlp/sim";
 import TRANG_BI from "../../../data/he_thong/json/trang_bi.json" with { type: "json" };
 import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
 import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
@@ -70,10 +70,13 @@ for (const b of SET.bo as unknown as SetRow[]) {
   SEAL_SET[b.an] = b.id;
 }
 
-/** Khóa tham_so của hiệu ứng chi_so đổi sang chỉ số trận; kháng hệ đổi sang kháng; khóa ngoài trận giữ nguyên tên. */
+/**
+ * Khóa tham_so của hiệu ứng chi_so đổi sang chỉ số trận; kháng hệ đổi sang kháng; khóa ngoài trận giữ nguyên tên.
+ * hp, atk, def, manaMax của set là % trên chỉ số chuẩn theo cấp, đổi thành số cộng thẳng, không nhân theo đồ (set không tăng
+ * theo cường hóa, độ hiếm, cấp đồ: tab Trang bị, phần 6, luật 4).
+ */
 const SET_STAT: Record<string, BuffStat> = {
-  healTaken: "healTaken", def: "def", manaMax: "manaMax", healPower: "healPower", controlTime: "controlTime",
-  critBonus: "critBonus", critDamage: "critDamage", atk: "atk",
+  healTaken: "healTaken", healPower: "healPower", controlTime: "controlTime", critBonus: "critBonus", critDamage: "critDamage",
   khienNhan: "shieldTaken", satThuongPvE: "monsterDamage", xuyenGiap: "armorPen", teLietTicks: "paralyzeTicks", bayTranTicks: "formationTicks",
 };
 const SET_RESIST: Record<string, Element[]> = { khangLoi: ["loi"], khangMoiHe: ELEMENTS.slice() };
@@ -82,7 +85,7 @@ const has = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k)
 
 /** Khóa chỉ số của set có chỗ áp không: trong trận, kháng, hoặc ngoài trận. */
 export function isKnownSetStat(key: string): boolean {
-  return has(SET_STAT, key) || has(SET_RESIST, key) || SET_OUTSIDE.indexOf(key) >= 0;
+  return FLAT.indexOf(key) >= 0 || has(SET_STAT, key) || has(SET_RESIST, key) || SET_OUTSIDE.indexOf(key) >= 0;
 }
 
 /** Mốc đạt được với n món cùng ấn: 3 món tính mốc 2, 5–6 món tính mốc 4; dưới 2 món là 0. */
@@ -170,17 +173,18 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[]): 
     if (moc === 0) continue;
     const hieuUng = SETS[bo].moc.filter((m) => m.so <= moc);
     out.sets.push({ bo, mon: pieces[bo], moc, hieuUng });
-    for (const m of hieuUng) if (m.loai === "chi_so") addSetStats(out, bo, m.tham_so);
+    for (const m of hieuUng) if (m.loai === "chi_so") addSetStats(out, bo, m.tham_so, level);
   }
   return out;
 }
 
-/** Cộng một hiệu ứng chi_so của set vào chỉ số trận, kháng, hoặc chỉ số ngoài trận. */
-function addSetStats(out: GearStats, bo: string, params: Record<string, number | boolean>): void {
+/** Cộng một hiệu ứng chi_so của set vào chỉ số cộng thẳng, chỉ số trận, kháng, hoặc chỉ số ngoài trận. */
+function addSetStats(out: GearStats, bo: string, params: Record<string, number | boolean>, level: number): void {
   for (const key of Object.keys(params)) {
     const v = params[key];
     if (typeof v !== "number") throw new Error(`Set ${bo}: ${key} không phải số`);
-    if (has(SET_STAT, key)) out.bonuses[SET_STAT[key]] = (out.bonuses[SET_STAT[key]] ?? 0) + v;
+    if (FLAT.indexOf(key) >= 0) out[key as "hp" | "atk" | "def" | "manaMax"] += statAmount(key, v, ONE, level);
+    else if (has(SET_STAT, key)) out.bonuses[SET_STAT[key]] = (out.bonuses[SET_STAT[key]] ?? 0) + v;
     else if (has(SET_RESIST, key)) for (const e of SET_RESIST[key]) out.resist[e] = (out.resist[e] ?? 0) + v;
     else if (SET_OUTSIDE.indexOf(key) >= 0) out.outside[key] = (out.outside[key] ?? 0) + v;
     else throw new Error(`Set ${bo}: chưa biết áp chỉ số ${key}`);

@@ -77,6 +77,15 @@ export const SKILL_RULES = {
   meleeKnockback: false, // Phong: chiêu cận chiến không đẩy lùi, để không đẩy địch ra khỏi tầm của chính mình; đề xuất
 };
 
+/**
+ * Sàn thời gian ra chiêu sau mọi phần giảm (Tu trận, set, Ý châu): bày trận 1 s, vận công diện rộng 0,5 s
+ * (đề xuất của phiên set đồ, 2026-11-03). Chưa có trong tham_so.json nên chưa có test so với file số liệu.
+ */
+export const CAST_FLOOR = {
+  formationTicks: 1 * SEC,
+  channelTicks: SEC / 2,
+};
+
 /** Sân đấu và nhịp trận (Q4 trong docs/KE_HOACH.md): tất cả là đề xuất. */
 export const BATTLE = {
   fieldLength: 12000, // trục 12 ô; đội A ở nửa 0–6000, đội B ở nửa 6000–12000
@@ -127,13 +136,14 @@ export const RESIST_CAP = 800;
 
 /**
  * Chỉ số nhân vật mà buff linh căn, tài năng, trang bị và set cộng vào, theo phần nghìn trừ các chỉ số ghi tick.
- * shieldTaken: khiên nhận được; monsterDamage: sát thương lên dị thú và boss; armorPen: cộng vào xuyên giáp Kim của công pháp;
- * paralyzeTicks: cộng tick vào tê liệt khi chí mạng của Lôi; formationTicks: cộng tick vào thời gian bày trận (âm là nhanh hơn).
+ * shieldTaken: khiên nhận được; monsterDamage: sát thương lên dị thú và boss PvE; armorPen: cộng vào xuyên giáp Kim của công pháp;
+ * paralyzeTicks: cộng tick vào tê liệt khi chí mạng của Lôi; formationTicks, channelTicks: cộng tick vào thời gian bày trận,
+ * vận công diện rộng (âm là nhanh hơn, không dưới CAST_FLOOR).
  */
 export type BuffStat =
   | "hp" | "atk" | "def" | "manaMax" | "damage" | "critBonus" | "critDamage" | "attackSpeed" | "cooldownCut"
   | "healPower" | "healTaken" | "lifesteal" | "resistPen" | "dot" | "controlTime"
-  | "shieldTaken" | "monsterDamage" | "armorPen" | "paralyzeTicks" | "formationTicks";
+  | "shieldTaken" | "monsterDamage" | "armorPen" | "paralyzeTicks" | "formationTicks" | "channelTicks";
 
 /**
  * Buff khi luyện đúng hệ (GDD mục 9), áp cho cả nhân vật, mỗi hệ một lần. Trùng hệ chủ quyển nhận đủ, trùng hệ phụ quyển nhận một nửa.

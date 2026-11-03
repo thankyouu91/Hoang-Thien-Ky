@@ -3,7 +3,7 @@ import { mul, clamp, ONE } from "./fixed.ts";
 import { Rng } from "./rng.ts";
 import { Hasher } from "./hash.ts";
 import { elementMultiplier, type Element } from "./elements.ts";
-import { BATTLE, SKILL_SPECS, ALLY_SKILLS, SKILL_RULES as R, RESIST_CAP, type SkillType, type Talent, type BuffStat } from "./config.ts";
+import { BATTLE, SKILL_SPECS, ALLY_SKILLS, SKILL_RULES as R, CAST_FLOOR, RESIST_CAP, type SkillType, type Talent, type BuffStat } from "./config.ts";
 import { techniqueFx, type Technique, type TechniqueFx } from "./technique.ts";
 import { unitBonuses, type UnitBonuses } from "./stats.ts";
 
@@ -29,7 +29,7 @@ export interface UnitSpec {
   techniques: Technique[]; // 1–4 công pháp, theo thứ tự ưu tiên
   manaMax?: number; // mặc định BATTLE.manaMax
   boss?: boolean; // miễn tuyệt sát
-  monster?: boolean; // dị thú (PvE), nhận sát thương cộng thêm của set săn thú; boss cũng tính là dị thú
+  monster?: boolean; // dị thú hoặc boss PvE, nhận sát thương cộng thêm của set Liệp Thú; NPC, trận nhãn, hộ trận trong chiến tranh không đặt cờ này dù là boss
   sectId?: string; // tông môn, để xét công pháp của kẻ phản bội
   /** Cộng thêm vào chỉ số trận từ trang bị và set (phần nghìn; hp, atk, def, manaMax là % của chỉ số gốc). */
   bonuses?: Partial<Record<BuffStat, number>>;
@@ -203,7 +203,7 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
   return {
     id: spec.id, team, level: spec.level, element: spec.element,
     hp, atk: mul(spec.atk, ONE + b.atk), def: mul(spec.def, ONE + b.def), resist: spec.resist ?? {}, boss: spec.boss ?? false,
-    monster: (spec.monster ?? false) || (spec.boss ?? false), sectId: spec.sectId ?? null, b,
+    monster: spec.monster ?? false, sectId: spec.sectId ?? null, b,
     curHp: hp,
     pos: team === 0 ? startA : BATTLE.fieldLength - startA,
     mana: manaMax,
@@ -334,7 +334,9 @@ export class Battle {
         u.channel = {
           slot: i,
           startTick: this.tick,
-          resolveTick: this.tick + (formation ? Math.max(1, mul(R.formationCastTicks, ONE - u.b.formationCut) + u.b.formationTicks) : R.aoeCastTicks),
+          resolveTick: this.tick + (formation
+            ? Math.max(CAST_FLOOR.formationTicks, mul(R.formationCastTicks, ONE - u.b.formationCut) + u.b.formationTicks)
+            : Math.max(CAST_FLOOR.channelTicks, R.aoeCastTicks + u.b.channelTicks)),
           center: foe.pos,
           ult: this.takeUlt(u),
           interruptible: !formation || R.formationInterruptible,

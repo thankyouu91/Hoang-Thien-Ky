@@ -31,7 +31,7 @@ export function unitBonuses(roots: Element[], talents: Talent[], techniques: Tec
   const b: UnitBonuses = {
     hp: 0, atk: 0, def: 0, manaMax: 0, damage: 0, critBonus: 0, critDamage: 0, attackSpeed: 0, cooldownCut: 0,
     healPower: 0, healTaken: 0, lifesteal: 0, resistPen: 0, dot: 0, controlTime: 0,
-    shieldTaken: 0, monsterDamage: 0, armorPen: 0, paralyzeTicks: 0, formationTicks: 0,
+    shieldTaken: 0, monsterDamage: 0, armorPen: 0, paralyzeTicks: 0, formationTicks: 0, channelTicks: 0,
     melee: 0, ranged: 0, extraTalismans: 0, formationCut: 0, executeBonus: 0, stealthTicks: 0, dashCooldownCut: 0,
   };
   const levels = rootBuffLevels(roots, techniques);

@@ -11,10 +11,14 @@ const seal = (ma: string): InlayLine => ({ loai: "an", ma });
 const SLOT_KIEU = ["TB-KI-001", "TB-MU-001", "TB-AO-001", "TB-DA-001", "TB-BT-001", "TB-GI-001", "TB-NB-001"];
 /** Mặc lần lượt các ô, mỗi món mang một ấn theo danh sách. */
 const sealed = (...seals: string[]): EquipItem[] => seals.map((ma, i) => item(SLOT_KIEU[i], { kham: [seal(ma)] }));
-/** Phần chỉ số trận do set cộng: so với chính các món đó khi gỡ hết ấn. */
-const setBonuses = (items: EquipItem[]): Record<string, number> => {
-  const all: Record<string, number> = gearStats(items, LV, []).bonuses;
-  const bare: Record<string, number> = gearStats(items.map((it) => ({ ...it, kham: it.kham.filter((l) => !l || l.loai !== "an") })), LV, []).bonuses;
+/** Phần chỉ số do set cộng (số cộng thẳng hp, atk, def, manaMax và bonuses): so với chính các món đó khi gỡ hết ấn. */
+const setBonuses = (items: EquipItem[], level = LV): Record<string, number> => {
+  const flat = (it: EquipItem[]): Record<string, number> => {
+    const g = gearStats(it, level, []);
+    return { hp: g.hp, atk: g.atk, def: g.def, manaMax: g.manaMax, ...g.bonuses };
+  };
+  const all = flat(items);
+  const bare = flat(items.map((it) => ({ ...it, kham: it.kham.filter((l) => !l || l.loai !== "an") })));
   const out: Record<string, number> = {};
   for (const k of Object.keys(all)) if (all[k] !== (bare[k] ?? 0)) out[k] = all[k] - (bare[k] ?? 0);
   return out;
@@ -113,8 +117,11 @@ test("dữ liệu set: mỗi bộ một ấn khớp ngoc.json, mọi khóa chỉ
   }
 });
 
-test("Vạn Kiếm 2 món: công lực +2%; 1 món hoặc món hết độ bền thì không mở", () => {
-  assert.deepEqual(setBonuses(sealed("NG-AN-017", "NG-AN-017")), { atk: 20 });
+test("Vạn Kiếm 2 món: công lực +2% chỉ số chuẩn theo cấp, không tăng theo đồ; 1 món hoặc món hết độ bền thì không mở", () => {
+  assert.deepEqual(setBonuses(sealed("NG-AN-017", "NG-AN-017")), { atk: 10 }); // 2% của 500
+  assert.deepEqual(setBonuses(sealed("NG-AN-017", "NG-AN-017"), 1), { atk: 2 }); // 2% của 104
+  const red = ["TB-KI-058", "TB-MU-058"].map((k) => item(k, { nac: 30, biCanh: 80, dongThem: 2, kham: [seal("NG-AN-017")] }));
+  assert.deepEqual(setBonuses(red), { atk: 10 });
   assert.deepEqual(gearStats(sealed("NG-AN-017"), LV, []).sets, []);
   const broken = sealed("NG-AN-017", "NG-AN-017");
   broken[1].doBen = 0;
@@ -148,7 +155,7 @@ test("chỉ số ngoài trận để riêng; bộ chỉ có hiệu ứng kinh t�
 test("ba bộ cùng mở 2+2+3; mỗi món tối đa 1 ấn, ấn phải có trong danh mục", () => {
   const items = sealed("NG-AN-017", "NG-AN-017", "NG-AN-005", "NG-AN-005", "NG-AN-008", "NG-AN-008", "NG-AN-008");
   assert.deepEqual(gearStats(items, LV, []).sets.map((s) => [s.bo, s.moc]), [["linh_tuyen", 2], ["thiet_ky", 2], ["van_kiem", 2]]);
-  assert.deepEqual(setBonuses(items), { atk: 20, def: 30, healPower: 40 });
+  assert.deepEqual(setBonuses(items), { atk: 10, def: 15, healPower: 40 });
   const twoSeals = item("TB-KI-058", { kham: [seal("NG-AN-017"), seal("NG-AN-005")] });
   assert.throws(() => gearStats([twoSeals], LV, []));
   assert.throws(() => gearStats([item("TB-KI-001", { kham: [seal("NG-AN-999")] })], LV, []));

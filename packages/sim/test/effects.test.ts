@@ -233,17 +233,20 @@ test("set chỉ làm mạnh hiệu ứng hệ đã có: tê liệt Lôi +5 tick,
   assert.deepEqual([kim.fx.paralyze, kim.fx.armorPen], [0, 130]);
 });
 
-test("bày trận nhanh hơn theo tick, cộng sau Tu trận", () => {
-  const cast = (extra: Partial<UnitSpec>) => {
-    const { b } = firstHit({ seed: 1, teamA: [unit(1, 0, [tech("tran_phap", "kim")], extra)], teamB: [inert(101)] });
+test("bày trận, vận công nhanh hơn theo tick, trừ sau Tu trận; sàn 1 s và 0,5 s", () => {
+  const cast = (type: "tran_phap" | "dien_rong", extra: Partial<UnitSpec>) => {
+    const { b } = firstHit({ seed: 1, teamA: [unit(1, 0, [tech(type, "kim")], extra)], teamB: [inert(101)] });
     const e = b.events.find((e) => e.unitId === 1)!;
     return e.tick - e.startTick;
   };
-  assert.equal(cast({ bonuses: { formationTicks: -10 } }), 90);
-  assert.equal(cast({ talents: ["tu_tran"], bonuses: { formationTicks: -10 } }), 60);
+  assert.equal(cast("tran_phap", { bonuses: { formationTicks: -10 } }), 90);
+  assert.equal(cast("tran_phap", { talents: ["tu_tran"], bonuses: { formationTicks: -10 } }), 60);
+  assert.equal(cast("tran_phap", { talents: ["tu_tran"], bonuses: { formationTicks: -60 } }), 20);
+  assert.equal(cast("dien_rong", { bonuses: { channelTicks: -6 } }), 14);
+  assert.equal(cast("dien_rong", { bonuses: { channelTicks: -15 } }), 10);
 });
 
-test("sát thương lên dị thú và boss chỉ tính khi mục tiêu là dị thú", () => {
+test("sát thương lên dị thú chỉ tính khi mục tiêu có cờ dị thú; boss chiến tranh không có cờ thì không tính", () => {
   const loss = (target: Partial<UnitSpec>, monsterDamage: number) => {
     const { b } = firstHit({ seed: 1, teamA: [unit(1, 0, [tech("can_don", "kim")], { bonuses: { monsterDamage } })], teamB: [inert(101, target)] });
     const t = get(b, 101);
@@ -252,5 +255,6 @@ test("sát thương lên dị thú và boss chỉ tính khi mục tiêu là dị
   const normal = loss({}, 0);
   assert.equal(loss({}, 50), normal);
   assert.ok(loss({ monster: true }, 50) > normal);
-  assert.equal(loss({ boss: true }, 50), loss({ monster: true }, 50));
+  assert.equal(loss({ boss: true }, 50), normal);
+  assert.equal(loss({ boss: true, monster: true }, 50), loss({ monster: true }, 50));
 });
