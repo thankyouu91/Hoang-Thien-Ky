@@ -91,6 +91,12 @@ const WORLD_FILE = import.meta.glob<WorldMap>("../../../../data/maps/ha_vi_dien.
 const LABEL_FILE = import.meta.glob<MapLabels>("../../../../data/maps/ha_nhan.json", { import: "default" });
 const POINT_FILES = import.meta.glob<RegionMap>("../../../../data/maps/ha_diem_*.json", { import: "default" });
 const TILE_FILES = import.meta.glob<string>("../../../../data/maps/ha_nen/x*/*.webp", { query: "?url", import: "default" });
+const MINI_FILES = import.meta.glob<string>("../../../../data/maps/ha_mini/*.webp", { query: "?url", import: "default" });
+
+/** URL ảnh nền bản đồ mini của vùng (data/maps/ha_mini/<mã>.webp): cảnh vùng thu nhỏ, phủ đúng khung `frame`. */
+export function miniUrl(code: string): Promise<string> | undefined {
+  return MINI_FILES[`../../../../data/maps/ha_mini/${code}.webp`]?.();
+}
 
 let world: Promise<WorldMap> | undefined;
 let labels: Promise<MapLabels> | undefined;

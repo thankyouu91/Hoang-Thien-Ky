@@ -1,10 +1,10 @@
-// Bản đồ mini (GDD mục 14): hình vùng, sương mù, điểm có chủ, vị trí của mình, sơn môn, thành chủ, cửa bí cảnh
-// đang mở và khung phần bản đồ tranh đang xem. Vẽ từ file điểm của vùng và bảng chủ điểm, không cần ảnh riêng;
-// không vẽ hết mọi điểm: điểm chưa ai giữ chỉ hiện chấm mờ ở phần đã mở sương.
-import { HOLDABLE, loadRegion, type RegionMap } from "../scenes/map/region.ts";
+// Bản đồ mini (GDD mục 14): cảnh vùng thu nhỏ làm nền (data/maps/ha_mini/<vùng>.webp, rừng, đồng cỏ, sa mạc và viền vùng
+// nét mực đã vẽ sẵn), sương mù giấy nhạt để vẫn thấy cảnh, và ít chấm có viền mực: vị trí của mình, sơn môn của mình,
+// thành chủ, điểm có chủ, điểm đang bị đánh (nhấp nháy), cửa bí cảnh đang mở; khung đỏ mảnh là phần bản đồ tranh đang xem.
+import { loadRegion, miniUrl, type RegionMap } from "../scenes/map/region.ts";
 import type { MiniMapView, Owner } from "./source.ts";
 
-// Bảng màu sáng (giấy kem, 2026-11-03): đất sáng hơn nền khung, sương là lớp giấy đục, chấm có viền mực mảnh.
+// Bảng màu sáng (giấy kem, 2026-11-03): chấm có viền mực mảnh.
 export const OWNER_COLOR: Record<Owner, string> = {
   minh: "#e0a020", // màu tông môn mình
   dong_minh: "#2f6fb0", // màu liên minh
@@ -12,11 +12,12 @@ export const OWNER_COLOR: Record<Owner, string> = {
   npc: "#8c7f6c",
 };
 const ATTACKED = "#d92d20";
-const LAND = "#fbf5e8";
-const EDGE = "#a8916f";
-const FOG = "rgba(222, 210, 186, 0.86)";
+const PAPER = "#efe5cf";
+/** Sương là lớp giấy nửa trong, vẫn thấy cảnh bên dưới. */
+const FOG = "rgba(239, 229, 207, 0.5)";
 const INK = "#2a2018";
-const DOT_EDGE = "rgba(42, 32, 24, 0.55)";
+const DOT_EDGE = "rgba(42, 32, 24, 0.7)";
+const FRAME = "rgba(138, 31, 22, 0.85)";
 
 export interface Viewport {
   /** Phần bản đồ tranh đang xem, theo toạ độ điểm của vùng. */
@@ -26,21 +27,21 @@ export interface Viewport {
   h: number;
 }
 
-/** Bao lồi của tập điểm (thuật toán chuỗi đơn điệu), dùng làm hình vùng. */
-function hull(pts: { x: number; y: number }[]): { x: number; y: number }[] {
-  const p = [...pts].sort((a, b) => a.x - b.x || a.y - b.y);
-  const cross = (o: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
-  const lower: typeof p = [];
-  for (const q of p) {
-    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], q) <= 0) lower.pop();
-    lower.push(q);
+/** Ảnh nền mini dùng chung giữa các khung (mỗi vùng tải một lần). */
+const images = new Map<string, Promise<HTMLImageElement | undefined>>();
+function miniImage(code: string): Promise<HTMLImageElement | undefined> {
+  let p = images.get(code);
+  if (!p) {
+    p = (miniUrl(code) ?? Promise.resolve(undefined)).then(async (url) => {
+      if (!url) return undefined;
+      const img = new Image();
+      img.src = url;
+      await img.decode();
+      return img;
+    }).catch(() => undefined);
+    images.set(code, p);
   }
-  const upper: typeof p = [];
-  for (let i = p.length - 1; i >= 0; i--) {
-    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p[i]) <= 0) upper.pop();
-    upper.push(p[i]);
-  }
-  return lower.slice(0, -1).concat(upper.slice(0, -1));
+  return p;
 }
 
 /** Một khung bản đồ mini gắn vào phần tử chứa; chạm vào thì gọi `onTap` với toạ độ điểm của vùng. */
@@ -48,7 +49,7 @@ export class MiniMap {
   readonly el: HTMLCanvasElement;
   private data?: MiniMapView;
   private region?: RegionMap;
-  private outline: { x: number; y: number }[] = [];
+  private bg?: HTMLImageElement;
   private viewport?: Viewport;
   private blink = false;
   private timer = 0;
@@ -72,8 +73,14 @@ export class MiniMap {
     this.data = data;
     this.viewport = viewport;
     if (this.region?.region.code !== data.region) {
+      this.bg = undefined;
       this.region = await loadRegion(data.region);
-      this.outline = hull(this.region.points);
+      // Vẽ ngay trên nền giấy, ảnh cảnh về thì vẽ lại.
+      void miniImage(data.region).then((img) => {
+        if (this.region?.region.code !== data.region) return;
+        this.bg = img;
+        this.draw();
+      });
     }
     this.draw();
   }
@@ -105,7 +112,6 @@ export class MiniMap {
     }
     const ctx = c.getContext("2d")!;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
 
     // Khung nhìn: cả vùng, hoặc thu về lãnh thổ (tông môn, liên minh) có chừa lề.
     let [x0, y0, x1, y1] = m.map.bbox;
@@ -121,62 +127,32 @@ export class MiniMap {
       y0 -= pad;
       y1 += pad;
     }
-    this.scale = Math.min((w - 8) / (x1 - x0), (h - 8) / (y1 - y0));
+    this.scale = Math.min((w - 6) / (x1 - x0), (h - 6) / (y1 - y0));
     this.ox = (w - (x1 - x0) * this.scale) / 2 - x0 * this.scale;
     this.oy = (h - (y1 - y0) * this.scale) / 2 - y0 * this.scale;
     const X = (x: number) => this.ox + x * this.scale;
     const Y = (y: number) => this.oy + y * this.scale;
-    const dot = (x: number, y: number, r: number, color: string, edge = false) => {
-      ctx.beginPath();
-      ctx.arc(X(x), Y(y), r, 0, Math.PI * 2);
-      ctx.fillStyle = color;
-      ctx.fill();
-      if (edge) {
-        ctx.lineWidth = 0.8;
-        ctx.strokeStyle = DOT_EDGE;
-        ctx.stroke();
-      }
-    };
 
-    // Hình vùng
-    const shape = () => {
-      ctx.beginPath();
-      this.outline.forEach((p, i) => (i ? ctx.lineTo(X(p.x), Y(p.y)) : ctx.moveTo(X(p.x), Y(p.y))));
-      ctx.closePath();
-    };
-    shape();
-    ctx.fillStyle = LAND;
-    ctx.fill();
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = EDGE;
-    ctx.stroke();
-
-    // Chặng đường làm nét địa hình
-    ctx.beginPath();
-    for (const e of m.edges) {
-      const a = m.points[e.a];
-      const b = m.points[e.b];
-      ctx.moveTo(X(a.x), Y(a.y));
-      ctx.lineTo(X(b.x), Y(b.y));
+    // Nền: giấy, rồi ảnh cảnh vùng phủ đúng khung frame.
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, w, h);
+    if (this.bg) {
+      const [fx0, fy0, fx1, fy1] = m.map.frame;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(this.bg, X(fx0), Y(fy0), (fx1 - fx0) * this.scale, (fy1 - fy0) * this.scale);
     }
-    ctx.strokeStyle = "rgba(118, 99, 79, 0.2)";
-    ctx.stroke();
 
-    // Sương mù: phủ cả hình vùng rồi khoét quanh các điểm đã mở.
-    const revealed = new Set(d.revealed);
+    // Sương mù: phủ giấy nhạt rồi khoét quanh các điểm đã mở.
     const fog = document.createElement("canvas");
     fog.width = c.width;
     fog.height = c.height;
     const f = fog.getContext("2d")!;
     f.setTransform(dpr, 0, 0, dpr, 0, 0);
-    f.beginPath();
-    this.outline.forEach((p, i) => (i ? f.lineTo(X(p.x), Y(p.y)) : f.moveTo(X(p.x), Y(p.y))));
-    f.closePath();
     f.fillStyle = FOG;
-    f.fill();
+    f.fillRect(0, 0, w, h);
     f.globalCompositeOperation = "destination-out";
     const hole = Math.max(5, 9 * this.scale);
-    for (const id of revealed) {
+    for (const id of d.revealed) {
       const p = m.points[id];
       const g = f.createRadialGradient(X(p.x), Y(p.y), hole * 0.4, X(p.x), Y(p.y), hole);
       g.addColorStop(0, "rgba(0,0,0,1)");
@@ -189,74 +165,71 @@ export class MiniMap {
     ctx.drawImage(fog, 0, 0);
     ctx.restore();
 
-    // Điểm chưa ai giữ: chấm mờ, chỉ ở phần đã mở sương.
-    const owned = new Map(d.marks.map((k) => [k.pointId, k]));
-    for (const id of revealed) {
-      const p = m.points[id];
-      if (!owned.has(id) && HOLDABLE.includes(p.type)) dot(p.x, p.y, 1.4, "rgba(118, 99, 79, 0.4)");
-    }
-    // Điểm có chủ
+    // Điểm có chủ; đang bị đánh thì nhấp nháy và có vòng đỏ.
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = DOT_EDGE;
     for (const k of d.marks) {
       const p = m.points[k.pointId];
-      dot(p.x, p.y, 2.8, k.attacked && this.blink ? ATTACKED : OWNER_COLOR[k.owner], true);
+      ctx.beginPath();
+      ctx.arc(X(p.x), Y(p.y), 2.4, 0, Math.PI * 2);
+      ctx.fillStyle = k.attacked && this.blink ? ATTACKED : OWNER_COLOR[k.owner];
+      ctx.fill();
+      ctx.stroke();
       if (k.attacked) {
         ctx.beginPath();
-        ctx.arc(X(p.x), Y(p.y), this.blink ? 7 : 5, 0, Math.PI * 2);
+        ctx.arc(X(p.x), Y(p.y), this.blink ? 6 : 4.5, 0, Math.PI * 2);
         ctx.strokeStyle = ATTACKED;
         ctx.lineWidth = 1.5;
         ctx.stroke();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = DOT_EDGE;
       }
     }
     // Cửa bí cảnh đang mở
     for (const id of d.openGates) {
       const p = m.points[id];
       ctx.beginPath();
-      ctx.arc(X(p.x), Y(p.y), 4, 0, Math.PI * 2);
-      ctx.strokeStyle = "#2b8a78";
+      ctx.arc(X(p.x), Y(p.y), 3.5, 0, Math.PI * 2);
+      ctx.strokeStyle = "#1f6f62";
       ctx.lineWidth = 1.5;
       ctx.stroke();
     }
-    // Thành chủ: hình thoi; sơn môn của mình: hình vuông.
+    // Thành chủ: hình thoi mực; sơn môn của mình: ô vuông màu tông.
     const city = m.points.find((p) => p.type === "thanh_chu")!;
     ctx.save();
     ctx.translate(X(city.x), Y(city.y));
     ctx.rotate(Math.PI / 4);
     ctx.fillStyle = INK;
-    ctx.fillRect(-3.5, -3.5, 7, 7);
+    ctx.fillRect(-3, -3, 6, 6);
     ctx.restore();
     const home = m.points[d.sonMon];
     ctx.fillStyle = OWNER_COLOR.minh;
     ctx.strokeStyle = INK;
     ctx.lineWidth = 1;
-    ctx.fillRect(X(home.x) - 4, Y(home.y) - 4, 8, 8);
-    ctx.strokeRect(X(home.x) - 4, Y(home.y) - 4, 8, 8);
+    ctx.fillRect(X(home.x) - 3.5, Y(home.y) - 3.5, 7, 7);
+    ctx.strokeRect(X(home.x) - 3.5, Y(home.y) - 3.5, 7, 7);
 
     // Vị trí của mình hoặc đoàn đang đi
     const a = m.points[d.self.from];
     const b = m.points[d.self.to];
-    const sx = a.x + (b.x - a.x) * d.self.progress;
-    const sy = a.y + (b.y - a.y) * d.self.progress;
+    const sx = X(a.x + (b.x - a.x) * d.self.progress);
+    const sy = Y(a.y + (b.y - a.y) * d.self.progress);
     ctx.beginPath();
-    ctx.moveTo(X(sx), Y(sy) - 6);
-    ctx.lineTo(X(sx) + 4.5, Y(sy) + 3);
-    ctx.lineTo(X(sx) - 4.5, Y(sy) + 3);
+    ctx.moveTo(sx, sy - 5);
+    ctx.lineTo(sx + 4, sy + 2.5);
+    ctx.lineTo(sx - 4, sy + 2.5);
     ctx.closePath();
     ctx.fillStyle = "#fffaf0";
     ctx.fill();
     ctx.strokeStyle = INK;
     ctx.stroke();
 
-    // Phần bản đồ tranh đang xem
+    // Phần bản đồ tranh đang xem: nét đỏ mảnh.
     const v = this.viewport;
     if (v) {
-      ctx.setLineDash([3, 3]);
-      ctx.strokeStyle = "rgba(42, 32, 24, 0.55)";
+      ctx.strokeStyle = FRAME;
       ctx.lineWidth = 1;
-      ctx.strokeRect(X(v.x), Y(v.y), v.w * this.scale, v.h * this.scale);
-      ctx.setLineDash([]);
+      ctx.strokeRect(X(v.x) + 0.5, Y(v.y) + 0.5, v.w * this.scale - 1, v.h * this.scale - 1);
     }
-    shape();
-    ctx.strokeStyle = EDGE;
-    ctx.stroke();
   }
 }
