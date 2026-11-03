@@ -6,7 +6,21 @@ import {
   SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, BASE_CRIT_PER_MILLE,
   elementMultiplier, comboRelation, composeTechnique, mul, ONE, type Element, type SkillType, type Variant,
 } from "@ktlp/sim";
+import { existsSync, readFileSync } from "node:fs";
 import type { Raw } from "./xuat.ts";
+import { TB_FILES } from "./trang_bi.ts";
+
+const TRANG_BI_DIR = new URL("../../data/trang_bi/", import.meta.url);
+
+/** Các đường dẫn khác nhau giữa hai giá trị JSON (bỏ qua thứ tự khóa), tối đa `limit` chỗ. */
+function diffJson(a: unknown, b: unknown, path = "", out: string[] = [], limit = 5): string[] {
+  if (out.length >= limit) return out;
+  if (a !== null && b !== null && typeof a === "object" && typeof b === "object" && Array.isArray(a) === Array.isArray(b)) {
+    const keys = new Set([...Object.keys(a as object), ...Object.keys(b as object)]);
+    for (const k of keys) diffJson((a as Record<string, unknown>)[k], (b as Record<string, unknown>)[k], Array.isArray(a) ? `${path}[${k}]` : `${path}.${k}`, out, limit);
+  } else if (JSON.stringify(a) !== JSON.stringify(b)) out.push(`${path || "(gốc)"}: file ${JSON.stringify(a)?.slice(0, 60)}, data/trang_bi ${JSON.stringify(b)?.slice(0, 60)}`);
+  return out;
+}
 
 type Any = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -191,6 +205,31 @@ export function kiem(d: Any, raw: Raw): Report {
     if (n !== info.species) warnings.push(`Thú cưỡi phẩm ${info.name}: ${n} loài, sheet Thú phẩm ghi ${info.species}`);
   }
   if (pets.length === 100) notes.push("Thú cưỡi: 100 loài, số loài mỗi phẩm khớp sheet Thú phẩm");
+
+  // Trang bị: số món, mã không trùng, và so với data/trang_bi (nguồn cũ của phiên set đồ) khi thư mục đó còn
+  if (d["trang_bi.json"]) {
+    const tb = d["trang_bi.json"], ngoc = d["ngoc.json"], set = d["set.json"], pb = d["phap_bao.json"], pk = d["phap_khi.json"], vp = d["vat_pham.json"];
+    const codes = [
+      ...tb.kieu, ...ngoc.he, ...ngoc.y_chau, ...ngoc.an_bo, ...pb.mon, ...pb.tran_giao, ...pk.mon, ...vp.phu, ...vp.dan, ...vp.nguyen_lieu,
+    ].map((x: Any) => x.ma_vp);
+    const dup = codes.filter((x, i) => codes.indexOf(x) !== i);
+    if (dup.length) errors.push(`Trang bị: mã vật phẩm trùng ${[...new Set(dup)].slice(0, 8).join(", ")}`);
+    const ids = new Set(tb.do_hiem.map((x: Any) => x.id)), slots = new Set(tb.o.map((x: Any) => x.id));
+    const badKieu = tb.kieu.filter((k: Any) => !ids.has(k.do_hiem) || !slots.has(k.o)).map((k: Any) => k.ma_vp);
+    if (badKieu.length) errors.push(`Kiểu trang bị có độ hiếm hoặc ô lạ: ${badKieu.slice(0, 8).join(", ")}`);
+    const an = new Set(ngoc.an_bo.map((x: Any) => x.ma_vp));
+    const badSet = set.bo.filter((b: Any) => !an.has(b.an) || b.moc.length !== set.moc.length).map((b: Any) => b.id);
+    if (badSet.length) errors.push(`Set: ấn bộ lạ hoặc thiếu mốc ở ${badSet.join(", ")}`);
+    notes.push(`Trang bị: ${tb.kieu.length} kiểu, ${pb.mon.length} pháp bảo, ${pk.mon.length} pháp khí, ${set.bo.length} bộ set, ${codes.length} mã vật phẩm không trùng`);
+    if (existsSync(new URL("trang_bi.json", TRANG_BI_DIR))) {
+      const changed = TB_FILES.flatMap((f) => {
+        const src = JSON.parse(readFileSync(new URL(f, TRANG_BI_DIR), "utf8"));
+        return diffJson(d[f], src).map((x) => `${f}${x}`);
+      });
+      if (changed.length) warnings.push(`Trang bị khác data/trang_bi (nguồn cũ của phiên set đồ; file Excel là nguồn gốc): ${changed.join("; ")}`);
+      else notes.push(`Trang bị: ${TB_FILES.length} file khớp từng phần tử với data/trang_bi`);
+    }
+  }
 
   // Chỗ khác code đang chạy (code chưa đọc JSON thì phải sửa tay theo file)
   const diff: string[] = [];

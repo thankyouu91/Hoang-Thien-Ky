@@ -1,0 +1,1228 @@
+{
+  "ghi_chu": [
+    "Phù bán bằng linh thạch ở chợ (mục 12); tổng tỷ lệ cộng từ phù tối đa +15% (mục 13).",
+    "Đan dược 50 loại × 5 cấp, linh đan 40, thần đan 30 (mục 12). Thần đan khóa vào nhân vật (mục 13). Đan phương rơi ở Đan Tiên Động Phủ.",
+    "Nguyên liệu: quặng 4 bậc theo vị diện (mục 12), đá cường hóa 4 phẩm, vật liệu giáp phục và phôi pháp bảo. Mảnh lô đỉnh, lò rèn, pháp bảo trấn giáo giữ mã MA- như danh_sach.json."
+  ],
+  "phu": [
+    {
+      "ma_vp": "PH-CH-001",
+      "ten": "Tị Lôi Phù",
+      "ten_icon": "phù chống sét",
+      "mo_ta": "Đỡ một phần lôi kiếp khi đột phá, thú kiếp, hộ pháp phi thăng",
+      "nguon": ["thien_loi_dai","cho"],
+      "moi": false
+    },
+    {
+      "ma_vp": "PH-CH-002",
+      "ten": "Bảo Ngọc Phù",
+      "ten_icon": "phù bảo ngọc",
+      "mo_ta": "Nén ngọc thất bại không mất ngọc",
+      "nguon": ["cho"],
+      "moi": false
+    },
+    {
+      "ma_vp": "PH-CH-003",
+      "ten": "Bảo Hộ Phù",
+      "ten_icon": "phù bảo hộ",
+      "mo_ta": "Cường hóa từ +21 thất bại giữ nguyên nấc",
+      "nguon": ["cho"],
+      "moi": false
+    },
+    {
+      "ma_vp": "PH-CH-004",
+      "ten": "Tăng Thành Phù",
+      "ten_icon": "phù tăng thành",
+      "mo_ta": "Cường hóa hoặc nén ngọc +5%, +10%, +15% theo phẩm; tổng từ phù tối đa +15%",
+      "nguon": ["cho"],
+      "moi": false
+    },
+    {
+      "ma_vp": "PH-CH-005",
+      "ten": "Hộ Thân Phù",
+      "ten_icon": "phù hộ thân",
+      "mo_ta": "Giảm xác suất gặp sự kiện trên đường (mục 3)",
+      "nguon": ["cho","nhiem_vu"],
+      "moi": false
+    },
+    {
+      "ma_vp": "PH-CH-006",
+      "ten": "Độn Thổ Phù",
+      "ten_icon": "phù độn thổ",
+      "mo_ta": "Đưa về thành chủ ngay (mục 3)",
+      "nguon": ["cho","nhiem_vu"],
+      "moi": false
+    },
+    {
+      "ma_vp": "PH-CH-007",
+      "ten": "Ngự Thú Phù",
+      "mo_ta": "Thuần phục +5%, +10%, +15% theo phẩm, chung trần +15% (mục 6)",
+      "nguon": ["cho"],
+      "moi": false
+    },
+    {
+      "ma_vp": "PH-CH-008",
+      "ten": "Thoát Khảm Phù",
+      "mo_ta": "Gỡ ngọc, Ý châu hoặc ấn bộ khỏi món mà vật gỡ ra còn nguyên",
+      "nguon": ["cho"],
+      "moi": true
+    },
+    {
+      "ma_vp": "PH-CH-009",
+      "ten": "Di Hồn Phù",
+      "mo_ta": "Chuyển nấc cường hóa sang món khác cùng ô, giữ 70% số nấc, tối đa +20",
+      "nguon": ["cho","luyen_khi_di_chi"],
+      "moi": true
+    },
+    {
+      "ma_vp": "PH-CH-010",
+      "ten": "Hộ Khí Phù",
+      "mo_ta": "Lần chết kế tiếp, đồ đang mặc không mất độ bền",
+      "nguon": ["cho"],
+      "moi": true
+    }
+  ],
+  "dan": [
+    {
+      "ma_vp": "DA-DD-001",
+      "nhom": "dan_duoc",
+      "ten": "Bổ Huyết Đan",
+      "ten_icon": "Đan dược hồi máu (Bổ Huyết Đan)",
+      "mo_ta": "Máu dưới 40% thì tự hồi 15% máu; dùng được giữa các chặng hành trình",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","cho_npc"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-002",
+      "nhom": "dan_duoc",
+      "ten": "Hồi Khí Đan",
+      "ten_icon": "Đan dược hồi mana (Hồi Khí Đan)",
+      "mo_ta": "Mana dưới 20% thì tự hồi 20% mana",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","cho_npc"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-003",
+      "nhom": "dan_duoc",
+      "ten": "Đại Lực Đan",
+      "ten_icon": "Đan dược tăng chỉ số tạm thời",
+      "mo_ta": "Công lực +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","cho_npc"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-004",
+      "nhom": "dan_duoc",
+      "ten": "Giải Độc Đan",
+      "ten_icon": "Đan dược giải độc",
+      "mo_ta": "Giải thiêu đốt và sát thương theo thời gian 1 lần",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","cho_npc"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-005",
+      "nhom": "dan_duoc",
+      "ten": "Hồi Xuân Đan",
+      "mo_ta": "Hồi 3% máu mỗi 2 s trong 10 s đầu trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-006",
+      "nhom": "dan_duoc",
+      "ten": "Đại Hoàn Đan",
+      "mo_ta": "Máu dưới 25% thì tự hồi 30% máu",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-007",
+      "nhom": "dan_duoc",
+      "ten": "Ngưng Khí Đan",
+      "mo_ta": "Mana tối đa +8% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-008",
+      "nhom": "dan_duoc",
+      "ten": "Bổ Nguyên Đan",
+      "mo_ta": "Mana cạn thì tự hồi 40% mana",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-009",
+      "nhom": "dan_duoc",
+      "ten": "Thiết Bì Đan",
+      "mo_ta": "Phòng thủ +6% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-010",
+      "nhom": "dan_duoc",
+      "ten": "Bồi Nguyên Đan",
+      "mo_ta": "Máu tối đa +6% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-011",
+      "nhom": "dan_duoc",
+      "ten": "Ưng Nhãn Đan",
+      "mo_ta": "Chí mạng +3% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-012",
+      "nhom": "dan_duoc",
+      "ten": "Bạo Huyết Đan",
+      "mo_ta": "Sát thương chí mạng +8% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-013",
+      "nhom": "dan_duoc",
+      "ten": "Tật Phong Đan",
+      "mo_ta": "Tốc đánh +4% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-014",
+      "nhom": "dan_duoc",
+      "ten": "Thanh Tâm Đan",
+      "mo_ta": "Giải khống chế 1 lần",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-015",
+      "nhom": "dan_duoc",
+      "ten": "Định Thần Đan",
+      "mo_ta": "Thời gian bị khống chế −20% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-016",
+      "nhom": "dan_duoc",
+      "ten": "Tị Kim Đan",
+      "mo_ta": "Kháng Kim +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-017",
+      "nhom": "dan_duoc",
+      "ten": "Tị Mộc Đan",
+      "mo_ta": "Kháng Mộc +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-018",
+      "nhom": "dan_duoc",
+      "ten": "Tị Thủy Đan",
+      "mo_ta": "Kháng Thủy +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-019",
+      "nhom": "dan_duoc",
+      "ten": "Tị Hỏa Đan",
+      "mo_ta": "Kháng Hỏa +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-020",
+      "nhom": "dan_duoc",
+      "ten": "Tị Thổ Đan",
+      "mo_ta": "Kháng Thổ +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-021",
+      "nhom": "dan_duoc",
+      "ten": "Tị Lôi Đan",
+      "mo_ta": "Kháng Lôi +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-022",
+      "nhom": "dan_duoc",
+      "ten": "Tị Phong Đan",
+      "mo_ta": "Kháng Phong +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-023",
+      "nhom": "dan_duoc",
+      "ten": "Tị Quang Đan",
+      "mo_ta": "Kháng Quang +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-024",
+      "nhom": "dan_duoc",
+      "ten": "Tị U Đan",
+      "mo_ta": "Kháng Âm lãnh +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-025",
+      "nhom": "dan_duoc",
+      "ten": "Tị Dương Đan",
+      "mo_ta": "Kháng Cực dương +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-026",
+      "nhom": "dan_duoc",
+      "ten": "Tị Âm Đan",
+      "mo_ta": "Kháng Cực âm +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-027",
+      "nhom": "dan_duoc",
+      "ten": "Tị Hàn Đan",
+      "mo_ta": "Kháng Cực hàn +5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-028",
+      "nhom": "dan_duoc",
+      "ten": "Hộ Tâm Đan",
+      "mo_ta": "Vào trận có khiên bằng 8% máu tối đa",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-029",
+      "nhom": "dan_duoc",
+      "ten": "Tục Mệnh Đan",
+      "mo_ta": "Máu dưới 10% thì hồi 20% máu, 1 lần",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-030",
+      "nhom": "dan_duoc",
+      "ten": "Phá Giáp Đan",
+      "mo_ta": "Xuyên giáp +4% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-031",
+      "nhom": "dan_duoc",
+      "ten": "Xuyên Linh Đan",
+      "mo_ta": "Xuyên kháng +4% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-032",
+      "nhom": "dan_duoc",
+      "ten": "Hấp Huyết Đan",
+      "mo_ta": "Hút máu +2% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-033",
+      "nhom": "dan_duoc",
+      "ten": "Ngự Phong Đan",
+      "mo_ta": "Giảm hồi chiêu 4% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-034",
+      "nhom": "dan_duoc",
+      "ten": "Thanh Lương Đan",
+      "mo_ta": "Thiêu đốt nhận −30% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-035",
+      "nhom": "dan_duoc",
+      "ten": "Ôn Dương Đan",
+      "mo_ta": "Làm chậm và đóng băng nhận −30% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-036",
+      "nhom": "dan_duoc",
+      "ten": "Khu Tà Đan",
+      "mo_ta": "Hiệu ứng giảm hồi máu nhận −30% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-037",
+      "nhom": "dan_duoc",
+      "ten": "Trấn Hồn Đan",
+      "mo_ta": "Tỷ lệ bị tuyệt sát −50% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-038",
+      "nhom": "dan_duoc",
+      "ten": "Bất Hoại Đan",
+      "mo_ta": "Sát thương nhận −10% trong 5 s đầu trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-039",
+      "nhom": "dan_duoc",
+      "ten": "Phấn Chiến Đan",
+      "mo_ta": "Sát thương +4% khi máu dưới 50%",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-040",
+      "nhom": "dan_duoc",
+      "ten": "Cuồng Bạo Đan",
+      "mo_ta": "Sát thương +8% nhưng phòng thủ −8% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-041",
+      "nhom": "dan_duoc",
+      "ten": "Quy Tức Đan",
+      "mo_ta": "Hồi mana +15% nhưng tốc đánh −5% trong 1 trận",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-042",
+      "nhom": "dan_duoc",
+      "ten": "Hồi Thiên Đan",
+      "mo_ta": "Hồi 10% máu cả đội 1 lần; chỉ Tu đan luyện được",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-043",
+      "nhom": "dan_duoc",
+      "ten": "Hóa Ứ Đan",
+      "mo_ta": "Chết trong trận kế tiếp thì đồ mất độ bền ít hơn một nửa",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-044",
+      "nhom": "dan_duoc",
+      "ten": "Hành Cước Đan",
+      "mo_ta": "Tốc độ hành trình +10% trong 1 giờ",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-045",
+      "nhom": "dan_duoc",
+      "ten": "Linh Giác Đan",
+      "mo_ta": "Thấy trước sự kiện trên chặng kế tiếp trước khi đi, trong 1 giờ",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-046",
+      "nhom": "dan_duoc",
+      "ten": "Khai Sơn Đan",
+      "mo_ta": "Khai khoáng thủ công +5% trong 1 giờ",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-047",
+      "nhom": "dan_duoc",
+      "ten": "Linh Mục Đan",
+      "mo_ta": "Cơ hội thấy dược liệu hiếm +5% trong 1 giờ",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-048",
+      "nhom": "dan_duoc",
+      "ten": "Ngưng Hỏa Đan",
+      "mo_ta": "Lần rèn kế tiếp +2% thành công (chung trần +15% của phù)",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-049",
+      "nhom": "dan_duoc",
+      "ten": "Tiếp Cốt Đan",
+      "mo_ta": "Đệ tử NPC bị thương hồi sớm 2 giờ",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-DD-050",
+      "nhom": "dan_duoc",
+      "ten": "Mê Hồn Đan",
+      "mo_ta": "Thuần phục dị thú +3% (chung trần +15% với Ngự Thú Phù)",
+      "cap": "1–5",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-001",
+      "nhom": "linh_dan",
+      "ten": "Liệu Thương Đan",
+      "ten_icon": "Linh đan trị thương",
+      "mo_ta": "Hết trạng thái bị thương của bản thân ngay sau trận thua",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-002",
+      "nhom": "linh_dan",
+      "ten": "Tụ Nguyên Đan",
+      "ten_icon": "Linh đan tăng kinh nghiệm",
+      "mo_ta": "Kinh nghiệm +20% trong 1 giờ; tối đa 3 viên mỗi ngày (mục 13)",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-003",
+      "nhom": "linh_dan",
+      "ten": "Tụ Linh Đan",
+      "ten_icon": "Linh đan tăng tốc tu luyện (Tụ Linh Đan)",
+      "mo_ta": "Tốc độ tu luyện +20% trong 8 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-004",
+      "nhom": "linh_dan",
+      "ten": "Tục Cốt Đan",
+      "mo_ta": "Đệ tử NPC hoặc NPC chiến bị thương hồi sớm 4 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-005",
+      "nhom": "linh_dan",
+      "ten": "Sinh Cơ Đan",
+      "mo_ta": "Hồi phục sau tử vong khi hành trình nhanh gấp đôi",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-006",
+      "nhom": "linh_dan",
+      "ten": "Cố Bản Đan",
+      "mo_ta": "Miễn bị thương nặng 1 lần trong 24 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-007",
+      "nhom": "linh_dan",
+      "ten": "Hộ Mạch Đan",
+      "mo_ta": "NPC chiến không bị thương sau 1 trận",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-008",
+      "nhom": "linh_dan",
+      "ten": "Dưỡng Hồn Đan",
+      "mo_ta": "Thú bị thương hồi phục nhanh hơn 50%",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-009",
+      "nhom": "linh_dan",
+      "ten": "Dưỡng Khí Đan",
+      "mo_ta": "Một lượng kinh nghiệm cố định cho cảnh giới Luyện Khí; chung giới hạn 3 viên mỗi ngày",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-010",
+      "nhom": "linh_dan",
+      "ten": "Trúc Nguyên Đan",
+      "mo_ta": "Một lượng kinh nghiệm cố định cho cảnh giới Trúc Cơ; chung giới hạn 3 viên mỗi ngày",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-011",
+      "nhom": "linh_dan",
+      "ten": "Kim Nguyên Đan",
+      "mo_ta": "Một lượng kinh nghiệm cố định cho cảnh giới Kết Đan; chung giới hạn 3 viên mỗi ngày",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-012",
+      "nhom": "linh_dan",
+      "ten": "Anh Nguyên Đan",
+      "mo_ta": "Một lượng kinh nghiệm cố định cho cảnh giới Nguyên Anh; chung giới hạn 3 viên mỗi ngày",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-013",
+      "nhom": "linh_dan",
+      "ten": "Thần Nguyên Đan",
+      "mo_ta": "Một lượng kinh nghiệm cố định cho cảnh giới Hóa Thần; chung giới hạn 3 viên mỗi ngày",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-014",
+      "nhom": "linh_dan",
+      "ten": "Hư Nguyên Đan",
+      "mo_ta": "Một lượng kinh nghiệm cố định cho cảnh giới Luyện Hư; chung giới hạn 3 viên mỗi ngày",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-015",
+      "nhom": "linh_dan",
+      "ten": "Hợp Nguyên Đan",
+      "mo_ta": "Một lượng kinh nghiệm cố định cho cảnh giới Hợp Thể; chung giới hạn 3 viên mỗi ngày",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-016",
+      "nhom": "linh_dan",
+      "ten": "Đồng Tâm Đan",
+      "mo_ta": "Kinh nghiệm cả party +10% trong 1 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-017",
+      "nhom": "linh_dan",
+      "ten": "Truyền Công Đan",
+      "mo_ta": "Truyền 5% kinh nghiệm hôm nay của mình cho một ngoại môn đệ tử cùng tông",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-018",
+      "nhom": "linh_dan",
+      "ten": "Ngưng Thần Đan",
+      "mo_ta": "Bế quan +10% trong 8 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-019",
+      "nhom": "linh_dan",
+      "ten": "Tĩnh Tâm Đan",
+      "mo_ta": "Đột phá cảnh giới nhỏ +3%",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-020",
+      "nhom": "linh_dan",
+      "ten": "Linh Tuyền Đan",
+      "mo_ta": "Bế quan +10% khi tông môn không giữ linh tuyền nào",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-021",
+      "nhom": "linh_dan",
+      "ten": "Tụ Vi Đan",
+      "mo_ta": "Tích tu vi ở thượng vị +10% trong 8 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-022",
+      "nhom": "linh_dan",
+      "ten": "Hộ Pháp Đan",
+      "mo_ta": "Hộ pháp cho người khác hiệu quả +10%",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-023",
+      "nhom": "linh_dan",
+      "ten": "Khai Khiếu Đan",
+      "mo_ta": "Lên tầng công pháp tốn cống hiến ít hơn 5%",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-024",
+      "nhom": "linh_dan",
+      "ten": "Thông Mạch Đan",
+      "mo_ta": "Tầng công pháp có hệ phụ trùng linh căn tiến nhanh hơn 10% trong 8 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-025",
+      "nhom": "linh_dan",
+      "ten": "Định Căn Đan",
+      "mo_ta": "Đột phá trong bí cảnh cùng hệ +3%",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-026",
+      "nhom": "linh_dan",
+      "ten": "Phục Linh Đan",
+      "mo_ta": "Lấy lại 5% tu vi đã mất khi đột phá thất bại",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-027",
+      "nhom": "linh_dan",
+      "ten": "Minh Tâm Đan",
+      "mo_ta": "Bế quan bị gián đoạn không mất tiến độ giờ đang dở",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-028",
+      "nhom": "linh_dan",
+      "ten": "Quy Nguyên Đan",
+      "mo_ta": "Tu vi thú nhận từ chủ +10% trong 8 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-029",
+      "nhom": "linh_dan",
+      "ten": "Ngộ Pháp Đan",
+      "mo_ta": "Thêm 1 lượt ghép thử ở bia Tầm Đạo trong ngày",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-030",
+      "nhom": "linh_dan",
+      "ten": "Tị Chướng Đan",
+      "mo_ta": "Miễn khí độc ở vùng nguy hiểm trong 1 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-031",
+      "nhom": "linh_dan",
+      "ten": "Ngự Hàn Đan",
+      "mo_ta": "Miễn rét buốt ở vùng băng trong 1 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-032",
+      "nhom": "linh_dan",
+      "ten": "Tị Nhiệt Đan",
+      "mo_ta": "Miễn nóng bỏng ở vùng lửa và sa mạc trong 1 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-033",
+      "nhom": "linh_dan",
+      "ten": "Tị Lôi Linh Đan",
+      "mo_ta": "Miễn sét đánh trên đường ở vùng Lôi trong 1 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-034",
+      "nhom": "linh_dan",
+      "ten": "Định Phong Linh Đan",
+      "mo_ta": "Miễn bão gió trên đường trong 1 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-035",
+      "nhom": "linh_dan",
+      "ten": "Khinh Thân Đan",
+      "mo_ta": "Tốc độ hành trình +15% trong 2 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-036",
+      "nhom": "linh_dan",
+      "ten": "Ẩn Hình Đan",
+      "mo_ta": "Dị thú không chủ động tấn công trong 1 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-037",
+      "nhom": "linh_dan",
+      "ten": "Dẫn Thú Đan",
+      "mo_ta": "Dụ dị thú trong hang ra ngay, khỏi chờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-038",
+      "nhom": "linh_dan",
+      "ten": "Hồi Lộ Đan",
+      "mo_ta": "Chặng quay về đi nhanh hơn 10%",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-039",
+      "nhom": "linh_dan",
+      "ten": "Hộ Tống Đan",
+      "mo_ta": "Đoàn hộ tống đỉnh vô chủ đi nhanh hơn 10% trong 1 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-LD-040",
+      "nhom": "linh_dan",
+      "ten": "Truy Tung Đan",
+      "mo_ta": "Thấy đường đi của đoàn hộ tống đỉnh vô chủ trong 1 giờ",
+      "nguon": ["luyen_dan","dan_phuong_dan_tien_dong_phu"],
+      "khoa": false
+    },
+    {
+      "ma_vp": "DA-TD-001",
+      "nhom": "than_dan",
+      "ten": "Phá Cảnh Đan",
+      "ten_icon": "Thần đan vượt cảnh giới (Phá Cảnh Đan)",
+      "mo_ta": "Đột phá cảnh giới nhỏ +10%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-002",
+      "nhom": "than_dan",
+      "ten": "Ngộ Đạo Đan",
+      "ten_icon": "Thần đan tăng ngộ đạo",
+      "mo_ta": "Đột phá chiêu thức ở thượng vị +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-003",
+      "nhom": "than_dan",
+      "ten": "Tị Kiếp Đan",
+      "ten_icon": "Thần đan giảm lôi kiếp",
+      "mo_ta": "Sát thương lôi kiếp −15%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-004",
+      "nhom": "than_dan",
+      "ten": "Trúc Cơ Đan",
+      "mo_ta": "Đột phá đại cảnh giới Luyện Khí lên Trúc Cơ +15%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-005",
+      "nhom": "than_dan",
+      "ten": "Kết Kim Đan",
+      "mo_ta": "Đột phá đại cảnh giới Trúc Cơ lên Kết Đan +15%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-006",
+      "nhom": "than_dan",
+      "ten": "Ngưng Anh Đan",
+      "mo_ta": "Đột phá đại cảnh giới Kết Đan lên Nguyên Anh +15%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-007",
+      "nhom": "than_dan",
+      "ten": "Hóa Thần Đan",
+      "mo_ta": "Đột phá đại cảnh giới Nguyên Anh lên Hóa Thần +15%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-008",
+      "nhom": "than_dan",
+      "ten": "Hợp Thể Đan",
+      "mo_ta": "Đột phá đại cảnh giới Luyện Hư lên Hợp Thể +15%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-009",
+      "nhom": "than_dan",
+      "ten": "Độ Ách Đan",
+      "mo_ta": "Đột phá đại cảnh giới Đại Thừa lên Độ Kiếp +15%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-010",
+      "nhom": "than_dan",
+      "ten": "Phá Chướng Đan",
+      "mo_ta": "Đột phá chiêu thức ở thượng vị +5% (tổng tỷ lệ tối đa 80%, mục 7)",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-011",
+      "nhom": "than_dan",
+      "ten": "Thông Huyền Đan",
+      "mo_ta": "Đột phá chiêu thức ở thượng vị +8% (tổng tỷ lệ tối đa 80%, mục 7)",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-012",
+      "nhom": "than_dan",
+      "ten": "Tạo Hóa Đan",
+      "mo_ta": "Đột phá chiêu thức ở thượng vị +10% (tổng tỷ lệ tối đa 80%, mục 7)",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-013",
+      "nhom": "than_dan",
+      "ten": "Thái Ất Đan",
+      "mo_ta": "Đột phá chiêu thức ở thượng vị +12% (tổng tỷ lệ tối đa 80%, mục 7)",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-014",
+      "nhom": "than_dan",
+      "ten": "Cửu Chuyển Kim Đan",
+      "mo_ta": "Đột phá chiêu thức ở thượng vị +15% (tổng tỷ lệ tối đa 80%, mục 7)",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-015",
+      "nhom": "than_dan",
+      "ten": "Hỗn Nguyên Đan",
+      "mo_ta": "Đột phá chiêu thức thất bại không mất tu vi, 1 lần",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-016",
+      "nhom": "than_dan",
+      "ten": "Kim Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Kim +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-017",
+      "nhom": "than_dan",
+      "ten": "Mộc Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Mộc +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-018",
+      "nhom": "than_dan",
+      "ten": "Thủy Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Thủy +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-019",
+      "nhom": "than_dan",
+      "ten": "Hỏa Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Hỏa +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-020",
+      "nhom": "than_dan",
+      "ten": "Thổ Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Thổ +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-021",
+      "nhom": "than_dan",
+      "ten": "Lôi Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Lôi +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-022",
+      "nhom": "than_dan",
+      "ten": "Phong Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Phong +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-023",
+      "nhom": "than_dan",
+      "ten": "Quang Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Quang +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-024",
+      "nhom": "than_dan",
+      "ten": "U Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Âm lãnh +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-025",
+      "nhom": "than_dan",
+      "ten": "Dương Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Cực dương +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-026",
+      "nhom": "than_dan",
+      "ten": "Âm Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Cực âm +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-027",
+      "nhom": "than_dan",
+      "ten": "Hàn Tâm Đan",
+      "mo_ta": "Đột phá chiêu thức hệ Cực hàn +5%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-028",
+      "nhom": "than_dan",
+      "ten": "Thiết Cốt Đan",
+      "mo_ta": "Máu +20% khi chịu lôi kiếp",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-029",
+      "nhom": "than_dan",
+      "ten": "Dẫn Lôi Đan",
+      "mo_ta": "Người hộ pháp gánh thêm 20% lôi kiếp",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    },
+    {
+      "ma_vp": "DA-TD-030",
+      "nhom": "than_dan",
+      "ten": "Tái Tạo Đan",
+      "mo_ta": "Đột phá thất bại chỉ mất 10% tu vi thay 20%",
+      "nguon": ["thien_loi_dai","luyen_dan_cap_8_10"],
+      "khoa": true
+    }
+  ],
+  "nguyen_lieu": [
+    {
+      "ma_vp": "QU-BA-001",
+      "ten": "Thiết tinh",
+      "mo_ta": "Quặng rèn Hạ vị",
+      "nguon": ["mo_quang","khoang_mach_dong"],
+      "moi": false
+    },
+    {
+      "ma_vp": "QU-BA-002",
+      "ten": "Huyền thiết",
+      "mo_ta": "Quặng rèn Trung vị",
+      "nguon": ["mo_quang","khoang_mach_dong"],
+      "moi": false
+    },
+    {
+      "ma_vp": "QU-BA-003",
+      "ten": "Tinh kim",
+      "mo_ta": "Quặng rèn Thần vực",
+      "nguon": ["mo_quang","khoang_mach_dong"],
+      "moi": false
+    },
+    {
+      "ma_vp": "QU-BA-004",
+      "ten": "Thần kim",
+      "mo_ta": "Quặng rèn Thánh vực",
+      "nguon": ["mo_quang","khoang_mach_dong"],
+      "moi": false
+    },
+    {
+      "ma_vp": "NL-LK-001",
+      "ten": "Hạ phẩm Luyện Khí Thạch",
+      "mo_ta": "Cường hóa +1 đến +10",
+      "nguon": ["cho","roi_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-LK-002",
+      "ten": "Trung phẩm Luyện Khí Thạch",
+      "mo_ta": "Cường hóa +11 đến +20",
+      "nguon": ["cho","roi_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-LK-003",
+      "ten": "Thượng phẩm Luyện Khí Thạch",
+      "mo_ta": "Cường hóa +21 đến +30; chỉ rơi trong bí cảnh, khóa vào nhân vật (mục 13)",
+      "nguon": ["luyen_khi_di_chi","khoang_mach_dong"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-LK-004",
+      "ten": "Cực phẩm Luyện Khí Thạch",
+      "mo_ta": "Cường hóa +31 đến +50 ở Thần vực và Thánh vực; khóa vào nhân vật",
+      "nguon": ["luyen_khi_di_chi","thuong_co_chien_truong"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-TB-001",
+      "ten": "Tu Bổ Sa",
+      "mo_ta": "Cát luyện để sửa đồ, đi cùng linh thạch và quặng",
+      "nguon": ["cho","khoang_mach_dong"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-KM-001",
+      "ten": "Khai Mạch Đinh",
+      "mo_ta": "Kích hoạt 1 dòng khảm trên món đồ",
+      "nguon": ["cho","luyen_khi_di_chi"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-GL-001",
+      "ten": "Yêu Thú Bì",
+      "mo_ta": "Da dị thú: áo giáp, bao tay, giày",
+      "nguon": ["san_di_thu","thu_lam"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-GL-002",
+      "ten": "Yêu Thú Cốt",
+      "mo_ta": "Xương dị thú: mũ khôi",
+      "nguon": ["san_di_thu","thu_lam"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-GL-003",
+      "ten": "Thiên Tằm Ti",
+      "mo_ta": "Tơ tằm linh: đạo bào, khăn",
+      "nguon": ["linh_duoc_vien","duoc_coc"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-GL-004",
+      "ten": "Linh Mộc",
+      "mo_ta": "Gỗ linh: cán vũ khí, cung, cầm, tiêu, trận kỳ",
+      "nguon": ["linh_duoc_vien","duoc_coc"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-GL-005",
+      "ten": "Vân Cẩm",
+      "mo_ta": "Gấm mây: đai, dây ngọc bội",
+      "nguon": ["cho","co_chien_truong"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-PB-001",
+      "ten": "Pháp Bảo Phôi",
+      "mo_ta": "Phôi luyện pháp bảo; độ hiếm của phôi là độ hiếm pháp bảo luyện ra",
+      "nguon": ["co_tong_di_tich","luyen_khi_di_chi"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DB-001",
+      "ten": "Thiên Ngoại Vẫn Thiết",
+      "mo_ta": "Rèn lại món vàng, đỏ để quay lại 1–2 dòng khảm thêm của đồ bí cảnh",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    }
+  ]
+}

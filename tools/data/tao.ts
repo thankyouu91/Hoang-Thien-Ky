@@ -16,6 +16,7 @@ import { ELEMENT_NAMES, SKILL_TYPE_NAMES, VARIANT_NAMES, GRADE_NAMES, RULES } fr
 import { writeXlsx, colName, type Cell, type Fmt, type SheetOut } from "./xlsx.ts";
 import * as B from "./bang.ts";
 import * as N from "./noi_dung.ts";
+import * as TB from "./trang_bi.ts";
 
 const ROOT = new URL("../../", import.meta.url);
 export const XLSX_URL = new URL("data/he_thong/KhaiTongLapPhai_HeThong_v1.xlsx", ROOT);
@@ -132,7 +133,13 @@ function table(def: B.TableDef, rows: Record<string, In>[], more: Partial<SheetO
       return { v: b.v ?? null, f: b.f, fill: B.SRC_FILL[src], fmt: b.fmt ?? fmtFor(kind, b.v) };
     }));
   }
-  return { name: def.sheet, rows: out, widths: def.cols.map((c) => c.width ?? 12), freeze: { rows: 1, cols: 2 }, ...more };
+  // Cột có/không và cột đơn vị chọn từ danh sách
+  const choices: Partial<Record<B.Kind, string[]>> = { bool: ["có", "không"], unit: ["%", "giây", "số ô"] };
+  const lists = def.cols.flatMap((c, i) => {
+    const values = choices[c.kind];
+    return values ? [{ ref: `${colName(i)}2:${colName(i)}${rows.length + 1}`, values }] : [];
+  });
+  return { name: def.sheet, rows: out, widths: def.cols.map((c) => c.width ?? 12), freeze: { rows: 1, cols: 2 }, lists, ...more };
 }
 
 function matrix(def: B.MatrixDef, cell: (a: Element, b: Element) => Box): SheetOut {
@@ -429,7 +436,10 @@ export function build(petCsv: string): SheetOut[] {
     };
   });
 
-  const bool = (def: B.TableDef, key: string, rows: number) => ({ ref: `${L(def, key)}2:${L(def, key)}${rows + 1}`, values: ["có", "không"] });
+  // Trang bị, pháp bảo, ngọc, set đồ, vật phẩm: dựng từ data/trang_bi của phiên set đồ
+  const tb = TB.sourceRows(new URL("data/trang_bi/", ROOT));
+  const TB_SHEETS = TB.PARTS.filter((p) => tb[p.def.sheet]).map((p) => table(p.def, tb[p.def.sheet]));
+
   return [
     noteSheet(),
     PARAM_SHEET,
@@ -443,7 +453,7 @@ export function build(petCsv: string): SheetOut[] {
       }),
       lists: [{ ref: "B2:M13", values: N.RELATIONS.map((r) => r.name) }],
     },
-    table(LC, LC_ROWS, { lists: [bool(LC, "dong_minh", LC_ROWS.length)] }),
+    table(LC, LC_ROWS),
     table(BT, BT_ROWS),
     table(PH, PH_ROWS),
     table(B.TAI_NANG, TN_ROWS),
@@ -454,11 +464,12 @@ export function build(petCsv: string): SheetOut[] {
     table(CT, CT_ROWS, { freeze: { rows: 1, cols: 1 } }),
     table(B.MO, MO_ROWS, { freeze: { rows: 1, cols: 1 } }),
     table(B.BI_CANH, BC_ROWS),
-    table(B.THU, THU_ROWS, { lists: [bool(B.THU, "mvp", THU_ROWS.length)] }),
+    table(B.THU, THU_ROWS),
     table(TP, N.PET_GRADES.map(([ma, ten, so_loai, gap_o, cong_chi_so, ban_tren_cho, luyen_hoa_them]) => ({ ma, ten, so_loai, gap_o, cong_chi_so, ban_tren_cho, luyen_hoa_them }))),
     table(B.THU_CANH_GIOI, N.PET_REALMS),
     table(B.THU_KICH_PHAT, N.PET_SETS.map(([ma, ten, dieu_kien, hieu_ung]) => ({ ma, ten, dieu_kien, hieu_ung }))),
     table(B.LINH_DON, N.PET_PILLS.map(([ma, ten, cap, cong_dung, nguyen_lieu, cho]) => ({ ma, ten, cap, cong_dung, nguyen_lieu, cho }))),
+    ...TB_SHEETS,
   ];
 }
 
@@ -508,6 +519,7 @@ function noteSheet(): SheetOut {
       ["Cấp tông môn", "Cấp 1–200: XP, ngày ước tính, thành viên, điểm giữ, tầm, mở khóa (GDD mục 5, 6, 9, 10)"],
       ["Mỏ, Bí cảnh", "Sản lượng và chi phí nâng mỏ cấp 1–100; 20 loại bí cảnh và phần rơi (GDD mục 11, 12)"],
       ["Thú cưỡi, Thú phẩm, Thú cảnh giới, Thú kích phát, Linh đơn", "Phần thú cưỡi ở GDD mục 6; số trong đó GDD còn ghi là đề xuất"],
+      ["Độ hiếm … Ghi chú trang bị (20 sheet)", "Trang bị, pháp bảo, pháp khí, ngọc, Ý châu, ấn bộ, set đồ, phù, đan, nguyên liệu rèn (GDD tab Trang bị, pháp bảo và set đồ); mọi số là đề xuất. Xuất ra 7 file như data/trang_bi. Cột \"đơn vị code\" ghi khóa: giá trị theo phần nghìn và tick; \"số ô\" là số ô đếm nguyên"],
     ].map(([a, b]) => [{ v: a, bold: true }, { v: b }] as (Cell | null)[]),
   ];
   return { name: B.NOTE_SHEET, rows, widths: [28, 140] };

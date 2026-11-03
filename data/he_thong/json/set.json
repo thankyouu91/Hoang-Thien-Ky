@@ -1,0 +1,498 @@
+{
+  "ghi_chu": [
+    "Set đồ dựa trên ấn bộ: ấn là vật phẩm khảm vào một dòng khảm đã kích hoạt, nên đúng luật 'thuộc tính chỉ hiện khi khảm ngọc' (chốt 2026-11-03). Kiểu món nào cũng mang được ấn bộ nào.",
+    "Mốc 2/4/7: số món đang mặc có cùng ấn và còn độ bền trên 0. 3 món tính mốc 2, 5–6 món tính mốc 4.",
+    "Mỗi món giữ tối đa 1 ấn bộ. Tối đa 3 bộ cùng lúc (2+2+2), 7 ô nên chỉ một bộ đạt mốc 7.",
+    "Hiệu ứng set không tăng theo cường hóa, độ hiếm hay cấp; ấn bộ không có cấp.",
+    "Trần: quy đổi lực chiến mốc 2 không quá 1%, đủ mốc 4 không quá 3%, đủ mốc 7 không quá 6%, tính trong trần 35% của đồ. Hiệu ứng kinh tế của set cộng pháp khí không quá +10% mỗi loại sản lượng; tỷ lệ nén, cường hóa, luyện đan tính chung trần +15% của phù.",
+    "Hiệu ứng 'mỗi trận' tính lại từ đầu mỗi trận mô phỏng; mọi chọn mục tiêu phải deterministic (hòa thì theo id).",
+    "Đồ tím trở lên rơi ở bí cảnh có 30% đã khảm sẵn ấn bộ của bí cảnh đó ở một dòng khảm thêm. Ấn rời cũng rơi ở bí cảnh đó; tông môn giữ bí cảnh đổi được ấn bằng cống hiến.",
+    "3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn): ấn khóa vào nhân vật. 17 bộ còn lại: ấn chưa khảm bán được trên chợ; món đã khảm bán kèm ấn nếu món đó bán được.",
+    "Gỡ ấn bằng Thoát Khảm Phù (PH-CH-008) thì ấn còn nguyên; gỡ không phù thì ấn vỡ."
+  ],
+  "moc": [2,4,7],
+  "tran": {"boToiDa":3,"luc_chien_phan_nghin":{"2":10,"4":30,"7":60},"kinhTeToiDa":100,"tyLeChungTranPhu":150},
+  "ty_le_kham_san_tim_tro_len": 300,
+  "bo": [
+    {
+      "id": "tu_bao",
+      "ten": "Tụ Bảo",
+      "nguon": "linh_thach_quat",
+      "chu_de": "tai_nang",
+      "gan_voi": {"tai_nang":"tu_kim_tien"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"kinh_te","mo_ta":"Thuế chợ −1% (cộng với Tu kim tiền không dưới 2%)","tham_so":{"thueCho":-10}},
+        {
+          "so": 4,
+          "loai": "kinh_te",
+          "mo_ta": "Mỏ linh thạch người mặc trấn giữ +5% sản lượng",
+          "tham_so": {"sanLuongMoLinhThach":50}
+        },
+        {
+          "so": 7,
+          "loai": "kinh_te",
+          "mo_ta": "Mỏ người mặc trấn giữ bị chiếm thì sản lượng chưa thu vẫn về Bảo Khố; Tu kim tiền thêm 1 gian hàng",
+          "tham_so": {"giuSanLuongKhiMatMo":true,"gianHangTuKimTien":1}
+        }
+      ],
+      "an": "NG-AN-001"
+    },
+    {
+      "id": "bach_thao",
+      "ten": "Bách Thảo",
+      "nguon": "duoc_coc",
+      "chu_de": "tai_nang",
+      "gan_voi": {"tai_nang":"tu_duoc"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Hồi máu nhận +4%","tham_so":{"healTaken":40}},
+        {
+          "so": 4,
+          "loai": "kinh_te",
+          "mo_ta": "Mỏ dược trấn giữ +5%; cứ 10 lần thu tay thêm 1 dược liệu cùng bậc",
+          "tham_so": {"sanLuongMoDuoc":50,"themMoi10LanThu":1}
+        },
+        {
+          "so": 7,
+          "loai": "khac_che",
+          "mo_ta": "Lần đầu mỗi trận người mặc hoặc đồng đội kề bên bị giảm hồi máu (Cực âm) thì tẩy ngay; Tu dược nhận ra dược liệu hiếm cao hơn 1 bậc",
+          "tham_so": {"tayGiamHoiMau":1}
+        }
+      ],
+      "an": "NG-AN-002"
+    },
+    {
+      "id": "ban_thach",
+      "ten": "Bàn Thạch",
+      "nguon": "khoang_mach_dong",
+      "chu_de": "tai_nang",
+      "gan_voi": {"tai_nang":"tu_the","loai_chieu":"ho_the"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Khiên nhận được +6%","tham_so":{"khienNhan":60}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Hộ thể của người mặc che thêm chính mình (3 thành 4 mục tiêu, khiên phần thêm bằng 50%)",
+          "tham_so": {"themMucTieuBanThan":1,"heSoKhienThem":500}
+        },
+        {
+          "so": 7,
+          "loai": "hanh_vi",
+          "mo_ta": "Lần đầu mỗi trận máu dưới 30%: hóa đá 1,5 s, miễn sát thương nhưng không ra chiêu; khai khoáng thủ công +5%",
+          "tham_so": {"nguongMau":300,"hoaDaTicks":30,"khaiKhoang":50}
+        }
+      ],
+      "an": "NG-AN-003"
+    },
+    {
+      "id": "liep_thu",
+      "ten": "Liệp Thú",
+      "nguon": "thu_lam",
+      "chu_de": "vai_tro",
+      "gan_voi": {"vai_tro":"san_di_thu","loai_chieu":"tam_xa"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Sát thương lên dị thú và boss +5% (chỉ PvE)","tham_so":{"satThuongPvE":50}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Tầm xa ưu tiên kẻ địch máu thấp nhất trong tầm",
+          "tham_so": {"chonMucTieu":"mau_thap_nhat"}
+        },
+        {
+          "so": 7,
+          "loai": "kinh_te",
+          "mo_ta": "Săn dị thú +10% cơ hội rơi đan thú; đòn Tầm xa đầu tiên mỗi trận PvE trúng thêm 1 mục tiêu",
+          "tham_so": {"roiDanThu":100,"themMucTieuPvE":1}
+        }
+      ],
+      "an": "NG-AN-004"
+    },
+    {
+      "id": "thiet_ky",
+      "ten": "Thiết Kỵ",
+      "nguon": "co_chien_truong",
+      "chu_de": "vai_tro",
+      "gan_voi": {"vai_tro":"tien_tuyen","loai_chieu":"can_quet"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Phòng thủ +3%","tham_so":{"def":30}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Mỗi lần Cận chiến quét, mục tiêu đầu tiên nhận thêm 20% sát thương",
+          "tham_so": {"mucTieuDau":200}
+        },
+        {
+          "so": 7,
+          "loai": "khac_che",
+          "mo_ta": "Đứng hàng trước khi hàng sau còn từ 2 đồng đội: nhận ít hơn 12% sát thương Diện rộng",
+          "tham_so": {"giamDienRong":120}
+        }
+      ],
+      "an": "NG-AN-005"
+    },
+    {
+      "id": "van_uyen",
+      "ten": "Văn Uyên",
+      "nguon": "tang_kinh_dong",
+      "chu_de": "tai_nang",
+      "gan_voi": {"tai_nang":"tu_phap","loai_chieu":"dien_rong"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Mana tối đa +4%","tham_so":{"manaMax":40}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Diện rộng bị khống chế lúc vận công thì hoàn lại 50% hồi chiêu thay vì mất trắng",
+          "tham_so": {"hoanHoiChieu":500}
+        },
+        {
+          "so": 7,
+          "loai": "hanh_vi",
+          "mo_ta": "Chiêu Diện rộng đầu tiên mỗi trận không cần vận công; nộp tàn quyển vào Tàng Kinh Các +5% cống hiến",
+          "tham_so": {"boVanCongLanDau":1,"congHienNopQuyen":50}
+        }
+      ],
+      "an": "NG-AN-006"
+    },
+    {
+      "id": "ngoc_tuy",
+      "ten": "Ngọc Tủy",
+      "nguon": "ngoc_tuy_dong",
+      "chu_de": "he",
+      "gan_voi": {"he":"theo_linh_can"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {
+          "so": 2,
+          "loai": "kinh_te",
+          "mo_ta": "Nén ngọc +2% tỷ lệ (tính chung trần +15% của phù)",
+          "tham_so": {"tyLeNenNgoc":20}
+        },
+        {
+          "so": 4,
+          "loai": "khac_che",
+          "mo_ta": "Kháng hệ đang khắc linh căn chính của người mặc +6%",
+          "tham_so": {"khangHeKhacMinh":60}
+        },
+        {
+          "so": 7,
+          "loai": "khac_che",
+          "mo_ta": "Đầu trận: kháng +8% với hệ xuất hiện nhiều nhất trong đội địch (hòa thì lấy hệ đứng trước trong bảng 12 hệ)",
+          "tham_so": {"khangHeDichNhieuNhat":80}
+        }
+      ],
+      "an": "NG-AN-007"
+    },
+    {
+      "id": "linh_tuyen",
+      "ten": "Linh Tuyền",
+      "nguon": "linh_tuyen_dong",
+      "chu_de": "vai_tro",
+      "gan_voi": {"vai_tro":"hoi_phuc","loai_chieu":"hoi_phuc"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Hiệu quả hồi máu và khiên +4%","tham_so":{"healPower":40}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Hồi phục: hồi mana khi đang vận chỉ −10% thay −20%",
+          "tham_so": {"hoiManaKhiVan":-100}
+        },
+        {
+          "so": 7,
+          "loai": "hanh_vi",
+          "mo_ta": "Khi một đồng đội ngã, chiêu Hồi phục kế tiếp hồi chiêu ngay (1 lần mỗi trận); bế quan +5%",
+          "tham_so": {"lamMoiHoiPhuc":1,"beQuan":50}
+        }
+      ],
+      "an": "NG-AN-008"
+    },
+    {
+      "id": "bang_phach",
+      "ten": "Băng Phách",
+      "nguon": "bang_phach_cung",
+      "chu_de": "he",
+      "gan_voi": {"he":["thuy","cuc_han"],"loai_chieu":"khong_che"},
+      "than": false,
+      "rang_buoc": "Mốc 7 cần ít nhất 1 công pháp hệ chủ Thủy hoặc Cực hàn",
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Thời gian khống chế +5%","tham_so":{"controlTime":50}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%",
+          "tham_so": {"giamDanKhongChe":750}
+        },
+        {
+          "so": 7,
+          "loai": "khac_che",
+          "mo_ta": "Kẻ địch đang bị đóng băng hoặc làm chậm nhận thêm 8% sát thương từ người mặc",
+          "tham_so": {"satThuongMucTieuCham":80}
+        }
+      ],
+      "an": "NG-AN-009"
+    },
+    {
+      "id": "loi_tri",
+      "ten": "Lôi Trì",
+      "nguon": "loi_tri",
+      "chu_de": "he",
+      "gan_voi": {"he":["loi","kim"]},
+      "than": false,
+      "rang_buoc": "Mốc 7 cần ít nhất 1 công pháp hệ chủ Lôi hoặc Kim",
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Chí mạng +2%","tham_so":{"critBonus":20}},
+        {
+          "so": 4,
+          "loai": "chi_so",
+          "mo_ta": "Tê liệt khi chí mạng (Lôi) +0,25 s; xuyên giáp (Kim) +3%",
+          "tham_so": {"teLietTicks":5,"xuyenGiap":30}
+        },
+        {
+          "so": 7,
+          "loai": "hanh_vi",
+          "mo_ta": "Đòn chí mạng thứ 3 mỗi trận nảy sang 1 kẻ địch khác với 50% sát thương",
+          "tham_so": {"thuTuChiMang":3,"heSoNay":500}
+        }
+      ],
+      "an": "NG-AN-010"
+    },
+    {
+      "id": "ngu_thu",
+      "ten": "Ngự Thú",
+      "nguon": "yeu_thu_sao_huyet",
+      "chu_de": "vai_tro",
+      "gan_voi": {"vai_tro":"thu_cuoi"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Hồi chiêu kích phát của thú cưỡi −5%","tham_so":{"hoiChieuKichPhat":-50}},
+        {
+          "so": 4,
+          "loai": "chi_so",
+          "mo_ta": "Hiệu ứng kích phát +10% (vẫn trong trần 15% lực chiến của thú)",
+          "tham_so": {"kichPhat":100}
+        },
+        {"so":7,"loai":"kinh_te","mo_ta":"Tỷ lệ qua thú kiếp và thuần phục +5%","tham_so":{"thuKiep":50,"thuanPhuc":50}}
+      ],
+      "an": "NG-AN-011"
+    },
+    {
+      "id": "co_tong",
+      "ten": "Cổ Tông",
+      "nguon": "co_tong_di_tich",
+      "chu_de": "vai_tro",
+      "gan_voi": {"vai_tro":"phap_bao"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Linh lực tối đa của pháp bảo +20%","tham_so":{"linhLucPhapBao":200}},
+        {"so":4,"loai":"hanh_vi","mo_ta":"Hồi chiêu pháp bảo −15%","tham_so":{"hoiChieuPhapBao":-150}},
+        {
+          "so": 7,
+          "loai": "hanh_vi",
+          "mo_ta": "Pháp bảo kích hoạt thêm 1 lần mỗi trận (tối đa 3)",
+          "tham_so": {"themLanPhapBao":1,"toiDa":3}
+        }
+      ],
+      "an": "NG-AN-012"
+    },
+    {
+      "id": "dan_tien",
+      "ten": "Đan Tiên",
+      "nguon": "dan_tien_dong_phu",
+      "chu_de": "tai_nang",
+      "gan_voi": {"tai_nang":"tu_dan"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Đan dược tự dùng +5%","tham_so":{"danTuDung":50}},
+        {"so":4,"loai":"kinh_te","mo_ta":"Đan dược buff trước trận kéo dài thêm 1 trận","tham_so":{"themTranBuff":1}},
+        {
+          "so": 7,
+          "loai": "kinh_te",
+          "mo_ta": "Luyện đan +5% thành công; Tu đan có 10% không tốn dược liệu phụ",
+          "tham_so": {"luyenDan":50,"khongTonPhuLieu":100}
+        }
+      ],
+      "an": "NG-AN-013"
+    },
+    {
+      "id": "thien_cong",
+      "ten": "Thiên Công",
+      "nguon": "luyen_khi_di_chi",
+      "chu_de": "tai_nang",
+      "gan_voi": {"tai_nang":"tu_ren"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {
+          "so": 2,
+          "loai": "kinh_te",
+          "mo_ta": "Độ bền mất mỗi trận giảm một nửa (2 trận mất 1)",
+          "tham_so": {"matBenMoiTran":500}
+        },
+        {"so":4,"loai":"kinh_te","mo_ta":"Sửa đồ không bị giảm độ bền tối đa","tham_so":{"suaKhongMon":true}},
+        {
+          "so": 7,
+          "loai": "kinh_te",
+          "mo_ta": "Cường hóa +3% thành công (tính chung trần +15%); Tu rèn có 10% rèn ra món thêm 1 dòng khảm",
+          "tham_so": {"cuongHoa":30,"themDongTuRen":100}
+        }
+      ],
+      "an": "NG-AN-014"
+    },
+    {
+      "id": "huyet_anh",
+      "ten": "Huyết Ảnh",
+      "nguon": "huyet_sat_ma_quat",
+      "chu_de": "tai_nang",
+      "gan_voi": {"tai_nang":"sat_thu","loai_chieu":"than_phap"},
+      "than": false,
+      "rang_buoc": "Bộ tà: mặc từ 4 món thì sát nghiệp nhận +50%",
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Sát thương chí mạng +5%","tham_so":{"critDamage":50}},
+        {"so":4,"loai":"hanh_vi","mo_ta":"Thân pháp chỉ lộ vị trí 2 s thay 3 s","tham_so":{"loViTriTicks":40}},
+        {
+          "so": 7,
+          "loai": "hanh_vi",
+          "mo_ta": "Hạ gục kẻ địch bằng Thân pháp thì ẩn thân 1,5 s (1 lần mỗi trận)",
+          "tham_so": {"anThanTicks":30}
+        }
+      ],
+      "an": "NG-AN-015"
+    },
+    {
+      "id": "do_kiep",
+      "ten": "Độ Kiếp",
+      "nguon": "thien_loi_dai",
+      "chu_de": "vai_tro",
+      "gan_voi": {"vai_tro":"do_kiep","loai_chieu":"bua_chu"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Kháng Lôi +4%","tham_so":{"khangLoi":40}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Lần Bùa chú cuối cùng mỗi trận không tốn mana",
+          "tham_so": {"buaCuoiMienMana":1}
+        },
+        {
+          "so": 7,
+          "loai": "kinh_te",
+          "mo_ta": "Lôi kiếp (đột phá, thú kiếp, hộ pháp phi thăng) gây ít hơn 10% sát thương lên người mặc",
+          "tham_so": {"giamLoiKiep":100}
+        }
+      ],
+      "an": "NG-AN-016"
+    },
+    {
+      "id": "van_kiem",
+      "ten": "Vạn Kiếm",
+      "nguon": "van_kiem_trung",
+      "chu_de": "vai_tro",
+      "gan_voi": {"vai_tro":"sat_thuong_don","loai_chieu":"can_don"},
+      "than": false,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Công lực +2%","tham_so":{"atk":20}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Cận chiến đơn đánh mục tiêu dưới 30% máu +15% sát thương",
+          "tham_so": {"nguongMau":300,"satThuong":150}
+        },
+        {
+          "so": 7,
+          "loai": "hanh_vi",
+          "mo_ta": "Mỗi 5 s, đòn Cận chiến đơn kế tiếp phát kiếm khí trúng thêm kẻ đứng sau mục tiêu với 30% sát thương",
+          "tham_so": {"chuKyTicks":100,"heSoKiemKhi":300}
+        }
+      ],
+      "an": "NG-AN-017"
+    },
+    {
+      "id": "chu_thien",
+      "ten": "Chu Thiên",
+      "nguon": "tien_nhan_dong_phu",
+      "chu_de": "tai_nang",
+      "gan_voi": {"tai_nang":"tu_tran","loai_chieu":"tran_phap"},
+      "than": true,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Bày trận nhanh hơn 0,5 s","tham_so":{"bayTranTicks":-10}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên",
+          "tham_so": {"chonViTri":"dong_dich_nhat"}
+        },
+        {
+          "so": 7,
+          "loai": "ho_tran",
+          "mo_ta": "Trấn giữ trận nhãn Hộ Sơn Đại Trận: trận nhãn đó +8% máu; Tu trận tuyệt sát +2%",
+          "tham_so": {"mauTranNhan":80,"tuyetSatTuTran":20}
+        }
+      ],
+      "an": "NG-AN-018"
+    },
+    {
+      "id": "pha_quan",
+      "ten": "Phá Quân",
+      "nguon": "thuong_co_chien_truong",
+      "chu_de": "vai_tro",
+      "gan_voi": {"vai_tro":"cong_thanh"},
+      "than": true,
+      "rang_buoc": "Mốc 4 và 7 chỉ áp trong chiến tranh địa bàn",
+      "moc": [
+        {"so":2,"loai":"ho_tran","mo_ta":"Sát thương lên trận nhãn và hộ trận +5%","tham_so":{"satThuongHoTran":50}},
+        {"so":4,"loai":"ho_tran","mo_ta":"Đòn phá trận đầu tiên mỗi trận công thành ×1,5","tham_so":{"heSoDonDau":1500}},
+        {
+          "so": 7,
+          "loai": "ho_tran",
+          "mo_ta": "Khi công thành, người mặc miễn 1 lần tuyệt sát của trận pháp địch",
+          "tham_so": {"mienTuyetSat":1}
+        }
+      ],
+      "an": "NG-AN-019"
+    },
+    {
+      "id": "hon_don",
+      "ten": "Hỗn Độn",
+      "nguon": "hon_don_bi_canh",
+      "chu_de": "he",
+      "gan_voi": {"he":"moi_he"},
+      "than": true,
+      "rang_buoc": null,
+      "moc": [
+        {"so":2,"loai":"chi_so","mo_ta":"Kháng mọi hệ +2%","tham_so":{"khangMoiHe":20}},
+        {
+          "so": 4,
+          "loai": "khac_che",
+          "mo_ta": "Trúng đòn của hệ khắc mình thì hệ số ×1,5 giảm còn ×1,4",
+          "tham_so": {"heSoBiKhac":1400}
+        },
+        {
+          "so": 7,
+          "loai": "khac_che",
+          "mo_ta": "Trước trận chọn 1 hệ ngụy linh căn: 8 s đầu trận bị đánh tính theo hệ đó thay linh căn thật",
+          "tham_so": {"nguyLinhCanTicks":160}
+        }
+      ],
+      "an": "NG-AN-020"
+    }
+  ]
+}
