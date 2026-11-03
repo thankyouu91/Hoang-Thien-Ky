@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { Battle, baseStats, composeTechnique, type UnitSpec } from "@ktlp/sim";
-import { gearStats, withGear, kieuInfo, maxInlayLines, setTier, isKnownSetStat, yChauMod, type EquipItem, type InlayLine } from "../src/index.ts";
+import { gearStats, withGear, kieuInfo, maxInlayLines, setTier, isKnownSetStat, yChauMod, toSkillMod, type EquipItem, type InlayLine } from "../src/index.ts";
 import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
 import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
 
@@ -181,7 +181,7 @@ test("mọi Ý châu trong ngoc.json đổi được sang cách chỉnh loại c
   assert.deepEqual(yChauMod("NG-YC-002").mod, { extraTargets: 1, extraTargetDamage: 500 });
   assert.deepEqual(yChauMod("NG-YC-004").mod, { castTicks: -6 });
   assert.deepEqual(yChauMod("NG-YC-006").mod, { pick: "lowest_hp", pickUses: 1 });
-  assert.deepEqual(yChauMod("NG-YC-008").mod, { pick: "lowest_hp", manaCost: 900 }); // ×2,7 thay ×3
+  assert.equal(yChauMod("NG-YC-008").mod.manaCost, 900); // ×2,7 thay ×3; phần còn lại của Cầm Ý đang đổi, xem test riêng
   assert.deepEqual(yChauMod("NG-YC-010").mod, { pick: "back_row_lowest_hp" });
 });
 
@@ -198,4 +198,12 @@ test("Ý châu vào trận: Cung Ý cho tầm xa thêm 1 ô", () => {
   const spec: UnitSpec = { id: 1, level: LV, element: "kim", row: 1, ...baseStats(LV), techniques: [bow] };
   const range = (s: UnitSpec) => new Battle({ seed: 1, teamA: [s], teamB: [{ ...spec, id: 101 }] }).units.find((u) => u.id === 1)!.slots[0].range;
   assert.equal(range(withGear(spec, [item("TB-KI-001", { kham: [yc("NG-YC-003")] })])), range(spec) + 1000);
+});
+
+test("Cầm Ý mới (đề xuất của phiên set đồ): hồi tràn thành khiên 50% giữ 3 s, mana ×2,7", () => {
+  assert.deepEqual(toSkillMod("hoi_phuc", { tranThanhKhien: 500, khienTicks: 60, heSoMana: 2700 }, "NG-YC-008"), {
+    overhealShield: 500, overhealShieldTicks: 60, manaCost: 900,
+  });
+  assert.throws(() => toSkillMod("can_don", { heSoMana: 2700 }, "x"));
+  assert.throws(() => toSkillMod("can_don", { khoaLa: 1 }, "x"));
 });

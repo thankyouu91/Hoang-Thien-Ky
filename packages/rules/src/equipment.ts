@@ -152,9 +152,14 @@ export function yChauMod(ma: string): { loai: SkillType; mod: SkillMod } {
   if (!has(Y_CHAU, ma)) throw new Error(`Không có Ý châu ${ma}`);
   const y = Y_CHAU[ma];
   const loai = y.loai_chieu as SkillType;
+  return { loai, mod: toSkillMod(loai, y.tham_so, ma) };
+}
+
+/** Đổi bộ tham_so của Ý châu cho loại chiêu `loai` thành SkillMod; `ma` chỉ để báo lỗi. */
+export function toSkillMod(loai: SkillType, thamSo: Record<string, number | string>, ma: string): SkillMod {
   const mod: SkillMod = {};
-  for (const key of Object.keys(y.tham_so)) {
-    const v = y.tham_so[key];
+  for (const key of Object.keys(thamSo)) {
+    const v = thamSo[key];
     const num = (): number => {
       if (typeof v !== "number") throw new Error(`${ma}: ${key} phải là số`);
       return v;
@@ -165,6 +170,8 @@ export function yChauMod(ma: string): { loai: SkillType; mod: SkillMod } {
     else if (key === "tamMilliO") mod.rangeBonus = num();
     else if (key === "vanCongTicks" || key === "bayTranTicks") mod.castTicks = num();
     else if (key === "soLan") mod.pickUses = num();
+    else if (key === "tranThanhKhien") mod.overhealShield = num();
+    else if (key === "khienTicks") mod.overhealShieldTicks = num();
     else if (key === "heSoMana") {
       if (loai !== "hoi_phuc") throw new Error(`${ma}: heSoMana chỉ dùng cho hồi phục`);
       mod.manaCost = Math.trunc((num() * ONE) / GEAR.healManaTimes);
@@ -173,7 +180,7 @@ export function yChauMod(ma: string): { loai: SkillType; mod: SkillMod } {
       mod.pick = PICKS[v];
     } else throw new Error(`${ma}: chưa biết áp ${key}`);
   }
-  return { loai, mod };
+  return mod;
 }
 
 /** Hệ số nhân của một món theo phần nghìn: độ hiếm × (1 + 3% mỗi nấc) × (1 + thưởng bí cảnh). */

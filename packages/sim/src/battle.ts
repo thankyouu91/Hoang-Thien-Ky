@@ -30,6 +30,8 @@ export interface SkillMod {
   manaCost?: number; // phần nghìn mana của chiêu
   pick?: TargetPick;
   pickUses?: number; // số lần ra chiêu đầu mỗi trận dùng `pick`; không ghi là mọi lần
+  overhealShield?: number; // hồi phục: phần nghìn phần hồi tràn quá máu tối đa thành khiên
+  overhealShieldTicks?: number; // khiên đó giữ bao lâu; mặc định như khiên hộ thể
 }
 
 export interface UnitSpec {
@@ -345,7 +347,7 @@ export class Battle {
       const type = s.tech.type;
       let targets: Unit[] = [];
       const pick = s.pickLeft !== 0 ? s.mod.pick : undefined;
-      // Hồi phục mặc định đã chọn % máu thấp nhất, nên `lowest_hp` của Cầm Ý không đổi gì.
+      // Hồi phục luôn chọn đồng minh % máu thấp nhất; `pick` không áp cho hồi phục.
       if (type === "hoi_phuc") targets = this.pickAllies(u, s);
       else if (type === "ho_the") targets = this.pickGuarded(u, s, foe, pick);
       else if (s.radius === 0) targets = this.pickEnemies(u, s, u.pos, s.range, pick);
@@ -572,12 +574,14 @@ export class Battle {
     }
   }
 
-  /** Hồi máu: nhân hiệu quả hồi máu của người hồi, hồi máu nhận của người nhận, trừ phần bị Cực âm giảm. */
-  private restore(src: Unit, t: Unit, amount: number): void {
+  /** Hồi máu: nhân hiệu quả hồi máu của người hồi, hồi máu nhận của người nhận, trừ phần bị Cực âm giảm. Trả về phần tràn quá máu tối đa. */
+  private restore(src: Unit, t: Unit, amount: number): number {
     let a = mul(amount, ONE + src.b.healPower);
     a = mul(a, ONE + t.b.healTaken);
     if (this.tick < t.healCutUntil) a = mul(a, ONE - t.healCut);
-    t.curHp = Math.min(t.hp, t.curHp + a);
+    const over = Math.max(0, t.curHp + a - t.hp);
+    t.curHp += a - over;
+    return over;
   }
 
   /** Khiên không cộng dồn, giữ khiên lớn hơn; nhân hiệu quả khiên của người tạo và khiên nhận được của người nhận. */
@@ -586,9 +590,18 @@ export class Battle {
     t.shieldUntil = this.tick + R.shieldTicks;
   }
 
+  /** Hồi phục; Cầm Ý đổi một phần hồi tràn thành khiên (không cộng dồn, giữ khiên lớn hơn, nhân khiên nhận được của người nhận). */
   private heal(u: Unit, s: Slot, targets: Unit[]): void {
     const amount = Math.trunc((s.tech.damage * u.atk) / (100 * ONE));
-    for (const t of targets) this.restore(u, t, amount);
+    for (const t of targets) {
+      const over = this.restore(u, t, amount);
+      if (over <= 0 || !s.mod.overhealShield) continue;
+      const shield = mul(mul(over, s.mod.overhealShield), ONE + t.b.shieldTaken);
+      if (shield > t.shield) {
+        t.shield = shield;
+        t.shieldUntil = this.tick + (s.mod.overhealShieldTicks ?? R.shieldTicks);
+      }
+    }
   }
 
   /** Hộ thể: khiên cho đồng minh, kèm đòn ×0,2 nếu địch đứng sát. Tu thể cộng 10% khiên. */

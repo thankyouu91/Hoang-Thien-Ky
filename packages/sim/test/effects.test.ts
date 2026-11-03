@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   Battle, BATTLE, composeTechnique, hitDamage, mul, techniqueFx, unitBonuses,
-  type Element, type SkillType, type Technique, type UnitSpec, type Unit, type BattleInput,
+  type Element, type SkillType, type SkillMod, type Technique, type UnitSpec, type Unit, type BattleInput,
 } from "../src/index.ts";
 
 const tech = (type: SkillType, element: Element, sub: Element = element): Technique =>
@@ -389,4 +389,26 @@ test("Côn Ý: hộ thể che trước đồng minh bị nhiều địch nhắm 
   };
   assert.deepEqual(run(), [2, 3, 4]);
   assert.deepEqual(run("most_targeted"), [2, 3, 5]);
+});
+
+test("Cầm Ý: 50% phần hồi tràn quá máu tối đa thành khiên giữ 3 s; khiên nhận được của người nhận vẫn tính", () => {
+  const run = (missing: number, mod: SkillMod, ally: Partial<UnitSpec> = {}) => {
+    const { b } = castNow(
+      { seed: 1, teamA: [unit(1, 1, [tech("hoi_phuc", "moc")], { skillMods: { hoi_phuc: mod } }), unit(2, 0, [tech("can_don", "kim")], { manaMax: 0, ...ally })], teamB: [inert(101)] },
+      (x) => {
+        place(x, { 1: 3000, 2: 4000, 101: 9000 });
+        get(x, 2).curHp = get(x, 2).hp - missing;
+      },
+    );
+    return get(b, 2);
+  };
+  const healed = 10_000 - run(10_000, {}).hp + run(10_000, {}).curHp; // lượng hồi khi không tràn
+  const mod = { overhealShield: 500, overhealShieldTicks: 60 };
+  assert.equal(run(10, {}).shield, 0);
+  const t = run(10, mod);
+  assert.equal(t.curHp, t.hp);
+  assert.equal(t.shield, mul(healed - 10, 500));
+  assert.equal(t.shieldUntil, 60);
+  assert.equal(run(10, mod, { bonuses: { shieldTaken: 60 } }).shield, mul(mul(healed - 10, 500), 1060));
+  assert.equal(run(10_000, mod).shield, 0); // không tràn thì không có khiên
 });
