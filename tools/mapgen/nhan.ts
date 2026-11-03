@@ -12,7 +12,7 @@
 // Ra: data/maps/<vị diện>_nhan.json; --xem vẽ thêm ảnh SVG xem trước ở vài độ phóng: data/maps/<vị diện>_nhan_xem_<độ phóng>.svg
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
-import { assignCells, FOREST, HIGH, loadRegions } from "./vung.ts";
+import { assignCells, centreCells, FOREST, HIGH, loadRegions } from "./vung.ts";
 import { mulberry32 } from "./diem.ts";
 import { backgroundTiles } from "./kiem.ts";
 import { nameFeatures } from "./ten.ts";
@@ -23,12 +23,12 @@ const MAX_ZOOM = 5; // camera.maxZoom của proto
 /** Cỡ hộp giữ chỗ, px CSS: ô nút 20 (thành chủ 26) cách nhau 6 như proto; chấm 7 cách nhau 4; tên cao 14, cách hình 4 */
 const BOX = { node: 20, big: 26, gap: 6, dot: 7, dotGap: 4, font: 11, dotFont: 10, charW: 0.56, line: 14, below: 4 };
 /** Thứ tự quan trọng của loại điểm, đầu danh sách xếp trước */
-const ORDER = ["thanh_chu", "cua_bi_canh", "son_mon", "deo", "ben_do", "linh_tuyen", "hang_di_thu", "mo_linh_thach", "mo_duoc", "mo_quang"];
+const ORDER = ["thanh_chu", "hang_thu_hoang", "cua_bi_canh", "son_mon", "deo", "ben_do", "linh_tuyen", "hang_di_thu", "mo_linh_thach", "mo_duoc", "mo_quang"];
 /** Hình hiện: mỏ nhiều và ít cần nhìn từ xa nên là chấm nhỏ (như làng nhỏ trên bản đồ cổ), còn lại là ô nút. Ô nút chỉ hiện
  * khi tên cũng có chỗ (như bản đồ mẫu, ô nào cũng kèm tên); chấm hiện trước, tên hiện khi đủ chỗ */
 const FORM: Record<string, "nut" | "cham"> = { mo_linh_thach: "cham", mo_duoc: "cham", mo_quang: "cham" };
 /** Độ phóng sàn theo loại: thu nhỏ chỉ còn thành chủ, cửa bí cảnh, sơn môn; phóng dần mới hiện đường đi, hang, mỏ */
-const FLOOR: Record<string, number> = { son_mon: 0.7, deo: 1.1, ben_do: 1.1, linh_tuyen: 1.1, hang_di_thu: 1.8, mo_linh_thach: 2.4, mo_duoc: 2.4, mo_quang: 2.4 };
+const FLOOR: Record<string, number> = { hang_thu_hoang: 0.7, son_mon: 0.7, deo: 1.1, ben_do: 1.1, linh_tuyen: 1.1, hang_di_thu: 1.8, mo_linh_thach: 2.4, mo_duoc: 2.4, mo_quang: 2.4 };
 /** Địa hình đặt tên: núi theo độ cao, còn lại theo biome Azgaar; mảng ít ô hơn MIN_PATCH thì không đặt tên */
 const BIOME_KIND: Record<string, string> = {
   Grassland: "dong_co", Savanna: "dong_co", "Cold desert": "sa_mac", "Hot desert": "sa_mac", Wetland: "dam_lay", Tundra: "bang_nguyen", Glacier: "bang_nguyen",
@@ -190,6 +190,7 @@ type World = {
   types: Record<string, { label: string; color: string }>;
   tiers: Record<string, { label: string; color: string }>;
   regions: { code: string; name: string; element: string; file: string }[];
+  zones?: { code: string; name: string; element: string; file: string }[];
   borders: { between: [string, string | null]; path: [number, number][] }[];
 };
 
@@ -198,10 +199,13 @@ function build(plane: string, dataDir: URL) {
   const map = loadPlaneMap(plane);
   const regions = loadRegions(plane);
   const region = assignCells(map, regions);
-  const pointsOf = world.regions.map((r) => (JSON.parse(readFileSync(new URL(r.file, dataDir), "utf8")) as { points: Point[] }).points);
+  // Cấm Khu ở lòng giữa (cam_khu.ts) tính như vùng thứ 13: ô lòng giữa mang chỉ số ngay sau 12 vùng
+  const areas = [...world.regions, ...(world.zones ?? [])];
+  if (world.zones?.length) for (const c of centreCells(map, region)) region[c] = world.regions.length;
+  const pointsOf = areas.map((r) => (JSON.parse(readFileSync(new URL(r.file, dataDir), "utf8")) as { points: Point[] }).points);
 
   // Tên vùng ở chỗ rộng nhất của vùng
-  const regionLabels = world.regions.map((r, k) => {
+  const regionLabels = areas.map((r, k) => {
     const { cell, r: radius } = widest(map, map.cells.filter((c) => region[c.i] === k).map((c) => c.i));
     return { code: r.code, name: r.name, x: r1(map.cells[cell].p[0]), y: r1(map.cells[cell].p[1]), r: r1(radius) };
   });
@@ -242,7 +246,7 @@ function build(plane: string, dataDir: URL) {
     .filter((r) => r.k !== undefined && r.cells >= 3) as { k: number; kind: string; path: [number, number][]; cells: number }[];
 
   // Đặt tên theo hệ của vùng, không trùng tên điểm trong vùng
-  world.regions.forEach((r, k) => {
+  areas.forEach((r, k) => {
     const used = new Set(pointsOf[k].map((p) => p.name));
     nameFeatures([...features.filter((f) => f.region === k), ...rivers.filter((v) => v.k === k)] as { kind: string; name?: string }[], r.element, mulberry32(SEED + k), used);
   });
@@ -256,7 +260,7 @@ function build(plane: string, dataDir: URL) {
   // Điểm
   const placed = placeAll(pointsOf, extras);
   const points = Object.fromEntries(
-    world.regions.map((r, k) => {
+    areas.map((r, k) => {
       const z: (number | null)[] = [], t: (number | null)[] = [];
       for (const it of placed[k]) (z[it.p.id] = up2(it.z)), (t[it.p.id] = up2(it.t));
       return [r.code, { z, t }];
@@ -264,10 +268,10 @@ function build(plane: string, dataDir: URL) {
   );
 
   const featureLabels = (features as (typeof features[number] & { name: string })[]).map((f, i) => ({
-    region: world.regions[f.region].code, kind: f.kind, name: f.name, x: r1(extras[i].x), y: r1(extras[i].y), r: r1(f.r), cells: f.cells.length, z: up2(extras[i].z),
+    region: areas[f.region].code, kind: f.kind, name: f.name, x: r1(extras[i].x), y: r1(extras[i].y), r: r1(f.r), cells: f.cells.length, z: up2(extras[i].z),
   }));
   const riverLabels = (rivers as (typeof rivers[number] & { name: string })[]).map((v) => ({
-    region: world.regions[v.k].code,
+    region: areas[v.k].code,
     kind: v.kind,
     name: v.name,
     // chữ chạy dọc đường sông khi đường dài hơn chữ cộng hai đầu chừa 12 px
@@ -289,7 +293,7 @@ function build(plane: string, dataDir: URL) {
     features: featureLabels,
     rivers: riverLabels,
   };
-  return { out, world, placed, pointsOf, extras };
+  return { out, world, areas, placed, pointsOf, extras };
 }
 
 /** Ảnh SVG xem trước khung nhìn W × H px tâm (cx, cy) ở độ phóng z, vẽ như proto sẽ vẽ từ file nhãn */
@@ -319,7 +323,7 @@ function preview(plane: string, dataDir: URL, data: ReturnType<typeof build>, z:
       svg.push(`<text x="${sx(r.x)}" y="${sy(r.y)}" font-family="Georgia, serif" font-style="italic" font-weight="700" font-size="18" fill="#5a2a17" letter-spacing="4" text-anchor="middle" dominant-baseline="middle" ${halo}>${esc(r.name)}</text>`);
   // điểm: hình rồi tên
   const icons: string[] = [], names: string[] = [];
-  world.regions.forEach((r, k) => {
+  data.areas.forEach((r, k) => {
     const he = new URL(`../../assets/pixellab/he/${r.element}.png`, import.meta.url);
     const icon = existsSync(he) ? `data:image/png;base64,${readFileSync(he).toString("base64")}` : "";
     for (const it of placed[k]) {
@@ -382,7 +386,7 @@ if (import.meta.main) {
   if (process.argv.includes("--xem")) {
     const lo = data.world.regions.findIndex((r) => r.code === "loi_dinh_coc");
     const capital = placed[lo].find((it) => it.p.type === "thanh_chu")!.p;
-    for (const [z, x, y] of [[0.85, 768, 512], [1.8, capital.x + 60, capital.y - 40], [3.5, capital.x, capital.y]]) {
+    for (const [z, x, y] of [[0.85, 768, 512], [1.8, capital.x + 60, capital.y - 40], [3.5, capital.x, capital.y], [1.6, 740, 490]]) {
       const svg = new URL(`${plane}_nhan_xem_${z}.svg`, dataDir);
       writeFileSync(svg, preview(plane, dataDir, data, z, x, y));
       console.log(`  ghi ${svg.pathname}`);

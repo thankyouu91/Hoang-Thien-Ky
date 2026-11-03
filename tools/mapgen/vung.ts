@@ -86,12 +86,7 @@ export function regionFrame(map: AzgaarMap, region: Int8Array, k: number, pad = 
 export function ringPosition(map: AzgaarMap, region: Int8Array): (x: number, y: number) => number {
   const outside = map.cells.filter((c) => region[c.i] < 0);
   if (!outside.length) return () => 0;
-  const isRim = new Uint8Array(region.length);
-  const start = outside.reduce((a, b) => (b.p[0] < a.p[0] ? b : a)).i;
-  const queue = [start];
-  isRim[start] = 1;
-  for (let q = 0; q < queue.length; q++)
-    for (const n of map.cells[queue[q]].c) if (!isRim[n] && region[n] < 0) (isRim[n] = 1), queue.push(n);
+  const isRim = rimMask(map, region);
   const rim = outside.filter((c) => isRim[c.i]).map((c) => c.p);
   const centre = outside.filter((c) => !isRim[c.i]).map((c) => c.p);
   const nearest = (list: [number, number][], x: number, y: number) => {
@@ -104,6 +99,25 @@ export function ringPosition(map: AzgaarMap, region: Int8Array): (x: number, y: 
     const toRim = nearest(rim, x, y), toCentre = nearest(centre, x, y);
     return toRim / (toRim + toCentre);
   };
+}
+
+/** Ô ngoài vùng thuộc rìa ngoài: mảng ngoài vùng liền với ô sát mép trái bản đồ */
+function rimMask(map: AzgaarMap, region: Int8Array): Uint8Array {
+  const isRim = new Uint8Array(region.length);
+  const start = map.cells.filter((c) => region[c.i] < 0).reduce((a, b) => (b.p[0] < a.p[0] ? b : a)).i;
+  const queue = [start];
+  isRim[start] = 1;
+  for (let q = 0; q < queue.length; q++)
+    for (const n of map.cells[queue[q]].c) if (!isRim[n] && region[n] < 0) (isRim[n] = 1), queue.push(n);
+  return isRim;
+}
+
+/** Lòng giữa (Linh Hải) của vị diện: các ô ngoài vùng không liền với rìa ngoài. Cấm Khu (cam_khu.ts) nằm trên các ô này;
+ * assignCells vẫn coi chúng là ngoài vùng, nên 12 vùng và trường ring của điểm không đổi */
+export function centreCells(map: AzgaarMap, region: Int8Array): number[] {
+  if (!map.cells.some((c) => region[c.i] < 0)) return [];
+  const isRim = rimMask(map, region);
+  return map.cells.filter((c) => region[c.i] < 0 && !isRim[c.i]).map((c) => c.i);
 }
 
 export const FOREST = new Set(["Tropical seasonal forest", "Temperate deciduous forest", "Tropical rainforest", "Temperate rainforest", "Taiga"]);

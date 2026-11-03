@@ -78,12 +78,18 @@ export function loadAzgaar(file: string | URL): AzgaarMap {
   };
 }
 
-/** Bản đồ của một vị diện từ bản rút gọn nén; Full JSON mới hơn (vừa xuất lại từ Azgaar) thì ghi lại bản rút gọn trước */
+/** Bản đồ của một vị diện từ bản rút gọn nén; Full JSON mới hơn (vừa xuất lại từ Azgaar) thì ghi lại bản rút gọn trước.
+ * Full JSON phải là bản xuất lúc vừa sinh bản đồ: Azgaar sửa độ cao khi nạp lại .map (lệch tới ±9 ở 5.615 ô vùng), xuất lại
+ * từ bản đã nạp thì chạy lại diem.ts sẽ xê dịch điểm của 12 vùng. Biome lòng giữa (Cấm Khu, cam_khu.ts --biome) áp thêm từ
+ * <vị diện>_cam_khu_biome.json, nên bản rút gọn của 12 vùng giữ nguyên */
 export function loadPlaneMap(plane: string): AzgaarMap {
   const dataDir = new URL("../../data/maps/", import.meta.url);
   const full = new URL(`${plane}_azgaar_full.json`, dataDir);
   const compact = new URL(`${plane}_azgaar.json.gz`, dataDir);
   if (existsSync(full) && (!existsSync(compact) || statSync(full).mtimeMs > statSync(compact).mtimeMs))
     writeFileSync(compact, gzipSync(JSON.stringify(loadAzgaar(full)), { level: 9 }));
-  return JSON.parse(gunzipSync(readFileSync(compact)).toString("utf8"));
+  const map = JSON.parse(gunzipSync(readFileSync(compact)).toString("utf8")) as AzgaarMap;
+  const zone = new URL(`${plane}_cam_khu_biome.json`, dataDir);
+  if (existsSync(zone)) for (const [cell, biome] of (JSON.parse(readFileSync(zone, "utf8")) as { cells: [number, number][] }).cells) map.cells[cell].biome = biome;
+  return map;
 }

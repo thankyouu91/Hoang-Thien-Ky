@@ -15,6 +15,8 @@ const BY_ELEMENT: Record<string, string[]> = {
   cuc_duong: ["Dương", "Liệt", "Sa", "Xích", "Diệu", "Nhật", "Hỏa", "Kim"],
   cuc_am: ["U", "Uyên", "Ám", "Huyền", "Cửu", "Âm", "Tịch", "Mặc"],
   cuc_han: ["Băng", "Tuyết", "Hàn", "Sương", "Ngân", "Bạch", "Lẫm", "Đông"],
+  // Linh Hải Cấm Khu (cam_khu.ts): không theo hệ nào, tên cổ và dữ
+  hon_don: ["Hỗn", "Độn", "Hoang", "Cổ", "Huyết", "Thái", "Hồng", "Ma", "Uyên", "Tịch", "Huyền", "Diệt"],
 };
 const COMMON = [
   "Thanh", "Vân", "Nguyệt", "Hạc", "Long", "Hổ", "Ngọc", "Tùng", "Thạch", "Linh", "Tiên", "Phượng", "Lộc", "An", "Bình",
@@ -31,6 +33,7 @@ const SUFFIX: Record<string, string[]> = {
   linh_tuyen: ["Tuyền"],
   cua_bi_canh: ["Bí Cảnh"],
   hang_di_thu: ["Động", "Quật", "Huyệt"],
+  hang_thu_hoang: ["Hoàng Sào", "Vương Huyệt"],
   deo: ["Quan"],
   ben_do: ["Độ"],
 };

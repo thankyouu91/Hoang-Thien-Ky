@@ -16,7 +16,7 @@ const SEED = 20261102;
  * 80 quặng, 80 dược, 10 linh tuyền); ngày 2026-11-02 người dùng giảm mỏ linh thạch và mỏ dược còn một nửa vì quá nhiều đảo
  * giống nhau, tổng bớt đúng phần đó (450 → 350) để số vị trí sơn môn không đổi. Đèo và bến đò tuỳ địa hình, vị trí sơn môn
  * lấy phần còn lại cho đủ tổng. Hang dị thú và số bến đò tối đa là đề xuất */
-const MEAN_COUNTS = { total: 350, mo_linh_thach: 60, mo_quang: 80, mo_duoc: 40, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
+export const MEAN_COUNTS = { total: 350, mo_linh_thach: 60, mo_quang: 80, mo_duoc: 40, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
 /** Bậc cửa bí cảnh (người dùng chia ngày 2026-11-02; hình cửa xanh, vàng, đỏ) */
 export const GATE_TIERS = ["thap", "vua", "cao"] as const;
 /** Mỗi vùng ít nhất một cửa bí cảnh dưới cấp nguy hiểm này, cho nhiệm vụ đầu game (đề xuất của phiên nhiệm vụ: nhiệm vụ

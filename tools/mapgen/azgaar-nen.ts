@@ -29,17 +29,22 @@ export async function render(name: string, frame: Frame, scale = SCALE): Promise
   download(await draw(frame, scale), `${name}.webp`);
 }
 
-/** Vẽ nhiều khung rồi tải một file ZIP; `dryRun` chỉ vẽ và trả kích thước, không tải */
-export async function renderZip(zipName: string, items: { name: string; frame: Frame }[], dryRun = false, scale = SCALE) {
+/** Vẽ nhiều khung rồi tải một file ZIP; `dryRun` chỉ vẽ và trả kích thước, không tải. Có `sink` (địa chỉ của nhan-file.ts)
+ * thì gửi thẳng từng ảnh vào data/maps/<zipName>/<name>.webp, không làm ZIP */
+export async function renderZip(zipName: string, items: { name: string; frame: Frame }[], dryRun = false, scale = SCALE, sink = "") {
   // đường dẫn mô-đun của máy chủ dev Vite (npm run dev); bản build không có
   const { default: JSZip } = await import(/* @vite-ignore */ "/@id/jszip");
   const zip = new JSZip();
   const sizes: Record<string, number> = {};
   for (const { name, frame } of items) {
     const blob = await draw(frame, scale);
-    zip.file(`${name}.webp`, blob);
+    if (sink && !dryRun) {
+      const reply = await fetch(`${sink}${zipName}/${name}.webp`, { method: "PUT", body: blob, headers: { "Content-Type": "image/webp" } });
+      if (!reply.ok) throw new Error(`Máy nhận file từ chối ${name}: ${reply.status}`);
+    } else zip.file(`${name}.webp`, blob);
     sizes[name] = Math.round(blob.size / 1024);
   }
+  if (sink && !dryRun) return { kb: sizes };
   const archive: Blob = await zip.generateAsync({ type: "blob" }); // WebP đã nén, không nén thêm
   if (!dryRun) download(archive, `${zipName}.zip`);
   return { kb: sizes, zipKb: Math.round(archive.size / 1024) };

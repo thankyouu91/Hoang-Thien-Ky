@@ -115,6 +115,19 @@ Xong khi: trận 10 đấu 10 chạy 60 khung/giây trên một máy Android t�
     - Lỗi: ghim nhân vật đi theo đường thẳng nối hai đầu chuyến chứ không theo đường đi, lệch tới 7 đơn vị bản đồ.
     - Dữ liệu sửa: `edges[].path` giờ luôn đi từ điểm a tới b (trước đó 1.778/5.165 đường lưu ngược chiều), file điểm 12 vùng chỉ đổi chiều path.
     - Phần proto (ghim bám đường, vùng chạm rộng hơn trên màn cảm ứng, chạm vào tên cũng mở điểm, viền khung mini) giao phiên dashboard.
+- Đổi ngày 2026-11-03 (người dùng): lòng giữa đang trống thành **Linh Hải Cấm Khu**.
+    - Ý người dùng: khu riêng, tài nguyên như các khu quanh nhưng rơi đồ cao hơn khoảng 30%. Thú cấp cao: dưới cấp 200 vào có thể chết ngay hoặc trọng thương; cấp 200–250 trở lên phải đi nhóm hoặc theo tông môn. Boss quanh khu. Tông môn muốn dựng hay dời vào phải trảm quanh khu, chỉ trảm 1 boss mà dời vào thì bị thú triều đánh liên tục trong ngày, bị diệt bên trong là mất tất cả.
+    - Luật chỉ dev biết, người chơi chỉ thấy cảnh báo "CẤM KHU cực kỳ nguy hiểm" kèm lời đồn rơi bảo vật nhiều. Luật nằm ở `data/bi_mat/ha_cam_khu.json` (thư mục không vào bản build; xem `data/bi_mat/README.md`).
+    - Boss là **Thú Hoàng**, phẩm dị thú Huyền: GDD không có phẩm dị thú "Hoàng", phẩm cao nhất ở Hạ vị là Huyền.
+    - Bản đồ:
+        - `tools/mapgen/cam_khu.ts` → `data/maps/ha_diem_cam_khu.json`, cùng định dạng file điểm vùng, thêm `warning` và `links` nối cửa ải ra vùng bên.
+        - 542 điểm: 10 cửa ải (mỗi vùng giáp ranh một cửa), 12 hang Thú Hoàng (loại mới `hang_thu_hoang`) quanh khu, 20 vị trí sơn môn; mỏ, linh tuyền, cửa bí cảnh, hang dị thú theo diện tích như các vùng.
+        - 1.013 lối mòn. Cấp nguy hiểm 200 ở cửa ải, tăng tới 250 ở chỗ sâu; Thú Hoàng 280. 16/16 phép kiểm.
+    - Cảnh: lòng giữa tô rừng cổ, trảng cỏ, đầm lầy (`ha_cam_khu_biome.json`, `loadPlaneMap` áp lên bộ đệm). Trong Azgaar, `azgaar-cam-khu.ts` tô biome và vẽ lại biểu tượng địa hình riêng lòng giữa (`Relief.regenerate`).
+    - `.map` mới lưu cả biểu tượng địa hình (bản cũ không lưu, Azgaar sinh ngẫu nhiên mỗi lần vẽ). Đã vẽ lại 86 ô nền, 13 ảnh nền vùng (thêm `ha_nen_cam_khu`), 13 ảnh mini.
+    - Giữ nguyên bộ đệm cũ: Azgaar sửa độ cao khi nạp lại `.map` (lệch tới ±9 ở 5.615 ô vùng). Nếu dựng bộ đệm từ bản đã nạp, chạy lại `diem.ts` sẽ xê dịch điểm 12 vùng. Đã kiểm: chạy lại `diem.ts` 12 vùng ra file y hệt.
+    - `ha_vi_dien.json` thêm `zones` và loại `hang_thu_hoang`; 10 đoạn ranh giới giáp khu ghi `cam_khu` thay cho `null`. `ha_nhan.json` có thêm điểm, tên khu và 6 tên địa hình của Cấm Khu.
+    - Giao phiên khác: giao diện cảnh báo và lớp phủ khu (dashboard), ký hiệu hệ `hon_don` (PixelLab), ghi luật vào GDD và packages/sim (CDD).
 - Diện tích 12 vùng trong khung chênh nhau tới 2,5 lần (Bích Ba Hải nhỏ nhất, Cuồng Phong Nguyên lớn nhất). Đã chọn ngày 2026-11-02: chia số điểm theo diện tích (xem `diem.ts` ở trên).
 - Prototype vẽ bản đồ, kéo và zoom, sương mù theo số chặng.
 - PixelLab: icon 10 loại điểm.
