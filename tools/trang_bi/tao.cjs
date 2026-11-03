@@ -72,14 +72,15 @@ const KHI_HINH_MOI = {
 };
 
 // Ý châu: ngọc đặc biệt chỉ khảm vào vũ khí, đổi hành vi một loại chiêu. Thứ tự như KHI_HINH.
+// Số tick là phần trừ đi, áp sau phần cắt % của tài năng, như set.json; sàn 1 s cho bày trận, 0,5 s cho vận công.
 const Y_CHAU = [
   ["Kiếm Ý Châu", "Cận chiến đơn xuyên 15% khiên của mục tiêu", { xuyenKhien: 150 }],
   ["Đao Ý Châu", "Cận chiến quét trúng thêm 1 mục tiêu (5 thành 6); mục tiêu thêm nhận 50% sát thương", { themMucTieu: 1, heSoMucTieuThem: 500 }],
   ["Cung Ý Châu", "Tầm xa +1 ô; không cộng dồn với tầm +1 ô của Âm lãnh (mỗi công pháp tối đa +1 ô)", { tamMilliO: 1000 }],
-  ["Phiến Ý Châu", "Diện rộng vận công 0,7 s thay 1 s", { vanCongTicks: 14 }],
+  ["Phiến Ý Châu", "Diện rộng vận công nhanh hơn 0,3 s (1 s còn 0,7 s)", { vanCongTicks: -6 }],
   ["Côn Ý Châu", "Hộ thể đặt khiên lên đồng đội đang bị nhiều kẻ địch nhắm nhất thay vì đồng đội gần nhất", { chonMucTieu: "bi_nham_nhieu_nhat" }],
   ["Bút Ý Châu", "Lần Bùa chú đầu tiên mỗi trận nhắm kẻ địch máu thấp nhất", { chonMucTieu: "mau_thap_nhat", soLan: 1 }],
-  ["Kỳ Ý Châu", "Trận pháp bày trong 4,5 s thay 5 s", { bayTranTicks: 90 }],
+  ["Kỳ Ý Châu", "Bày trận nhanh hơn 0,5 s (5 s còn 4,5 s)", { bayTranTicks: -10 }],
   ["Cầm Ý Châu", "Hồi phục chọn đồng đội máu thấp nhất trước; tốn mana ×2,7 thay ×3", { chonMucTieu: "mau_thap_nhat", heSoMana: 2700 }],
   ["Tiêu Ý Châu", "Khống chế ưu tiên kẻ địch đang vận công (diện rộng, trận pháp)", { chonMucTieu: "dang_van_cong" }],
   ["Thương Ý Châu", "Thân pháp lướt tới kẻ địch hàng sau có máu thấp nhất", { chonMucTieu: "hang_sau_mau_thap_nhat" }],

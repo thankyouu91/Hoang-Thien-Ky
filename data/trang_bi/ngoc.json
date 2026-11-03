@@ -261,9 +261,9 @@
    "khi_hinh": "phien",
    "loai_chieu": "dien_rong",
    "chi_kham_vao": "vu_khi",
-   "mo_ta": "Diện rộng vận công 0,7 s thay 1 s",
+   "mo_ta": "Diện rộng vận công nhanh hơn 0,3 s (1 s còn 0,7 s)",
    "tham_so": {
-    "vanCongTicks": 14
+    "vanCongTicks": -6
    },
    "ban_cho": true,
    "nguon": [
@@ -310,9 +310,9 @@
    "khi_hinh": "ky",
    "loai_chieu": "tran_phap",
    "chi_kham_vao": "vu_khi",
-   "mo_ta": "Trận pháp bày trong 4,5 s thay 5 s",
+   "mo_ta": "Bày trận nhanh hơn 0,5 s (5 s còn 4,5 s)",
    "tham_so": {
-    "bayTranTicks": 90
+    "bayTranTicks": -10
    },
    "ban_cho": true,
    "nguon": [
