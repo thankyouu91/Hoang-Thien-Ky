@@ -20,6 +20,13 @@ export interface SceneParams {
   linhKhi?: boolean;
   /** Màu hạt linh khí theo hệ; mặc định ngọc và vàng của dashboard. */
   element?: ElementId;
+  /** false: bỏ mặt trời, trăng. */
+  disc?: boolean;
+  /**
+   * false: bỏ cả trời (nền trong suốt): chỉ còn núi, sương, mây, cây, nằm trên nền của màn bên dưới. Hợp làm lớp nền mờ
+   * dưới thẻ. Cũng bỏ đĩa trời, tia sáng, viền tối.
+   */
+  sky?: boolean;
 }
 
 /** Loại hình nền cho renderBackground. */

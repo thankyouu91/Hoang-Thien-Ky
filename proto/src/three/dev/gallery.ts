@@ -51,6 +51,8 @@ document.body.innerHTML = `
     <select id="scene">${SCENES.map((s) => `<option value="${s.id}">${s.name}</option>`).join("")}</select>
     <select id="tone"><option value="giay">Giấy (kem)</option><option value="chang_vang">Chạng vạng</option></select>
     <label><input type="checkbox" id="lk"> linh khí</label>
+    <label><input type="checkbox" id="nodisc"> không mặt trời</label>
+    <label><input type="checkbox" id="nosky"> không trời</label>
     <input id="seed" type="number" value="1" min="1" style="width:56px">
   </div>
   <div id="stat"></div>`;
@@ -62,6 +64,8 @@ const sceneSel = $<HTMLSelectElement>("scene");
 const toneSel = $<HTMLSelectElement>("tone");
 const lk = $<HTMLInputElement>("lk");
 const seedIn = $<HTMLInputElement>("seed");
+const noDisc = $<HTMLInputElement>("nodisc");
+const noSky = $<HTMLInputElement>("nosky");
 const stat = $<HTMLDivElement>("stat");
 
 let handle: SceneHandle | null = null;
@@ -87,7 +91,7 @@ function clear(): void {
 }
 
 function params() {
-  return { seed: Number(seedIn.value) || 1, tone: toneSel.value as Tone, linhKhi: lk.checked };
+  return { seed: Number(seedIn.value) || 1, tone: toneSel.value as Tone, linhKhi: lk.checked, disc: !noDisc.checked, sky: !noSky.checked };
 }
 
 async function render(): Promise<void> {
@@ -107,10 +111,12 @@ async function render(): Promise<void> {
       stage.style.background = "#120d09";
       handle = mountScene(stage, "linh_khi", { seed: params().seed });
     } else {
-      stage.style.background = "";
+      // không trời: nền trong suốt, xem trên nền kem của dashboard
+      stage.style.background = noSky.checked ? "#f6efdf" : "";
       handle = mountScene(stage, scene as SceneName, params());
     }
   } else if (mode === "nuong") {
+    stage.style.backgroundColor = noSky.checked ? "#f6efdf" : "";
     handle = mountBakedScene(stage, scene as SceneName, params());
     if (lk.checked) overlay = mountScene(stage, "linh_khi", { seed: params().seed });
   } else if (mode === "nen") {
@@ -241,7 +247,7 @@ async function render(): Promise<void> {
 
 for (const b of document.querySelectorAll<HTMLButtonElement>("#bar button")) b.addEventListener("click", () => go(b.dataset.mode!));
 sceneSel.addEventListener("change", () => go(state().mode, sceneSel.value));
-for (const el of [toneSel, lk, seedIn]) el.addEventListener("change", () => void render());
+for (const el of [toneSel, lk, seedIn, noDisc, noSky]) el.addEventListener("change", () => void render());
 window.addEventListener("hashchange", () => void render());
 void render();
 

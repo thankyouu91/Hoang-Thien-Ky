@@ -33,7 +33,8 @@ export function sceneFactory(name: SceneName, p: SceneParams = {}): ProgramFacto
       linhKhi(s, p.element);
     } else {
       const dark = name === "son_thuy" ? null : ELEMENT_RECIPES[name]();
-      compose(s, dark === null ? sonThuy(s.tone) : s.tone === "giay" ? toPaper(dark, name as ElementId) : dark);
+      s.transparent = p.sky === false;
+      compose(s, dark === null ? sonThuy(s.tone) : s.tone === "giay" ? toPaper(dark, name as ElementId) : dark, { noDisc: p.disc === false, noSky: p.sky === false });
       if (p.linhKhi) linhKhi(s, p.element ?? (name === "son_thuy" ? undefined : (name as ElementId)), 0.6);
     }
     s.resize(1, 1, 1);

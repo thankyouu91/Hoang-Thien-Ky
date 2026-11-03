@@ -50,6 +50,10 @@ export interface Recipe {
 }
 
 export interface ComposeExtra {
+  /** Bỏ mặt trời, trăng. */
+  noDisc?: boolean;
+  /** Bỏ lớp trời, tia sáng, viền tối: nền trong suốt (Stage.transparent). */
+  noSky?: boolean;
   /** Chèn công trình, điểm bản đồ ngay sau núi giữa (trước sương và núi gần). */
   afterMid?: (s: Stage, refs: Refs) => void;
   /** Chèn vật ở tiền cảnh, ngay sau núi gần. */
@@ -81,14 +85,14 @@ function trees(s: Stage, layer: Mesh & { shape: RidgeShape }, row: TreeRow, dept
 
 export function compose(s: Stage, r: Recipe, extra: ComposeExtra = {}): Refs {
   const refs: Refs = {};
-  sky(s, r.sky);
+  if (!extra.noSky) sky(s, r.sky);
   r.hooks?.afterSky?.(s, refs);
-  if (r.disc) {
+  if (r.disc && !extra.noDisc && !extra.noSky) {
     const d = r.disc;
     const m = disc(s, { ...d, x: 0 });
     s.onResize((a) => s.place(m, (d.x * a) / 2, d.y));
   }
-  if (r.rays) rays(s, r.rays);
+  if (r.rays && !extra.noSky) rays(s, r.rays);
   for (const h of r.high ?? []) mist(s, { ...h, depth: 0.08 });
   const layer = (o: LayerOpts | undefined, depth: number, key: keyof Refs) => {
     if (!o) return;
@@ -110,6 +114,6 @@ export function compose(s: Stage, r: Recipe, extra: ComposeExtra = {}): Refs {
   if (r.fore) ridge(s, { ...r.fore, depth: 1 });
   if (!extra.noParticles) for (const p of r.particles ?? []) particles(s, { ...p, count: Math.max(1, Math.round(p.count * (extra.particleScale ?? 1))), depth: 0.85 });
   r.hooks?.end?.(s, refs);
-  if (r.vignette) vignette(s, r.vignette);
+  if (r.vignette && !extra.noSky) vignette(s, r.vignette);
   return refs;
 }

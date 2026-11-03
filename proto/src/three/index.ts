@@ -70,7 +70,7 @@ export async function bakeScene(name: SceneName, params: SceneParams, w: number,
   if (!hasWebGL()) return null;
   try {
     const e = await load();
-    return await enqueue(() => e.getHost().bake(e.sceneFactory(name, params), w, h, dpr, { transparent: name === "linh_khi" }));
+    return await enqueue(() => e.getHost().bake(e.sceneFactory(name, params), w, h, dpr, { transparent: name === "linh_khi" || params.sky === false }));
   } catch (err) {
     console.warn("bakeScene lỗi", name, err);
     return null;
