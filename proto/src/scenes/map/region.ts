@@ -150,6 +150,69 @@ export function stagesFrom(m: RegionMap, start: number): Map<number, number> {
   return dist;
 }
 
+const routes = new WeakMap<RegionMap, Map<string, [number, number][]>>();
+
+/**
+ * Đường đi theo chặng từ điểm `from` tới `to`: ngắn nhất theo số ô (e.cells), nối path của từng chặng thành một đường
+ * (path luôn đi từ a tới b; đi chiều b → a thì đảo). Không có đường thì nối thẳng. Nhớ theo cặp điểm.
+ */
+export function route(m: RegionMap, from: number, to: number): [number, number][] {
+  let memo = routes.get(m);
+  if (!memo) routes.set(m, (memo = new Map()));
+  const key = `${from}>${to}`;
+  const got = memo.get(key);
+  if (got) return got;
+  const near = new Map<number, RegionEdge[]>();
+  for (const e of m.edges) for (const id of [e.a, e.b]) (near.get(id) ?? near.set(id, []).get(id)!).push(e);
+  // Dijkstra trên vài trăm điểm: chọn đỉnh nhỏ nhất bằng vòng lặp là đủ nhanh.
+  const dist = new Map<number, number>([[from, 0]]);
+  const via = new Map<number, RegionEdge>();
+  const open = new Set([from]);
+  while (open.size) {
+    let u = -1;
+    for (const id of open) if (u < 0 || dist.get(id)! < dist.get(u)!) u = id;
+    open.delete(u);
+    if (u === to) break;
+    for (const e of near.get(u) ?? []) {
+      const n = e.a === u ? e.b : e.a;
+      const dn = dist.get(u)! + e.cells;
+      if (dn < (dist.get(n) ?? Infinity)) {
+        dist.set(n, dn);
+        via.set(n, e);
+        open.add(n);
+      }
+    }
+  }
+  const a = m.points[from];
+  const out: [number, number][] = [[a.x, a.y]];
+  if (from !== to && via.has(to)) {
+    const legs: [number, number][][] = [];
+    for (let n = to; n !== from; ) {
+      const e = via.get(n)!;
+      legs.unshift(e.b === n ? e.path : [...e.path].reverse());
+      n = e.a === n ? e.b : e.a;
+    }
+    for (const leg of legs) out.push(...leg.slice(1));
+  } else if (from !== to) out.push([m.points[to].x, m.points[to].y]);
+  memo.set(key, out);
+  return out;
+}
+
+/** Điểm trên đường theo tỉ lệ đã đi (0–1), tính theo chiều dài. */
+export function along(path: [number, number][], t: number): { x: number; y: number } {
+  if (path.length === 1) return { x: path[0][0], y: path[0][1] };
+  const seg = path.slice(1).map((p, i) => Math.hypot(p[0] - path[i][0], p[1] - path[i][1]));
+  let d = Math.max(0, Math.min(1, t)) * seg.reduce((s, l) => s + l, 0);
+  for (let i = 0; i < seg.length; i++) {
+    if (d <= seg[i] || i === seg.length - 1) {
+      const k = seg[i] ? Math.min(1, d / seg[i]) : 0;
+      return { x: path[i][0] + (path[i + 1][0] - path[i][0]) * k, y: path[i][1] + (path[i + 1][1] - path[i][1]) * k };
+    }
+    d -= seg[i];
+  }
+  return { x: path[path.length - 1][0], y: path[path.length - 1][1] };
+}
+
 /** Tên loại điểm (mã như tools/mapgen). */
 export const POINT_NAMES: Record<PointType, string> = {
   thanh_chu: "Thành chủ",

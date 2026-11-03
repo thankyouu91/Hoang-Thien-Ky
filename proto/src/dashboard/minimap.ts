@@ -2,7 +2,7 @@
 // nét mực đã vẽ sẵn), sương mù giấy nhạt để vẫn thấy cảnh, và ít chấm có viền mực: vị trí của mình, sơn môn của mình,
 // thành chủ, điểm có chủ, điểm đang bị đánh (nhấp nháy), cửa bí cảnh đang mở; khung đỏ mảnh là phần bản đồ tranh đang xem.
 // Đang có chiến tranh hay Yêu Triều thì điểm của sự kiện nhấp nháy đỏ và viền khung mini nhấp nháy đỏ.
-import { loadRegion, miniUrl, type RegionMap } from "../scenes/map/region.ts";
+import { along, loadRegion, miniUrl, route, type RegionMap } from "../scenes/map/region.ts";
 import type { MiniMapView, Owner } from "./source.ts";
 
 // Bảng màu sáng (giấy kem, 2026-11-03): chấm có viền mực mảnh.
@@ -64,10 +64,8 @@ export class MiniMap {
     this.el.className = "minimap";
     this.el.setAttribute("role", "button");
     this.el.setAttribute("aria-label", "Bản đồ mini, chạm để mở bản đồ tranh tại chỗ đó");
-    this.el.addEventListener("click", (e) => {
-      const r = this.el.getBoundingClientRect();
-      onTap((e.clientX - r.left - this.ox) / this.scale, (e.clientY - r.top - this.oy) / this.scale);
-    });
+    // offsetX/Y tính từ mép trong của canvas (không gồm viền CSS), cùng gốc với ox, oy.
+    this.el.addEventListener("click", (e) => onTap((e.offsetX - this.ox) / this.scale, (e.offsetY - this.oy) / this.scale));
   }
 
   async set(data: MiniMapView, viewport?: Viewport): Promise<void> {
@@ -221,11 +219,10 @@ export class MiniMap {
     ctx.fillRect(X(home.x) - 3.5, Y(home.y) - 3.5, 7, 7);
     ctx.strokeRect(X(home.x) - 3.5, Y(home.y) - 3.5, 7, 7);
 
-    // Vị trí của mình hoặc đoàn đang đi
-    const a = m.points[d.self.from];
-    const b = m.points[d.self.to];
-    const sx = X(a.x + (b.x - a.x) * d.self.progress);
-    const sy = Y(a.y + (b.y - a.y) * d.self.progress);
+    // Vị trí của mình hoặc đoàn đang đi, bám đường theo chặng như trên bản đồ tranh.
+    const at = along(route(m, d.self.from, d.self.to), d.self.progress);
+    const sx = X(at.x);
+    const sy = Y(at.y);
     ctx.beginPath();
     ctx.moveTo(sx, sy - 5);
     ctx.lineTo(sx + 4, sy + 2.5);

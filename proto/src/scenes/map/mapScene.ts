@@ -19,7 +19,7 @@ import { drawFeatureNames, drawRiverNames } from "./labels.ts";
 import { WorldLayers } from "./layers.ts";
 import { NODE, NODE_BIG, NodeSprites, Placer } from "./nodes.ts";
 import {
-  HOLDABLE, loadLabels, loadRegion, loadWorld, POINT_NAMES,
+  along, HOLDABLE, loadLabels, loadRegion, loadWorld, POINT_NAMES, route,
   type MapLabels, type PointForm, type RegionMap, type RegionPoint, type Tier, type WorldMap, type WorldRegion,
 } from "./region.ts";
 
@@ -83,6 +83,8 @@ export class MapScene implements Scene {
   private data?: BanDoView;
   private cands: Cand[] = [];
   private placed: { c: Cand; x: number; y: number; size: number }[] = [];
+  /** Hộp tên đã vẽ ở khung trước (chạm vào tên cũng mở điểm). */
+  private named: { c: Cand; box: readonly [number, number, number, number] }[] = [];
   private sprites = new NodeSprites();
   private placer = new Placer();
   private prefs: Record<Layer, boolean> = { names: true, terrain: true, borders: true, fog: true };
@@ -189,7 +191,7 @@ export class MapScene implements Scene {
       if (!this.active || !down || down.id !== e.pointerId) return;
       const moved = Math.hypot(e.offsetX - down.x, e.offsetY - down.y);
       down = null;
-      if (moved <= TAP_SLOP) this.tap(e.offsetX, e.offsetY);
+      if (moved <= TAP_SLOP) this.tap(e.offsetX, e.offsetY, e.pointerType === "touch");
     });
     canvas.addEventListener("pointermove", (e) => {
       if (!this.active || e.pointerType !== "mouse" || e.buttons) return;
@@ -447,10 +449,10 @@ export class MapScene implements Scene {
     this.tween = { x0: c.x, y0: c.y, z0: c.zoom, x1: x, y1: y, z1, t: 0 };
   }
 
+  /** Vị trí của mình: bám đường theo chặng từ điểm đi tới điểm tới, theo tỉ lệ đã đi. */
   private selfAt(m: RegionMap, d: BanDoView): { x: number; y: number } {
-    const a = m.points[d.map.self.from];
-    const b = m.points[d.map.self.to];
-    return { x: a.x + (b.x - a.x) * d.map.self.progress, y: a.y + (b.y - a.y) * d.map.self.progress };
+    const s = d.map.self;
+    return along(route(m, s.from, s.to), s.progress);
   }
 
   /** Thanh tiến độ khi ảnh nền chưa về; bản đồ vẫn dùng được trên nền giấy. */
@@ -514,7 +516,7 @@ export class MapScene implements Scene {
     const maxPrio = PRIO_ZOOM.filter((k) => z >= k).length - 1;
     const pad = NODE_BIG;
     const placed: typeof this.placed = [];
-    const labels: { text: string; x: number; y: number; big: boolean; px: number }[] = [];
+    const labels: { c: Cand; text: string; x: number; y: number; big: boolean; px: number; box: readonly [number, number, number, number] }[] = [];
     /** Hộp tên dưới ô (điểm động và thành chủ thử thêm phía trên nếu dưới đã kín); take = false thì chỉ thử. */
     const label = (c: Cand, x: number, y: number, size: number, take = true) => {
       const px = c.form === "cham" ? B.dotFont : c.big ? 12 : B.font;
@@ -529,7 +531,7 @@ export class MapScene implements Scene {
           continue;
         }
         if (!placer.take(...box)) continue;
-        labels.push({ text: c.name, x, y: top, big: c.big, px });
+        labels.push({ c, text: c.name, x, y: top, big: c.big, px, box });
         return true;
       }
       return false;
@@ -537,7 +539,8 @@ export class MapScene implements Scene {
     // Bậc xếp chỗ: 0 thành chủ và sơn môn mình, 1 điểm động, 2 điểm khác (theo z/t tính sẵn). Dấu của mình (ghim và tên
     // phía trên) giữ chỗ ngay sau bậc 0, nên điểm động và điểm khác né tên mình, còn thành chủ không bị ghim che mất.
     const home = this.regions.get(d.map.region);
-    const me = home && cam.toScreen(this.selfAt(home, d).x, this.selfAt(home, d).y, v);
+    const at = home && this.selfAt(home, d);
+    const me = at && cam.toScreen(at.x, at.y, v);
     const meTip = me ? me.y - NODE_BIG / 2 - 2 : 0;
     ctx.font = `700 12px ${FONT}`;
     const meHalf = Math.max(8, ctx.measureText(d.top.name).width / 2 + 3);
@@ -561,6 +564,7 @@ export class MapScene implements Scene {
       }
     }
     this.placed = placed;
+    this.named = labels;
 
     // Tên vùng kiểu bản đồ cổ ở chỗ rộng nhất của vùng khi thu nhỏ; mờ dần khi phóng tới.
     if (this.prefs.names && z < REGION_LABEL_ZOOM) {
@@ -661,19 +665,26 @@ export class MapScene implements Scene {
     }
   }
 
-  /** Ô đang hiện dưới toạ độ màn hình (px CSS trong canvas). */
-  private hit(sx: number, sy: number): Cand | undefined {
+  /**
+   * Ô đang hiện dưới toạ độ màn hình (px CSS trong canvas): đúng trên ô, hay đúng trên tên dưới ô, hay ô gần nhất trong
+   * tầm. Chạm ngón tay tầm 22 px (ô 44 px như hướng dẫn chạm), chuột 14 px.
+   */
+  private hit(sx: number, sy: number, touch = false): Cand | undefined {
     let best: Cand | undefined;
     let bestD = Infinity;
+    let onNode = false;
     for (const k of this.placed) {
-      const reach = Math.max(k.size / 2 + 4, 14);
+      const reach = Math.max(k.size / 2 + 4, touch ? 22 : 14);
       const dd = Math.max(Math.abs(k.x - sx), Math.abs(k.y - sy));
       if (dd <= reach && dd < bestD) {
         bestD = dd;
         best = k.c;
+        onNode = dd <= k.size / 2 + 1;
       }
     }
-    return best;
+    if (onNode) return best;
+    const label = this.named.find(({ box: [x0, y0, x1, y1] }) => sx >= x0 && sx <= x1 && sy >= y0 && sy <= y1);
+    return label?.c ?? best;
   }
 
   private hover(sx: number, sy: number, cx: number, cy: number): void {
@@ -692,8 +703,8 @@ export class MapScene implements Scene {
     this.tip.style.top = `${Math.min(cy + 14, window.innerHeight - r.height - 8)}px`;
   }
 
-  private tap(sx: number, sy: number): void {
-    const c = this.hit(sx, sy);
+  private tap(sx: number, sy: number, touch: boolean): void {
+    const c = this.hit(sx, sy, touch);
     if (!c) {
       closeSheet();
       return;
