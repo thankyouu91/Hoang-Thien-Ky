@@ -255,185 +255,203 @@
       "ghi_chu": "Mẫu đã duyệt, do phiên trước sinh trên Canva; không lưu lời mô tả gốc nên description là khuôn tả lại."
     },
     {
-      "file": "trang_bi/ao_linh.webp",
-      "ten": "Áo linh cấp",
+      "file": "trang_bi/ao/25.webp",
+      "ten": "Đạo Bào Lưu Vân",
       "description": "Game inventory item icon: a flowing Taoist cultivator robe folded and displayed upright, deep indigo silk with silver cloud embroidery and a jade clasp at the collar. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
       "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
       "canva_media_goc": "MAHZ1gP8uzE",
       "canva_media_tach_nen": "MAHZ1kfrcZw",
       "canva_design": "DAHZ1iamT_w trang 2",
-      "created": "2026-11-03"
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/ao_linh"
     },
     {
-      "file": "trang_bi/ao_than.webp",
-      "ten": "Áo thần vật",
-      "description": "Game inventory item icon: a divine immortal's robe of shimmering white and gold silk woven with feathers of light, floating ribbons and a soft radiant aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
-      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1hVF1v8",
-      "canva_media_tach_nen": "MAHZ1tgohks",
-      "canva_design": "DAHZ1iamT_w trang 13",
-      "created": "2026-11-03"
-    },
-    {
-      "file": "trang_bi/ao_thien.webp",
-      "ten": "Áo thiên cấp",
+      "file": "trang_bi/ao/26.webp",
+      "ten": "Giáp Huyền Thiết",
       "description": "Game inventory item icon: a heavy dark iron lamellar armor vest with bronze-trimmed plates and shoulder guards, xianxia warrior style. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
       "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
       "canva_media_goc": "MAHZ1s3aKH8",
       "canva_media_tach_nen": "MAHZ1nQg6iM",
       "canva_design": "DAHZ1iamT_w trang 12",
-      "created": "2026-11-03"
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/ao_thien"
     },
     {
-      "file": "trang_bi/dai_linh.webp",
-      "ten": "Đai linh cấp",
+      "file": "trang_bi/ao/53.webp",
+      "ten": "Tiên Y Vũ Linh",
+      "description": "Game inventory item icon: a divine immortal's robe of shimmering white and gold silk woven with feathers of light, floating ribbons and a soft radiant aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1hVF1v8",
+      "canva_media_tach_nen": "MAHZ1tgohks",
+      "canva_design": "DAHZ1iamT_w trang 13",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/ao_than"
+    },
+    {
+      "file": "trang_bi/dai/01.webp",
+      "ten": "Đai Da Ngọc Khấu",
       "description": "Game inventory item icon: a coiled leather cultivator belt with a carved green jade buckle and a small hanging pouch. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
       "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
       "canva_media_goc": "MAHZ1gkBWXk",
       "canva_media_tach_nen": "MAHZ1schFS0",
       "canva_design": "DAHZ1iamT_w trang 14",
-      "created": "2026-11-03"
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/dai_linh"
     },
     {
-      "file": "trang_bi/dai_than.webp",
-      "ten": "Đai thần vật",
+      "file": "trang_bi/dai/25.webp",
+      "ten": "Đai Lôi Văn",
+      "description": "Game inventory item icon: an ornate silver-plated belt engraved with thunder-cloud patterns and a round dark jade buckle. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1v8EcUg",
+      "canva_media_tach_nen": "MAHZ1rPGkwA",
+      "canva_design": "DAHZ1iamT_w trang 15",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/dai_thien"
+    },
+    {
+      "file": "trang_bi/dai/53.webp",
+      "ten": "Đai Hoàng Long",
       "description": "Game inventory item icon: a divine golden dragon belt laid out in a gentle S-curve, a long strap of linked golden plates with dragon-scale engraving, the buckle shaped like a dragon head holding a glowing pearl, celestial aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
       "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
       "canva_media_goc": "MAHZ1r9414c",
       "canva_media_tach_nen": "MAHZ1le3KUY",
       "canva_design": "DAHZ1iamT_w trang 25",
       "created": "2026-11-03",
-      "ghi_chu": "Vẽ lại lần 2: bản đầu giống vương miện."
+      "ghi_chu": "Vẽ lại lần 2: bản đầu giống vương miện.",
+      "ma_cu": "trang_bi/dai_than"
     },
     {
-      "file": "trang_bi/dai_thien.webp",
-      "ten": "Đai thiên cấp",
-      "description": "Game inventory item icon: an ornate silver-plated belt engraved with thunder-cloud patterns and a round dark jade buckle. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
-      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1v8EcUg",
-      "canva_media_tach_nen": "MAHZ1rPGkwA",
-      "canva_design": "DAHZ1iamT_w trang 15",
-      "created": "2026-11-03"
-    },
-    {
-      "file": "trang_bi/giay_linh.webp",
-      "ten": "Giày linh cấp",
+      "file": "trang_bi/giay/01.webp",
+      "ten": "Ngoa Vải Đen",
       "description": "Game inventory item icon: a pair of black cloth cultivator boots with white soles and simple stitched cloud motif. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
       "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
       "canva_media_goc": "MAHZ1l5CaHs",
       "canva_media_tach_nen": "MAHZ1gALFQw",
       "canva_design": "DAHZ1iamT_w trang 16",
-      "created": "2026-11-03"
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/giay_linh"
     },
     {
-      "file": "trang_bi/giay_than.webp",
-      "ten": "Giày thần vật",
-      "description": "Game inventory item icon: a pair of divine phoenix-feather boots in crimson and gold with flame-like plumes at the heels, soft golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
-      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1vyKo-s",
-      "canva_media_tach_nen": "MAHZ1mms9yE",
-      "canva_design": "DAHZ1iamT_w trang 18",
-      "created": "2026-11-03"
-    },
-    {
-      "file": "trang_bi/giay_thien.webp",
-      "ten": "Giày thiên cấp",
+      "file": "trang_bi/giay/25.webp",
+      "ten": "Giày Đạp Vân",
       "description": "Game inventory item icon: a pair of cloud-stepping boots of pale blue silk with silver cloud embroidery and wisps of mist around the soles. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
       "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
       "canva_media_goc": "MAHZ1lD54hw",
       "canva_media_tach_nen": "MAHZ1g7-ygQ",
       "canva_design": "DAHZ1iamT_w trang 17",
-      "created": "2026-11-03"
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/giay_thien"
     },
     {
-      "file": "trang_bi/mu_linh.webp",
-      "ten": "Mũ linh cấp",
-      "description": "Game inventory item icon: a black lacquered gauze scholar-official cap (wusha hat) with two short side wings and a small jade bead. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "file": "trang_bi/giay/58.webp",
+      "ten": "Ngoa Phượng Hoàng",
+      "description": "Game inventory item icon: a pair of divine phoenix-feather boots in crimson and gold with flame-like plumes at the heels, soft golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
       "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1kszP_0",
-      "canva_media_tach_nen": "MAHZ1hboD0E",
-      "canva_design": "DAHZ1iamT_w trang 9",
-      "created": "2026-11-03"
+      "canva_media_goc": "MAHZ1vyKo-s",
+      "canva_media_tach_nen": "MAHZ1mms9yE",
+      "canva_design": "DAHZ1iamT_w trang 18",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/giay_than"
     },
     {
-      "file": "trang_bi/mu_than.webp",
-      "ten": "Mũ thần vật",
-      "description": "Game inventory item icon: a divine golden crown of a celestial immortal, phoenix and cloud filigree, glowing pearl at the front and soft golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
-      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1qsBCHM",
-      "canva_media_tach_nen": "MAHZ1hyP5bE",
-      "canva_design": "DAHZ1iamT_w trang 11",
-      "created": "2026-11-03"
-    },
-    {
-      "file": "trang_bi/mu_thien.webp",
-      "ten": "Mũ thiên cấp",
-      "description": "Game inventory item icon: an ornate jade crown hairpiece (guan) of carved white jade with a silver hairpin through it. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
-      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1puVTQ8",
-      "canva_media_tach_nen": "MAHZ1tV-3vU",
-      "canva_design": "DAHZ1iamT_w trang 10",
-      "created": "2026-11-03"
-    },
-    {
-      "file": "trang_bi/ngoc_boi_linh.webp",
-      "ten": "Ngọc bội linh cấp",
-      "description": "Game inventory item icon: a round carved green jade pendant disc (bi) with a hole in the center, hanging from a red knotted cord. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
-      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1vESJtI",
-      "canva_media_tach_nen": "MAHZ1juNMtY",
-      "canva_design": "DAHZ1iamT_w trang 19",
-      "created": "2026-11-03"
-    },
-    {
-      "file": "trang_bi/ngoc_boi_than.webp",
-      "ten": "Ngọc bội thần vật",
-      "description": "Game inventory item icon: a divine glowing jade pendant carved with a dragon and phoenix, radiating soft golden light, golden tassel. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
-      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1r1kSbE",
-      "canva_media_tach_nen": "MAHZ1oluxs4",
-      "canva_design": "DAHZ1iamT_w trang 21",
-      "created": "2026-11-03"
-    },
-    {
-      "file": "trang_bi/ngoc_boi_thien.webp",
-      "ten": "Ngọc bội thiên cấp",
-      "description": "Game inventory item icon: an intricately carved white jade pendant shaped like a coiled qilin, silver cap and a blue silk tassel. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
-      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1sxDK30",
-      "canva_media_tach_nen": "MAHZ1rciWKA",
-      "canva_design": "DAHZ1iamT_w trang 20",
-      "created": "2026-11-03"
-    },
-    {
-      "file": "trang_bi/vu_khi_linh.webp",
-      "ten": "Vũ khí linh cấp",
+      "file": "trang_bi/kiem/01.webp",
+      "ten": "Kiếm Thanh Cương",
       "description": "Game inventory item icon: a plain but well-forged cultivator's straight sword (jian) with a steel blade and a simple bronze guard, red silk tassel on the pommel. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
       "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
       "canva_media_goc": "MAHZ1ii02tE",
       "canva_media_tach_nen": "MAHZ1v2MhEg",
       "canva_design": "DAHZ1iamT_w trang 6",
-      "created": "2026-11-03"
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/vu_khi_linh"
     },
     {
-      "file": "trang_bi/vu_khi_than.webp",
-      "ten": "Vũ khí thần vật",
-      "description": "Game inventory item icon: a legendary divine sword (jian) with a radiant golden blade, dragon-carved hilt and swirling celestial aura, glowing runes along the blade. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
-      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
-      "canva_media_goc": "MAHZ1h0vYow",
-      "canva_media_tach_nen": "MAHZ1kjGSLA",
-      "canva_design": "DAHZ1iamT_w trang 8",
-      "created": "2026-11-03"
-    },
-    {
-      "file": "trang_bi/vu_khi_thien.webp",
-      "ten": "Vũ khí thiên cấp",
+      "file": "trang_bi/kiem/41.webp",
+      "ten": "Kiếm Bạch Ngọc",
       "description": "Game inventory item icon: an elegant spirit sword (jian) with a blade of translucent white jade and silver cloud engravings, faint blue glow along the edge. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
       "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
       "canva_media_goc": "MAHZ1jgVViE",
       "canva_media_tach_nen": "MAHZ1gyYzpk",
       "canva_design": "DAHZ1iamT_w trang 7",
-      "created": "2026-11-03"
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/vu_khi_thien"
+    },
+    {
+      "file": "trang_bi/kiem/53.webp",
+      "ten": "Kiếm Hoàng Long",
+      "description": "Game inventory item icon: a legendary divine sword (jian) with a radiant golden blade, dragon-carved hilt and swirling celestial aura, glowing runes along the blade. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1h0vYow",
+      "canva_media_tach_nen": "MAHZ1kjGSLA",
+      "canva_design": "DAHZ1iamT_w trang 8",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/vu_khi_than"
+    },
+    {
+      "file": "trang_bi/mu/01.webp",
+      "ten": "Ô Sa Mặc Ngọc",
+      "description": "Game inventory item icon: a black lacquered gauze scholar-official cap (wusha hat) with two short side wings and a small jade bead. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1kszP_0",
+      "canva_media_tach_nen": "MAHZ1hboD0E",
+      "canva_design": "DAHZ1iamT_w trang 9",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/mu_linh"
+    },
+    {
+      "file": "trang_bi/mu/41.webp",
+      "ten": "Bạch Ngọc Quan",
+      "description": "Game inventory item icon: an ornate jade crown hairpiece (guan) of carved white jade with a silver hairpin through it. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1puVTQ8",
+      "canva_media_tach_nen": "MAHZ1tV-3vU",
+      "canva_design": "DAHZ1iamT_w trang 10",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/mu_thien"
+    },
+    {
+      "file": "trang_bi/mu/53.webp",
+      "ten": "Quan Phượng Hoàng",
+      "description": "Game inventory item icon: a divine golden crown of a celestial immortal, phoenix and cloud filigree, glowing pearl at the front and soft golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1qsBCHM",
+      "canva_media_tach_nen": "MAHZ1hyP5bE",
+      "canva_design": "DAHZ1iamT_w trang 11",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/mu_than"
+    },
+    {
+      "file": "trang_bi/ngoc_boi/01.webp",
+      "ten": "Bội Bích Hoàn",
+      "description": "Game inventory item icon: a round carved green jade pendant disc (bi) with a hole in the center, hanging from a red knotted cord. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1vESJtI",
+      "canva_media_tach_nen": "MAHZ1juNMtY",
+      "canva_design": "DAHZ1iamT_w trang 19",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/ngoc_boi_linh"
+    },
+    {
+      "file": "trang_bi/ngoc_boi/41.webp",
+      "ten": "Bội Kỳ Lân",
+      "description": "Game inventory item icon: an intricately carved white jade pendant shaped like a coiled qilin, silver cap and a blue silk tassel. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1sxDK30",
+      "canva_media_tach_nen": "MAHZ1rciWKA",
+      "canva_design": "DAHZ1iamT_w trang 20",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/ngoc_boi_thien"
+    },
+    {
+      "file": "trang_bi/ngoc_boi/53.webp",
+      "ten": "Bội Long Phượng",
+      "description": "Game inventory item icon: a divine glowing jade pendant carved with a dragon and phoenix, radiating soft golden light, golden tassel. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ1r1kSbE",
+      "canva_media_tach_nen": "MAHZ1oluxs4",
+      "canva_design": "DAHZ1iamT_w trang 21",
+      "created": "2026-11-03",
+      "ma_cu": "trang_bi/ngoc_boi_than"
     },
     {
       "file": "trung_thu/thuong.webp",

@@ -2,8 +2,9 @@
   "ghi_chu": [
     "Danh sách icon vật phẩm vẽ bằng Canva (phong cách tranh vẽ 3D, nền trong). Nhân vật, thú, đảo vẫn là pixel art PixelLab.",
     "Lời mô tả gửi Canva: 'Game inventory item icon: <mo_ta>. ' + duoi_loi_mo_ta.",
-    "Phẩm, cấp (1–10) và nấc cường hóa hiện bằng viền và số trên UI, không vẽ riêng. Trang bị chỉ vẽ theo cấp linh, thiên, thần.",
-    "uu_tien 1: món đang hiện trong prototype (túi, 6 ô trang bị, Bảo Khố, Công pháp). 2: phần còn lại của GDD. 3: làm sau.",
+    "Trang bị (người dùng chốt 2026-11-03): 7 loại (kiếm, mũ, áo, đai, bao tay, giày, ngọc bội), mỗi loại 60 kiểu có tên riêng. Độ hiếm là màu nền ô trên UI, không vẽ vào hình: lục (đồ shop) < lam < tím < vàng < đỏ. Mỗi loại 24 lục, 16 lam, 12 tím, 5 vàng, 3 đỏ (đề xuất); vàng và đỏ rơi khi săn linh thú, thần thú. Thuộc tính chỉ hiện khi khảm ngọc, nên hình và tên không gắn hệ.",
+    "Phẩm, cấp (1–10) và nấc cường hóa của các món khác hiện bằng viền và số trên UI, không vẽ riêng.",
+    "uu_tien 1: món đang hiện trong prototype (túi, ô trang bị, Bảo Khố, Công pháp) và 10 kiểu đầu mỗi loại trang bị trải đủ 5 độ hiếm. 2: phần còn lại. 3: làm sau.",
     "File ảnh: assets/icon_ve/<ma>.webp, 512 px; nguồn gốc từng ảnh ở manifest.json cùng thư mục."
   ],
   "duoi_loi_mo_ta": "Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
@@ -58,156 +59,4257 @@
       "mau": "icy pale blue"
     }
   },
+  "do_hiem": [
+    {
+      "id": "luc",
+      "ten": "Lục",
+      "bac": 1
+    },
+    {
+      "id": "lam",
+      "ten": "Lam",
+      "bac": 2
+    },
+    {
+      "id": "tim",
+      "ten": "Tím",
+      "bac": 3
+    },
+    {
+      "id": "vang",
+      "ten": "Vàng",
+      "bac": 4
+    },
+    {
+      "id": "do",
+      "ten": "Đỏ",
+      "bac": 5
+    }
+  ],
   "so_luong": {
-    "tong": 117,
-    "uu_tien_1": 64,
-    "uu_tien_2": 44,
+    "tong": 519,
+    "uu_tien_1": 116,
+    "uu_tien_2": 394,
     "uu_tien_3": 9
   },
   "icon": [
     {
-      "ma": "trang_bi/vu_khi_linh",
+      "ma": "trang_bi/kiem/01",
       "nhom": "trang_bi",
-      "ten": "Vũ khí linh cấp",
+      "ten": "Kiếm Thanh Cương",
       "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a plain but well-forged cultivator's straight sword (jian) with a steel blade and a simple bronze guard, red silk tassel on the pommel"
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a plain but well-forged cultivator's straight sword (jian) with a steel blade and a simple bronze guard, red silk tassel on the pommel",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/vu_khi_linh",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/vu_khi_thien",
+      "ma": "trang_bi/kiem/02",
       "nhom": "trang_bi",
-      "ten": "Vũ khí thiên cấp",
+      "ten": "Kiếm Thiết Phong",
       "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "an elegant spirit sword (jian) with a blade of translucent white jade and silver cloud engravings, faint blue glow along the edge"
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): plain iron blade, worn leather-wrapped grip, simple crossguard, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/vu_khi_than",
+      "ma": "trang_bi/kiem/03",
       "nhom": "trang_bi",
-      "ten": "Vũ khí thần vật",
+      "ten": "Kiếm Thanh Đồng",
       "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a legendary divine sword (jian) with a radiant golden blade, dragon-carved hilt and swirling celestial aura, glowing runes along the blade"
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): ancient bronze leaf-shaped blade with green patina, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/mu_linh",
+      "ma": "trang_bi/kiem/04",
       "nhom": "trang_bi",
-      "ten": "Mũ linh cấp",
+      "ten": "Kiếm Đào Mộc",
       "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a black lacquered gauze scholar-official cap (wusha hat) with two short side wings and a small jade bead"
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): peach-wood blade carved with talisman grooves, red cord on the hilt, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/mu_thien",
+      "ma": "trang_bi/kiem/05",
       "nhom": "trang_bi",
-      "ten": "Mũ thiên cấp",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "an ornate jade crown hairpiece (guan) of carved white jade with a silver hairpin through it"
+      "ten": "Kiếm Trúc Ảnh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): slender blade with a bamboo-node hilt and bamboo pommel, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/mu_than",
+      "ma": "trang_bi/kiem/06",
       "nhom": "trang_bi",
-      "ten": "Mũ thần vật",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a divine golden crown of a celestial immortal, phoenix and cloud filigree, glowing pearl at the front and soft golden aura"
+      "ten": "Kiếm Bạch Cương",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): polished white steel blade, black cord-wrapped grip, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/ao_linh",
+      "ma": "trang_bi/kiem/07",
       "nhom": "trang_bi",
-      "ten": "Áo linh cấp",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a flowing Taoist cultivator robe folded and displayed upright, deep indigo silk with silver cloud embroidery and a jade clasp at the collar"
+      "ten": "Kiếm Hắc Thiết",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): heavy broad black iron blade, square guard, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/ao_thien",
+      "ma": "trang_bi/kiem/08",
       "nhom": "trang_bi",
-      "ten": "Áo thiên cấp",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a heavy dark iron lamellar armor vest with bronze-trimmed plates and shoulder guards, xianxia warrior style"
+      "ten": "Kiếm Khách Hành",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): traveler's sword with a cloth-wrapped hilt and a small gourd charm, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/ao_than",
+      "ma": "trang_bi/kiem/09",
       "nhom": "trang_bi",
-      "ten": "Áo thần vật",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a divine immortal's robe of shimmering white and gold silk woven with feathers of light, floating ribbons and a soft radiant aura"
+      "ten": "Kiếm Song Nhận",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): double-edged blade with a central fuller, round guard, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/dai_linh",
+      "ma": "trang_bi/kiem/10",
       "nhom": "trang_bi",
-      "ten": "Đai linh cấp",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a coiled leather cultivator belt with a carved green jade buckle and a small hanging pouch"
+      "ten": "Kiếm Thạch Văn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): grey blade with faint stone-like patterns, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/dai_thien",
+      "ma": "trang_bi/kiem/11",
       "nhom": "trang_bi",
-      "ten": "Đai thiên cấp",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "an ornate silver-plated belt engraved with thunder-cloud patterns and a round dark jade buckle"
+      "ten": "Kiếm Thô Phong",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): rough-forged blade with visible hammer marks, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/dai_than",
+      "ma": "trang_bi/kiem/12",
       "nhom": "trang_bi",
-      "ten": "Đai thần vật",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a divine golden dragon belt laid out in a gentle S-curve, a long strap of linked golden plates with dragon-scale engraving, the buckle shaped like a dragon head holding a glowing pearl, celestial aura"
+      "ten": "Kiếm Liễu Diệp",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): thin willow-leaf shaped blade, light hilt, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/giay_linh",
+      "ma": "trang_bi/kiem/13",
       "nhom": "trang_bi",
-      "ten": "Giày linh cấp",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a pair of black cloth cultivator boots with white soles and simple stitched cloud motif"
+      "ten": "Kiếm Thư Sinh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): scholar's slim sword with a white tassel and a small jade bead, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/giay_thien",
+      "ma": "trang_bi/kiem/14",
       "nhom": "trang_bi",
-      "ten": "Giày thiên cấp",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a pair of cloud-stepping boots of pale blue silk with silver cloud embroidery and wisps of mist around the soles"
+      "ten": "Kiếm Sơn Dã",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): rustic blade with a rope-bound grip, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/giay_than",
+      "ma": "trang_bi/kiem/15",
       "nhom": "trang_bi",
-      "ten": "Giày thần vật",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a pair of divine phoenix-feather boots in crimson and gold with flame-like plumes at the heels, soft golden aura"
+      "ten": "Kiếm Hồng Anh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): plain steel blade with a long flowing red tassel, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/ngoc_boi_linh",
+      "ma": "trang_bi/kiem/16",
       "nhom": "trang_bi",
-      "ten": "Ngọc bội linh cấp",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a round carved green jade pendant disc (bi) with a hole in the center, hanging from a red knotted cord"
+      "ten": "Kiếm Thiết Cốt",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): iron blade with a ribbed bone-like guard, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/ngoc_boi_thien",
+      "ma": "trang_bi/kiem/17",
       "nhom": "trang_bi",
-      "ten": "Ngọc bội thiên cấp",
-      "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "an intricately carved white jade pendant shaped like a coiled qilin, silver cap and a blue silk tassel"
+      "ten": "Kiếm Đồng Hoàn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): bronze sword with a ring pommel, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
     },
     {
-      "ma": "trang_bi/ngoc_boi_than",
+      "ma": "trang_bi/kiem/18",
       "nhom": "trang_bi",
-      "ten": "Ngọc bội thần vật",
+      "ten": "Kiếm Ô Mộc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): steel blade with an ebony wood hilt and brass caps, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/kiem/19",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Tế Vũ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): very thin needle-like blade with dotted engraving, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/kiem/20",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Quân Doanh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): army-issue sword, plain steel, square guard, cord grip, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/kiem/21",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Thiết Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): iron sword with a fish-scale patterned grip, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/kiem/22",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Ngân Tuyến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): steel blade with a silver wire-wrapped hilt, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/kiem/23",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Thanh Hà",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): blue-grey sheened blade, wave-shaped guard, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/kiem/24",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Tùng Văn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): steel blade with a pine-bark textured hilt, simple, practical and plainly crafted",
+      "loai": "Kiếm",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/kiem/25",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Lưu Vân",
       "uu_tien": 1,
-      "nguon": "GDD mục 6 (Ngoại hình), mục 12 (Trang bị)",
-      "mo_ta": "a divine glowing jade pendant carved with a dragon and phoenix, radiating soft golden light, golden tassel"
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): flowing cloud engravings along the blade, silver cloud guard, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/26",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Hạc Vũ",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): crane-wing shaped guard, black and white tassel, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/27",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Thanh Liên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): lotus-shaped guard in teal enamel, slender blade, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/28",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Bích Lạc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): hilt inlaid with azure enamel, blue sheen on the blade, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/29",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Nguyệt Ảnh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): crescent-moon pommel, silvery moonlit blade, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/30",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Tinh Thần",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): blade engraved with tiny star constellations, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/31",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Hổ Phách",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): tiger-head guard, amber pommel stone, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/32",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Long Ngâm",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): dragon-scale grip, blue-tempered steel blade, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/33",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Thu Hồ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): blade with an autumn-lake ripple pattern, maple leaf tassel charm, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/34",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Phi Yến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): swallow-shaped guard, light curved blade tip, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/35",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Mai Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): plum blossom engravings on blade and guard, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/36",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Trường Hồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): long blade with a faint rainbow sheen, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/37",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Tử Trúc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): purple bamboo hilt, silver fittings, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/38",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Kỳ Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): qilin-head guard in silver, scaled grip, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/39",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Huyền Quy",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): tortoise-shell patterned black hilt, heavy blade, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/40",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Thanh Hồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): blue-green blade with a red jade pommel, well-crafted with refined engraved details",
+      "loai": "Kiếm",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/kiem/41",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Bạch Ngọc",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "an elegant spirit sword (jian) with a blade of translucent white jade and silver cloud engravings, faint blue glow along the edge",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/vu_khi_thien",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/42",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Tử Vân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): purple cloud engravings with amethyst inlay along the guard, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/43",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Phượng Vĩ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): phoenix-tail guard with sweeping feathers, ruby inlay, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/44",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Thất Tinh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): seven gems set in a line along the blade like the Big Dipper, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/45",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Thiên Hà",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): blade patterned like a starry galaxy, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/46",
+      "nhom": "trang_bi",
+      "ten": "Kiếm U Lan",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): dark orchid engravings, faint violet glow, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/47",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Bích Huyết",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): blade veined with deep crimson like blood jade, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/48",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Lưu Ly",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): translucent glass-like crystal blade, gold hilt, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/49",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Vạn Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): floral filigree hilt studded with many small colored gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/50",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Giao Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): a flood dragon coiled around the hilt, sapphire eyes, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/51",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Tử Điện",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): blade veined with violet lightning patterns, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/52",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Huyễn Ảnh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): phantom blade with shimmering afterimages, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Kiếm",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/kiem/53",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Hoàng Long",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a legendary divine sword (jian) with a radiant golden blade, dragon-carved hilt and swirling celestial aura, glowing runes along the blade",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/vu_khi_than",
+      "loai": "Kiếm",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/kiem/54",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Thái Hư",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): taiji symbol on the guard, blade half black half white, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Kiếm",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/kiem/55",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Xích Tiêu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): red-gold blade of an ancient emperor, cloud-dragon hilt, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Kiếm",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/kiem/56",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Hiên Viên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): ancient sacred sword engraved with sun, moon and stars on the blade, mountains on the hilt, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Kiếm",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/kiem/57",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Vạn Tượng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): golden sword carved with countless mythical beasts, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Kiếm",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/kiem/58",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Huyết Long",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): crimson blade with a blood-red dragon coiled along it, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Kiếm",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/kiem/59",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Phần Thiên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): blade wreathed in crimson and golden flames, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Kiếm",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/kiem/60",
+      "nhom": "trang_bi",
+      "ten": "Kiếm Hỗn Độn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a Chinese straight sword (jian): black and red blade swirling with a void of chaos energy, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Kiếm",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/mu/01",
+      "nhom": "trang_bi",
+      "ten": "Ô Sa Mặc Ngọc",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a black lacquered gauze scholar-official cap (wusha hat) with two short side wings and a small jade bead",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/mu_linh",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/02",
+      "nhom": "trang_bi",
+      "ten": "Nón Lá Trúc Ti",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: conical hat woven from bamboo strips, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/03",
+      "nhom": "trang_bi",
+      "ten": "Đấu Lạp Phong Trần",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: wide straw rain hat, weathered, with a chin cord, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/04",
+      "nhom": "trang_bi",
+      "ten": "Khăn Vấn Thanh Bố",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: plain blue cloth head wrap, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/05",
+      "nhom": "trang_bi",
+      "ten": "Đạo Quan Mộc Trâm",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: simple wooden topknot crown with a wooden hairpin, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/06",
+      "nhom": "trang_bi",
+      "ten": "Mũ Da Thú",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: fur-trimmed leather cap, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/07",
+      "nhom": "trang_bi",
+      "ten": "Khôi Thiết Phiến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: iron helmet made of riveted plates, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/08",
+      "nhom": "trang_bi",
+      "ten": "Khôi Đồng Đầu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: round bronze helmet with a small spike, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/09",
+      "nhom": "trang_bi",
+      "ten": "Mạo Nho Sinh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: scholar's soft black cap with two hanging ribbons, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/10",
+      "nhom": "trang_bi",
+      "ten": "Nón Lá Tị Thủy",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: conical palm-leaf hat with a glossy waterproof sheen, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/11",
+      "nhom": "trang_bi",
+      "ten": "Khăn Đầu Hồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: red cloth headband with long tied tails, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/12",
+      "nhom": "trang_bi",
+      "ten": "Mũ Lông Chồn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: sable fur hat, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/13",
+      "nhom": "trang_bi",
+      "ten": "Đạo Quan Hoàng Bố",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: yellow cloth Taoist hat folded like a lotus, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/14",
+      "nhom": "trang_bi",
+      "ten": "Khôi Da Tê",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: rhino-hide leather helmet with neck flap, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/15",
+      "nhom": "trang_bi",
+      "ten": "Mạo Lục Hợp",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: round six-panel cap of dark cloth, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/16",
+      "nhom": "trang_bi",
+      "ten": "Mũ Cỏ Bện",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: woven straw cap, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/17",
+      "nhom": "trang_bi",
+      "ten": "Phát Quan Đồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: small bronze hair crown with a bronze pin, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/18",
+      "nhom": "trang_bi",
+      "ten": "Khôi Quân Sĩ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: soldier's iron helmet with a red tassel on top, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/19",
+      "nhom": "trang_bi",
+      "ten": "Mũ Khăn Lụa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: silk scarf hood, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/20",
+      "nhom": "trang_bi",
+      "ten": "Nón Tre Sơn Dã",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: rustic bamboo hat with a cloth band, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/21",
+      "nhom": "trang_bi",
+      "ten": "Đạo Mạo Bát Quái",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: Taoist cap with an eight-trigram emblem, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/22",
+      "nhom": "trang_bi",
+      "ten": "Mũ Lính Tuần",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: patrol guard's felt cap, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/23",
+      "nhom": "trang_bi",
+      "ten": "Khăn Chít Mặc Sắc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: black wrapped turban, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/24",
+      "nhom": "trang_bi",
+      "ten": "Mũ Mềm Bố Y",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: commoner's soft cloth hat, simple, practical and plainly crafted",
+      "loai": "Mũ",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/mu/25",
+      "nhom": "trang_bi",
+      "ten": "Ngọc Quan Tử Vân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: jade hair crown with purple cloud carvings, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/26",
+      "nhom": "trang_bi",
+      "ten": "Khôi Ưng Dực",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: steel helmet with eagle wings on the sides, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/27",
+      "nhom": "trang_bi",
+      "ten": "Ô Sa Lôi Văn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: black gauze official cap with silver thunder-cloud embroidery, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/28",
+      "nhom": "trang_bi",
+      "ten": "Đạo Quan Liên Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: lotus-shaped silver Taoist crown, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/29",
+      "nhom": "trang_bi",
+      "ten": "Khôi Hổ Đầu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: helmet shaped like a tiger head, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/30",
+      "nhom": "trang_bi",
+      "ten": "Mạo Hạc Vũ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: hat decorated with white crane feathers, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/31",
+      "nhom": "trang_bi",
+      "ten": "Quan Ngân Ti",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: silver filigree hair crown, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/32",
+      "nhom": "trang_bi",
+      "ten": "Khăn Lưu Vân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: headwrap embroidered with flowing clouds, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/33",
+      "nhom": "trang_bi",
+      "ten": "Khôi Long Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: dragon-scale steel helmet, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/34",
+      "nhom": "trang_bi",
+      "ten": "Mũ Phượng Linh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: hat with a long phoenix tail plume, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/35",
+      "nhom": "trang_bi",
+      "ten": "Đấu Lạp Ẩn Giả",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: hermit's straw hat with a sheer silk veil, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/36",
+      "nhom": "trang_bi",
+      "ten": "Quan Thanh Ngọc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: green jade hair crown, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/37",
+      "nhom": "trang_bi",
+      "ten": "Khôi Huyền Thiết",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: black iron helmet with gold trim, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/38",
+      "nhom": "trang_bi",
+      "ten": "Mạo Tùng Hạc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: cap embroidered with pine and crane, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/39",
+      "nhom": "trang_bi",
+      "ten": "Phát Quan Song Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: silver hair crown with twin dragons, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/40",
+      "nhom": "trang_bi",
+      "ten": "Khăn Tử La",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: purple gauze headwrap with a jade ornament, well-crafted with refined engraved details",
+      "loai": "Mũ",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/mu/41",
+      "nhom": "trang_bi",
+      "ten": "Bạch Ngọc Quan",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "an ornate jade crown hairpiece (guan) of carved white jade with a silver hairpin through it",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/mu_thien",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/42",
+      "nhom": "trang_bi",
+      "ten": "Khôi Kỳ Lân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: qilin helmet with glowing gem eyes, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/43",
+      "nhom": "trang_bi",
+      "ten": "Quan Tinh Tú",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: crown studded with sapphires like stars, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/44",
+      "nhom": "trang_bi",
+      "ten": "Mạo Lưu Ly",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: hat of translucent glass-like crystal, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/45",
+      "nhom": "trang_bi",
+      "ten": "Phượng Quan Tử Tinh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: phoenix crown set with amethysts, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/46",
+      "nhom": "trang_bi",
+      "ten": "Khôi Thiên Lang",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: wolf-head helmet with glowing blue eyes, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/47",
+      "nhom": "trang_bi",
+      "ten": "Quan Nguyệt Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: crown of silver moonflowers with a pale glow, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/48",
+      "nhom": "trang_bi",
+      "ten": "Đạo Quan Thất Bảo",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: Taoist crown set with seven treasures, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/49",
+      "nhom": "trang_bi",
+      "ten": "Mạo Huyễn Vũ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: hat of iridescent shimmering feathers, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/50",
+      "nhom": "trang_bi",
+      "ten": "Khôi Giao Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: helmet crested with a coiled flood dragon, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/51",
+      "nhom": "trang_bi",
+      "ten": "Quan Bích Hải",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: sea-green crown hung with pearls, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/52",
+      "nhom": "trang_bi",
+      "ten": "Khăn Vân Hà",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: rose-cloud headband studded with gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Mũ",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/mu/53",
+      "nhom": "trang_bi",
+      "ten": "Quan Phượng Hoàng",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a divine golden crown of a celestial immortal, phoenix and cloud filigree, glowing pearl at the front and soft golden aura",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/mu_than",
+      "loai": "Mũ",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/mu/54",
+      "nhom": "trang_bi",
+      "ten": "Khôi Hoàng Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: golden dragon helmet, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Mũ",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/mu/55",
+      "nhom": "trang_bi",
+      "ten": "Quan Diệu Nhật",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: golden crown with radiating sun rays, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Mũ",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/mu/56",
+      "nhom": "trang_bi",
+      "ten": "Quan Cửu Châu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: golden crown with nine luminous pearls, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Mũ",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/mu/57",
+      "nhom": "trang_bi",
+      "ten": "Khôi Thiên Tướng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: celestial general's golden helmet with wings and a red plume, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Mũ",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/mu/58",
+      "nhom": "trang_bi",
+      "ten": "Quan Xích Phượng",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: crimson phoenix crown wreathed in flames, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Mũ",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/mu/59",
+      "nhom": "trang_bi",
+      "ten": "Khôi Ma Thần",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: dark horned demon-god helmet with red glowing eyes, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Mũ",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/mu/60",
+      "nhom": "trang_bi",
+      "ten": "Quan Đế Vương",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a piece of headwear: red-gold emperor's crown with bead curtains, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Mũ",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/ao/01",
+      "nhom": "trang_bi",
+      "ten": "Bố Y Thô",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: plain hemp robe, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/02",
+      "nhom": "trang_bi",
+      "ten": "Sam Thanh Bố",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: blue cloth shirt with a cloth sash, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/03",
+      "nhom": "trang_bi",
+      "ten": "Đạo Bào Tro",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: simple grey Taoist robe, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/04",
+      "nhom": "trang_bi",
+      "ten": "Giáp Da Thú",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: leather armor vest, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/05",
+      "nhom": "trang_bi",
+      "ten": "Giáp Đồng Phiến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: bronze lamellar vest, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/06",
+      "nhom": "trang_bi",
+      "ten": "Áo Bông Kép",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: padded cotton jacket, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/07",
+      "nhom": "trang_bi",
+      "ten": "Sam Trắng Thư Sinh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: white scholar's robe, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/08",
+      "nhom": "trang_bi",
+      "ten": "Áo Vải Sơn Dã",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: rustic tunic with a rope belt, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/09",
+      "nhom": "trang_bi",
+      "ten": "Giáp Liên Hoàn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: chain mail shirt, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/10",
+      "nhom": "trang_bi",
+      "ten": "Đạo Bào Hoàng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: yellow Taoist robe, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/11",
+      "nhom": "trang_bi",
+      "ten": "Áo Choàng Lông",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: fur-lined cloak, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/12",
+      "nhom": "trang_bi",
+      "ten": "Giáp Trúc Phiến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: armor of lacquered bamboo slats, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/13",
+      "nhom": "trang_bi",
+      "ten": "Bào Lam Đơn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: simple blue robe, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/14",
+      "nhom": "trang_bi",
+      "ten": "Y Phục Dạ Hành",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: black night-walker outfit, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/15",
+      "nhom": "trang_bi",
+      "ten": "Giáp Da Tê",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: rhino hide armor, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/16",
+      "nhom": "trang_bi",
+      "ten": "Áo Nâu Tăng Nhân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: brown monk's robe, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/17",
+      "nhom": "trang_bi",
+      "ten": "Bào Lá Trúc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe printed with bamboo leaves, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/18",
+      "nhom": "trang_bi",
+      "ten": "Giáp Vải Bông",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: quilted cloth armor, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/19",
+      "nhom": "trang_bi",
+      "ten": "Áo Gấm Thô",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: coarse brocade jacket, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/20",
+      "nhom": "trang_bi",
+      "ten": "Bào Thanh Sam",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: light teal robe, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/21",
+      "nhom": "trang_bi",
+      "ten": "Áo Ngắn Võ Sinh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: martial artist's short jacket with wrist ties, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/22",
+      "nhom": "trang_bi",
+      "ten": "Giáp Ngực Đồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: bronze breastplate, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/23",
+      "nhom": "trang_bi",
+      "ten": "Áo Tơi Rơm",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: straw raincoat cape, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/24",
+      "nhom": "trang_bi",
+      "ten": "Bào Mực Nhạt",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: ink-wash grey robe, simple, practical and plainly crafted",
+      "loai": "Áo",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ao/25",
+      "nhom": "trang_bi",
+      "ten": "Đạo Bào Lưu Vân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a flowing Taoist cultivator robe folded and displayed upright, deep indigo silk with silver cloud embroidery and a jade clasp at the collar",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/ao_linh",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/26",
+      "nhom": "trang_bi",
+      "ten": "Giáp Huyền Thiết",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a heavy dark iron lamellar armor vest with bronze-trimmed plates and shoulder guards, xianxia warrior style",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/ao_thien",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/27",
+      "nhom": "trang_bi",
+      "ten": "Bào Hạc Văn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: white robe embroidered with cranes, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/28",
+      "nhom": "trang_bi",
+      "ten": "Giáp Thiết Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: iron scale armor with bronze trim, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/29",
+      "nhom": "trang_bi",
+      "ten": "Sam Bích Hà",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: sea-blue silk robe with wave embroidery, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/30",
+      "nhom": "trang_bi",
+      "ten": "Bào Tùng Hạc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe embroidered with pine and crane, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/31",
+      "nhom": "trang_bi",
+      "ten": "Giáp Hổ Văn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: armor with tiger-stripe pattern, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/32",
+      "nhom": "trang_bi",
+      "ten": "Y Phi Yến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: light silk dancer's outfit with swallow motifs, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/33",
+      "nhom": "trang_bi",
+      "ten": "Bào Mai Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe embroidered with plum blossoms, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/34",
+      "nhom": "trang_bi",
+      "ten": "Giáp Ngân Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: silver scale armor, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/35",
+      "nhom": "trang_bi",
+      "ten": "Bào Thanh Liên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe embroidered with teal lotuses, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/36",
+      "nhom": "trang_bi",
+      "ten": "Áo Choàng Hắc Ưng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: black eagle-feather cloak, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/37",
+      "nhom": "trang_bi",
+      "ten": "Giáp Quy Bối",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: armor of tortoise-shell plates, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/38",
+      "nhom": "trang_bi",
+      "ten": "Bào Trúc Lâm",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe painted with a bamboo forest, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/39",
+      "nhom": "trang_bi",
+      "ten": "Sam Tử La",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: purple gauze robe, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/40",
+      "nhom": "trang_bi",
+      "ten": "Giáp Long Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: blue steel dragon-scale armor, well-crafted with refined engraved details",
+      "loai": "Áo",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ao/41",
+      "nhom": "trang_bi",
+      "ten": "Pháp Y Tinh Hà",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: starry galaxy robe with a faint glow, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/42",
+      "nhom": "trang_bi",
+      "ten": "Giáp Kỳ Lân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: qilin-motif armor inlaid with gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/43",
+      "nhom": "trang_bi",
+      "ten": "Bào Phượng Vũ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: phoenix-feather patterned robe with ruby clasps, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/44",
+      "nhom": "trang_bi",
+      "ten": "Y Lưu Ly",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: shimmering robe woven from crystal thread, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/45",
+      "nhom": "trang_bi",
+      "ten": "Giáp Huyễn Ảnh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: dark phantom armor with shimmering afterimage edges, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/46",
+      "nhom": "trang_bi",
+      "ten": "Bào Tử Vân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: purple cloud robe with amethyst buttons, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/47",
+      "nhom": "trang_bi",
+      "ten": "Pháp Y Bát Quái",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe with glowing eight-trigram symbols, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/48",
+      "nhom": "trang_bi",
+      "ten": "Giáp Thiên Lang",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: wolf-motif armor with silver fur trim, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/49",
+      "nhom": "trang_bi",
+      "ten": "Bào Nguyệt Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe embroidered with glowing moonflowers, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/50",
+      "nhom": "trang_bi",
+      "ten": "Y Thiên Tằm",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe of celestial silkworm silk, faint pearly glow, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/51",
+      "nhom": "trang_bi",
+      "ten": "Giáp Bích Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: jade-green scale armor, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/52",
+      "nhom": "trang_bi",
+      "ten": "Bào Vạn Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe embroidered with countless flowers and small gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Áo",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ao/53",
+      "nhom": "trang_bi",
+      "ten": "Tiên Y Vũ Linh",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a divine immortal's robe of shimmering white and gold silk woven with feathers of light, floating ribbons and a soft radiant aura",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/ao_than",
+      "loai": "Áo",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ao/54",
+      "nhom": "trang_bi",
+      "ten": "Giáp Hoàng Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: golden dragon armor, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Áo",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ao/55",
+      "nhom": "trang_bi",
+      "ten": "Bào Cửu Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: imperial robe with nine golden dragons, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Áo",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ao/56",
+      "nhom": "trang_bi",
+      "ten": "Giáp Thiên Tướng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: celestial general's golden armor with a red cape, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Áo",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ao/57",
+      "nhom": "trang_bi",
+      "ten": "Pháp Y Thái Hư",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: black and white void robe with a taiji emblem, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Áo",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ao/58",
+      "nhom": "trang_bi",
+      "ten": "Bào Xích Hoàng",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: crimson emperor's robe with golden phoenixes, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Áo",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/ao/59",
+      "nhom": "trang_bi",
+      "ten": "Giáp Huyết Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: blood-red dragon armor, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Áo",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/ao/60",
+      "nhom": "trang_bi",
+      "ten": "Y Phần Thiên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a garment displayed upright: robe of crimson and gold flames, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Áo",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/dai/01",
+      "nhom": "trang_bi",
+      "ten": "Đai Da Ngọc Khấu",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a coiled leather cultivator belt with a carved green jade buckle and a small hanging pouch",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/dai_linh",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/02",
+      "nhom": "trang_bi",
+      "ten": "Đai Vải Bố",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: plain cloth sash tied in a knot, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/03",
+      "nhom": "trang_bi",
+      "ten": "Đai Dây Thừng",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: rope belt with a knot, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/04",
+      "nhom": "trang_bi",
+      "ten": "Đai Da Trâu",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: buffalo leather belt with an iron buckle, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/05",
+      "nhom": "trang_bi",
+      "ten": "Đai Đồng Khấu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: leather belt with a round bronze buckle, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/06",
+      "nhom": "trang_bi",
+      "ten": "Đai Lụa Lam",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: blue silk sash, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/07",
+      "nhom": "trang_bi",
+      "ten": "Đai Trúc Phiến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt of small bamboo plaques, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/08",
+      "nhom": "trang_bi",
+      "ten": "Đai Hồ Lô",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: leather belt with a small gourd hanging, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/09",
+      "nhom": "trang_bi",
+      "ten": "Đai Túi Dược",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with herb pouches, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/10",
+      "nhom": "trang_bi",
+      "ten": "Đai Xích Sắt",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: iron chain belt, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/11",
+      "nhom": "trang_bi",
+      "ten": "Đai Gấm Thô",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: coarse brocade sash, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/12",
+      "nhom": "trang_bi",
+      "ten": "Đai Da Rắn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: snakeskin belt, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/13",
+      "nhom": "trang_bi",
+      "ten": "Đai Mây Bện",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: woven rattan belt, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/14",
+      "nhom": "trang_bi",
+      "ten": "Đai Quân Sĩ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: soldier's wide belt with iron plates, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/15",
+      "nhom": "trang_bi",
+      "ten": "Đai Đạo Sĩ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: yellow sash with tassels, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/16",
+      "nhom": "trang_bi",
+      "ten": "Đai Ngọc Thô",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt strung with rough jade beads, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/17",
+      "nhom": "trang_bi",
+      "ten": "Đai Da Hươu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: deerskin belt with a bone buckle, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/18",
+      "nhom": "trang_bi",
+      "ten": "Đai Lụa Hồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: pink silk sash, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/19",
+      "nhom": "trang_bi",
+      "ten": "Đai Kiếm Khách",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: swordsman's belt with a sword loop, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/20",
+      "nhom": "trang_bi",
+      "ten": "Đai Vảy Cá",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: fish-scale patterned leather belt, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/21",
+      "nhom": "trang_bi",
+      "ten": "Đai Đá Cuội",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt strung with polished pebbles, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/22",
+      "nhom": "trang_bi",
+      "ten": "Đai Thắt Nút",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: knotted cord belt, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/23",
+      "nhom": "trang_bi",
+      "ten": "Đai Mây Trắng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: white sash with a cloud print, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/24",
+      "nhom": "trang_bi",
+      "ten": "Đai Sừng Thú",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: leather belt with a horn buckle, simple, practical and plainly crafted",
+      "loai": "Đai",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/dai/25",
+      "nhom": "trang_bi",
+      "ten": "Đai Lôi Văn",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "an ornate silver-plated belt engraved with thunder-cloud patterns and a round dark jade buckle",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/dai_thien",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/26",
+      "nhom": "trang_bi",
+      "ten": "Đai Ngân Hạc",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with a silver crane buckle, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/27",
+      "nhom": "trang_bi",
+      "ten": "Đai Thanh Ngọc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt of green jade plaques, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/28",
+      "nhom": "trang_bi",
+      "ten": "Đai Hổ Đầu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with a tiger-head buckle, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/29",
+      "nhom": "trang_bi",
+      "ten": "Đai Lưu Vân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with flowing cloud engravings, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/30",
+      "nhom": "trang_bi",
+      "ten": "Đai Long Khấu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with a silver dragon buckle, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/31",
+      "nhom": "trang_bi",
+      "ten": "Đai Mai Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with plum blossom plaques, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/32",
+      "nhom": "trang_bi",
+      "ten": "Đai Bích Lạc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with azure enamel plaques, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/33",
+      "nhom": "trang_bi",
+      "ten": "Đai Huyền Quy",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt of tortoise-shell plates, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/34",
+      "nhom": "trang_bi",
+      "ten": "Đai Tùng Văn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt engraved with pine motifs, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/35",
+      "nhom": "trang_bi",
+      "ten": "Đai Song Ngư",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with a twin-fish buckle, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/36",
+      "nhom": "trang_bi",
+      "ten": "Đai Ngọc Bích",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with a large jade disc buckle, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/37",
+      "nhom": "trang_bi",
+      "ten": "Đai Phi Yến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with a swallow-shaped buckle, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/38",
+      "nhom": "trang_bi",
+      "ten": "Đai Thất Hoàn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with seven silver rings, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/39",
+      "nhom": "trang_bi",
+      "ten": "Đai Tử Trúc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: purple bamboo plaque belt, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/40",
+      "nhom": "trang_bi",
+      "ten": "Đai Bạch Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: white scale belt, well-crafted with refined engraved details",
+      "loai": "Đai",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/dai/41",
+      "nhom": "trang_bi",
+      "ten": "Đai Tinh Tú",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt studded with star-like gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/42",
+      "nhom": "trang_bi",
+      "ten": "Đai Kỳ Lân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with a qilin buckle and gem eyes, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/43",
+      "nhom": "trang_bi",
+      "ten": "Đai Phượng Vĩ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with phoenix-tail plaques, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/44",
+      "nhom": "trang_bi",
+      "ten": "Đai Lưu Ly",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt of glowing crystal plaques, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/45",
+      "nhom": "trang_bi",
+      "ten": "Đai Tử Vân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: purple cloud belt with amethysts, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/46",
+      "nhom": "trang_bi",
+      "ten": "Đai Thất Bảo",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt set with seven treasures, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/47",
+      "nhom": "trang_bi",
+      "ten": "Đai Bát Quái",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with glowing trigram plaques, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/48",
+      "nhom": "trang_bi",
+      "ten": "Đai Nguyệt Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with silver moonflowers, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/49",
+      "nhom": "trang_bi",
+      "ten": "Đai Huyễn Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt of iridescent scales, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/50",
+      "nhom": "trang_bi",
+      "ten": "Đai Giao Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt with a coiled flood dragon buckle, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/51",
+      "nhom": "trang_bi",
+      "ten": "Đai Bích Hải",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt hung with pearls, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/52",
+      "nhom": "trang_bi",
+      "ten": "Đai Ngọc Tủy",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: belt of glowing milky jade, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Đai",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/dai/53",
+      "nhom": "trang_bi",
+      "ten": "Đai Hoàng Long",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a divine golden dragon belt laid out in a gentle S-curve, a long strap of linked golden plates with dragon-scale engraving, the buckle shaped like a dragon head holding a glowing pearl, celestial aura",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/dai_than",
+      "loai": "Đai",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/dai/54",
+      "nhom": "trang_bi",
+      "ten": "Đai Cửu Châu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: golden belt with nine pearls, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Đai",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/dai/55",
+      "nhom": "trang_bi",
+      "ten": "Đai Diệu Nhật",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: golden belt with a sun-disc buckle, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Đai",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/dai/56",
+      "nhom": "trang_bi",
+      "ten": "Đai Thiên Tướng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: celestial general's golden belt with a beast-face buckle, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Đai",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/dai/57",
+      "nhom": "trang_bi",
+      "ten": "Đai Vạn Tượng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: golden belt carved with many mythical beasts, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Đai",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/dai/58",
+      "nhom": "trang_bi",
+      "ten": "Đai Xích Long",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: crimson dragon belt, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Đai",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/dai/59",
+      "nhom": "trang_bi",
+      "ten": "Đai Huyết Phượng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: blood-red phoenix belt, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Đai",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/dai/60",
+      "nhom": "trang_bi",
+      "ten": "Đai Hỗn Nguyên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a waist belt: black and red belt swirling with chaos energy, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Đai",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/bao_tay/01",
+      "nhom": "trang_bi",
+      "ten": "Găng Da Thô",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: rough leather gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/02",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Vải",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: cloth wrist wraps, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/03",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Bố",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: plain cloth gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/04",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Đồng",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bronze gauntlets, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/05",
+      "nhom": "trang_bi",
+      "ten": "Găng Da Trâu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: buffalo leather gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/06",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Da",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: laced leather bracers, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/07",
+      "nhom": "trang_bi",
+      "ten": "Găng Thợ Rèn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: thick blacksmith's gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/08",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Sắt",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: iron gauntlets, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/09",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Lụa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: silk gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/10",
+      "nhom": "trang_bi",
+      "ten": "Băng Tay Võ Sinh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: martial artist's hand wraps, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/11",
+      "nhom": "trang_bi",
+      "ten": "Găng Hái Thuốc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: herbalist's gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/12",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Trúc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bamboo slat bracers, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/13",
+      "nhom": "trang_bi",
+      "ten": "Găng Lông Thú",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: fur-lined mittens, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/14",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Xích",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: chain mail gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/15",
+      "nhom": "trang_bi",
+      "ten": "Găng Da Rắn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: snakeskin gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/16",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Quân Sĩ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: soldier's leather bracers, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/17",
+      "nhom": "trang_bi",
+      "ten": "Găng Hở Ngón",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: fingerless leather gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/18",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Đen",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: black cloth gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/19",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Đinh Đồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bracers studded with bronze, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/20",
+      "nhom": "trang_bi",
+      "ten": "Găng Da Hươu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: deerskin gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/21",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Sừng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: gauntlets with horn plates, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/22",
+      "nhom": "trang_bi",
+      "ten": "Găng Thợ Săn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: hunter's archery gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/23",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Gấm",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: brocade bracers, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/24",
+      "nhom": "trang_bi",
+      "ten": "Găng Vải Bông",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: padded cotton gloves, simple, practical and plainly crafted",
+      "loai": "Bao tay",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/bao_tay/25",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Thiết Lân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: iron scale gauntlets, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/26",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Lưu Vân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: silver bracers engraved with clouds, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/27",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Hổ Trảo",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: tiger-claw gauntlets, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/28",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Hạc Văn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: gloves embroidered with cranes, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/29",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Long Văn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bracers engraved with dragons, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/30",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Ưng Trảo",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: eagle-talon gauntlets, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/31",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Thanh Ti",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: gloves of blue silk thread, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/32",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Ngân Hoàn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bracers with silver rings, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/33",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Huyền Thiết",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: black iron gauntlets with gold trim, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/34",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Mai Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: gloves embroidered with plum blossoms, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/35",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Ngọc Bích",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bracers inlaid with jade, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/36",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Quy Giáp",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: tortoise-shell gauntlets, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/37",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Phi Yến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: light gloves with swallow motifs, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/38",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Tùng Hạc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bracers with pine and crane, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/39",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Ngân Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: silver scale gauntlets, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/40",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Tử La",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: purple gauze gloves, well-crafted with refined engraved details",
+      "loai": "Bao tay",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/bao_tay/41",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Kỳ Lân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: qilin gauntlets with gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/42",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Tinh Tú",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bracers studded with star gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/43",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Lưu Ly",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: gloves of glowing crystal thread, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/44",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Giao Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: flood-dragon gauntlets, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/45",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Phượng Vũ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: phoenix-feather bracers, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/46",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Huyễn Ảnh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: phantom gloves with shimmering edges, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/47",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Thiên Lang",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: wolf-head gauntlets, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/48",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Bát Quái",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bracers with glowing trigrams, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/49",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Thiên Tằm",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: gloves of celestial silk, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/50",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Bích Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: jade-scale gauntlets, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/51",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Tử Vân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bracers with purple clouds and amethysts, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/52",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Nguyệt Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: gloves with silver moonflowers, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Bao tay",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/bao_tay/53",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Hoàng Long",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: golden dragon gauntlets, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Bao tay",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/bao_tay/54",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Diệu Nhật",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: golden sun bracers, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Bao tay",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/bao_tay/55",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Thiên Tướng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: celestial general's golden gauntlets, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Bao tay",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/bao_tay/56",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Cửu Châu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: golden bracers with nine pearls, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Bao tay",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/bao_tay/57",
+      "nhom": "trang_bi",
+      "ten": "Thủ Sáo Vạn Tượng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: golden gloves embroidered with mythical beasts, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Bao tay",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/bao_tay/58",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Xích Long",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: crimson dragon-claw gauntlets, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Bao tay",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/bao_tay/59",
+      "nhom": "trang_bi",
+      "ten": "Hộ Thủ Ma Thần",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: dark demon-god claw gauntlets with red glow, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Bao tay",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/bao_tay/60",
+      "nhom": "trang_bi",
+      "ten": "Hộ Uyển Phần Thiên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of gloves or bracers: bracers wreathed in crimson and golden flames, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Bao tay",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/giay/01",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Vải Đen",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of black cloth cultivator boots with white soles and simple stitched cloud motif",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/giay_linh",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/02",
+      "nhom": "trang_bi",
+      "ten": "Hài Cỏ",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: straw sandals, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/03",
+      "nhom": "trang_bi",
+      "ten": "Giày Vải Bố",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: plain cloth shoes, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/04",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Da Thú",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: leather boots, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/05",
+      "nhom": "trang_bi",
+      "ten": "Guốc Gỗ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: wooden clogs, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/06",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Quân Sĩ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: soldier's boots with shin guards, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/07",
+      "nhom": "trang_bi",
+      "ten": "Hài Thư Sinh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: scholar's black cloth shoes, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/08",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Da Trâu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: buffalo hide boots, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/09",
+      "nhom": "trang_bi",
+      "ten": "Giày Tăng Nhân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: monk's shoes, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/10",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Lông Thú",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: fur boots, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/11",
+      "nhom": "trang_bi",
+      "ten": "Hài Trúc Bện",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: woven bamboo shoes, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/12",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Đinh Đồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots studded with bronze, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/13",
+      "nhom": "trang_bi",
+      "ten": "Giày Leo Núi",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: mountain shoes with leg wraps, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/14",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Da Rắn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: snakeskin boots, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/15",
+      "nhom": "trang_bi",
+      "ten": "Hài Gấm Thô",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: coarse brocade shoes, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/16",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Mũi Sắt",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots with iron toe caps, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/17",
+      "nhom": "trang_bi",
+      "ten": "Giày Dạ Hành",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: soft black night-walker boots, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/18",
+      "nhom": "trang_bi",
+      "ten": "Hài Đạo Sĩ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: Taoist shoes with upturned cloud toes, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/19",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Da Hươu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: deerskin boots, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/20",
+      "nhom": "trang_bi",
+      "ten": "Giày Vải Xanh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: blue cloth shoes, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/21",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Cao Cổ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: tall riding boots, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/22",
+      "nhom": "trang_bi",
+      "ten": "Hài Lụa Hồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: pink silk shoes, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/23",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Thợ Săn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: hunter's boots, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/24",
+      "nhom": "trang_bi",
+      "ten": "Dép Tre Sơn Dã",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: bamboo sandals, simple, practical and plainly crafted",
+      "loai": "Giày",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/giay/25",
+      "nhom": "trang_bi",
+      "ten": "Giày Đạp Vân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of cloud-stepping boots of pale blue silk with silver cloud embroidery and wisps of mist around the soles",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/giay_thien",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/26",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Hạc Vũ",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots with crane feathers, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/27",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Thiết Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: iron scale boots, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/28",
+      "nhom": "trang_bi",
+      "ten": "Hài Lưu Vân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: shoes embroidered with clouds, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/29",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Hổ Văn",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: tiger-stripe boots, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/30",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Long Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: dragon-scale boots, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/31",
+      "nhom": "trang_bi",
+      "ten": "Hài Thanh Liên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: shoes embroidered with teal lotuses, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/32",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Phi Yến",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: light boots with swallow motifs, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/33",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Ngân Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: silver scale boots, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/34",
+      "nhom": "trang_bi",
+      "ten": "Hài Mai Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: shoes embroidered with plum blossoms, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/35",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Huyền Thiết",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: black iron boots with gold trim, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/36",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Truy Ảnh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots with small wing motifs at the heels, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/37",
+      "nhom": "trang_bi",
+      "ten": "Hài Tử La",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: purple gauze shoes, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/38",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Quy Giáp",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots with tortoise-shell plates, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/39",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Tùng Hạc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots with pine and crane, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/40",
+      "nhom": "trang_bi",
+      "ten": "Hài Bích Hải",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: sea-blue shoes with wave embroidery, well-crafted with refined engraved details",
+      "loai": "Giày",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/giay/41",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Kỳ Lân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: qilin boots with gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/42",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Tinh Tú",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots studded with star gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/43",
+      "nhom": "trang_bi",
+      "ten": "Hài Lưu Ly",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: shoes of glowing crystal, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/44",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Giao Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: flood-dragon boots, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/45",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Huyễn Ảnh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: phantom boots with shimmering edges, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/46",
+      "nhom": "trang_bi",
+      "ten": "Hài Nguyệt Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: shoes with silver moonflowers, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/47",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Thiên Lang",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: wolf-fur boots with glowing trim, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/48",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Bát Quái",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots with glowing trigram soles, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/49",
+      "nhom": "trang_bi",
+      "ten": "Hài Thiên Tằm",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: shoes of celestial silk, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/50",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Bích Lân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: jade-scale boots, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/51",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Tử Vân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots with purple clouds and amethysts, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/52",
+      "nhom": "trang_bi",
+      "ten": "Hài Vạn Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: shoes embroidered with countless flowers, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Giày",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/giay/53",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Hoàng Long",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: golden dragon boots, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Giày",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/giay/54",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Thiên Tướng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: celestial general's golden boots, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Giày",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/giay/55",
+      "nhom": "trang_bi",
+      "ten": "Hài Diệu Nhật",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: golden sun shoes, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Giày",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/giay/56",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Cửu Châu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: golden boots with nine pearls, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Giày",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/giay/57",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Đại Bằng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: golden boots with roc wings, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Giày",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/giay/58",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Phượng Hoàng",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of divine phoenix-feather boots in crimson and gold with flame-like plumes at the heels, soft golden aura",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/giay_than",
+      "loai": "Giày",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/giay/59",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Huyết Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: blood-red dragon boots, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Giày",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/giay/60",
+      "nhom": "trang_bi",
+      "ten": "Ngoa Phần Thiên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a pair of boots or shoes: boots wreathed in crimson and golden flames, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Giày",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/01",
+      "nhom": "trang_bi",
+      "ten": "Bội Bích Hoàn",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a round carved green jade pendant disc (bi) with a hole in the center, hanging from a red knotted cord",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/ngoc_boi_linh",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/02",
+      "nhom": "trang_bi",
+      "ten": "Bội Đá Thanh",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: plain green stone pendant on a cord, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/03",
+      "nhom": "trang_bi",
+      "ten": "Bội Gỗ Đào",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: carved peach-wood charm, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/04",
+      "nhom": "trang_bi",
+      "ten": "Bội Đồng Tiền",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: old bronze coin charm with a red cord, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/05",
+      "nhom": "trang_bi",
+      "ten": "Bội Xương Thú",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: carved beast-bone pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/06",
+      "nhom": "trang_bi",
+      "ten": "Bội Ngọc Thô",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: rough jade pebble pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/07",
+      "nhom": "trang_bi",
+      "ten": "Bội Hồ Lô",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: small gourd-shaped charm, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/08",
+      "nhom": "trang_bi",
+      "ten": "Bội Cá Chép",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: carved carp pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/09",
+      "nhom": "trang_bi",
+      "ten": "Bội Lá Trúc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade bamboo-leaf pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/10",
+      "nhom": "trang_bi",
+      "ten": "Bội Đồng Linh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: small bronze bell charm, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/11",
+      "nhom": "trang_bi",
+      "ten": "Bội Bồ Đề",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: string of bodhi seed beads, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/12",
+      "nhom": "trang_bi",
+      "ten": "Bội Ve Sầu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade cicada pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/13",
+      "nhom": "trang_bi",
+      "ten": "Bội Mây Đá",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: stone cloud-shaped pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/14",
+      "nhom": "trang_bi",
+      "ten": "Bội Sừng Hươu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: antler charm, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/15",
+      "nhom": "trang_bi",
+      "ten": "Bội Hổ Phách Thô",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: rough amber pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/16",
+      "nhom": "trang_bi",
+      "ten": "Bội Thỏ Ngọc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade rabbit pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/17",
+      "nhom": "trang_bi",
+      "ten": "Bội Vỏ Sò",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: seashell charm, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/18",
+      "nhom": "trang_bi",
+      "ten": "Bội Sen Gỗ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: carved wooden lotus pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/19",
+      "nhom": "trang_bi",
+      "ten": "Bội Ấn Đồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: small bronze seal charm, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/20",
+      "nhom": "trang_bi",
+      "ten": "Bội Kết Hồng",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: red knot charm with a bead, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/21",
+      "nhom": "trang_bi",
+      "ten": "Bội Song Ngư Đá",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: stone twin-fish pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/22",
+      "nhom": "trang_bi",
+      "ten": "Bội Phù Gỗ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: wooden talisman plaque with carved patterns, no readable text, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/23",
+      "nhom": "trang_bi",
+      "ten": "Bội Hạt Châu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: single pearl bead pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/24",
+      "nhom": "trang_bi",
+      "ten": "Bội Đá Vân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: banded agate pendant, simple, practical and plainly crafted",
+      "loai": "Ngọc bội",
+      "do_hiem": "luc"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/25",
+      "nhom": "trang_bi",
+      "ten": "Bội Mã Não",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: carved red agate pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/26",
+      "nhom": "trang_bi",
+      "ten": "Bội Bạch Hạc",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: white jade crane pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/27",
+      "nhom": "trang_bi",
+      "ten": "Bội Song Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade pendant with twin dragons, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/28",
+      "nhom": "trang_bi",
+      "ten": "Bội Lan Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade orchid pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/29",
+      "nhom": "trang_bi",
+      "ten": "Bội Ngân Tỏa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: silver longevity lock pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/30",
+      "nhom": "trang_bi",
+      "ten": "Bội Phỉ Thúy",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: bright jadeite pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/31",
+      "nhom": "trang_bi",
+      "ten": "Bội Sư Tử",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade lion pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/32",
+      "nhom": "trang_bi",
+      "ten": "Bội Như Ý",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: ruyi-shaped jade pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/33",
+      "nhom": "trang_bi",
+      "ten": "Bội Mai Hoa",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: plum blossom jade pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/34",
+      "nhom": "trang_bi",
+      "ten": "Bội Hồ Điệp",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade butterfly pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/35",
+      "nhom": "trang_bi",
+      "ten": "Bội Lưu Vân",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: cloud-carved jade pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/36",
+      "nhom": "trang_bi",
+      "ten": "Bội Bát Bảo",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: pendant with eight treasure symbols, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/37",
+      "nhom": "trang_bi",
+      "ten": "Bội Quy Thọ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade longevity tortoise pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/38",
+      "nhom": "trang_bi",
+      "ten": "Bội Trúc Tiết",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade bamboo-node pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/39",
+      "nhom": "trang_bi",
+      "ten": "Bội Thanh Điền",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: carved green-veined stone pendant, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/40",
+      "nhom": "trang_bi",
+      "ten": "Bội Tùng Hạc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: pendant with pine and crane, well-crafted with refined engraved details",
+      "loai": "Ngọc bội",
+      "do_hiem": "lam"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/41",
+      "nhom": "trang_bi",
+      "ten": "Bội Kỳ Lân",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "an intricately carved white jade pendant shaped like a coiled qilin, silver cap and a blue silk tassel",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/ngoc_boi_thien",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/42",
+      "nhom": "trang_bi",
+      "ten": "Bội Tử Tinh",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: faceted amethyst pendant, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/43",
+      "nhom": "trang_bi",
+      "ten": "Bội Nguyệt Quang",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: moonstone jade pendant with a pale glow, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/44",
+      "nhom": "trang_bi",
+      "ten": "Bội Thất Tinh",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: pendant set with seven star gems, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/45",
+      "nhom": "trang_bi",
+      "ten": "Bội Phượng Lưu Ly",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: glass phoenix pendant, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/46",
+      "nhom": "trang_bi",
+      "ten": "Bội Huyễn Thải",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: iridescent opal pendant, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/47",
+      "nhom": "trang_bi",
+      "ten": "Bội Giao Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: flood-dragon jade pendant, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/48",
+      "nhom": "trang_bi",
+      "ten": "Bội Ngọc Tủy",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: glowing milky jade pendant, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/49",
+      "nhom": "trang_bi",
+      "ten": "Bội Bát Quái",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: pendant with glowing trigrams, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/50",
+      "nhom": "trang_bi",
+      "ten": "Bội Linh Hồ",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: jade fox pendant, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/51",
+      "nhom": "trang_bi",
+      "ten": "Bội Liên Lưu Ly",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: glass lotus pendant, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/52",
+      "nhom": "trang_bi",
+      "ten": "Bội Tinh Hà",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: pendant with a galaxy swirl inside, ornate, inlaid with gems, a faint mystical glow",
+      "loai": "Ngọc bội",
+      "do_hiem": "tim"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/53",
+      "nhom": "trang_bi",
+      "ten": "Bội Long Phượng",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a divine glowing jade pendant carved with a dragon and phoenix, radiating soft golden light, golden tassel",
+      "ghi_chu": "Hình vẽ trước với mã trang_bi/ngoc_boi_than",
+      "loai": "Ngọc bội",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/54",
+      "nhom": "trang_bi",
+      "ten": "Bội Hoàng Long",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: golden dragon pendant, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Ngọc bội",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/55",
+      "nhom": "trang_bi",
+      "ten": "Bội Diệu Nhật",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: golden sun-disc pendant, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Ngọc bội",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/56",
+      "nhom": "trang_bi",
+      "ten": "Bội Cửu Châu",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: golden pendant with nine pearls, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Ngọc bội",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/57",
+      "nhom": "trang_bi",
+      "ten": "Bội Thái Hư",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: taiji jade pendant, black and white with a golden rim, magnificent and luxurious, gold accents, radiant golden aura",
+      "loai": "Ngọc bội",
+      "do_hiem": "vang"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/58",
+      "nhom": "trang_bi",
+      "ten": "Bội Xích Long",
+      "uu_tien": 1,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: crimson dragon pendant, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Ngọc bội",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/59",
+      "nhom": "trang_bi",
+      "ten": "Bội Huyết Ngọc",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: blood jade pendant, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Ngọc bội",
+      "do_hiem": "do"
+    },
+    {
+      "ma": "trang_bi/ngoc_boi/60",
+      "nhom": "trang_bi",
+      "ten": "Bội Hỗn Nguyên",
+      "uu_tien": 2,
+      "nguon": "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền",
+      "mo_ta": "a hanging pendant charm: black and red pendant swirling with chaos energy, legendary divine artifact, red and gold, blazing aura of power",
+      "loai": "Ngọc bội",
+      "do_hiem": "do"
     },
     {
       "ma": "ngoc/kim",
@@ -957,7 +5059,7 @@
       "uu_tien": 3,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a pair of heavy bronze battle gauntlets with knuckle spikes",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
     },
     {
       "ma": "vu_khi_tai_nang/phap_truong",
@@ -966,7 +5068,7 @@
       "uu_tien": 3,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a tall wooden magic staff topped with a glowing crystal orb held by carved branches",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
     },
     {
       "ma": "vu_khi_tai_nang/tran_ban",
@@ -975,7 +5077,7 @@
       "uu_tien": 3,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a round bronze formation array disc engraved with trigram and rune circles, faint glowing lines",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
     },
     {
       "ma": "vu_khi_tai_nang/ho_lo",
@@ -984,7 +5086,7 @@
       "uu_tien": 3,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a lacquered red calabash gourd bottle with a cork stopper and a cord, wisps of medicinal mist",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
     },
     {
       "ma": "vu_khi_tai_nang/song_chuy_thu",
@@ -993,7 +5095,7 @@
       "uu_tien": 3,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a pair of crossed sleek black daggers with curved blades and dark red wrapped handles",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
     },
     {
       "ma": "vu_khi_tai_nang/bua_ren",
@@ -1002,7 +5104,7 @@
       "uu_tien": 3,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a heavy forging hammer with a bronze head engraved with fire patterns and a wooden handle",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
     },
     {
       "ma": "vu_khi_tai_nang/liem_hai_thuoc",
@@ -1011,7 +5113,7 @@
       "uu_tien": 3,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a small curved herb-gathering sickle with a jade handle and a sprig of spirit herb tied to it",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
     },
     {
       "ma": "vu_khi_tai_nang/ban_tinh",
@@ -1020,7 +5122,7 @@
       "uu_tien": 3,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "an ornate golden abacus with jade beads and a carved rosewood frame",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm; trong túi dùng trang_bi/vu_khi_<cấp>"
+      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
     }
   ]
 }
