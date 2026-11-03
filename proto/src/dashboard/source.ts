@@ -115,7 +115,10 @@ export interface DongPhuView extends Stamped {
   city: { name: string; pointId: number; facilities: string[] };
 }
 
-export type GearSlot = "vu_khi" | "mu" | "ao" | "dai" | "giay" | "ngoc_boi";
+/** 7 ô trang bị (người dùng chốt 2026-11-03): kiếm, mũ, áo, đai, bao tay, giày, ngọc bội. */
+export type GearSlot = "vu_khi" | "mu" | "ao" | "dai" | "bao_tay" | "giay" | "ngoc_boi";
+/** Độ hiếm, hiện bằng màu nền ô (người dùng chốt 2026-11-03): lục là đồ shop < lam < tím < vàng < đỏ. */
+export type Rarity = "luc" | "lam" | "tim" | "vang" | "do";
 export type GearTier = "linh" | "thien" | "than";
 
 export interface Gem {
@@ -134,8 +137,13 @@ export interface GearItem {
   gems: Gem[];
   /** Chỉ số gốc của món, cộng 3% mỗi nấc (GDD mục 12). */
   stats: { hp?: number; atk?: number; def?: number; mana?: number };
-  /** Khoá hình trong manifest PixelLab, nếu có. */
+  /** Khoá hình trong manifest PixelLab, nếu có; dùng khi chưa có hình vẽ `art`. */
   icon?: string;
+  /** Hình vẽ Canva (assets/icon_ve/<art>.webp), mã như "trang_bi/ao/26". */
+  art?: string;
+  rarity?: Rarity;
+  /** Mã vật phẩm cố định (ma_vp trong assets/icon_ve/danh_sach.json), ví dụ "TB-AO-026". */
+  code?: string;
 }
 
 /** Một dòng nguồn của chỉ số; `value` cùng đơn vị với chỉ số. */
@@ -175,8 +183,14 @@ export interface BagItem {
   gradeLabel: string;
   count: number;
   element?: Element;
-  /** Khoá hình trong manifest PixelLab; không có thì vẽ ký hiệu theo loại trên nền màu phẩm. */
+  /** Khoá hình trong manifest PixelLab; không có `art` lẫn `icon` thì vẽ ký hiệu theo loại trên nền màu phẩm. */
   icon?: string;
+  /** Hình vẽ Canva (assets/icon_ve/<art>.webp), mã như "ngoc/loi"; món chưa có hình thì để trống. */
+  art?: string;
+  /** Độ hiếm theo do_hiem của danh sách icon; món không phải trang bị thường không có. */
+  rarity?: Rarity;
+  /** Mã vật phẩm cố định (ma_vp), ví dụ "NG-KH-006". */
+  code?: string;
   /** Một dòng công dụng. */
   detail: string;
   gear?: GearItem;

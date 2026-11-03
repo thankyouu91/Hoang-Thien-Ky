@@ -23,7 +23,7 @@ import { ELEMENT_STYLE } from "../../theme/elements.ts";
 
 export type NhanVatTab = "thong-tin" | "phap-tuong" | "tui";
 
-const SLOT_NAMES: Record<GearSlot, string> = { vu_khi: "Vũ khí", mu: "Mũ", ao: "Áo", dai: "Đai", giay: "Giày", ngoc_boi: "Ngọc bội" };
+const SLOT_NAMES: Record<GearSlot, string> = { vu_khi: "Vũ khí", mu: "Mũ", ao: "Áo", dai: "Đai", bao_tay: "Bao tay", giay: "Giày", ngoc_boi: "Ngọc bội" };
 const LEFT: GearSlot[] = ["vu_khi", "mu", "ao"];
 const RIGHT: GearSlot[] = ["dai", "giay", "ngoc_boi"];
 const TIER_NAMES = { linh: "Linh", thien: "Thiên", than: "Thần" };
@@ -38,7 +38,7 @@ const GRADE_NAMES: Record<ItemGrade, string> = { ha: "Hạ phẩm", trung: "Trun
 const KIND_GLYPH: Record<ItemKind, IconName> = {
   trang_bi: "sword", cong_phap: "scroll", tan_quyen: "scroll", ngoc: "gem", dan: "dan", nguyen_lieu: "quang", phu: "phu", trung_thu: "trung",
 };
-const SLOT_GLYPH: Record<GearSlot, IconName> = { vu_khi: "sword", mu: "shield", ao: "ao", dai: "dai", giay: "giay", ngoc_boi: "ngoc_boi" };
+const SLOT_GLYPH: Record<GearSlot, IconName> = { vu_khi: "sword", mu: "shield", ao: "ao", dai: "dai", bao_tay: "shield", giay: "giay", ngoc_boi: "ngoc_boi" };
 /** Độ bền dưới mức này tô đỏ (cùng mức với thẻ Việc nên làm). */
 const LOW = 20;
 const WIDE = "(min-width: 1100px)";

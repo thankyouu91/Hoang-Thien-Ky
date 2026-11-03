@@ -64,9 +64,13 @@ const LEARNED_UID = 1_000_000;
 function gearBagItem(uid: number, g: GearItem): BagItem {
   return {
     uid, kind: "trang_bi", name: g.name, grade: g.tier === "linh" ? "ha" : g.tier === "thien" ? "trung" : "cao",
-    gradeLabel: { linh: "Linh", thien: "Thiên", than: "Thần" }[g.tier], count: 1, icon: g.icon, detail: "Đồ đã tháo.", gear: g,
+    gradeLabel: { linh: "Linh", thien: "Thiên", than: "Thần" }[g.tier], count: 1, icon: g.icon, art: g.art, rarity: g.rarity, code: g.code, detail: "Đồ đã tháo.", gear: g,
   };
 }
+
+/** Thứ tự hệ trong mã vật phẩm của danh sách icon vẽ (TQ-HE-xxx, CP-HE-xxx; assets/icon_ve/danh_sach.json). */
+const ICON_ELEMENTS: Element[] = ["kim", "moc", "thuy", "hoa", "tho", "loi", "phong", "quang", "am_lanh", "cuc_duong", "cuc_am", "cuc_han"];
+const elementCode = (prefix: string, e: Element) => `${prefix}-HE-${String(ICON_ELEMENTS.indexOf(e) + 1).padStart(3, "0")}`;
 
 /** Phẩm lọc của tàn quyển và công pháp: Phàm, Hoàng là hạ; Huyền là trung; từ Địa trở lên là cao (đề xuất). */
 function techGrade(grade: number): BagItem["grade"] {
@@ -459,11 +463,15 @@ export class MockDashboardSource implements DashboardSource {
       ...p.bag,
       ...me.bag.map((sc): BagItem => {
         const c = scrollCard(sc);
-        return { uid: c.uid, kind: "tan_quyen", name: c.name, grade: techGrade(c.grade), gradeLabel: c.gradeName, count: 1, element: c.element, icon: `chieu/${c.type}`, detail: `Nộp ở Tàng Kinh Các được ${c.contribution} cống hiến.` };
+        return {
+          uid: c.uid, kind: "tan_quyen", name: c.name, grade: techGrade(c.grade), gradeLabel: c.gradeName, count: 1, element: c.element,
+          icon: `chieu/${c.type}`, art: `tan_quyen/${c.element}`, code: elementCode("TQ", c.element), detail: `Nộp ở Tàng Kinh Các được ${c.contribution} cống hiến.`,
+        };
       }),
       ...learned
         .filter((t) => !me.loadout.includes(t.id))
-        .map((t): BagItem => ({ uid: LEARNED_UID + t.id, kind: "cong_phap", name: t.name, grade: techGrade(t.grade), gradeLabel: t.gradeName, count: 1, element: t.element, icon: `chieu/${t.type}`, detail: t.summary, technique: t })),
+        // Công pháp chưa có hình vẽ (cong_phap/<hệ> trong danh sách icon), giữ hình loại chiêu PixelLab.
+        .map((t): BagItem => ({ uid: LEARNED_UID + t.id, kind: "cong_phap", name: t.name, grade: techGrade(t.grade), gradeLabel: t.gradeName, count: 1, element: t.element, icon: `chieu/${t.type}`, code: elementCode("CP", t.element), detail: t.summary, technique: t })),
     ];
     return {
       serverNow: now,
