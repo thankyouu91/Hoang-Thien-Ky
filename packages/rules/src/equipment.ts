@@ -1,13 +1,14 @@
-// Chỉ số trang bị và ngọc khảm (đặc tả của phiên set đồ; số trong data/trang_bi, mọi số là đề xuất).
+// Chỉ số trang bị và ngọc khảm (đặc tả của phiên set đồ; mọi số là đề xuất). Số đọc từ data/he_thong/json,
+// xuất từ file Excel số liệu bằng tools/data/xuat.ts: đổi số thì sửa Excel rồi xuất lại.
 // Món: chỉ số chính và phụ của ô × độ hiếm × (1 + 3% mỗi nấc) × (1 + thưởng bí cảnh). Độ bền 0 thì món không cộng gì.
 // Ngọc: ô "công" cộng sát thương cho công pháp cùng hệ chủ, ô "thủ" cộng kháng hệ; trùng linh căn ×1,2.
 // Set: ấn bộ khảm ở một dòng; đủ 2/4/7 món cùng ấn (còn độ bền) thì mở mốc. Bước này áp hiệu ứng loại chi_so;
 // các loại khác (kinh tế, hành vi, khắc chế, hộ trận) chỉ được liệt kê trong `sets` để các bước sau dùng.
 // Ý châu chiếm dòng khảm nhưng tính ở bước Ý châu.
 import { baseStats, mul, BATTLE, ELEMENTS, type Element, type BuffStat, type UnitSpec } from "@ktlp/sim";
-import TRANG_BI from "../../../data/trang_bi/trang_bi.json" with { type: "json" };
-import NGOC from "../../../data/trang_bi/ngoc.json" with { type: "json" };
-import SET from "../../../data/trang_bi/set.json" with { type: "json" };
+import TRANG_BI from "../../../data/he_thong/json/trang_bi.json" with { type: "json" };
+import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
+import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
 import { GEAR } from "./config.ts";
 
 export type SlotId = "vu_khi" | "mu" | "ao" | "dai" | "bao_tay" | "giay" | "ngoc_boi";

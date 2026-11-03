@@ -25,7 +25,7 @@ export const RULES = {
   outerMaxGrade: 2,
 };
 
-/** Trang bị (GDD mục 12, tab Trang bị; data/trang_bi). Mọi số là đề xuất trừ chỗ ghi chốt. */
+/** Trang bị (GDD mục 12, tab Trang bị; data/he_thong/json). Mọi số là đề xuất trừ chỗ ghi chốt. */
 export const GEAR = {
   /** Cường hóa mỗi nấc +3% chỉ số gốc của món. */
   enhancePerLevel: 30,

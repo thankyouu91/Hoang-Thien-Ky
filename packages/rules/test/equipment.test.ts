@@ -2,8 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { Battle, baseStats, composeTechnique, type UnitSpec } from "@ktlp/sim";
 import { gearStats, withGear, kieuInfo, maxInlayLines, setTier, isKnownSetStat, type EquipItem, type InlayLine } from "../src/index.ts";
-import SET from "../../../data/trang_bi/set.json" with { type: "json" };
-import NGOC from "../../../data/trang_bi/ngoc.json" with { type: "json" };
+import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
+import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
 
 const item = (kieu: string, extra: Partial<EquipItem> = {}): EquipItem => ({ kieu, nac: 0, doBen: 100, biCanh: 0, dongThem: 0, kham: [], ...extra });
 const gem = (he: "kim" | "hoa" | "loi", cap: number): InlayLine => ({ loai: "ngoc", he, cap });
