@@ -551,10 +551,18 @@ export function pointArt(region: string, type: string): string | undefined {
   return undefined;
 }
 
-/** Hình nền của một công trình: PixelLab nếu có, không thì Three.js, máy không có WebGL2 thì SVG vẽ code. */
+/**
+ * Bộ hình chung: công trình tông nào cũng có (trừ Chính Điện) dùng một hình cho mọi mô hình, ở
+ * assets/pixellab/cong_trinh/chung/<công trình>.png (người dùng chốt 2026-11-03). Chính Điện vẫn riêng từng mô hình.
+ */
+const SHARED = "chung";
+
+/** Hình nền của một công trình: PixelLab (bộ chung, rồi hình riêng của mô hình) nếu có, không thì Three.js, máy không có WebGL2 thì SVG vẽ code. */
 export function locationArt(input: SceneInput): { url: string; pixel: boolean } {
   const key = `${input.model.id}/${input.location}`;
-  if (pixelArtOn && pixelArt.has(key)) return { url: `${import.meta.env.BASE_URL}pixellab/cong_trinh/${key}.png`, pixel: true };
+  const shared = `${SHARED}/${input.location}`;
+  for (const k of input.location === "chinh_dien" ? [key] : [shared, key])
+    if (pixelArtOn && pixelArt.has(k)) return { url: `${import.meta.env.BASE_URL}pixellab/cong_trinh/${k}.png`, pixel: true };
   const url = baked.get(`cong_trinh/${key}`);
   if (url) return { url, pixel: false };
   const svg = sectSceneUrl(input);
