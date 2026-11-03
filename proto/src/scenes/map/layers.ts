@@ -1,163 +1,329 @@
-// Tải và vẽ bản đồ tranh cho nhanh trên điện thoại.
-//  - Ảnh nền tải bằng fetch có tiến độ (thanh "Đang tải bản đồ"), giải mã bằng createImageBitmap, không chặn luồng chính.
-//  - Trong lúc chờ đã có tấm tạm (màu giấy + đường + sương mù) nên bản đồ hiện ngay, chạm và kéo được.
-//  - Khi thu nhỏ (mỗi px ảnh ≤ 0,5 px thiết bị), nền + đường + sương được nướng sẵn ở 1/4 và 1/2: mỗi khung một lần
-//    drawImage từ tấm nhỏ, không phóng ảnh 1926 × 1842 và không dựng lại 360 chặng đường. Khi phóng to thì vẽ thẳng
-//    ảnh nền, đường (Path2D dựng một lần) và sương; không nướng cả cỡ để khỏi tốn thêm ~14 MB.
-//  - Hình đảo chỉ nạp ~20 hình cần cho bản đồ thay vì chờ cả manifest PixelLab (186 hình).
-//  - MapScene.prefetch() được dashboard gọi lúc rảnh để mở tab Bản đồ là có ngay.
-import { BG_SCALE, loadRegion, regionBackground, toImage, type RegionMap } from "./region.ts";
+// Nền bản đồ cả vị diện, tải và vẽ cho nhanh trên điện thoại. Toạ độ thế giới là toạ độ bản đồ 1536 × 1024.
+//  - Ảnh nền chia ô (data/maps/ha_nen/x{mức}/{cột}_{hàng}.webp, mục lục ha_vi_dien.json): chọn mức theo số px thiết bị
+//    trên mỗi đơn vị bản đồ, chỉ tải các ô giao với khung nhìn; mức nhỏ nhất (2 ô) luôn tải làm lớp lót khi ô mức cao chưa về.
+//  - Chưa có ô thì dùng ảnh nền từng vùng (ha_nen_<mã>.webp, khung frame, ×6). Mỗi vùng giữ một tấm nhỏ 1,5 px/đơn vị để
+//    vẽ khi thu nhỏ và tối đa 3 ảnh đầy đủ cho các vùng đang xem khi phóng to. Các ảnh là phần cắt của cùng một bản vẽ nên
+//    chồng lên nhau không lộ mép.
+//  - Tải tối đa 2 ảnh một lúc theo thứ tự cần: vùng của người chơi trước, rồi gần tâm khung nhìn trước. Ảnh tải bằng fetch
+//    có tiến độ, giải mã bằng createImageBitmap, không chặn luồng chính.
+//  - Đường đi (Path2D dựng một lần mỗi vùng), ranh giới vùng và sương mù vẽ chồng lên nền.
+import { REGION_BG_SCALE, regionBackground, tileUrl, type RegionMap, type WorldMap } from "./region.ts";
 
-const PAPER = "#3b3226";
-const FOG = "rgba(16, 13, 11, 0.62)";
-/** Các mức nướng sẵn; trên mức lớn nhất thì vẽ thẳng. */
-const LEVELS = [0.25, 0.5];
-const FOG_DIV = 4;
+/** Màu giấy ở mép ảnh nền Azgaar, lót dưới phần chưa có ảnh. */
+export const PAPER = "#b9a080";
+/** Sương mù là lớp giấy nhạt phủ lên phần chưa mở, không phủ đen. */
+const FOG = "rgba(238, 226, 198, 0.74)";
+const FOG_DIV = 2;
+const FOG_R = 14;
+/** Px trên mỗi đơn vị bản đồ của tấm nhỏ mỗi vùng. */
+const SMALL = 1.5;
+const MAX_FULL = 3;
+const MAX_TILES = 20;
+const PARALLEL = 2;
 
-interface Baked {
-  scale: number;
-  canvas: HTMLCanvasElement;
+type Bitmap = ImageBitmap | HTMLImageElement;
+
+interface Rect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
 }
 
-/** Lớp nền của một vùng: tải một lần, dùng chung cho mọi lần mở bản đồ. */
-export class RegionLayers {
-  readonly region: RegionMap;
+/** Một ảnh nền: một ô ở một mức, hoặc ảnh của một vùng. */
+interface Piece extends Rect {
+  url: () => Promise<string>;
+  /** Px ảnh trên mỗi đơn vị bản đồ. */
+  scale: number;
+  state: "idle" | "loading" | "ready" | "error";
+  /** Ảnh vùng: giữ file nén để giải mã lại khi cần phóng to. */
+  blob?: Blob;
+  small?: HTMLCanvasElement;
+  full?: Bitmap;
+  decoding?: boolean;
+  /** Tỉ lệ đã tải (ảnh cần trước, cho thanh tải). */
+  got?: number;
+  /** Khung gần nhất có vẽ ảnh đầy đủ (dọn ảnh ít dùng). */
+  used: number;
+}
+
+const overlaps = (a: Rect, b: Rect) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+
+export class WorldLayers {
+  readonly world: WorldMap;
   readonly w: number;
   readonly h: number;
-  /** 0–1 trong lúc tải ảnh nền; 1 khi xong. */
-  progress = 0;
-  /** Gọi khi tiến độ tải đổi hoặc ảnh nền vừa về. */
-  onChange?: () => void;
-  private roads: { kind: string; path: Path2D }[] = [];
-  private bg?: ImageBitmap | HTMLImageElement;
-  private bgPromise?: Promise<void>;
-  private fogKey = "";
-  private revealed: number[] = [];
+  /** Mức ảnh nền chia ô có trong repo, tăng dần; rỗng thì dùng ảnh từng vùng. */
+  private levels: number[];
+  private tiles = new Map<string, Piece>();
+  private regions = new Map<string, Piece>();
+  /** Ảnh phải về trước khi tắt thanh tải (vùng của người chơi, hoặc lớp ô lót). */
+  private primary: Piece[] = [];
+  private queue: Piece[] = [];
+  private active = 0;
+  private frameNo = 0;
+  private roads = new Map<string, { kind: string; path: Path2D }[]>();
+  private borders: { outer: Path2D; inner: Path2D };
+  /** Phần ngoài đất liền (quanh vị diện và lòng giữa), tô một màu giấy để ảnh từng vùng không lộ mép ở đó. */
+  private outside: Path2D;
   private fog?: HTMLCanvasElement;
-  private baked: Baked[] = [];
+  private fogKey = "";
+  private revealed: { x: number; y: number }[] = [];
+  /** 0–1 trong lúc tải ảnh đầu tiên cần; 1 khi xong. */
+  progress = 0;
+  /** Gọi khi tiến độ tải đổi hoặc ảnh vừa về. */
+  onChange?: () => void;
 
-  constructor(region: RegionMap) {
-    this.region = region;
-    const [x0, y0, x1, y1] = region.map.frame;
-    this.w = (x1 - x0) * BG_SCALE;
-    this.h = (y1 - y0) * BG_SCALE;
-    // Đường đi dựng một lần thành Path2D theo toạ độ ảnh, gom theo loại để mỗi loại một nét.
-    for (const kind of ["loi_mon", "tieu_dao", "quan_dao"]) {
-      const p = new Path2D();
-      for (const e of region.edges) {
-        if (e.kind !== kind) continue;
-        e.path.forEach(([x, y], i) => {
-          const q = toImage(region, x, y);
-          if (i) p.lineTo(q.x, q.y);
-          else p.moveTo(q.x, q.y);
-        });
-      }
-      this.roads.push({ kind, path: p });
+  constructor(world: WorldMap) {
+    this.world = world;
+    this.w = world.map.width;
+    this.h = world.map.height;
+    const bg = world.background;
+    this.levels = bg.levels.filter((l) => tileUrl(bg.path, l.level, 0, 0)).map((l) => l.level).sort((a, b) => a - b);
+    for (const l of bg.levels) {
+      if (!this.levels.includes(l.level)) continue;
+      const size = bg.tile / l.level;
+      for (let c = 0; c < l.cols; c++)
+        for (let r = 0; r < l.rows; r++) {
+          const url = tileUrl(bg.path, l.level, c, r);
+          const x = c * size;
+          const y = r * size;
+          if (url) this.tiles.set(`${l.level}/${c}/${r}`, { url, x, y, w: Math.min(size, this.w - x), h: Math.min(size, this.h - y), scale: l.level, state: "idle", used: 0 });
+        }
     }
+    if (!this.levels.length)
+      for (const r of world.regions) {
+        const url = regionBackground(r.code);
+        const [x0, y0, x1, y1] = r.frame;
+        if (url) this.regions.set(r.code, { url, x: x0, y: y0, w: x1 - x0, h: y1 - y0, scale: REGION_BG_SCALE, state: "idle", used: 0 });
+      }
+    // Ranh giới dựng một lần: mép ngoài nét liền, giữa hai vùng nét đứt.
+    const outer = new Path2D();
+    const inner = new Path2D();
+    for (const b of world.borders) {
+      const p = b.between[1] ? inner : outer;
+      b.path.forEach(([x, y], i) => (i ? p.lineTo(x, y) : p.moveTo(x, y)));
+    }
+    this.borders = { outer, inner };
+    this.outside = new Path2D();
+    this.outside.rect(0, 0, this.w, this.h);
+    for (const ring of rings(world.borders.filter((b) => !b.between[1]).map((b) => b.path)))
+      ring.forEach(([x, y], i) => (i ? this.outside.lineTo(x, y) : this.outside.moveTo(x, y)));
   }
 
   get ready(): boolean {
     return this.progress >= 1;
   }
 
-  /** Bắt đầu tải ảnh nền (một lần); `progress` tăng dần, xong thì nướng lại. */
-  loadBackground(): Promise<void> {
-    return (this.bgPromise ??= (async () => {
-      const url = await regionBackground(this.region.region.code);
-      if (url) {
-        try {
-          const res = await fetch(url);
-          const total = Number(res.headers.get("content-length")) || 0;
-          let blob: Blob;
-          if (res.body && total) {
-            const reader = res.body.getReader();
-            const chunks: BlobPart[] = [];
-            let got = 0;
-            for (;;) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              chunks.push(value);
-              got += value.length;
-              this.progress = Math.min(0.95, got / total);
-              this.onChange?.();
-            }
-            blob = new Blob(chunks, { type: res.headers.get("content-type") ?? "image/webp" });
-          } else blob = await res.blob();
-          this.bg = typeof createImageBitmap === "function" ? await createImageBitmap(blob) : await decodeImage(URL.createObjectURL(blob));
-        } catch (e) {
-          console.warn("Không nạp được ảnh nền bản đồ", url, e);
-        }
-      }
+  /** Bắt đầu tải phần nền cần trước: lớp ô lót, hoặc ảnh vùng của người chơi. */
+  prefetch(regionCode: string): void {
+    if (this.levels.length) this.primary = [...this.tiles.values()].filter((t) => t.scale === this.levels[0]);
+    else this.primary = [this.regions.get(regionCode)].filter((p): p is Piece => !!p);
+    if (!this.primary.length) {
       this.progress = 1;
-      this.baked = [];
-      performance.mark("ban-do:anh-nen");
-      this.onChange?.();
-    })());
+      return;
+    }
+    for (const p of this.primary) this.load(p);
   }
 
-  /** Đặt tập điểm đã mở sương; đổi thì dựng lại sương và các tấm nướng. */
-  setRevealed(ids: number[]): void {
-    const key = `${ids.length}:${ids.join(",")}`;
+  /** Đường đi của một vùng (dựng một lần khi file điểm về). */
+  addRegion(m: RegionMap): void {
+    if (this.roads.has(m.region.code)) return;
+    const list: { kind: string; path: Path2D }[] = [];
+    for (const kind of ["loi_mon", "tieu_dao", "quan_dao"]) {
+      const p = new Path2D();
+      for (const e of m.edges) if (e.kind === kind) e.path.forEach(([x, y], i) => (i ? p.lineTo(x, y) : p.moveTo(x, y)));
+      list.push({ kind, path: p });
+    }
+    this.roads.set(m.region.code, list);
+  }
+
+  /** Đặt các điểm đã mở sương; đổi thì dựng lại sương. */
+  setRevealed(points: { x: number; y: number }[]): void {
+    const key = points.map((p) => `${p.x},${p.y}`).join(";");
     if (key === this.fogKey) return;
     this.fogKey = key;
-    this.revealed = ids;
+    this.revealed = points;
     this.fog = undefined;
-    this.baked = [];
   }
 
   /**
-   * Vẽ phần ảnh [x0, x1] × [y0, y1] (toạ độ ảnh) vào ctx đã đặt biến đổi camera.
-   * `devicePx` là số px thiết bị trên mỗi px ảnh ở độ phóng hiện tại.
+   * Vẽ nền phần `view` (toạ độ bản đồ) vào ctx đã đặt biến đổi camera. `devicePx` là số px thiết bị trên mỗi đơn vị bản đồ,
+   * `zoom` là số px CSS trên mỗi đơn vị.
    */
-  draw(ctx: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, devicePx: number, zoom: number): void {
-    if (x1 <= x0 || y1 <= y0) return;
-    if (!this.baked.length) this.bake();
-    const lvl = this.baked.find((b) => b.scale >= devicePx);
-    if (lvl || !this.bg) {
-      const b = lvl ?? this.baked[this.baked.length - 1];
-      const k = b.scale;
-      ctx.drawImage(b.canvas, x0 * k, y0 * k, (x1 - x0) * k, (y1 - y0) * k, x0, y0, x1 - x0, y1 - y0);
-      return;
-    }
-    // Phóng to: vẽ thẳng phần đang thấy của ảnh nền, đường và sương.
-    ctx.drawImage(this.bg, x0, y0, x1 - x0, y1 - y0, x0, y0, x1 - x0, y1 - y0);
-    this.strokeRoads(ctx, Math.max(1, 1 / zoom));
-    const f = this.fogCanvas();
-    ctx.drawImage(f, x0 / FOG_DIV, y0 / FOG_DIV, (x1 - x0) / FOG_DIV, (y1 - y0) / FOG_DIV, x0, y0, x1 - x0, y1 - y0);
-  }
-
-  private strokeRoads(g: CanvasRenderingContext2D, widthMul: number): void {
-    for (const r of this.roads) {
-      g.lineWidth = (r.kind === "quan_dao" ? 3 : r.kind === "tieu_dao" ? 2 : 1.5) * widthMul;
-      g.strokeStyle = r.kind === "loi_mon" ? "rgba(70, 48, 28, 0.35)" : "rgba(70, 48, 28, 0.55)";
-      g.setLineDash(r.kind === "loi_mon" ? [6, 6] : []);
-      g.stroke(r.path);
-    }
-    g.setLineDash([]);
-  }
-
-  /** Nướng nền + đường + sương ở các mức nhỏ. Chưa có ảnh nền thì chỉ một tấm tạm 1/4 trên màu giấy. */
-  private bake(): void {
-    const fog = this.fogCanvas();
-    this.baked = (this.bg ? LEVELS : [LEVELS[0]]).map((scale) => {
-      const c = document.createElement("canvas");
-      c.width = Math.ceil(this.w * scale);
-      c.height = Math.ceil(this.h * scale);
-      const g = c.getContext("2d", { alpha: false })!;
-      g.scale(scale, scale);
-      if (this.bg) g.drawImage(this.bg, 0, 0, this.w, this.h);
-      else {
-        g.fillStyle = PAPER;
-        g.fillRect(0, 0, this.w, this.h);
+  drawBackground(ctx: CanvasRenderingContext2D, view: Rect, devicePx: number): void {
+    this.frameNo++;
+    const v = { x: Math.max(0, view.x), y: Math.max(0, view.y), w: Math.min(this.w, view.x + view.w) - Math.max(0, view.x), h: Math.min(this.h, view.y + view.h) - Math.max(0, view.y) };
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, this.w, this.h);
+    if (v.w <= 0 || v.h <= 0) return;
+    const cx = v.x + v.w / 2;
+    const cy = v.y + v.h / 2;
+    const near = (a: Piece, b: Piece) => Math.hypot(a.x + a.w / 2 - cx, a.y + a.h / 2 - cy) - Math.hypot(b.x + b.w / 2 - cx, b.y + b.h / 2 - cy);
+    const want: Piece[] = [];
+    if (this.levels.length) {
+      const base = this.levels[0];
+      const top = this.levels.find((l) => l >= devicePx) ?? this.levels[this.levels.length - 1];
+      for (const lvl of base === top ? [base] : [base, top]) {
+        const inView = [...this.tiles.values()].filter((t) => t.scale === lvl && overlaps(t, v)).sort(near);
+        want.push(...inView);
+        for (const t of inView) if (t.full) this.blit(ctx, t, t.full, v);
       }
-      // Nét đường giữ độ dày ít nhất 1 px thiết bị ở mức nhỏ.
-      this.strokeRoads(g, Math.max(1, 0.5 / scale));
-      g.drawImage(fog, 0, 0, this.w, this.h);
-      return { scale, canvas: c };
-    });
+      this.evict([...this.tiles.values()].filter((t) => t.full), MAX_TILES, (t) => {
+        if (t.full && "close" in t.full) t.full.close();
+        t.full = undefined;
+        t.state = "idle";
+      });
+    } else {
+      const inView = [...this.regions.values()].filter((r) => overlaps(r, v)).sort(near);
+      want.push(...inView);
+      for (const r of inView) if (r.small) this.blit(ctx, r, r.small, v);
+      if (devicePx > SMALL * 1.1)
+        for (const r of inView) {
+          if (r.full) this.blit(ctx, r, r.full, v);
+          else void this.decodeFull(r);
+        }
+      this.evict([...this.regions.values()].filter((r) => r.full), MAX_FULL, (r) => {
+        if (r.full && "close" in r.full) r.full.close();
+        r.full = undefined;
+      });
+      ctx.fillStyle = PAPER;
+      ctx.fill(this.outside, "evenodd");
+    }
+    this.queue = [...this.primary, ...want];
+    this.pump();
   }
 
-  /** Sương mù ở 1/4 độ phân giải: phủ tối rồi khoét quanh các điểm đã mở. */
+  /** Đường đi của các vùng đã có file điểm, chỉ phần đang thấy. */
+  drawRoads(ctx: CanvasRenderingContext2D, zoom: number, codes: Iterable<string>): void {
+    for (const code of codes)
+      for (const r of this.roads.get(code) ?? []) {
+        ctx.lineWidth = (r.kind === "quan_dao" ? 2 : r.kind === "tieu_dao" ? 1.4 : 1) / zoom;
+        ctx.strokeStyle = r.kind === "loi_mon" ? "rgba(70, 48, 28, 0.35)" : "rgba(70, 48, 28, 0.55)";
+        ctx.setLineDash(r.kind === "loi_mon" ? [4 / zoom, 4 / zoom] : []);
+        ctx.stroke(r.path);
+      }
+    ctx.setLineDash([]);
+  }
+
+  drawBorders(ctx: CanvasRenderingContext2D, zoom: number): void {
+    ctx.strokeStyle = "rgba(92, 40, 24, 0.75)";
+    ctx.lineWidth = 1.6 / zoom;
+    ctx.setLineDash([6 / zoom, 4 / zoom]);
+    ctx.stroke(this.borders.inner);
+    ctx.setLineDash([]);
+    ctx.lineWidth = 2.2 / zoom;
+    ctx.stroke(this.borders.outer);
+  }
+
+  drawFog(ctx: CanvasRenderingContext2D, view: Rect): void {
+    const f = this.fogCanvas();
+    const x0 = Math.max(0, view.x);
+    const y0 = Math.max(0, view.y);
+    const x1 = Math.min(this.w, view.x + view.w);
+    const y1 = Math.min(this.h, view.y + view.h);
+    if (x1 > x0 && y1 > y0) ctx.drawImage(f, x0 / FOG_DIV, y0 / FOG_DIV, (x1 - x0) / FOG_DIV, (y1 - y0) / FOG_DIV, x0, y0, x1 - x0, y1 - y0);
+  }
+
+  /** Vẽ phần giao của ảnh với khung nhìn. */
+  private blit(ctx: CanvasRenderingContext2D, p: Piece, img: Bitmap | HTMLCanvasElement, v: Rect): void {
+    if (img === p.full) p.used = this.frameNo;
+    const x0 = Math.max(p.x, v.x);
+    const y0 = Math.max(p.y, v.y);
+    const x1 = Math.min(p.x + p.w, v.x + v.w);
+    const y1 = Math.min(p.y + p.h, v.y + v.h);
+    if (x1 <= x0 || y1 <= y0) return;
+    const k = img.width / p.w;
+    ctx.drawImage(img, (x0 - p.x) * k, (y0 - p.y) * k, (x1 - x0) * k, (y1 - y0) * k, x0, y0, x1 - x0, y1 - y0);
+  }
+
+  /** Bỏ bớt ảnh đã giải mã lâu không vẽ, giữ tối đa `max` ảnh. */
+  private evict(list: Piece[], max: number, drop: (p: Piece) => void): void {
+    if (list.length <= max) return;
+    list.sort((a, b) => a.used - b.used);
+    for (const p of list.slice(0, list.length - max)) if (p.used < this.frameNo) drop(p);
+  }
+
+  private pump(): void {
+    while (this.active < PARALLEL) {
+      const next = this.queue.find((p) => p.state === "idle");
+      if (!next) return;
+      this.load(next);
+    }
+  }
+
+  private load(p: Piece): void {
+    if (p.state !== "idle") return;
+    p.state = "loading";
+    this.active++;
+    void (async () => {
+      try {
+        const res = await fetch(await p.url());
+        const blob = await this.readBlob(res, this.primary.includes(p) ? p : undefined);
+        const img = await decode(blob);
+        if (p.scale === REGION_BG_SCALE && !this.levels.length) {
+          // Ảnh vùng: giữ tấm nhỏ, ảnh đầy đủ chỉ giữ khi đang phóng to ở đó (drawBackground tự dọn).
+          const c = document.createElement("canvas");
+          c.width = Math.ceil(p.w * SMALL);
+          c.height = Math.ceil(p.h * SMALL);
+          const g = c.getContext("2d", { alpha: false })!;
+          g.imageSmoothingQuality = "high";
+          g.drawImage(img, 0, 0, c.width, c.height);
+          p.small = c;
+          p.blob = blob;
+        }
+        p.full = img;
+        p.used = this.frameNo;
+        p.state = "ready";
+      } catch (e) {
+        console.warn("Không nạp được ảnh nền bản đồ", e);
+        p.state = "error";
+      }
+      this.active--;
+      this.updateProgress();
+      this.pump();
+    })();
+  }
+
+  /** Đọc thân trả về, báo tiến độ nếu là ảnh cần trước. */
+  private async readBlob(res: Response, tracked?: Piece): Promise<Blob> {
+    const total = Number(res.headers.get("content-length")) || 0;
+    if (!tracked || !res.body || !total) return res.blob();
+    const reader = res.body.getReader();
+    const chunks: BlobPart[] = [];
+    let got = 0;
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+      got += value.length;
+      tracked.got = got / total;
+      this.updateProgress();
+    }
+    return new Blob(chunks, { type: res.headers.get("content-type") ?? "image/webp" });
+  }
+
+  private updateProgress(): void {
+    if (!this.primary.length) return;
+    const done = this.primary.reduce((s, p) => s + (p.state === "ready" || p.state === "error" ? 1 : Math.min(0.95, p.got ?? 0)), 0);
+    const was = this.progress;
+    this.progress = done / this.primary.length;
+    if (this.progress >= 1 && was < 1) performance.mark("ban-do:anh-nen");
+    this.onChange?.();
+  }
+
+  private async decodeFull(p: Piece): Promise<void> {
+    if (p.decoding || !p.blob) return;
+    p.decoding = true;
+    try {
+      p.full = await decode(p.blob);
+      p.used = this.frameNo;
+    } finally {
+      p.decoding = false;
+    }
+  }
+
+  /** Sương mù ở 1/2 độ phân giải: phủ giấy nhạt rồi khoét quanh các điểm đã mở. */
   private fogCanvas(): HTMLCanvasElement {
     if (this.fog) return this.fog;
     const c = document.createElement("canvas");
@@ -167,60 +333,51 @@ export class RegionLayers {
     f.fillStyle = FOG;
     f.fillRect(0, 0, c.width, c.height);
     f.globalCompositeOperation = "destination-out";
-    const r = 70 / FOG_DIV;
-    for (const id of this.revealed) {
-      const p = toImage(this.region, this.region.points[id].x, this.region.points[id].y);
-      const g = f.createRadialGradient(p.x / FOG_DIV, p.y / FOG_DIV, r * 0.35, p.x / FOG_DIV, p.y / FOG_DIV, r);
+    const r = FOG_R / FOG_DIV;
+    for (const p of this.revealed) {
+      const x = p.x / FOG_DIV;
+      const y = p.y / FOG_DIV;
+      const g = f.createRadialGradient(x, y, r * 0.35, x, y, r);
       g.addColorStop(0, "rgba(0,0,0,1)");
       g.addColorStop(1, "rgba(0,0,0,0)");
       f.fillStyle = g;
-      f.fillRect(p.x / FOG_DIV - r, p.y / FOG_DIV - r, r * 2, r * 2);
+      f.fillRect(x - r, y - r, r * 2, r * 2);
     }
     return (this.fog = c);
   }
 }
 
-function decodeImage(src: string): Promise<HTMLImageElement> {
-  const img = new Image();
-  img.src = src;
-  return img.decode().then(() => img);
-}
-
-const layers = new Map<string, Promise<RegionLayers>>();
-
-/** Lớp nền của vùng, dùng chung giữa prefetch và màn bản đồ. */
-export function regionLayers(code: string): Promise<RegionLayers> {
-  let p = layers.get(code);
-  if (!p) {
-    p = loadRegion(code).then((m) => new RegionLayers(m));
-    layers.set(code, p);
-  }
-  return p;
-}
-
-/** Hình đảo nổi cho điểm bản đồ: chỉ nạp các khoá cần, không chờ cả manifest PixelLab. */
-export class IslandImages {
-  private images = new Map<string, HTMLImageElement>();
-  private loading = new Set<string>();
-
-  get(key: string): HTMLImageElement | undefined {
-    const img = this.images.get(key);
-    if (img) return img;
-    if (!this.loading.has(key)) {
-      this.loading.add(key);
-      const el = new Image();
-      el.decoding = "async";
-      el.src = `${import.meta.env.BASE_URL}pixellab/${key}.png`;
-      el.decode().then(
-        () => void this.images.set(key, el),
-        () => console.warn("Không nạp được hình đảo", key),
-      );
+/** Nối các đoạn mép ngoài (đầu đoạn này trùng cuối đoạn kia) thành vòng khép kín. */
+function rings(parts: [number, number][][]): [number, number][][] {
+  const key = (p: [number, number]) => `${p[0]},${p[1]}`;
+  const left = new Set(parts.map((_, i) => i));
+  const out: [number, number][][] = [];
+  while (left.size) {
+    const first = left.values().next().value!;
+    left.delete(first);
+    const ring = [...parts[first]];
+    for (;;) {
+      const end = key(ring[ring.length - 1]);
+      let next = -1;
+      let flip = false;
+      for (const i of left) {
+        if (key(parts[i][0]) === end) next = i;
+        else if (key(parts[i][parts[i].length - 1]) === end) (next = i), (flip = true);
+        if (next >= 0) break;
+      }
+      if (next < 0) break;
+      left.delete(next);
+      ring.push(...(flip ? [...parts[next]].reverse() : parts[next]).slice(1));
     }
-    return undefined;
+    out.push(ring);
   }
+  return out;
+}
 
-  /** Nạp trước một loạt khoá (lúc rảnh). */
-  preload(keys: Iterable<string>): void {
-    for (const k of keys) this.get(k);
-  }
+async function decode(blob: Blob): Promise<Bitmap> {
+  if (typeof createImageBitmap === "function") return createImageBitmap(blob);
+  const img = new Image();
+  img.src = URL.createObjectURL(blob);
+  await img.decode();
+  return img;
 }

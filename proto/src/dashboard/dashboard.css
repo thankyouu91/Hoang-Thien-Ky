@@ -577,8 +577,20 @@ details.dev select { height: 36px; max-width: 60vw; border: 0; border-radius: 8p
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 /* ---- Bản đồ tranh ----------------------------------------------------------------------------------------- */
-.map-hud { position: absolute; right: 10px; bottom: 10px; width: 132px; padding: 4px; border-radius: 12px; background: var(--panel); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), inset 0 0 0 1px var(--bronze); }
+.map-hud { position: absolute; right: 10px; bottom: 10px; width: 152px; padding: 6px; border-radius: 12px; background: var(--panel); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), inset 0 0 0 1px var(--bronze); }
 .map-hud .minimap { height: 96px; }
+.map-layers { margin-bottom: 6px; }
+.map-layers summary { min-height: 26px; padding: 0 4px; border-radius: 6px; font: 600 12px/26px var(--font); color: var(--ink); cursor: pointer; }
+.map-layers summary:hover { background: var(--hair); }
+.map-layers label { display: flex; align-items: center; gap: 6px; min-height: 26px; padding: 0 4px; border-radius: 6px; font-size: 12px; color: var(--ink-2); cursor: pointer; }
+.map-layers label:hover { background: var(--hair); color: var(--ink); }
+.map-layers input { width: 15px; height: 15px; margin: 0; accent-color: var(--gold); }
+.map-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 6px; }
+.map-nav button { min-height: 28px; padding: 0 2px; white-space: nowrap; border: 0; border-radius: 6px; background: var(--s3); color: var(--ink); font: 600 12px var(--font); cursor: pointer; }
+.map-nav button:hover { background: var(--wood-2); box-shadow: inset 0 0 0 1px var(--bronze); }
+.map-tip { position: fixed; z-index: 30; display: grid; gap: 1px; max-width: 220px; padding: 6px 9px; border-radius: 8px; background: var(--paper); color: var(--paper-ink-2); box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 0 0 1px var(--bronze); font: 12px/1.35 var(--font); pointer-events: none; }
+.map-tip b { color: var(--paper-ink); font-size: 13px; }
+.map-tip[hidden] { display: none; }
 .map-loading {
   position: fixed;
   left: 50%;

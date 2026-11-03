@@ -1,10 +1,13 @@
-// File điểm của vùng (data/maps/ha_diem_<mã vùng>.json, định dạng bản 1 do tools/mapgen/diem.ts sinh) và ảnh nền tranh.
-// Mỗi vùng là một chunk riêng, chỉ tải khi cần; ảnh nền là URL do Vite chép vào bản build.
+// Mục lục cả vị diện (data/maps/ha_vi_dien.json), file điểm của vùng (data/maps/ha_diem_<mã vùng>.json, định dạng bản 1
+// do tools/mapgen/diem.ts sinh) và ảnh nền. Toạ độ điểm là toạ độ bản đồ 1536 × 1024 chung cho cả vị diện, cũng là toạ độ
+// thế giới của màn bản đồ. Mỗi vùng là một chunk riêng, chỉ tải khi cần; ảnh nền là URL do Vite chép vào bản build.
 import type { PointType } from "../../dashboard/source.ts";
 
 export interface RegionPoint {
   id: number;
   type: PointType;
+  /** Tên Hán Việt, không trùng trong vùng. */
+  name?: string;
   x: number;
   y: number;
   stages: number; // số chặng tới thành chủ
@@ -33,11 +36,45 @@ export interface RegionMap {
   edges: RegionEdge[];
 }
 
-/** Ảnh nền vẽ ở tỉ lệ ×6 theo khung `map.frame` (tools/mapgen/azgaar-nen.ts). */
-export const BG_SCALE = 6;
+export type Tier = "thap" | "vua" | "cao";
 
+export interface WorldRegion {
+  code: string;
+  name: string;
+  element: string;
+  frame: [number, number, number, number];
+  bbox: [number, number, number, number];
+  capital: { id: number; name: string; x: number; y: number };
+  points: number;
+}
+
+export interface WorldMap {
+  version: number;
+  title: string;
+  map: { width: number; height: number };
+  /** Ảnh nền chia ô: ô (col, row) ở mức L phủ [col, row, col + 1, row + 1] × tile / L đơn vị bản đồ. */
+  background: { tile: number; path: string; levels: { level: number; cols: number; rows: number }[] };
+  types: Record<PointType, { label: string; color: string }>;
+  tiers: Record<Tier, { label: string; color: string }>;
+  terrains: Record<string, string>;
+  regions: WorldRegion[];
+  /** Ranh giới giữa hai vùng; vế thứ hai null là mép ngoài vị diện. */
+  borders: { between: [string, string | null]; path: [number, number][] }[];
+}
+
+/** Ảnh nền từng vùng vẽ ở tỉ lệ ×6 theo khung `frame` (tools/mapgen/azgaar-nen.ts). */
+export const REGION_BG_SCALE = 6;
+
+const WORLD_FILE = import.meta.glob<WorldMap>("../../../../data/maps/ha_vi_dien.json", { import: "default" });
 const POINT_FILES = import.meta.glob<RegionMap>("../../../../data/maps/ha_diem_*.json", { import: "default" });
 const BG_FILES = import.meta.glob<string>("../../../../data/maps/ha_nen_*.webp", { query: "?url", import: "default" });
+const TILE_FILES = import.meta.glob<string>("../../../../data/maps/ha_nen/x*/*.webp", { query: "?url", import: "default" });
+
+let world: Promise<WorldMap> | undefined;
+
+export function loadWorld(): Promise<WorldMap> {
+  return (world ??= WORLD_FILE["../../../../data/maps/ha_vi_dien.json"]());
+}
 
 const cache = new Map<string, Promise<RegionMap>>();
 
@@ -52,14 +89,15 @@ export function loadRegion(code: string): Promise<RegionMap> {
   return p;
 }
 
-export async function regionBackground(code: string): Promise<string | undefined> {
-  const load = BG_FILES[`../../../../data/maps/ha_nen_${code}.webp`];
-  return load ? load() : undefined;
+/** URL ảnh nền của một vùng (khung `frame`, ×6), dùng khi chưa có ảnh nền chia ô. */
+export function regionBackground(code: string): (() => Promise<string>) | undefined {
+  return BG_FILES[`../../../../data/maps/ha_nen_${code}.webp`];
 }
 
-/** Toạ độ điểm trên ảnh nền (px ảnh), cũng là toạ độ thế giới của bản đồ tranh. */
-export function toImage(m: RegionMap, x: number, y: number): { x: number; y: number } {
-  return { x: (x - m.map.frame[0]) * BG_SCALE, y: (y - m.map.frame[1]) * BG_SCALE };
+/** URL một ô ảnh nền theo `background.path` của mục lục; ô chưa có trong repo thì undefined. */
+export function tileUrl(path: string, level: number, col: number, row: number): (() => Promise<string>) | undefined {
+  const rel = path.replace("{level}", String(level)).replace("{col}", String(col)).replace("{row}", String(row));
+  return TILE_FILES[`../../../../data/maps/${rel}`];
 }
 
 /** Số chặng từ một điểm tới mọi điểm khác (tìm theo chiều rộng trên các chặng). */
