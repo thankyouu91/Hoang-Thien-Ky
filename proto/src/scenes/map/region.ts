@@ -48,6 +48,18 @@ export interface WorldRegion {
   points: number;
 }
 
+export interface WorldZone {
+  code: string;
+  name: string;
+  element: string;
+  /** Lời cảnh báo cho người chơi. */
+  warning: string;
+  frame: [number, number, number, number];
+  bbox: [number, number, number, number];
+  /** Id các cửa ải (điểm loại đèo nối sang vùng bên). */
+  gates: number[];
+}
+
 export interface WorldMap {
   version: number;
   title: string;
@@ -58,6 +70,11 @@ export interface WorldMap {
   tiers: Record<Tier, { label: string; color: string }>;
   terrains: Record<string, string>;
   regions: WorldRegion[];
+  /**
+   * Khu đặc biệt không có thành chủ, ví dụ Linh Hải Cấm Khu ở lòng giữa Hạ vị. Luật của khu là bí mật của dev
+   * (data/bi_mat/, không vào bản build): giao diện chỉ hiện `warning`, không hiện con số hay luật nào.
+   */
+  zones?: WorldZone[];
   /** Ranh giới giữa hai vùng; vế thứ hai null là mép ngoài vị diện. */
   borders: { between: [string, string | null]; path: [number, number][] }[];
 }
@@ -225,6 +242,7 @@ export const POINT_NAMES: Record<PointType, string> = {
   mo_quang: "Mỏ quặng",
   mo_duoc: "Mỏ dược",
   hang_di_thu: "Hang dị thú",
+  hang_thu_hoang: "Hang Thú Hoàng",
 };
 
 /** Điểm tông môn giữ được (GDD mục 5): mỏ, linh tuyền, cửa bí cảnh, đèo, bến đò. */

@@ -27,7 +27,9 @@ export interface TopBarView {
 
 export type PointType =
   | "thanh_chu" | "deo" | "ben_do" | "cua_bi_canh" | "mo_linh_thach" | "linh_tuyen"
-  | "son_mon" | "mo_quang" | "mo_duoc" | "hang_di_thu";
+  | "son_mon" | "mo_quang" | "mo_duoc" | "hang_di_thu"
+  /** Chỉ có trong Linh Hải Cấm Khu. */
+  | "hang_thu_hoang";
 
 /** Chủ của một điểm trên bản đồ mini, từ bảng chủ điểm (GDD mục 16). */
 export type Owner = "minh" | "dong_minh" | "dich" | "npc";

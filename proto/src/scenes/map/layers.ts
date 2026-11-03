@@ -59,6 +59,8 @@ export class WorldLayers {
   private frameNo = 0;
   private roads = new Map<string, { kind: string; path: Path2D }[]>();
   private borders: { outer: Path2D; inner: Path2D };
+  /** Khu đặc biệt (Linh Hải Cấm Khu): hình khu nối từ các đoạn ranh giới giáp khu, tô màu cảnh báo, viền đỏ. */
+  private zones: Path2D[] = [];
   private fog?: HTMLCanvasElement;
   private fogKey = "";
   private revealed: { x: number; y: number }[] = [];
@@ -84,14 +86,23 @@ export class WorldLayers {
     }
     this.levels = [...new Set(this.tiles.map((t) => t.level))].sort((a, b) => a - b);
     this.base = this.tiles.filter((t) => t.level === this.levels[0]);
-    // Ranh giới dựng một lần: mép ngoài nét liền, giữa hai vùng nét đứt.
+    // Ranh giới dựng một lần: mép ngoài nét liền, giữa hai vùng nét đứt; ranh giáp khu đặc biệt vẽ riêng (drawZones).
+    const zoneCodes = new Set((world.zones ?? []).map((z) => z.code));
     const outer = new Path2D();
     const inner = new Path2D();
     for (const b of world.borders) {
+      if (b.between.some((c) => c && zoneCodes.has(c))) continue;
       const p = b.between[1] ? inner : outer;
       b.path.forEach(([x, y], i) => (i ? p.lineTo(x, y) : p.moveTo(x, y)));
     }
     this.borders = { outer, inner };
+    for (const code of zoneCodes) {
+      const p = new Path2D();
+      for (const ring of rings(world.borders.filter((b) => b.between.includes(code)).map((b) => b.path)))
+        ring.forEach(([x, y], i) => (i ? p.lineTo(x, y) : p.moveTo(x, y)));
+      p.closePath();
+      this.zones.push(p);
+    }
   }
 
   get ready(): boolean {
@@ -173,6 +184,17 @@ export class WorldLayers {
     ctx.setLineDash([]);
     ctx.lineWidth = 2.2 / zoom;
     ctx.stroke(this.borders.outer);
+  }
+
+  /** Khu đặc biệt: phủ đỏ sẫm mờ và viền đỏ liền, khác ranh giới vùng thường. */
+  drawZones(ctx: CanvasRenderingContext2D, zoom: number): void {
+    for (const p of this.zones) {
+      ctx.fillStyle = "rgba(96, 14, 22, 0.16)";
+      ctx.fill(p);
+      ctx.strokeStyle = "rgba(176, 30, 30, 0.85)";
+      ctx.lineWidth = 2.4 / zoom;
+      ctx.stroke(p);
+    }
   }
 
   drawFog(ctx: CanvasRenderingContext2D, view: Rect): void {
@@ -287,6 +309,33 @@ export class WorldLayers {
     }
     return (this.fog = c);
   }
+}
+
+/** Nối các đoạn ranh giới (đầu đoạn này trùng cuối đoạn kia, có thể ngược chiều) thành vòng khép kín. */
+function rings(parts: [number, number][][]): [number, number][][] {
+  const key = (p: [number, number]) => `${p[0]},${p[1]}`;
+  const left = new Set(parts.map((_, i) => i));
+  const out: [number, number][][] = [];
+  while (left.size) {
+    const first = left.values().next().value!;
+    left.delete(first);
+    const ring = [...parts[first]];
+    for (;;) {
+      const end = key(ring[ring.length - 1]);
+      let next = -1;
+      let flip = false;
+      for (const i of left) {
+        if (key(parts[i][0]) === end) next = i;
+        else if (key(parts[i][parts[i].length - 1]) === end) (next = i), (flip = true);
+        if (next >= 0) break;
+      }
+      if (next < 0) break;
+      left.delete(next);
+      ring.push(...(flip ? [...parts[next]].reverse() : parts[next]).slice(1));
+    }
+    out.push(ring);
+  }
+  return out;
 }
 
 async function decode(blob: Blob): Promise<Bitmap> {

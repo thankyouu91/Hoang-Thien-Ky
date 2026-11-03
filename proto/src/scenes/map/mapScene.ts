@@ -20,7 +20,7 @@ import { WorldLayers } from "./layers.ts";
 import { NODE, NODE_BIG, NodeSprites, Placer } from "./nodes.ts";
 import {
   along, HOLDABLE, loadLabels, loadRegion, loadWorld, POINT_NAMES, route,
-  type MapLabels, type PointForm, type RegionMap, type RegionPoint, type Tier, type WorldMap, type WorldRegion,
+  type MapLabels, type PointForm, type RegionMap, type RegionPoint, type Tier, type WorldMap, type WorldRegion, type WorldZone,
 } from "./region.ts";
 
 const TAP_SLOP = 8;
@@ -32,6 +32,8 @@ const PRIO_ZOOM = [0, 0.5, 0.9, 1.6];
 const ROAD_ZOOM = 1.2;
 /** Tên vùng hiện khi thu nhỏ dưới mức này. */
 const REGION_LABEL_ZOOM = 1.3;
+/** Chữ thay tên vùng cho khu đặc biệt khi thu nhỏ. */
+const ZONE_TAG = "CẤM KHU";
 // Tên địa danh dùng cùng chữ có chân với dashboard (mẫu tranh giấy, 2026-11-03).
 const FONT = '"Noto Serif", Cambria, "Times New Roman", serif';
 const INK = "#2a1d14";
@@ -67,6 +69,8 @@ interface Cand {
   dyn: boolean;
   /** Điểm của sự kiện đang diễn ra (chiến tranh, Yêu Triều): nhấp nháy đỏ. */
   alert?: { title: string; endsAt: number };
+  /** Điểm trong khu đặc biệt (Linh Hải Cấm Khu): thẻ chỉ hiện lời cảnh báo, không con số hay luật nào. */
+  zone?: WorldZone;
 }
 
 export class MapScene implements Scene {
@@ -292,6 +296,7 @@ export class MapScene implements Scene {
     this.data = d;
     layers.prefetch();
     const home = await this.ensureRegion(d.map.region);
+    for (const z of this.world?.zones ?? []) void this.ensureRegion(z.code);
     layers.setRevealed(d.map.revealed.map((id) => home.points[id]));
     this.rebuild();
     this.updateHere();
@@ -338,8 +343,30 @@ export class MapScene implements Scene {
         out.push(this.cand(w, r, p, p.type, name, p.x, p.y, { own, gate: home && gates.has(p.id), mine, here: home && p.id === hereId, alert, z: zt?.z[p.id], t: zt?.t[p.id] }));
       }
     }
+    // Khu đặc biệt: bật sương thì chỉ thấy các cửa ải (luôn hiện, như mốc đã biết); khu phủ sương tới khi vào tận nơi.
+    for (const zn of w.zones ?? []) {
+      const m = this.regions.get(zn.code);
+      if (!m) continue;
+      const zr = this.zoneRegion(zn);
+      const gates = new Set(zn.gates);
+      const zt = L.points[zn.code];
+      for (const p of m.points) {
+        if ((this.prefs.fog && !gates.has(p.id)) || hidden(p)) continue;
+        const c = this.cand(w, zr, p, p.type, p.name ?? POINT_NAMES[p.type], p.x, p.y, { z: zt?.z[p.id], t: zt?.t[p.id] });
+        if (gates.has(p.id)) c.dyn = true;
+        out.push({ ...c, zone: zn });
+      }
+    }
     out.sort((a, b) => a.prio - b.prio || a.order - b.order);
     this.cands = out;
+  }
+
+  private zoneRegions = new Map<string, WorldRegion>();
+  /** Khu đặc biệt dưới dạng vùng cho ô nút và đường (không có thành chủ). */
+  private zoneRegion(z: WorldZone): WorldRegion {
+    let r = this.zoneRegions.get(z.code);
+    if (!r) this.zoneRegions.set(z.code, (r = { code: z.code, name: z.name, element: z.element, frame: z.frame, bbox: z.bbox, capital: { id: -1, name: "", x: 0, y: 0 }, points: 0 }));
+    return r;
   }
 
   private cand(
@@ -498,11 +525,12 @@ export class MapScene implements Scene {
     }
     L.drawBackground(ctx, view, z * v.dpr);
     const inView = (r: WorldRegion) => r.bbox[0] < view.x + view.w && r.bbox[2] > view.x && r.bbox[1] < view.y + view.h && r.bbox[3] > view.y;
-    const shown = w.regions.filter((r) => inView(r) && (!this.prefs.fog || r.code === d.map.region));
+    const shown = [...w.regions, ...(w.zones ?? []).map((zn) => this.zoneRegion(zn))].filter((r) => inView(r) && (!this.prefs.fog || r.code === d.map.region));
     if (!this.prefs.fog && z >= PRIO_ZOOM[1])
       for (const r of shown) if (!this.regions.has(r.code) && !this.loadingRegions.has(r.code)) void this.ensureRegion(r.code);
     if (z >= ROAD_ZOOM) L.drawRoads(ctx, z, shown.map((r) => r.code));
     if (this.prefs.fog) L.drawFog(ctx, view);
+    L.drawZones(ctx, z);
     if (this.prefs.borders) L.drawBorders(ctx, z);
 
     // Từ đây vẽ theo px CSS: ô nút, chấm và chữ giữ cỡ cố định khi phóng. Xếp chỗ theo thứ tự: dấu của mình, thành chủ và
@@ -544,9 +572,36 @@ export class MapScene implements Scene {
     const meTip = me ? me.y - NODE_BIG / 2 - 2 : 0;
     ctx.font = `700 12px ${FONT}`;
     const meHalf = Math.max(8, ctx.measureText(d.top.name).width / 2 + 3);
+    // Chữ CẤM KHU của khu đặc biệt khi thu nhỏ giữ chỗ ngay sau thành chủ, như dấu của mình: lời cảnh báo không nhường
+    // cho điểm. Chữ thu cho vừa ba phần tư bề ngang khu; vướng thành chủ thì dịch ngang hoặc lên xuống trong khu.
+    const regionPx = Math.round(Math.min(20, 13 + z * 10));
+    const zoneCodes = new Set((w.zones ?? []).map((zn) => zn.code));
+    const zoneTags: { x: number; y: number; size: number }[] = [];
+    const placeZoneTags = () => {
+      if (!this.prefs.names || z >= REGION_LABEL_ZOOM) return;
+      ctx.letterSpacing = "4px";
+      for (const zn of w.zones ?? []) {
+        const r = this.labels!.regions.find((r) => r.code === zn.code);
+        if (!r) continue;
+        let size = regionPx + 6;
+        ctx.font = `700 ${size}px ${FONT}`;
+        const fit = ((zn.bbox[2] - zn.bbox[0]) * z * 0.75) / ctx.measureText(ZONE_TAG).width;
+        if (fit < 1) size = Math.max(12, Math.floor(size * fit));
+        ctx.font = `700 ${size}px ${FONT}`;
+        const half = ctx.measureText(ZONE_TAG).width / 2;
+        const s = cam.toScreen(r.x, r.y, v);
+        const box = ([dx, dy]: number[]) => [s.x + dx - half, s.y + dy - size / 2, s.x + dx + half, s.y + dy + size / 2] as const;
+        const shifts = [0, size * 1.3, -size * 1.3].flatMap((dy) => [0, -0.6, 0.6, -1.2, 1.2].map((k) => [k * half, dy]));
+        const [dx, dy] = shifts.find((d) => placer.fits(...box(d))) ?? [0, 0];
+        placer.reserve(...box([dx, dy]));
+        zoneTags.push({ x: s.x + dx, y: s.y + dy, size });
+      }
+      ctx.letterSpacing = "0px";
+    };
     const tier = (c: Cand) => (c.big ? 0 : c.dyn ? 1 : 2);
     for (const pass of [0, 1, 2]) {
       if (pass === 1 && me) placer.reserve(me.x - meHalf, meTip - 28, me.x + meHalf, meTip);
+      if (pass === 1) placeZoneTags();
       for (const c of this.cands) {
         if (tier(c) !== pass) continue;
         if (pass === 2 && (filtered ? c.prio > maxPrio : z < c.z)) continue;
@@ -569,22 +624,31 @@ export class MapScene implements Scene {
     // Tên vùng kiểu bản đồ cổ ở chỗ rộng nhất của vùng khi thu nhỏ; mờ dần khi phóng tới.
     if (this.prefs.names && z < REGION_LABEL_ZOOM) {
       const alpha = Math.min(1, (REGION_LABEL_ZOOM - z) / 0.4);
-      const px = Math.round(Math.min(20, 13 + z * 10));
-      ctx.font = `italic 700 ${px}px ${FONT}`;
-      ctx.letterSpacing = "2px";
+      const px = regionPx;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.lineJoin = "round";
       ctx.globalAlpha = alpha;
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = HALO;
+      // Khu đặc biệt: chữ CẤM KHU đỏ, to hơn tên vùng, ở chỗ đã giữ trước khi xếp điểm.
+      ctx.letterSpacing = "4px";
+      ctx.fillStyle = "#a3171b";
+      for (const t of zoneTags) {
+        ctx.font = `700 ${t.size}px ${FONT}`;
+        ctx.strokeText(ZONE_TAG, t.x, t.y);
+        ctx.fillText(ZONE_TAG, t.x, t.y);
+      }
+      ctx.font = `italic 700 ${px}px ${FONT}`;
+      ctx.letterSpacing = "2px";
+      ctx.fillStyle = "#5a2a17";
       for (const r of this.labels!.regions) {
+        if (zoneCodes.has(r.code)) continue;
         const s = cam.toScreen(r.x, r.y, v);
         const tw = ctx.measureText(r.name).width;
         for (const dy of [0, px * 1.4, -px * 1.4])
           if (placer.take(s.x - tw / 2, s.y + dy - px / 2, s.x + tw / 2, s.y + dy + px / 2)) {
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = HALO;
             ctx.strokeText(r.name, s.x, s.y + dy);
-            ctx.fillStyle = "#5a2a17";
             ctx.fillText(r.name, s.x, s.y + dy);
             break;
           }
@@ -614,6 +678,11 @@ export class MapScene implements Scene {
       }
       const img = this.sprites.get(c.color, c.region.element, size, v.dpr);
       ctx.drawImage(img, x - size / 2, y - size / 2, img.width / v.dpr, img.height / v.dpr);
+      if (c.type === "hang_thu_hoang") {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = `rgba(120, 12, 16, ${0.45 + 0.4 * Math.sin(this.t * 2)})`;
+        ctx.strokeRect(x - size / 2 - 3, y - size / 2 - 3, size + 6, size + 6);
+      }
       if (c.gate || c.own?.attacked || c.alert) {
         ctx.lineWidth = 2;
         ctx.strokeStyle = c.own?.attacked || c.alert ? (blink ? "#ff5a4f" : "rgba(255, 90, 79, 0.35)") : `rgba(134, 220, 200, ${0.55 + 0.45 * Math.sin(this.t * 4)})`;
@@ -696,7 +765,7 @@ export class MapScene implements Scene {
     }
     const w = this.world!;
     const kind = c.type === "cua_bi_canh" && c.p?.tier ? w.tiers[c.p.tier].label : w.types[c.type].label;
-    this.tip.innerHTML = `<b>${esc(c.name)}</b><span>${kind} · ${esc(c.region.name)}</span>${c.p ? `<span>Cấp nguy hiểm ${c.p.danger}</span>` : ""}${c.own && c.type !== "son_mon" ? `<span>Chủ: ${esc(c.own.name)}</span>` : ""}${c.alert ? `<span class="bad">${esc(c.alert.title)}</span>` : ""}`;
+    this.tip.innerHTML = `<b>${esc(c.name)}</b><span>${kind} · ${esc(c.region.name)}</span>${c.zone ? `<span class="bad">Cực kỳ nguy hiểm</span>` : c.p ? `<span>Cấp nguy hiểm ${c.p.danger}</span>` : ""}${c.own && c.type !== "son_mon" ? `<span>Chủ: ${esc(c.own.name)}</span>` : ""}${c.alert ? `<span class="bad">${esc(c.alert.title)}</span>` : ""}`;
     this.tip.hidden = false;
     const r = this.tip.getBoundingClientRect();
     this.tip.style.left = `${Math.min(cx + 14, window.innerWidth - r.width - 8)}px`;
@@ -719,6 +788,7 @@ export class MapScene implements Scene {
 
   /** Thẻ điểm (GDD mục 14): chủ, sản lượng, cấp nguy hiểm, nút Đi tới, Chiếm, Tuyên chiến theo chức vị. */
   private openPoint(c: Cand): void {
+    if (c.zone) return this.openZonePoint(c, c.zone);
     const d = this.data!;
     const w = this.world!;
     const p = c.p!;
@@ -758,6 +828,31 @@ export class MapScene implements Scene {
       if (a === "di") toast("Hành trình theo chặng có ở khối M3; prototype chưa đi được.");
       if (a === "chiem") toast("Chiếm điểm bằng trận tranh điểm có ở Sprint 6.");
       if (a === "chien") toast("Tuyên chiến có ở khối M5.");
+    });
+  }
+
+  /**
+   * Thẻ điểm trong khu đặc biệt: lời cảnh báo nổi bật, loại điểm, khu, cửa ải nối sang vùng nào. Luật của khu là bí mật
+   * của dev, nên không hiện cấp nguy hiểm, quãng đường hay con số nào. Đi tới thì hỏi xác nhận thêm một lần.
+   */
+  private openZonePoint(c: Cand, zone: WorldZone): void {
+    const w = this.world!;
+    const p = c.p!;
+    const rows: [string, string][] = [["Loại", w.types[p.type].label], ["Khu", esc(zone.name)]];
+    if (p.neighbour) rows.push(["Nối với", esc(w.regions.find((r) => r.code === p.neighbour)?.name ?? p.neighbour)]);
+    const body = openSheet(
+      c.name,
+      `<p class="map-warn">${esc(zone.warning)}</p>
+       <dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
+       <div class="actions"><button type="button" class="seal" data-a="di">Đi tới</button></div>`,
+    );
+    body.addEventListener("click", (e) => {
+      const a = (e.target as HTMLElement).closest<HTMLElement>("[data-a]")?.dataset.a;
+      if (a === "di")
+        body.querySelector(".actions")!.outerHTML = `<div class="actions confirm"><p class="map-warn">Vào ${esc(zone.name)} là tự chịu mọi rủi ro. Vẫn đi?</p>
+          <button type="button" class="seal" data-a="vao">Vẫn đi</button><button type="button" data-a="thoi">Thôi</button></div>`;
+      if (a === "vao") toast("Hành trình theo chặng có ở khối M3; prototype chưa đi được.");
+      if (a === "thoi") closeSheet();
     });
   }
 }
