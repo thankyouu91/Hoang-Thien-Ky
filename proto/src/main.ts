@@ -6,9 +6,12 @@ import { sampleBattle } from "./mock/sampleBattle.ts";
 import { simReplaySource } from "./replay/simSource.ts";
 import { BattleScene } from "./scenes/battle/battleScene.ts";
 
-// Hình nạp nền; scene vẽ khối màu cho tới khi ảnh có mặt.
+// Hình PixelLab (cả manifest, ~190 ảnh) chỉ nạp khi cần: lúc mở Trận hoặc Nhân vật, hoặc lúc rảnh sau khi vào game,
+// để không tranh đường tải với Động phủ và bản đồ. Scene vẽ khối màu cho tới khi ảnh có mặt.
 const sprites = new Sprites();
-void sprites.load();
+let spritesLoad: Promise<void> | undefined;
+const loadSprites = () => (spritesLoad ??= sprites.load());
+setTimeout(() => ("requestIdleCallback" in window ? requestIdleCallback(() => void loadSprites()) : void loadSprites()), 5000);
 
 const canvas = document.getElementById("view") as HTMLCanvasElement;
 // Trận không có tab riêng (GDD mục 14): mở từ chiến báo trên Động phủ; vẫn vào thẳng được bằng #tran để thử trận.
@@ -25,7 +28,13 @@ const app = new App(
   document.getElementById("tabbar")!,
   // Thứ tự trên thanh dưới; scene đầu (Động phủ) là màn mở mặc định.
   dashboard.tabs,
-  { offTab: [...dashboard.offTab, battle], onShow: (s) => dashboard.onShow(s) },
+  {
+    offTab: [...dashboard.offTab, battle],
+    onShow: (s) => {
+      if (s === battle || s.id === "nhan-vat") void loadSprites();
+      dashboard.onShow(s);
+    },
+  },
 );
 dashboard.attach(app);
 app.start();

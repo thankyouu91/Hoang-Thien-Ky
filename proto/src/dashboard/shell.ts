@@ -1,6 +1,8 @@
 // Khung chung của các màn dashboard: thanh trên, điều hướng theo `Go`, và lớp PageScene cho màn DOM.
 import { Camera } from "../app/camera.ts";
 import type { Scene } from "../app/scene.ts";
+import type { AuthSource } from "./auth.ts";
+import { icon } from "./icons.ts";
 import type { CommandResult, DashboardCommand, DashboardSource, Go, Stamped, TopBarView } from "./source.ts";
 import { assetUrl, ERROR_TEXT, esc, fmt, ServerClock, tickCountdowns, toast } from "./ui.ts";
 
@@ -13,6 +15,7 @@ export interface Nav {
 /** Những gì mọi màn dashboard dùng chung. */
 export interface DashCtx {
   source: DashboardSource;
+  auth: AuthSource;
   clock: ServerClock;
   topbar: TopBar;
   nav: Nav;
@@ -25,7 +28,7 @@ export class TopBar {
   constructor(onPortrait: () => void, onBack: () => void) {
     this.el = document.createElement("header");
     this.el.id = "topbar";
-    this.el.innerHTML = `<button type="button" class="back" aria-label="Quay lại">‹ Quay lại</button><div class="content"></div>`;
+    this.el.innerHTML = `<button type="button" class="back" aria-label="Quay lại">${icon("back")}<span>Quay lại</span></button><div class="content"></div>`;
     this.el.addEventListener("click", (e) => {
       const t = e.target as HTMLElement;
       if (t.closest(".portrait")) onPortrait();
@@ -34,18 +37,19 @@ export class TopBar {
   }
 
   set(t: TopBarView): void {
-    const minor = t.playMinutesLeft !== undefined ? `<span class="play" title="Thời gian chơi còn lại hôm nay">⏳ ${t.playMinutesLeft} phút</span>` : "";
-    const sat = t.satNghiep > 0 ? `<span class="sat" title="Sát nghiệp">Sát nghiệp ${fmt(t.satNghiep)}</span>` : "";
+    const minor = t.playMinutesLeft !== undefined ? `<span class="pill play" title="Thời gian chơi còn lại hôm nay">${icon("clock")}${t.playMinutesLeft}′</span>` : "";
+    const sat = t.satNghiep > 0 ? `<span class="pill sat" title="Sát nghiệp">${icon("sword")}${fmt(t.satNghiep)}</span>` : "";
     this.el.querySelector(".content")!.innerHTML = `
-      <button type="button" class="portrait" aria-label="Mở màn Nhân vật">
-        <img src="${assetUrl(t.portrait)}" alt="">
+      <button type="button" class="portrait" aria-label="${esc(t.name)}: mở màn Nhân vật">
+        <span class="avatar"><img src="${assetUrl(t.portrait)}" alt=""></span>
+        <span class="who"><b>Cấp ${t.level}</b><span>${esc(t.realm)}</span></span>
       </button>
-      <div class="who">
-        <div class="lv"><b>Cấp ${t.level}</b> · ${esc(t.realm)}</div>
-        <div class="money"><span title="Linh thạch hạ phẩm">◆ ${fmt(t.linhThach)}</span><span title="Tiên ngọc">✦ ${fmt(t.tienNgoc)}</span>${sat}</div>
-      </div>
-      ${minor}
-      <span class="age" title="Nhãn phân loại độ tuổi">${esc(t.ageLabel)}</span>`;
+      <span class="pills">
+        ${minor}${sat}
+        <span class="pill stone" title="Linh thạch hạ phẩm">${icon("gem")}${fmt(t.linhThach)}</span>
+        <span class="pill jade" title="Tiên ngọc">${icon("jade")}${fmt(t.tienNgoc)}</span>
+        <span class="age" title="Nhãn phân loại độ tuổi">${esc(t.ageLabel)}</span>
+      </span>`;
   }
 }
 

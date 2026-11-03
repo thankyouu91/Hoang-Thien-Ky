@@ -1,10 +1,11 @@
 // Động phủ: dashboard của người chơi, mở sẵn khi vào game (GDD mục 14). Trả lời câu hỏi hôm nay cần làm gì.
+import { icon, type IconName } from "../icons.ts";
 import { MiniMap } from "../minimap.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { DongPhuView, Go } from "../source.ts";
 import { agoText, cd, clockText, esc, openSheet, withCountdowns } from "../ui.ts";
 
-const JOB_ICON: Record<string, string> = { hanh_trinh: "⇢", xay: "⌂", ren: "⚒", luyen_dan: "⚗", be_quan: "☯" };
+const JOB_ICON: Record<string, IconName> = { hanh_trinh: "hanh_trinh", xay: "xay", ren: "ren", luyen_dan: "luyen_dan", be_quan: "be_quan" };
 const RESULT: Record<string, string> = { thang: "Thắng", thua: "Thua", hoa: "Hòa" };
 
 export class DongPhuScene extends PageScene<DongPhuView> {
@@ -65,7 +66,7 @@ export class DongPhuScene extends PageScene<DongPhuView> {
         <ul class="list">${v.running
           .map(
             (j) => `<li><button type="button" class="row" ${this.link(j.go)}>
-              <span class="icon" aria-hidden="true">${JOB_ICON[j.kind]}</span>
+              <span class="icon">${icon(JOB_ICON[j.kind])}</span>
               <span class="grow"><b>${esc(j.title)}</b><span class="muted block">${esc(j.detail)}</span></span>
               <span class="cd-wrap">${cd(j.endsAt)}</span></button></li>`,
           )
@@ -82,7 +83,7 @@ export class DongPhuScene extends PageScene<DongPhuView> {
           <div class="mini-slot"></div>
         </section>
         <section class="card city">
-          <h2><button type="button" class="link" data-act="city">${esc(v.city.name)}</button></h2>
+          <h2><button type="button" class="link" data-act="city" aria-label="${esc(v.city.name)}">Thành chủ</button></h2>
           <ul class="plain">${v.city.facilities.map((f) => `<li><button type="button" class="link" data-act="city">${esc(f)}</button></li>`).join("")}</ul>
         </section>
       </div>

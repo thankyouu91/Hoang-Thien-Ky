@@ -3,6 +3,8 @@
 // quanh hình nhân vật), Chỉ số (chạm để xem nguồn), Thú cưỡi (5 ô và kích phát).
 import type { Sprites } from "../../assets/sprites.ts";
 import { animInfo, drawCharacter } from "../../scenes/battle/character.ts";
+import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
+import { icon } from "../icons.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { GearItem, GearSlot, NhanVatView, StatLine } from "../source.ts";
 import { assetUrl, cropIcons, elementChip, esc, fmt, openSheet, pctText, ROLE_NAMES, toast } from "../ui.ts";
@@ -62,7 +64,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const total = v.power.parts.reduce((a, p) => a + p.value, 0) || 1;
     const seg = (id: NhanVatTab, label: string) => `<button type="button" data-act="tab" data-tab="${id}" aria-pressed="${this.tab === id}">${label}</button>`;
     this.page.innerHTML = `
-      <button type="button" class="ghost back-link" data-act="back">‹ Quay lại</button>
+      <button type="button" class="ghost back-link" data-act="back">${icon("back")}Quay lại</button>
       <section class="card nv-id">
         <div class="nv-line">${v.roots.map((e) => elementChip(e)).join(" ")} <span class="chip sk" title="${esc(v.talent.combat)}">${esc(v.talent.name)}</span></div>
         <div class="nv-line"><b>${esc(v.sect.name)}</b> · ${esc(v.sect.role ? ROLE_NAMES[v.sect.role] : "Chưa vào tông")}${v.satNghiep > 0 ? ` · <span class="bad">Sát nghiệp ${fmt(v.satNghiep)}</span>` : ""}</div>
@@ -75,10 +77,22 @@ export class NhanVatScene extends PageScene<NhanVatView> {
           .join("")}</div>
       </section>
       <div class="seg" role="group" aria-label="Tab con">${seg("trang-bi", "Trang bị")}${seg("chi-so", "Chỉ số")}${seg("thu-cuoi", "Thú cưỡi")}</div>
-      ${this.tab === "trang-bi" ? this.gearTab(v) : this.tab === "chi-so" ? this.statsTab(v) : this.mountTab(v)}`;
+      ${this.tab === "trang-bi" ? this.gearTab(v) : this.tab === "chi-so" ? this.statsTab(v) : this.mountTab(v)}
+      ${this.accountCard()}`;
     this.doll = this.page.querySelector<HTMLCanvasElement>(".doll") ?? undefined;
     cropIcons(this.page);
     this.drawDoll();
+  }
+
+  /** Tài khoản đăng nhập: số điện thoại che bớt, nhóm tuổi theo G1, đăng xuất. */
+  private accountCard(): string {
+    const s = this.ctx.auth.session();
+    if (!s) return "";
+    const age = ageOn(s.birthDate);
+    const group = age < GUARDIAN_AGE ? "Dưới 16 tuổi, có người giám hộ" : age < ADULT_AGE ? "Dưới 18 tuổi, giới hạn giờ chơi" : "Từ 18 tuổi";
+    return `<section class="card"><h2>Tài khoản</h2>
+      <div class="account"><span class="grow"><b>${esc(s.phoneMasked)}</b><span class="muted block">${group}${s.guardian ? ` · giám hộ ${esc(s.guardian.name)}` : ""}</span></span>
+      <button type="button" class="btn small" data-act="logout">${icon("logout")} Đăng xuất</button></div></section>`;
   }
 
   private slot(v: NhanVatView, s: GearSlot): string {
@@ -176,6 +190,10 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const v = this.data;
     if (!v) return;
     if (name === "back") this.ctx.nav.back();
+    else if (name === "logout") {
+      this.ctx.auth.logout();
+      location.reload();
+    }
     else if (name === "tab") this.setTab(el.dataset.tab as NhanVatTab);
     else if (name === "stat") this.openStat([...v.main, ...v.stats].find((s) => s.id === el.dataset.stat)!);
     else if (name === "slot") this.openSlot(el.dataset.slot as GearSlot, v.gear[el.dataset.slot as GearSlot]);

@@ -1,7 +1,6 @@
 // Bản đồ tranh của vùng đang đứng (GDD mục 14), bản tối thiểu để bản đồ mini và các thẻ dashboard nhảy tới đúng chỗ:
 // ảnh nền Azgaar, chặng đường, điểm là chấm khi thu nhỏ và đảo nổi PixelLab khi phóng to, sương mù, thẻ điểm khi chạm.
-// Kéo, zoom, lớp lọc và hình cả vị diện thuộc việc bản đồ của Sprint 4.
-import type { Sprites } from "../../assets/sprites.ts";
+// Kéo, zoom, lớp lọc và hình cả vị diện thuộc việc bản đồ của Sprint 4. Tải và vẽ nhanh: xem layers.ts.
 import { Camera } from "../../app/camera.ts";
 import type { Scene } from "../../app/scene.ts";
 import type { View } from "../../app/view.ts";
@@ -9,7 +8,22 @@ import { MiniMap, OWNER_COLOR } from "../../dashboard/minimap.ts";
 import type { DashCtx } from "../../dashboard/shell.ts";
 import type { BanDoView, Go } from "../../dashboard/source.ts";
 import { cd, closeSheet, esc, fmt, openSheet, toast } from "../../dashboard/ui.ts";
-import { BG_SCALE, HOLDABLE, loadRegion, POINT_NAMES, regionBackground, toImage, type RegionMap, type RegionPoint } from "./region.ts";
+import { IslandImages, regionLayers, type RegionLayers } from "./layers.ts";
+import { BG_SCALE, HOLDABLE, POINT_NAMES, toImage, type RegionMap, type RegionPoint } from "./region.ts";
+
+/** Hình đảo dùng chung giữa màn bản đồ và prefetch của Động phủ. */
+export const islandImages = new IslandImages();
+
+/** Khoá hình đảo của một điểm; sơn môn của tông mình dùng đảo tông môn. */
+export function islandKey(p: RegionPoint, sonMon: number, sectIsland: string): string {
+  if (p.type === "son_mon" && p.id === sonMon) return sectIsland;
+  if (p.type === "cua_bi_canh") return `diem/cua_bi_canh_${p.tier ?? "vua"}`;
+  if (["mo_linh_thach", "mo_quang", "mo_duoc", "hang_di_thu"].includes(p.type)) {
+    const k = p.id % 3;
+    return `diem/${p.type}${k ? `_${k + 1}` : ""}`;
+  }
+  return `diem/${p.type}`;
+}
 
 /** Cạnh đảo nổi trên ảnh nền (px ảnh). */
 const ISLAND = 44;
@@ -27,11 +41,12 @@ export class MapScene implements Scene {
   readonly camera = new Camera();
   readonly hud: HTMLElement;
   private ctx: DashCtx;
-  private sprites: Sprites;
   private region?: RegionMap;
-  private bg?: HTMLImageElement;
-  private fog?: HTMLCanvasElement;
+  private layers?: RegionLayers;
   private data?: BanDoView;
+  private loading: HTMLElement;
+  /** Đã vẽ khung đầu (mốc đo thời gian tới khi thấy bản đồ). */
+  private drawn = false;
   private v?: View;
   private active = false;
   private fitted = false;
@@ -40,14 +55,18 @@ export class MapScene implements Scene {
   private miniTimer = 0;
   private t = 0;
 
-  constructor(ctx: DashCtx, sprites: Sprites, canvas: HTMLCanvasElement) {
+  constructor(ctx: DashCtx, canvas: HTMLCanvasElement) {
     this.ctx = ctx;
-    this.sprites = sprites;
     this.camera.maxZoom = 2.5;
     this.mini = new MiniMap((x, y) => this.focusRegion(x, y));
     this.hud = document.createElement("div");
     this.hud.className = "map-hud";
     this.hud.append(this.mini.el);
+    this.loading = document.createElement("div");
+    this.loading.className = "map-loading";
+    this.loading.hidden = true;
+    this.loading.innerHTML = `<span>Đang tải bản đồ</span><div class="bar"><i></i></div>`;
+    this.hud.append(this.loading);
 
     // Chạm (không kéo) vào một điểm thì mở thẻ điểm.
     let down: { x: number; y: number; id: number } | null = null;
@@ -59,6 +78,14 @@ export class MapScene implements Scene {
       const moved = Math.hypot(e.offsetX - down.x, e.offsetY - down.y);
       down = null;
       if (moved <= TAP_SLOP) this.tap(e.offsetX, e.offsetY);
+    });
+  }
+
+  /** Tải trước lớp nền và hình đảo của vùng (gọi lúc rảnh từ dashboard). */
+  prefetch(code: string): void {
+    void regionLayers(code).then((l) => {
+      void l.loadBackground();
+      islandImages.preload(new Set(l.region.points.map((p) => islandKey(p, -1, ""))));
     });
   }
 
@@ -90,20 +117,16 @@ export class MapScene implements Scene {
     this.ctx.topbar.set(d.top);
     this.data = d;
     if (this.region?.region.code !== d.map.region) {
-      const region = await loadRegion(d.map.region);
-      const [x0, y0, x1, y1] = region.map.frame;
-      this.camera.bounds = { x: 0, y: 0, w: (x1 - x0) * BG_SCALE, h: (y1 - y0) * BG_SCALE };
-      this.region = region;
-      this.bg = undefined;
+      const layers = await regionLayers(d.map.region);
+      this.camera.bounds = { x: 0, y: 0, w: layers.w, h: layers.h };
+      this.region = layers.region;
+      this.layers = layers;
       this.fitted = false;
-      void regionBackground(d.map.region).then((url) => {
-        if (!url) return;
-        const img = new Image();
-        img.src = url;
-        img.decode().then(() => (this.bg = img), () => console.warn("Không nạp được ảnh nền", url));
-      });
+      layers.onChange = () => this.showProgress();
+      void layers.loadBackground();
     }
-    this.buildFog();
+    this.layers!.setRevealed(d.map.revealed);
+    this.showProgress();
     if (!this.fitted && this.v) {
       this.camera.fit(this.camera.bounds!, this.v, 8);
       this.camera.minZoom = this.camera.zoom * 0.8;
@@ -137,30 +160,11 @@ export class MapScene implements Scene {
     this.camera.y = y;
   }
 
-  /** Sương mù vẽ một lần ở độ phân giải thấp rồi phóng lên: khoét quanh các điểm đã mở. */
-  private buildFog(): void {
-    const m = this.region;
-    const d = this.data;
-    if (!m || !d) return;
-    const b = this.camera.bounds!;
-    const k = 4;
-    const c = document.createElement("canvas");
-    c.width = Math.ceil(b.w / k);
-    c.height = Math.ceil(b.h / k);
-    const f = c.getContext("2d")!;
-    f.fillStyle = "rgba(16, 13, 11, 0.62)";
-    f.fillRect(0, 0, c.width, c.height);
-    f.globalCompositeOperation = "destination-out";
-    const r = 70 / k;
-    for (const id of d.map.revealed) {
-      const p = toImage(m, m.points[id].x, m.points[id].y);
-      const g = f.createRadialGradient(p.x / k, p.y / k, r * 0.35, p.x / k, p.y / k, r);
-      g.addColorStop(0, "rgba(0,0,0,1)");
-      g.addColorStop(1, "rgba(0,0,0,0)");
-      f.fillStyle = g;
-      f.fillRect(p.x / k - r, p.y / k - r, r * 2, r * 2);
-    }
-    this.fog = c;
+  /** Thanh tiến độ khi ảnh nền chưa về; bản đồ vẫn dùng được trên tấm tạm. */
+  private showProgress(): void {
+    const l = this.layers;
+    this.loading.hidden = !l || l.ready;
+    if (l && !l.ready) this.loading.querySelector("i")!.style.width = `${Math.round(l.progress * 100)}%`;
   }
 
   private syncMini(): void {
@@ -183,60 +187,64 @@ export class MapScene implements Scene {
     const cam = this.camera;
     if (!m || !d || !cam.bounds) return;
     cam.apply(v);
-    const b = cam.bounds!;
-    if (this.bg) ctx.drawImage(this.bg, 0, 0, b.w, b.h);
-    else {
-      ctx.fillStyle = "#3b3226";
-      ctx.fillRect(0, 0, b.w, b.h);
+    const view = cam.visible(v);
+    // Nền + đường + sương: chỉ phần đang thấy, từ tấm nướng sẵn khi thu nhỏ (xem layers.ts).
+    const b = cam.bounds;
+    if (this.layers && !this.drawn) {
+      this.drawn = true;
+      performance.mark("ban-do:khung-dau");
     }
+    this.layers?.draw(ctx, Math.max(0, view.x), Math.max(0, view.y), Math.min(b.w, view.x + view.w), Math.min(b.h, view.y + view.h), cam.zoom * v.dpr, cam.zoom);
     const P = (p: { x: number; y: number }) => toImage(m, p.x, p.y);
     const revealed = new Set(d.map.revealed);
 
-    // Chặng đường: quan đạo đậm, tiểu đạo vừa, lối mòn đứt nét.
-    for (const kind of ["loi_mon", "tieu_dao", "quan_dao"] as const) {
-      ctx.beginPath();
-      for (const e of m.edges) {
-        if (e.kind !== kind) continue;
-        e.path.forEach(([x, y], i) => {
-          const q = P({ x, y });
-          if (i) ctx.lineTo(q.x, q.y);
-          else ctx.moveTo(q.x, q.y);
-        });
-      }
-      ctx.lineWidth = (kind === "quan_dao" ? 3 : kind === "tieu_dao" ? 2 : 1.5) / Math.min(1, cam.zoom);
-      ctx.strokeStyle = kind === "loi_mon" ? "rgba(70, 48, 28, 0.35)" : "rgba(70, 48, 28, 0.55)";
-      ctx.setLineDash(kind === "loi_mon" ? [6, 6] : []);
-      ctx.stroke();
-    }
-    ctx.setLineDash([]);
-    if (this.fog) ctx.drawImage(this.fog, 0, 0, b.w, b.h);
-
     const islands = ISLAND * cam.zoom >= ISLAND_MIN_PX;
-    const view = cam.visible(v);
     const blink = Math.floor(this.t * 2) % 2 === 0;
+    const pad = ISLAND;
+    const inView = (q: { x: number; y: number }) => q.x > view.x - pad && q.x < view.x + view.w + pad && q.y > view.y - pad && q.y < view.y + view.h + pad;
+    // Vòng màu chủ điểm và chấm điểm gom theo màu: mỗi màu một lần fill.
+    const rings = new Map<string, Path2D>();
+    const dotsLit = new Path2D();
+    const dotsDim = new Path2D();
+    const dotR = 1 / Math.min(1, cam.zoom);
     for (const p of m.points) {
       const q = P(p);
-      if (q.x < view.x - ISLAND || q.x > view.x + view.w + ISLAND || q.y < view.y - ISLAND || q.y > view.y + view.h + ISLAND) continue;
+      if (!inView(q)) continue;
       const own = d.owners[p.id];
-      const lit = revealed.has(p.id);
       if (own) {
-        ctx.beginPath();
-        ctx.ellipse(q.x, q.y + (islands ? ISLAND * 0.3 : 0), islands ? ISLAND * 0.55 : 7 / cam.zoom, islands ? ISLAND * 0.22 : 7 / cam.zoom, 0, 0, Math.PI * 2);
-        ctx.fillStyle = own.attacked && blink ? "#ff5a4f" : OWNER_COLOR[own.owner];
-        ctx.globalAlpha = 0.85;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-      const img = islands && lit ? this.sprites.get(this.spriteKey(p)) : undefined;
-      if (img) {
-        ctx.drawImage(img, q.x - ISLAND / 2, q.y - ISLAND / 2 - 4, ISLAND, ISLAND);
-      } else {
-        ctx.beginPath();
-        ctx.arc(q.x, q.y, (lit ? 3.2 : 2) / Math.min(1, cam.zoom), 0, Math.PI * 2);
-        ctx.fillStyle = lit ? "#2a1f14" : "rgba(42, 31, 20, 0.45)";
-        ctx.fill();
+        const color = own.attacked && blink ? "#ff5a4f" : OWNER_COLOR[own.owner];
+        let path = rings.get(color);
+        if (!path) rings.set(color, (path = new Path2D()));
+        const rx = islands ? ISLAND * 0.55 : 7 / cam.zoom;
+        const ry = islands ? ISLAND * 0.22 : 7 / cam.zoom;
+        const cy = q.y + (islands ? ISLAND * 0.3 : 0);
+        path.moveTo(q.x + rx, cy);
+        path.ellipse(q.x, cy, rx, ry, 0, 0, Math.PI * 2);
       }
     }
+    ctx.globalAlpha = 0.85;
+    for (const [color, path] of rings) {
+      ctx.fillStyle = color;
+      ctx.fill(path);
+    }
+    ctx.globalAlpha = 1;
+    for (const p of m.points) {
+      const q = P(p);
+      if (!inView(q)) continue;
+      const lit = revealed.has(p.id);
+      const img = islands && lit ? islandImages.get(islandKey(p, d.map.sonMon, d.sectIsland)) : undefined;
+      if (img) ctx.drawImage(img, q.x - ISLAND / 2, q.y - ISLAND / 2 - 4, ISLAND, ISLAND);
+      else {
+        const r = (lit ? 3.2 : 2) * dotR;
+        const path = lit ? dotsLit : dotsDim;
+        path.moveTo(q.x + r, q.y);
+        path.arc(q.x, q.y, r, 0, Math.PI * 2);
+      }
+    }
+    ctx.fillStyle = "#2a1f14";
+    ctx.fill(dotsLit);
+    ctx.fillStyle = "rgba(42, 31, 20, 0.45)";
+    ctx.fill(dotsDim);
     // Vị trí của mình hoặc đoàn đang đi
     const a = P(m.points[d.map.self.from]);
     const z = P(m.points[d.map.self.to]);
@@ -272,17 +280,6 @@ export class MapScene implements Scene {
         ctx.fillText(label, q.x, q.y + ISLAND / 2);
       }
     }
-  }
-
-  private spriteKey(p: RegionPoint): string {
-    const d = this.data!;
-    if (p.type === "son_mon" && p.id === d.map.sonMon) return "tong_mon/loi_loi_tri_phong";
-    if (p.type === "cua_bi_canh") return `diem/cua_bi_canh_${p.tier ?? "vua"}`;
-    if (["mo_linh_thach", "mo_quang", "mo_duoc", "hang_di_thu"].includes(p.type)) {
-      const k = p.id % 3;
-      return `diem/${p.type}${k ? `_${k + 1}` : ""}`;
-    }
-    return `diem/${p.type}`;
   }
 
   private tap(sx: number, sy: number): void {

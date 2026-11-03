@@ -4,7 +4,8 @@
 // Tên người, tên tông môn và số lượng là tự đặt cho bản mẫu.
 import { addMember, addSect, apply, emptyState, type Command, type GameState, type Role } from "@ktlp/rules";
 import type { Element } from "@ktlp/sim";
-import type { GearItem, GearSlot, PointType } from "../source.ts";
+import type { SectModel } from "../art/sectScene.ts";
+import type { Building, GearItem, GearSlot, PointType } from "../source.ts";
 import { HOLDABLE, stagesFrom, type RegionMap } from "../../scenes/map/region.ts";
 
 export const PLAYER = "p1";
@@ -62,13 +63,13 @@ export interface World {
     gear: Partial<Record<GearSlot, GearItem>>;
     mounts: (string | null)[];
   };
-  sect: { name: string; xp: number; faction: string; vault: { linhThach: number; quang: number; duoc: number } };
+  sect: { name: string; model: SectModel; xp: number; faction: string; vault: { linhThach: number; quang: number; duoc: number } };
   held: HeldPoint[];
   sects: OtherSect[];
   applicants: { id: string; name: string; level: number }[];
   wars: { id: number; with: string; direction: "di" | "den"; startsAt: number }[];
   jobs: Job[];
-  buildings: { id: string; name: string; level: number; upgradingUntil?: number }[];
+  buildings: Building[];
   travel: { from: number; to: number; startsAt: number; endsAt: number };
   reports: { id: number; seed: number; title: string; at: number }[];
   mail: { id: number; from: string; title: string; body: string; unread: boolean }[];
@@ -210,7 +211,7 @@ export function createWorld(region: RegionMap, now: number): World {
       },
       mounts: ["thiem_dien_bao", "loi_am_lang", "loi_tuoc", "thiet_boi_nguu", null],
     },
-    sect: { name: "Lôi Trì Phong", xp: 118_400, faction: "Chính", vault: { linhThach: 8_420, quang: 1_260, duoc: 540 } },
+    sect: { name: "Lôi Trì Phong", model: { id: "loi_loi_tri_phong", name: "Lôi Trì Phong", element: "loi" }, xp: 118_400, faction: "Chính", vault: { linhThach: 8_420, quang: 1_260, duoc: 540 } },
     held,
     sects,
     applicants: [
@@ -234,6 +235,8 @@ export function createWorld(region: RegionMap, now: number): World {
       { id: "linh_duoc_vien", name: "Linh Dược Viên", level: 2 },
       { id: "bao_kho", name: "Bảo Khố", level: 4 },
       { id: "truyen_tong_tran", name: "Truyền Tống Trận", level: 1 },
+      { id: "thuong_hoi", name: "Thương hội", level: 0, locked: "Cần người có tài năng Tu kim tiền" },
+      { id: "phi_thang_dai", name: "Phi Thăng Đài", level: 0, locked: "Mở ở cấp tông môn 200" },
     ],
     // Đang đi từ thành chủ về sơn môn, còn 14 phút.
     travel: { from: thanhChu, to: SON_MON, startsAt: now - 9 * MIN, endsAt: now + 14 * MIN },

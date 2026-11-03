@@ -23,13 +23,14 @@ import type {
   BanDoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, GearItem, Go, LienMinhView,
   MiniMapView, MountView, NhanVatView, ScrollCard, StatLine, StatSource, TechniqueCard, TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
+import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.ts";
 import { createWorld, PLAYER, REGION, SECT, todayAt, type World } from "./world.ts";
 
 const H = 3600_000;
 const KT = THAM_SO.kinh_te;
 
 /** Nhãn phân loại độ tuổi G1 (đề xuất, chờ chốt khi xin giấy phép). */
-const AGE_LABEL = "16+";
+export const AGE_LABEL = "16+";
 /** Mỏ chưa thu quá bấy nhiêu giờ thì vào Việc nên làm (GDD mục 14). */
 const MINE_STALE_HOURS = 8;
 /** Mỏ tích tối đa 24 giờ sản lượng (đề xuất). */
@@ -115,13 +116,15 @@ function learnedCard(l: LearnedTechnique): TechniqueCard {
 
 export class MockDashboardSource implements DashboardSource {
   private w: World;
+  private auth?: AuthSource;
 
-  private constructor(w: World) {
+  private constructor(w: World, auth?: AuthSource) {
     this.w = w;
+    this.auth = auth;
   }
 
-  static async create(now = Date.now()): Promise<MockDashboardSource> {
-    return new MockDashboardSource(createWorld(await loadRegion(REGION), now));
+  static async create(now = Date.now(), auth?: AuthSource): Promise<MockDashboardSource> {
+    return new MockDashboardSource(createWorld(await loadRegion(REGION), now), auth);
   }
 
   /** Giờ server giả: cùng đồng hồ máy. */
@@ -147,8 +150,16 @@ export class MockDashboardSource implements DashboardSource {
       linhThach: p.linhThach,
       tienNgoc: p.tienNgoc,
       satNghiep: p.satNghiep,
+      playMinutesLeft: this.minorMinutesLeft(),
       ageLabel: AGE_LABEL,
     };
+  }
+
+  /** Người dưới 18 tuổi thấy thời gian chơi còn lại trong ngày (GDD mục 14, G1). */
+  private minorMinutesLeft(): number | undefined {
+    const session = this.auth?.session();
+    if (!session || ageOn(session.birthDate) >= ADULT_AGE) return undefined;
+    return Math.max(0, MINOR_DAILY_MINUTES - this.auth!.playedMinutesToday());
   }
 
   private miniMap(focus?: number[]): MiniMapView {
@@ -461,7 +472,9 @@ export class MockDashboardSource implements DashboardSource {
         regionName: w.region.region.name,
         terrain: TERRAIN_NAMES[sonMon.terrain ?? ""] ?? "—",
         faction: w.sect.faction,
-        island: "tong_mon/loi_loi_tri_phong",
+        island: `tong_mon/${w.sect.model.id}`,
+        model: w.sect.model,
+        terrainId: sonMon.terrain ?? "co_tich",
       },
       territory: {
         held: w.held.map((h) => ({ pointId: h.pointId, type: h.type, level: h.level, perHour: minePerHour(h.level), uncollectedSince: h.uncollectedSince, attacked: h.attacked && h.attacked.endsAt > now ? h.attacked : undefined })),
@@ -606,6 +619,7 @@ export class MockDashboardSource implements DashboardSource {
       top: this.top(),
       viewerRole: role,
       map: this.miniMap(),
+      sectIsland: `tong_mon/${w.sect.model.id}`,
       owners,
       inRange: [...dist].filter(([, d]) => d <= row.range).map(([id]) => id),
       held: w.held.length,
@@ -710,6 +724,9 @@ export class MockDashboardSource implements DashboardSource {
       case "dev_chuc_vi":
         this.me.role = cmd.role;
         return { ok: true };
+      case "dev_mo_hinh":
+        w.sect.model = cmd.model;
+        return { ok: true, message: `Mô hình ${cmd.model.name}` };
       case "dev_lien_minh":
         w.alliance.joined = cmd.joined;
         return { ok: true };

@@ -3,6 +3,7 @@
 // server giả trong Web Worker với cùng các hàm này, nên các màn không phải sửa.
 import type { BattleInput, Element, SkillType } from "@ktlp/sim";
 import type { Role, RuleError } from "@ktlp/rules";
+import type { LocationId, SectModel } from "./art/sectScene.ts";
 
 /** Mốc giờ server (ms) gửi kèm mọi lệnh đọc; đồng hồ đếm ngược ở client tự đếm từ mốc này. */
 export interface Stamped {
@@ -185,11 +186,13 @@ export interface TerritoryPoint {
 }
 
 export interface Building {
-  id: string;
+  id: LocationId;
   name: string;
-  level: number;
+  level: number; // 0 = chưa xây
   /** Đang nâng cấp tới cấp kế, kết thúc lúc nào. */
   upgradingUntil?: number;
+  /** Chưa xây được thì vì sao (ví dụ "Mở ở cấp 200"). */
+  locked?: string;
 }
 
 export interface SectMember {
@@ -223,6 +226,9 @@ export interface TongMonView extends Stamped {
     shieldUntil?: number;
     patron?: string;
     island: string; // khoá hình đảo tông môn
+    /** Mô hình tông môn (đảo PixelLab) và mã địa thế, để vẽ hình nền từng công trình. */
+    model: SectModel;
+    terrainId: string;
   };
   territory: { held: TerritoryPoint[]; max: number; range: number; perHour: { linhThach: number; quang: number; duoc: number } };
   vault: { linhThach: number; upkeepPerDay: number; daysLeft: number; parts: StatSource[] };
@@ -331,6 +337,8 @@ export interface BanDoView extends Stamped {
   top: TopBarView;
   viewerRole: Role | null;
   map: MiniMapView;
+  /** Khoá hình đảo của tông mình (sơn môn trên bản đồ). */
+  sectIsland: string;
   owners: Record<number, PointOwner>;
   /** Điểm trong tầm Truyền Tống Trận của tông mình: chỉ chiếm được các điểm này (GDD mục 5). */
   inRange: number[];
@@ -355,7 +363,9 @@ export type DashboardCommand =
   /** Chỉ prototype: xem dashboard dưới chức vị khác để kiểm nút theo quyền. */
   | { type: "dev_chuc_vi"; role: Role }
   /** Chỉ prototype: bật tắt việc tông môn đã vào liên minh. */
-  | { type: "dev_lien_minh"; joined: boolean };
+  | { type: "dev_lien_minh"; joined: boolean }
+  /** Chỉ prototype: đổi mô hình tông môn để xem hình nền các công trình. */
+  | { type: "dev_mo_hinh"; model: SectModel };
 
 export type CommandResult = { ok: true; message?: string } | { ok: false; error: RuleError | "chua_co_trong_proto" | string };
 
