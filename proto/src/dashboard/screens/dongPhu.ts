@@ -42,7 +42,6 @@ export class DongPhuScene extends PageScene<DongPhuView> {
   protected render(v: DongPhuView): void {
     this.gos = [];
     const now = v.serverNow;
-    const cityArt = pointArt(v.miniMap.region, "thanh_chu");
     const calendar = v.calendar
       .map((c) => {
         const state = now >= c.endsAt ? "past" : now >= c.startsAt ? "open" : "next";
@@ -85,7 +84,7 @@ export class DongPhuScene extends PageScene<DongPhuView> {
           <h2>Bản đồ mini</h2>
           <div class="mini-slot"></div>
         </section>
-        <section class="card city${cityArt ? " has-art" : ""}"${cityArt ? ` style="--art:url('${cityArt}')"` : ""}>
+        <section class="card city">
           <h2><button type="button" class="link" data-act="city" aria-label="${esc(v.city.name)}">Thành chủ</button></h2>
           <ul class="plain">${v.city.facilities.map((f) => `<li><button type="button" class="link" data-act="city">${esc(f)}</button></li>`).join("")}</ul>
         </section>

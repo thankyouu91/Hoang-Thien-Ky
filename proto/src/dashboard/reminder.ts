@@ -1,33 +1,6 @@
-// Chủ đề giao diện và lời nhắc sức khỏe.
-// - "scroll": khung cuộn giấy ghép từ hình PixelLab (assets/pixellab/ui/), theo GDD mục 15; mặc định.
-// - "minimal": bản phẳng tối giản. Lựa chọn lưu trên máy người xem.
+// Lời nhắc sức khỏe sau mỗi 30 phút chơi trong ngày (G1, GDD mục 14).
 import type { AuthSource } from "./auth.ts";
 
-export type Theme = "scroll" | "minimal";
-const KEY = "ktlp.theme";
-
-export function theme(): Theme {
-  try {
-    return localStorage.getItem(KEY) === "minimal" ? "minimal" : "scroll";
-  } catch {
-    return "scroll";
-  }
-}
-
-export function applyTheme(t: Theme = theme()): void {
-  document.body.classList.toggle("theme-scroll", t === "scroll");
-}
-
-export function setTheme(t: Theme): void {
-  try {
-    localStorage.setItem(KEY, t);
-  } catch {
-    // Không lưu được thì chỉ đổi cho lần mở này.
-  }
-  applyTheme(t);
-}
-
-/** Lời nhắc nghỉ sau mỗi 30 phút chơi trong ngày (G1, GDD mục 14). */
 export const REST_EVERY_MINUTES = 30;
 
 export function startRestReminder(auth: AuthSource): void {
@@ -47,7 +20,7 @@ export function startRestReminder(auth: AuthSource): void {
     try {
       sessionStorage.setItem(key, String(bucket));
     } catch {
-      // bỏ qua
+      // Không lưu được thì lần sau vẫn nhắc lại, chấp nhận được.
     }
     const el = document.createElement("div");
     el.id = "rest-reminder";

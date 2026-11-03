@@ -5,7 +5,6 @@ import type { Sprites } from "../../assets/sprites.ts";
 import { animInfo, drawCharacter } from "../../scenes/battle/character.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { REALM_TERM, term } from "../terms.ts";
-import { setTheme, theme } from "../theme.ts";
 import { icon } from "../icons.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { GearItem, GearSlot, NhanVatView, StatLine } from "../source.ts";
@@ -94,10 +93,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const group = age < GUARDIAN_AGE ? "Dưới 16 tuổi, có người giám hộ" : age < ADULT_AGE ? "Dưới 18 tuổi, giới hạn giờ chơi" : "Từ 18 tuổi";
     return `<section class="card"><h2>Tài khoản</h2>
       <div class="account"><span class="grow"><b>${esc(s.phoneMasked)}</b><span class="muted block">${group}${s.guardian ? ` · giám hộ ${esc(s.guardian.name)}` : ""}</span></span>
-      <button type="button" class="btn small" data-act="logout">${icon("logout")} Đăng xuất</button></div>
-      <div class="account theme-row"><span class="grow">Giao diện<span class="muted block">Cuộn giấy dùng khung PixelLab; tối giản là bản phẳng</span></span>
-      <button type="button" class="${theme() === "scroll" ? "seal" : "btn"} small" data-act="theme" data-theme="scroll">Cuộn giấy</button>
-      <button type="button" class="${theme() === "minimal" ? "seal" : "btn"} small" data-act="theme" data-theme="minimal">Tối giản</button></div></section>`;
+      <button type="button" class="btn small" data-act="logout">${icon("logout")} Đăng xuất</button></div></section>`;
   }
 
   private slot(v: NhanVatView, s: GearSlot): string {
@@ -195,10 +191,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const v = this.data;
     if (!v) return;
     if (name === "back") this.ctx.nav.back();
-    else if (name === "theme") {
-      setTheme(el.dataset.theme === "minimal" ? "minimal" : "scroll");
-      this.render(v);
-    } else if (name === "logout") {
+    else if (name === "logout") {
       this.ctx.auth.logout();
       location.reload();
     }
