@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ.
 
-Tổng 519 món, đã vẽ 141.
+Tổng 519 món, đã vẽ 165.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -56,33 +56,33 @@ Tổng 519 món, đã vẽ 141.
 | TB-KI-028 | Kiếm Bích Lạc | Lam | trang_bi/kiem/28.webp | ✓ |
 | TB-KI-029 | Kiếm Nguyệt Ảnh | Lam | trang_bi/kiem/29.webp | ✓ |
 | TB-KI-030 | Kiếm Tinh Thần | Lam | trang_bi/kiem/30.webp | ✓ |
-| TB-KI-031 | Kiếm Hổ Phách | Lam | trang_bi/kiem/31.webp |  |
-| TB-KI-032 | Kiếm Long Ngâm | Lam | trang_bi/kiem/32.webp |  |
-| TB-KI-033 | Kiếm Thu Hồ | Lam | trang_bi/kiem/33.webp |  |
-| TB-KI-034 | Kiếm Phi Yến | Lam | trang_bi/kiem/34.webp |  |
-| TB-KI-035 | Kiếm Mai Hoa | Lam | trang_bi/kiem/35.webp |  |
-| TB-KI-036 | Kiếm Trường Hồng | Lam | trang_bi/kiem/36.webp |  |
-| TB-KI-037 | Kiếm Tử Trúc | Lam | trang_bi/kiem/37.webp |  |
-| TB-KI-038 | Kiếm Kỳ Lân | Lam | trang_bi/kiem/38.webp |  |
-| TB-KI-039 | Kiếm Huyền Quy | Lam | trang_bi/kiem/39.webp |  |
-| TB-KI-040 | Kiếm Thanh Hồng | Lam | trang_bi/kiem/40.webp |  |
+| TB-KI-031 | Kiếm Hổ Phách | Lam | trang_bi/kiem/31.webp | ✓ |
+| TB-KI-032 | Kiếm Long Ngâm | Lam | trang_bi/kiem/32.webp | ✓ |
+| TB-KI-033 | Kiếm Thu Hồ | Lam | trang_bi/kiem/33.webp | ✓ |
+| TB-KI-034 | Kiếm Phi Yến | Lam | trang_bi/kiem/34.webp | ✓ |
+| TB-KI-035 | Kiếm Mai Hoa | Lam | trang_bi/kiem/35.webp | ✓ |
+| TB-KI-036 | Kiếm Trường Hồng | Lam | trang_bi/kiem/36.webp | ✓ |
+| TB-KI-037 | Kiếm Tử Trúc | Lam | trang_bi/kiem/37.webp | ✓ |
+| TB-KI-038 | Kiếm Kỳ Lân | Lam | trang_bi/kiem/38.webp | ✓ |
+| TB-KI-039 | Kiếm Huyền Quy | Lam | trang_bi/kiem/39.webp | ✓ |
+| TB-KI-040 | Kiếm Thanh Hồng | Lam | trang_bi/kiem/40.webp | ✓ |
 | TB-KI-041 | Kiếm Bạch Ngọc | Tím | trang_bi/kiem/41.webp | ✓ |
 | TB-KI-042 | Kiếm Tử Vân | Tím | trang_bi/kiem/42.webp | ✓ |
-| TB-KI-043 | Kiếm Phượng Vĩ | Tím | trang_bi/kiem/43.webp |  |
-| TB-KI-044 | Kiếm Thất Tinh | Tím | trang_bi/kiem/44.webp |  |
-| TB-KI-045 | Kiếm Thiên Hà | Tím | trang_bi/kiem/45.webp |  |
-| TB-KI-046 | Kiếm U Lan | Tím | trang_bi/kiem/46.webp |  |
-| TB-KI-047 | Kiếm Bích Huyết | Tím | trang_bi/kiem/47.webp |  |
-| TB-KI-048 | Kiếm Lưu Ly | Tím | trang_bi/kiem/48.webp |  |
-| TB-KI-049 | Kiếm Vạn Hoa | Tím | trang_bi/kiem/49.webp |  |
-| TB-KI-050 | Kiếm Giao Long | Tím | trang_bi/kiem/50.webp |  |
-| TB-KI-051 | Kiếm Tử Điện | Tím | trang_bi/kiem/51.webp |  |
-| TB-KI-052 | Kiếm Huyễn Ảnh | Tím | trang_bi/kiem/52.webp |  |
+| TB-KI-043 | Kiếm Phượng Vĩ | Tím | trang_bi/kiem/43.webp | ✓ |
+| TB-KI-044 | Kiếm Thất Tinh | Tím | trang_bi/kiem/44.webp | ✓ |
+| TB-KI-045 | Kiếm Thiên Hà | Tím | trang_bi/kiem/45.webp | ✓ |
+| TB-KI-046 | Kiếm U Lan | Tím | trang_bi/kiem/46.webp | ✓ |
+| TB-KI-047 | Kiếm Bích Huyết | Tím | trang_bi/kiem/47.webp | ✓ |
+| TB-KI-048 | Kiếm Lưu Ly | Tím | trang_bi/kiem/48.webp | ✓ |
+| TB-KI-049 | Kiếm Vạn Hoa | Tím | trang_bi/kiem/49.webp | ✓ |
+| TB-KI-050 | Kiếm Giao Long | Tím | trang_bi/kiem/50.webp | ✓ |
+| TB-KI-051 | Kiếm Tử Điện | Tím | trang_bi/kiem/51.webp | ✓ |
+| TB-KI-052 | Kiếm Huyễn Ảnh | Tím | trang_bi/kiem/52.webp | ✓ |
 | TB-KI-053 | Kiếm Hoàng Long | Vàng | trang_bi/kiem/53.webp | ✓ |
-| TB-KI-054 | Kiếm Thái Hư | Vàng | trang_bi/kiem/54.webp |  |
-| TB-KI-055 | Kiếm Xích Tiêu | Vàng | trang_bi/kiem/55.webp |  |
-| TB-KI-056 | Kiếm Hiên Viên | Vàng | trang_bi/kiem/56.webp |  |
-| TB-KI-057 | Kiếm Vạn Tượng | Vàng | trang_bi/kiem/57.webp |  |
+| TB-KI-054 | Kiếm Thái Hư | Vàng | trang_bi/kiem/54.webp | ✓ |
+| TB-KI-055 | Kiếm Xích Tiêu | Vàng | trang_bi/kiem/55.webp | ✓ |
+| TB-KI-056 | Kiếm Hiên Viên | Vàng | trang_bi/kiem/56.webp | ✓ |
+| TB-KI-057 | Kiếm Vạn Tượng | Vàng | trang_bi/kiem/57.webp | ✓ |
 | TB-KI-058 | Kiếm Huyết Long | Đỏ | trang_bi/kiem/58.webp | ✓ |
 | TB-KI-059 | Kiếm Phần Thiên | Đỏ | trang_bi/kiem/59.webp |  |
 | TB-KI-060 | Kiếm Hỗn Độn | Đỏ | trang_bi/kiem/60.webp |  |

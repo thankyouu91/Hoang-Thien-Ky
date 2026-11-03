@@ -17,7 +17,8 @@ Icon vật phẩm và giao diện vẽ bằng Canva theo phong cách tranh vẽ 
 1. Gọi `generate-image` với lời `Game inventory item icon: <mo_ta>. <duoi_loi_mo_ta>`, tỷ lệ `SQUARE_1_1`. Xem ảnh; món lệch phong cách, có chữ hay có khung thì vẽ lại.
 2. Gọi `remove-background`. Gọi song song đôi khi bị 409; gọi lại từng món là được.
 3. API Canva chỉ trả ảnh 200 px. Muốn có bản 512 px thì chèn ảnh đã tách nền vào trang 512×512 của design tờ xuất `DAHZ1iamT_w`, lưu, rồi `export-design` dạng PNG với `transparent_background` và `width` 512.
-    - Mỗi design chỉ chứa được 100 trang. Khi đầy thì dùng lại trang đã xuất: `update_fill`, rồi `crop_media` về 512×512, vì `update_fill` tự phóng ảnh lên khoảng 4%.
+    - Mỗi design chỉ chứa được 100 trang. Tờ xuất 1 `DAHZ1iamT_w` đã đầy; từ lô 4 dùng tờ xuất 2 `DAHZ2R_YFBk` và chạy `xu_ly.cjs` với `DESIGN=DAHZ2R_YFBk`. Tờ mới tạo bằng `create-design` với brief trang trắng, rồi `add_page` 512×512; id trang chỉ đọc được sau khi lưu.
+    - Khi tờ đang dùng cũng đầy thì tạo tờ mới như trên, hoặc dùng lại trang đã xuất: `update_fill`, rồi `crop_media` về 512×512, vì `update_fill` tự phóng ảnh lên khoảng 4%.
 4. Chạy `tao_lo.cjs` rồi `xu_ly.cjs`, sau đó `danh_muc.cjs`. Commit file trong `assets/icon_ve/`.
 5. Chuyển ảnh gốc vào thư mục Canva "KTLP – Icon vật phẩm" (`FAHZ1p8MzDI`), đúng thư mục con theo loại món. Ảnh đã tách nền không chuyển được bằng API (lỗi "Not allowed to access this folder") và cũng không hiện ở thư mục gốc.
 
