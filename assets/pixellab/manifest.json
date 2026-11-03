@@ -7482,6 +7482,132 @@
       },
       "created": "2026-11-03",
       "pixellab_id": "058f1184-805b-4f0f-aea1-49b51cf7e777"
+    },
+    {
+      "file": "vfx/cham_trung.png",
+      "description": "Hiệu ứng chạm trúng cho màn Trận: chớp trắng, tia và vòng bật ra, tia lửa văng. Dải xám trắng, proto tô theo hệ lúc chạy. Lưới 3 cột, 7 khung (2 khung cuối trống, proto bỏ).",
+      "tool": "vfx_workbench",
+      "params": {
+        "preset": "impact_burst",
+        "ramp": [
+          "#1c1c22",
+          "#4a4a55",
+          "#85858f",
+          "#bdbdc6",
+          "#e6e6ec",
+          "#ffffff"
+        ],
+        "effect_url": "https://pixellab.ai/create-vfx?effect=3c65f951-7902-4e47-aa62-f465793023c7"
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "3c65f951-7902-4e47-aa62-f465793023c7",
+      "frames": 7,
+      "frame_w": 64,
+      "frame_h": 64,
+      "fps": 16,
+      "cols": 3,
+      "anchor": [
+        32,
+        32
+      ],
+      "loop": false,
+      "tint": true
+    },
+    {
+      "file": "vfx/tran_do.png",
+      "description": "Trận đồ cho trận pháp đang bày: vòng ngoài, vòng trong, sao tám cánh và 8 ký tự xoay, nhìn thẳng xuống để giãn theo vùng đánh hình elip. Dải xám trắng, tô theo hệ. Lặp, lưới 4 cột.",
+      "tool": "vfx_workbench",
+      "params": {
+        "preset": "ground_sigil",
+        "star": "8/3",
+        "runes": 8,
+        "camera_tilt": 1,
+        "ramp": [
+          "#1c1c22",
+          "#4a4a55",
+          "#85858f",
+          "#bdbdc6",
+          "#e6e6ec",
+          "#ffffff"
+        ],
+        "effect_url": "https://pixellab.ai/create-vfx?effect=2894683f-21a7-49b5-87dd-fb311397af8f"
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "2894683f-21a7-49b5-87dd-fb311397af8f",
+      "frames": 12,
+      "frame_w": 128,
+      "frame_h": 128,
+      "fps": 12,
+      "cols": 4,
+      "anchor": [
+        64,
+        64
+      ],
+      "loop": true,
+      "tint": true
+    },
+    {
+      "file": "vfx/no_vung.png",
+      "description": "Nổ vùng cho diện rộng và trận pháp lúc phát: chớp, quầng sáng, hai vòng xung kích, tia, tia lửa và mảnh văng, nhìn thẳng xuống. Dải xám trắng, tô theo hệ. Lưới 4 cột.",
+      "tool": "vfx_workbench",
+      "params": {
+        "base": "impact_burst",
+        "ramp": [
+          "#1c1c22",
+          "#4a4a55",
+          "#85858f",
+          "#bdbdc6",
+          "#e6e6ec",
+          "#ffffff"
+        ],
+        "effect_url": "https://pixellab.ai/create-vfx?effect=ae2fc7ae-dcd6-42ca-8305-ff444a372a14"
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "ae2fc7ae-dcd6-42ca-8305-ff444a372a14",
+      "frames": 12,
+      "frame_w": 128,
+      "frame_h": 128,
+      "fps": 16,
+      "cols": 4,
+      "anchor": [
+        64,
+        64
+      ],
+      "loop": false,
+      "tint": true
+    },
+    {
+      "file": "vfx/chieu_cuoi.png",
+      "description": "Chiêu cuối tông chủ: hạt sáng hút vào rồi bùng sao bốn cánh, vòng và tia vàng kim quanh người tung chiêu. Giữ màu, không tô theo hệ. Lưới 4 cột.",
+      "tool": "vfx_workbench",
+      "params": {
+        "parts": [
+          "charge_up",
+          "crit_hit x1.6"
+        ],
+        "ramp": [
+          "#3a2a08",
+          "#7a5a12",
+          "#c08a1e",
+          "#f2c230",
+          "#ffe680",
+          "#fffbe6"
+        ],
+        "effect_url": "https://pixellab.ai/create-vfx?effect=b907ac8d-82ca-470e-a78e-cc0127f01d90"
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "b907ac8d-82ca-470e-a78e-cc0127f01d90",
+      "frames": 12,
+      "frame_w": 101,
+      "frame_h": 105,
+      "fps": 12,
+      "cols": 4,
+      "anchor": [
+        54,
+        45
+      ],
+      "loop": false,
+      "tint": false
     }
   ]
 }

@@ -5,6 +5,7 @@ import { between, type ReplayIndex } from "../../replay/timeline.ts";
 import type { ElementId, ReplayEvent, SkillId } from "../../replay/types.ts";
 import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
 import { burst, drawMotif, next, particle, seed, unit01 } from "./motifs.ts";
+import type { VfxLib } from "./vfx.ts";
 
 type Cast = Extract<ReplayEvent, { kind: "cast" }>;
 export interface Point {
@@ -33,6 +34,8 @@ export interface FxFrame {
   dpr: number;
   /** Hình PixelLab theo khoá, ví dụ chieu/bua_chu; thiếu thì vẽ chữ */
   image: (key: string) => HTMLImageElement | undefined;
+  /** Hiệu ứng pixel PixelLab (vfx/); thiếu hình thì vẽ bằng code */
+  vfx: VfxLib;
 }
 
 const MELEE = new Set<SkillId>(["can_don", "can_quet", "than_phap"]);
@@ -40,6 +43,12 @@ const PROJECTILE = new Set<SkillId>(["tam_xa", "bua_chu", "khong_che"]);
 /** Đòn thường hồi chiêu ngắn: không hiện nhãn công pháp để màn hình khỏi rối (trừ khi mang chiêu cuối). */
 const NO_CALLOUT = new Set<SkillId>(["can_don", "can_quet", "tam_xa"]);
 const GOLD = "#ffd34d";
+// Kích thước trong ảnh hiệu ứng PixelLab, để khớp ảnh với vùng đánh và nhân vật.
+const TRAN_DO_R = 54; // bán kính vòng ngoài của trận đồ, px
+const NO_VUNG_R = 60; // bán kính vòng xung kích lúc lớn nhất, px
+const HIT_SCALE = 0.7; // ảnh chạm trúng 64 px còn khoảng 45 đơn vị thế giới
+const ULT_SCALE = 0.9;
+const ULT_LEAD = 0.4; // giây tụ lực trước khi bùng, để lúc bùng trùng với đòn đánh
 /** Chiêu bày lâu nhất (trận pháp 5 s) cộng dư, tick */
 const MAX_LEAD = 120;
 /** Đạn bay lâu nhất (bùa chú), tick */
@@ -115,7 +124,13 @@ export class FxLayer {
       ctx.strokeStyle = color;
       ctx.lineWidth = 2;
       if (c.skill === "tran_phap") {
-        formation(ctx, z, t * 0.03);
+        // Trận đồ PixelLab tô theo hệ, xoay theo thời gian trận, giãn theo vùng đánh.
+        const { vfx, index } = this.f;
+        const info = vfx.info("tran_do");
+        const frame = info ? Math.floor((t / index.replay.tps) * info.fps) % info.frames : 0;
+        if (!info || !vfx.draw(ctx, "tran_do", c.element, frame, z.x, z.y, z.rx / TRAN_DO_R, z.ry / TRAN_DO_R, 0.9)) {
+          formation(ctx, z, t * 0.03);
+        }
       } else {
         ctx.setLineDash([8, 6]);
         ctx.lineDashOffset = -t * 2;
@@ -176,6 +191,8 @@ export class FxLayer {
     ctx.lineJoin = "round";
     for (const c of this.upcoming) if (PROJECTILE.has(c.skill) && c.tick - this.f.t <= MAX_FLIGHT) this.flight(c);
     for (const c of this.recent) this.after(c);
+    for (const c of this.upcoming) if (c.ult) this.ult(c);
+    for (const c of this.recent) if (c.ult) this.ult(c);
     for (const c of this.states) if (c.skill === "khong_che") this.stun(c);
     ctx.globalCompositeOperation = "source-over";
     ctx.globalAlpha = 1;
@@ -260,20 +277,6 @@ export class FxLayer {
     const inner = pal[1] ? ELEMENT_STYLE[pal[1]].color : "#ffffff";
     const src = at(c.unit);
     if (!src) return;
-
-    if (c.ult) {
-      // Chiêu cuối tông chủ: hào quang vàng bùng quanh người tung chiêu.
-      const a = (t - c.tick) / life(0.6);
-      if (a < 1) {
-        glowAt(ctx, GOLD, src.x, src.y, size * (0.9 + a), 0.9 * (1 - a));
-        ctx.globalAlpha = 1 - a;
-        ctx.strokeStyle = GOLD;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(src.x, src.y, size * (0.6 + 1.2 * a), 0, Math.PI * 2);
-        ctx.stroke();
-      }
-    }
 
     switch (c.skill) {
       case "can_quet": {
@@ -366,11 +369,17 @@ export class FxLayer {
         const a = (t - c.tick) / life(c.skill === "tran_phap" ? 0.7 : 0.45);
         if (a < 0 || a >= 1) break;
         const z = zone(c.center, c.radius);
-        ctx.globalAlpha = 1 - a;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 6 * (1 - a) + 1;
-        ellipse(ctx, z, 0.5 + 0.7 * a);
-        ctx.stroke();
+        // Nổ vùng PixelLab tô theo hệ, giãn theo vùng đánh; trận pháp to hơn một chút.
+        const { vfx } = this.f;
+        const info = vfx.info("no_vung");
+        const k = c.skill === "tran_phap" ? 1.1 : 1;
+        if (!info || !vfx.draw(ctx, "no_vung", c.element, Math.floor(a * info.frames), z.x, z.y, (k * z.rx) / NO_VUNG_R, (k * z.ry) / NO_VUNG_R, 0.8)) {
+          ctx.globalAlpha = 1 - a;
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 6 * (1 - a) + 1;
+          ellipse(ctx, z, 0.5 + 0.7 * a);
+          ctx.stroke();
+        }
         let s = seed(c.tick, c.unit, 0);
         for (let k = 0; k < 10; k++) {
           s = next(s);
@@ -387,15 +396,20 @@ export class FxLayer {
       // Chạm trúng: vòng nhỏ loé ra và chùm hạt của hệ; bùa chú nổ thêm mảnh giấy.
       const a = (t - c.tick) / life(0.35);
       if (a >= 1) return;
+      const { vfx } = this.f;
+      const hit = vfx.info("cham_trung");
       for (const id of c.targets) {
         const d = at(id);
         if (!d) continue;
-        ctx.globalAlpha = 1 - a;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 3 * (1 - a) + 0.5;
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, 6 + 18 * a, 0, Math.PI * 2);
-        ctx.stroke();
+        // Ảnh chạm trúng PixelLab tô theo hệ; chưa có hình thì vòng nhỏ loé ra.
+        if (!hit || !vfx.draw(ctx, "cham_trung", c.element, Math.floor(a * hit.frames), d.x, d.y, HIT_SCALE, HIT_SCALE, 1)) {
+          ctx.globalAlpha = 1 - a;
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 3 * (1 - a) + 0.5;
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, 6 + 18 * a, 0, Math.PI * 2);
+          ctx.stroke();
+        }
         // Chùm hạt chủ yếu mang hệ chủ, thêm 2 hạt của hệ phụ để thấy công pháp ghép từ những hệ nào.
         const s = seed(c.tick, c.unit, id);
         const n = c.skill === "bua_chu" ? 7 : 5;
@@ -471,6 +485,31 @@ export class FxLayer {
       ctx.fillText(label, cx + 2, y + 0.5);
     }
     ctx.globalAlpha = 1;
+  }
+
+  /**
+   * Chiêu cuối tông chủ: ảnh PixelLab tụ lực rồi bùng vàng kim quanh người tung chiêu. Ảnh chạy theo thời gian trận,
+   * bắt đầu sớm ULT_LEAD giây để lúc bùng trùng với đòn đánh. Chưa có hình thì vẽ hào quang bằng code.
+   */
+  private ult(c: Cast): void {
+    const { ctx, t, life, at, size, vfx, index } = this.f;
+    const src = at(c.unit);
+    if (!src) return;
+    const info = vfx.info("chieu_cuoi");
+    if (info) {
+      const frame = Math.floor(((t - c.tick) / index.replay.tps + ULT_LEAD) * info.fps);
+      vfx.draw(ctx, "chieu_cuoi", null, frame, src.x, src.y, ULT_SCALE, ULT_SCALE, 1);
+      return;
+    }
+    const a = (t - c.tick) / life(0.6);
+    if (a < 0 || a >= 1) return;
+    glowAt(ctx, GOLD, src.x, src.y, size * (0.9 + a), 0.9 * (1 - a));
+    ctx.globalAlpha = 1 - a;
+    ctx.strokeStyle = GOLD;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(src.x, src.y, size * (0.6 + 1.2 * a), 0, Math.PI * 2);
+    ctx.stroke();
   }
 
   /** Sao choáng quay trên đầu người bị khống chế. */

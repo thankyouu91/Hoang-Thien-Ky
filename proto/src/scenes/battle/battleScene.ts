@@ -10,6 +10,7 @@ import { animInfo, assignLooks, drawCharacter, resolveLook, type Anim } from "./
 import { ReplayControls } from "./controls.ts";
 import { FxLayer, type Point } from "./fx.ts";
 import { drawMotif } from "./motifs.ts";
+import { VfxLib } from "./vfx.ts";
 
 const CELL = 64; // đơn vị thế giới mỗi ô sân
 const LANE = 60; // khoảng cách ngang giữa hai người cùng hàng
@@ -44,6 +45,7 @@ export class BattleScene implements Scene {
   private sources: ReplaySource[];
   private source: ReplaySource;
   private sprites: Sprites;
+  private vfx: VfxLib;
   private fx = new FxLayer();
   private index: ReplayIndex | null = null;
   private player: ReplayPlayer | null = null;
@@ -64,6 +66,7 @@ export class BattleScene implements Scene {
     this.sources = [...sources];
     this.source = this.sources[0];
     this.sprites = sprites;
+    this.vfx = new VfxLib(sprites);
     this.controls = new ReplayControls(this.sources.map((s) => s.label), (i) => this.load(this.sources[i]));
     this.hud = this.controls.el;
   }
@@ -146,6 +149,7 @@ export class BattleScene implements Scene {
       },
       toScreen: (p) => cam.toScreen(p.x, p.y, v),
       image: (key) => this.sprites.get(key),
+      vfx: this.vfx,
     });
 
     cam.apply(v);

@@ -36,6 +36,11 @@ export interface ManifestEntry {
   /** Đồ ghép: ô trang bị và điểm xoay trong ảnh đồ (px) */
   slot?: string;
   pivot?: [number, number];
+  /** Hiệu ứng vfx/: số cột của lưới khung (mặc định một hàng), điểm gốc (px), lặp hay không, có tô theo hệ không */
+  cols?: number;
+  anchor?: [number, number];
+  loop?: boolean;
+  tint?: boolean;
 }
 
 export interface Manifest {
