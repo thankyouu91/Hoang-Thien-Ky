@@ -47,6 +47,9 @@ export interface Asset {
   meta: ManifestEntry;
 }
 
+/** Hình nền của các màn DOM (dashboard nạp qua CSS khi cần): bộ nạp này bỏ qua để khỏi tải cả trăm ảnh lớn. */
+export const SKIP_GROUPS = ["cong_trinh/", "diem_nen/", "bang_mau/"];
+
 export class Sprites {
   private assets = new Map<string, Asset>();
 
@@ -63,8 +66,11 @@ export class Sprites {
     return this.assets.size;
   }
 
-  /** Không ném lỗi: thiếu manifest hay ảnh hỏng thì chỉ ghi cảnh báo. */
-  async load(base = import.meta.env.BASE_URL + "pixellab/"): Promise<void> {
+  /**
+   * Không ném lỗi: thiếu manifest hay ảnh hỏng thì chỉ ghi cảnh báo.
+   * Dòng manifest có `file` bắt đầu bằng một tiền tố trong `skip` thì không nạp.
+   */
+  async load(base = import.meta.env.BASE_URL + "pixellab/", skip: readonly string[] = SKIP_GROUPS): Promise<void> {
     let manifest: Manifest;
     try {
       const res = await fetch(base + "manifest.json", { cache: "no-cache" });
@@ -74,8 +80,9 @@ export class Sprites {
       console.warn("Không đọc được manifest PixelLab, dùng khối màu thay thế:", e);
       return;
     }
+    const wanted = (manifest.assets ?? []).filter((meta) => !skip.some((p) => meta.file.startsWith(p)));
     await Promise.all(
-      (manifest.assets ?? []).map(async (meta) => {
+      wanted.map(async (meta) => {
         const img = new Image();
         img.src = base + meta.file;
         try {
