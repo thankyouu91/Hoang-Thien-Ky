@@ -804,12 +804,12 @@ button.nv-row:hover { background: var(--c-sunken); }
 .g-ha { --g: #93b282; --g-bg: #e9f0dd; }
 .g-trung { --g: #8aa6c8; --g-bg: #e3eaf2; }
 .g-cao { --g: #b58fcb; --g-bg: #efe4f2; }
-/* Độ hiếm: ô túi tô cả nền và viền; ô trang bị chỉ tô nền (viền vẫn theo cấp đồ Linh, Thiên, Thần) */
-.r-luc, .pt-slot.r-luc { --g: var(--rar-luc); --g-bg: var(--rar-luc-bg); --tb: var(--rar-luc-bg); }
-.r-lam, .pt-slot.r-lam { --g: var(--rar-lam); --g-bg: var(--rar-lam-bg); --tb: var(--rar-lam-bg); }
-.r-tim, .pt-slot.r-tim { --g: var(--rar-tim); --g-bg: var(--rar-tim-bg); --tb: var(--rar-tim-bg); }
-.r-vang, .pt-slot.r-vang { --g: var(--rar-vang); --g-bg: var(--rar-vang-bg); --tb: var(--rar-vang-bg); }
-.r-do, .pt-slot.r-do { --g: var(--rar-do); --g-bg: var(--rar-do-bg); --tb: var(--rar-do-bg); }
+/* Độ hiếm thay hẳn cấp đồ Linh, Thiên, Thần (GDD rev 217): ô túi và ô trang bị tô nền và viền cùng màu độ hiếm */
+.r-luc, .pt-slot.r-luc { --g: var(--rar-luc); --g-bg: var(--rar-luc-bg); --t: var(--rar-luc); --tb: var(--rar-luc-bg); }
+.r-lam, .pt-slot.r-lam { --g: var(--rar-lam); --g-bg: var(--rar-lam-bg); --t: var(--rar-lam); --tb: var(--rar-lam-bg); }
+.r-tim, .pt-slot.r-tim { --g: var(--rar-tim); --g-bg: var(--rar-tim-bg); --t: var(--rar-tim); --tb: var(--rar-tim-bg); }
+.r-vang, .pt-slot.r-vang { --g: var(--rar-vang); --g-bg: var(--rar-vang-bg); --t: var(--rar-vang); --tb: var(--rar-vang-bg); }
+.r-do, .pt-slot.r-do { --g: var(--rar-do); --g-bg: var(--rar-do-bg); --t: var(--rar-do); --tb: var(--rar-do-bg); }
 b.r-luc, .rar.r-luc { color: var(--rar-luc-ink); }
 b.r-lam, .rar.r-lam { color: var(--rar-lam-ink); }
 b.r-tim, .rar.r-tim { color: var(--rar-tim-ink); }

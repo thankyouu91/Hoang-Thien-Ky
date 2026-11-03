@@ -31,6 +31,7 @@ const RIGHT: GearSlot[] = ["vu_khi", "bao_tay", "ngoc_boi"];
 const RARITY_NAMES: Record<Rarity, string> = { luc: "Lục", lam: "Lam", tim: "Tím", vang: "Vàng", do: "Đỏ" };
 /** Lớp màu của ô món: độ hiếm nếu có, không thì phẩm. */
 const tone = (it: { rarity?: Rarity; grade: ItemGrade }) => (it.rarity ? `r-${it.rarity}` : `g-${it.grade}`);
+/** Cấp đồ cũ, chỉ còn dùng khi món chưa có độ hiếm (độ hiếm đã thay hẳn cấp đồ, GDD rev 217). */
 const TIER_NAMES = { linh: "Linh", thien: "Thiên", than: "Thần" };
 const STAT_KEYS: Record<string, string> = { hp: "Máu", atk: "Công lực", def: "Phòng thủ", mana: "Mana" };
 /** Chỉ số hiện ở nhóm Chỉ số chiến đấu, đúng thứ tự (số từ @ktlp/sim qua nguồn đọc). */
@@ -58,7 +59,8 @@ type DragRef = string;
 export class NhanVatScene extends PageScene<NhanVatView> {
   private tab: NhanVatTab = "phap-tuong";
   private kind: ItemKind | "all" = "all";
-  private grade: ItemGrade | "all" = "all";
+  /** Lọc thứ hai: độ hiếm khi đang xem trang bị, phẩm với các loại khác. */
+  private grade: ItemGrade | Rarity | "all" = "all";
   private selected?: number;
   private sprites: Sprites;
   private doll?: HTMLCanvasElement;
@@ -78,8 +80,10 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     this.sprites = sprites;
     this.page.addEventListener("change", (e) => {
       const el = e.target as HTMLSelectElement;
-      if (el.dataset.filter === "kind") this.kind = el.value as ItemKind | "all";
-      else if (el.dataset.filter === "grade") this.grade = el.value as ItemGrade | "all";
+      if (el.dataset.filter === "kind") {
+        this.kind = el.value as ItemKind | "all";
+        this.grade = "all";
+      } else if (el.dataset.filter === "grade") this.grade = el.value as ItemGrade | Rarity | "all";
       else return;
       if (this.data) this.render(this.data);
     });
@@ -221,7 +225,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const g = v.gear[s];
     if (!g) return `<button type="button" class="pt-slot empty" data-act="slot" data-slot="${s}" data-drop="gear:${s}"><span class="lbl">${SLOT_NAMES[s]}</span></button>`;
     const dur = g.durability / g.durabilityMax;
-    return `<button type="button" class="pt-slot tier-${g.tier}${g.rarity ? ` r-${g.rarity}` : ""}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}`)}">
+    return `<button type="button" class="pt-slot ${g.rarity ? `r-${g.rarity}` : `tier-${g.tier}`}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}`)}">
       ${g.art ? `<img class="ve" src="${artUrl(g.art)}" alt="">` : g.icon ? `<img src="${assetUrl(g.icon)}" alt="" data-crop>` : icon(SLOT_GLYPH[s], "glyph")}
       <span class="plus">+${g.plus}</span>
       ${g.sockets ? `<span class="gems">◆${g.gems.length}/${g.sockets}</span>` : ""}
@@ -243,7 +247,10 @@ export class NhanVatScene extends PageScene<NhanVatView> {
 
   private bag(v: NhanVatView): string {
     const real = v.bag.items.filter((it) => it.kind !== "cong_phap");
-    const shown = v.bag.items.filter((it) => (this.kind === "all" ? it.kind !== "cong_phap" : it.kind === this.kind) && (this.grade === "all" || it.grade === this.grade));
+    const byRarity = this.kind === "trang_bi";
+    const shown = v.bag.items.filter(
+      (it) => (this.kind === "all" ? it.kind !== "cong_phap" : it.kind === this.kind) && (this.grade === "all" || (byRarity ? it.rarity === this.grade : it.grade === this.grade)),
+    );
     const empty = this.kind === "all" && this.grade === "all" ? Math.max(0, v.bag.capacity - real.length) : 0;
     const opt = (val: string, label: string, cur: string) => `<option value="${val}"${val === cur ? " selected" : ""}>${label}</option>`;
     const sel = v.bag.items.find((it) => it.uid === this.selected);
@@ -251,7 +258,9 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       <div class="nv-sub"><b>Túi đồ</b><span class="muted"><b>${real.length}</b> / ${v.bag.capacity} ô</span></div>
       <div class="bag-filters">
         <select data-filter="kind" aria-label="Lọc theo loại">${opt("all", "Tất cả loại", this.kind)}${(Object.keys(KIND_NAMES) as ItemKind[]).map((k) => opt(k, KIND_NAMES[k], this.kind)).join("")}</select>
-        <select data-filter="grade" aria-label="Lọc theo phẩm">${opt("all", "Tất cả phẩm", this.grade)}${(Object.keys(GRADE_NAMES) as ItemGrade[]).map((g) => opt(g, GRADE_NAMES[g], this.grade)).join("")}</select>
+        ${byRarity
+          ? `<select data-filter="grade" aria-label="Lọc theo độ hiếm">${opt("all", "Mọi độ hiếm", this.grade)}${(Object.keys(RARITY_NAMES) as Rarity[]).map((r) => opt(r, RARITY_NAMES[r], this.grade)).join("")}</select>`
+          : `<select data-filter="grade" aria-label="Lọc theo phẩm">${opt("all", "Tất cả phẩm", this.grade)}${(Object.keys(GRADE_NAMES) as ItemGrade[]).map((g) => opt(g, GRADE_NAMES[g], this.grade)).join("")}</select>`}
       </div>
       <div class="bag-grid" data-drop="bag">
         ${shown.map((it) => this.cell(it)).join("")}${"<span class=\"bag-cell empty\"></span>".repeat(empty)}
@@ -277,7 +286,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   /** Khung chi tiết món: tên theo màu phẩm, loại và phẩm, công dụng, chỉ số, nút dùng. */
   private detail(it: BagItem, v: NhanVatView): string {
     const head = `<div class="bd-head"><span class="bag-cell ${tone(it)}">${this.itemIcon(it)}</span><span class="grow"><b class="${tone(it)}">${esc(it.name)}</b>
-      <span class="block muted">${KIND_NAMES[it.kind]} · ${esc(it.gradeLabel)}${it.rarity ? ` · <span class="rar r-${it.rarity}">${RARITY_NAMES[it.rarity]}</span>` : ""}${it.count > 1 ? ` · × ${it.count}` : ""}</span></span>${it.element ? elementChip(it.element as Element) : ""}</div>`;
+      <span class="block muted">${KIND_NAMES[it.kind]} · ${it.rarity ? `<span class="rar r-${it.rarity}">${RARITY_NAMES[it.rarity]}</span>` : esc(it.gradeLabel)}${it.count > 1 ? ` · × ${it.count}` : ""}</span></span>${it.element ? elementChip(it.element as Element) : ""}</div>`;
     let body = `<p class="nv-note">${esc(it.detail)}</p>`;
     let act = "";
     if (it.gear) {
@@ -447,7 +456,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       g ? `${SLOT_NAMES[slot]}: ${g.name}` : SLOT_NAMES[slot],
       `${g ? this.gearDetail(g) : `<p class="muted">Chưa mặc món nào. Đồ rơi ở bí cảnh hoặc rèn ở lò rèn.</p>`}
        ${spare.length ? `<h3>Trong túi</h3><ul class="list">${spare
-         .map((it) => `<li class="row"><span class="bag-cell ${tone(it)}">${this.itemIcon(it)}</span><span class="grow"><b>${esc(it.name)}</b><span class="muted block">${esc(it.gradeLabel)} · +${it.gear!.plus}</span></span><button type="button" class="btn small" data-a="wear" data-uid="${it.uid}">Mặc</button></li>`)
+         .map((it) => `<li class="row"><span class="bag-cell ${tone(it)}">${this.itemIcon(it)}</span><span class="grow"><b>${esc(it.name)}</b><span class="muted block">${it.rarity ? RARITY_NAMES[it.rarity] : esc(it.gradeLabel)} · +${it.gear!.plus}</span></span><button type="button" class="btn small" data-a="wear" data-uid="${it.uid}">Mặc</button></li>`)
          .join("")}</ul>` : ""}
        ${g ? `<div class="actions"><button type="button" data-a="off">Tháo về túi</button><button type="button" data-a="ren">Rèn</button></div>` : ""}`,
     );
@@ -469,8 +478,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       .join("");
     const gems = g.gems.map((gem) => `<li class="row">${elementChip(gem.element)} <span class="grow">Ngọc cấp ${gem.level}</span><span class="muted">+${pctText(2.5 * gem.level * (gem.level + 1))}</span></li>`).join("");
     return `<dl class="kv">
-        <dt>Cấp đồ</dt><dd>${TIER_NAMES[g.tier]}</dd>
-        ${g.rarity ? `<dt>Độ hiếm</dt><dd class="rar r-${g.rarity}">${RARITY_NAMES[g.rarity]}</dd>` : ""}
+        ${g.rarity ? `<dt>Độ hiếm</dt><dd class="rar r-${g.rarity}">${RARITY_NAMES[g.rarity]}</dd>` : `<dt>Cấp đồ</dt><dd>${TIER_NAMES[g.tier]}</dd>`}
         <dt>Cường hóa</dt><dd>+${g.plus} / +30</dd>
         <dt>Độ bền</dt><dd class="${g.durability < LOW ? "bad" : ""}">${g.durability} / ${g.durabilityMax}</dd>
         ${stats}
