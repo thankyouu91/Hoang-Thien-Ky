@@ -1605,6 +1605,28 @@
       "created": "2026-11-03"
     },
     {
+      "ma_vp": "TB-KI-059",
+      "file": "trang_bi/kiem/59.webp",
+      "ten": "Kiếm Phần Thiên",
+      "description": "Game inventory item icon: a Chinese straight sword (jian): blade wreathed in crimson and golden flames, legendary divine artifact, red and gold, blazing aura of power. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2mgtYN8",
+      "canva_media_tach_nen": "MAHZ2jTqS8o",
+      "canva_design": "DAHZ2R_YFBk trang 50",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-KI-060",
+      "file": "trang_bi/kiem/60.webp",
+      "ten": "Kiếm Hỗn Độn",
+      "description": "Game inventory item icon: a Chinese straight sword (jian): black and red blade swirling with a void of chaos energy, legendary divine artifact, red and gold, blazing aura of power. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2spYdd0",
+      "canva_media_tach_nen": "MAHZ2iRqT0U",
+      "canva_design": "DAHZ2R_YFBk trang 51",
+      "created": "2026-11-03"
+    },
+    {
       "ma_vp": "TB-MU-001",
       "file": "trang_bi/mu/01.webp",
       "ten": "Ô Sa Mặc Ngọc",
@@ -1651,6 +1673,226 @@
       "created": "2026-11-03"
     },
     {
+      "ma_vp": "TB-MU-005",
+      "file": "trang_bi/mu/05.webp",
+      "ten": "Đạo Quan Mộc Trâm",
+      "description": "Game inventory item icon: a piece of headwear: simple wooden topknot crown with a wooden hairpin, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2pRLE6I",
+      "canva_media_tach_nen": "MAHZ2jTGVLA",
+      "canva_design": "DAHZ2R_YFBk trang 52",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-006",
+      "file": "trang_bi/mu/06.webp",
+      "ten": "Mũ Da Thú",
+      "description": "Game inventory item icon: a piece of headwear: fur-trimmed leather cap, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2oZn5cw",
+      "canva_media_tach_nen": "MAHZ2q1tpew",
+      "canva_design": "DAHZ2R_YFBk trang 53",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-007",
+      "file": "trang_bi/mu/07.webp",
+      "ten": "Khôi Thiết Phiến",
+      "description": "Game inventory item icon: a piece of headwear: iron helmet made of riveted plates, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2jhZGnI",
+      "canva_media_tach_nen": "MAHZ2t5gdao",
+      "canva_design": "DAHZ2R_YFBk trang 54",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-008",
+      "file": "trang_bi/mu/08.webp",
+      "ten": "Khôi Đồng Đầu",
+      "description": "Game inventory item icon: a piece of headwear: round bronze helmet with a small spike, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2rumSsU",
+      "canva_media_tach_nen": "MAHZ2gYutjY",
+      "canva_design": "DAHZ2R_YFBk trang 55",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-009",
+      "file": "trang_bi/mu/09.webp",
+      "ten": "Mạo Nho Sinh",
+      "description": "Game inventory item icon: a piece of headwear: scholar's soft black cap with two hanging ribbons, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2seHP04",
+      "canva_media_tach_nen": "MAHZ2nO61IY",
+      "canva_design": "DAHZ2R_YFBk trang 56",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-010",
+      "file": "trang_bi/mu/10.webp",
+      "ten": "Nón Lá Tị Thủy",
+      "description": "Game inventory item icon: a piece of headwear: conical palm-leaf hat with a glossy waterproof sheen, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2skHAVc",
+      "canva_media_tach_nen": "MAHZ2iwF3XM",
+      "canva_design": "DAHZ2R_YFBk trang 57",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-011",
+      "file": "trang_bi/mu/11.webp",
+      "ten": "Khăn Đầu Hồng",
+      "description": "Game inventory item icon: a piece of headwear: red cloth headband with long tied tails, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2kJYh38",
+      "canva_media_tach_nen": "MAHZ2oxclbo",
+      "canva_design": "DAHZ2R_YFBk trang 58",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-012",
+      "file": "trang_bi/mu/12.webp",
+      "ten": "Mũ Lông Chồn",
+      "description": "Game inventory item icon: a piece of headwear: sable fur hat, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2lukgpM",
+      "canva_media_tach_nen": "MAHZ2nfz1ME",
+      "canva_design": "DAHZ2R_YFBk trang 59",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-013",
+      "file": "trang_bi/mu/13.webp",
+      "ten": "Đạo Quan Hoàng Bố",
+      "description": "Game inventory item icon: a piece of headwear: yellow cloth Taoist hat folded like a lotus, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2hbHE00",
+      "canva_media_tach_nen": "MAHZ2vem53s",
+      "canva_design": "DAHZ2R_YFBk trang 60",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-014",
+      "file": "trang_bi/mu/14.webp",
+      "ten": "Khôi Da Tê",
+      "description": "Game inventory item icon: a piece of headwear: rhino-hide leather helmet with neck flap, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2u1lSo0",
+      "canva_media_tach_nen": "MAHZ2jgzZDo",
+      "canva_design": "DAHZ2R_YFBk trang 61",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-015",
+      "file": "trang_bi/mu/15.webp",
+      "ten": "Mạo Lục Hợp",
+      "description": "Game inventory item icon: a piece of headwear: round six-panel cap of dark cloth, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2vkRGtA",
+      "canva_media_tach_nen": "MAHZ2nnJfms",
+      "canva_design": "DAHZ2R_YFBk trang 62",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-016",
+      "file": "trang_bi/mu/16.webp",
+      "ten": "Mũ Cỏ Bện",
+      "description": "Game inventory item icon: a piece of headwear: woven straw cap, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2uijWU8",
+      "canva_media_tach_nen": "MAHZ2qGv_Xc",
+      "canva_design": "DAHZ2R_YFBk trang 63",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-017",
+      "file": "trang_bi/mu/17.webp",
+      "ten": "Phát Quan Đồng",
+      "description": "Game inventory item icon: a piece of headwear: small bronze hair crown with a bronze pin, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2vVBa-Y",
+      "canva_media_tach_nen": "MAHZ2hwVb9A",
+      "canva_design": "DAHZ2R_YFBk trang 64",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-018",
+      "file": "trang_bi/mu/18.webp",
+      "ten": "Khôi Quân Sĩ",
+      "description": "Game inventory item icon: a piece of headwear: soldier's iron helmet with a red tassel on top, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2j0BOlo",
+      "canva_media_tach_nen": "MAHZ2j-do6w",
+      "canva_design": "DAHZ2R_YFBk trang 65",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-019",
+      "file": "trang_bi/mu/19.webp",
+      "ten": "Mũ Khăn Lụa",
+      "description": "Game inventory item icon: a piece of headwear: silk scarf hood, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2i52Cpg",
+      "canva_media_tach_nen": "MAHZ2uyd-zU",
+      "canva_design": "DAHZ2R_YFBk trang 66",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-020",
+      "file": "trang_bi/mu/20.webp",
+      "ten": "Nón Tre Sơn Dã",
+      "description": "Game inventory item icon: a piece of headwear: rustic bamboo hat with a cloth band, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2oqXQPU",
+      "canva_media_tach_nen": "MAHZ2nYMWAg",
+      "canva_design": "DAHZ2R_YFBk trang 67",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-021",
+      "file": "trang_bi/mu/21.webp",
+      "ten": "Đạo Mạo Bát Quái",
+      "description": "Game inventory item icon: a piece of headwear: Taoist cap with an eight-trigram emblem, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2lsqWUs",
+      "canva_media_tach_nen": "MAHZ2mr6O0o",
+      "canva_design": "DAHZ2R_YFBk trang 68",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-022",
+      "file": "trang_bi/mu/22.webp",
+      "ten": "Mũ Lính Tuần",
+      "description": "Game inventory item icon: a piece of headwear: patrol guard's felt cap, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2sll4og",
+      "canva_media_tach_nen": "MAHZ2kdEJMM",
+      "canva_design": "DAHZ2R_YFBk trang 69",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-023",
+      "file": "trang_bi/mu/23.webp",
+      "ten": "Khăn Chít Mặc Sắc",
+      "description": "Game inventory item icon: a piece of headwear: black wrapped turban, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2jC_D2s",
+      "canva_media_tach_nen": "MAHZ2svDiMU",
+      "canva_design": "DAHZ2R_YFBk trang 70",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-024",
+      "file": "trang_bi/mu/24.webp",
+      "ten": "Mũ Mềm Bố Y",
+      "description": "Game inventory item icon: a piece of headwear: commoner's soft cloth hat, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2jXdJnk",
+      "canva_media_tach_nen": "MAHZ2q66AJg",
+      "canva_design": "DAHZ2R_YFBk trang 71",
+      "created": "2026-11-03"
+    },
+    {
       "ma_vp": "TB-MU-025",
       "file": "trang_bi/mu/25.webp",
       "ten": "Ngọc Quan Tử Vân",
@@ -1670,6 +1912,28 @@
       "canva_media_goc": "MAHZ1iAn5Vw",
       "canva_media_tach_nen": "MAHZ1wpglGI",
       "canva_design": "DAHZ1iamT_w trang 57",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-027",
+      "file": "trang_bi/mu/27.webp",
+      "ten": "Ô Sa Lôi Văn",
+      "description": "Game inventory item icon: a piece of headwear: black gauze official cap with silver thunder-cloud embroidery, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2mwUYuE",
+      "canva_media_tach_nen": "MAHZ2mOmMX8",
+      "canva_design": "DAHZ2R_YFBk trang 72",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-028",
+      "file": "trang_bi/mu/28.webp",
+      "ten": "Đạo Quan Liên Hoa",
+      "description": "Game inventory item icon: a piece of headwear: lotus-shaped silver Taoist crown, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2puGxbs",
+      "canva_media_tach_nen": "MAHZ2ntbrj4",
+      "canva_design": "DAHZ2R_YFBk trang 73",
       "created": "2026-11-03"
     },
     {

@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ.
 
-Tổng 519 món, đã vẽ 165.
+Tổng 519 món, đã vẽ 189.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -84,8 +84,8 @@ Tổng 519 món, đã vẽ 165.
 | TB-KI-056 | Kiếm Hiên Viên | Vàng | trang_bi/kiem/56.webp | ✓ |
 | TB-KI-057 | Kiếm Vạn Tượng | Vàng | trang_bi/kiem/57.webp | ✓ |
 | TB-KI-058 | Kiếm Huyết Long | Đỏ | trang_bi/kiem/58.webp | ✓ |
-| TB-KI-059 | Kiếm Phần Thiên | Đỏ | trang_bi/kiem/59.webp |  |
-| TB-KI-060 | Kiếm Hỗn Độn | Đỏ | trang_bi/kiem/60.webp |  |
+| TB-KI-059 | Kiếm Phần Thiên | Đỏ | trang_bi/kiem/59.webp | ✓ |
+| TB-KI-060 | Kiếm Hỗn Độn | Đỏ | trang_bi/kiem/60.webp | ✓ |
 
 ## Trang bị · Mũ (60)
 
@@ -95,30 +95,30 @@ Tổng 519 món, đã vẽ 165.
 | TB-MU-002 | Nón Lá Trúc Ti | Lục | trang_bi/mu/02.webp | ✓ |
 | TB-MU-003 | Đấu Lạp Phong Trần | Lục | trang_bi/mu/03.webp | ✓ |
 | TB-MU-004 | Khăn Vấn Thanh Bố | Lục | trang_bi/mu/04.webp | ✓ |
-| TB-MU-005 | Đạo Quan Mộc Trâm | Lục | trang_bi/mu/05.webp |  |
-| TB-MU-006 | Mũ Da Thú | Lục | trang_bi/mu/06.webp |  |
-| TB-MU-007 | Khôi Thiết Phiến | Lục | trang_bi/mu/07.webp |  |
-| TB-MU-008 | Khôi Đồng Đầu | Lục | trang_bi/mu/08.webp |  |
-| TB-MU-009 | Mạo Nho Sinh | Lục | trang_bi/mu/09.webp |  |
-| TB-MU-010 | Nón Lá Tị Thủy | Lục | trang_bi/mu/10.webp |  |
-| TB-MU-011 | Khăn Đầu Hồng | Lục | trang_bi/mu/11.webp |  |
-| TB-MU-012 | Mũ Lông Chồn | Lục | trang_bi/mu/12.webp |  |
-| TB-MU-013 | Đạo Quan Hoàng Bố | Lục | trang_bi/mu/13.webp |  |
-| TB-MU-014 | Khôi Da Tê | Lục | trang_bi/mu/14.webp |  |
-| TB-MU-015 | Mạo Lục Hợp | Lục | trang_bi/mu/15.webp |  |
-| TB-MU-016 | Mũ Cỏ Bện | Lục | trang_bi/mu/16.webp |  |
-| TB-MU-017 | Phát Quan Đồng | Lục | trang_bi/mu/17.webp |  |
-| TB-MU-018 | Khôi Quân Sĩ | Lục | trang_bi/mu/18.webp |  |
-| TB-MU-019 | Mũ Khăn Lụa | Lục | trang_bi/mu/19.webp |  |
-| TB-MU-020 | Nón Tre Sơn Dã | Lục | trang_bi/mu/20.webp |  |
-| TB-MU-021 | Đạo Mạo Bát Quái | Lục | trang_bi/mu/21.webp |  |
-| TB-MU-022 | Mũ Lính Tuần | Lục | trang_bi/mu/22.webp |  |
-| TB-MU-023 | Khăn Chít Mặc Sắc | Lục | trang_bi/mu/23.webp |  |
-| TB-MU-024 | Mũ Mềm Bố Y | Lục | trang_bi/mu/24.webp |  |
+| TB-MU-005 | Đạo Quan Mộc Trâm | Lục | trang_bi/mu/05.webp | ✓ |
+| TB-MU-006 | Mũ Da Thú | Lục | trang_bi/mu/06.webp | ✓ |
+| TB-MU-007 | Khôi Thiết Phiến | Lục | trang_bi/mu/07.webp | ✓ |
+| TB-MU-008 | Khôi Đồng Đầu | Lục | trang_bi/mu/08.webp | ✓ |
+| TB-MU-009 | Mạo Nho Sinh | Lục | trang_bi/mu/09.webp | ✓ |
+| TB-MU-010 | Nón Lá Tị Thủy | Lục | trang_bi/mu/10.webp | ✓ |
+| TB-MU-011 | Khăn Đầu Hồng | Lục | trang_bi/mu/11.webp | ✓ |
+| TB-MU-012 | Mũ Lông Chồn | Lục | trang_bi/mu/12.webp | ✓ |
+| TB-MU-013 | Đạo Quan Hoàng Bố | Lục | trang_bi/mu/13.webp | ✓ |
+| TB-MU-014 | Khôi Da Tê | Lục | trang_bi/mu/14.webp | ✓ |
+| TB-MU-015 | Mạo Lục Hợp | Lục | trang_bi/mu/15.webp | ✓ |
+| TB-MU-016 | Mũ Cỏ Bện | Lục | trang_bi/mu/16.webp | ✓ |
+| TB-MU-017 | Phát Quan Đồng | Lục | trang_bi/mu/17.webp | ✓ |
+| TB-MU-018 | Khôi Quân Sĩ | Lục | trang_bi/mu/18.webp | ✓ |
+| TB-MU-019 | Mũ Khăn Lụa | Lục | trang_bi/mu/19.webp | ✓ |
+| TB-MU-020 | Nón Tre Sơn Dã | Lục | trang_bi/mu/20.webp | ✓ |
+| TB-MU-021 | Đạo Mạo Bát Quái | Lục | trang_bi/mu/21.webp | ✓ |
+| TB-MU-022 | Mũ Lính Tuần | Lục | trang_bi/mu/22.webp | ✓ |
+| TB-MU-023 | Khăn Chít Mặc Sắc | Lục | trang_bi/mu/23.webp | ✓ |
+| TB-MU-024 | Mũ Mềm Bố Y | Lục | trang_bi/mu/24.webp | ✓ |
 | TB-MU-025 | Ngọc Quan Tử Vân | Lam | trang_bi/mu/25.webp | ✓ |
 | TB-MU-026 | Khôi Ưng Dực | Lam | trang_bi/mu/26.webp | ✓ |
-| TB-MU-027 | Ô Sa Lôi Văn | Lam | trang_bi/mu/27.webp |  |
-| TB-MU-028 | Đạo Quan Liên Hoa | Lam | trang_bi/mu/28.webp |  |
+| TB-MU-027 | Ô Sa Lôi Văn | Lam | trang_bi/mu/27.webp | ✓ |
+| TB-MU-028 | Đạo Quan Liên Hoa | Lam | trang_bi/mu/28.webp | ✓ |
 | TB-MU-029 | Khôi Hổ Đầu | Lam | trang_bi/mu/29.webp |  |
 | TB-MU-030 | Mạo Hạc Vũ | Lam | trang_bi/mu/30.webp |  |
 | TB-MU-031 | Quan Ngân Ti | Lam | trang_bi/mu/31.webp |  |
