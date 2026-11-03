@@ -1,6 +1,7 @@
 // Trang bị, pháp bảo, ngọc, set đồ và vật phẩm (GDD tab "Trang bị, pháp bảo và set đồ"; mọi số là đề xuất).
-// Mỗi bảng con của data/trang_bi/*.json (phiên set đồ dựng bằng tools/trang_bi) thành một sheet. xuat.ts ghép các sheet lại
-// đúng cấu trúc 7 file đó trong data/he_thong/json, nên code chỉ cần đổi thư mục đọc. tao.ts đọc data/trang_bi khi dựng lần đầu.
+// Mỗi bảng con của 7 file trang bị (trang_bi, vu_khi, ngoc, set, phap_bao, phap_khi, vat_pham) thành một sheet; xuat.ts ghép
+// các sheet lại đúng cấu trúc đó trong data/he_thong/json. Lần đầu dựng từ bản nháp data/trang_bi của phiên set đồ (đã bỏ ở
+// e79c326); giờ tao.ts dựng lại từ data/he_thong/json, vốn xuất từ chính file Excel.
 import { existsSync, readFileSync } from "node:fs";
 import * as B from "./bang.ts";
 
