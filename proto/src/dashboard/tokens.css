@@ -20,6 +20,8 @@
   --c-accent: #b3261e;
   --c-accent-hover: #971d16;
   --c-accent-soft: #f7e3dc;
+  /* Đỏ son sẫm cho chữ tiêu đề kiểu tranh giấy (tên nhân vật, tiêu đề nhóm): 8,8 trên --c-surface */
+  --c-accent-ink: #8a1f16;
   --c-on-accent: #fff8ef;
   /* Trạng thái (chỉ dùng cho chữ ngắn và chấm, không làm nền lớn) */
   --c-ok: #2e6b34;
@@ -50,6 +52,8 @@
 
   /* Chữ */
   --font: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Chữ có chân cho màn kiểu tranh giấy (Nhân vật, theo mẫu người dùng gửi); Noto Serif OFL, có đủ dấu tiếng Việt */
+  --font-serif: "Noto Serif", Cambria, "Times New Roman", serif;
   --fs-xs: 12px;
   --fs-sm: 13px;
   --fs-md: 15px;

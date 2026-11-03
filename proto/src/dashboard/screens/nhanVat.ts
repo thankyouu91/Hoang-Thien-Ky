@@ -1,15 +1,16 @@
 // Màn Nhân vật (GDD mục 14): mở bằng chân dung trên thanh trên. Một thẻ ba cột:
 //  - Thông tin: các nhóm thu gọn được (thân phận, linh căn và tài năng, chỉ số chiến đấu, tu luyện, tài khoản), nhãn trái
 //    giá trị phải; nút lớn Bế quan hoặc Đột phá ở đáy.
-//  - Pháp tướng: hình nhân vật đứng giữa vòng 12 hệ (elementWheel.ts), 6 ô trang bị hai bên, 4 ô công pháp mang vào trận,
-//    5 ô thú (ô đang cưỡi có dấu yên), chú giải thu gọn ở đáy.
+//  - Pháp tướng (theo mẫu người dùng gửi 2026-11-03): bóng lớn của chính nhân vật vẽ màu mực nâu mờ dần vào núi sương
+//    (nướng bằng three), tu sĩ đứng trước, 6 ô trang bị hai bên, 4 ô công pháp mang vào trận, 5 ô thú (ô đang cưỡi có dấu
+//    yên), chú giải một dòng ở đáy. Vòng 12 hệ (elementWheel.ts) chỉ hiện khi bấm "Vòng hệ".
 //  - Túi: 50 ô, lọc theo loại và theo phẩm, khung chi tiết món đang chọn.
 // Màn rộng (từ 1100 px) hiện đủ ba cột và kéo thả bằng chuột: kéo đồ hay công pháp từ túi vào ô để mặc, kéo ra túi để
 // tháo. Điện thoại đổi thành ba thẻ Thông tin · Pháp tướng · Túi và dùng chạm: chạm ô mở bảng chọn món, chạm món mở chi
 // tiết; việc nào cũng trong 2 chạm.
 import type { Element } from "@ktlp/sim";
 import type { Sprites } from "../../assets/sprites.ts";
-import { hasWebGL, mountProgram, type LiveMount } from "../../three/index.ts";
+import { mountBakedScene, type SceneHandle } from "../../three/index.ts";
 import { animInfo, drawCharacter } from "../../scenes/battle/character.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { elementWheel } from "../elementWheel.ts";
@@ -60,10 +61,12 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   private frame = 0;
   /** Vừa thả xong một món: bỏ qua cú nhấp đi kèm. */
   private dropped = false;
-  /** Lớp cảnh three của Pháp tướng: giữ qua các lần vẽ lại, mỗi lần chỉ chèn lại vào .pt-stage mới. */
-  private ptLayer: HTMLElement;
-  private ptLive: LiveMount | null = null;
-  private ptRoots?: string;
+  /** Bóng pháp tướng phía sau tu sĩ. */
+  private ghost?: HTMLCanvasElement;
+  /** Núi sương dưới đáy cột Pháp tướng: ảnh three nướng một lần, giữ qua các lần vẽ lại. */
+  private mistEl: HTMLElement;
+  private mist?: SceneHandle;
+  private showWheel = false;
 
   constructor(ctx: DashCtx, sprites: Sprites) {
     super("nhan-vat", "Nhân vật", ctx);
@@ -76,9 +79,9 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       if (this.data) this.render(this.data);
     });
     this.page.addEventListener("pointerdown", (e) => this.dragStart(e));
-    this.ptLayer = document.createElement("div");
-    this.ptLayer.className = "pt-three";
-    this.ptLayer.setAttribute("aria-hidden", "true");
+    this.mistEl = document.createElement("div");
+    this.mistEl.className = "pt-mist";
+    this.mistEl.setAttribute("aria-hidden", "true");
   }
 
   setTab(t: NhanVatTab): void {
@@ -122,28 +125,12 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         </div>
       </section>`;
     this.doll = this.page.querySelector<HTMLCanvasElement>(".doll") ?? undefined;
-    const stage = this.page.querySelector<HTMLElement>(".pt-stage");
-    if (stage) {
-      stage.prepend(this.ptLayer);
-      stage.classList.toggle("live", !!this.ptLive);
-    }
-    void this.mountPhapTuong(v.roots);
+    this.ghost = this.page.querySelector<HTMLCanvasElement>(".pt-ghost") ?? undefined;
+    this.page.querySelector(".nv-form")?.prepend(this.mistEl);
+    // Máy không có WebGL2 thì mountBakedScene không gắn gì: cột giữa chỉ còn bóng pháp tướng trên giấy.
+    this.mist ??= mountBakedScene(this.mistEl, "son_thuy", { tone: "giay", seed: 3 });
     cropIcons(this.page);
     this.drawDoll();
-  }
-
-  /**
-   * Cảnh three của Pháp tướng (art/phapTuong.ts: vòng hệ có chiều sâu, nét mực, hạt linh khí), nạp động lần đầu.
-   * Máy không có WebGL2 thì giữ vòng hệ SVG; đổi linh căn thì thay chương trình vẽ, giữ chỗ gắn.
-   */
-  private async mountPhapTuong(roots: Element[]): Promise<void> {
-    const key = roots.join(",");
-    if (!hasWebGL() || key === this.ptRoots) return;
-    this.ptRoots = key;
-    const { phapTuong } = await import("../art/phapTuong.ts");
-    if (this.ptLive) this.ptLive.replace((h) => phapTuong(h, roots));
-    else this.ptLive = await mountProgram(this.ptLayer, (h) => phapTuong(h, roots));
-    this.page.querySelector(".pt-stage")?.classList.toggle("live", !!this.ptLive);
   }
 
   // ---- Cột trái: thông tin ---------------------------------------------------------------------------------------
@@ -192,17 +179,22 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   private form(v: NhanVatView): string {
     const riding = v.mounts[v.riding];
     const combos = v.combos.filter((k) => k.active);
+    const wheelLegend = this.showWheel
+      ? `<li><i class="lg-root"></i>Linh căn</li><li><i class="lg-sinh"></i>Tương sinh</li><li><i class="lg-khac"></i>Tương khắc</li><li><i class="lg-cuc"></i>Đối cực</li><li><i class="lg-bien"></i>Biến dị</li>`
+      : "";
     return `
-      <div class="nv-sub"><b>Pháp tướng</b><span class="muted">${v.roots.map((e) => ELEMENT_STYLE[e].name).join(", ")} linh căn</span></div>
-      <div class="pt-stage">
+      <div class="nv-sub"><b>Pháp tướng · ${esc(v.roots.map((e) => ELEMENT_STYLE[e].name).join(", "))} linh căn</b>
+        <button type="button" class="nv-tog" data-act="wheel" aria-pressed="${this.showWheel}">Vòng hệ</button></div>
+      <div class="pt-stage${this.showWheel ? " wheel-on" : ""}">
+        <canvas class="pt-ghost" aria-hidden="true"></canvas>
         ${elementWheel(v.roots)}
         <canvas class="doll" aria-label="Hình nhân vật"></canvas>
         <div class="pt-gear left">${LEFT.map((s) => this.gearSlot(v, s)).join("")}</div>
         <div class="pt-gear right">${RIGHT.map((s) => this.gearSlot(v, s)).join("")}</div>
       </div>
-      <h3 class="nv-h">Công pháp mang vào trận <span class="muted">${v.loadout.filter(Boolean).length}/${v.loadout.length}</span></h3>
+      <h3 class="nv-h">Công pháp mang vào trận <span>${v.loadout.filter(Boolean).length} / ${v.loadout.length}</span></h3>
       <div class="pt-tech">${v.loadout.map((t, i) => this.techSlot(t, i)).join("")}</div>
-      <h3 class="nv-h">Thú <span class="muted">${riding ? `đang cưỡi ${esc(riding.name)}` : "chưa cưỡi"}</span></h3>
+      <h3 class="nv-h">Thú <span>${riding ? `đang cưỡi ${esc(riding.name)}` : "chưa cưỡi"}</span></h3>
       <div class="pt-pets">${v.mounts
         .map((m, i) =>
           m
@@ -212,21 +204,17 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         )
         .join("")}</div>
       ${combos.length ? `<p class="pt-combos">${combos.map((k) => `<span class="chip sk" title="${esc(k.effect)}">${esc(k.name)}</span>`).join("")}</p>` : ""}
-      <details class="fold pt-legend-fold"><summary>Chú giải</summary><ul class="pt-legend">
-        <li><i class="lg-root"></i>Linh căn</li>
-        <li><i class="lg-sinh"></i>Tương sinh</li>
-        <li><i class="lg-khac"></i>Tương khắc</li>
-        <li><i class="lg-cuc"></i>Đối cực</li>
-        <li><i class="lg-bien"></i>Biến dị</li>
+      <ul class="pt-legend">${wheelLegend}
         <li><b class="lg-plus">+8</b>Nấc rèn</li>
+        <li><b class="lg-gem">◆</b>Dòng khảm</li>
         <li><i class="lg-dur"></i>Độ bền</li>
         <li><span class="lg-yen">${icon("yen")}</span>Thú cưỡi</li>
-      </ul></details>`;
+      </ul>`;
   }
 
   private gearSlot(v: NhanVatView, s: GearSlot): string {
     const g = v.gear[s];
-    if (!g) return `<button type="button" class="pt-slot empty" data-act="slot" data-slot="${s}" data-drop="gear:${s}">${icon(SLOT_GLYPH[s], "glyph")}<span class="lbl">${SLOT_NAMES[s]}</span></button>`;
+    if (!g) return `<button type="button" class="pt-slot empty" data-act="slot" data-slot="${s}" data-drop="gear:${s}"><span class="lbl">${SLOT_NAMES[s]}</span></button>`;
     const dur = g.durability / g.durabilityMax;
     return `<button type="button" class="pt-slot tier-${g.tier}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}`)}">
       ${g.icon ? `<img src="${assetUrl(g.icon)}" alt="" data-crop>` : icon(SLOT_GLYPH[s], "glyph")}
@@ -309,6 +297,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
 
   /** Thân (đã gồm áo), mũ neo ở đầu, vũ khí neo ở tay; dùng đúng hàm vẽ của màn Trận. */
   private drawDoll(): void {
+    this.drawGhost();
     const c = this.doll;
     const v = this.data;
     if (!c || !v || !c.isConnected) return;
@@ -338,6 +327,34 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     }
   }
 
+  /**
+   * Bóng pháp tướng: chính nhân vật phóng to gần bằng cột, chân chìm dưới đáy; CSS nhuộm mực nâu, làm nhòe và mờ dần.
+   * Vẽ ở 1 điểm ảnh CSS (đằng nào cũng nhòe) và cùng khung hoạt ảnh với tu sĩ, như cái bóng thở theo.
+   */
+  private drawGhost(): void {
+    const c = this.ghost;
+    const v = this.data;
+    if (!c || !v || !c.isConnected) return;
+    const w = c.clientWidth;
+    const h = c.clientHeight;
+    if (!w || !h) return;
+    if (c.width !== w || c.height !== h) {
+      c.width = w;
+      c.height = h;
+    }
+    const ctx = c.getContext("2d")!;
+    ctx.clearRect(0, 0, w, h);
+    ctx.imageSmoothingEnabled = true;
+    const look = { body: v.look.body, outfit: v.look.outfit, hat: v.look.hat, weapon: v.look.weapon };
+    const info = animInfo(this.sprites, look, "dung");
+    const scale = (h * 1.18) / 72;
+    const foot = h * 1.16;
+    if (!info || !drawCharacter(ctx, this.sprites, look, "dung", this.frame % info.frames, w / 2, foot, scale, false)) {
+      const img = this.sprites.get(`nhan_vat/${v.look.body}/${v.look.outfit}`);
+      if (img) ctx.drawImage(img, w / 2 - 32 * scale, foot - 56 * scale, 64 * scale, 64 * scale);
+    }
+  }
+
   // ---- Thao tác -----------------------------------------------------------------------------------------------
 
   protected override act(name: string, el: HTMLElement): void {
@@ -347,6 +364,10 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     if (name === "back") this.ctx.nav.back();
     else if (name === "help") this.openHelp();
     else if (name === "tab") this.setTab(el.dataset.tab as NhanVatTab);
+    else if (name === "wheel") {
+      this.showWheel = !this.showWheel;
+      this.render(v);
+    }
     else if (name === "logout") {
       this.ctx.auth.logout();
       location.reload();
@@ -389,7 +410,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       "Màn Nhân vật",
       `<ul class="list nv-help">
         <li><b>Thông tin</b>: thân phận, linh căn, chỉ số chiến đấu, tu luyện. Chạm một chỉ số để xem nguồn.</li>
-        <li><b>Pháp tướng</b>: 6 ô trang bị quanh hình, 4 ô công pháp mang vào trận, 5 ô thú. Vòng phía sau là 12 hệ; hệ linh căn sáng, vạch xanh là tương sinh, vạch đỏ là tương khắc, nét đứt là đối cực.</li>
+        <li><b>Pháp tướng</b>: 6 ô trang bị quanh hình, 4 ô công pháp mang vào trận, 5 ô thú. Bấm "Vòng hệ" để xem 12 hệ: hệ linh căn sáng, vạch xanh là tương sinh, vạch đỏ là tương khắc, nét đứt là đối cực.</li>
         <li><b>Túi</b>: 50 ô gốc, lọc theo loại và phẩm. Màn rộng kéo món sang ô để mặc, kéo về túi để tháo; điện thoại chạm ô hoặc chạm món rồi chọn.</li>
       </ul>`,
     );
