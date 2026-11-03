@@ -1937,6 +1937,138 @@
       "created": "2026-11-03"
     },
     {
+      "ma_vp": "TB-MU-029",
+      "file": "trang_bi/mu/29.webp",
+      "ten": "Khôi Hổ Đầu",
+      "description": "Game inventory item icon: a piece of headwear: helmet shaped like a tiger head, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2hVy4RY",
+      "canva_media_tach_nen": "MAHZ2njXMck",
+      "canva_design": "DAHZ2R_YFBk trang 74",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-030",
+      "file": "trang_bi/mu/30.webp",
+      "ten": "Mạo Hạc Vũ",
+      "description": "Game inventory item icon: a piece of headwear: hat decorated with white crane feathers, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2prSWEM",
+      "canva_media_tach_nen": "MAHZ2gLVl4U",
+      "canva_design": "DAHZ2R_YFBk trang 75",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-031",
+      "file": "trang_bi/mu/31.webp",
+      "ten": "Quan Ngân Ti",
+      "description": "Game inventory item icon: a piece of headwear: silver filigree hair crown, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2vtUS8k",
+      "canva_media_tach_nen": "MAHZ2l3W8Qk",
+      "canva_design": "DAHZ2R_YFBk trang 76",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-032",
+      "file": "trang_bi/mu/32.webp",
+      "ten": "Khăn Lưu Vân",
+      "description": "Game inventory item icon: a piece of headwear: headwrap embroidered with flowing clouds, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2vvFJ8E",
+      "canva_media_tach_nen": "MAHZ2qtnTZQ",
+      "canva_design": "DAHZ2R_YFBk trang 77",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-033",
+      "file": "trang_bi/mu/33.webp",
+      "ten": "Khôi Long Lân",
+      "description": "Game inventory item icon: a piece of headwear: dragon-scale steel helmet, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2oSK8BU",
+      "canva_media_tach_nen": "MAHZ2uIqa6M",
+      "canva_design": "DAHZ2R_YFBk trang 78",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-034",
+      "file": "trang_bi/mu/34.webp",
+      "ten": "Mũ Phượng Linh",
+      "description": "Game inventory item icon: a piece of headwear: hat with a long phoenix tail plume, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2krPOrk",
+      "canva_media_tach_nen": "MAHZ2rDxHA0",
+      "canva_design": "DAHZ2R_YFBk trang 79",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-035",
+      "file": "trang_bi/mu/35.webp",
+      "ten": "Đấu Lạp Ẩn Giả",
+      "description": "Game inventory item icon: a piece of headwear: hermit's straw hat with a sheer silk veil, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2jxh96g",
+      "canva_media_tach_nen": "MAHZ2rSibuA",
+      "canva_design": "DAHZ2R_YFBk trang 80",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-036",
+      "file": "trang_bi/mu/36.webp",
+      "ten": "Quan Thanh Ngọc",
+      "description": "Game inventory item icon: a piece of headwear: green jade hair crown, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2iAOoQQ",
+      "canva_media_tach_nen": "MAHZ2snBLxE",
+      "canva_design": "DAHZ2R_YFBk trang 81",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-037",
+      "file": "trang_bi/mu/37.webp",
+      "ten": "Khôi Huyền Thiết",
+      "description": "Game inventory item icon: a piece of headwear: black iron helmet with gold trim, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2tGCOCg",
+      "canva_media_tach_nen": "MAHZ2nJL520",
+      "canva_design": "DAHZ2R_YFBk trang 82",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-038",
+      "file": "trang_bi/mu/38.webp",
+      "ten": "Mạo Tùng Hạc",
+      "description": "Game inventory item icon: a piece of headwear: a soft black silk Chinese scholar hat with two short stiff wings at the back, its sides embroidered with a pine tree and a flying crane in silver thread, three-quarter view, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2j5aggI",
+      "canva_media_tach_nen": "MAHZ2isEy64",
+      "canva_design": "DAHZ2R_YFBk trang 87",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-039",
+      "file": "trang_bi/mu/39.webp",
+      "ten": "Phát Quan Song Long",
+      "description": "Game inventory item icon: a piece of headwear: silver hair crown with twin dragons, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2qzGBQU",
+      "canva_media_tach_nen": "MAHZ2lh3G-M",
+      "canva_design": "DAHZ2R_YFBk trang 83",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-040",
+      "file": "trang_bi/mu/40.webp",
+      "ten": "Khăn Tử La",
+      "description": "Game inventory item icon: a piece of headwear: purple gauze headwrap with a jade ornament, well-crafted with refined engraved details. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2q1kAas",
+      "canva_media_tach_nen": "MAHZ2tf0DGs",
+      "canva_design": "DAHZ2R_YFBk trang 84",
+      "created": "2026-11-03"
+    },
+    {
       "ma_vp": "TB-MU-041",
       "file": "trang_bi/mu/41.webp",
       "ten": "Bạch Ngọc Quan",
@@ -1960,6 +2092,116 @@
       "created": "2026-11-03"
     },
     {
+      "ma_vp": "TB-MU-043",
+      "file": "trang_bi/mu/43.webp",
+      "ten": "Quan Tinh Tú",
+      "description": "Game inventory item icon: a piece of headwear: crown studded with sapphires like stars, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2sz6EnA",
+      "canva_media_tach_nen": "MAHZ2pOw37k",
+      "canva_design": "DAHZ2R_YFBk trang 85",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-044",
+      "file": "trang_bi/mu/44.webp",
+      "ten": "Mạo Lưu Ly",
+      "description": "Game inventory item icon: a piece of headwear: hat of translucent glass-like crystal, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2mLciJg",
+      "canva_media_tach_nen": "MAHZ2oJc1dE",
+      "canva_design": "DAHZ2R_YFBk trang 86",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-045",
+      "file": "trang_bi/mu/45.webp",
+      "ten": "Phượng Quan Tử Tinh",
+      "description": "Game inventory item icon: a piece of headwear: phoenix crown set with amethysts, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2vHH838",
+      "canva_media_tach_nen": "MAHZ2tUQzZo",
+      "canva_design": "DAHZ2R_YFBk trang 88",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-046",
+      "file": "trang_bi/mu/46.webp",
+      "ten": "Khôi Thiên Lang",
+      "description": "Game inventory item icon: a piece of headwear: wolf-head helmet with glowing blue eyes, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2iTQTEg",
+      "canva_media_tach_nen": "MAHZ2gVKe6g",
+      "canva_design": "DAHZ2R_YFBk trang 89",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-047",
+      "file": "trang_bi/mu/47.webp",
+      "ten": "Quan Nguyệt Hoa",
+      "description": "Game inventory item icon: a piece of headwear: crown of silver moonflowers with a pale glow, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2man0ro",
+      "canva_media_tach_nen": "MAHZ2oYBD-0",
+      "canva_design": "DAHZ2R_YFBk trang 90",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-048",
+      "file": "trang_bi/mu/48.webp",
+      "ten": "Đạo Quan Thất Bảo",
+      "description": "Game inventory item icon: a piece of headwear: Taoist crown set with seven treasures, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2osKH4M",
+      "canva_media_tach_nen": "MAHZ2jovelE",
+      "canva_design": "DAHZ2R_YFBk trang 91",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-049",
+      "file": "trang_bi/mu/49.webp",
+      "ten": "Mạo Huyễn Vũ",
+      "description": "Game inventory item icon: a piece of headwear: hat of iridescent shimmering feathers, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2t5X5SY",
+      "canva_media_tach_nen": "MAHZ2jN8Bdg",
+      "canva_design": "DAHZ2R_YFBk trang 92",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-050",
+      "file": "trang_bi/mu/50.webp",
+      "ten": "Khôi Giao Long",
+      "description": "Game inventory item icon: a piece of headwear: helmet crested with a coiled flood dragon, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2gumtJ0",
+      "canva_media_tach_nen": "MAHZ2qO5hJA",
+      "canva_design": "DAHZ2R_YFBk trang 93",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-051",
+      "file": "trang_bi/mu/51.webp",
+      "ten": "Quan Bích Hải",
+      "description": "Game inventory item icon: a piece of headwear: sea-green crown hung with pearls, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2vhFUaI",
+      "canva_media_tach_nen": "MAHZ2rnINpU",
+      "canva_design": "DAHZ2R_YFBk trang 94",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-052",
+      "file": "trang_bi/mu/52.webp",
+      "ten": "Khăn Vân Hà",
+      "description": "Game inventory item icon: a piece of headwear: rose-cloud headband studded with gems, ornate, inlaid with gems, a faint mystical glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2nGIZ3E",
+      "canva_media_tach_nen": "MAHZ2mwDmHA",
+      "canva_design": "DAHZ2R_YFBk trang 95",
+      "created": "2026-11-03"
+    },
+    {
       "ma_vp": "TB-MU-053",
       "file": "trang_bi/mu/53.webp",
       "ten": "Quan Phượng Hoàng",
@@ -1970,6 +2212,28 @@
       "canva_design": "DAHZ1iamT_w trang 11",
       "created": "2026-11-03",
       "ma_cu": "trang_bi/mu_than"
+    },
+    {
+      "ma_vp": "TB-MU-054",
+      "file": "trang_bi/mu/54.webp",
+      "ten": "Khôi Hoàng Long",
+      "description": "Game inventory item icon: a piece of headwear: golden dragon helmet, magnificent and luxurious, gold accents, radiant golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2t2-ZjI",
+      "canva_media_tach_nen": "MAHZ2qJ3x5Q",
+      "canva_design": "DAHZ2R_YFBk trang 96",
+      "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-MU-055",
+      "file": "trang_bi/mu/55.webp",
+      "ten": "Quan Diệu Nhật",
+      "description": "Game inventory item icon: a piece of headwear: golden crown with radiating sun rays, magnificent and luxurious, gold accents, radiant golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ2k4jROk",
+      "canva_media_tach_nen": "MAHZ2ptoXRw",
+      "canva_design": "DAHZ2R_YFBk trang 97",
+      "created": "2026-11-03"
     },
     {
       "ma_vp": "TB-MU-058",

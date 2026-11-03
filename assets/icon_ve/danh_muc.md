@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ.
 
-Tổng 519 món, đã vẽ 189.
+Tổng 519 món, đã vẽ 213.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -119,33 +119,33 @@ Tổng 519 món, đã vẽ 189.
 | TB-MU-026 | Khôi Ưng Dực | Lam | trang_bi/mu/26.webp | ✓ |
 | TB-MU-027 | Ô Sa Lôi Văn | Lam | trang_bi/mu/27.webp | ✓ |
 | TB-MU-028 | Đạo Quan Liên Hoa | Lam | trang_bi/mu/28.webp | ✓ |
-| TB-MU-029 | Khôi Hổ Đầu | Lam | trang_bi/mu/29.webp |  |
-| TB-MU-030 | Mạo Hạc Vũ | Lam | trang_bi/mu/30.webp |  |
-| TB-MU-031 | Quan Ngân Ti | Lam | trang_bi/mu/31.webp |  |
-| TB-MU-032 | Khăn Lưu Vân | Lam | trang_bi/mu/32.webp |  |
-| TB-MU-033 | Khôi Long Lân | Lam | trang_bi/mu/33.webp |  |
-| TB-MU-034 | Mũ Phượng Linh | Lam | trang_bi/mu/34.webp |  |
-| TB-MU-035 | Đấu Lạp Ẩn Giả | Lam | trang_bi/mu/35.webp |  |
-| TB-MU-036 | Quan Thanh Ngọc | Lam | trang_bi/mu/36.webp |  |
-| TB-MU-037 | Khôi Huyền Thiết | Lam | trang_bi/mu/37.webp |  |
-| TB-MU-038 | Mạo Tùng Hạc | Lam | trang_bi/mu/38.webp |  |
-| TB-MU-039 | Phát Quan Song Long | Lam | trang_bi/mu/39.webp |  |
-| TB-MU-040 | Khăn Tử La | Lam | trang_bi/mu/40.webp |  |
+| TB-MU-029 | Khôi Hổ Đầu | Lam | trang_bi/mu/29.webp | ✓ |
+| TB-MU-030 | Mạo Hạc Vũ | Lam | trang_bi/mu/30.webp | ✓ |
+| TB-MU-031 | Quan Ngân Ti | Lam | trang_bi/mu/31.webp | ✓ |
+| TB-MU-032 | Khăn Lưu Vân | Lam | trang_bi/mu/32.webp | ✓ |
+| TB-MU-033 | Khôi Long Lân | Lam | trang_bi/mu/33.webp | ✓ |
+| TB-MU-034 | Mũ Phượng Linh | Lam | trang_bi/mu/34.webp | ✓ |
+| TB-MU-035 | Đấu Lạp Ẩn Giả | Lam | trang_bi/mu/35.webp | ✓ |
+| TB-MU-036 | Quan Thanh Ngọc | Lam | trang_bi/mu/36.webp | ✓ |
+| TB-MU-037 | Khôi Huyền Thiết | Lam | trang_bi/mu/37.webp | ✓ |
+| TB-MU-038 | Mạo Tùng Hạc | Lam | trang_bi/mu/38.webp | ✓ |
+| TB-MU-039 | Phát Quan Song Long | Lam | trang_bi/mu/39.webp | ✓ |
+| TB-MU-040 | Khăn Tử La | Lam | trang_bi/mu/40.webp | ✓ |
 | TB-MU-041 | Bạch Ngọc Quan | Tím | trang_bi/mu/41.webp | ✓ |
 | TB-MU-042 | Khôi Kỳ Lân | Tím | trang_bi/mu/42.webp | ✓ |
-| TB-MU-043 | Quan Tinh Tú | Tím | trang_bi/mu/43.webp |  |
-| TB-MU-044 | Mạo Lưu Ly | Tím | trang_bi/mu/44.webp |  |
-| TB-MU-045 | Phượng Quan Tử Tinh | Tím | trang_bi/mu/45.webp |  |
-| TB-MU-046 | Khôi Thiên Lang | Tím | trang_bi/mu/46.webp |  |
-| TB-MU-047 | Quan Nguyệt Hoa | Tím | trang_bi/mu/47.webp |  |
-| TB-MU-048 | Đạo Quan Thất Bảo | Tím | trang_bi/mu/48.webp |  |
-| TB-MU-049 | Mạo Huyễn Vũ | Tím | trang_bi/mu/49.webp |  |
-| TB-MU-050 | Khôi Giao Long | Tím | trang_bi/mu/50.webp |  |
-| TB-MU-051 | Quan Bích Hải | Tím | trang_bi/mu/51.webp |  |
-| TB-MU-052 | Khăn Vân Hà | Tím | trang_bi/mu/52.webp |  |
+| TB-MU-043 | Quan Tinh Tú | Tím | trang_bi/mu/43.webp | ✓ |
+| TB-MU-044 | Mạo Lưu Ly | Tím | trang_bi/mu/44.webp | ✓ |
+| TB-MU-045 | Phượng Quan Tử Tinh | Tím | trang_bi/mu/45.webp | ✓ |
+| TB-MU-046 | Khôi Thiên Lang | Tím | trang_bi/mu/46.webp | ✓ |
+| TB-MU-047 | Quan Nguyệt Hoa | Tím | trang_bi/mu/47.webp | ✓ |
+| TB-MU-048 | Đạo Quan Thất Bảo | Tím | trang_bi/mu/48.webp | ✓ |
+| TB-MU-049 | Mạo Huyễn Vũ | Tím | trang_bi/mu/49.webp | ✓ |
+| TB-MU-050 | Khôi Giao Long | Tím | trang_bi/mu/50.webp | ✓ |
+| TB-MU-051 | Quan Bích Hải | Tím | trang_bi/mu/51.webp | ✓ |
+| TB-MU-052 | Khăn Vân Hà | Tím | trang_bi/mu/52.webp | ✓ |
 | TB-MU-053 | Quan Phượng Hoàng | Vàng | trang_bi/mu/53.webp | ✓ |
-| TB-MU-054 | Khôi Hoàng Long | Vàng | trang_bi/mu/54.webp |  |
-| TB-MU-055 | Quan Diệu Nhật | Vàng | trang_bi/mu/55.webp |  |
+| TB-MU-054 | Khôi Hoàng Long | Vàng | trang_bi/mu/54.webp | ✓ |
+| TB-MU-055 | Quan Diệu Nhật | Vàng | trang_bi/mu/55.webp | ✓ |
 | TB-MU-056 | Quan Cửu Châu | Vàng | trang_bi/mu/56.webp |  |
 | TB-MU-057 | Khôi Thiên Tướng | Vàng | trang_bi/mu/57.webp |  |
 | TB-MU-058 | Quan Xích Phượng | Đỏ | trang_bi/mu/58.webp | ✓ |
