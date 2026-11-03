@@ -1,9 +1,12 @@
 // Hình nền từng công trình trong tông môn, vẽ bằng code (SVG kiểu thủy mặc lúc chạng vạng, hợp nền tối của dashboard).
 // Mỗi hình suy ra từ ba thứ: mô hình tông môn (50 đảo tông môn trong assets/pixellab/tong_mon, mỗi mô hình một seed và
 // một bộ họa tiết đọc từ tên), địa thế sơn môn (GDD mục 3) và công trình (GDD mục 5). Cùng đầu vào thì cùng hình.
-// Không dùng PixelLab: 50 mô hình × 11 công trình là 550 hình, quá ngân sách; bản vẽ code thay được bằng hình họa sĩ sau.
+// Thứ tự dùng hình (cuối file): hình PixelLab nếu có, không thì cảnh Three.js nướng thành ảnh (proto/src/three), máy không có
+// WebGL2 thì bản SVG vẽ code ở đây.
 import type { Element } from "@ktlp/sim";
+import { loadWorld } from "../../scenes/map/region.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
+import { renderBackground } from "../../three/index.ts";
 
 export type LocationId =
   | "chinh_dien" | "tang_kinh_cac" | "ho_son_dai_tran" | "dien_vo_truong" | "luyen_dan_phong" | "luyen_khi_cac"
@@ -491,7 +494,7 @@ export function sectModels(): Promise<SectModel[]> {
 
 // ---- hình PixelLab khi có -----------------------------------------------------------------------------------------
 // Hình vẽ tay bằng PixelLab nằm ở assets/pixellab/cong_trinh/<mô hình>/<công trình>.png (có dòng trong manifest).
-// Công trình nào có thì dùng, không thì dùng bản vẽ code ở trên. Bộ hình đang vẽ lại bằng PixelLab Pro (create_image_pro, 320×192)
+// Công trình nào có thì dùng, không thì cảnh Three.js (dưới) rồi tới bản vẽ code ở trên. Bộ hình đang vẽ lại bằng PixelLab Pro (create_image_pro, 320×192)
 // theo thứ tự: Chính Điện của mọi mô hình, điểm bản đồ của mọi vùng, rồi các công trình còn lại; hình chưa tới lượt còn bản pixflux.
 
 let pixelArt = new Set<string>();
@@ -515,15 +518,46 @@ export function pixelArtEnabled(): boolean {
   return pixelArtOn;
 }
 
-/** Hình nền của một loại điểm bản đồ trong vùng (assets/pixellab/diem_nen/<vùng>/<loại>.png), nếu đã có. */
-export function pointArt(region: string, type: string): string | undefined {
-  const key = `${region}/${type}`;
-  return pixelArtOn && pointPixelArt.has(key) ? `${import.meta.env.BASE_URL}pixellab/diem_nen/${key}.png` : undefined;
+// ---- cảnh Three.js cho chỗ chưa có hình PixelLab --------------------------------------------------------------------
+// renderBackground là async, còn các màn dựng HTML ngay: lần đầu trả bản tạm (SVG, hoặc không có hình với điểm bản đồ) và
+// bắt đầu nướng; nướng xong thì thay ảnh tạm đang hiện trên trang, các lần dựng sau dùng thẳng ảnh đã nướng. Chunk three
+// chỉ tải khi thật sự có chỗ thiếu hình. Công cụ thử tắt hình PixelLab thì thấy bản Three.js để so.
+
+/** Khoá "cong_trinh/<mô hình>/<công trình>" hoặc "diem/<vùng>/<loại>" → URL ảnh; null là đang nướng hoặc không vẽ được. */
+const baked = new Map<string, string | null>();
+
+function bake(key: string, render: () => Promise<string | null>, placeholder?: string): void {
+  if (baked.has(key)) return;
+  baked.set(key, null);
+  void render().then((url) => {
+    if (!url) return;
+    baked.set(key, url);
+    if (!placeholder) return;
+    for (const el of document.querySelectorAll<HTMLElement>("[style*='background-image']"))
+      if (el.style.backgroundImage.includes(placeholder)) el.style.backgroundImage = `url("${url}")`;
+  });
 }
 
-/** Hình nền của một công trình: hình PixelLab nếu có, không thì SVG vẽ code. */
+/** Hình nền của một loại điểm bản đồ trong vùng: PixelLab (assets/pixellab/diem_nen/<vùng>/<loại>.png), không thì Three.js. */
+export function pointArt(region: string, type: string): string | undefined {
+  const key = `${region}/${type}`;
+  if (pixelArtOn && pointPixelArt.has(key)) return `${import.meta.env.BASE_URL}pixellab/diem_nen/${key}.png`;
+  const url = baked.get(`diem/${key}`);
+  if (url) return url;
+  bake(`diem/${key}`, async () => {
+    const r = (await loadWorld()).regions.find((x) => x.code === region);
+    return r ? renderBackground("diem", r.element as Element, region, { variant: type }) : null;
+  });
+  return undefined;
+}
+
+/** Hình nền của một công trình: PixelLab nếu có, không thì Three.js, máy không có WebGL2 thì SVG vẽ code. */
 export function locationArt(input: SceneInput): { url: string; pixel: boolean } {
   const key = `${input.model.id}/${input.location}`;
   if (pixelArtOn && pixelArt.has(key)) return { url: `${import.meta.env.BASE_URL}pixellab/cong_trinh/${key}.png`, pixel: true };
-  return { url: sectSceneUrl(input), pixel: false };
+  const url = baked.get(`cong_trinh/${key}`);
+  if (url) return { url, pixel: false };
+  const svg = sectSceneUrl(input);
+  bake(`cong_trinh/${key}`, () => renderBackground("cong_trinh", input.model.element, input.model.id, { variant: input.location }), svg);
+  return { url: svg, pixel: false };
 }
