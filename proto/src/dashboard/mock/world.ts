@@ -5,7 +5,7 @@
 import { addMember, addSect, apply, emptyState, type Command, type GameState, type Role } from "@ktlp/rules";
 import type { Element } from "@ktlp/sim";
 import type { SectModel } from "../art/sectScene.ts";
-import type { Building, GearItem, GearSlot, PointType } from "../source.ts";
+import type { BagItem, Building, GearItem, GearSlot, PointType } from "../source.ts";
 import { HOLDABLE, stagesFrom, type RegionMap } from "../../scenes/map/region.ts";
 
 export const PLAYER = "p1";
@@ -62,6 +62,11 @@ export interface World {
     satNghiep: number;
     gear: Partial<Record<GearSlot, GearItem>>;
     mounts: (string | null)[];
+    /** Ô của thú đang cưỡi. */
+    riding: number;
+    /** Món trong túi chưa có luật (đồ, ngọc, đan, nguyên liệu, phù, trứng thú); tàn quyển lấy từ @ktlp/rules. */
+    bag: BagItem[];
+    nextUid: number;
   };
   sect: { name: string; model: SectModel; xp: number; faction: string; vault: { linhThach: number; quang: number; duoc: number } };
   held: HeldPoint[];
@@ -77,6 +82,43 @@ export interface World {
   alliance: { joined: boolean; name: string; leader: string };
   chat: { id: number; from: string; text: string; at: number; reported?: boolean }[];
   nextChat: number;
+}
+
+/** Túi mẫu: đồ dự phòng, ngọc, đan, nguyên liệu, phù và một trứng thú; uid từ 10.000 để khỏi trùng uid tàn quyển. */
+function sampleBag(): BagItem[] {
+  let uid = 10_000;
+  const gear = (g: Omit<GearItem, "durability" | "durabilityMax" | "gems"> & { durability?: number }, detail: string): BagItem => ({
+    uid: uid++, kind: "trang_bi", name: g.name, grade: g.tier === "linh" ? "ha" : g.tier === "thien" ? "trung" : "cao", gradeLabel: { linh: "Linh", thien: "Thiên", than: "Thần" }[g.tier],
+    count: 1, icon: g.icon, detail, gear: { durability: 100, durabilityMax: 100, gems: [], ...g },
+  });
+  const item = (kind: BagItem["kind"], name: string, grade: BagItem["grade"], gradeLabel: string, count: number, detail: string, element?: Element): BagItem => ({
+    uid: uid++, kind, name, grade, gradeLabel, count, detail, element, icon: kind === "ngoc" && element ? `he/${element}` : undefined,
+  });
+  return [
+    gear({ slot: "vu_khi", name: "Đao Liệt Hỏa", tier: "linh", plus: 2, sockets: 1, stats: { atk: 90 }, icon: "do/vu_khi/dao" }, "Đao rèn ở lò thành chủ."),
+    gear({ slot: "vu_khi", name: "Trượng Thanh Mộc", tier: "thien", plus: 0, sockets: 2, stats: { atk: 105, mana: 40 }, icon: "do/vu_khi/truong" }, "Rơi ở bí cảnh Mộc."),
+    gear({ slot: "mu", name: "Nón Lá Tị Thủy", tier: "linh", plus: 1, sockets: 1, stats: { hp: 700, def: 25 }, icon: "do/mu/non_la" }, "Nón lá đan bằng cỏ linh."),
+    gear({ slot: "mu", name: "Ngọc Quan Tử Vân", tier: "thien", plus: 3, sockets: 2, stats: { hp: 1200, def: 40 }, icon: "do/mu/ngoc_quan" }, "Mũ ngọc của chân truyền."),
+    gear({ slot: "ao", name: "Giáp Huyền Thiết", tier: "thien", plus: 0, sockets: 2, stats: { hp: 2400, def: 90 } }, "Giáp nặng, thủ cao."),
+    gear({ slot: "dai", name: "Đai Lôi Văn", tier: "linh", plus: 0, sockets: 1, stats: { hp: 500, def: 35 } }, "Đai thêu vân sấm."),
+    gear({ slot: "giay", name: "Giày Đạp Vân", tier: "thien", plus: 1, sockets: 1, stats: { hp: 600, def: 30 } }, "Giày nhẹ của thân pháp sư."),
+    item("ngoc", "Ngọc Lôi", "trung", "Cấp 2", 3, "Khảm vào dòng đã kích hoạt: tăng sát thương hoặc kháng Lôi.", "loi"),
+    item("ngoc", "Ngọc Hỏa", "ha", "Cấp 1", 5, "Khảm vào dòng đã kích hoạt: tăng sát thương hoặc kháng Hỏa.", "hoa"),
+    item("ngoc", "Ngọc Kim", "cao", "Cấp 3", 1, "Khảm vào dòng đã kích hoạt: tăng sát thương hoặc kháng Kim.", "kim"),
+    item("ngoc", "Ngọc Thủy", "ha", "Cấp 1", 2, "Ba viên cùng hệ cùng cấp nén thành một viên cấp trên.", "thuy"),
+    item("dan", "Hồi Khí Đan", "ha", "Đan dược", 10, "Hồi mana trong trận."),
+    item("dan", "Bổ Huyết Đan", "ha", "Đan dược", 6, "Hồi máu trong trận."),
+    item("dan", "Tụ Linh Đan", "trung", "Linh đan", 2, "Tăng tốc tu luyện khi bế quan."),
+    item("dan", "Phá Cảnh Đan", "cao", "Thần đan", 1, "Dùng khi đột phá cảnh giới, giảm lôi kiếp."),
+    item("nguyen_lieu", "Thiết tinh", "ha", "Quặng", 40, "Rèn và sửa đồ ở Hạ vị."),
+    item("nguyen_lieu", "Huyền thiết", "trung", "Quặng", 12, "Rèn đồ thiên cấp."),
+    item("nguyen_lieu", "Linh thảo", "ha", "Dược liệu", 25, "Luyện đan dược phẩm thấp."),
+    item("nguyen_lieu", "Tử Lôi Thảo", "trung", "Dược liệu", 4, "Dược liệu hệ Lôi.", "loi"),
+    item("phu", "Phù chống sét", "trung", "Phù", 3, "Đỡ một đợt lôi kiếp khi đột phá."),
+    item("phu", "Phù bảo ngọc", "cao", "Phù", 1, "Giữ lại ngọc khi nén thất bại."),
+    item("phu", "Phù bảo hộ", "trung", "Phù", 2, "Giữ nguyên nấc khi rèn từ +21 thất bại."),
+    item("trung_thu", "Trứng Lôi Tước", "trung", "Trứng thú", 1, "Nở ra Lôi Tước khi còn trống một ô thú.", "loi"),
+  ];
 }
 
 /** Mốc giờ hôm nay theo giờ máy (server giả cùng múi giờ với người chơi). */
@@ -126,8 +168,8 @@ function buildRules(now: number): GameState {
   const t5 = compose(["loi.dien_rong.bao", 2], ["hoa.dien_rong.linh", 2]);
   const t6 = compose(["moc.hoi_phuc.linh", 1], ["thuy.hoi_phuc.ben", 1]);
   must(s, { type: "dat_bo_truyen_thu", actor: PLAYER, techniqueIds: [t1, t2, t3, t4, t5, t6] }, now);
-  for (const t of [t1, t2, t3]) must(s, { type: "hoc_cong_phap", actor: PLAYER, techniqueId: t }, now);
-  // Ô thứ tư để trống: thẻ Việc nên làm "Ô công pháp còn trống".
+  for (const t of [t1, t2, t3, t4]) must(s, { type: "hoc_cong_phap", actor: PLAYER, techniqueId: t }, now);
+  // Ô thứ tư để trống: thẻ Việc nên làm "Ô công pháp còn trống"; công pháp hộ thể đã học nằm chờ trong túi để kéo vào.
   must(s, { type: "mang_vao_tran", actor: PLAYER, techniqueIds: [t1, t2, t3] }, now);
 
   // Tàng Kinh Các còn vài quyển để ghép thử; túi còn vài quyển chưa nộp.
@@ -211,6 +253,9 @@ export function createWorld(region: RegionMap, now: number): World {
         ngoc_boi: { slot: "ngoc_boi", name: "Ngọc Bội Chấn Lôi", tier: "thien", plus: 2, durability: 92, durabilityMax: 100, sockets: 3, gems: [{ element: "loi", level: 2 }, { element: "hoa", level: 1 }], stats: { atk: 40, mana: 30 } },
       },
       mounts: ["thiem_dien_bao", "loi_am_lang", "loi_tuoc", "thiet_boi_nguu", null],
+      riding: 0,
+      bag: sampleBag(),
+      nextUid: 10_100,
     },
     sect: { name: "Lôi Trì Phong", model: { id: "loi_loi_tri_phong", name: "Lôi Trì Phong", element: "loi" }, xp: 118_400, faction: "Chính", vault: { linhThach: 8_420, quang: 1_260, duoc: 540 } },
     held,

@@ -201,6 +201,8 @@ export const ROLE_NAMES: Record<string, string> = {
 /** Lời của từng mã lỗi luật, để màn hiện cho người chơi. */
 export const ERROR_TEXT: Record<string, string> = {
   khong_du_quyen: "Chức vị của bạn không làm được việc này.",
+  khong_thay_mon: "Không tìm thấy món này.",
+  tui_day: "Túi đầy, cần trống một ô.",
   chua_du_cap: "Chưa đủ cấp để học phẩm này.",
   ngoai_mon_gioi_han: "Ngoại môn chỉ học tối đa 2 công pháp phẩm Phàm hoặc Hoàng.",
   da_hoc: "Đã học công pháp này.",

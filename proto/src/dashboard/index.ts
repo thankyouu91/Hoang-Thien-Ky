@@ -66,7 +66,7 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
           app.show(congPhap);
           break;
         case "nhan-vat":
-          nhanVat.setTab(g.tab ?? "trang-bi");
+          nhanVat.setTab(g.tab ?? "phap-tuong");
           app.open("nhan-vat");
           break;
         case "thanh-chu":

@@ -74,7 +74,7 @@ export interface CalendarEntry {
 /** Nơi một thẻ dẫn tới: màn, tab con, hay điểm trên bản đồ. Mỗi đích cách màn chính tối đa 1 lần chạm nữa. */
 export type Go =
   | { screen: "dong-phu" }
-  | { screen: "nhan-vat"; tab?: "trang-bi" | "chi-so" | "thu-cuoi" }
+  | { screen: "nhan-vat"; tab?: "thong-tin" | "phap-tuong" | "tui" }
   | { screen: "ban-do"; pointId?: number; at?: { x: number; y: number } }
   | { screen: "tong-mon"; tab?: "tong-quan" | "son-mon" | "thanh-vien" | "chien-su" }
   | { screen: "cong-phap"; section?: "mang" | "truyen-thu" | "tui" | "tang-kinh" }
@@ -155,15 +155,54 @@ export interface MountView {
   icon: string;
 }
 
+/** Loại món trong túi (GDD mục 9, 11, 12). Công pháp đã học không chiếm ô túi, chỉ hiện khi lọc "Công pháp". */
+export type ItemKind = "trang_bi" | "cong_phap" | "tan_quyen" | "ngoc" | "dan" | "nguyen_lieu" | "phu" | "trung_thu";
+/** Phẩm để lọc túi theo ba phẩm của chợ chung (GDD mục 12); đồ linh, thiên, thần xếp vào hạ, trung, cao. */
+export type ItemGrade = "ha" | "trung" | "cao";
+
+export interface BagItem {
+  uid: number;
+  kind: ItemKind;
+  name: string;
+  grade: ItemGrade;
+  /** Nhãn phẩm riêng của loại món: "Thiên" với đồ, "Cấp 3" với ngọc, phẩm công pháp với tàn quyển. */
+  gradeLabel: string;
+  count: number;
+  element?: Element;
+  /** Khoá hình trong manifest PixelLab; không có thì vẽ ký hiệu theo loại trên nền màu phẩm. */
+  icon?: string;
+  /** Một dòng công dụng. */
+  detail: string;
+  gear?: GearItem;
+  technique?: TechniqueCard;
+}
+
 export interface NhanVatView extends Stamped {
   top: TopBarView;
+  name: string;
   roots: Element[];
   talent: { id: string; name: string; combat: string };
   level: number;
   exp: number;
   expToNext: number;
-  sect: { name: string; role: Role | null };
+  sect: { name: string; role: Role | null; faction: string };
   satNghiep: number;
+  contribution: number;
+  /** Tu luyện ở Hạ vị: kinh nghiệm mỗi giờ bế quan và nguồn, mốc đột phá cảnh giới kế (GDD mục 7; số đề xuất). */
+  cultivation: {
+    perHour: number;
+    sources: StatSource[];
+    breakAt: { level: number; realm: string };
+    /** Đủ kinh nghiệm ở cấp cuối cảnh giới: nút lớn đổi thành Đột phá. */
+    canBreak: boolean;
+    retreat?: { title: string; endsAt: number };
+  };
+  /** 4 ô công pháp mang vào trận và công pháp đã học (để kéo vào ô). */
+  loadout: (TechniqueCard | null)[];
+  learned: TechniqueCard[];
+  bag: { capacity: number; items: BagItem[] };
+  /** Ô của thú đang cưỡi trong `mounts`. */
+  riding: number;
   /** Lực chiến chia theo nguồn; đồ và thú có trần (GDD mục 13 và 6). */
   power: { total: number; parts: { id: "co_ban" | "do" | "thu"; label: string; value: number; cap?: number }[] };
   gear: Partial<Record<GearSlot, GearItem>>;
@@ -357,6 +396,12 @@ export type DashboardCommand =
   | { type: "dat_bo_truyen_thu"; techniqueIds: number[] }
   | { type: "hoc_cong_phap"; techniqueId: number }
   | { type: "mang_vao_tran"; techniqueIds: number[] }
+  /** Mặc một món trang bị trong túi; món đang ở ô đó về túi. */
+  | { type: "mac_do"; uid: number }
+  /** Tháo món ở một ô về túi; túi đầy thì không tháo được. */
+  | { type: "thao_do"; slot: GearSlot }
+  /** Chọn thú cưỡi trong 5 ô thú (GDD mục 6). */
+  | { type: "cuoi_thu"; index: number }
   | { type: "chat"; text: string }
   | { type: "bao_cao"; chatId: number }
   | { type: "xin_vao_lien_minh"; allianceId: string }

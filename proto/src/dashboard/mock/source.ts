@@ -20,7 +20,7 @@ import NHIEM_VU from "../../../../data/nhiem_vu/ha_nhiem_vu.json";
 import { sampleBattle } from "../../mock/sampleBattle.ts";
 import { loadRegion, POINT_NAMES, stagesFrom } from "../../scenes/map/region.ts";
 import type {
-  BanDoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, GearItem, Go, LienMinhView,
+  BagItem, BanDoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, GearItem, Go, LienMinhView,
   MiniMapView, MountView, NhanVatView, ScrollCard, StatLine, StatSource, TechniqueCard, TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
 import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.ts";
@@ -50,6 +50,28 @@ const GEAR_CAP = 0.35;
 const MOUNT_CAP = 0.15;
 /** Mỗi thú cộng statBonus / 5 % máu, công, phòng gốc (đề xuất cho proto). */
 const MOUNT_STAT_DIV = 5;
+/** Túi gốc 50 ô (GDD mục 12, đề xuất). */
+const BAG_CAPACITY = 50;
+/** Bế quan ở Hạ vị: mỗi giờ được 1/8 kinh nghiệm của cấp đang tu (đề xuất); linh tuyền tông giữ cộng 20% (đề xuất). */
+const RETREAT_HOURS_PER_LEVEL = 8;
+const SPRING_BONUS = 0.2;
+/** Linh khí vị diện nhân thẳng vào tốc độ tu luyện (GDD mục 7). */
+const LINH_KHI_HA = 1;
+/** Uid ảo cho công pháp đã học khi hiện trong túi (không chiếm ô). */
+const LEARNED_UID = 1_000_000;
+
+/** Món trang bị đem vào túi, kèm phẩm lọc theo cấp đồ. */
+function gearBagItem(uid: number, g: GearItem): BagItem {
+  return {
+    uid, kind: "trang_bi", name: g.name, grade: g.tier === "linh" ? "ha" : g.tier === "thien" ? "trung" : "cao",
+    gradeLabel: { linh: "Linh", thien: "Thiên", than: "Thần" }[g.tier], count: 1, icon: g.icon, detail: "Đồ đã tháo.", gear: g,
+  };
+}
+
+/** Phẩm lọc của tàn quyển và công pháp: Phàm, Hoàng là hạ; Huyền là trung; từ Địa trở lên là cao (đề xuất). */
+function techGrade(grade: number): BagItem["grade"] {
+  return grade <= 2 ? "ha" : grade === 3 ? "trung" : "cao";
+}
 
 const ROLE_ORDER: Role[] = ["tong_chu", "pho_tong_chu", "truong_lao", "noi_mon", "ngoai_mon"];
 const atLeast = (role: Role | null, min: Role): boolean => role !== null && ROLE_ORDER.indexOf(role) <= ROLE_ORDER.indexOf(min);
@@ -219,7 +241,7 @@ export class MockDashboardSource implements DashboardSource {
       cards.push({ id: "o_trong", title: "Ô công pháp còn trống", detail: `Đang mang ${this.me.loadout.length}/${RULES.loadoutSize}`, go: { screen: "cong-phap", section: "mang" } });
     }
     const worn = Object.values(w.player.gear).find((g) => g && g.durability < LOW_DURABILITY);
-    if (worn) cards.push({ id: "do_hong", title: "Đồ sắp hỏng", detail: `${worn.name} còn ${worn.durability}/${worn.durabilityMax}`, go: { screen: "nhan-vat", tab: "trang-bi" } });
+    if (worn) cards.push({ id: "do_hong", title: "Đồ sắp hỏng", detail: `${worn.name} còn ${worn.durability}/${worn.durabilityMax}`, go: { screen: "nhan-vat", tab: "phap-tuong" } });
     if (w.applicants.length && atLeast(this.me.role, "truong_lao")) {
       cards.push({ id: "don", title: "Đơn xin vào", detail: `${w.applicants.length} đơn chờ duyệt`, go: { screen: "tong-mon", tab: "thanh-vien" } });
     }
@@ -260,7 +282,7 @@ export class MockDashboardSource implements DashboardSource {
         title: j.title,
         detail: j.detail,
         endsAt: j.endsAt,
-        go: (j.kind === "xay" ? { screen: "tong-mon", tab: "son-mon" } : j.kind === "be_quan" ? { screen: "cong-phap", section: "mang" } : { screen: "nhan-vat", tab: "trang-bi" }) as Go,
+        go: (j.kind === "xay" ? { screen: "tong-mon", tab: "son-mon" } : j.kind === "be_quan" ? { screen: "cong-phap", section: "mang" } : { screen: "nhan-vat", tab: "phap-tuong" }) as Go,
       })),
     ];
     const mins = THAM_SO.roi_do.openMinutes * 60_000;
@@ -409,16 +431,53 @@ export class MockDashboardSource implements DashboardSource {
       tu_tuong: false,
     };
     const talent = TAI_NANG[p.talent];
+    const now = this.now();
+    // Tu luyện: gốc theo cấp, nhân linh khí vị diện, cộng linh tuyền tông đang giữ.
+    const perHourBase = Math.round(expToNext(me.level) / RETREAT_HOURS_PER_LEVEL);
+    const spring = w.held.some((h) => h.type === "linh_tuyen") ? Math.round(perHourBase * LINH_KHI_HA * SPRING_BONUS) : 0;
+    const breakLevel = Math.min(250, Math.ceil(me.level / 50) * 50);
+    const retreat = w.jobs.find((j) => j.kind === "be_quan" && j.endsAt > now);
+    const byId = (id: number) => me.learned.find((l) => l.techniqueId === id)!;
+    const loadout: (TechniqueCard | null)[] = [];
+    for (let i = 0; i < RULES.loadoutSize; i++) loadout.push(me.loadout[i] !== undefined ? learnedCard(byId(me.loadout[i])) : null);
+    const learned = me.learned.map(learnedCard);
+    const items: BagItem[] = [
+      ...p.bag,
+      ...me.bag.map((sc): BagItem => {
+        const c = scrollCard(sc);
+        return { uid: c.uid, kind: "tan_quyen", name: c.name, grade: techGrade(c.grade), gradeLabel: c.gradeName, count: 1, element: c.element, icon: `chieu/${c.type}`, detail: `Nộp ở Tàng Kinh Các được ${c.contribution} cống hiến.` };
+      }),
+      ...learned
+        .filter((t) => !me.loadout.includes(t.id))
+        .map((t): BagItem => ({ uid: LEARNED_UID + t.id, kind: "cong_phap", name: t.name, grade: techGrade(t.grade), gradeLabel: t.gradeName, count: 1, element: t.element, icon: `chieu/${t.type}`, detail: t.summary, technique: t })),
+    ];
     return {
-      serverNow: this.now(),
+      serverNow: now,
       top: this.top(),
+      name: p.name,
       roots: p.roots,
       talent: { id: talent.id, name: talent.name, combat: talent.combat },
       level: me.level,
       exp: p.exp,
       expToNext: expToNext(me.level),
-      sect: { name: w.sect.name, role: me.role },
+      sect: { name: w.sect.name, role: me.role, faction: w.sect.faction },
       satNghiep: p.satNghiep,
+      contribution: me.contribution,
+      cultivation: {
+        perHour: perHourBase * LINH_KHI_HA + spring,
+        sources: [
+          { label: `Gốc: 1/${RETREAT_HOURS_PER_LEVEL} kinh nghiệm cấp mỗi giờ`, value: perHourBase },
+          { label: `Linh khí Hạ vị ×${LINH_KHI_HA}`, value: perHourBase * (LINH_KHI_HA - 1) },
+          { label: `Linh tuyền của tông +${SPRING_BONUS * 100}%`, value: spring },
+        ],
+        breakAt: { level: breakLevel, realm: realmOf(breakLevel + 1) },
+        canBreak: me.level === breakLevel && p.exp >= expToNext(me.level),
+        retreat: retreat && { title: retreat.title, endsAt: retreat.endsAt },
+      },
+      loadout,
+      learned,
+      bag: { capacity: BAG_CAPACITY, items },
+      riding: p.riding,
       power: {
         total,
         parts: [
@@ -432,7 +491,8 @@ export class MockDashboardSource implements DashboardSource {
       stats,
       mounts: mountViews,
       combos: Object.values(THU_KICH_PHAT).map((k) => ({ name: k.name, effect: `${k.condition}: ${k.effect}`, active: active[k.id] ?? false })),
-      look: { body: "nam_khoe", outfit: "dao_bao", idle: "nhan_vat/nam_khoe/dao_bao/dung", hat: "o_sa", weapon: "kiem" },
+      // Mũ và vũ khí trên hình đổi theo món đang mặc.
+      look: { body: "nam_khoe", outfit: "dao_bao", idle: "nhan_vat/nam_khoe/dao_bao/dung", hat: p.gear.mu?.icon?.split("/").pop(), weapon: p.gear.vu_khi?.icon?.split("/").pop() },
     };
   }
 
@@ -654,6 +714,33 @@ export class MockDashboardSource implements DashboardSource {
         const r = rule({ type: "hoc_cong_phap", actor: PLAYER, techniqueId: cmd.techniqueId });
         const t = this.sect.techniques.find((x) => x.id === cmd.techniqueId);
         return r.ok ? { ok: true, message: `Đã học ${t?.name ?? "công pháp"}, tầng 1` } : r;
+      }
+      case "mac_do": {
+        const p = w.player;
+        const i = p.bag.findIndex((x) => x.uid === cmd.uid && x.gear);
+        if (i < 0) return { ok: false, error: "khong_thay_mon" };
+        const g = p.bag[i].gear!;
+        const old = p.gear[g.slot];
+        p.bag.splice(i, 1);
+        if (old) p.bag.push(gearBagItem(p.nextUid++, old));
+        p.gear[g.slot] = g;
+        return { ok: true, message: old ? `Đã mặc ${g.name}, ${old.name} về túi` : `Đã mặc ${g.name}` };
+      }
+      case "thao_do": {
+        const p = w.player;
+        const g = p.gear[cmd.slot];
+        if (!g) return { ok: false, error: "khong_thay_mon" };
+        if (p.bag.length + this.me.bag.length >= BAG_CAPACITY) return { ok: false, error: "tui_day" };
+        delete p.gear[cmd.slot];
+        p.bag.push(gearBagItem(p.nextUid++, g));
+        return { ok: true, message: `${g.name} về túi` };
+      }
+      case "cuoi_thu": {
+        const p = w.player;
+        const id = p.mounts[cmd.index];
+        if (!id) return { ok: false, error: "khong_thay_mon" };
+        p.riding = cmd.index;
+        return { ok: true, message: `Đang cưỡi ${THU_CUOI.find((t) => t.id === id)?.name ?? "thú"}` };
       }
       case "mang_vao_tran": {
         const r = rule({ type: "mang_vao_tran", actor: PLAYER, techniqueIds: cmd.techniqueIds });
