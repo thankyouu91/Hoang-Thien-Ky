@@ -21,6 +21,7 @@ const MANA = "#5aa9e6";
 const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
 const HEAVY_HIT = 0.05; // đòn từ 5% máu tối đa trở lên mới diễn hoạt ảnh trúng đòn
 const BADGE = 12; // cạnh dấu hệ đặt trước thanh máu, đơn vị thế giới
+const DEFAULT_ARENA = "vo_truong"; // nền sân khi replay không nói trận đánh ở đâu
 
 /** Số tick từ mốc gần nhất không sau t trong `marks` (xếp tăng dần) tới t; undefined nếu chưa có mốc nào. */
 function since(marks: number[] | undefined, t: number): number | undefined {
@@ -266,10 +267,29 @@ export class BattleScene implements Scene {
   private drawField(ctx: CanvasRenderingContext2D, fieldLength: number): void {
     const r = this.fieldRect();
     const cells = fieldLength / 1000;
-    ctx.fillStyle = "#1f1a15";
+    // Nền sân PixelLab (san_dau/<tên>, vẽ ngang theo chiều trục sân); màn đứng xoay 90 độ. Chưa có hình thì nền tối.
+    const bg = this.sprites.get("san_dau/" + (this.index?.replay.arena ?? DEFAULT_ARENA));
+    if (bg) {
+      ctx.imageSmoothingEnabled = false;
+      if (this.vertical) {
+        ctx.save();
+        ctx.translate(r.x + r.w / 2, r.y + r.h / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.drawImage(bg, -r.h / 2, -r.w / 2, r.h, r.w);
+        ctx.restore();
+      } else {
+        ctx.drawImage(bg, r.x, r.y, r.w, r.h);
+      }
+      // Phủ tối nhẹ để người và hiệu ứng nổi trên nền.
+      ctx.fillStyle = "rgba(20, 17, 15, 0.25)";
+    } else {
+      ctx.fillStyle = "#1f1a15";
+    }
     ctx.fillRect(r.x, r.y, r.w, r.h);
+    // Nền đá lát đã có ô để ước khoảng cách: chỉ kẻ ô khi chưa có nền, vạch giữa sân thì luôn giữ (mờ hơn khi có nền).
+    ctx.globalAlpha = bg ? 0.5 : 1;
     ctx.beginPath();
-    for (let i = 0; i <= cells; i++) {
+    for (let i = 0; i <= (bg ? -1 : cells); i++) {
       const a = this.place(i * 1000, 0);
       if (this.vertical) {
         ctx.moveTo(r.x, a.y);
@@ -295,6 +315,7 @@ export class BattleScene implements Scene {
     ctx.strokeStyle = "#5a4a38";
     ctx.lineWidth = 2;
     ctx.stroke();
+    ctx.globalAlpha = 1;
   }
 
   private drawUnit(ctx: CanvasRenderingContext2D, ut: UnitTimeline, t: number, flash: boolean, lunge?: Point): void {

@@ -82,6 +82,8 @@ export interface Replay {
   units: ReplayUnit[];
   events: ReplayEvent[];
   winner: "A" | "B" | "draw";
+  /** Nền sân trong assets/pixellab/san_dau/ (vo_truong, cao_nguyen, mo_linh_thach); bỏ trống là võ trường. */
+  arena?: string;
 }
 
 /** Nguồn replay: hiện là replay giả trong src/mock, sau này là simulate() của @ktlp/sim. */

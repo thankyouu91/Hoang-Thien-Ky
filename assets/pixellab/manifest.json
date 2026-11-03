@@ -7608,6 +7608,46 @@
       ],
       "loop": false,
       "tint": false
+    },
+    {
+      "file": "san_dau/vo_truong.png",
+      "description": "Nền sân đấu võ trường tông môn nhìn thẳng từ trên xuống: đá lát ô vuông xám be, rêu và cỏ ở khe, vạch đá chạm khắc giữa sân chia hai bên, mép vỡ ra đất. Vẽ ngang theo trục sân (đội A trái, đội B phải); màn đứng xoay 90 độ. Nền mặc định của màn Trận.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view of an ancient xianxia sect training courtyard used as a battle arena floor: weathered grey and beige flagstone paving laid in a regular grid, cracks, moss and tiny grass tufts in the joints, a faint carved stone line running straight across the middle from top to bottom dividing the arena into left and right halves, worn edges blending into packed earth at the outer border, a few fallen leaves. Muted ink-wash palette: warm greys, parchment beige, soft moss green, low contrast so characters stand out. Flat ground only, orthographic view from straight above, evenly lit, no characters, no buildings, no walls, no text.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "style_image": "tu_si/tu_the.png",
+        "style_copy": [
+          "outline",
+          "detail",
+          "shading"
+        ],
+        "job_id": "7378d961-3a5f-4a8b-9fb6-f001bd58463b"
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "88fe61a0-bf72-54f7-a302-7c049c039a48"
+    },
+    {
+      "file": "san_dau/mo_linh_thach.png",
+      "description": "Nền sân đấu mỏ linh thạch nhìn thẳng từ trên xuống: nền đá xám đen có sỏi, cụm linh thạch phát sáng xanh, hai đường ray xe goòng, vạch bụi mờ giữa sân. Dùng cho trận tranh mỏ (truyền arena: mo_linh_thach). Vẽ ngang theo trục sân; màn đứng xoay 90 độ.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view of a spirit stone mine floor used as a battle arena in a xianxia world: dark grey rock ground with gravel, scattered small glowing pale blue-green spirit crystal clusters embedded in the rock, cart tracks and pickaxe marks, a faint dust line running straight across the middle from top to bottom dividing left and right halves. Muted palette of slate grey, umber and a little cyan glow, low contrast so characters stand out. Flat ground only, orthographic view from straight above, evenly lit, no characters, no walls, no buildings, no text.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "style_image": "tu_si/tu_the.png",
+        "style_copy": [
+          "outline",
+          "detail",
+          "shading"
+        ],
+        "job_id": "d92fab37-1f4a-438d-afb6-5ca658fd3f8b"
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "0d18e70b-ace6-5aed-a869-6b8ac231f202"
     }
   ]
 }

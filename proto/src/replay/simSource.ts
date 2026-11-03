@@ -91,7 +91,7 @@ export function replayFromSim(input: BattleInput): Replay {
   return { tps: TICKS_PER_SECOND, ticks: result.ticks, fieldLength: BATTLE.fieldLength, units, events, winner: result.winner };
 }
 
-/** Nguồn replay chạy trận thật từ một BattleInput dựng sẵn. */
-export function simReplaySource(label: string, input: () => BattleInput): ReplaySource {
-  return { label, load: async () => replayFromSim(input()) };
+/** Nguồn replay chạy trận thật từ một BattleInput dựng sẵn; `arena` chọn nền sân (ví dụ mo_linh_thach cho trận tranh mỏ). */
+export function simReplaySource(label: string, input: () => BattleInput, arena?: string): ReplaySource {
+  return { label, load: async () => ({ ...replayFromSim(input()), ...(arena ? { arena } : {}) }) };
 }
