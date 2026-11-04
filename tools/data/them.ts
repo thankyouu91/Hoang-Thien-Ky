@@ -14,6 +14,7 @@
 //   luyen_khi_4     cột tham số danh văn ở Danh khí, tham số phụ (ngưỡng, chu kỳ) ở Khí văn
 //   luyen_khi_5     xóa dòng luật khiVanTinhToiDa (code thôi đọc), bỏ câu nhắc nó trong ghi chú khi_van
 //   luyen_khi_6     Hộ Mệnh 1,8%, Ý danh khí ×1,0, ngân sách khí văn khiVanTranLucChien 2% (lần đo 2)
+//   luyen_khi_7     ghi chú song hệ: Bảo Ngọc Phù tiêu 1 tấm mỗi lần dùng, đậu hay không cũng mất
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -622,6 +623,9 @@ function baoGiamThuong(dem: Record<string, string>, ten: string, oTen: Record<st
   }
 }
 
+/** Ghi chú song hệ, Phách ở ngoc.json (luyen_khi_2 viết, luyen_khi_7 thêm câu Bảo Ngọc Phù). */
+const GHI_CHU_SONG_HE = "song_he, phach (luyện khí, đề xuất 2026-11-04): song hệ hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp, mỗi hệ moi_he giá trị một viên thường, tính trong trần mềm của hệ đó; đậu theo ty_le_dau cố định (không theo bảng nén), thất bại mất that_bai_mat viên (viên đặt thứ hai), phù phu_giu giữ lại cả hai; mỗi lần dùng tiêu 1 tấm phù, đậu hay không cũng mất. Phách điểm hóa từ 1 ngọc cấp 10 (luyen_khi.json luat.phachKhiTinh, luat.phachTyLe), khảm ô công, cho gia_tri và nâng trần sát thương hệ đó lên tran_toi_da; mỗi hệ 1 Phách tính trần; khóa.";
+
 const luyenKhi2: Step = (wb, log) => {
   const text = (v: string): Cell => ({ v, fill: "de_xuat" });
   const hdr = (v: string): Cell => ({ v, fill: "tieu_de", bold: true, wrap: true });
@@ -683,7 +687,7 @@ const luyenKhi2: Step = (wb, log) => {
   };
   note("luyen_khi.json", "tay_luyen:", "tay_luyen: đổi loại chỉ số phụ của một món sang loại khác trong 4 loại của ô, cùng thang giá trị (giá trị ở lục +0, nhân độ hiếm, cường hóa, bí cảnh như chỉ số phụ cũ). Loại 1 là chỉ số phụ mặc định ở trang_bi.json o[].phu. Người thường quay ngẫu nhiên trong 3 loại còn lại; Tu rèn chọn thẳng. Mỗi lần tốn luat.tayLuyenKhiTinh Khí Tinh và luat.tayLuyenLinhThach linh thạch theo độ hiếm món, linh thạch đúng phẩm của vị diện.");
   note("luyen_khi.json", "bao_giam:", "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu, loại thưởng theo thứ được đếm (vũ khí, danh khí: ánh sáng vũ khí; ô khác: khung ô; pháp bảo, Phách: danh hiệu; pháp khí: ô kho; ấn bộ: ô túi; Ý châu: Khí Tinh). Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch.");
-  note("ngoc.json", "song_he, phach", "song_he, phach (luyện khí, đề xuất 2026-11-04): song hệ hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp, mỗi hệ moi_he giá trị một viên thường, tính trong trần mềm của hệ đó; đậu theo ty_le_dau cố định (không theo bảng nén), thất bại mất that_bai_mat viên (viên đặt thứ hai), phù phu_giu giữ lại cả hai. Phách điểm hóa từ 1 ngọc cấp 10 (luyen_khi.json luat.phachKhiTinh, luat.phachTyLe), khảm ô công, cho gia_tri và nâng trần sát thương hệ đó lên tran_toi_da; mỗi hệ 1 Phách tính trần; khóa.");
+  note("ngoc.json", "song_he, phach", GHI_CHU_SONG_HE);
   log.push("Ghi chú trang bị: sửa 3 dòng (tẩy luyện, Bảo Giám, song hệ)");
 };
 
@@ -844,9 +848,22 @@ const luyenKhi6: Step = (wb, log) => {
   if (next !== cur) { wb.setCell(gc.sheet, i, hd("noi_dung"), text(next)); log.push("Ghi chú trang bị: danh_khi, Ý bằng Ý châu"); }
 };
 
+// ---------- luyện khí lần 7: Bảo Ngọc Phù tiêu 1 tấm mỗi lần dùng (phiên set đồ) ----------
+
+const luyenKhi7: Step = (wb, log) => {
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), gh = (gs.cells[0] ?? []).map(norm);
+  const hd = (k: string) => gh.indexOf(gc.cols.find((c) => c.key === k)!.header);
+  const i = gs.cells.findIndex((r) => norm(r?.[hd("file")]) === "ngoc.json" && norm(r?.[hd("noi_dung")]).startsWith("song_he, phach"));
+  if (i < 0) throw new Error("Ghi chú trang bị: không có dòng song_he của ngoc.json");
+  if (norm(gs.cells[i][hd("noi_dung")]) !== GHI_CHU_SONG_HE) {
+    wb.setCell(gc.sheet, i, hd("noi_dung"), { v: GHI_CHU_SONG_HE, fill: "de_xuat" });
+    log.push("Ghi chú trang bị: song hệ thêm câu Bảo Ngọc Phù tiêu 1 tấm mỗi lần");
+  } else log.push("Ghi chú trang bị: song hệ đã có câu Bảo Ngọc Phù, bỏ qua");
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
-  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6,
+  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
