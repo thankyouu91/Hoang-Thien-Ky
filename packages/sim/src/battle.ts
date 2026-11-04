@@ -577,13 +577,14 @@ export class Battle {
         // Diện rộng vận công, trận pháp bày trận: phát sau, tâm chốt ở địch gần nhất lúc bắt đầu.
         const formation = type === "tran_phap";
         const center = formation && s.mod.densest ? this.densestSpot(u, s, foe) : foe.pos;
-        const join = formation ? this.formationToJoin(u, center) : null;
+        const resolveTick = this.tick + (formation
+          ? Math.max(CAST_FLOOR.formationTicks, mul(R.formationCastTicks, ONE - u.b.formationCut) + u.b.formationTicks + (s.mod.castTicks ?? 0))
+          : Math.max(CAST_FLOOR.channelTicks, this.aoeCastTicks(u, s)));
+        const join = formation ? this.formationToJoin(u, center, resolveTick) : null;
         u.channel = {
           slot: i,
           startTick: this.tick,
-          resolveTick: this.tick + (formation
-            ? Math.max(CAST_FLOOR.formationTicks, mul(R.formationCastTicks, ONE - u.b.formationCut) + u.b.formationTicks + (s.mod.castTicks ?? 0))
-            : Math.max(CAST_FLOOR.channelTicks, this.aoeCastTicks(u, s))),
+          resolveTick,
           center,
           ult: this.takeUlt(u),
           interruptible: !formation || R.formationInterruptible,
@@ -654,15 +655,19 @@ export class Battle {
   }
 
   /**
-   * Hợp trận: trận chung của đồng đội đang bày trận pháp (còn sống, chưa kích), tâm cách tâm mới không quá formationJoinRange.
+   * Hợp trận: trận chung của đồng đội đang bày trận pháp (còn sống, chưa kích), tâm cách tâm mới không quá formationJoinRange,
+   * và người mới bày xong (`resolveTick`) không muộn hơn người xong sớm nhất của trận đó quá formationJoinWait.
    * Có nhiều trận thì nhập trận bắt đầu bày sớm nhất, rồi id người bày đầu nhỏ hơn.
    */
-  private formationToJoin(u: Unit, center: number): Channel | null {
+  private formationToJoin(u: Unit, center: number, resolveTick: number): Channel | null {
     let best: Channel | null = null;
     for (const a of this.teams[u.team]) {
       const ch = a.channel;
       if (a === u || a.curHp <= 0 || !ch || a.slots[ch.slot].tech.type !== "tran_phap") continue;
       if (Math.abs(ch.center - center) > R.formationJoinRange) continue;
+      let earliest = ch.resolveTick;
+      for (const m of this.formationMembers(u.team, ch.group)) earliest = Math.min(earliest, m.channel!.resolveTick);
+      if (resolveTick > earliest + R.formationJoinWait) continue;
       if (!best || ch.startTick < best.startTick || (ch.startTick === best.startTick && ch.group < best.group)) best = ch;
     }
     return best;
@@ -695,7 +700,9 @@ export class Battle {
     }
     const lc = lead.channel!;
     const ls = lead.slots[lc.slot];
-    const targets = this.pickEnemies(lead, ls, lc.center, ls.radius);
+    // Trận chung đánh thêm mục tiêu theo số người, có trần.
+    const limit = Math.min(R.formationMaxTargets, ls.maxTargets + R.formationExtraTargets * (members.length - 1));
+    const targets = this.pickEnemies(lead, ls, lc.center, ls.radius, undefined, limit);
     const chans = members.map((m) => m.channel!);
     for (const m of members) m.channel = null;
     const opts: StrikeOpts = { scale: this.formationBond(members.length), guarded: lc.guarded, guardCut: lc.guardCut };
@@ -790,7 +797,7 @@ export class Battle {
    * Địch trong khoảng `reach` quanh `center`: chiêu đơn ưu tiên kẻ đang lộ vị trí, rồi gần nhất → máu thấp → id.
    * `pick` của Ý châu thay thứ tự: % máu thấp nhất, kẻ đang vận công trước, hoặc hàng sau % máu thấp nhất (không có ai hàng sau thì như mặc định).
    */
-  private pickEnemies(u: Unit, s: Slot, center: number, reach: number, pick?: TargetPick): Unit[] {
+  private pickEnemies(u: Unit, s: Slot, center: number, reach: number, pick?: TargetPick, limit = s.maxTargets): Unit[] {
     const tick = this.tick;
     let list: Unit[] = [];
     for (const e of this.teams[1 - u.team]) {
@@ -811,7 +818,7 @@ export class Battle {
     if (byHp) list.sort((a, b) => a.curHp * b.hp - b.curHp * a.hp || a.curHp - b.curHp || a.id - b.id);
     else if (pick === "channeling") list.sort((a, b) => (b.channel ? 1 : 0) - (a.channel ? 1 : 0) || order(a, b));
     else list.sort(order);
-    if (list.length > s.maxTargets) list.length = s.maxTargets;
+    if (list.length > limit) list.length = limit;
     return list;
   }
 

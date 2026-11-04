@@ -249,3 +249,21 @@ test("hợp trận: người vào sau làm trận chung kích lúc người cu�
   while (b.events.length === 0) b.step();
   assert.deepEqual(b.events.map((e) => [e.unitId, e.groupSize]), [[1, undefined]]);
 });
+
+test("hợp trận lần 2: người bày xong muộn hơn người sớm nhất quá 1 s thì không nhập; trận chung thêm 2 mục tiêu mỗi người, tối đa 10", () => {
+  const noCrit = { bonuses: { critBonus: -2000 } };
+  const target = unit(101, 0, ["hoi_phuc"], { hp: 1_000_000, manaMax: 0, boss: true });
+  // Người 2 bày chậm 1,5 s (30 tick): quá 20 tick nên bày riêng, mỗi người kích một trận.
+  const slow = run(
+    { seed: 1, teamA: [unit(1, 0, ["tran_phap"], noCrit), unit(2, 0, ["tran_phap"], { ...noCrit, skillMods: { tran_phap: { castTicks: 30 } } })], teamB: [target] },
+    (b) => b.events.length >= 2,
+  );
+  assert.deepEqual(slow.events.map((e) => [e.unitId, e.groupSize]), [[1, undefined], [2, undefined]]);
+  // Mục tiêu: 6 + 2 × (n − 1), tối đa 10.
+  const foes = Array.from({ length: 12 }, (_, i) => unit(101 + i, 0, ["hoi_phuc"], { hp: 1_000_000, manaMax: 0, boss: true }));
+  const hits = (n: number) => {
+    const teamA = Array.from({ length: n }, (_, i) => unit(1 + i, 0, ["tran_phap"], noCrit));
+    return run({ seed: 1, teamA, teamB: foes }, (b) => b.events.some((e) => e.unitId === 1)).events[0].targets.length;
+  };
+  assert.deepEqual([hits(1), hits(2), hits(3), hits(5)], [6, 8, 10, 10]);
+});

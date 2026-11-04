@@ -81,6 +81,10 @@ export const SKILL_RULES = {
   formationBond2: 1300, // 2 người (Lưỡng Nghi): tổng sát thương ×1,3
   formationBond3: 1600, // 3 người (Tam Tài) ×1,6; 4 người cũng tính mức này (đề xuất)
   formationBond5: 2000, // từ 5 người (Ngũ Hành) ×2,0
+  // Hợp trận lần 2 (người dùng duyệt 2026-11-04 qua phiên trận pháp; đề xuất):
+  formationJoinWait: 20, // chỉ nhập trận nếu bày xong không muộn hơn người xong sớm nhất của nhóm quá 1 s
+  formationExtraTargets: 2, // trận chung thêm 2 mục tiêu mỗi người sau người đầu
+  formationMaxTargets: 10, // tối đa 10 mục tiêu
 };
 
 /**
