@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ.
 
-Tổng 519 món, đã vẽ 213.
+Tổng 519 món, đã vẽ 237.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -146,11 +146,11 @@ Tổng 519 món, đã vẽ 213.
 | TB-MU-053 | Quan Phượng Hoàng | Vàng | trang_bi/mu/53.webp | ✓ |
 | TB-MU-054 | Khôi Hoàng Long | Vàng | trang_bi/mu/54.webp | ✓ |
 | TB-MU-055 | Quan Diệu Nhật | Vàng | trang_bi/mu/55.webp | ✓ |
-| TB-MU-056 | Quan Cửu Châu | Vàng | trang_bi/mu/56.webp |  |
-| TB-MU-057 | Khôi Thiên Tướng | Vàng | trang_bi/mu/57.webp |  |
+| TB-MU-056 | Quan Cửu Châu | Vàng | trang_bi/mu/56.webp | ✓ |
+| TB-MU-057 | Khôi Thiên Tướng | Vàng | trang_bi/mu/57.webp | ✓ |
 | TB-MU-058 | Quan Xích Phượng | Đỏ | trang_bi/mu/58.webp | ✓ |
-| TB-MU-059 | Khôi Ma Thần | Đỏ | trang_bi/mu/59.webp |  |
-| TB-MU-060 | Quan Đế Vương | Đỏ | trang_bi/mu/60.webp |  |
+| TB-MU-059 | Khôi Ma Thần | Đỏ | trang_bi/mu/59.webp | ✓ |
+| TB-MU-060 | Quan Đế Vương | Đỏ | trang_bi/mu/60.webp | ✓ |
 
 ## Trang bị · Áo (60)
 
@@ -160,26 +160,26 @@ Tổng 519 món, đã vẽ 213.
 | TB-AO-002 | Sam Thanh Bố | Lục | trang_bi/ao/02.webp | ✓ |
 | TB-AO-003 | Đạo Bào Tro | Lục | trang_bi/ao/03.webp | ✓ |
 | TB-AO-004 | Giáp Da Thú | Lục | trang_bi/ao/04.webp | ✓ |
-| TB-AO-005 | Giáp Đồng Phiến | Lục | trang_bi/ao/05.webp |  |
-| TB-AO-006 | Áo Bông Kép | Lục | trang_bi/ao/06.webp |  |
-| TB-AO-007 | Sam Trắng Thư Sinh | Lục | trang_bi/ao/07.webp |  |
-| TB-AO-008 | Áo Vải Sơn Dã | Lục | trang_bi/ao/08.webp |  |
-| TB-AO-009 | Giáp Liên Hoàn | Lục | trang_bi/ao/09.webp |  |
-| TB-AO-010 | Đạo Bào Hoàng | Lục | trang_bi/ao/10.webp |  |
-| TB-AO-011 | Áo Choàng Lông | Lục | trang_bi/ao/11.webp |  |
-| TB-AO-012 | Giáp Trúc Phiến | Lục | trang_bi/ao/12.webp |  |
-| TB-AO-013 | Bào Lam Đơn | Lục | trang_bi/ao/13.webp |  |
-| TB-AO-014 | Y Phục Dạ Hành | Lục | trang_bi/ao/14.webp |  |
-| TB-AO-015 | Giáp Da Tê | Lục | trang_bi/ao/15.webp |  |
-| TB-AO-016 | Áo Nâu Tăng Nhân | Lục | trang_bi/ao/16.webp |  |
-| TB-AO-017 | Bào Lá Trúc | Lục | trang_bi/ao/17.webp |  |
-| TB-AO-018 | Giáp Vải Bông | Lục | trang_bi/ao/18.webp |  |
-| TB-AO-019 | Áo Gấm Thô | Lục | trang_bi/ao/19.webp |  |
-| TB-AO-020 | Bào Thanh Sam | Lục | trang_bi/ao/20.webp |  |
-| TB-AO-021 | Áo Ngắn Võ Sinh | Lục | trang_bi/ao/21.webp |  |
-| TB-AO-022 | Giáp Ngực Đồng | Lục | trang_bi/ao/22.webp |  |
-| TB-AO-023 | Áo Tơi Rơm | Lục | trang_bi/ao/23.webp |  |
-| TB-AO-024 | Bào Mực Nhạt | Lục | trang_bi/ao/24.webp |  |
+| TB-AO-005 | Giáp Đồng Phiến | Lục | trang_bi/ao/05.webp | ✓ |
+| TB-AO-006 | Áo Bông Kép | Lục | trang_bi/ao/06.webp | ✓ |
+| TB-AO-007 | Sam Trắng Thư Sinh | Lục | trang_bi/ao/07.webp | ✓ |
+| TB-AO-008 | Áo Vải Sơn Dã | Lục | trang_bi/ao/08.webp | ✓ |
+| TB-AO-009 | Giáp Liên Hoàn | Lục | trang_bi/ao/09.webp | ✓ |
+| TB-AO-010 | Đạo Bào Hoàng | Lục | trang_bi/ao/10.webp | ✓ |
+| TB-AO-011 | Áo Choàng Lông | Lục | trang_bi/ao/11.webp | ✓ |
+| TB-AO-012 | Giáp Trúc Phiến | Lục | trang_bi/ao/12.webp | ✓ |
+| TB-AO-013 | Bào Lam Đơn | Lục | trang_bi/ao/13.webp | ✓ |
+| TB-AO-014 | Y Phục Dạ Hành | Lục | trang_bi/ao/14.webp | ✓ |
+| TB-AO-015 | Giáp Da Tê | Lục | trang_bi/ao/15.webp | ✓ |
+| TB-AO-016 | Áo Nâu Tăng Nhân | Lục | trang_bi/ao/16.webp | ✓ |
+| TB-AO-017 | Bào Lá Trúc | Lục | trang_bi/ao/17.webp | ✓ |
+| TB-AO-018 | Giáp Vải Bông | Lục | trang_bi/ao/18.webp | ✓ |
+| TB-AO-019 | Áo Gấm Thô | Lục | trang_bi/ao/19.webp | ✓ |
+| TB-AO-020 | Bào Thanh Sam | Lục | trang_bi/ao/20.webp | ✓ |
+| TB-AO-021 | Áo Ngắn Võ Sinh | Lục | trang_bi/ao/21.webp | ✓ |
+| TB-AO-022 | Giáp Ngực Đồng | Lục | trang_bi/ao/22.webp | ✓ |
+| TB-AO-023 | Áo Tơi Rơm | Lục | trang_bi/ao/23.webp | ✓ |
+| TB-AO-024 | Bào Mực Nhạt | Lục | trang_bi/ao/24.webp | ✓ |
 | TB-AO-025 | Đạo Bào Lưu Vân | Lam | trang_bi/ao/25.webp | ✓ |
 | TB-AO-026 | Giáp Huyền Thiết | Lam | trang_bi/ao/26.webp | ✓ |
 | TB-AO-027 | Bào Hạc Văn | Lam | trang_bi/ao/27.webp |  |
