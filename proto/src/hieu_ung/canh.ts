@@ -22,6 +22,13 @@ export function emitFrame(e: Emitter, f: FxInput): void {
   let busy = 0;
   for (const c of casts) if (Math.abs(c.tick - f.t) <= near) busy++;
   setCrowd(Math.min(1, Math.max(0.3, 24 / Math.max(1, busy))));
+  // Vòng diện rộng, trận đồ đang hiện ở t (từ lúc vận, bày trận tới hết pha nổ): nhiều thì mỗi cái mờ đi.
+  let zones = 0;
+  for (const c of casts) {
+    if (c.skill !== "dien_rong" && c.skill !== "tran_phap") continue;
+    if (f.t >= (c.start ?? c.tick - f.life(1)) && f.t < c.tick + f.life(0.9)) zones++;
+  }
+  x.zoneK = 1 / Math.sqrt(Math.max(1, zones));
   for (const c of casts) drawCast(x, c, recipeOf(c));
   setCrowd(1);
 }

@@ -68,6 +68,7 @@ Dữ liệu từ replay:
 - Hiệu ứng nằm trên người, thanh máu, số sát thương, nên phải ngắn và trong (điều kiện của proto-shell).
 - Không sửa `packages/sim`; cần thêm dữ liệu sự kiện thì nhắn phiên giữ sim.
 - Hạt dùng instancing; đông chiêu thì giảm số hạt mỗi chiêu (`setCrowd`), hình chính giữ nguyên.
+- Nhiều vòng diện rộng, trận đồ cùng hiện thì mỗi cái mờ theo 1/√n (`Ctx.zoneK`), vòng nổ tắt nhanh hơn, để vẫn đọc được thanh máu và số (góp ý của proto-shell 2026-11-04).
 
 ## Trang xem thử
 

@@ -414,6 +414,8 @@ function seal(x: Ctx, s: Shot, p: Point, a: number): void {
 function area(x: Ctx, s: Shot): void {
   const { t, e } = x;
   const { c, r, src } = s;
+  // Nhiều vùng chồng nhau thì mỗi vùng trong hơn, để vẫn thấy thanh máu, số sát thương bên dưới.
+  const B = r.bright * x.zoneK;
   if (c.center === undefined || !c.radius) {
     for (const id of c.targets) impact(x, s, id, (t - c.tick) / s.S(0.45));
     return;
@@ -425,11 +427,11 @@ function area(x: Ctx, s: Shot): void {
   if (t >= start && t < c.tick) {
     const q = (t - start) / Math.max(1, c.tick - start);
     const beat = 0.6 + 0.4 * Math.sin(t * (0.4 + 1.2 * q));
-    ring(e, L.GROUND, z.x, zy, z.rx, z.ry, r.main.glow, (0.55 + 0.35 * beat) * r.bright, { width: 3, dashes: 28, phase: -t * 0.01, duty: 0.65, fill: 0.16 * q, halo: 0.25 });
-    rune(e, L.GROUND, z.x, zy, z.rx * 0.82, z.ry * 0.82, r.trail.glow, 0.6 * r.bright * ramp(q, 0, 0.25), -t * 0.015, q, 3, 1, 0.8);
-    ring(e, L.GROUND, z.x, zy, z.rx * q, z.ry * q, r.main.glow, 0.5 * r.bright, { width: 2, add: 0.8 });
+    ring(e, L.GROUND, z.x, zy, z.rx, z.ry, r.main.glow, (0.55 + 0.35 * beat) * B, { width: 3, dashes: 28, phase: -t * 0.01, duty: 0.65, fill: 0.16 * q, halo: 0.25 });
+    rune(e, L.GROUND, z.x, zy, z.rx * 0.82, z.ry * 0.82, r.trail.glow, 0.6 * B * ramp(q, 0, 0.25), -t * 0.015, q, 3, 1, 0.8);
+    ring(e, L.GROUND, z.x, zy, z.rx * q, z.ry * q, r.main.glow, 0.5 * B, { width: 2, add: 0.8 });
     windup(x, s, start, c.tick, 1.2);
-    glow(e, L.AIR, src.x, src.y, HEAD_Z + 6, 10 + 14 * q, r.main.glow, (0.3 + 0.6 * q) * r.bright, 1, 0.6);
+    glow(e, L.AIR, src.x, src.y, HEAD_Z + 6, 10 + 14 * q, r.main.glow, (0.3 + 0.6 * q) * B, 1, 0.6);
   }
   // Pha 2: cầu khí bay vòng từ người ra chiêu xuống tâm vùng.
   const fl = s.S(0.3);
@@ -439,19 +441,19 @@ function area(x: Ctx, s: Shot): void {
     const px = src.x + (z.x - src.x) * q;
     const py = src.y + (zy - src.y) * q;
     const pz = h * (1 - q) + 0 * q;
-    glow(e, L.AIR, px, py, pz, 18 * r.impact, r.main.glow, r.bright, 1, 1);
+    glow(e, L.AIR, px, py, pz, 18 * r.impact, r.main.glow, B, 1, 1);
     for (let k = 1; k <= 4; k++) {
       const qq = Math.max(0, q - k * 0.06);
       const hh = HEAD_Z + 6 + 90 * Math.sin(Math.PI * qq) * (1 - qq * 0.4);
-      glow(e, L.AIR, src.x + (z.x - src.x) * qq, src.y + (zy - src.y) * qq, hh * (1 - qq), 12 - k * 2, k % 2 ? r.trail.glow : r.main.glow, (0.6 - k * 0.12) * r.bright, 1, 0.3);
+      glow(e, L.AIR, src.x + (z.x - src.x) * qq, src.y + (zy - src.y) * qq, hh * (1 - qq), 12 - k * 2, k % 2 ? r.trail.glow : r.main.glow, (0.6 - k * 0.12) * B, 1, 0.3);
     }
   }
   // Pha 3: chớp, sóng xung kích, mảnh hệ văng lên khắp vùng.
   const a = (t - c.tick) / s.S(0.6);
   if (a >= 0 && a < 1) {
-    groundGlow(e, L.GROUND, z.x, zy, z.rx * 1.1, z.ry * 1.1, r.main.glow, 0.45 * r.bright * pulse(a, 0.06), 0.8);
-    ring(e, L.GROUND, z.x, zy, z.rx * (0.3 + 0.85 * easeOut(a)) * r.impact, z.ry * (0.3 + 0.85 * easeOut(a)) * r.impact, r.main.glow, r.bright * (1 - a), { width: 8 * (1 - a) + 1, halo: 0.6, add: 0.85 });
-    if (r.subs.length) ring(e, L.GROUND, z.x, zy, z.rx * (0.2 + 0.7 * easeOut(a)), z.ry * (0.2 + 0.7 * easeOut(a)), r.trail.glow, 0.8 * r.bright * (1 - a), { width: 4 * (1 - a) + 1, add: 0.9 });
+    groundGlow(e, L.GROUND, z.x, zy, z.rx * 1.1, z.ry * 1.1, r.main.glow, 0.45 * B * pulse(a, 0.06), 0.8);
+    ring(e, L.GROUND, z.x, zy, z.rx * (0.3 + 0.85 * easeOut(a)) * r.impact, z.ry * (0.3 + 0.85 * easeOut(a)) * r.impact, r.main.glow, B * (1 - a) ** 2, { width: 8 * (1 - a) + 1, halo: 0.6, add: 0.85 });
+    if (r.subs.length) ring(e, L.GROUND, z.x, zy, z.rx * (0.2 + 0.7 * easeOut(a)), z.ry * (0.2 + 0.7 * easeOut(a)), r.trail.glow, 0.8 * B * (1 - a) ** 2, { width: 4 * (1 - a) + 1, add: 0.9 });
     const n = count(r, 14);
     for (let i = 0; i < n; i++) {
       const ang = rnd(s.seed, 600 + i) * TAU;
@@ -461,9 +463,9 @@ function area(x: Ctx, s: Shot): void {
       const up = 50 * (0.5 + rnd(s.seed, 620 + i));
       const h = up * a * (1.2 - a);
       const el = i % 4 === 3 && r.subs[0] ? r.subs[0] : r.el;
-      motif(e, L.AIR, el, px, py, h + 2, 5 + 3 * rnd(s.seed, 630 + i), a * 6 + ang, COLORS[el].glow, r.bright * (1 - a), 0.6);
+      motif(e, L.AIR, el, px, py, h + 2, 5 + 3 * rnd(s.seed, 630 + i), a * 6 + ang, COLORS[el].glow, B * (1 - a), 0.6);
     }
-    if (r.tier >= 2) rays(e, L.GROUND, z.x, zy, 0, Math.max(z.rx, z.ry), r.main.glow, 0.5 * r.bright * pulse(a, 0.1), 12, a, 12, 0.3, z.ry / Math.max(z.rx, z.ry));
+    if (r.tier >= 2) rays(e, L.GROUND, z.x, zy, 0, Math.max(z.rx, z.ry), r.main.glow, 0.5 * B * pulse(a, 0.1), 12, a, 12, 0.3, z.ry / Math.max(z.rx, z.ry));
   }
   for (const id of c.targets) impact(x, s, id, (t - c.tick) / s.S(0.45), 0.8, 0.7);
 }
@@ -473,6 +475,7 @@ function area(x: Ctx, s: Shot): void {
 function formation(x: Ctx, s: Shot): void {
   const { t, e } = x;
   const { c, r, src } = s;
+  const B = r.bright * x.zoneK;
   if (c.center === undefined || !c.radius) {
     for (const id of c.targets) impact(x, s, id, (t - c.tick) / s.S(0.5));
     return;
@@ -492,17 +495,17 @@ function formation(x: Ctx, s: Shot): void {
     const rot = t * 0.012;
     const flare = after > 0 ? pulse(after, 0.08) : 0;
     // Lúc bày trận giữ trong để vẫn thấy người đứng trên trận đồ; lúc kích bùng sáng ngắn.
-    const alpha = (after > 0 ? (1 - after) * 0.8 + flare * 0.5 : 0.32 + 0.28 * ramp(q, 0, 0.15) + 0.15 * q) * r.bright;
+    const alpha = (after > 0 ? (1 - after) ** 2 * 0.8 + flare * 0.5 : 0.32 + 0.28 * ramp(q, 0, 0.15) + 0.15 * q) * B;
     rune(e, L.GROUND, z.x, zy, z.rx, z.ry, r.main.glow, alpha, rot, after > 0 ? 1 : q, 0, 1 + flare, 0.75);
     if (r.subs.length) rune(e, L.GROUND, z.x, zy, z.rx * 0.5, z.ry * 0.5, r.trail.glow, alpha * 0.7, -rot * 2, after > 0 ? 1 : q, 3, 1, 0.8);
-    groundGlow(e, L.GROUND, z.x, zy, z.rx, z.ry, r.main.glow, 0.12 * q * r.bright + 0.4 * flare);
+    groundGlow(e, L.GROUND, z.x, zy, z.rx, z.ry, r.main.glow, 0.12 * q * B + 0.4 * flare);
     if (after <= 0) {
       for (let i = 0; i < nodes; i++) {
         const on = ramp(q, i / nodes, i / nodes + 0.05);
         if (on <= 0) continue;
         const n = node(i, 0);
-        beam(e, L.BODY, n.x, n.y, 0, n.x, n.y, 18 + 10 * on, 3, r.main.glow, 0.9 * on * r.bright, 0, 1, 0.6, 0.2, 0.6);
-        glow(e, L.GROUND, n.x, n.y, 0, 8, r.main.glow, 0.7 * on * r.bright, 1, 0.5);
+        beam(e, L.BODY, n.x, n.y, 0, n.x, n.y, 18 + 10 * on, 3, r.main.glow, 0.9 * on * B, 0, 1, 0.6, 0.2, 0.6);
+        glow(e, L.GROUND, n.x, n.y, 0, 8, r.main.glow, 0.7 * on * B, 1, 0.5);
       }
       // phù văn bay lên từ trận đồ
       const nr = count(r, 6);
@@ -510,10 +513,10 @@ function formation(x: Ctx, s: Shot): void {
         const ph = ((t - start) / 40 + i / nr) % 1;
         const ang = rnd(s.seed, 700 + i) * TAU;
         const rr = 0.3 + 0.6 * rnd(s.seed, 710 + i);
-        sprite(e, L.AIR, CELL.rune0 + (i % 4), z.x + Math.cos(ang) * z.rx * rr, zy + Math.sin(ang) * z.ry * rr, 4 + 40 * ph, 5, 5, 0, r.main.glow, q * (1 - ph) * r.bright, 0.8, 0.3);
+        sprite(e, L.AIR, CELL.rune0 + (i % 4), z.x + Math.cos(ang) * z.rx * rr, zy + Math.sin(ang) * z.ry * rr, 4 + 40 * ph, 5, 5, 0, r.main.glow, q * (1 - ph) * B, 0.8, 0.3);
       }
       // sợi linh lực từ người bày trận tới tâm trận
-      beam(e, L.GROUND, src.x, src.y, BODY_Z, z.x, zy, 2, 1.6, r.main.glow, 0.5 * r.bright, 0.2 * r.bright * (0.6 + 0.4 * Math.sin(t * 0.7)), 1, 0.3, 0, 0.8);
+      beam(e, L.GROUND, src.x, src.y, BODY_Z, z.x, zy, 2, 1.6, r.main.glow, 0.5 * B, 0.2 * B * (0.6 + 0.4 * Math.sin(t * 0.7)), 1, 0.3, 0, 0.8);
       windup(x, s, start, c.tick, 1);
     }
   }
@@ -525,22 +528,22 @@ function formation(x: Ctx, s: Shot): void {
       const n = node(i, 0);
       const hx = n.x + (z.x - n.x) * easeIn(q);
       const hy = n.y + (zy - n.y) * easeIn(q);
-      beam(e, L.GROUND, n.x + (z.x - n.x) * Math.max(0, easeIn(q) - 0.25), n.y + (zy - n.y) * Math.max(0, easeIn(q) - 0.25), 2, hx, hy, 2, 2.5, r.main.glow, 0.2, r.bright, 1, 0.6, 0.4, 0.5);
+      beam(e, L.GROUND, n.x + (z.x - n.x) * Math.max(0, easeIn(q) - 0.25), n.y + (zy - n.y) * Math.max(0, easeIn(q) - 0.25), 2, hx, hy, 2, 2.5, r.main.glow, 0.2, B, 1, 0.6, 0.4, 0.5);
     }
-    glow(e, L.GROUND, z.x, zy, 0, 20 + 30 * q, r.main.glow, q * r.bright, 1, 0.6);
+    glow(e, L.GROUND, z.x, zy, 0, 20 + 30 * q, r.main.glow, q * B, 1, 0.6);
   }
   // Pha 3: cột sáng lớn giữa trận, cột sáng trên từng mục tiêu, chữ Trận; tuyệt sát trên ai bị hạ đúng lúc kích.
   const a = (t - c.tick) / s.S(0.9);
   if (a >= 0 && a < 1) {
     const grow = easeOut(a / 0.2);
     const fade = 1 - ramp(a, 0.4, 1);
-    beam(e, L.AIR, z.x, zy, 0, z.x, zy, 260 * grow, 16 * r.impact, r.main.glow, fade * r.bright, 0, 1, 0.7, 0.3, 0.6);
-    glow(e, L.AIR, z.x, zy, 30, 70 * r.impact, r.main.glow, pulse(a, 0.06) * r.bright, 1, 0.8);
-    sprite(e, L.AIR, CELL.glyphPhong, z.x, zy, 90 + 20 * a, 20, 20, 0, mix(r.main.glow, WHITE, 0.5), pulse(a, 0.15) * r.bright, 0.4, 0.2);
+    beam(e, L.AIR, z.x, zy, 0, z.x, zy, 260 * grow, 16 * r.impact, r.main.glow, fade * B, 0, 1, 0.7, 0.3, 0.6);
+    glow(e, L.AIR, z.x, zy, 30, 70 * r.impact, r.main.glow, pulse(a, 0.06) * B, 1, 0.8);
+    sprite(e, L.AIR, CELL.glyphPhong, z.x, zy, 90 + 20 * a, 20, 20, 0, mix(r.main.glow, WHITE, 0.5), pulse(a, 0.15) * B, 0.4, 0.2);
     for (const id of c.targets) {
       const p = x.foot(id, c.tick);
       if (!p) continue;
-      beam(e, L.AIR, p.x, p.y, 0, p.x, p.y, 150 * grow, 8 * r.impact, r.trail.glow, fade * r.bright, 0, 1, 0.8, 0.4, 0.6);
+      beam(e, L.AIR, p.x, p.y, 0, p.x, p.y, 150 * grow, 8 * r.impact, r.trail.glow, fade * B, 0, 1, 0.8, 0.4, 0.6);
       const ut = x.f.index.byId.get(id);
       if (ut && ut.death === c.tick) execution(x, s, p, a);
     }

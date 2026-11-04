@@ -17,6 +17,8 @@ export interface Ctx {
   /** Điểm chân của một người (mặt đất) ở thời điểm time (mặc định t) */
   foot(id: number, time?: number): Point | null;
   alive(id: number, time?: number): boolean;
+  /** Hệ số độ sáng của vòng, trận đồ trên đất khi nhiều chiêu diện rộng, trận pháp chồng nhau (1 khi chỉ một) */
+  zoneK: number;
 }
 
 export function makeCtx(e: Emitter, f: FxInput): Ctx {
@@ -26,6 +28,7 @@ export function makeCtx(e: Emitter, f: FxInput): Ctx {
     f,
     t: f.t,
     tps: f.index.replay.tps,
+    zoneK: 1,
     foot(id, time) {
       const p = f.at(id, time);
       return p ? { x: p.x, y: p.y + half } : null;
