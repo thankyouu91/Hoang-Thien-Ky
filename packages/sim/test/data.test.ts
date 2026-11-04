@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, ALLY_SKILLS, VARIANT_STATS, LINH_EFFECT_POWER, ELEMENT_STATS, ELEMENT_EFFECTS,
-  ROOT_BUFFS, SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, GRADE_POW, BASE_CRIT_PER_MILLE, RESIST_CAP, COMBO,
+  ROOT_BUFFS, SKILL_RULES, CAST_FLOOR, ARTIFACT_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, GRADE_POW, BASE_CRIT_PER_MILLE, RESIST_CAP, COMBO,
   elementMultiplier, comboRelation,
 } from "../src/index.ts";
 
@@ -46,7 +46,7 @@ test("khắc chế 12 × 12 khớp khac_che.json", () => {
 
 test("tham số trận đấu khớp tham_so.json", () => {
   const p = data("tham_so.json");
-  const groups: [string, Record<string, unknown>][] = [["SKILL_RULES", SKILL_RULES], ["CAST_FLOOR", CAST_FLOOR], ["BATTLE", BATTLE], ["UNIT_CURVE", UNIT_CURVE], ["TALENT_RULES", TALENT_RULES]];
+  const groups: [string, Record<string, unknown>][] = [["SKILL_RULES", SKILL_RULES], ["CAST_FLOOR", CAST_FLOOR], ["ARTIFACT_RULES", ARTIFACT_RULES], ["BATTLE", BATTLE], ["UNIT_CURVE", UNIT_CURVE], ["TALENT_RULES", TALENT_RULES]];
   for (const [name, values] of groups) {
     assert.deepEqual(Object.keys(p[name]).sort(), Object.keys(values).sort(), `${name}: tên khóa`);
     for (const key of Object.keys(values)) assert.equal(values[key], p[name][key], `${name}.${key}`);

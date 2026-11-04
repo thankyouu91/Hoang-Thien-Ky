@@ -88,7 +88,7 @@ export const CAST_FLOOR = {
 
 /**
  * Pháp bảo (tab Trang bị, phần 9; data/he_thong/json/phap_bao.json). Số đếm lấy theo điều kiện kích hoạt trong GDD;
- * khoảng cách "kề bên", "đứng sát", "trong tầm" là đề xuất (2026-11-04). Chưa có trong tham_so.json.
+ * khoảng cách "kề bên", "đứng sát", "trong tầm" là đề xuất (2026-11-04). Nhóm ARTIFACT_RULES trong tham_so.json.
  */
 export const ARTIFACT_RULES = {
   adjacentRange: 1000, // "kề bên", "đứng sát": trong 1 ô
