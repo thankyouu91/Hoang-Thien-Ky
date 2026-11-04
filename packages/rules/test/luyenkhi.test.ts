@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  artifactSpecs, danhKhiOf, gearStats, khiLinhLevel, khiTinhPhanGiai, khiVanSlots, phapBaoLinhLucToiDa, tayLuyen,
+  artifactSpecs, danhKhiOf, gearStats, khiLinhLevel, khiTinhPhanGiai, khiVanSlots, phapBaoLinhLucToiDa, scaleSkillMod, tayLuyen,
   type EquipItem, type InlayLine, type PhapBaoItem,
 } from "../src/index.ts";
 import LK from "../../../data/he_thong/json/luyen_khi.json" with { type: "json" };
@@ -14,6 +14,9 @@ const red = (kieu: string, extra: Partial<EquipItem> = {}) => item(kieu, { nac: 
 const gem = (he: "kim" | "moc" | "thuy", cap: number): InlayLine => ({ loai: "ngoc", he, cap });
 const MAX_KN = 4500;
 const LV = 100;
+const TINH = LK.luat.khiVanTinhToiDa;
+const KICH = (LK.luat as { khiVanKichToiDa?: number }).khiVanKichToiDa ?? 3;
+const kvGia = (ma: string) => LK.khi_van.find((k) => k.ma === ma)!.gia_tri;
 
 test("khí linh: cấp theo kinh nghiệm, +0,5% mỗi cấp cộng cùng chỗ với cường hóa; chỉ đồ từ tím", () => {
   assert.deepEqual([0, 99, 100, 300, 4499, MAX_KN].map(khiLinhLevel), [0, 0, 1, 2, 8, 9]);
@@ -32,17 +35,36 @@ test("ô khí văn: mở ở cấp 3, 6, 9, tối đa theo độ hiếm; đúng 
   assert.deepEqual(gearStats([red("TB-KI-058", { khiLinhKn: 600, khiVan: ["KV-CO-003"] })], LV, []).setFx, { openerBonus: 150 });
 });
 
-test("khí văn trên nhiều món tính tối đa 2 lần; Ngự Khắc Văn với Hỗn Độn lấy trần khắc thấp hơn", () => {
+test("khí văn trên nhiều món tính tối đa luat.khiVanTinhToiDa lần; Ngự Khắc Văn với Hỗn Độn lấy trần khắc thấp hơn", () => {
   const kv = (o: string, ma: string) => red(`TB-${o}-058`, { khiLinhKn: MAX_KN, khiVan: [ma] });
   const g = gearStats([kv("KI", "KV-CO-005"), kv("BT", "KV-CO-005"), kv("NB", "KV-CO-005")], LV, []);
-  assert.deepEqual([g.khiVan["KV-CO-005"], g.setFx.counterBoost], [2, 60]);
+  const n = Math.min(3, TINH);
+  assert.deepEqual([g.khiVan["KV-CO-005"], g.setFx.counterBoost], [n, (kvGia("KV-CO-005") - 1500) * n]);
   const t = gearStats([kv("MU", "KV-TH-002"), kv("AO", "KV-TH-002")], LV, []);
-  assert.equal(t.setFx.counterCap, 1440); // 1500 − 30 × 2
+  assert.equal(t.setFx.counterCap, 1500 - (1500 - kvGia("KV-TH-002")) * Math.min(2, TINH));
   const hd = SET.bo.find((b) => b.id === "hon_don")!.an;
   const both = [{ ...kv("MU", "KV-TH-002"), kham: [{ loai: "an", ma: hd } as InlayLine] }, ...["AO", "DA", "GI"].map((o) => red(`TB-${o}-058`, { kham: [{ loai: "an", ma: hd }] }))];
   assert.equal(gearStats(both, LV, []).setFx.counterCap, 1400); // Hỗn Độn mốc 4 ×1,4 thấp hơn 1470
   const lieu = gearStats([kv("KI", "KV-CO-008")], LV, []);
-  assert.equal(lieu.bonuses.monsterDamage, 40);
+  assert.equal(lieu.bonuses.monsterDamage, kvGia("KV-CO-008"));
+});
+
+test("khí văn kích: tối đa luat.khiVanKichToiDa khí văn khác nhau có trên đồ; không chọn thì lấy theo thứ tự món", () => {
+  const items = [
+    red("TB-KI-058", { khiLinhKn: MAX_KN, khiVan: ["KV-CO-001", "KV-CO-002", "KV-CO-003"] }),
+    red("TB-BT-058", { khiLinhKn: MAX_KN, khiVan: ["KV-CO-004"] }),
+  ];
+  const all = ["KV-CO-001", "KV-CO-002", "KV-CO-003", "KV-CO-004"];
+  const d = gearStats(items, LV, []);
+  assert.deepEqual(Object.keys(d.khiVan), all);
+  assert.deepEqual(d.khiVanKich, all.slice(0, KICH));
+  if (KICH < 4) assert.equal(d.setFx.comboThirdBonus, undefined); // khí văn thứ 4 chỉ để sưu tầm
+  const c = gearStats(items, LV, [], undefined, undefined, ["KV-CO-004", "KV-CO-003"]);
+  assert.deepEqual([c.setFx.comboThirdBonus, c.setFx.openerBonus, c.setFx.shieldBreakBonus], [kvGia("KV-CO-004"), kvGia("KV-CO-003"), undefined]);
+  assert.deepEqual(gearStats(items, LV, [], undefined, undefined, []).setFx, {});
+  assert.throws(() => gearStats(items, LV, [], undefined, undefined, all.concat(["KV-CO-005"]).slice(0, KICH + 1)));
+  assert.throws(() => gearStats(items, LV, [], undefined, undefined, ["KV-TH-001"])); // không có trên đồ
+  assert.throws(() => gearStats(items, LV, [], undefined, undefined, ["KV-CO-003", "KV-CO-003"]));
 });
 
 test("tẩy luyện: đổi loại chỉ số phụ trong 4 loại của ô; Tu rèn chọn thẳng", () => {
@@ -72,12 +94,21 @@ test("ngọc song hệ: mỗi hệ 60%, cần hai hệ tương sinh hoặc tươ
   assert.throws(() => gearStats([red("TB-AO-058", { kham: [{ loai: "phach", ma: "NG-PH-001" }] })], LV, [])); // ô thủ
 });
 
-test("danh khí: Ý của khí hình ×1,5 không chiếm dòng khảm, cộng danh văn; không khảm thêm Ý châu", () => {
+test("danh khí: Ý của khí hình nhân luat.danhKhiYHeSo, không chiếm dòng khảm, cộng danh văn; không khảm thêm Ý châu", () => {
   assert.deepEqual(danhKhiOf("TB-KI-061"), { khiHinh: "kiem", yChau: "NG-YC-001" });
   assert.equal(danhKhiOf("TB-KI-058"), null);
-  assert.deepEqual(gearStats([red("TB-KI-061")], LV, []).skillMods, { can_don: { shieldPierce: 225, critCooldownCut: 10 } });
+  const yOf = (kieu: string, loai: "can_don" | "hoi_phuc") => {
+    const ma = danhKhiOf(kieu)!.yChau;
+    const base = gearStats([red("TB-KI-058", { kham: [{ loai: "y_chau", ma }] })], LV, []).skillMods[loai]!;
+    return scaleSkillMod(base, LK.luat.danhKhiYHeSo);
+  };
+  const kiem = yOf("TB-KI-061", "can_don");
+  assert.deepEqual(gearStats([red("TB-KI-061")], LV, []).skillMods, { can_don: { ...kiem, critCooldownCut: 10 } });
+  if (LK.luat.danhKhiYHeSo === 1500) assert.equal(kiem.shieldPierce, 225);
   const cam = gearStats([red("TB-KI-068")], LV, []).skillMods.hoi_phuc!;
-  assert.deepEqual([cam.manaCost, cam.overhealShield, cam.cleanseBurn], [850, 750, true]); // mana ×0,9 → ×0,85
+  const camY = yOf("TB-KI-068", "hoi_phuc");
+  assert.deepEqual([cam.manaCost, cam.overhealShield, cam.cleanseBurn], [camY.manaCost, camY.overhealShield, true]);
+  if (LK.luat.danhKhiYHeSo === 1500) assert.deepEqual([cam.manaCost, cam.overhealShield], [850, 750]); // mana ×0,9 → ×0,85
   assert.throws(() => gearStats([red("TB-KI-061", { kham: [{ loai: "y_chau", ma: "NG-YC-001" }] })], LV, []));
   assert.equal(LK.danh_khi.length, 10);
   for (const d of LK.danh_khi) assert.ok(gearStats([red(d.ma_vp)], LV, []).skillMods, d.ma_vp);

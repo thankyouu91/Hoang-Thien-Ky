@@ -78,9 +78,14 @@ export interface GearStats {
   board?: BoardResult;
   /** Hiệu ứng hành vi và khắc chế của set và khí văn theo người mặc (sim UnitSpec.setFx). */
   setFx: SetFx;
-  /** Khí văn đang có và số lần được tính (tối đa luat.khiVanTinhToiDa mỗi khí văn). */
+  /** Khí văn có trên đồ đang mặc và số lần được tính (tối đa luat.khiVanTinhToiDa mỗi khí văn). */
   khiVan: Record<string, number>;
+  /** Khí văn đang kích (có tác dụng): tối đa luat.khiVanKichToiDa khí văn khác nhau; các ô còn lại để sưu tầm. */
+  khiVanKich: string[];
 }
+
+/** Số khí văn kích tối đa (luyen_khi.json luat.khiVanKichToiDa; khi dữ liệu chưa có khóa thì lấy 3 theo GDD phần 13). */
+const KICH_TOI_DA = (LUYEN_KHI as { khiVanKichToiDa?: number }).khiVanKichToiDa ?? 3;
 
 interface SlotRow { id: string; chinh: { stat: string; gia_tri: number }; phu: { stat: string; gia_tri: number }; ngoc: string }
 interface RarityRow { id: string; he_so: number; dong_kham: number }
@@ -252,9 +257,14 @@ export function softCap(raw: number, knee: number, max: number): number {
 /**
  * Cộng chỉ số chính, phụ và ngọc của các món đang mặc (mỗi ô tối đa một món), rồi set; `board` thêm món và cộng hưởng cho set.
  * `mainElements` = hệ chủ các công pháp mang theo, để xét ràng buộc mốc 7 (không có thì không xét).
+ * `khiVanKich` = khí văn người chơi chọn kích trước trận; không chọn thì lấy các khí văn đầu tiên có trên đồ, theo thứ tự món.
  */
-export function gearStats(items: EquipItem[], level: number, roots: Element[], board?: BoardSetup, mainElements?: Element[]): GearStats {
-  const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {}, khiVan: {} };
+export function gearStats(
+  items: EquipItem[], level: number, roots: Element[], board?: BoardSetup, mainElements?: Element[], khiVanKich?: string[],
+): GearStats {
+  const out: GearStats = {
+    hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {}, khiVan: {}, khiVanKich: [],
+  };
   const used: string[] = [];
   const pieces: Record<string, number> = {}; // id bộ → số món còn độ bền mang ấn bộ đó
   const gemDamage: Partial<Record<Element, number>> = {}; // tổng thô từ ngọc ô công, trước trần mềm
@@ -327,8 +337,19 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[], b
   }
   // Ý châu (và Ý của danh khí) đứng trước set nếu cùng loại chiêu có cùng khóa.
   for (const t of Object.keys(acc.mods) as SkillType[]) out.skillMods[t] = { ...acc.mods[t], ...out.skillMods[t] };
+  // Khí văn kích: khác nhau, có trên đồ, không quá KICH_TOI_DA.
+  const present = Object.keys(khiVan);
+  const kich = khiVanKich ?? present.slice(0, KICH_TOI_DA);
+  if (kich.length > KICH_TOI_DA) throw new Error(`Chỉ kích được ${KICH_TOI_DA} khí văn`);
+  kich.forEach((ma, i) => {
+    if (present.indexOf(ma) < 0) throw new Error(`Khí văn ${ma} không có trên đồ đang mặc`);
+    if (kich.indexOf(ma) !== i) throw new Error(`Khí văn ${ma} kích hai lần`);
+  });
+  out.khiVanKich = kich.slice();
+  const active: Record<string, number> = {};
+  for (const ma of kich) active[ma] = khiVan[ma];
   // Khí văn: các trường riêng với set, trừ trần khắc (Hỗn Độn và Ngự Khắc Văn) thì lấy mức thấp hơn.
-  const kv = khiVanFx(khiVan);
+  const kv = khiVanFx(active);
   out.setFx = { ...acc.setFx, ...kv.setFx };
   if (acc.setFx.counterCap !== undefined && kv.setFx.counterCap !== undefined) out.setFx.counterCap = Math.min(acc.setFx.counterCap, kv.setFx.counterCap);
   if (kv.monsterDamage) out.bonuses.monsterDamage = (out.bonuses.monsterDamage ?? 0) + kv.monsterDamage;
@@ -371,10 +392,13 @@ function addSetStats(out: GearStats, bo: string, params: Record<string, number |
   }
 }
 
-/** Áp bộ đồ (và Đạo Cơ Bàn nếu có) vào một đơn vị trong trận; linh căn lấy từ `element` và `element2` của đơn vị. */
-export function withGear(spec: UnitSpec, items: EquipItem[], board?: BoardSetup): UnitSpec {
+/**
+ * Áp bộ đồ (và Đạo Cơ Bàn nếu có) vào một đơn vị trong trận; linh căn lấy từ `element` và `element2` của đơn vị.
+ * `khiVanKich`: khí văn chọn kích trước trận (xem gearStats).
+ */
+export function withGear(spec: UnitSpec, items: EquipItem[], board?: BoardSetup, khiVanKich?: string[]): UnitSpec {
   const roots = spec.element2 ? [spec.element, spec.element2] : [spec.element];
-  const g = gearStats(items, spec.level, roots, board, spec.techniques.map((t) => t.element));
+  const g = gearStats(items, spec.level, roots, board, spec.techniques.map((t) => t.element), khiVanKich);
   const bonuses: Partial<Record<BuffStat, number>> = { ...spec.bonuses };
   for (const k of Object.keys(g.bonuses) as BuffStat[]) bonuses[k] = (bonuses[k] ?? 0) + (g.bonuses[k] ?? 0);
   const resist: Partial<Record<Element, number>> = { ...spec.resist };
