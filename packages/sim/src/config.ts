@@ -159,6 +159,12 @@ export function maxGradeAtLevel(level: number): number {
 export const RESIST_CAP = 200;
 
 /**
+ * Đánh hệ bị khắc: sau mọi nguồn làm mềm (set Hỗn Độn, Ngự Khắc Văn, kháng), hệ số khắc nhân kháng vẫn không dưới ×1,2
+ * (tab Trang bị, phần 13: khí văn "không xóa được khắc"; đề xuất 2026-11-04). Chưa có trong tham_so.json.
+ */
+export const COUNTER_FLOOR = 1200;
+
+/**
  * Chỉ số nhân vật mà buff linh căn, tài năng, trang bị và set cộng vào, theo phần nghìn trừ các chỉ số ghi tick.
  * shieldTaken: khiên nhận được; monsterDamage: sát thương lên dị thú và boss PvE; armorPen: cộng vào xuyên giáp Kim của công pháp;
  * paralyzeTicks: cộng tick vào tê liệt khi chí mạng của Lôi; formationTicks, channelTicks: cộng tick vào thời gian bày trận,
