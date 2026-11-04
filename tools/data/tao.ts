@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   SKILL_TYPES, VARIANTS, TALENTS, SKILL_SPECS, ALLY_SKILLS, VARIANT_STATS, LINH_EFFECT_POWER, ELEMENT_STATS, ELEMENT_EFFECTS,
-  ROOT_BUFFS, COMBO, BASE_CRIT_PER_MILLE, RESIST_CAP, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, CAST_FLOOR,
+  ROOT_BUFFS, COMBO, BASE_CRIT_PER_MILLE, RESIST_CAP, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, CAST_FLOOR, ARTIFACT_RULES,
   elementMultiplier, comboRelation, parentOf, baseElement, isOpposite, generatesEither, beatsEither,
   type Element, type SkillType, type Variant,
 } from "@ktlp/sim";
@@ -123,7 +123,17 @@ function fmtFor(kind: B.Kind, v: unknown): Fmt {
 }
 const box = (x: In): Box => (x !== null && typeof x === "object" ? x : { v: x ?? null });
 
-function table(def: B.TableDef, rows: Record<string, In>[], more: Partial<SheetOut> = {}): SheetOut {
+/** Một dòng của sheet Tham số (dùng chung với them.ts khi thêm nhóm vào file có sẵn). */
+export function paramCells(group: string, key: string, name: string, v: number | string, kieu: string, muc: string, src: B.Src): Cell[] {
+  const srcLabel: Record<B.Src, string> = { gdd: "GDD", code: "code", de_xuat: "đề xuất", cong_thuc: "công thức" };
+  const fmt: Fmt = kieu === "%" && typeof v === "number" ? pctFmt(v) : typeof v === "number" && Math.abs(v) >= 1000 && Number.isInteger(v) ? "int" : "general";
+  return [
+    { v: group }, { v: key }, { v: name }, { v, fill: B.SRC_FILL[src], fmt }, { v: kieu },
+    { v: muc ? `Mục ${muc}` : "" }, { v: srcLabel[src] },
+  ];
+}
+
+export function table(def: B.TableDef, rows: Record<string, In>[], more: Partial<SheetOut> = {}): SheetOut {
   const out: (Cell | null)[][] = [def.cols.map((c) => ({ v: c.header, fill: "tieu_de", bold: true, wrap: true }))];
   for (const r of rows) {
     out.push(def.cols.map((c) => {
@@ -171,14 +181,9 @@ export function build(petCsv: string): SheetOut[] {
 
   // Tham số
   const paramRows: (Cell | null)[][] = [B.PARAM_COLS.map((h) => ({ v: h, fill: "tieu_de" as const, bold: true }))];
-  const srcLabel: Record<B.Src, string> = { gdd: "GDD", code: "code", de_xuat: "đề xuất", cong_thuc: "công thức" };
   const pushParam = (group: string, key: string, name: string, v: number | string, kieu: string, muc: string, src: B.Src) => {
     if (typeof v === "number") param[key] = v;
-    const fmt: Fmt = kieu === "%" && typeof v === "number" ? pctFmt(v) : typeof v === "number" && Math.abs(v) >= 1000 && Number.isInteger(v) ? "int" : "general";
-    paramRows.push([
-      { v: group }, { v: key }, { v: name }, { v, fill: B.SRC_FILL[src], fmt }, { v: kieu },
-      { v: muc ? `Mục ${muc}` : "" }, { v: srcLabel[src] },
-    ]);
+    paramRows.push(paramCells(group, key, name, v, kieu, muc, src));
   };
   const extra = (g: string) => N.PARAMS_EXTRA.filter((p) => p[0] === g).forEach((p) => pushParam(...p));
   extra("kinh_te");
@@ -187,8 +192,8 @@ export function build(petCsv: string): SheetOut[] {
   pushParam("cong_phap", "resistCap", "Kháng hệ (từ ngọc) giảm tối đa", RESIST_CAP / 1000, "%", "", "code");
   extra("roi_do");
   extra("thu_cuoi");
-  const codeObjs: Record<keyof typeof N.CODE_PARAMS, Record<string, number | boolean>> = { SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES };
-  for (const g of ["SKILL_RULES", "CAST_FLOOR", "BATTLE", "UNIT_CURVE", "TALENT_RULES"] as const) {
+  const codeObjs: Record<keyof typeof N.CODE_PARAMS, Record<string, number | boolean>> = { SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES };
+  for (const g of ["SKILL_RULES", "CAST_FLOOR", "BATTLE", "UNIT_CURVE", "TALENT_RULES", "ARTIFACT_RULES"] as const) {
     const obj = codeObjs[g];
     const seen = new Set<string>();
     for (const [key, name, kieu, muc, src] of N.CODE_PARAMS[g]) {
@@ -509,7 +514,7 @@ function noteSheet(): SheetOut {
     [],
     t("Các sheet", { bold: true }),
     ...[
-      ["Tham số", "Hằng số chung: kinh tế, ghép công pháp, rơi đồ, thú cưỡi, và các nhóm trận đấu lấy từ code (SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES)"],
+      ["Tham số", "Hằng số chung: kinh tế, ghép công pháp, rơi đồ, thú cưỡi, và các nhóm trận đấu lấy từ code (SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES)"],
       ["Hệ", "12 hệ: hiệu ứng đặc trưng, chỉ số kèm, buff luyện đúng hệ (GDD mục 3, 9)"],
       ["Khắc chế", "Ma trận 12 × 12 hệ số sát thương (GDD mục 8)"],
       ["Quan hệ tổ hợp, Tổ hợp", "6 quan hệ với hệ số t và ma trận 12 × 12 quan hệ hệ chủ – hệ phụ (GDD mục 9)"],

@@ -29,7 +29,7 @@ function readTable(def: B.TableDef, s: SheetIn): RawRow[] {
   for (const c of def.cols) {
     const i = header.indexOf(c.header);
     if (i < 0) {
-      if (c.json === false) continue; // cột chỉ để xem, thiếu cũng được
+      if (c.json === false || c.optional || c.nullable) continue; // cột chỉ để xem hoặc được bỏ trống, thiếu cũng được
       throw new Error(`Sheet "${def.sheet}" thiếu cột "${c.header}"`);
     }
     at[c.key] = i;

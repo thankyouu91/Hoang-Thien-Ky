@@ -220,6 +220,7 @@
       "ma_vp": "NG-AN-001",
       "ten": "Ấn Tụ Bảo",
       "bo": "tu_bao",
+      "he": "kim",
       "ban_cho": true,
       "nguon": ["linh_thach_quat","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -227,6 +228,7 @@
       "ma_vp": "NG-AN-002",
       "ten": "Ấn Bách Thảo",
       "bo": "bach_thao",
+      "he": "moc",
       "ban_cho": true,
       "nguon": ["duoc_coc","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -234,6 +236,7 @@
       "ma_vp": "NG-AN-003",
       "ten": "Ấn Bàn Thạch",
       "bo": "ban_thach",
+      "he": "tho",
       "ban_cho": true,
       "nguon": ["khoang_mach_dong","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -241,6 +244,7 @@
       "ma_vp": "NG-AN-004",
       "ten": "Ấn Liệp Thú",
       "bo": "liep_thu",
+      "he": "phong",
       "ban_cho": true,
       "nguon": ["thu_lam","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -248,6 +252,7 @@
       "ma_vp": "NG-AN-005",
       "ten": "Ấn Thiết Kỵ",
       "bo": "thiet_ky",
+      "he": "phong",
       "ban_cho": true,
       "nguon": ["co_chien_truong","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -255,6 +260,7 @@
       "ma_vp": "NG-AN-006",
       "ten": "Ấn Văn Uyên",
       "bo": "van_uyen",
+      "he": "quang",
       "ban_cho": true,
       "nguon": ["tang_kinh_dong","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -262,6 +268,7 @@
       "ma_vp": "NG-AN-007",
       "ten": "Ấn Ngọc Tủy",
       "bo": "ngoc_tuy",
+      "he": "thuy",
       "ban_cho": true,
       "nguon": ["ngoc_tuy_dong","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -269,6 +276,7 @@
       "ma_vp": "NG-AN-008",
       "ten": "Ấn Linh Tuyền",
       "bo": "linh_tuyen",
+      "he": "thuy",
       "ban_cho": true,
       "nguon": ["linh_tuyen_dong","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -276,6 +284,7 @@
       "ma_vp": "NG-AN-009",
       "ten": "Ấn Băng Phách",
       "bo": "bang_phach",
+      "he": "cuc_han",
       "ban_cho": true,
       "nguon": ["bang_phach_cung","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -283,6 +292,7 @@
       "ma_vp": "NG-AN-010",
       "ten": "Ấn Lôi Trì",
       "bo": "loi_tri",
+      "he": "loi",
       "ban_cho": true,
       "nguon": ["loi_tri","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -290,6 +300,7 @@
       "ma_vp": "NG-AN-011",
       "ten": "Ấn Ngự Thú",
       "bo": "ngu_thu",
+      "he": "moc",
       "ban_cho": true,
       "nguon": ["yeu_thu_sao_huyet","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -297,6 +308,7 @@
       "ma_vp": "NG-AN-012",
       "ten": "Ấn Cổ Tông",
       "bo": "co_tong",
+      "he": "am_lanh",
       "ban_cho": true,
       "nguon": ["co_tong_di_tich","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -304,6 +316,7 @@
       "ma_vp": "NG-AN-013",
       "ten": "Ấn Đan Tiên",
       "bo": "dan_tien",
+      "he": "hoa",
       "ban_cho": true,
       "nguon": ["dan_tien_dong_phu","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -311,6 +324,7 @@
       "ma_vp": "NG-AN-014",
       "ten": "Ấn Thiên Công",
       "bo": "thien_cong",
+      "he": "hoa",
       "ban_cho": true,
       "nguon": ["luyen_khi_di_chi","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -318,6 +332,7 @@
       "ma_vp": "NG-AN-015",
       "ten": "Ấn Huyết Ảnh",
       "bo": "huyet_anh",
+      "he": "cuc_am",
       "ban_cho": true,
       "nguon": ["huyet_sat_ma_quat","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -325,6 +340,7 @@
       "ma_vp": "NG-AN-016",
       "ten": "Ấn Độ Kiếp",
       "bo": "do_kiep",
+      "he": "loi",
       "ban_cho": true,
       "nguon": ["thien_loi_dai","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -332,6 +348,7 @@
       "ma_vp": "NG-AN-017",
       "ten": "Ấn Vạn Kiếm",
       "bo": "van_kiem",
+      "he": "kim",
       "ban_cho": true,
       "nguon": ["van_kiem_trung","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -339,6 +356,7 @@
       "ma_vp": "NG-AN-018",
       "ten": "Ấn Chu Thiên",
       "bo": "chu_thien",
+      "he": "tho",
       "ban_cho": false,
       "nguon": ["tien_nhan_dong_phu","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -346,6 +364,7 @@
       "ma_vp": "NG-AN-019",
       "ten": "Ấn Phá Quân",
       "bo": "pha_quan",
+      "he": "cuc_duong",
       "ban_cho": false,
       "nguon": ["thuong_co_chien_truong","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
@@ -353,6 +372,7 @@
       "ma_vp": "NG-AN-020",
       "ten": "Ấn Hỗn Độn",
       "bo": "hon_don",
+      "he": null,
       "ban_cho": false,
       "nguon": ["hon_don_bi_canh","doi_cong_hien_khi_tong_giu_bi_canh"]
     }

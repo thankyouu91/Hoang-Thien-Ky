@@ -343,7 +343,7 @@ export const PARAMS_EXTRA: [string, string, string, number | string, string, str
 ];
 
 /** Mô tả tham số lấy từ code: [khóa, tên, kiểu, mục GDD (trống = chỉ có trong code), nguồn]. */
-export const CODE_PARAMS: Record<"SKILL_RULES" | "CAST_FLOOR" | "BATTLE" | "UNIT_CURVE" | "TALENT_RULES", [string, string, string, string, Src][]> = {
+export const CODE_PARAMS: Record<"SKILL_RULES" | "CAST_FLOOR" | "BATTLE" | "UNIT_CURVE" | "TALENT_RULES" | "ARTIFACT_RULES", [string, string, string, string, Src][]> = {
   /** Sàn sau mọi phần giảm (Tu trận, set, Ý châu); đề xuất của phiên set đồ 2026-11-03, sim c72b41f. */
   CAST_FLOOR: [
     ["formationTicks", "Trận pháp: bày trận ngắn nhất sau mọi phần giảm (Tu trận, set, Ý châu)", "giây", "", "de_xuat"],
@@ -407,5 +407,16 @@ export const CODE_PARAMS: Record<"SKILL_RULES" | "CAST_FLOOR" | "BATTLE" | "UNIT
     ["satThuStealthTicks", "Sát thủ: ẩn thân đầu trận", "giây", "6", "gdd"],
     ["satThuDashCooldownCut", "Sát thủ: thân pháp hồi chiêu giảm", "%", "6", "gdd"],
     ["tuDuocHealTaken", "Tu dược: hồi máu nhận", "%", "6", "gdd"],
+  ],
+  /** Điều kiện kích hoạt pháp bảo (GDD tab Trang bị; sim f656195). Hai tầm "kề bên", "trong tầm" là đề xuất. */
+  ARTIFACT_RULES: [
+    ["adjacentRange", "Pháp bảo: \"kề bên\", \"đứng sát\" là trong khoảng này", "ô", "", "de_xuat"],
+    ["nearRange", "Pháp bảo Hồ lô: \"trong tầm\" là trong khoảng này", "ô", "", "de_xuat"],
+    ["luanMinEnemies", "Luân: số kẻ địch cận chiến đứng sát tối thiểu", "số", "", "gdd"],
+    ["chauHits", "Châu: số đòn tầm xa kế tiếp", "số", "", "gdd"],
+    ["thapAllies", "Tháp: số đồng đội gần nhất được che", "số", "", "gdd"],
+    ["dinhHealOfMax", "Đỉnh: kích hoạt khi lượng hồi từ phần này của máu tối đa", "%", "", "gdd"],
+    ["chuongMinControlled", "Chuông: số đồng đội đang bị khống chế tối thiểu", "số", "", "gdd"],
+    ["anDashDamage", "Ấn: đòn lướt của địch còn lại", "%", "", "gdd"],
   ],
 };

@@ -3,7 +3,7 @@
 //   Cần xem: chỗ dữ liệu khác code đang chạy (code chưa đọc JSON), khác mốc trong GDD, hoặc Excel chưa tính lại công thức.
 import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, ROOT_BUFFS, GRADE_POW, LINH_EFFECT_POWER,
-  SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, BASE_CRIT_PER_MILLE,
+  SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES, BASE_CRIT_PER_MILLE,
   elementMultiplier, comboRelation, composeTechnique, mul, ONE, type Element, type SkillType, type Variant,
 } from "@ktlp/sim";
 import { existsSync, readFileSync } from "node:fs";
@@ -231,6 +231,36 @@ export function kiem(d: Any, raw: Raw): Report {
     }
   }
 
+  // Đạo Cơ Bàn: lục giác 19 ô bán kính 2, ô tâm chỉ nhận ấn, mạch đủ 6 quan hệ tổ hợp, hệ ấn hợp lệ
+  const dcb = d["dao_co_ban.json"];
+  if (dcb) {
+    const o = dcb.o as Any[];
+    const dist = (x: Any) => Math.max(Math.abs(x.q), Math.abs(x.r), Math.abs(x.q + x.r));
+    const ring: Record<string, number> = { tam: 0, trong: 1, canh: 2, goc: 2 };
+    const near = (a: Any, b: Any) => [[1, 0], [-1, 0], [0, 1], [0, -1], [1, -1], [-1, 1]].some(([dq, dr]) => a.q + dq === b.q && a.r + dr === b.r);
+    const bad: string[] = [];
+    if (o.length !== 19) bad.push(`${o.length} ô, cần 19`);
+    if (new Set(o.map((x) => x.ma)).size !== o.length) bad.push("mã ô trùng");
+    if (new Set(o.map((x) => `${x.q},${x.r}`)).size !== o.length) bad.push("tọa độ trùng");
+    for (const x of o) {
+      if (ring[x.vong] === undefined || dist(x) !== ring[x.vong]) bad.push(`${x.ma}: vòng ${x.vong} không khớp tọa độ (${x.q}, ${x.r})`);
+      const inner = o.filter((y) => y.vong === "trong" && near(x, y)).length;
+      if (x.vong === "canh" && inner !== 2) bad.push(`${x.ma}: ô cạnh kề ${inner} ô vòng trong, cần 2`);
+      if (x.vong === "goc" && inner !== 1) bad.push(`${x.ma}: ô góc kề ${inner} ô vòng trong, cần 1`);
+      const accept = [...(x.chi_nhan ?? [])].sort().join(",");
+      if (x.vong === "tam" ? accept !== "an" : accept !== "an,ngoc") bad.push(`${x.ma}: nhận "${accept}"`);
+    }
+    const rels = Object.keys(d["quan_he_to_hop.json"]);
+    const mach = dcb.mach ?? {};
+    const noMach = rels.filter((r) => !(r in mach));
+    if (noMach.length) bad.push(`thiếu mạch cho quan hệ ${noMach.join(", ")}`);
+    const machKinds = new Set(Object.values(mach));
+    for (const c of dcb.cong_huong ?? []) if (!machKinds.has(c.mach)) bad.push(`cộng hưởng ${c.ten}: mạch lạ ${c.mach}`);
+    for (const a of d["ngoc.json"].an_bo as Any[]) if (a.he !== undefined && a.he !== null && !he[a.he]) bad.push(`ấn ${a.ma_vp}: hệ lạ ${a.he}`);
+    if (bad.length) errors.push(`Đạo Cơ Bàn: ${bad.join("; ")}`);
+    else notes.push(`Đạo Cơ Bàn: 19 ô lục giác bán kính 2 (ô cạnh kề 2, ô góc kề 1 ô vòng trong), ${(dcb.cong_huong ?? []).length} cộng hưởng, mạch đủ ${rels.length} quan hệ tổ hợp`);
+  }
+
   // Chỗ khác code đang chạy (code chưa đọc JSON thì phải sửa tay theo file)
   const diff: string[] = [];
   const cmp = (label: string, file: number | boolean | undefined, code: number | boolean | undefined) => {
@@ -250,7 +280,7 @@ export function kiem(d: Any, raw: Raw): Report {
     cmp(`Hệ ${e}.rootBuff.value`, he[e]?.rootBuff?.value, ROOT_BUFFS[e].value);
   }
   const ts = d["tham_so.json"];
-  const groups = { SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES } as Record<string, Record<string, number | boolean>>;
+  const groups = { SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES } as Record<string, Record<string, number | boolean>>;
   for (const [g, obj] of Object.entries(groups)) for (const [k, v] of Object.entries(obj)) cmp(`${g}.${k}`, ts[g]?.[k], v);
   cmp("cong_phap.baseCrit", ts.cong_phap?.baseCrit, BASE_CRIT_PER_MILLE);
   if (diff.length) warnings.push(`Khác số đang chạy trong packages/sim (${diff.length} chỗ): ${diff.join("; ")}`);

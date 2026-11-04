@@ -59,7 +59,8 @@ export const PARTS: PartDef[] = [
     c("ban_cho", "Bán ở chợ", "bool"), nguon,
   ]),
   T("Ấn bộ", "ngoc.json", "an_bo", "ma_vp", [
-    c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text"), c("bo", "Bộ", "text"), c("ban_cho", "Bán ở chợ", "bool"), nguon,
+    c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text"), c("bo", "Bộ", "text"),
+    c("he", "Hệ ấn (trống: không hệ)", "text", { nullable: true }), c("ban_cho", "Bán ở chợ", "bool"), nguon,
   ]),
   T("Set", "set.json", "bo", "id", [
     c("id", "Mã bộ", "text"), c("ten", "Tên", "text"), c("nguon", "Bí cảnh ra ấn", "text", { width: 20 }), c("chu_de", "Chủ đề", "text"),
@@ -69,6 +70,21 @@ export const PARTS: PartDef[] = [
   T("Set mốc", "set.json", "", "bo", [
     c("bo", "Mã bộ", "text"), c("so", "Số món", "int"), c("loai", "Loại hiệu ứng", "text"),
     c("mo_ta", "Mô tả", "text", { width: 60 }), c("tham_so", "Tham số (đơn vị code)", "kv", { width: 50 }),
+  ]),
+  // Đạo Cơ Bàn: bàn ô lục giác đặt ấn bộ và ngọc hệ để tính thêm món set và cộng hưởng (GDD tab Trang bị phần 8, rev 28)
+  T("Đạo Cơ Bàn", "dao_co_ban.json", "o", "ma", [
+    c("ma", "Mã ô", "text", { width: 7 }), c("vong", "Vòng (tam, trong, canh, goc)", "text", { width: 12 }),
+    c("q", "q", "int", { width: 5 }), c("r", "r", "int", { width: 5 }),
+    c("mo", "Mở ở cảnh giới", "text", { width: 14 }), c("chi_nhan", "Nhận (an: ấn bộ, ngoc: ngọc hệ)", "list", { width: 16 }),
+  ]),
+  T("Cộng hưởng", "dao_co_ban.json", "cong_huong", "mach", [
+    c("mach", "Mạch", "text", { width: 8 }), c("ten", "Tên", "text"), c("heSoMoc2", "Nhân số ở mốc 2", "mul", { width: 10 }),
+    c("khangHe", "Kháng hệ đó", "pct", { optional: true, width: 9 }), c("manaMax", "Mana tối đa", "pct", { optional: true, width: 9 }),
+    c("mo_ta", "Tác dụng", "text", { width: 60 }),
+  ]),
+  T("Mạch cộng hưởng", "dao_co_ban.json", "", "quan_he", [
+    c("quan_he", "Quan hệ tổ hợp (mã)", "text", { width: 14 }), c("mach", "Mạch", "text", { width: 8 }),
+    c("ten", "Tên mạch", "text", { json: false }), c("mau", "Gợi ý màu", "text", { json: false, width: 16 }),
   ]),
   T("Pháp bảo loại", "phap_bao.json", "loai", "id", [
     c("ma", "Mã ngắn", "text"), c("id", "Mã", "text"), c("ten", "Tên", "text"), c("khac_loai_chieu", "Khắc loại chiêu", "text"),
@@ -120,6 +136,12 @@ export const PARTS: PartDef[] = [
 ];
 const part = (sheet: string) => PARTS.find((p) => p.def.sheet === sheet)!;
 
+/** Loại mạch của Đạo Cơ Bàn: tên và gợi ý màu (chỉ để xem trong Excel). */
+export const MACH_INFO: Record<string, [string, string]> = {
+  thuan: ["Thuần", "trắng ngà"], sinh: ["Sinh", "xanh lục"], cuc: ["Cực", "tím"], trung: ["Trung", "xám"],
+  dut: ["Đứt (không phải mạch)", "đỏ, nét đứt"],
+};
+
 /** Thứ tự khóa cấp đầu của từng file, như data/trang_bi. */
 const TOP_ORDER: Record<string, string[]> = {
   "trang_bi.json": ["ghi_chu", "do_hiem", "o", "kieu"],
@@ -129,11 +151,12 @@ const TOP_ORDER: Record<string, string[]> = {
   "phap_bao.json": ["ghi_chu", "o", "loai", "mon", "tran_giao"],
   "phap_khi.json": ["ghi_chu", "o", "mon"],
   "vat_pham.json": ["ghi_chu", "phu", "dan", "nguyen_lieu"],
+  "dao_co_ban.json": ["ghi_chu", "o", "cong_huong", "mach", "luat"],
 };
 export const TB_FILES = Object.keys(TOP_ORDER);
 
 /** Luật lẻ trong các file: [file:đường dẫn, tên, kiểu]. */
-const LUAT: [string, string, string][] = [
+export const LUAT: [string, string, string][] = [
   ["set.json:moc[0]", "Mốc set thứ nhất (số món)", "số"],
   ["set.json:moc[1]", "Mốc set thứ hai (số món)", "số"],
   ["set.json:moc[2]", "Mốc set thứ ba (số món)", "số"],
@@ -147,6 +170,10 @@ const LUAT: [string, string, string][] = [
   ["phap_bao.json:o.ha_vi", "Ô pháp bảo ở Hạ vị", "số"],
   ["phap_bao.json:o.trung_vi_tro_len", "Ô pháp bảo từ Trung vị", "số"],
   ["phap_khi.json:o", "Ô pháp khí", "số"],
+  ["dao_co_ban.json:luat.banMonToiDaMoiBo", "Đạo Cơ Bàn: mỗi bộ tính thêm tối đa số món từ bàn (gồm ô tâm)", "số"],
+  ["dao_co_ban.json:luat.banMonTrenDoToiThieu", "Đạo Cơ Bàn: bộ cần ít nhất số món trên đồ đang mặc mới được tính thêm", "số"],
+  ["dao_co_ban.json:luat.banMoTuCap", "Đạo Cơ Bàn: mở từ cấp nhân vật", "số"],
+  ["dao_co_ban.json:luat.banTranLucChien", "Đạo Cơ Bàn: bàn đầy thêm tối đa lực chiến", "%"],
 ];
 
 // ---------- dựng lần đầu từ data/trang_bi ----------
@@ -172,7 +199,7 @@ function toCell(col: B.Col, v: unknown, unitCode: unknown): string | number | nu
 export function sourceRows(dir: URL): Record<string, Row[]> {
   if (!existsSync(new URL("trang_bi.json", dir))) return {};
   const src: Record<string, Record<string, unknown>> = {};
-  for (const f of TB_FILES) src[f] = JSON.parse(readFileSync(new URL(f, dir), "utf8"));
+  for (const f of TB_FILES) if (existsSync(new URL(f, dir))) src[f] = JSON.parse(readFileSync(new URL(f, dir), "utf8"));
   const rowOf = (p: PartDef, item: Record<string, unknown>): Row => {
     const row: Row = {};
     for (const col of p.def.cols) {
@@ -182,16 +209,19 @@ export function sourceRows(dir: URL): Record<string, Row[]> {
     return row;
   };
   const out: Record<string, Row[]> = {};
-  for (const p of PARTS) if (p.path) out[p.def.sheet] = (B.getPath(src[p.file], p.path) as Record<string, unknown>[]).map((it) => rowOf(p, it));
+  for (const p of PARTS) if (p.path && src[p.file]) out[p.def.sheet] = (B.getPath(src[p.file], p.path) as Record<string, unknown>[]).map((it) => rowOf(p, it));
   const moc = part("Set mốc");
   out[moc.def.sheet] = (src["set.json"].bo as { id: string; moc: Record<string, unknown>[] }[])
     .flatMap((b) => b.moc.map((m) => rowOf(moc, { bo: b.id, ...m })));
-  out["Luật trang bị"] = LUAT.map(([khoa, ten, kieu]) => {
+  const dcb = src["dao_co_ban.json"];
+  if (dcb) out["Mạch cộng hưởng"] = Object.entries(dcb.mach as Record<string, string>)
+    .map(([quan_he, mach]) => ({ quan_he, mach, ten: MACH_INFO[mach]?.[0] ?? null, mau: MACH_INFO[mach]?.[1] ?? null }));
+  out["Luật trang bị"] = LUAT.filter(([khoa]) => src[khoa.split(":")[0]]).map(([khoa, ten, kieu]) => {
     const [f, path] = khoa.split(":");
     const v = B.getPath(src[f], path) as number;
     return { khoa, ten, gia_tri: kieu === "%" ? v / 1000 : v, kieu };
   });
-  out["Ghi chú trang bị"] = TB_FILES.flatMap((f) => ((src[f].ghi_chu ?? []) as string[]).map((noi_dung, i) => ({ file: f, stt: i + 1, noi_dung })));
+  out["Ghi chú trang bị"] = TB_FILES.filter((f) => src[f]).flatMap((f) => ((src[f].ghi_chu ?? []) as string[]).map((noi_dung, i) => ({ file: f, stt: i + 1, noi_dung })));
   return out;
 }
 
@@ -212,7 +242,11 @@ export function assemble(rows: Record<string, Record<string, unknown>[]>): Recor
     if (!files[f] || !path) throw new Error(`Sheet "Luật trang bị": khóa lạ ${String(r.khoa)}`);
     B.setPath(files[f], path, r.gia_tri);
   }
-  for (const p of PARTS) if (p.path) B.setPath(files[p.file], p.path, rows[p.def.sheet]);
+  for (const p of PARTS) if (p.path && rows[p.def.sheet]) B.setPath(files[p.file], p.path, rows[p.def.sheet]);
+  // Đạo Cơ Bàn: quan hệ tổ hợp → loại mạch
+  if (rows["Mạch cộng hưởng"]) files["dao_co_ban.json"].mach = Object.fromEntries(rows["Mạch cộng hưởng"].map((m) => [m.quan_he, m.mach]));
+  // File chưa có sheet nào trong Excel (Đạo Cơ Bàn ở file cũ) thì không xuất
+  for (const f of TB_FILES) if (!PARTS.some((p) => p.file === f && rows[p.def.sheet])) delete files[f];
   const order = ["id", "ten", "nguon", "chu_de", "gan_voi", "than", "rang_buoc", "moc", "an"];
   files["set.json"].bo = (files["set.json"].bo as Record<string, unknown>[]).map((b) => {
     const moc = rows["Set mốc"].filter((m) => m.bo === b.id).map(({ bo: _, ...m }) => m);
@@ -221,6 +255,7 @@ export function assemble(rows: Record<string, Record<string, unknown>[]>): Recor
   });
   for (const [f, keys] of Object.entries(TOP_ORDER)) {
     const o = files[f];
+    if (!o) continue;
     files[f] = Object.fromEntries([...keys.filter((k) => k in o), ...Object.keys(o).filter((k) => !keys.includes(k))].map((k) => [k, o[k]]));
   }
   return files;

@@ -157,5 +157,15 @@
     "satThuStealthTicks": 60,
     "satThuDashCooldownCut": 200,
     "tuDuocHealTaken": 100
+  },
+  "ARTIFACT_RULES": {
+    "adjacentRange": 1000,
+    "nearRange": 4000,
+    "luanMinEnemies": 3,
+    "chauHits": 2,
+    "thapAllies": 3,
+    "dinhHealOfMax": 150,
+    "chuongMinControlled": 2,
+    "anDashDamage": 500
   }
 }
