@@ -53,8 +53,7 @@ test("tham số trận đấu khớp tham_so.json", () => {
   }
   assert.equal(BASE_CRIT_PER_MILLE, p.cong_phap.baseCrit);
   assert.equal(RESIST_CAP, p.cong_phap.resistCap);
-  const floor = (p.cong_phap as { counterFloor?: number }).counterFloor; // khóa mới ở tham_so (bang-so-lieu); chưa có thì giữ 1200
-  assert.equal(COUNTER_FLOOR, floor ?? 1200);
+  assert.equal(COUNTER_FLOOR, p.cong_phap.counterFloor);
 });
 
 test("phẩm: hệ số 1,25^(phẩm − 1) khớp pham.json", () => {
