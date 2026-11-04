@@ -24,7 +24,7 @@ Lệnh chỉ thay XML của đúng các ô đó, giữ nguyên định dạng, c
 node --experimental-strip-types --no-warnings tools/data/sua.ts --mau gdd "Kiểu trang bị" "TB-KI-*" khi_hinh ten_de_xuat
 ```
 
-Thêm cấu trúc mới (nhóm tham số, cột, sheet) vào file đang có mà không đụng ô cũ: viết một bước trong `tools/data/them.ts` rồi chạy nó. Chạy lại thì bỏ qua phần đã có. Các bước đã chạy: `artifact_rules`, `dao_co_ban`, `dao_co_ban_mo` (2026-11-04).
+Thêm cấu trúc mới (nhóm tham số, cột, sheet) vào file đang có mà không đụng ô cũ: viết một bước trong `tools/data/them.ts` rồi chạy nó. Chạy lại thì bỏ qua phần đã có. Các bước đã chạy: `artifact_rules`, `dao_co_ban`, `dao_co_ban_mo`, `tran_lan_2` (2026-11-04). Bước đổi số ghi số tuyệt đối, kèm đúng định dạng ô.
 
 ```
 node --experimental-strip-types --no-warnings tools/data/them.ts dao_co_ban
