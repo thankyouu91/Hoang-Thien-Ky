@@ -47,24 +47,24 @@ export interface Persona {
  * Luật chọn dáng (đề xuất, đọc từ trên xuống, gặp luật khớp thì dừng):
  * 1. Sát thủ đánh cận chiến, thân pháp: huyết tuyến.
  * 2. Âm tà (hệ chủ Âm lãnh, Cực âm) đánh tầm xa, khống chế, bùa chú: đầu lâu.
- * 3. Kim hệ hoặc cầm kiếm: diện rộng là mưa kiếm; bùa chú là cự kiếm; tầm xa, cận chiến quét là kiếm trận.
- * 4. Cầm đao, cận chiến quét hoặc diện rộng: đao khí chém ngang.
- * 5. Diện rộng theo hệ: Lôi thiên lôi giáng; Thổ, Cực hàn gai trồi; Phong lốc xoáy.
+ * 3. Diện rộng theo hệ: Lôi thiên lôi giáng; Thổ, Cực hàn gai trồi; Phong lốc xoáy (hệ rõ hơn vũ khí với chiêu vùng).
+ * 4. Kim hệ hoặc cầm kiếm: diện rộng là mưa kiếm; bùa chú là cự kiếm; tầm xa, cận chiến quét là kiếm trận.
+ * 5. Cầm đao, cận chiến quét hoặc diện rộng: đao khí chém ngang.
  * 6. Tu kim tiền đánh tầm xa: đồng tiền bay.
  */
 export function autoDang(skill: SkillId, element: ElementId, p: Persona = {}): Dang | null {
   const kiem = p.weapon === "kiem" || element === "kim";
   if (p.talent === "sat_thu" && (skill === "can_don" || skill === "than_phap" || skill === "can_quet")) return "huyet_tuyen";
   if ((element === "am_lanh" || element === "cuc_am") && (skill === "tam_xa" || skill === "khong_che" || skill === "bua_chu")) return "dau_lau";
-  if (kiem && skill === "dien_rong") return "mua_kiem";
-  if (kiem && skill === "bua_chu") return "cu_kiem";
-  if (kiem && (skill === "tam_xa" || skill === "can_quet")) return "kiem_tran";
-  if (p.weapon === "dao" && (skill === "can_quet" || skill === "dien_rong")) return "dao_khi";
   if (skill === "dien_rong") {
     if (element === "loi") return "thien_loi";
     if (element === "tho" || element === "cuc_han") return "gai_troi";
     if (element === "phong") return "loc_xoay";
   }
+  if (kiem && skill === "dien_rong") return "mua_kiem";
+  if (kiem && skill === "bua_chu") return "cu_kiem";
+  if (kiem && (skill === "tam_xa" || skill === "can_quet")) return "kiem_tran";
+  if (p.weapon === "dao" && (skill === "can_quet" || skill === "dien_rong")) return "dao_khi";
   if (p.talent === "tu_kim_tien" && skill === "tam_xa") return "tien_dong";
   return null;
 }

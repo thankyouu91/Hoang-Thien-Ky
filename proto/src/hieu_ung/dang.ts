@@ -230,7 +230,7 @@ function muaKiem(x: Ctx, s: Shot): boolean {
     const p = id !== undefined ? x.foot(id, c.tick) : inZone(z, s.seed, 50 + j);
     if (!p) continue;
     const tf = id !== undefined ? c.tick : c.tick - s.S(0.22) + rnd(s.seed, 90 + j) * s.S(0.34);
-    const hover = 230 + 20 * rnd(s.seed, 120 + j);
+    const hover = 150 + 25 * rnd(s.seed, 120 + j);
     if (t < show || t >= tf + s.S(0.9)) continue;
     if (t < tf - fall) {
       const k = ramp(t, show + (j / n) * (tf - fall - show) * 0.5, show + (j / n) * (tf - fall - show) * 0.5 + s.S(0.15));
@@ -269,12 +269,12 @@ function cuKiem(x: Ctx, s: Shot): boolean {
   windup(x, s, w0, t0, 0.8);
   if (t >= w0 && t < t0) {
     const q = (t - w0) / (t0 - w0);
-    sword(x, L.AIR, p.x, p.y, 230 - 30 * q + big, big, Math.PI / 2, col, easeOut(q / 0.4) * r.bright);
-    glow(e, L.AIR, p.x, p.y, 230 - 30 * q + big * 0.4, 30, r.main.glow, 0.5 * q * r.bright, 1, 0.4);
+    sword(x, L.AIR, p.x, p.y, 170 - 20 * q + big, big, Math.PI / 2, col, easeOut(q / 0.4) * r.bright);
+    glow(e, L.AIR, p.x, p.y, 170 - 20 * q + big * 0.4, 30, r.main.glow, 0.5 * q * r.bright, 1, 0.4);
     rune(e, L.GROUND, p.x, p.y, 34 * easeOut(q), 13 * easeOut(q), r.main.glow, 0.8 * q * r.bright, t * 0.05, q, 1, 1.2, 0.6);
   } else if (t >= t0 && t < c.tick) {
     const q = easeIn((t - t0) / Math.max(1, c.tick - t0));
-    const pz = 200 * (1 - q) + 26 * q;
+    const pz = 150 * (1 - q) + 26 * q;
     for (let i = 0; i < 3; i++) beam(e, L.AIR, p.x + (i - 1) * 9, p.y, pz + big + 70, p.x + (i - 1) * 9, p.y, pz + big, 1.2, r.main.glow, 0, 0.7 * r.bright, 1, 0.5, 0.6, 0.6);
     sword(x, L.AIR, p.x, p.y, pz + big, big, Math.PI / 2, col, r.bright);
   }
@@ -292,7 +292,7 @@ function cuKiem(x: Ctx, s: Shot): boolean {
       const len = (30 + 26 * rnd(s.seed, 310 + i)) * easeOut(a * 3);
       beam(e, L.GROUND, p.x, p.y, 0, p.x + Math.cos(ang) * len, p.y + Math.sin(ang) * len * 0.4, 0, 1.2, DARK, 0.8 * (1 - a), 0.2 * (1 - a), 0, 0, 0.6, 0.4);
     }
-    glow(e, L.AIR, p.x, p.y, BODY_Z, 40, r.main.glow, pulse(a, 0.04) * r.bright, 1, 0.4);
+    glow(e, L.AIR, p.x, p.y, BODY_Z, 34, r.main.glow, 0.55 * pulse(a, 0.04) * r.bright, 1, 0.1);
   }
   hits(x, s, 0.5, 1.3);
   return true;

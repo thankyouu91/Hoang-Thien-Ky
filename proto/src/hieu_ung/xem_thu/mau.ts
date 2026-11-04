@@ -28,7 +28,8 @@ export function sampleReplay(style: FxStyle, opts: { ult?: boolean } = {}): Repl
   // Người ra chiêu đội A (id 1) cùng hai đồng đội; bốn địch đội B. Cận chiến đứng sát địch, thân pháp lướt tới.
   const casterPos = melee ? 5400 : skill === "than_phap" ? 3600 : 3800;
   const units: ReplayUnit[] = [
-    unit(1, 0, 0, element, casterPos),
+    // Người ra chiêu cầm vũ khí hợp loại chiêu: cận chiến cầm kiếm, chiêu xa cầm trượng (dáng chiêu tự chọn theo vũ khí).
+    { ...unit(1, 0, 0, element, casterPos), look: { body: "nam_khoe", outfit: "dao_bao", hat: "ngoc_quan", weapon: MELEE.has(skill) || skill === "than_phap" || skill === "khong_che" ? "kiem" : "truong" } },
     unit(2, 0, 0, subs[0] ?? element, casterPos - 300),
     unit(3, 0, 1, subs[1] ?? "quang", casterPos - 1100),
     unit(101, 1, 0, "kim", 6200),
