@@ -231,6 +231,18 @@ export function kiem(d: Any, raw: Raw): Report {
     }
   }
 
+  // Trần mềm của ngọc: mức tính một nửa không vượt mức tối đa; tối đa kháng từ ngọc không vượt tổng kháng mọi nguồn
+  const tran = d["ngoc.json"]?.tran;
+  if (tran) {
+    const bad: string[] = [];
+    if (!(tran.satThuongMem <= tran.satThuongToiDa)) bad.push(`satThuongMem ${tran.satThuongMem} > satThuongToiDa ${tran.satThuongToiDa}`);
+    if (!(tran.khangMem <= tran.khangToiDa)) bad.push(`khangMem ${tran.khangMem} > khangToiDa ${tran.khangToiDa}`);
+    const cap = d["tham_so.json"].cong_phap?.resistCap;
+    if (cap !== undefined && tran.khangToiDa > cap) bad.push(`khangToiDa ${tran.khangToiDa} > resistCap ${cap}`);
+    if (bad.length) errors.push(`Ngọc, trần mềm: ${bad.join("; ")}`);
+    else notes.push(`Ngọc: trần mềm sát thương ${tran.satThuongMem / 10}% → tối đa ${tran.satThuongToiDa / 10}%, kháng ${tran.khangMem / 10}% → ${tran.khangToiDa / 10}%; tổng kháng mọi nguồn ${cap / 10}%`);
+  }
+
   // Đạo Cơ Bàn: lục giác 19 ô bán kính 2, ô tâm chỉ nhận ấn, mạch đủ 6 quan hệ tổ hợp, hệ ấn hợp lệ
   const dcb = d["dao_co_ban.json"];
   if (dcb) {

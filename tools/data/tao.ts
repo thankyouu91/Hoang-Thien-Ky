@@ -109,7 +109,7 @@ type Box = { v?: string | number | null; f?: string; src?: B.Src; fmt?: Fmt };
 type In = string | number | null | undefined | Box;
 
 /** Số chữ số lẻ cần cho % (0–2). */
-function pctFmt(v: number): Fmt {
+export function pctFmt(v: number): Fmt {
   for (const [d, f] of [[0, "pct"], [1, "pct1"]] as const) {
     const x = v * 100 * 10 ** d;
     if (Math.abs(x - Math.round(x)) < 1e-9) return f;
@@ -189,7 +189,7 @@ export function build(petCsv: string): SheetOut[] {
   extra("kinh_te");
   extra("cong_phap");
   pushParam("cong_phap", "baseCrit", "Chí mạng gốc", BASE_CRIT_PER_MILLE / 1000, "%", "9", "gdd");
-  pushParam("cong_phap", "resistCap", "Kháng hệ (từ ngọc) giảm tối đa", RESIST_CAP / 1000, "%", "", "code");
+  pushParam("cong_phap", "resistCap", "Tổng kháng một hệ từ mọi nguồn (ngọc, set, cộng hưởng, đan) tối đa", RESIST_CAP / 1000, "%", "", "de_xuat");
   extra("roi_do");
   extra("thu_cuoi");
   const codeObjs: Record<keyof typeof N.CODE_PARAMS, Record<string, number | boolean>> = { SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES };

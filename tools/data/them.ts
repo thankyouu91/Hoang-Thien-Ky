@@ -18,7 +18,7 @@ import { patchCell } from "./sua.ts";
 import * as B from "./bang.ts";
 import * as N from "./noi_dung.ts";
 import * as TB from "./trang_bi.ts";
-import { table, paramCells } from "./tao.ts";
+import { table, paramCells, pctFmt } from "./tao.ts";
 
 /** Gói xlsx đang sửa: đọc lại sau mỗi bước, thêm dòng, cột, sheet. */
 export class Workbook {
@@ -273,7 +273,78 @@ const daoCoBanMo: Step = (wb, log) => {
   log.push("Đạo Cơ Bàn: cột mở thành vị diện, cấp, cảnh giới (19 ô); cột Nhận dời ra cuối");
 };
 
-export const STEPS: Record<string, Step> = { artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo };
+/** Dòng (đếm từ 0) và cột của ô ở `header`, dòng có cột `idHeader` bằng `id`. */
+function locate(wb: Workbook, sheet: string, idHeader: string, id: string, header: string): [number, number] {
+  const s = wb.sheet(sheet), h = (s.cells[0] ?? []).map(norm);
+  const ic = h.indexOf(idHeader), cc = h.indexOf(header);
+  const rows = s.cells.map((r, i) => (i > 0 && norm(r?.[ic]) === id ? i : -1)).filter((i) => i > 0);
+  if (ic < 0 || cc < 0 || rows.length !== 1) throw new Error(`${sheet}: không tìm được đúng một ô "${header}" của "${id}"`);
+  return [rows[0], cc];
+}
+const pctCell = (v: number): Cell => ({ v, fill: "de_xuat", fmt: pctFmt(v) });
+
+/** Chỉ số món theo ô sau lần đo trần 2 (phần nghìn của chỉ số chuẩn cùng cấp; trước đó gấp đôi). */
+const TRAN_O: Record<string, [number, number]> = {
+  vu_khi: [40, 20], mu: [20, 20], ao: [40, 15], dai: [25, 10], bao_tay: [20, 5], giay: [20, 10], ngoc_boi: [25, 5],
+};
+/** Ngọc cấp k: k × (k + 1) phần nghìn, tức 0,1 × k × (k + 1)%. */
+const NGOC_CAP = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((k) => k * (k + 1));
+const LUAT_NGOC: [string, number][] = [
+  ["ngoc.json:tran.satThuongMem", 150], ["ngoc.json:tran.satThuongToiDa", 250],
+  ["ngoc.json:tran.khangMem", 100], ["ngoc.json:tran.khangToiDa", 150],
+];
+const GHI_CHU_NGOC: [number, string][] = [
+  [1, "12 hệ cấp 1–10 (chốt). gia_tri: phần nghìn, = k × (k + 1), tức 0,1 × k × (k + 1)% (đề xuất, sửa sau lần đo trần 2 ngày 2026-11-04; trước là 0,25 × k × (k + 1)%). Khảm trùng hệ linh căn hiệu quả +20%."],
+  [2, "Ô 'cong' (vũ khí, bao tay, ngọc bội): tăng sát thương chiêu có hệ chủ là hệ ngọc. Ô 'thu' (mũ, áo, đai, giày): kháng hệ ngọc. Tổng kháng một hệ từ mọi nguồn (ngọc, set, cộng hưởng, đan) tối đa resistCap ở tham_so.json (20%)."],
+  [5, "tran (đề xuất 2026-11-04): mỗi hệ, phần sát thương từ ngọc trên satThuongMem chỉ tính một nửa và không vượt satThuongToiDa; kháng từ ngọc trên khangMem tính một nửa và không vượt khangToiDa."],
+];
+
+/**
+ * Bộ số trần lần 2 (phiên set đồ chọn, phiên Sprint đo đạt mọi mục tiêu 2026-11-04; mọi số là đề xuất): chỉ số món ×0,5, ngọc
+ * 0,1 × k × (k + 1)%, trần mềm của ngọc ở ngoc.json tran, tổng kháng một hệ resistCap 20%. Ghi số tuyệt đối nên chạy lại vẫn vậy.
+ */
+const tranLan2: Step = (wb, log) => {
+  const o = partDef("Ô trang bị"), oh = (k: string) => o.cols.find((c) => c.key === k)!.header;
+  for (const [id, [chinh, phu]] of Object.entries(TRAN_O)) {
+    wb.setCell(o.sheet, ...locate(wb, o.sheet, oh("id"), id, oh("chinh_gia_tri")), pctCell(chinh / 1000));
+    wb.setCell(o.sheet, ...locate(wb, o.sheet, oh("id"), id, oh("phu_gia_tri")), pctCell(phu / 1000));
+  }
+  log.push("Ô trang bị: chỉ số chính và phụ của 7 ô theo trần lần 2 (×0,5)");
+
+  const nc = partDef("Ngọc cấp"), nh = (k: string) => nc.cols.find((c) => c.key === k)!.header;
+  NGOC_CAP.forEach((v, i) => wb.setCell(nc.sheet, ...locate(wb, nc.sheet, nh("cap"), String(i + 1), nh("gia_tri")), pctCell(v / 1000)));
+  log.push(`Ngọc cấp: ${NGOC_CAP.join(", ")} phần nghìn`);
+
+  const ts = B.PARAMS.sheet;
+  wb.setCell(ts, ...locate(wb, ts, "Khóa", "resistCap", "Giá trị"), pctCell(0.2));
+  wb.setCell(ts, ...locate(wb, ts, "Khóa", "resistCap", "Tên"), { v: "Tổng kháng một hệ từ mọi nguồn (ngọc, set, cộng hưởng, đan) tối đa" });
+  wb.setCell(ts, ...locate(wb, ts, "Khóa", "resistCap", "Nguồn"), { v: "đề xuất" });
+  log.push("Tham số: resistCap 20% (tổng kháng một hệ từ mọi nguồn)");
+
+  const luatDef = partDef("Luật trang bị");
+  const have = new Set(wb.sheet(luatDef.sheet).cells.map((r) => norm(r?.[0])));
+  const luat = LUAT_NGOC.filter(([k]) => !have.has(k)).map(([khoa, v]) => {
+    const [, ten, kieu] = TB.LUAT.find((l) => l[0] === khoa)!;
+    return { khoa, ten, gia_tri: kieu === "%" ? v / 1000 : v, kieu };
+  });
+  if (luat.length) wb.appendRows(luatDef.sheet, tableRows(luatDef, luat));
+  log.push(`Luật trang bị: thêm ${luat.length} dòng trần mềm của ngọc`);
+
+  // Ghi chú của ngoc.json: sửa dòng 1, 2; thêm dòng 5 nếu chưa có
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet);
+  const gh = (k: string) => (gs.cells[0] ?? []).map(norm).indexOf(gc.cols.find((c) => c.key === k)!.header);
+  const rowOf = (stt: number) => gs.cells.findIndex((r, i) => i > 0 && norm(r?.[gh("file")]) === "ngoc.json" && Number(r?.[gh("stt")]) === stt);
+  const add: Record<string, string | number>[] = [];
+  for (const [stt, text] of GHI_CHU_NGOC) {
+    const r = rowOf(stt);
+    if (r > 0) wb.setCell(gc.sheet, r, gh("noi_dung"), { v: text, fill: "de_xuat" });
+    else add.push({ file: "ngoc.json", stt, noi_dung: text });
+  }
+  if (add.length) wb.appendRows(gc.sheet, tableRows(gc, add));
+  log.push(`Ghi chú trang bị: sửa ${GHI_CHU_NGOC.length - add.length}, thêm ${add.length} dòng của ngoc.json`);
+};
+
+export const STEPS: Record<string, Step> = { artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const names = process.argv.slice(2);

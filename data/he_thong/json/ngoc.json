@@ -1,9 +1,10 @@
 {
   "ghi_chu": [
-    "12 hệ cấp 1–10 (chốt). gia_tri: phần nghìn, = 0,25 × k × (k + 1)% (mục 12, đề xuất). Khảm trùng hệ linh căn hiệu quả +20%.",
-    "Ô 'cong' (vũ khí, bao tay, ngọc bội): tăng sát thương chiêu có hệ chủ là hệ ngọc. Ô 'thu' (mũ, áo, đai, giày): kháng hệ ngọc, trần kháng 80% (RESIST_CAP).",
+    "12 hệ cấp 1–10 (chốt). gia_tri: phần nghìn, = k × (k + 1), tức 0,1 × k × (k + 1)% (đề xuất, sửa sau lần đo trần 2 ngày 2026-11-04; trước là 0,25 × k × (k + 1)%). Khảm trùng hệ linh căn hiệu quả +20%.",
+    "Ô 'cong' (vũ khí, bao tay, ngọc bội): tăng sát thương chiêu có hệ chủ là hệ ngọc. Ô 'thu' (mũ, áo, đai, giày): kháng hệ ngọc. Tổng kháng một hệ từ mọi nguồn (ngọc, set, cộng hưởng, đan) tối đa resistCap ở tham_so.json (20%).",
     "Nén 3 viên cùng hệ cùng cấp lên 1 viên cấp trên; ty_le_nen_len là tỷ lệ đậu khi nén lên cấp đó (đề xuất). Ngọc từ cấp 7 khóa vào nhân vật (chốt mục 13).",
-    "Cấp là thuộc tính của từng viên, không nằm trong mã. Mã NG-KH giữ như danh_sach.json; ten_han_viet là tên hiện trong tooltip (đề xuất)."
+    "Cấp là thuộc tính của từng viên, không nằm trong mã. Mã NG-KH giữ như danh_sach.json; ten_han_viet là tên hiện trong tooltip (đề xuất).",
+    "tran (đề xuất 2026-11-04): mỗi hệ, phần sát thương từ ngọc trên satThuongMem chỉ tính một nửa và không vượt satThuongToiDa; kháng từ ngọc trên khangMem tính một nửa và không vượt khangToiDa."
   ],
   "he": [
     {
@@ -92,17 +93,18 @@
     }
   ],
   "cap": [
-    {"cap":1,"gia_tri":5,"ty_le_nen_len":null,"khoa":false},
-    {"cap":2,"gia_tri":15,"ty_le_nen_len":1000,"khoa":false},
-    {"cap":3,"gia_tri":30,"ty_le_nen_len":900,"khoa":false},
-    {"cap":4,"gia_tri":50,"ty_le_nen_len":800,"khoa":false},
-    {"cap":5,"gia_tri":75,"ty_le_nen_len":650,"khoa":false},
-    {"cap":6,"gia_tri":105,"ty_le_nen_len":500,"khoa":false},
-    {"cap":7,"gia_tri":140,"ty_le_nen_len":350,"khoa":true},
-    {"cap":8,"gia_tri":180,"ty_le_nen_len":200,"khoa":true},
-    {"cap":9,"gia_tri":225,"ty_le_nen_len":100,"khoa":true},
-    {"cap":10,"gia_tri":275,"ty_le_nen_len":50,"khoa":true}
+    {"cap":1,"gia_tri":2,"ty_le_nen_len":null,"khoa":false},
+    {"cap":2,"gia_tri":6,"ty_le_nen_len":1000,"khoa":false},
+    {"cap":3,"gia_tri":12,"ty_le_nen_len":900,"khoa":false},
+    {"cap":4,"gia_tri":20,"ty_le_nen_len":800,"khoa":false},
+    {"cap":5,"gia_tri":30,"ty_le_nen_len":650,"khoa":false},
+    {"cap":6,"gia_tri":42,"ty_le_nen_len":500,"khoa":false},
+    {"cap":7,"gia_tri":56,"ty_le_nen_len":350,"khoa":true},
+    {"cap":8,"gia_tri":72,"ty_le_nen_len":200,"khoa":true},
+    {"cap":9,"gia_tri":90,"ty_le_nen_len":100,"khoa":true},
+    {"cap":10,"gia_tri":110,"ty_le_nen_len":50,"khoa":true}
   ],
+  "tran": {"satThuongMem":150,"satThuongToiDa":250,"khangMem":100,"khangToiDa":150},
   "y_chau": [
     {
       "ma_vp": "NG-YC-001",
