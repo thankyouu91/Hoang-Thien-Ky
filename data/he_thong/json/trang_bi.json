@@ -793,7 +793,7 @@
       "ten": "Tinh La Kỳ",
       "do_hiem": "do",
       "khi_hinh": "ky",
-      "mo_ta": "Danh khí (thần binh có tên): Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ",
+      "mo_ta": "Danh khí (thần binh có tên): Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ trong 5 s",
       "nguon": ["luyen_danh_khi"]
     },
     {
@@ -813,7 +813,7 @@
       "ten": "Ngọc Lâu Tiêu",
       "do_hiem": "do",
       "khi_hinh": "tieu",
-      "mo_ta": "Danh khí (thần binh có tên): Khống chế trúng kẻ đang vận công thì chiêu đó mất luôn, không hoàn hồi chiêu",
+      "mo_ta": "Danh khí (thần binh có tên): Khống chế trúng kẻ đang vận công hoặc đang bày trận thì chiêu đó mất luôn, không hoàn hồi chiêu",
       "nguon": ["luyen_danh_khi"]
     },
     {

@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   SKILL_TYPES, VARIANTS, TALENTS, SKILL_SPECS, ALLY_SKILLS, VARIANT_STATS, LINH_EFFECT_POWER, ELEMENT_STATS, ELEMENT_EFFECTS,
-  ROOT_BUFFS, COMBO, BASE_CRIT_PER_MILLE, RESIST_CAP, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, CAST_FLOOR, ARTIFACT_RULES,
+  ROOT_BUFFS, COMBO, BASE_CRIT_PER_MILLE, RESIST_CAP, COUNTER_FLOOR, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, CAST_FLOOR, ARTIFACT_RULES,
   elementMultiplier, comboRelation, parentOf, baseElement, isOpposite, generatesEither, beatsEither,
   type Element, type SkillType, type Variant,
 } from "@ktlp/sim";
@@ -190,6 +190,7 @@ export function build(petCsv: string): SheetOut[] {
   extra("cong_phap");
   pushParam("cong_phap", "baseCrit", "Chí mạng gốc", BASE_CRIT_PER_MILLE / 1000, "%", "9", "gdd");
   pushParam("cong_phap", "resistCap", "Tổng kháng một hệ từ mọi nguồn (ngọc, set, cộng hưởng, đan) tối đa", RESIST_CAP / 1000, "%", "", "de_xuat");
+  pushParam("cong_phap", "counterFloor", "Khắc hệ sau mọi nguồn làm mềm (kháng, set, khí văn) không dưới hệ số", COUNTER_FLOOR / 1000, "hệ số", "", "de_xuat");
   extra("roi_do");
   extra("thu_cuoi");
   const codeObjs: Record<keyof typeof N.CODE_PARAMS, Record<string, number | boolean>> = { SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES };

@@ -56,7 +56,8 @@
     "outerMaxGrade": 2,
     "outerDays": 7,
     "baseCrit": 50,
-    "resistCap": 200
+    "resistCap": 200,
+    "counterFloor": 1200
   },
   "roi_do": {
     "mainElementShare": 500,

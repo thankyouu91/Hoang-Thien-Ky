@@ -3,7 +3,7 @@
 //   Cần xem: chỗ dữ liệu khác code đang chạy (code chưa đọc JSON), khác mốc trong GDD, hoặc Excel chưa tính lại công thức.
 import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, ROOT_BUFFS, GRADE_POW, LINH_EFFECT_POWER,
-  SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES, BASE_CRIT_PER_MILLE,
+  SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES, BASE_CRIT_PER_MILLE, RESIST_CAP, COUNTER_FLOOR,
   elementMultiplier, comboRelation, composeTechnique, mul, ONE, type Element, type SkillType, type Variant,
 } from "@ktlp/sim";
 import { existsSync, readFileSync } from "node:fs";
@@ -379,6 +379,8 @@ export function kiem(d: Any, raw: Raw): Report {
     for (const k of Object.keys(ts[g] ?? {})) if (!(k in obj)) cmp(`${g}.${k}`, ts[g][k], undefined); // khóa mới chờ code thêm
   }
   cmp("cong_phap.baseCrit", ts.cong_phap?.baseCrit, BASE_CRIT_PER_MILLE);
+  cmp("cong_phap.resistCap", ts.cong_phap?.resistCap, RESIST_CAP);
+  cmp("cong_phap.counterFloor", ts.cong_phap?.counterFloor, COUNTER_FLOOR);
   if (diff.length) warnings.push(`Khác số đang chạy trong packages/sim (${diff.length} chỗ): ${diff.join("; ")}`);
   else notes.push("Loại chiêu, biến thể, hệ, tham số trận đấu: khớp số đang chạy trong packages/sim");
 

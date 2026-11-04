@@ -10,6 +10,7 @@
 //                   hệ vào ngoc.json; 10 danh khí ở Kiểu trang bị, Khí Tinh, Linh Văn Thạch, đồ phổ ở Nguyên liệu rèn; luật, ghi chú
 //   hop_tran_2      3 khóa hợp trận ở SKILL_RULES: formationJoinWait, formationExtraTargets, formationMaxTargets (đề xuất)
 //   luyen_khi_2     song hệ ngọc đậu cố định, giá linh thạch tẩy luyện theo độ hiếm, thưởng Bảo Giám theo loại (đề xuất)
+//   luyen_khi_3     khiVanTinhToiDa 1 và khiVanKichToiDa 3, Hộ Mệnh 3%, Định Thân 50%, Ý danh khí ×1,25, 2 danh văn, counterFloor
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -438,13 +439,13 @@ const KHI_VAN: [string, string, string, number, string][] = [
   ["KV-CO-006", "Tụ Linh Văn", "Hạ gục kẻ địch thì hồi 3% mana", 0.03, "%"],
   ["KV-CO-007", "Phá Trận Văn", "Sát thương lên trận nhãn, hộ trận +3% (chiến tranh)", 0.03, "%"],
   ["KV-CO-008", "Liệp Yêu Văn", "Sát thương lên dị thú và boss PvE +4%", 0.04, "%"],
-  ["KV-TH-001", "Hộ Mệnh Văn", "Lần đầu máu dưới 25%: khiên 8% máu tối đa", 0.08, "%"],
+  ["KV-TH-001", "Hộ Mệnh Văn", "Lần đầu máu dưới 25%: khiên 3% máu tối đa", 0.03, "%"],
   ["KV-TH-002", "Ngự Khắc Văn", "Trúng đòn hệ khắc mình: hệ số ×1,5 thành ×1,47", 1.47, "hệ số"],
   ["KV-TH-003", "Phản Chấn Văn", "Phản 3% sát thương cận chiến nhận được", 0.03, "%"],
   ["KV-TH-004", "Thiết Bích Văn", "Đứng hàng trước: phòng thủ +3%", 0.03, "%"],
   ["KV-TH-005", "Tĩnh Tâm Văn", "Đứng hàng sau: mana tối đa +3%", 0.03, "%"],
   ["KV-TH-006", "Hồi Xuân Văn", "Hồi 1% máu mỗi 5 s", 0.01, "%"],
-  ["KV-TH-007", "Định Thân Văn", "Bị đẩy lùi thì đứng lại sau 0,5 s thay vì bị đẩy hết ô", 0.5, "giây"],
+  ["KV-TH-007", "Định Thân Văn", "Mỗi lần bị đẩy lùi chỉ bị đẩy một nửa quãng", 0.5, "%"],
   ["KV-TH-008", "Tị Kiếp Văn", "Lôi kiếp gây ít hơn 5% sát thương (ngoài trận)", 0.05, "%"],
 ];
 const PHAN_GIAI: [string, number][] = [["lam", 1], ["tim", 3], ["vang", 10], ["do", 25]];
@@ -458,9 +459,9 @@ const DANH_KHI: [string, string, string, string][] = [
   ["TB-KI-064", "Phong Lôi Phiến", "phien", "Diện rộng trúng từ 6 mục tiêu thì lần vận công kế tiếp nhanh gấp đôi"],
   ["TB-KI-065", "Bất Động Côn", "con", "Khiên hộ thể của người cầm đỡ thêm 1 lần khống chế cho người được che"],
   ["TB-KI-066", "Tạo Hóa Bút", "but", "Bùa chú thêm 1 lần mỗi trận, mỗi lần −15% sát thương"],
-  ["TB-KI-067", "Tinh La Kỳ", "ky", "Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ"],
+  ["TB-KI-067", "Tinh La Kỳ", "ky", "Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ trong 5 s"],
   ["TB-KI-068", "Vọng Nguyệt Cầm", "cam", "Hồi phục giải luôn 1 hiệu ứng thiêu đốt hoặc độc"],
-  ["TB-KI-069", "Ngọc Lâu Tiêu", "tieu", "Khống chế trúng kẻ đang vận công thì chiêu đó mất luôn, không hoàn hồi chiêu"],
+  ["TB-KI-069", "Ngọc Lâu Tiêu", "tieu", "Khống chế trúng kẻ đang vận công hoặc đang bày trận thì chiêu đó mất luôn, không hoàn hồi chiêu"],
   ["TB-KI-070", "Phá Thiên Thương", "thuong", "Lướt tới xong, đòn kế tiếp xuyên 20% khiên"],
 ];
 const LUAT_LK: [string, number][] = [
@@ -468,10 +469,10 @@ const LUAT_LK: [string, number][] = [
   ["songHeCapNgoc", 7], ["phachCapNgoc", 10], ["danhKhiMoCap", 250], ["danhKhiLoToiThieu", 9],
   ["phanGiaiKhiTinhMoiCapKhiLinh", 1], ["phanGiaiTraNac", 500], ["tayLuyenKhiTinh", 2],
   ["khiLinhKnTran", 1], ["khiLinhKnBiCanh", 5], ["khiLinhKnKhiTinh", 10],
-  ["khiVanToiDa.tim", 1], ["khiVanToiDa.vang", 2], ["khiVanToiDa.do", 3], ["khiVanTinhToiDa", 2], ["khiVanTranLucChien", 10],
+  ["khiVanToiDa.tim", 1], ["khiVanToiDa.vang", 2], ["khiVanToiDa.do", 3], ["khiVanTinhToiDa", 1], ["khiVanKichToiDa", 3], ["khiVanTranLucChien", 10],
   ["taoVanLinhVanThach", 1], ["phachTyLe", 300], ["phachKhiTinh", 20],
   ["danhKhiVanThiet", 5], ["danhKhiKhiTinh", 50], ["danhKhiHoLo", 3], ["danhKhiTyLe.lo9", 400], ["danhKhiTyLe.lo10", 600],
-  ["danhKhiYHeSo", 1500], ["danhKhiMoiNguoi", 1], ["baoGiamTuanLinhVanThach", 2], ["teLuyenHoiChieuSan", 600],
+  ["danhKhiYHeSo", 1250], ["danhKhiMoiNguoi", 1], ["baoGiamTuanLinhVanThach", 2], ["teLuyenHoiChieuSan", 600],
 ];
 const GHI_CHU_LK = [
   "Luyện khí sau cấp tối đa (GDD tab Trang bị, pháp bảo và set đồ, phần 13; mọi số là đề xuất): mở rộng theo chiều ngang (thêm lựa chọn, thứ để thử, thứ để sưu tầm), cả lớp cộng tối đa khoảng 3 điểm lực chiến, trong trần 35% của đồ.",
@@ -663,9 +664,67 @@ const luyenKhi2: Step = (wb, log) => {
   log.push("Ghi chú trang bị: sửa 3 dòng (tẩy luyện, Bảo Giám, song hệ)");
 };
 
+// ---------- luyện khí lần 3 (sau lần đo đầu của phiên Sprint: khí văn vượt trần; GDD tab Trang bị phần 13 rev 55; đề xuất) ----------
+
+const luyenKhi3: Step = (wb, log) => {
+  const text = (v: string): Cell => ({ v, fill: "de_xuat" });
+  const colOf = (def: B.TableDef, key: string) => def.cols.find((c) => c.key === key)!.header;
+  const put = (def: B.TableDef, id: string, key: string, c: Cell) => wb.setCell(def.sheet, ...locate(wb, def.sheet, colOf(def, def.id), id, colOf(def, key)), c);
+
+  // 1. Luật khí văn: mỗi khí văn tính 1 lần (khiVanTinhToiDa 2 → 1, giữ dòng vì code rules còn đọc; bỏ khi code thôi đọc),
+  //    thêm "mỗi người tối đa 3 khí văn đang kích" ngay sau; Ý danh khí ×1,25
+  const luat = partDef("Luật trang bị"), cu = "luyen_khi.json:luat.khiVanTinhToiDa", moi = "luyen_khi.json:luat.khiVanKichToiDa";
+  const keys = wb.sheet(luat.sheet).cells.map((r) => norm(r?.[0]));
+  if (!keys.includes(cu)) throw new Error(`Luật trang bị: không có dòng ${cu}`);
+  put(luat, cu, "ten", text(TB.LUAT.find((l) => l[0] === cu)![1]));
+  put(luat, cu, "gia_tri", { v: 1, fill: "de_xuat" });
+  if (!keys.includes(moi)) {
+    wb.insertRows(luat.sheet, keys.indexOf(cu) + 1, tableRows(luat, [{ khoa: moi, ten: TB.LUAT.find((l) => l[0] === moi)![1], gia_tri: 3, kieu: "số" }]));
+  }
+  log.push("Luật trang bị: khiVanTinhToiDa 2 → 1, thêm khiVanKichToiDa 3");
+  put(luat, "luyen_khi.json:luat.danhKhiYHeSo", "gia_tri", { v: 1.25, fill: "de_xuat" });
+  log.push("Luật trang bị: danhKhiYHeSo ×1,25");
+
+  // 2–3. Khí văn Hộ Mệnh, Định Thân (số và chữ theo KHI_VAN)
+  const kv = partDef("Khí văn");
+  for (const ma of ["KV-TH-001", "KV-TH-007"]) {
+    const [, , tacDung, giaTri, donVi] = KHI_VAN.find((x) => x[0] === ma)!;
+    put(kv, ma, "tac_dung", text(tacDung));
+    put(kv, ma, "gia_tri", donVi === "%" ? pctCell(giaTri) : { v: giaTri, fill: "de_xuat" });
+    put(kv, ma, "don_vi", text(donVi));
+  }
+  log.push("Khí văn: KV-TH-001 khiên 3%, KV-TH-007 đẩy một nửa quãng (50%)");
+
+  // 4. Danh văn Tinh La Kỳ, Ngọc Lâu Tiêu (sheet Danh khí và mô tả ở Kiểu trang bị)
+  const dk = partDef("Danh khí"), kt = partDef("Kiểu trang bị");
+  for (const ma of ["TB-KI-067", "TB-KI-069"]) {
+    const [, , , danhVan] = DANH_KHI.find((x) => x[0] === ma)!;
+    put(dk, ma, "danh_van", text(danhVan));
+    put(kt, ma, "mo_ta", text(`Danh khí (thần binh có tên): ${danhVan}`));
+  }
+  log.push("Danh khí: danh văn TB-KI-067, TB-KI-069");
+
+  // 5. Sàn khắc hệ (sim COUNTER_FLOOR) ngay sau resistCap
+  const ts = B.PARAMS.sheet, s = wb.sheet(ts), keyAt = (s.cells[0] ?? []).map(norm).indexOf("Khóa");
+  if (!s.cells.some((r) => norm(r?.[keyAt]) === "counterFloor")) {
+    const at = s.cells.findIndex((r) => norm(r?.[keyAt]) === "resistCap");
+    if (at < 0) throw new Error("Tham số: không có dòng resistCap");
+    wb.insertRows(ts, at + 1, [paramCells("cong_phap", "counterFloor", "Khắc hệ sau mọi nguồn làm mềm (kháng, set, khí văn) không dưới hệ số", 1.2, "hệ số", "", "de_xuat")]);
+    log.push(`Tham số: chèn counterFloor ×1,2 sau dòng ${at + 1} (resistCap)`);
+  }
+
+  // Ghi chú khí văn theo luật mới
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), gh = (gs.cells[0] ?? []).map(norm);
+  const fAt = gh.indexOf(colOf(gc, "file")), nAt = gh.indexOf(colOf(gc, "noi_dung"));
+  const i = gs.cells.findIndex((r) => norm(r?.[fAt]) === "luyen_khi.json" && norm(r?.[nAt]).startsWith("khi_van:"));
+  if (i < 0) throw new Error("Ghi chú trang bị: không có dòng khi_van của luyen_khi.json");
+  wb.setCell(gc.sheet, i, nAt, text("khi_van: gia_tri là số chính của tác dụng để chỉnh. Mỗi người chọn tối đa luat.khiVanKichToiDa khí văn đang kích, khác nhau, mỗi khí văn tính 1 lần (luat.khiVanTinhToiDa = 1, giữ tạm cho code); tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi nguồn làm mềm vẫn còn ít nhất tham_so.json cong_phap.counterFloor (×1,2)."));
+  log.push("Ghi chú trang bị: sửa dòng khi_van");
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
-  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2,
+  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

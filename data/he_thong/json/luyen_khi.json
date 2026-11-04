@@ -4,7 +4,7 @@
     "Mở khóa (số ở luat): phân giải và Bảo Giám từ cấp 20; tẩy luyện từ Kết Đan; khí linh và khí văn từ Hóa Thần, món từ tím; song hệ khi có ngọc cấp 7; Ngọc Phách khi có ngọc cấp 10; danh khí từ cấp 250 Hạ vị hoặc từ Trung vị, tông môn có lò rèn cấp 9; tế luyện tầng pháp bảo từ Trung vị.",
     "tay_luyen: đổi loại chỉ số phụ của một món sang loại khác trong 4 loại của ô, cùng thang giá trị (giá trị ở lục +0, nhân độ hiếm, cường hóa, bí cảnh như chỉ số phụ cũ). Loại 1 là chỉ số phụ mặc định ở trang_bi.json o[].phu. Người thường quay ngẫu nhiên trong 3 loại còn lại; Tu rèn chọn thẳng. Mỗi lần tốn luat.tayLuyenKhiTinh Khí Tinh và luat.tayLuyenLinhThach linh thạch theo độ hiếm món, linh thạch đúng phẩm của vị diện.",
     "khi_linh: mỗi cấp cộng cong_chi_so vào hệ số cùng chỗ với cường hóa; món có khí linh từ cấp 1 khóa vào nhân vật. Cấp 3, 6, 9 mở ô khí văn, tối đa luat.khiVanToiDa theo độ hiếm; chọn 1 trong 3 khí văn của nhóm ô (cong: vũ khí, bao tay, ngọc bội; thu: mũ, áo, đai, giày).",
-    "khi_van: gia_tri là số chính của tác dụng để chỉnh. Một khí văn trên nhiều món tính tối đa luat.khiVanTinhToiDa lần; tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi thứ vẫn còn ít nhất ×1,2.",
+    "khi_van: gia_tri là số chính của tác dụng để chỉnh. Mỗi người chọn tối đa luat.khiVanKichToiDa khí văn đang kích, khác nhau, mỗi khí văn tính 1 lần (luat.khiVanTinhToiDa = 1, giữ tạm cho code); tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi nguồn làm mềm vẫn còn ít nhất tham_so.json cong_phap.counterFloor (×1,2).",
     "phan_giai: món từ lam ra Khí Tinh theo độ hiếm, cộng luat.phanGiaiKhiTinhMoiCapKhiLinh mỗi cấp khí linh; ngọc, Ý châu, ấn trả nguyên vẹn; luat.phanGiaiTraNac số nấc cường hóa trả lại thành Luyện Khí Thạch đúng phẩm. Khí Tinh từ đồ khóa cũng khóa.",
     "danh_khi: luyện ở lò tông môn cấp luat.danhKhiLoToiThieu trở lên theo đồ phổ, phôi là 1 vũ khí đỏ cùng khí hình; Ý của khí hình mạnh gấp luat.danhKhiYHeSo lần Ý châu, không chiếm dòng khảm, cộng danh văn riêng. Mỗi người mặc luat.danhKhiMoiNguoi danh khí; khóa. Thất bại mất Khí Tinh và Vẫn Thiết, giữ phôi và đồ phổ.",
     "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu, loại thưởng theo thứ được đếm (vũ khí, danh khí: ánh sáng vũ khí; ô khác: khung ô; pháp bảo, Phách: danh hiệu; pháp khí: ô kho; ấn bộ: ô túi; Ý châu: Khí Tinh). Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch.",
@@ -121,8 +121,8 @@
       "ma": "KV-TH-001",
       "nhom": "thu",
       "ten": "Hộ Mệnh Văn",
-      "tac_dung": "Lần đầu máu dưới 25%: khiên 8% máu tối đa",
-      "gia_tri": 80,
+      "tac_dung": "Lần đầu máu dưới 25%: khiên 3% máu tối đa",
+      "gia_tri": 30,
       "don_vi": "phan_nghin"
     },
     {
@@ -169,9 +169,9 @@
       "ma": "KV-TH-007",
       "nhom": "thu",
       "ten": "Định Thân Văn",
-      "tac_dung": "Bị đẩy lùi thì đứng lại sau 0,5 s thay vì bị đẩy hết ô",
-      "gia_tri": 10,
-      "don_vi": "tick"
+      "tac_dung": "Mỗi lần bị đẩy lùi chỉ bị đẩy một nửa quãng",
+      "gia_tri": 500,
+      "don_vi": "phan_nghin"
     },
     {
       "ma": "KV-TH-008",
@@ -235,7 +235,7 @@
       "ma_vp": "TB-KI-067",
       "ten": "Tinh La Kỳ",
       "khi_hinh": "ky",
-      "danh_van": "Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ",
+      "danh_van": "Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ trong 5 s",
       "do_pho": "NL-DP-007"
     },
     {
@@ -249,7 +249,7 @@
       "ma_vp": "TB-KI-069",
       "ten": "Ngọc Lâu Tiêu",
       "khi_hinh": "tieu",
-      "danh_van": "Khống chế trúng kẻ đang vận công thì chiêu đó mất luôn, không hoàn hồi chiêu",
+      "danh_van": "Khống chế trúng kẻ đang vận công hoặc đang bày trận thì chiêu đó mất luôn, không hoàn hồi chiêu",
       "do_pho": "NL-DP-009"
     },
     {
@@ -494,7 +494,8 @@
     "khiLinhKnBiCanh": 5,
     "khiLinhKnKhiTinh": 10,
     "khiVanToiDa": {"tim":1,"vang":2,"do":3},
-    "khiVanTinhToiDa": 2,
+    "khiVanTinhToiDa": 1,
+    "khiVanKichToiDa": 3,
     "khiVanTranLucChien": 10,
     "taoVanLinhVanThach": 1,
     "phachTyLe": 300,
@@ -503,7 +504,7 @@
     "danhKhiKhiTinh": 50,
     "danhKhiHoLo": 3,
     "danhKhiTyLe": {"lo9":400,"lo10":600},
-    "danhKhiYHeSo": 1500,
+    "danhKhiYHeSo": 1250,
     "danhKhiMoiNguoi": 1,
     "baoGiamTuanLinhVanThach": 2,
     "teLuyenHoiChieuSan": 600
