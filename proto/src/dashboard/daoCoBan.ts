@@ -1,7 +1,7 @@
 // Đạo Cơ Bàn ở màn Nhân vật (GDD tab Trang bị, pháp bảo và set đồ, phần 8; đặc tả của phiên set đồ). Bàn lục giác 19 ô
 // đặt ấn bộ hoặc ngọc hệ để kích thêm set và cho hai bộ cộng hưởng. Luật lấy thẳng từ @ktlp/rules (board.ts), số từ
 // data/he_thong/json/dao_co_ban.json. File này không import three: dữ liệu vẽ dùng chung cho lớp nút DOM và cảnh three
-// (art/daoCoBanScene.ts). Bàn đang đặt và số món trên đồ còn là mẫu TẠM ở màn, chờ DashboardSource.
+// (art/daoCoBanScene.ts). Bàn đang đặt, số món trên đồ và tiến độ đọc từ NhanVatView.board (DashboardSource).
 import { boardBonus, boardCellOpen, connectedCells, machBetween, type BoardPiece, type BoardResult, type Progress } from "@ktlp/rules";
 import type { Element } from "@ktlp/sim";
 import DAO from "../../../data/he_thong/json/dao_co_ban.json";
@@ -164,24 +164,6 @@ export function onOpenCells(pieces: Record<string, BoardPiece>, p: Progress): Re
 
 export function bonusOf(pieces: Record<string, BoardPiece>, p: Progress, gear: Record<string, number>): BoardResult {
   return boardBonus({ cells: onOpenCells(pieces, p), progress: p }, gear);
-}
-
-/**
- * Mẫu TẠM cho Lăng Vân (Tu thể): Bàn Thạch (Thổ) ở tâm; Tụ Bảo (Kim) kề nên Thổ sinh Kim là Tương Dưỡng; ngọc Thổ kề
- * tâm là mạch Thuần; ngọc Mộc kề tâm thì tương khắc nên đứt.
- */
-export function sampleBoard(): { pieces: Record<string, BoardPiece>; gear: Record<string, number> } {
-  return {
-    pieces: {
-      O: { loai: "an", ma: "NG-AN-003" },
-      T1: { loai: "an", ma: "NG-AN-001" },
-      T4: { loai: "ngoc", he: "tho", cap: 2 },
-      T3: { loai: "an", ma: "NG-AN-010" },
-      T6: { loai: "ngoc", he: "moc", cap: 1 },
-      T2: { loai: "ngoc", he: "kim", cap: 1 },
-    },
-    gear: { ban_thach: 2, tu_bao: 2, loi_tri: 3 },
-  };
 }
 
 /** Tâm ô theo px, gốc ở giữa bàn, y hướng xuống (như DOM); lưới lục giác đỉnh nhọn, toạ độ trục. */

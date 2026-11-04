@@ -226,5 +226,8 @@ export const ERROR_TEXT: Record<string, string> = {
   tong_chu_khong_roi_duoc: "Tông chủ không rời tông được.",
   khong_du_linh_thach: "Không đủ linh thạch.",
   chua_du_tu_vi: "Chưa đủ tu vi để đột phá.",
+  khong_thay_o: "Không có ô này trên Đạo Cơ Bàn.",
+  o_chua_mo: "Ô này chưa mở.",
+  o_khong_nhan: "Ô này không nhận loại viên đó (ô tâm chỉ nhận ấn).",
   chua_co_trong_proto: "Chức năng này chưa có trong prototype.",
 };

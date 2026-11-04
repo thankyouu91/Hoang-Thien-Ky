@@ -12,11 +12,11 @@
 // tiết; việc nào cũng trong 2 chạm.
 import type { Element } from "@ktlp/sim";
 import type { Sprites } from "../../assets/sprites.ts";
-import type { BoardPiece } from "@ktlp/rules";
+import type { BoardPiece, Progress } from "@ktlp/rules";
 import { hasWebGL, loadSceneFactory, mountBakedScene, mountProgram, type LiveMount, type SceneHandle } from "../../three/index.ts";
 import type { DaoCoBanProgram } from "../art/daoCoBanScene.ts";
 import {
-  axialToXY, bonusOf, CELLS, CENTER, cellOpensAt, drawOf, hexSize, LINK_NAMES, onOpenCells, pieceName, REALMS, RESONANCE, sampleBoard, sealOfSet, sealSet, setLines, setName, type BanDraw,
+  axialToXY, bonusOf, CELLS, CENTER, cellOpen, cellOpensAt, drawOf, hexSize, LINK_NAMES, onOpenCells, pieceName, REALMS, RESONANCE, sealSet, setLines, setName, type BanDraw,
 } from "../daoCoBan.ts";
 import { animInfo, drawCharacter } from "../../scenes/battle/character.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
@@ -87,10 +87,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   private center: Center = "phap-tuong";
   /** Mục Luyện khí: giữ phần đang mở và lựa chọn qua các lần vẽ lại. */
   private lk: LuyenKhiPanel;
-  /** Đạo Cơ Bàn: viên đang đặt và số món mang ấn trên đồ. TẠM giữ ở màn, chờ DashboardSource. */
-  private ban?: { pieces: Record<string, BoardPiece>; gear: Record<string, number> };
-  /** Công cụ thử: xem ô mở ở cảnh giới nào (chỉ số trong REALMS); mặc định Nguyên Anh để thấy 7 ô. */
-  private realm = 3;
+  /** Công cụ xem thử: -1 là ô mở theo tiến độ thật (v.board.progress), số khác là chỉ số trong REALMS. */
+  private realm = -1;
   /** Lớp cảnh three của Đạo Cơ Bàn, giữ qua các lần vẽ lại. */
   private ltLayer: HTMLElement;
   private ltLive: LiveMount | null = null;
@@ -273,22 +271,30 @@ export class NhanVatScene extends PageScene<NhanVatView> {
 
   // ---- Đạo Cơ Bàn ------------------------------------------------------------------------------------------------
 
-  private banState(): { pieces: Record<string, BoardPiece>; gear: Record<string, number> } {
-    return (this.ban ??= sampleBoard());
+  /** Tiến độ để vẽ ô mở: thật (nguồn đọc) hoặc cảnh giới đang xem thử. */
+  private banProgress(v: NhanVatView): Progress {
+    return this.realm < 0 ? v.board.progress : REALMS[this.realm].p;
   }
 
   private banDraw(): BanDraw {
-    const p = REALMS[this.realm].p;
-    return drawOf(onOpenCells(this.banState().pieces, p), p);
+    const v = this.data!;
+    const p = this.banProgress(v);
+    return drawOf(onOpenCells(v.board.cells, p), p);
+  }
+
+  /** Ô đặt được thật: mở ở tiến độ thật và nhận loại viên đó. */
+  private canPlace(v: NhanVatView, ma: string, piece?: BoardPiece): boolean {
+    const c = CELLS.find((x) => x.ma === ma);
+    return !!c && cellOpen(ma, v.board.progress) && (!piece || c.chiNhan.includes(piece.loai));
   }
 
   /** Bàn lục giác 19 ô (GDD tab Trang bị phần 8): ô thông nối về tâm, mạch theo quan hệ hệ, cộng hưởng giữa hai bộ. */
   private banView(v: NhanVatView, switcher: string): string {
-    const b = this.banState();
-    const p = REALMS[this.realm].p;
+    const b = v.board;
+    const p = this.banProgress(v);
     const draw = this.banDraw();
-    const res = bonusOf(b.pieces, p, b.gear);
-    const lines = setLines(b.gear, res);
+    const res = bonusOf(b.cells, p, b.gearSets);
+    const lines = setLines(b.gearSets, res);
     const cell = (c: (typeof CELLS)[number]) => {
       const piece = draw.pieces[c.ma];
       const open = draw.open.has(c.ma);
@@ -299,13 +305,15 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     };
     const tiers = (s: (typeof lines)[number]) => s.tiers.map((x) => `<i class="${x.on ? "on" : ""}">${x.so}</i>`).join("");
     const ordered: GearSlot[] = ["vu_khi", "mu", "ao", "dai", "bao_tay", "giay", "ngoc_boi"];
+    const now = v.top.realm;
     return `
       <div class="nv-sub">${switcher}<span class="nv-roots">Nền ${esc(v.talent.name)}</span></div>
       <div class="lt-board" role="group" aria-label="Đạo Cơ Bàn: bàn ô đặt ấn bộ và ngọc hệ">
         <canvas class="pt-ghost" aria-hidden="true"></canvas>
         ${CELLS.map(cell).join("")}
       </div>
-      <label class="lt-realm">Thử ô mở ở cảnh giới <select data-filter="realm">${REALMS.map((r, i) => `<option value="${i}"${i === this.realm ? " selected" : ""}>${r.ten}</option>`).join("")}</select></label>
+      <label class="lt-realm">Ô mở theo <select data-filter="realm"><option value="-1"${this.realm < 0 ? " selected" : ""}>Cảnh giới hiện tại (${esc(now)})</option>${REALMS.map((r, i) => `<option value="${i}"${i === this.realm ? " selected" : ""}>Xem thử: ${r.ten}</option>`).join("")}</select></label>
+      ${this.realm >= 0 ? `<p class="nv-note lt-preview">Đang xem thử: ô sáng thêm chỉ để xem, đặt và gỡ viên chỉ ở ô đã mở thật.</p>` : ""}
       <h3 class="nv-h">Bộ đang kích <span>đồ + bàn, tối đa 3 bộ</span></h3>
       <ul class="lt-sets">${lines
         .map((s) => `<li><button type="button" class="nv-row" data-act="lt-set" data-set="${s.id}"><span><b class="lt-set-name">${esc(s.name)}</b> ${s.total}/7 <span class="muted">${s.gear} đồ${s.board ? ` + ${s.board} bàn` : ""}</span></span><span class="lt-tiers">${tiers(s)}</span></button></li>`)
@@ -313,7 +321,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         .map((r) => `<li class="lt-res"><b>${esc(r.ten)}</b> · ${esc(setName(r.a))} ↔ ${esc(setName(r.b))}<span class="muted block">${esc(RESONANCE.find((x) => x.mach === r.mach)?.mo_ta ?? "")}</span></li>`)
         .join("")}</ul>
       <h3 class="nv-h">Trang bị <span>ấn khảm trên đồ tính vào bộ</span></h3>
-      <div class="lt-gear">${ordered.map((s) => this.gearSlot(v, s)).join("")}</div>
+      <div class="lt-gear">${ordered.map((s) => this.gearSlot(v, s, true)).join("")}</div>
       <ul class="pt-legend">
         <li><i class="lg-m lg-m-thuan"></i>Thuần</li>
         <li><i class="lg-m lg-m-sinh"></i>Sinh</li>
@@ -365,29 +373,41 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     }
   }
 
-  /** Đổi bàn (TẠM, chỉ ở máy): vẽ lại lớp nút; render báo lại cảnh three. */
-  private setBan(pieces: Record<string, BoardPiece>): void {
-    this.ban = { ...this.banState(), pieces };
-    if (this.data) this.render(this.data);
+  /** Viên trong túi đặt được vào ô (ô tâm chỉ nhận ấn). */
+  private placeable(v: NhanVatView, ma: string): BagItem[] {
+    const c = CELLS.find((x) => x.ma === ma)!;
+    return v.bag.items.filter((it) => it.boardPiece && c.chiNhan.includes(it.boardPiece.loai));
+  }
+
+  private pickList(v: NhanVatView, ma: string): string {
+    const items = this.placeable(v, ma);
+    if (!items.length) return `<p class="muted">Túi không có ${ma === CENTER ? "ấn bộ" : "ấn bộ hay ngọc hệ"} nào để đặt.</p>`;
+    return `<ul class="list">${items
+      .map((it) => `<li><button type="button" class="row" data-pick="${it.uid}"><span class="bag-cell lt-pick">${this.pieceIcon(it.boardPiece!)}</span><span class="grow"><b>${esc(pieceName(it.boardPiece!))}</b><span class="muted block">${it.boardPiece!.loai === "an" ? `Ấn bộ ${esc(setName(sealSet(it.boardPiece!.ma)))}` : "Ngọc hệ: chỉ dẫn mạch"}${it.count > 1 ? ` · còn ${it.count}` : ""}</span></span></button></li>`)
+      .join("")}</ul>`;
   }
 
   private openBanCell(v: NhanVatView, ma: string): void {
-    const b = this.banState();
-    const p = REALMS[this.realm].p;
+    const b = v.board;
+    const p = this.banProgress(v);
     const draw = this.banDraw();
-    const c = CELLS.find((x) => x.ma === ma)!;
     if (!draw.open.has(ma)) {
       toast(`Ô này mở ở cảnh giới ${cellOpensAt(ma)}.`);
       return;
     }
     const piece = draw.pieces[ma];
+    if (!piece && !this.canPlace(v, ma)) {
+      toast(`Đang xem thử: ô này mở thật ở cảnh giới ${cellOpensAt(ma)}.`);
+      return;
+    }
+    let body: HTMLElement;
     if (piece) {
-      const res = bonusOf(b.pieces, p, b.gear);
+      const res = bonusOf(b.cells, p, b.gearSets);
       const thong = draw.thong.has(ma);
       let info: string;
       if (piece.loai === "an") {
         const bo = sealSet(piece.ma);
-        const gear = b.gear[bo] ?? 0;
+        const gear = b.gearSets[bo] ?? 0;
         info = !thong
           ? "Chưa thông: cần nối về ô tâm qua các ô có đồ, không qua cặp kề tương khắc."
           : gear < 2
@@ -397,47 +417,30 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         if (rs.length) info += ` Cộng hưởng: ${rs.join(", ")}.`;
       } else info = thong ? "Ngọc trên bàn không cộng chỉ số; nó mang hệ để dẫn mạch." : "Ngọc chưa thông: nối về ô tâm để dẫn mạch.";
       const links = draw.links.filter((l) => l.a === ma || l.b === ma).map((l) => LINK_NAMES[l.kind]);
-      const body = openSheet(
+      const real = this.canPlace(v, ma);
+      body = openSheet(
         pieceName(piece),
         `<p>${esc(info)}</p>${links.length ? `<p class="muted">Mạch với ô kề: ${esc(links.join(", "))}</p>` : ""}
-         <div class="actions"><button type="button" data-a="off">Gỡ về túi</button></div>`,
+         ${real ? `<div class="actions"><button type="button" data-a="off">Gỡ về túi</button></div><h3>Đổi bằng</h3>${this.pickList(v, ma)}` : ""}`,
       );
-      body.addEventListener("click", (e) => {
-        if (!(e.target as HTMLElement).closest("[data-a=off]")) return;
-        closeSheet();
-        const pieces = { ...b.pieces };
-        delete pieces[ma];
-        this.setBan(pieces);
-      });
-      return;
-    }
-    // Viên đặt được: ấn của các bộ có trên đồ (TẠM: ấn chưa có trong túi mẫu), và ngọc trong túi nếu ô nhận ngọc.
-    const seals: BoardPiece[] = Object.keys(b.gear)
-      .map((bo) => sealOfSet(bo))
-      .filter((x): x is string => !!x)
-      .map((x) => ({ loai: "an", ma: x }));
-    const gems: BoardPiece[] = c.chiNhan.includes("ngoc")
-      ? v.bag.items.filter((x) => x.kind === "ngoc" && x.element).map((x) => ({ loai: "ngoc", he: x.element as Element, cap: Number(/\d+/.exec(x.gradeLabel)?.[0] ?? 1) }))
-      : [];
-    const options = [...seals, ...gems];
-    const body = openSheet(
-      ma === CENTER ? "Ấn chủ (ô tâm chỉ nhận ấn)" : "Đặt ấn hoặc ngọc",
-      `<ul class="list">${options
-        .map((o, i) => `<li><button type="button" class="row" data-pick="${i}"><span class="bag-cell lt-pick">${this.pieceIcon(o)}</span><span class="grow"><b>${esc(pieceName(o))}</b><span class="muted block">${o.loai === "an" ? "Ấn bộ" : "Ngọc hệ: chỉ dẫn mạch"}</span></span></button></li>`)
-        .join("")}</ul>`,
-    );
+    } else body = openSheet(ma === CENTER ? "Ấn chủ (ô tâm chỉ nhận ấn)" : "Đặt ấn hoặc ngọc", this.pickList(v, ma));
     body.addEventListener("click", (e) => {
-      const i = (e.target as HTMLElement).closest<HTMLElement>("[data-pick]")?.dataset.pick;
-      if (i === undefined) return;
-      closeSheet();
-      this.setBan({ ...b.pieces, [ma]: options[Number(i)] });
+      const t = e.target as HTMLElement;
+      const uid = t.closest<HTMLElement>("[data-pick]")?.dataset.pick;
+      if (t.closest("[data-a=off]")) {
+        closeSheet();
+        void this.send({ type: "go_vien", cell: ma });
+      } else if (uid !== undefined) {
+        closeSheet();
+        void this.send({ type: "dat_vien", cell: ma, uid: Number(uid) });
+      }
     });
   }
 
-  private openBanSet(id: string): void {
-    const b = this.banState();
-    const res = bonusOf(b.pieces, REALMS[this.realm].p, b.gear);
-    const s = setLines(b.gear, res).find((x) => x.id === id);
+  private openBanSet(v: NhanVatView, id: string): void {
+    const b = v.board;
+    const res = bonusOf(b.cells, this.banProgress(v), b.gearSets);
+    const s = setLines(b.gearSets, res).find((x) => x.id === id);
     if (!s) return;
     const rs = res.congHuong.filter((r) => r.a === id || r.b === id);
     openSheet(
@@ -447,12 +450,12 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     );
   }
 
-  private gearSlot(v: NhanVatView, s: GearSlot): string {
+  private gearSlot(v: NhanVatView, s: GearSlot, seal = false): string {
     const g = v.gear[s];
     if (!g) return `<button type="button" class="pt-slot empty" data-act="slot" data-slot="${s}" data-drop="gear:${s}"><span class="lbl">${SLOT_NAMES[s]}</span></button>`;
     const dur = g.durability / g.durabilityMax;
     return `<button type="button" class="pt-slot r-${g.rarity}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}${this.lk.slotLabel(v, s)}`)}">
-      ${this.gearIcon(g, s)}${this.lk.slotBar(v, s)}
+      ${this.gearIcon(g, s)}${this.lk.slotBar(v, s)}${seal && g.seal ? `<span class="lt-seal mini" title="${esc(`Ấn ${setName(sealSet(g.seal))}`)}">${esc(setName(sealSet(g.seal)).split(" ")[0])}</span>` : ""}
       <span class="plus">+${g.plus}</span>
       ${g.sockets ? `<span class="gems">◆${g.gems.length}/${g.sockets}</span>` : ""}
       <span class="dur${g.durability < LOW ? " low" : ""}"><i style="width:${(dur * 100).toFixed(0)}%"></i></span>
@@ -502,12 +505,14 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   }
 
   private cell(it: BagItem): string {
-    return `<button type="button" class="bag-cell ${tone(it)}${it.uid === this.selected ? " sel" : ""}" data-act="item" data-uid="${it.uid}"${it.gear || it.technique || (it.kind === "ngoc" && this.center === "dao-co") ? ` data-drag="item:${it.uid}"` : ""} aria-label="${esc(`${it.name}${it.count > 1 ? ` × ${it.count}` : ""}`)}" title="${esc(it.name)}">
+    return `<button type="button" class="bag-cell ${tone(it)}${it.uid === this.selected ? " sel" : ""}" data-act="item" data-uid="${it.uid}"${it.gear || it.technique || (it.boardPiece && this.center === "dao-co") ? ` data-drag="item:${it.uid}"` : ""} aria-label="${esc(`${it.name}${it.count > 1 ? ` × ${it.count}` : ""}`)}" title="${esc(it.name)}">
       ${this.itemIcon(it)}${it.count > 1 ? `<span class="n">${it.count}</span>` : ""}${it.kind === "cong_phap" ? `<span class="learned">Đã học</span>` : ""}
     </button>`;
   }
 
   private itemIcon(it: BagItem): string {
+    // Ấn bộ chưa có hình vẽ: dùng dấu son như trên Đạo Cơ Bàn.
+    if (!it.art && it.boardPiece?.loai === "an") return this.pieceIcon(it.boardPiece);
     if (it.art) return `<img class="ve" src="${artUrl(it.art)}" alt="">`;
     if (it.icon) return `<img src="${assetUrl(it.icon)}" alt=""${it.gear ? " data-crop" : ""}>`;
     const glyph = it.gear ? SLOT_GLYPH[it.gear.slot] : KIND_GLYPH[it.kind];
@@ -617,7 +622,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       this.tab = this.center;
       this.render(v);
     } else if (name === "lt-cell") this.openBanCell(v, el.dataset.cell!);
-    else if (name === "lt-set") this.openBanSet(el.dataset.set!);
+    else if (name === "lt-set") this.openBanSet(v, el.dataset.set!);
     else if (name === "goto-lk") this.gotoLk(el.dataset.lk as LkTab);
     else if (name === "wheel") {
       this.showWheel = !this.showWheel;
@@ -794,11 +799,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       const it = v.bag.items.find((x) => x.uid === Number(id));
       if (it?.gear) return drop === `gear:${it.gear.slot}`;
       if (it?.technique) return drop.startsWith("tech:");
-      if (it?.kind === "ngoc" && drop.startsWith("ban:")) {
-        const ma = drop.slice(4);
-        const draw = this.banDraw();
-        return draw.open.has(ma) && !draw.pieces[ma] && !!CELLS.find((c) => c.ma === ma)?.chiNhan.includes("ngoc");
-      }
+      if (it?.boardPiece && drop.startsWith("ban:")) return this.canPlace(v, drop.slice(4), it.boardPiece);
       return false;
     }
     if (k === "gear") return drop === "bag";
@@ -814,9 +815,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       const it = v.bag.items.find((x) => x.uid === Number(id))!;
       if (it.gear) void this.send({ type: "mac_do", uid: it.uid });
       else if (it.technique) void this.carry(v, it.technique.id, target);
-      else if (it.kind === "ngoc" && drop.startsWith("ban:") && it.element) {
-        this.setBan({ ...this.banState().pieces, [drop.slice(4)]: { loai: "ngoc", he: it.element as Element, cap: Number(/\d+/.exec(it.gradeLabel)?.[0] ?? 1) } });
-      }
+      else if (it.boardPiece && drop.startsWith("ban:")) void this.send({ type: "dat_vien", cell: drop.slice(4), uid: it.uid });
     } else if (k === "gear") void this.send({ type: "thao_do", slot: id as GearSlot });
     else if (k === "tech") {
       const ids = v.loadout.map((t) => t?.id ?? null);

@@ -840,6 +840,9 @@ button.nv-row:hover { background: var(--c-sunken); }
 .pt-legend .lg-lock { width: 12px; height: 12px; border: 1px dashed var(--c-ink-3); }
 #sheet .lt-pick { display: grid; place-items: center; width: 40px; }
 #sheet .lt-pick .lt-seal { transform: none; }
+/* Ấn khảm trên đồ (hàng Trang bị của Đạo Cơ Bàn): dấu son nhỏ góc dưới */
+.pt-slot .lt-seal.mini { position: absolute; left: 2px; bottom: 6px; z-index: 1; min-width: 0; height: 15px; padding: 0 3px; font-size: 9px; transform: none; box-shadow: none; }
+.page .lt-preview { margin: 4px 0 0; text-align: center; }
 
 /* ---- Luyện khí (GDD tab Trang bị phần 13): phân giải, tẩy luyện, khí linh, ngọc, Bảo Giám; lò danh khí ở Luyện Khí Các ---- */
 /* Điện thoại: 5 tab màn Nhân vật rộng theo chữ để "Pháp tướng" không bị cắt */
