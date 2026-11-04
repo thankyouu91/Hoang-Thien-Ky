@@ -18,6 +18,8 @@ const SLOT_KIEU = ["TB-KI-001", "TB-MU-001", "TB-AO-001", "TB-DA-001", "TB-BT-00
 const sealed = (...seals: string[]): EquipItem[] =>
   seals.map((ma, i) => ({ kieu: SLOT_KIEU[i], nac: 0, doBen: 100, biCanh: 0, dongThem: 0, kham: [{ loai: "an", ma }] }));
 const LV = 100;
+/** Mana tối đa Âm Dương trừ, theo dao_co_ban.json (phần nghìn của mana chuẩn 300). */
+const AM_DUONG_MANA = Math.trunc((300 * (DAO.cong_huong.find((c) => c.mach === "cuc") as { manaMax: number }).manaMax) / 1000);
 
 test("bàn 19 ô, ô tâm kề 6 ô; quan hệ hệ ra loại mạch, không hệ là trung", () => {
   assert.equal(DAO.o.length, 19);
@@ -77,7 +79,7 @@ test("Đồng Khí (Thuần): mốc 2 ×1,25 cho cả hai bộ, làm tròn về 
   assert.equal(g.resist.kim, 30);
 });
 
-test("Tương Dưỡng (Sinh) ×1,5; Âm Dương (Cực) ×2 và mana tối đa −5%; mốc 4 và 7 không đổi", () => {
+test("Tương Dưỡng (Sinh) ×1,5; Âm Dương (Cực) ×2 và giảm mana tối đa; mốc 4 và 7 không đổi", () => {
   const sinh = gearStats(sealed("NG-AN-003", "NG-AN-003", "NG-AN-001", "NG-AN-001"), LV, [], board({ O: an("NG-AN-003"), T1: an("NG-AN-001") }));
   assert.equal(sinh.board!.congHuong[0].ten, "Tương Dưỡng");
   assert.equal(sinh.bonuses.shieldTaken, 90); // Bàn Thạch khiên nhận +6% → +9%
@@ -86,7 +88,7 @@ test("Tương Dưỡng (Sinh) ×1,5; Âm Dương (Cực) ×2 và mana tối đa 
   const cuc = gearStats(items, LV, [], board({ O: an("NG-AN-019"), T1: an("NG-AN-015") }));
   assert.equal(cuc.board!.congHuong[0].ten, "Âm Dương");
   assert.equal(cuc.bonuses.critDamage! - plain.bonuses.critDamage!, 100 - 50); // Huyết Ảnh sát thương chí mạng +5% → +10%
-  assert.equal(cuc.manaMax - plain.manaMax, -15); // 300 × 5%
+  assert.equal(cuc.manaMax - plain.manaMax, AM_DUONG_MANA); // phần nghìn của mana chuẩn 300
   // Mốc 4 của Huyết Ảnh (4 món: 2 trên đồ + 2 trên bàn) không nhân.
   const four = gearStats(items, LV, [], board({ O: an("NG-AN-015"), T4: an("NG-AN-015"), T1: an("NG-AN-019") }));
   const moc4 = (g: ReturnType<typeof gearStats>) => g.sets.find((s) => s.bo === "huyet_anh")!.hieuUng.find((m) => m.so === 4);
@@ -101,7 +103,7 @@ test("mỗi bộ lấy cộng hưởng mạnh nhất; tác dụng phụ tính m�
   assert.deepEqual(g.board!.heSo, { huyet_anh: 2000, van_kiem: 1500, pha_quan: 2000 });
   assert.deepEqual(g.board!.congHuong.map((c) => [c.a, c.b, c.ten]), [["huyet_anh", "pha_quan", "Âm Dương"], ["huyet_anh", "van_kiem", "Tương Dưỡng"]]);
   const plain = gearStats(items, LV, []);
-  assert.equal(g.manaMax - plain.manaMax, -15); // một cặp Âm Dương
+  assert.equal(g.manaMax - plain.manaMax, AM_DUONG_MANA); // một cặp Âm Dương
 });
 
 test("ấn không thông hoặc bộ chưa kích thì không cộng hưởng", () => {
