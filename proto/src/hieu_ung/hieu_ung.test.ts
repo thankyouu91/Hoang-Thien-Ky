@@ -154,8 +154,8 @@ test("replay từ sim thật: có sự kiện trạng thái, phẩm công pháp;
   const { replayFromSim } = await import("../replay/simSource.ts");
   const { sampleBattle } = await import("../mock/sampleBattle.ts");
   for (const seed of [11, 2, 3]) {
-    const input = sampleBattle(seed);
-    const replay = replayFromSim(input);
+    const battleInput = sampleBattle(seed);
+    const replay = replayFromSim(battleInput);
     const result = simulate(sampleBattle(seed));
     assert.equal(replay.ticks, result.ticks, `seed ${seed}: số tick`);
     assert.equal(replay.winner, result.winner, `seed ${seed}: bên thắng`);
