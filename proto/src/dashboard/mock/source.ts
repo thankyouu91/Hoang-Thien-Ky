@@ -1,8 +1,8 @@
 // Nguồn đọc gộp chạy ngay trong trang (chưa có server giả). Mỗi lệnh đọc dựng đủ các thẻ của một màn từ World,
 // kèm mốc giờ server; lệnh ghi đi qua apply() của @ktlp/rules khi luật đã có, phần còn lại sửa World trực tiếp.
 import {
-  apply, GRADE_NAMES, loadoutTechniques, RULES, scrollKind, techniqueOf, transmissionSlots,
-  type Command, type LearnedTechnique, type Role, type SectTechnique,
+  apply, boardCell, boardCellOpen, GRADE_NAMES, loadoutTechniques, RULES, scrollKind, techniqueOf, transmissionSlots,
+  type BoardPiece, type Command, type LearnedTechnique, type Progress, type Role, type SectTechnique,
 } from "@ktlp/rules";
 import {
   BASE_CRIT_PER_MILLE, baseStats, BATTLE, maxGradeAtLevel, simulate, TICKS_PER_SECOND, unitBonuses,
@@ -24,7 +24,8 @@ import type {
   MiniMapView, MountView, NhanVatView, ScrollCard, StatLine, StatSource, TechniqueCard, TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
 import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.ts";
-import { createWorld, npcSects, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, todayAt, type NpcSect, type World } from "./world.ts";
+import { createWorld, npcSects, pieceBagItem, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, samePiece, todayAt, type NpcSect, type World } from "./world.ts";
+import NGOC from "../../../../data/he_thong/json/ngoc.json";
 
 const H = 3600_000;
 const KT = THAM_SO.kinh_te;
@@ -83,6 +84,26 @@ const atLeast = (role: Role | null, min: Role): boolean => role !== null && ROLE
 const TERRAIN_NAMES: Record<string, string> = {
   son_hiem: "Sơn hiểm", thuy_trach: "Thủy trạch", thuong_lo: "Thương lộ", co_tich: "Cổ tích", linh_mach: "Linh mạch", hoa_mach: "Hỏa mạch",
 };
+
+const SEAL_SET: Record<string, string> = Object.fromEntries((NGOC.an_bo as { ma_vp: string; bo: string }[]).map((a) => [a.ma_vp, a.bo]));
+
+/** Số món mỗi bộ trên đồ đang mặc còn độ bền (mỗi món một ấn), như gearStats của @ktlp/rules. */
+function gearSets(gear: World["player"]["gear"]): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const g of Object.values(gear)) if (g?.seal && g.durability > 0) out[SEAL_SET[g.seal]] = (out[SEAL_SET[g.seal]] ?? 0) + 1;
+  return out;
+}
+
+/** Tiến độ cho Đạo Cơ Bàn: Hạ vị, cấp và số thứ tự cảnh giới (1 Luyện Khí … 5 Hóa Thần, cùng mốc với realmOf). */
+function progressOf(level: number): Progress {
+  return { viDien: "ha", cap: level, canhGioi: level <= 50 ? 1 : level <= 100 ? 2 : level <= 150 ? 3 : level <= 200 ? 4 : 5 };
+}
+
+/** Tên viên cho lời báo: ấn theo tên, ngọc kèm cấp. */
+function pieceLabel(piece: BoardPiece): string {
+  const name = pieceBagItem(0, piece).name;
+  return piece.loai === "an" ? name : `${name} cấp ${piece.cap}`;
+}
 
 /** Cảnh giới Hạ vị theo cấp (GDD mục 7). */
 export function realmOf(level: number): string {
@@ -160,6 +181,23 @@ export class MockDashboardSource implements DashboardSource {
 
   private get me() {
     return this.w.rules.members[PLAYER];
+  }
+
+  private bagFull(): boolean {
+    return this.w.player.bag.length + this.me.bag.length >= BAG_CAPACITY;
+  }
+
+  /** Chồng cùng loại trong túi của một viên Đạo Cơ Bàn. */
+  private pieceStack(piece: BoardPiece): BagItem | undefined {
+    return this.w.player.bag.find((x) => x.boardPiece && samePiece(x.boardPiece, piece));
+  }
+
+  /** Viên gỡ khỏi bàn về túi: gộp vào chồng cùng loại, chưa có thì thêm món mới. */
+  private pieceToBag(piece: BoardPiece): void {
+    const p = this.w.player;
+    const stack = this.pieceStack(piece);
+    if (stack) stack.count++;
+    else p.bag.push(pieceBagItem(p.nextUid++, piece));
   }
 
   private get sect() {
@@ -514,6 +552,7 @@ export class MockDashboardSource implements DashboardSource {
       mounts: mountViews,
       combos: Object.values(THU_KICH_PHAT).map((k) => ({ name: k.name, effect: `${k.condition}: ${k.effect}`, active: active[k.id] ?? false })),
       // Mũ và vũ khí trên hình đổi theo món đang mặc.
+      board: { cells: { ...p.board }, gearSets: gearSets(p.gear), progress: progressOf(me.level) },
       look: { body: "nam_khoe", outfit: "dao_bao", idle: "nhan_vat/nam_khoe/dao_bao/dung", hat: p.gear.mu?.icon?.split("/").pop(), weapon: p.gear.vu_khi?.icon?.split("/").pop() },
     };
   }
@@ -771,6 +810,38 @@ export class MockDashboardSource implements DashboardSource {
         delete p.gear[cmd.slot];
         p.bag.push(gearBagItem(p.nextUid++, g));
         return { ok: true, message: `${g.name} về túi` };
+      }
+      case "dat_vien": {
+        const p = w.player;
+        const i = p.bag.findIndex((x) => x.uid === cmd.uid && x.boardPiece);
+        if (i < 0) return { ok: false, error: "khong_thay_mon" };
+        const it = p.bag[i];
+        const piece = it.boardPiece!;
+        let cell: ReturnType<typeof boardCell>;
+        try {
+          cell = boardCell(cmd.cell);
+        } catch {
+          return { ok: false, error: "khong_thay_o" };
+        }
+        if (!boardCellOpen(cmd.cell, progressOf(this.me.level))) return { ok: false, error: "o_chua_mo" };
+        if (!cell.chi_nhan.includes(piece.loai)) return { ok: false, error: "o_khong_nhan" };
+        const old = p.board[cmd.cell];
+        // Viên cũ về túi cần một ô trống khi chưa có chồng cùng loại và viên mới không làm trống ô nào.
+        if (old && !this.pieceStack(old) && it.count > 1 && this.bagFull()) return { ok: false, error: "tui_day" };
+        if (it.count > 1) it.count--;
+        else p.bag.splice(i, 1);
+        if (old) this.pieceToBag(old);
+        p.board[cmd.cell] = piece;
+        return { ok: true, message: old ? `Đặt ${pieceLabel(piece)} vào ô ${cmd.cell}, ${pieceLabel(old)} về túi` : `Đặt ${pieceLabel(piece)} vào ô ${cmd.cell}` };
+      }
+      case "go_vien": {
+        const p = w.player;
+        const piece = p.board[cmd.cell];
+        if (!piece) return { ok: false, error: "khong_thay_mon" };
+        if (!this.pieceStack(piece) && this.bagFull()) return { ok: false, error: "tui_day" };
+        delete p.board[cmd.cell];
+        this.pieceToBag(piece);
+        return { ok: true, message: `${pieceLabel(piece)} về túi` };
       }
       case "cuoi_thu": {
         const p = w.player;

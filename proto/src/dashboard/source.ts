@@ -2,7 +2,7 @@
 // Bản đầu là MockDashboardSource dựng trạng thái mẫu bằng chính lệnh của @ktlp/rules; Sprint 5 thay bằng
 // server giả trong Web Worker với cùng các hàm này, nên các màn không phải sửa.
 import type { BattleInput, Element, SkillType } from "@ktlp/sim";
-import type { Role, RuleError } from "@ktlp/rules";
+import type { BoardPiece, Progress, Role, RuleError } from "@ktlp/rules";
 import type { LocationId, SectModel } from "./art/sectScene.ts";
 
 /** Mốc giờ server (ms) gửi kèm mọi lệnh đọc; đồng hồ đếm ngược ở client tự đếm từ mốc này. */
@@ -130,6 +130,8 @@ export interface Gem {
 export interface GearItem {
   slot: GearSlot;
   name: string;
+  /** Ấn bộ khảm trên món (ma_vp NG-AN-…): món còn độ bền thì tính một món cho bộ của ấn. */
+  seal?: string;
   plus: number; // nấc cường hóa
   durability: number;
   durabilityMax: number;
@@ -196,6 +198,8 @@ export interface BagItem {
   detail: string;
   gear?: GearItem;
   technique?: TechniqueCard;
+  /** Viên đặt được lên Đạo Cơ Bàn: ấn bộ hoặc ngọc hệ (lệnh dat_vien). */
+  boardPiece?: BoardPiece;
 }
 
 export interface NhanVatView extends Stamped {
@@ -234,6 +238,12 @@ export interface NhanVatView extends Stamped {
   combos: { name: string; effect: string; active: boolean }[];
   /** Hình nhân vật ghép: thân, áo và đồ (khoá manifest). */
   look: { body: string; outfit: string; idle: string; hat?: string; weapon?: string };
+  /**
+   * Đạo Cơ Bàn (GDD tab Trang bị, phần 8): viên đang đặt theo mã ô của dao_co_ban.json; số món mỗi bộ (id trong set.json)
+   * trên đồ đang mặc còn độ bền; tiến độ nhân vật để biết ô nào mở (boardCellOpen). Món thêm, ô thông và cộng hưởng tính
+   * bằng boardBonus của @ktlp/rules.
+   */
+  board: { cells: Record<string, BoardPiece>; gearSets: Record<string, number>; progress: Progress };
 }
 
 export interface TerritoryPoint {
@@ -426,6 +436,13 @@ export type DashboardCommand =
   | { type: "mac_do"; uid: number }
   /** Tháo món ở một ô về túi; túi đầy thì không tháo được. */
   | { type: "thao_do"; slot: GearSlot }
+  /**
+   * Đặt một viên trong túi (món có boardPiece) vào ô Đạo Cơ Bàn; ô đã có viên thì viên cũ về túi. Ô phải mở và nhận loại
+   * viên đó (chi_nhan); tương khắc không chặn, chỉ làm đứt mạch.
+   */
+  | { type: "dat_vien"; cell: string; uid: number }
+  /** Gỡ viên ở một ô Đạo Cơ Bàn về túi. */
+  | { type: "go_vien"; cell: string }
   /** Chọn thú cưỡi trong 5 ô thú (GDD mục 6). */
   | { type: "cuoi_thu"; index: number }
   | { type: "chat"; text: string }
