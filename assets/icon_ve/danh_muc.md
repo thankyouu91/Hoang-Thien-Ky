@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 753 món, đã vẽ 261, cần vẽ lại 0.
+Tổng 753 món, đã vẽ 285, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -212,13 +212,13 @@ Tổng 753 món, đã vẽ 261, cần vẽ lại 0.
 | TB-AO-051 | Giáp Bích Lân | Tím | trang_bi/ao/51.webp | ✓ |
 | TB-AO-052 | Bào Vạn Hoa | Tím | trang_bi/ao/52.webp | ✓ |
 | TB-AO-053 | Tiên Y Vũ Linh | Vàng | trang_bi/ao/53.webp | ✓ |
-| TB-AO-054 | Giáp Hoàng Long | Vàng | trang_bi/ao/54.webp |  |
-| TB-AO-055 | Bào Cửu Long | Vàng | trang_bi/ao/55.webp |  |
-| TB-AO-056 | Giáp Thiên Tướng | Vàng | trang_bi/ao/56.webp |  |
-| TB-AO-057 | Pháp Y Thái Hư | Vàng | trang_bi/ao/57.webp |  |
+| TB-AO-054 | Giáp Hoàng Long | Vàng | trang_bi/ao/54.webp | ✓ |
+| TB-AO-055 | Bào Cửu Long | Vàng | trang_bi/ao/55.webp | ✓ |
+| TB-AO-056 | Giáp Thiên Tướng | Vàng | trang_bi/ao/56.webp | ✓ |
+| TB-AO-057 | Pháp Y Thái Hư | Vàng | trang_bi/ao/57.webp | ✓ |
 | TB-AO-058 | Bào Xích Hoàng | Đỏ | trang_bi/ao/58.webp | ✓ |
-| TB-AO-059 | Giáp Huyết Long | Đỏ | trang_bi/ao/59.webp |  |
-| TB-AO-060 | Y Phần Thiên | Đỏ | trang_bi/ao/60.webp |  |
+| TB-AO-059 | Giáp Huyết Long | Đỏ | trang_bi/ao/59.webp | ✓ |
+| TB-AO-060 | Y Phần Thiên | Đỏ | trang_bi/ao/60.webp | ✓ |
 
 ## Trang bị · Đai (60)
 
@@ -228,24 +228,24 @@ Tổng 753 món, đã vẽ 261, cần vẽ lại 0.
 | TB-DA-002 | Đai Vải Bố | Lục | trang_bi/dai/02.webp | ✓ |
 | TB-DA-003 | Đai Dây Thừng | Lục | trang_bi/dai/03.webp | ✓ |
 | TB-DA-004 | Đai Da Trâu | Lục | trang_bi/dai/04.webp | ✓ |
-| TB-DA-005 | Đai Đồng Khấu | Lục | trang_bi/dai/05.webp |  |
-| TB-DA-006 | Đai Lụa Lam | Lục | trang_bi/dai/06.webp |  |
-| TB-DA-007 | Đai Trúc Phiến | Lục | trang_bi/dai/07.webp |  |
-| TB-DA-008 | Đai Hồ Lô | Lục | trang_bi/dai/08.webp |  |
-| TB-DA-009 | Đai Túi Dược | Lục | trang_bi/dai/09.webp |  |
-| TB-DA-010 | Đai Xích Sắt | Lục | trang_bi/dai/10.webp |  |
-| TB-DA-011 | Đai Gấm Thô | Lục | trang_bi/dai/11.webp |  |
-| TB-DA-012 | Đai Da Rắn | Lục | trang_bi/dai/12.webp |  |
-| TB-DA-013 | Đai Mây Bện | Lục | trang_bi/dai/13.webp |  |
-| TB-DA-014 | Đai Quân Sĩ | Lục | trang_bi/dai/14.webp |  |
-| TB-DA-015 | Đai Đạo Sĩ | Lục | trang_bi/dai/15.webp |  |
-| TB-DA-016 | Đai Ngọc Thô | Lục | trang_bi/dai/16.webp |  |
-| TB-DA-017 | Đai Da Hươu | Lục | trang_bi/dai/17.webp |  |
-| TB-DA-018 | Đai Lụa Hồng | Lục | trang_bi/dai/18.webp |  |
-| TB-DA-019 | Đai Kiếm Khách | Lục | trang_bi/dai/19.webp |  |
-| TB-DA-020 | Đai Vảy Cá | Lục | trang_bi/dai/20.webp |  |
-| TB-DA-021 | Đai Đá Cuội | Lục | trang_bi/dai/21.webp |  |
-| TB-DA-022 | Đai Thắt Nút | Lục | trang_bi/dai/22.webp |  |
+| TB-DA-005 | Đai Đồng Khấu | Lục | trang_bi/dai/05.webp | ✓ |
+| TB-DA-006 | Đai Lụa Lam | Lục | trang_bi/dai/06.webp | ✓ |
+| TB-DA-007 | Đai Trúc Phiến | Lục | trang_bi/dai/07.webp | ✓ |
+| TB-DA-008 | Đai Hồ Lô | Lục | trang_bi/dai/08.webp | ✓ |
+| TB-DA-009 | Đai Túi Dược | Lục | trang_bi/dai/09.webp | ✓ |
+| TB-DA-010 | Đai Xích Sắt | Lục | trang_bi/dai/10.webp | ✓ |
+| TB-DA-011 | Đai Gấm Thô | Lục | trang_bi/dai/11.webp | ✓ |
+| TB-DA-012 | Đai Da Rắn | Lục | trang_bi/dai/12.webp | ✓ |
+| TB-DA-013 | Đai Mây Bện | Lục | trang_bi/dai/13.webp | ✓ |
+| TB-DA-014 | Đai Quân Sĩ | Lục | trang_bi/dai/14.webp | ✓ |
+| TB-DA-015 | Đai Đạo Sĩ | Lục | trang_bi/dai/15.webp | ✓ |
+| TB-DA-016 | Đai Ngọc Thô | Lục | trang_bi/dai/16.webp | ✓ |
+| TB-DA-017 | Đai Da Hươu | Lục | trang_bi/dai/17.webp | ✓ |
+| TB-DA-018 | Đai Lụa Hồng | Lục | trang_bi/dai/18.webp | ✓ |
+| TB-DA-019 | Đai Kiếm Khách | Lục | trang_bi/dai/19.webp | ✓ |
+| TB-DA-020 | Đai Vảy Cá | Lục | trang_bi/dai/20.webp | ✓ |
+| TB-DA-021 | Đai Đá Cuội | Lục | trang_bi/dai/21.webp | ✓ |
+| TB-DA-022 | Đai Thắt Nút | Lục | trang_bi/dai/22.webp | ✓ |
 | TB-DA-023 | Đai Mây Trắng | Lục | trang_bi/dai/23.webp |  |
 | TB-DA-024 | Đai Sừng Thú | Lục | trang_bi/dai/24.webp |  |
 | TB-DA-025 | Đai Lôi Văn | Lam | trang_bi/dai/25.webp | ✓ |

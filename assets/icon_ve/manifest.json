@@ -1098,6 +1098,50 @@
       "ma_cu": "trang_bi/ao_than"
     },
     {
+      "ma_vp": "TB-AO-054",
+      "file": "trang_bi/ao/54.webp",
+      "ten": "Giáp Hoàng Long",
+      "description": "Game inventory item icon: a garment displayed upright: golden dragon armor, magnificent and luxurious, gold accents, radiant golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ7_ugRqo",
+      "canva_media_tach_nen": "MAHZ71ZH81c",
+      "canva_design": "DAHZ2im7cjI trang 76",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-AO-055",
+      "file": "trang_bi/ao/55.webp",
+      "ten": "Bào Cửu Long",
+      "description": "Game inventory item icon: a garment displayed upright: imperial robe with nine golden dragons, magnificent and luxurious, gold accents, radiant golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ780WmiE",
+      "canva_media_tach_nen": "MAHZ7zj3RJI",
+      "canva_design": "DAHZ2im7cjI trang 77",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-AO-056",
+      "file": "trang_bi/ao/56.webp",
+      "ten": "Giáp Thiên Tướng",
+      "description": "Game inventory item icon: a garment displayed upright: celestial general's golden armor with a red cape, magnificent and luxurious, gold accents, radiant golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ78hWAzE",
+      "canva_media_tach_nen": "MAHZ72qaUGI",
+      "canva_design": "DAHZ2im7cjI trang 78",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-AO-057",
+      "file": "trang_bi/ao/57.webp",
+      "ten": "Pháp Y Thái Hư",
+      "description": "Game inventory item icon: a garment displayed upright: black and white void robe with a taiji emblem, magnificent and luxurious, gold accents, radiant golden aura. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ7wnKyoE",
+      "canva_media_tach_nen": "MAHZ7wZm0u8",
+      "canva_design": "DAHZ2im7cjI trang 79",
+      "created": "2026-11-04"
+    },
+    {
       "ma_vp": "TB-AO-058",
       "file": "trang_bi/ao/58.webp",
       "ten": "Bào Xích Hoàng",
@@ -1107,6 +1151,28 @@
       "canva_media_tach_nen": "MAHZ158ZvSc",
       "canva_design": "DAHZ1iamT_w trang 66",
       "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-AO-059",
+      "file": "trang_bi/ao/59.webp",
+      "ten": "Giáp Huyết Long",
+      "description": "Game inventory item icon: a garment displayed upright: blood-red dragon armor, legendary divine artifact, red and gold, blazing aura of power. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ76UUT2Y",
+      "canva_media_tach_nen": "MAHZ7zvC_N0",
+      "canva_design": "DAHZ2im7cjI trang 80",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-AO-060",
+      "file": "trang_bi/ao/60.webp",
+      "ten": "Y Phần Thiên",
+      "description": "Game inventory item icon: a garment displayed upright: robe of crimson and gold flames, legendary divine artifact, red and gold, blazing aura of power. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ75uFmuE",
+      "canva_media_tach_nen": "MAHZ73osYw8",
+      "canva_design": "DAHZ2im7cjI trang 81",
+      "created": "2026-11-04"
     },
     {
       "ma_vp": "TB-BT-001",
@@ -1262,6 +1328,204 @@
       "canva_media_tach_nen": "MAHZ18_tLg4",
       "canva_design": "DAHZ1iamT_w trang 69",
       "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "TB-DA-005",
+      "file": "trang_bi/dai/05.webp",
+      "ten": "Đai Đồng Khấu",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: leather belt with a round bronze buckle, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ74zYBF4",
+      "canva_media_tach_nen": "MAHZ77Mi1AE",
+      "canva_design": "DAHZ2im7cjI trang 82",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-006",
+      "file": "trang_bi/dai/06.webp",
+      "ten": "Đai Lụa Lam",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: blue silk sash, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ75hs76A",
+      "canva_media_tach_nen": "MAHZ7_uUofU",
+      "canva_design": "DAHZ2im7cjI trang 83",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-007",
+      "file": "trang_bi/dai/07.webp",
+      "ten": "Đai Trúc Phiến",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: belt of small bamboo plaques, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ75hgFIo",
+      "canva_media_tach_nen": "MAHZ70T7l2g",
+      "canva_design": "DAHZ2im7cjI trang 84",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-008",
+      "file": "trang_bi/dai/08.webp",
+      "ten": "Đai Hồ Lô",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: leather belt with a small gourd hanging, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ7-1DYlU",
+      "canva_media_tach_nen": "MAHZ7-AyHH8",
+      "canva_design": "DAHZ2im7cjI trang 85",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-009",
+      "file": "trang_bi/dai/09.webp",
+      "ten": "Đai Túi Dược",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: belt with herb pouches, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ7_vbzMQ",
+      "canva_media_tach_nen": "MAHZ76TABmk",
+      "canva_design": "DAHZ2im7cjI trang 86",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-010",
+      "file": "trang_bi/dai/10.webp",
+      "ten": "Đai Xích Sắt",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: iron chain belt, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ7xjdfK4",
+      "canva_media_tach_nen": "MAHZ72FpV4A",
+      "canva_design": "DAHZ2im7cjI trang 87",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-011",
+      "file": "trang_bi/dai/11.webp",
+      "ten": "Đai Gấm Thô",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: coarse brocade sash, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ73AMcMs",
+      "canva_media_tach_nen": "MAHZ766HP9U",
+      "canva_design": "DAHZ2im7cjI trang 88",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-012",
+      "file": "trang_bi/dai/12.webp",
+      "ten": "Đai Da Rắn",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: snakeskin belt, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ738A2rY",
+      "canva_media_tach_nen": "MAHZ7-wX3S0",
+      "canva_design": "DAHZ2im7cjI trang 89",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-013",
+      "file": "trang_bi/dai/13.webp",
+      "ten": "Đai Mây Bện",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: woven rattan belt, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ7_SAjq0",
+      "canva_media_tach_nen": "MAHZ73-xD0k",
+      "canva_design": "DAHZ2im7cjI trang 90",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-014",
+      "file": "trang_bi/dai/14.webp",
+      "ten": "Đai Quân Sĩ",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: soldier's wide belt with iron plates, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ7wRIJns",
+      "canva_media_tach_nen": "MAHZ75s7to4",
+      "canva_design": "DAHZ2im7cjI trang 91",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-015",
+      "file": "trang_bi/dai/15.webp",
+      "ten": "Đai Đạo Sĩ",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: yellow sash with tassels, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ78WUdlk",
+      "canva_media_tach_nen": "MAHZ7wp6p3k",
+      "canva_design": "DAHZ2im7cjI trang 92",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-016",
+      "file": "trang_bi/dai/16.webp",
+      "ten": "Đai Ngọc Thô",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: belt strung with rough jade beads, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ773SvCI",
+      "canva_media_tach_nen": "MAHZ78eFoAA",
+      "canva_design": "DAHZ2im7cjI trang 93",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-017",
+      "file": "trang_bi/dai/17.webp",
+      "ten": "Đai Da Hươu",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: deerskin belt with a bone buckle, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ74h5_6g",
+      "canva_media_tach_nen": "MAHZ72mm234",
+      "canva_design": "DAHZ2im7cjI trang 94",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-018",
+      "file": "trang_bi/dai/18.webp",
+      "ten": "Đai Lụa Hồng",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: pink silk sash, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ7xDAbbQ",
+      "canva_media_tach_nen": "MAHZ763EW3U",
+      "canva_design": "DAHZ2im7cjI trang 95",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-019",
+      "file": "trang_bi/dai/19.webp",
+      "ten": "Đai Kiếm Khách",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: swordsman's belt with a sword loop, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ74chv0c",
+      "canva_media_tach_nen": "MAHZ75mDeAg",
+      "canva_design": "DAHZ2im7cjI trang 96",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-020",
+      "file": "trang_bi/dai/20.webp",
+      "ten": "Đai Vảy Cá",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: fish-scale patterned leather belt, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ71HTsDA",
+      "canva_media_tach_nen": "MAHZ7zCqzks",
+      "canva_design": "DAHZ2im7cjI trang 97",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-021",
+      "file": "trang_bi/dai/21.webp",
+      "ten": "Đai Đá Cuội",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: belt strung with polished pebbles, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ74NBkQY",
+      "canva_media_tach_nen": "MAHZ7077jNI",
+      "canva_design": "DAHZ2im7cjI trang 98",
+      "created": "2026-11-04"
+    },
+    {
+      "ma_vp": "TB-DA-022",
+      "file": "trang_bi/dai/22.webp",
+      "ten": "Đai Thắt Nút",
+      "description": "Game inventory item icon: a long waist belt laid out flat in a gentle S-curve so both the strap and the buckle are visible: knotted cord belt, simple, practical and plainly crafted. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHZ7_U3QfM",
+      "canva_media_tach_nen": "MAHZ75vosS4",
+      "canva_design": "DAHZ2im7cjI trang 99",
+      "created": "2026-11-04"
     },
     {
       "ma_vp": "TB-DA-025",
