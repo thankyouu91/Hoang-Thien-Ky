@@ -10,7 +10,7 @@ import TRANG_BI from "../../../data/he_thong/json/trang_bi.json" with { type: "j
 export const LUYEN_KHI = LK.luat;
 interface LevelRow { cap: number; kinh_nghiem_tich_luy: number; cong_chi_so: number; mo_o_khi_van: boolean }
 interface PhuRow { o: string; loai: number; stat: string; gia_tri: number }
-interface KhiVanRow { ma: string; nhom: "cong" | "thu"; gia_tri: number }
+interface KhiVanRow { ma: string; nhom: "cong" | "thu"; gia_tri: number; don_vi: string }
 interface DanhKhiRow { ma_vp: string; khi_hinh: string }
 const LEVELS = LK.khi_linh as LevelRow[];
 const PHU = LK.tay_luyen as PhuRow[];
@@ -137,7 +137,7 @@ export function khiVanInfo(ma: string): { nhom: "cong" | "thu"; giaTri: number }
 export interface KhiVanFx { setFx: SetFx; monsterDamage: number; outside: Record<string, number> }
 
 /**
- * Đổi số lần tính của từng khí văn (đã chặn ở luat.khiVanTinhToiDa) sang sim. Ngưỡng trong mô tả (20% máu, 25% máu,
+ * Đổi số lần tính của từng khí văn (mỗi khí văn kích tính 1 lần) sang sim. Ngưỡng trong mô tả (20% máu, 25% máu,
  * 5 s) chưa có cột số trong dữ liệu nên ghi ở đây. Định Thân: mỗi lần tính bị đẩy lùi ngắn đi một nửa (đề xuất).
  */
 export function khiVanFx(counts: Record<string, number>): KhiVanFx {
@@ -161,7 +161,8 @@ export function khiVanFx(counts: Record<string, number>): KhiVanFx {
       case "KV-TH-004": f.frontDef = v * c; break;
       case "KV-TH-005": f.backMana = v * c; break;
       case "KV-TH-006": f.regenPulse = v * c; f.regenPulseTicks = 100; break;
-      case "KV-TH-007": f.knockbackResist = Math.min(1000, 500 * c); break;
+      // Định Thân: bị đẩy một nửa quãng (gia_tri phần nghìn); dữ liệu cũ ghi 10 tick thì lấy 500.
+      case "KV-TH-007": f.knockbackResist = Math.min(1000, (KHI_VAN[ma].don_vi === "phan_nghin" ? v : 500) * c); break;
       case "KV-TH-008": out.outside.loiKiepGiam = (out.outside.loiKiepGiam ?? 0) + v * c; break;
       default: throw new Error(`Chưa biết đổi khí văn ${ma}`);
     }
