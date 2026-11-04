@@ -257,7 +257,6 @@ export const LUAT: [string, string, string][] = [
   ["luyen_khi.json:luat.khiVanToiDa.tim", "Khí văn tối đa trên món tím", "số"],
   ["luyen_khi.json:luat.khiVanToiDa.vang", "Khí văn tối đa trên món vàng", "số"],
   ["luyen_khi.json:luat.khiVanToiDa.do", "Khí văn tối đa trên món đỏ", "số"],
-  ["luyen_khi.json:luat.khiVanTinhToiDa", "Một khí văn trên nhiều món tính tối đa số lần (1: mỗi khí văn tính 1 lần; giữ cho code rules, sẽ bỏ)", "số"],
   ["luyen_khi.json:luat.khiVanKichToiDa", "Khí văn: mỗi người chọn tối đa số khí văn đang kích (khác nhau, mỗi khí văn tính 1 lần)", "số"],
   ["luyen_khi.json:luat.khiVanTranLucChien", "Tổng mọi khí văn quy đổi không quá lực chiến", "%"],
   ["luyen_khi.json:luat.taoVanLinhVanThach", "Tẩy văn (quay lại 3 lựa chọn): Linh Văn Thạch mỗi lần", "số"],

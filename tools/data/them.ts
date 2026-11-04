@@ -12,6 +12,7 @@
 //   luyen_khi_2     song hệ ngọc đậu cố định, giá linh thạch tẩy luyện theo độ hiếm, thưởng Bảo Giám theo loại (đề xuất)
 //   luyen_khi_3     khiVanTinhToiDa 1 và khiVanKichToiDa 3, Hộ Mệnh 3%, Định Thân 50%, Ý danh khí ×1,25, 2 danh văn, counterFloor
 //   luyen_khi_4     cột tham số danh văn ở Danh khí, tham số phụ (ngưỡng, chu kỳ) ở Khí văn
+//   luyen_khi_5     xóa dòng luật khiVanTinhToiDa (code thôi đọc), bỏ câu nhắc nó trong ghi chú khi_van
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -89,6 +90,26 @@ export class Workbook {
     const at = new RegExp(`<row\\b[^>]*?\\br="${after}"[^>]*?(?:/>|>[\\s\\S]*?</row>)`).exec(xml);
     if (!at) throw new Error(`Sheet "${sheet}" không có dòng ${after}`);
     xml = xml.slice(0, at.index + at[0].length) + add + xml.slice(at.index + at[0].length);
+    this.put(part, xml.replace(/<dimension\b[^>]*\/>/, ""));
+  }
+
+  /** Xóa dòng Excel `row` (đếm từ 1), dời các dòng phía dưới lên. Cùng giới hạn như insertRows (sheet không có công thức). */
+  deleteRow(sheet: string, row: number): void {
+    if (this.sheet(sheet).formulas.some((r) => r?.some(Boolean))) throw new Error(`Sheet "${sheet}" có công thức, không xóa dòng giữa được`);
+    if (row < 2) throw new Error("Không xóa dòng tiêu đề");
+    const part = this.part(sheet);
+    const shift = (k: number) => (k > row ? k - 1 : k);
+    let found = false;
+    let xml = this.text(part).replace(/<row\b([^>]*?)\br="(\d+)"([^>]*?)(\/>|>([\s\S]*?)<\/row>)/g, (m, pre: string, k: string, post: string, tail: string, body?: string) => {
+      const r = Number(k);
+      if (r === row) { found = true; return ""; }
+      if (r < row) return m;
+      const newBody = (body ?? "").replace(/(<c\b[^>]*?\br=")([A-Z]+)(\d+)"/g, (_, a: string, c: string, rr: string) => `${a}${c}${shift(Number(rr))}"`);
+      return `<row${pre}r="${shift(r)}"${post}${body === undefined ? tail : `>${newBody}</row>`}`;
+    });
+    if (!found) throw new Error(`Sheet "${sheet}" không có dòng ${row}`);
+    xml = xml.replace(/\b(sqref|ref)="([^"]+)"/g, (_, attr: string, v: string) =>
+      `${attr}="${v.replace(/([A-Z]+)(\d+)/g, (__, c: string, r: string) => `${c}${shift(Number(r))}`)}"`);
     this.put(part, xml.replace(/<dimension\b[^>]*\/>/, ""));
   }
 
@@ -470,7 +491,7 @@ const LUAT_LK: [string, number][] = [
   ["songHeCapNgoc", 7], ["phachCapNgoc", 10], ["danhKhiMoCap", 250], ["danhKhiLoToiThieu", 9],
   ["phanGiaiKhiTinhMoiCapKhiLinh", 1], ["phanGiaiTraNac", 500], ["tayLuyenKhiTinh", 2],
   ["khiLinhKnTran", 1], ["khiLinhKnBiCanh", 5], ["khiLinhKnKhiTinh", 10],
-  ["khiVanToiDa.tim", 1], ["khiVanToiDa.vang", 2], ["khiVanToiDa.do", 3], ["khiVanTinhToiDa", 1], ["khiVanKichToiDa", 3], ["khiVanTranLucChien", 10],
+  ["khiVanToiDa.tim", 1], ["khiVanToiDa.vang", 2], ["khiVanToiDa.do", 3], ["khiVanKichToiDa", 3], ["khiVanTranLucChien", 10],
   ["taoVanLinhVanThach", 1], ["phachTyLe", 300], ["phachKhiTinh", 20],
   ["danhKhiVanThiet", 5], ["danhKhiKhiTinh", 50], ["danhKhiHoLo", 3], ["danhKhiTyLe.lo9", 400], ["danhKhiTyLe.lo10", 600],
   ["danhKhiYHeSo", 1250], ["danhKhiMoiNguoi", 1], ["baoGiamTuanLinhVanThach", 2], ["teLuyenHoiChieuSan", 600],
@@ -676,13 +697,14 @@ const luyenKhi3: Step = (wb, log) => {
   //    thêm "mỗi người tối đa 3 khí văn đang kích" ngay sau; Ý danh khí ×1,25
   const luat = partDef("Luật trang bị"), cu = "luyen_khi.json:luat.khiVanTinhToiDa", moi = "luyen_khi.json:luat.khiVanKichToiDa";
   const keys = wb.sheet(luat.sheet).cells.map((r) => norm(r?.[0]));
-  if (!keys.includes(cu)) throw new Error(`Luật trang bị: không có dòng ${cu}`);
-  put(luat, cu, "ten", text(TB.LUAT.find((l) => l[0] === cu)![1]));
-  put(luat, cu, "gia_tri", { v: 1, fill: "de_xuat" });
-  if (!keys.includes(moi)) {
-    wb.insertRows(luat.sheet, keys.indexOf(cu) + 1, tableRows(luat, [{ khoa: moi, ten: TB.LUAT.find((l) => l[0] === moi)![1], gia_tri: 3, kieu: "số" }]));
-  }
-  log.push("Luật trang bị: khiVanTinhToiDa 2 → 1, thêm khiVanKichToiDa 3");
+  if (keys.includes(cu)) { // luyen_khi_5 xóa dòng này khi code thôi đọc; chạy lại sau đó thì bỏ qua phần này
+    put(luat, cu, "ten", text("Một khí văn trên nhiều món tính tối đa số lần (1: mỗi khí văn tính 1 lần; giữ cho code rules, sẽ bỏ)"));
+    put(luat, cu, "gia_tri", { v: 1, fill: "de_xuat" });
+    if (!keys.includes(moi)) {
+      wb.insertRows(luat.sheet, keys.indexOf(cu) + 1, tableRows(luat, [{ khoa: moi, ten: TB.LUAT.find((l) => l[0] === moi)![1], gia_tri: 3, kieu: "số" }]));
+    }
+    log.push("Luật trang bị: khiVanTinhToiDa 2 → 1, thêm khiVanKichToiDa 3");
+  } else if (!keys.includes(moi)) throw new Error(`Luật trang bị: không có dòng ${cu} lẫn ${moi}`);
   put(luat, "luyen_khi.json:luat.danhKhiYHeSo", "gia_tri", { v: 1.25, fill: "de_xuat" });
   log.push("Luật trang bị: danhKhiYHeSo ×1,25");
 
@@ -719,7 +741,7 @@ const luyenKhi3: Step = (wb, log) => {
   const fAt = gh.indexOf(colOf(gc, "file")), nAt = gh.indexOf(colOf(gc, "noi_dung"));
   const i = gs.cells.findIndex((r) => norm(r?.[fAt]) === "luyen_khi.json" && norm(r?.[nAt]).startsWith("khi_van:"));
   if (i < 0) throw new Error("Ghi chú trang bị: không có dòng khi_van của luyen_khi.json");
-  wb.setCell(gc.sheet, i, nAt, text("khi_van: gia_tri là số chính của tác dụng để chỉnh. Mỗi người chọn tối đa luat.khiVanKichToiDa khí văn đang kích, khác nhau, mỗi khí văn tính 1 lần (luat.khiVanTinhToiDa = 1, giữ tạm cho code); tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi nguồn làm mềm vẫn còn ít nhất tham_so.json cong_phap.counterFloor (×1,2)."));
+  if (!norm(gs.cells[i][nAt]).includes("luat.khiVanKichToiDa")) wb.setCell(gc.sheet, i, nAt, text("khi_van: gia_tri là số chính của tác dụng để chỉnh. Mỗi người chọn tối đa luat.khiVanKichToiDa khí văn đang kích, khác nhau, mỗi khí văn tính 1 lần (luat.khiVanTinhToiDa = 1, giữ tạm cho code); tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi nguồn làm mềm vẫn còn ít nhất tham_so.json cong_phap.counterFloor (×1,2)."));
   log.push("Ghi chú trang bị: sửa dòng khi_van");
 };
 
@@ -773,9 +795,24 @@ const luyenKhi4: Step = (wb, log) => {
   log.push("Ghi chú trang bị: thêm câu về cột tham_so ở danh_khi, khi_van");
 };
 
+// ---------- luyện khí lần 5: bỏ luật khiVanTinhToiDa (code rules thôi đọc từ 3cb7ba5; mỗi khí văn luôn tính 1 lần) ----------
+
+const luyenKhi5: Step = (wb, log) => {
+  const luat = partDef("Luật trang bị"), cu = "luyen_khi.json:luat.khiVanTinhToiDa";
+  const at = wb.sheet(luat.sheet).cells.findIndex((r) => norm(r?.[0]) === cu);
+  if (at > 0) { wb.deleteRow(luat.sheet, at + 1); log.push(`Luật trang bị: xóa dòng ${at + 1} (khiVanTinhToiDa)`); }
+  else log.push("Luật trang bị: khiVanTinhToiDa đã xóa, bỏ qua");
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), gh = (gs.cells[0] ?? []).map(norm);
+  const hd = (k: string) => gh.indexOf(gc.cols.find((c) => c.key === k)!.header);
+  const i = gs.cells.findIndex((r) => norm(r?.[hd("file")]) === "luyen_khi.json" && norm(r?.[hd("noi_dung")]).startsWith("khi_van:"));
+  if (i < 0) throw new Error("Ghi chú trang bị: không có dòng khi_van của luyen_khi.json");
+  const cur = norm(gs.cells[i][hd("noi_dung")]), next = cur.replace(" (luat.khiVanTinhToiDa = 1, giữ tạm cho code)", "");
+  if (next !== cur) { wb.setCell(gc.sheet, i, hd("noi_dung"), { v: next, fill: "de_xuat" }); log.push("Ghi chú trang bị: bỏ câu khiVanTinhToiDa ở dòng khi_van"); }
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
-  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4,
+  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
