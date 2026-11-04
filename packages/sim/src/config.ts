@@ -86,6 +86,21 @@ export const CAST_FLOOR = {
   channelTicks: SEC / 2,
 };
 
+/**
+ * Pháp bảo (tab Trang bị, phần 9; data/he_thong/json/phap_bao.json). Số đếm lấy theo điều kiện kích hoạt trong GDD;
+ * khoảng cách "kề bên", "đứng sát", "trong tầm" là đề xuất (2026-11-04). Chưa có trong tham_so.json.
+ */
+export const ARTIFACT_RULES = {
+  adjacentRange: 1000, // "kề bên", "đứng sát": trong 1 ô
+  nearRange: 4000, // Hồ lô "trong tầm": trong 4 ô
+  luanMinEnemies: 3, // Luân: từ 3 kẻ địch cận chiến đứng sát
+  chauHits: 2, // Châu: 2 đòn tầm xa kế tiếp
+  thapAllies: 3, // Tháp: che 3 đồng đội gần nhất
+  dinhHealOfMax: 150, // Đỉnh: lượng hồi từ 15% máu tối đa
+  chuongMinControlled: 2, // Chuông: từ 2 đồng đội đang bị khống chế
+  anDashDamage: 500, // Ấn: đòn lướt còn 50%
+};
+
 /** Sân đấu và nhịp trận (Q4 trong docs/KE_HOACH.md): tất cả là đề xuất. */
 export const BATTLE = {
   fieldLength: 12000, // trục 12 ô; đội A ở nửa 0–6000, đội B ở nửa 6000–12000

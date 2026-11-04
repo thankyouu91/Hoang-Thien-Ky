@@ -352,7 +352,7 @@ test("Tiêu Ý: khống chế ưu tiên địch đang vận công", () => {
   const run = (pick?: "channeling") =>
     castNow({ seed: 1, teamA: [unit(1, 1, [tech("khong_che", "kim")], { skillMods: pick ? { khong_che: { pick } } : {} })], teamB: [inert(101), inert(102)] }, (x) => {
       place(x, { 1: 4000, 101: 5000, 102: 6000 });
-      get(x, 102).channel = { slot: 0, startTick: 0, resolveTick: 1_000_000, center: 4000, ult: false, interruptible: true };
+      get(x, 102).channel = { slot: 0, startTick: 0, resolveTick: 1_000_000, center: 4000, ult: false, interruptible: true, guarded: [], guardCut: 0 };
     }).targets;
   assert.deepEqual(run(), [101]);
   assert.deepEqual(run("channeling"), [102]);

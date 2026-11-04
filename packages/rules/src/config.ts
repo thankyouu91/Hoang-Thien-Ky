@@ -43,4 +43,6 @@ export const GEAR = {
   maxYChau: 1,
   /** Hồi phục tốn mana gấp 3 (GDD mục 8); hệ số mana của Cầm Ý (×2,7) tính trên mức này. */
   healManaTimes: 3000,
+  /** Pháp bảo tự rèn (Tu rèn) +10% chỉ số chính (GDD mục 6). */
+  selfForgedArtifact: 1100,
 };
