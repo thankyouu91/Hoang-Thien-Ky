@@ -6,6 +6,8 @@
 //   artifact_rules  nhóm ARTIFACT_RULES ở sheet Tham số (điều kiện kích hoạt pháp bảo, sim f656195)
 //   dao_co_ban      Đạo Cơ Bàn (GDD tab Trang bị phần 8): sheet Đạo Cơ Bàn, Cộng hưởng, Mạch cộng hưởng; cột Hệ ấn ở Ấn bộ;
 //                   4 luật ở Luật trang bị; ghi chú của dao_co_ban.json
+//   luyen_khi       Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13): 9 sheet sau Nguyên liệu rèn → luyen_khi.json, Phách và song
+//                   hệ vào ngoc.json; 10 danh khí ở Kiểu trang bị, Khí Tinh, Linh Văn Thạch, đồ phổ ở Nguyên liệu rèn; luật, ghi chú
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -396,8 +398,179 @@ const hopTran: Step = (wb, log) => {
   log.push(`Tham số: chèn ${desc.length} khóa hợp trận sau dòng ${last + 1} (SKILL_RULES)`);
 };
 
+// ---------- luyện khí sau cấp tối đa (GDD tab Trang bị phần 13, rev 37; ghi chú chung luyen-khi.md; mọi số là đề xuất) ----------
+
+const STAT_TEN: Record<string, string> = {
+  critDamage: "Sát thương chí mạng", armorPen: "Xuyên giáp", attackSpeed: "Tốc đánh", lifesteal: "Hút máu", manaMax: "Mana tối đa",
+  cooldownCut: "Giảm hồi chiêu", controlTime: "Thời gian khống chế", healPower: "Hiệu quả hồi máu và khiên", hp: "Máu",
+  shieldTaken: "Khiên nhận", healTaken: "Hồi máu nhận", critBonus: "Chí mạng", resistPen: "Xuyên kháng", def: "Phòng thủ",
+  dot: "Sát thương theo thời gian",
+};
+/** 4 loại chỉ số phụ mỗi ô, giá trị phần nghìn ở lục +0; loại 1 là chỉ số phụ mặc định. */
+const TAY_LUYEN: Record<string, [string, number][]> = {
+  vu_khi: [["critDamage", 20], ["armorPen", 10], ["attackSpeed", 10], ["lifesteal", 5]],
+  mu: [["manaMax", 20], ["cooldownCut", 5], ["controlTime", 20], ["healPower", 10]],
+  ao: [["hp", 15], ["shieldTaken", 20], ["healTaken", 10], ["manaMax", 10]],
+  dai: [["healTaken", 10], ["hp", 10], ["healPower", 10], ["shieldTaken", 10]],
+  bao_tay: [["critBonus", 5], ["critDamage", 10], ["resistPen", 10], ["attackSpeed", 5]],
+  giay: [["attackSpeed", 10], ["cooldownCut", 5], ["controlTime", 20], ["def", 10]],
+  ngoc_boi: [["cooldownCut", 5], ["manaMax", 10], ["dot", 20], ["resistPen", 10]],
+};
+/** Khí văn: mã, tên, tác dụng, số chính, đơn vị. */
+const KHI_VAN: [string, string, string, number, string][] = [
+  ["KV-CO-001", "Phá Thuẫn Văn", "Đòn đầu tiên lên mục tiêu đang có khiên +10% sát thương", 0.10, "%"],
+  ["KV-CO-002", "Truy Mệnh Văn", "Mục tiêu dưới 20% máu nhận thêm 5% sát thương", 0.05, "%"],
+  ["KV-CO-003", "Tiên Phát Văn", "Chiêu đầu tiên mỗi trận +15% sát thương", 0.15, "%"],
+  ["KV-CO-004", "Liên Kích Văn", "Đánh cùng mục tiêu 3 lần liên tiếp thì lần thứ 3 +8% sát thương", 0.08, "%"],
+  ["KV-CO-005", "Khắc Hệ Văn", "Đánh hệ mình khắc: hệ số ×1,5 thành ×1,53", 1.53, "hệ số"],
+  ["KV-CO-006", "Tụ Linh Văn", "Hạ gục kẻ địch thì hồi 3% mana", 0.03, "%"],
+  ["KV-CO-007", "Phá Trận Văn", "Sát thương lên trận nhãn, hộ trận +3% (chiến tranh)", 0.03, "%"],
+  ["KV-CO-008", "Liệp Yêu Văn", "Sát thương lên dị thú và boss PvE +4%", 0.04, "%"],
+  ["KV-TH-001", "Hộ Mệnh Văn", "Lần đầu máu dưới 25%: khiên 8% máu tối đa", 0.08, "%"],
+  ["KV-TH-002", "Ngự Khắc Văn", "Trúng đòn hệ khắc mình: hệ số ×1,5 thành ×1,47", 1.47, "hệ số"],
+  ["KV-TH-003", "Phản Chấn Văn", "Phản 3% sát thương cận chiến nhận được", 0.03, "%"],
+  ["KV-TH-004", "Thiết Bích Văn", "Đứng hàng trước: phòng thủ +3%", 0.03, "%"],
+  ["KV-TH-005", "Tĩnh Tâm Văn", "Đứng hàng sau: mana tối đa +3%", 0.03, "%"],
+  ["KV-TH-006", "Hồi Xuân Văn", "Hồi 1% máu mỗi 5 s", 0.01, "%"],
+  ["KV-TH-007", "Định Thân Văn", "Bị đẩy lùi thì đứng lại sau 0,5 s thay vì bị đẩy hết ô", 0.5, "giây"],
+  ["KV-TH-008", "Tị Kiếp Văn", "Lôi kiếp gây ít hơn 5% sát thương (ngoài trận)", 0.05, "%"],
+];
+const PHAN_GIAI: [string, number][] = [["lam", 1], ["tim", 3], ["vang", 10], ["do", 25]];
+const PHACH_TEN = ["Canh Kim Phách", "Thanh Mộc Phách", "Huyền Thủy Phách", "Xích Diễm Phách", "Hậu Thổ Phách", "Tử Lôi Phách",
+  "Thanh Phong Phách", "Diệu Quang Phách", "U Lãnh Phách", "Thuần Dương Phách", "Huyền Âm Phách", "Hàn Tủy Phách"];
+/** Danh khí: mã, tên, khí hình, danh văn. Đồ phổ NL-DP-001…010 theo cùng thứ tự. */
+const DANH_KHI: [string, string, string, string][] = [
+  ["TB-KI-061", "Thiên Vấn Kiếm", "kiem", "Cận chiến đơn chí mạng thì chiêu đó hồi chiêu nhanh 0,5 s"],
+  ["TB-KI-062", "Đoạn Nhạc Đao", "dao", "Mỗi mục tiêu trúng quét từ thứ 3 trở đi cho người cầm khiên 1% máu tối đa"],
+  ["TB-KI-063", "Lạc Tinh Cung", "cung", "Đòn tầm xa vào kẻ đang vận công +20% sát thương"],
+  ["TB-KI-064", "Phong Lôi Phiến", "phien", "Diện rộng trúng từ 6 mục tiêu thì lần vận công kế tiếp nhanh gấp đôi"],
+  ["TB-KI-065", "Bất Động Côn", "con", "Khiên hộ thể của người cầm đỡ thêm 1 lần khống chế cho người được che"],
+  ["TB-KI-066", "Tạo Hóa Bút", "but", "Bùa chú thêm 1 lần mỗi trận, mỗi lần −15% sát thương"],
+  ["TB-KI-067", "Tinh La Kỳ", "ky", "Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ"],
+  ["TB-KI-068", "Vọng Nguyệt Cầm", "cam", "Hồi phục giải luôn 1 hiệu ứng thiêu đốt hoặc độc"],
+  ["TB-KI-069", "Ngọc Lâu Tiêu", "tieu", "Khống chế trúng kẻ đang vận công thì chiêu đó mất luôn, không hoàn hồi chiêu"],
+  ["TB-KI-070", "Phá Thiên Thương", "thuong", "Lướt tới xong, đòn kế tiếp xuyên 20% khiên"],
+];
+const LUAT_LK: [string, number][] = [
+  ["phanGiaiMoCap", 20], ["baoGiamMoCap", 20], ["tayLuyenMoCap", 101], ["khiLinhMoCap", 201], ["khiLinhBacToiThieu", 3],
+  ["songHeCapNgoc", 7], ["phachCapNgoc", 10], ["danhKhiMoCap", 250], ["danhKhiLoToiThieu", 9],
+  ["phanGiaiKhiTinhMoiCapKhiLinh", 1], ["phanGiaiTraNac", 500], ["tayLuyenKhiTinh", 2],
+  ["khiLinhKnTran", 1], ["khiLinhKnBiCanh", 5], ["khiLinhKnKhiTinh", 10],
+  ["khiVanToiDa.tim", 1], ["khiVanToiDa.vang", 2], ["khiVanToiDa.do", 3], ["khiVanTinhToiDa", 2], ["khiVanTranLucChien", 10],
+  ["taoVanLinhVanThach", 1], ["phachTyLe", 300], ["phachKhiTinh", 20],
+  ["danhKhiVanThiet", 5], ["danhKhiKhiTinh", 50], ["danhKhiHoLo", 3], ["danhKhiTyLe.lo9", 400], ["danhKhiTyLe.lo10", 600],
+  ["danhKhiYHeSo", 1500], ["danhKhiMoiNguoi", 1], ["baoGiamTuanLinhVanThach", 2], ["teLuyenHoiChieuSan", 600],
+];
+const GHI_CHU_LK = [
+  "Luyện khí sau cấp tối đa (GDD tab Trang bị, pháp bảo và set đồ, phần 13; mọi số là đề xuất): mở rộng theo chiều ngang (thêm lựa chọn, thứ để thử, thứ để sưu tầm), cả lớp cộng tối đa khoảng 3 điểm lực chiến, trong trần 35% của đồ.",
+  "Mở khóa (số ở luat): phân giải và Bảo Giám từ cấp 20; tẩy luyện từ Kết Đan; khí linh và khí văn từ Hóa Thần, món từ tím; song hệ khi có ngọc cấp 7; Ngọc Phách khi có ngọc cấp 10; danh khí từ cấp 250 Hạ vị hoặc từ Trung vị, tông môn có lò rèn cấp 9; tế luyện tầng pháp bảo từ Trung vị.",
+  "tay_luyen: đổi loại chỉ số phụ của một món sang loại khác trong 4 loại của ô, cùng thang giá trị (giá trị ở lục +0, nhân độ hiếm, cường hóa, bí cảnh như chỉ số phụ cũ). Loại 1 là chỉ số phụ mặc định ở trang_bi.json o[].phu. Người thường quay ngẫu nhiên trong 3 loại còn lại; Tu rèn chọn thẳng.",
+  "khi_linh: mỗi cấp cộng cong_chi_so vào hệ số cùng chỗ với cường hóa; món có khí linh từ cấp 1 khóa vào nhân vật. Cấp 3, 6, 9 mở ô khí văn, tối đa luat.khiVanToiDa theo độ hiếm; chọn 1 trong 3 khí văn của nhóm ô (cong: vũ khí, bao tay, ngọc bội; thu: mũ, áo, đai, giày).",
+  "khi_van: gia_tri là số chính của tác dụng để chỉnh. Một khí văn trên nhiều món tính tối đa luat.khiVanTinhToiDa lần; tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi thứ vẫn còn ít nhất ×1,2.",
+  "phan_giai: món từ lam ra Khí Tinh theo độ hiếm, cộng luat.phanGiaiKhiTinhMoiCapKhiLinh mỗi cấp khí linh; ngọc, Ý châu, ấn trả nguyên vẹn; luat.phanGiaiTraNac số nấc cường hóa trả lại thành Luyện Khí Thạch đúng phẩm. Khí Tinh từ đồ khóa cũng khóa.",
+  "danh_khi: luyện ở lò tông môn cấp luat.danhKhiLoToiThieu trở lên theo đồ phổ, phôi là 1 vũ khí đỏ cùng khí hình; Ý của khí hình mạnh gấp luat.danhKhiYHeSo lần Ý châu, không chiếm dòng khảm, cộng danh văn riêng. Mỗi người mặc luat.danhKhiMoiNguoi danh khí; khóa. Thất bại mất Khí Tinh và Vẫn Thiết, giữ phôi và đồ phổ.",
+  "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu. Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch.",
+  "te_luyen_tang: pháp bảo đã tế luyện, từ Trung vị, lên tầng 1–5; linh_luc, hoi_chieu là cộng dồn tới tầng đó. Hồi chiêu pháp bảo sau mọi nguồn (set Cổ Tông, tầng) không dưới luat.teLuyenHoiChieuSan hồi chiêu gốc.",
+];
+const GHI_CHU_NGOC_LK = "song_he, phach (luyện khí, đề xuất 2026-11-04): song hệ hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp, mỗi hệ moi_he giá trị một viên thường, tính trong trần mềm của hệ đó. Phách điểm hóa từ 1 ngọc cấp 10 (luyen_khi.json luat.phachKhiTinh, luat.phachTyLe), khảm ô công, cho gia_tri và nâng trần sát thương hệ đó lên tran_toi_da; mỗi hệ 1 Phách tính trần; khóa.";
+
+const luyenKhi: Step = (wb, log) => {
+  // Sheet mới, đặt sau Nguyên liệu rèn
+  const pb = wb.sheet("Pháp bảo loại"), pbh = (pb.cells[0] ?? []).map(norm);
+  const pbId = pbh.indexOf("Mã"), pbTen = pbh.indexOf("Tên");
+  const pbLoai = pb.cells.slice(1).filter((r) => norm(r?.[pbId])).map((r) => [norm(r[pbId]), norm(r[pbTen])]);
+  const oTen: Record<string, string> = { vu_khi: "Vũ khí", mu: "Mũ", ao: "Áo", dai: "Đai", bao_tay: "Bao tay", giay: "Giày", ngoc_boi: "Ngọc bội" };
+  const baoGiam = [
+    ...Object.keys(TAY_LUYEN).map((o) => ({
+      ma: `BG-TB-${o.toUpperCase().replace(/_/g, "")}`, ten: `${oTen[o]} phổ`, dem: `loai: trang_bi; o: ${o}`, so_luong: o === "vu_khi" ? 70 : 60,
+      thuong: o === "vu_khi" ? "Danh hiệu Vạn Binh; ánh sáng vũ khí" : `Khung ô ${oTen[o].toLowerCase()}; 10 Khí Tinh`,
+    })),
+    ...pbLoai.map(([id, ten]) => ({ ma: `BG-PB-${id.toUpperCase().replace(/_/g, "")}`, ten: `${ten} đủ năm màu`, dem: `loai: phap_bao; phap_bao: ${id}`, so_luong: 5, thuong: "5 Khí Tinh" })),
+    { ma: "BG-PB-ALL", ten: "Bách Bảo phổ", dem: "loai: phap_bao", so_luong: 50, thuong: "Danh hiệu Bách Bảo; 10 ô kho" },
+    { ma: "BG-PK-ALL", ten: "Pháp khí phổ", dem: "loai: phap_khi", so_luong: 24, thuong: "10 ô túi" },
+    { ma: "BG-YC-ALL", ten: "Ý châu phổ", dem: "loai: y_chau", so_luong: 10, thuong: "Ánh sáng vũ khí theo Ý" },
+    { ma: "BG-AN-ALL", ten: "Ấn phổ", dem: "loai: an_bo", so_luong: 20, thuong: "Danh hiệu Ấn Tàng" },
+    { ma: "BG-PH-ALL", ten: "Phách phổ", dem: "loai: phach", so_luong: 12, thuong: "Khung ô ngọc" },
+    { ma: "BG-DK-ALL", ten: "Danh khí phổ", dem: "loai: danh_khi", so_luong: 10, thuong: "Danh hiệu Thần Binh" },
+  ];
+  const sheets: [string, Record<string, string | number | null>[]][] = [
+    ["Tẩy luyện", Object.entries(TAY_LUYEN).flatMap(([o, list]) => list.map(([stat, v], i) => ({ o, loai: i + 1, stat, ten: STAT_TEN[stat], gia_tri: v / 1000 })))],
+    ["Khí linh", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((k) => ({
+      cap: k, kinh_nghiem: 100 * k, kinh_nghiem_tich_luy: (100 * k * (k + 1)) / 2, cong_chi_so: (5 * k) / 1000, mo_o_khi_van: k > 0 && k % 3 === 0 ? "có" : "không",
+    }))],
+    ["Khí văn", KHI_VAN.map(([ma, ten, tac_dung, gia_tri, don_vi]) => ({ ma, nhom: ma.startsWith("KV-CO") ? "cong" : "thu", ten, tac_dung, gia_tri, don_vi }))],
+    ["Phân giải", PHAN_GIAI.map(([do_hiem, khi_tinh]) => ({ do_hiem, khi_tinh }))],
+    ["Ngọc Phách", N.ELEMENT_ORDER.map((he, i) => ({
+      ma_vp: `NG-PH-${String(i + 1).padStart(3, "0")}`, he, ten: PHACH_TEN[i], gia_tri: 0.11, tran_toi_da: 0.28, khoa: "có", nguon: "diem_hoa_ngoc_cap_10",
+    }))],
+    ["Song hệ ngọc", [{ ma_vp: "NG-SH-001", ten: "Song Hệ Ngọc", moi_he: 0.6, mo_ta: "Hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp; hai hệ và cấp là thuộc tính từng viên. Tỷ lệ đậu như nén lên chính cấp đó", nguon: "hop_ngoc" }]],
+    ["Danh khí", DANH_KHI.map(([ma_vp, ten, khi_hinh, danh_van], i) => ({ ma_vp, ten, khi_hinh, danh_van, do_pho: `NL-DP-${String(i + 1).padStart(3, "0")}` }))],
+    ["Bảo Giám", baoGiam],
+    ["Tế luyện tầng", [1, 2, 3, 4, 5].map((k) => ({ tang: k, linh_luc: k / 10, hoi_chieu: -k / 50, khi_tinh: 5 * k }))],
+  ];
+  let after = "Nguyên liệu rèn";
+  for (const [name, rows] of sheets) {
+    if (wb.names().includes(name)) log.push(`${name}: sheet đã có, bỏ qua`);
+    else { wb.addSheet(table(partDef(name), rows), after); log.push(`${name}: thêm sheet ${rows.length} dòng`); }
+    after = name;
+  }
+
+  // 10 danh khí vào Kiểu trang bị, ngay sau TB-KI-060
+  const kt = partDef("Kiểu trang bị"), ks = wb.sheet(kt.sheet), kh = (ks.cells[0] ?? []).map(norm);
+  const kId = kh.indexOf(kt.cols.find((c) => c.key === "ma_vp")!.header);
+  const haveKieu = new Set(ks.cells.map((r) => norm(r?.[kId])));
+  const newKieu = DANH_KHI.filter(([ma]) => !haveKieu.has(ma)).map(([ma_vp, ten, khi_hinh, danh_van]) => ({
+    ma_vp, o: "vu_khi", so: Number(ma_vp.slice(-3)), ten, do_hiem: "do", khi_hinh, ten_de_xuat: null, dang: null,
+    mo_ta: `Danh khí (thần binh có tên): ${danh_van}`, nguon: "luyen_danh_khi",
+  }));
+  if (newKieu.length) {
+    const last = ks.cells.reduce((a, r, i) => (/^TB-KI-\d{3}$/.test(norm(r?.[kId])) ? i : a), -1);
+    wb.insertRows(kt.sheet, last + 1, tableRows(kt, newKieu));
+  }
+  log.push(`Kiểu trang bị: chèn ${newKieu.length} danh khí sau vũ khí cuối`);
+
+  // Nguyên liệu: Khí Tinh, Linh Văn Thạch, 10 đồ phổ
+  const nl = partDef("Nguyên liệu rèn"), ns = wb.sheet(nl.sheet), nId = (ns.cells[0] ?? []).map(norm).indexOf(nl.cols.find((c) => c.key === "ma_vp")!.header);
+  const haveNl = new Set(ns.cells.map((r) => norm(r?.[nId])));
+  const newNl = [
+    { ma_vp: "NL-KT-001", ten: "Khí Tinh", mo_ta: "Phân giải đồ từ lam trở lên ra; dùng tẩy luyện, dưỡng khí linh, luyện danh khí, tế luyện tầng pháp bảo. Từ đồ khóa thì khóa, từ đồ chưa khóa thì bán được bằng linh thạch", nguon: "phan_giai", moi: "có" },
+    { ma_vp: "NL-KT-002", ten: "Linh Văn Thạch", mo_ta: "Tẩy văn: quay lại 3 lựa chọn khí văn của một ô", nguon: "bao_giam_trang_tuan", moi: "có" },
+    ...DANH_KHI.map(([, ten], i) => ({
+      ma_vp: `NL-DP-${String(i + 1).padStart(3, "0")}`, ten: `${ten} đồ phổ`, mo_ta: `Đồ phổ luyện danh khí ${ten}; khóa`,
+      nguon: "thuong_co_chien_truong, hon_don_bi_canh", moi: "có",
+    })),
+  ].filter((r) => !haveNl.has(r.ma_vp));
+  if (newNl.length) wb.appendRows(nl.sheet, tableRows(nl, newNl));
+  log.push(`Nguyên liệu rèn: thêm ${newNl.length} dòng`);
+
+  // Luật và ghi chú
+  const luatDef = partDef("Luật trang bị");
+  const have = new Set(wb.sheet(luatDef.sheet).cells.map((r) => norm(r?.[0])));
+  const luat = LUAT_LK.map(([k, v]) => [`luyen_khi.json:luat.${k}`, v] as const).filter(([k]) => !have.has(k)).map(([khoa, v]) => {
+    const [, ten, kieu] = TB.LUAT.find((l) => l[0] === khoa)!;
+    return { khoa, ten, gia_tri: kieu === "số" ? v : v / 1000, kieu };
+  });
+  if (luat.length) wb.appendRows(luatDef.sheet, tableRows(luatDef, luat));
+  log.push(`Luật trang bị: thêm ${luat.length} dòng`);
+  const gcDef = partDef("Ghi chú trang bị"), gs = wb.sheet(gcDef.sheet);
+  const gh = (k: string) => (gs.cells[0] ?? []).map(norm).indexOf(gcDef.cols.find((c) => c.key === k)!.header);
+  const addGc: Record<string, string | number>[] = [];
+  if (!gs.cells.some((r) => norm(r?.[gh("file")]) === "luyen_khi.json")) GHI_CHU_LK.forEach((noi_dung, i) => addGc.push({ file: "luyen_khi.json", stt: i + 1, noi_dung }));
+  const ngocNotes = gs.cells.filter((r) => norm(r?.[gh("file")]) === "ngoc.json");
+  if (!ngocNotes.some((r) => norm(r?.[gh("noi_dung")]).startsWith("song_he, phach"))) {
+    addGc.push({ file: "ngoc.json", stt: Math.max(0, ...ngocNotes.map((r) => Number(r?.[gh("stt")]))) + 1, noi_dung: GHI_CHU_NGOC_LK });
+  }
+  if (addGc.length) wb.appendRows(gcDef.sheet, tableRows(gcDef, addGc));
+  log.push(`Ghi chú trang bị: thêm ${addGc.length} dòng`);
+  const intro = "Tẩy luyện … Tế luyện tầng (9 sheet)";
+  if (!wb.sheet(B.NOTE_SHEET).cells.some((r) => norm(r?.[0]) === intro)) {
+    wb.appendRows(B.NOTE_SHEET, [[{ v: intro, bold: true }, { v: "Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13): tẩy luyện, khí linh, khí văn, phân giải, Ngọc Phách, song hệ ngọc, danh khí, Bảo Giám, tế luyện tầng pháp bảo; mọi số là đề xuất. Xuất ra luyen_khi.json; Phách và song hệ vào ngoc.json; 10 danh khí ở Kiểu trang bị" }]]);
+  }
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
+  luyen_khi: luyenKhi,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

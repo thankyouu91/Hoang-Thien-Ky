@@ -144,7 +144,7 @@ export function table(def: B.TableDef, rows: Record<string, In>[], more: Partial
     }));
   }
   // Cột có/không và cột đơn vị chọn từ danh sách
-  const choices: Partial<Record<B.Kind, string[]>> = { bool: ["có", "không"], unit: ["%", "giây", "số ô"] };
+  const choices: Partial<Record<B.Kind, string[]>> = { bool: ["có", "không"], unit: ["%", "giây", "số ô", "hệ số"] };
   const lists = def.cols.flatMap((c, i) => {
     const values = choices[c.kind];
     return values ? [{ ref: `${colName(i)}2:${colName(i)}${rows.length + 1}`, values }] : [];

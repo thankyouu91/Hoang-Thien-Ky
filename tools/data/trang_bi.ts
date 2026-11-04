@@ -130,6 +130,48 @@ export const PARTS: PartDef[] = [
   T("Nguyên liệu rèn", "vat_pham.json", "nguyen_lieu", "ma_vp", [
     c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text"), moTa, nguon, c("moi", "Mới", "bool"),
   ]),
+  // Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13, rev 37): tẩy luyện, khí linh, khí văn, phân giải, Ngọc Phách, song hệ,
+  // danh khí, Bảo Giám, tế luyện tầng pháp bảo
+  T("Tẩy luyện", "luyen_khi.json", "tay_luyen", "o", [
+    c("o", "Ô", "text", { width: 10 }), c("loai", "Loại (1 là mặc định)", "int", { width: 9 }),
+    c("stat", "Khóa sim", "text", { width: 13 }), c("ten", "Chỉ số phụ", "text", { width: 26 }),
+    c("gia_tri", "Giá trị ở lục +0", "pct", { width: 10 }),
+  ]),
+  T("Khí linh", "luyen_khi.json", "khi_linh", "cap", [
+    c("cap", "Cấp khí linh", "int", { width: 8 }), c("kinh_nghiem", "Kinh nghiệm lên cấp này", "int", { width: 12 }),
+    c("kinh_nghiem_tich_luy", "Kinh nghiệm tích lũy", "int", { width: 12 }),
+    c("cong_chi_so", "Cộng chỉ số gốc của món", "pct", { width: 12 }), c("mo_o_khi_van", "Mở ô khí văn", "bool", { width: 9 }),
+  ]),
+  T("Khí văn", "luyen_khi.json", "khi_van", "ma", [
+    c("ma", "Mã", "text", { width: 11 }), c("nhom", "Nhóm ô (cong, thu)", "text", { width: 9 }), c("ten", "Tên", "text", { width: 15 }),
+    c("tac_dung", "Tác dụng", "text", { width: 60 }), c("gia_tri", "Số chính", "qty", { unitCol: "don_vi", width: 9 }),
+    c("don_vi", "Đơn vị", "unit", { width: 8 }),
+  ]),
+  T("Phân giải", "luyen_khi.json", "phan_giai", "do_hiem", [
+    c("do_hiem", "Độ hiếm", "text", { width: 9 }), c("khi_tinh", "Khí Tinh nhận được", "int", { width: 10 }),
+  ]),
+  T("Ngọc Phách", "ngoc.json", "phach", "ma_vp", [
+    c("ma_vp", "Mã vật phẩm", "text"), c("he", "Hệ", "text", { width: 9 }), c("ten", "Tên", "text", { width: 16 }),
+    c("gia_tri", "Sát thương hệ", "pct", { width: 9 }), c("tran_toi_da", "Trần sát thương hệ đó nâng lên", "pct", { width: 11 }),
+    c("khoa", "Khóa vào nhân vật", "bool"), nguon,
+  ]),
+  T("Song hệ ngọc", "ngoc.json", "song_he", "ma_vp", [
+    c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text"), c("moi_he", "Mỗi hệ so với một viên thường", "pct", { width: 12 }),
+    moTa, nguon,
+  ]),
+  T("Danh khí", "luyen_khi.json", "danh_khi", "ma_vp", [
+    c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text", { width: 16 }), c("khi_hinh", "Khí hình", "text", { width: 9 }),
+    c("danh_van", "Danh văn", "text", { width: 60 }), c("do_pho", "Đồ phổ", "text", { width: 11 }),
+  ]),
+  T("Bảo Giám", "luyen_khi.json", "bao_giam", "ma", [
+    c("ma", "Mã trang", "text", { width: 11 }), c("ten", "Tên trang", "text", { width: 18 }),
+    c("dem", "Đếm (đơn vị code)", "kv", { width: 30 }), c("so_luong", "Số kiểu cần đủ", "int", { width: 9 }),
+    c("thuong", "Thưởng (không cộng chỉ số)", "text", { width: 45 }),
+  ]),
+  T("Tế luyện tầng", "luyen_khi.json", "te_luyen_tang", "tang", [
+    c("tang", "Tầng", "int", { width: 6 }), c("linh_luc", "Linh lực tối đa (cộng dồn)", "pct", { width: 11 }),
+    c("hoi_chieu", "Hồi chiêu (cộng dồn)", "pct", { width: 10 }), c("khi_tinh", "Khí Tinh lên tầng này", "int", { width: 10 }),
+  ]),
   T("Luật trang bị", "", "", "khoa", [
     c("khoa", "Khóa (file:đường dẫn)", "text", { width: 40 }), c("ten", "Tên", "text", { width: 45, json: false }),
     c("gia_tri", "Giá trị", "qty", { unitCol: "kieu", width: 10 }), c("kieu", "Kiểu", "text", { width: 8 }),
@@ -150,12 +192,13 @@ export const MACH_INFO: Record<string, [string, string]> = {
 const TOP_ORDER: Record<string, string[]> = {
   "trang_bi.json": ["ghi_chu", "do_hiem", "o", "kieu"],
   "vu_khi.json": ["ghi_chu", "khi_hinh", "hinh_khi_cam"],
-  "ngoc.json": ["ghi_chu", "he", "cap", "tran", "y_chau", "an_bo"],
+  "ngoc.json": ["ghi_chu", "he", "cap", "tran", "song_he", "phach", "y_chau", "an_bo"],
   "set.json": ["ghi_chu", "moc", "tran", "ty_le_kham_san_tim_tro_len", "bo"],
   "phap_bao.json": ["ghi_chu", "o", "loai", "mon", "tran_giao"],
   "phap_khi.json": ["ghi_chu", "o", "mon"],
   "vat_pham.json": ["ghi_chu", "phu", "dan", "nguyen_lieu"],
   "dao_co_ban.json": ["ghi_chu", "o", "cong_huong", "mach", "luat"],
+  "luyen_khi.json": ["ghi_chu", "tay_luyen", "khi_linh", "khi_van", "phan_giai", "danh_khi", "bao_giam", "te_luyen_tang", "luat"],
 };
 export const TB_FILES = Object.keys(TOP_ORDER);
 
@@ -182,6 +225,41 @@ export const LUAT: [string, string, string][] = [
   ["dao_co_ban.json:luat.banMonTrenDoToiThieu", "Đạo Cơ Bàn: bộ cần ít nhất số món trên đồ đang mặc mới được tính thêm", "số"],
   ["dao_co_ban.json:luat.banMoTuCap", "Đạo Cơ Bàn: mở từ cấp nhân vật", "số"],
   ["dao_co_ban.json:luat.banTranLucChien", "Đạo Cơ Bàn: bàn đầy thêm tối đa lực chiến", "%"],
+  // Luyện khí sau cấp tối đa: mở khóa
+  ["luyen_khi.json:luat.phanGiaiMoCap", "Phân giải mở từ cấp nhân vật", "số"],
+  ["luyen_khi.json:luat.baoGiamMoCap", "Bảo Giám mở từ cấp nhân vật", "số"],
+  ["luyen_khi.json:luat.tayLuyenMoCap", "Tẩy luyện mở từ cấp (Kết Đan)", "số"],
+  ["luyen_khi.json:luat.khiLinhMoCap", "Khí linh và khí văn mở từ cấp (Hóa Thần)", "số"],
+  ["luyen_khi.json:luat.khiLinhBacToiThieu", "Khí linh: món từ bậc độ hiếm này (3 là tím)", "số"],
+  ["luyen_khi.json:luat.songHeCapNgoc", "Hợp ngọc song hệ: khi có ngọc cấp", "số"],
+  ["luyen_khi.json:luat.phachCapNgoc", "Ngọc Phách: điểm hóa ngọc cấp", "số"],
+  ["luyen_khi.json:luat.danhKhiMoCap", "Danh khí: từ cấp 250 ở Hạ vị (từ Trung vị thì luôn mở)", "số"],
+  ["luyen_khi.json:luat.danhKhiLoToiThieu", "Danh khí: lò rèn tông môn tối thiểu cấp", "số"],
+  // Phân giải, tẩy luyện, khí linh, khí văn
+  ["luyen_khi.json:luat.phanGiaiKhiTinhMoiCapKhiLinh", "Phân giải: Khí Tinh thêm mỗi cấp khí linh của món", "số"],
+  ["luyen_khi.json:luat.phanGiaiTraNac", "Phân giải: số nấc cường hóa trả lại thành Luyện Khí Thạch", "%"],
+  ["luyen_khi.json:luat.tayLuyenKhiTinh", "Tẩy luyện: Khí Tinh mỗi lần", "số"],
+  ["luyen_khi.json:luat.khiLinhKnTran", "Khí linh: kinh nghiệm mỗi trận món được mặc", "số"],
+  ["luyen_khi.json:luat.khiLinhKnBiCanh", "Khí linh: kinh nghiệm mỗi lượt bí cảnh", "số"],
+  ["luyen_khi.json:luat.khiLinhKnKhiTinh", "Khí linh: kinh nghiệm mỗi Khí Tinh nạp vào", "số"],
+  ["luyen_khi.json:luat.khiVanToiDa.tim", "Khí văn tối đa trên món tím", "số"],
+  ["luyen_khi.json:luat.khiVanToiDa.vang", "Khí văn tối đa trên món vàng", "số"],
+  ["luyen_khi.json:luat.khiVanToiDa.do", "Khí văn tối đa trên món đỏ", "số"],
+  ["luyen_khi.json:luat.khiVanTinhToiDa", "Một khí văn trên nhiều món tính tối đa số lần", "số"],
+  ["luyen_khi.json:luat.khiVanTranLucChien", "Tổng mọi khí văn quy đổi không quá lực chiến", "%"],
+  ["luyen_khi.json:luat.taoVanLinhVanThach", "Tẩy văn (quay lại 3 lựa chọn): Linh Văn Thạch mỗi lần", "số"],
+  // Ngọc Phách, danh khí, Bảo Giám, tế luyện tầng
+  ["luyen_khi.json:luat.phachTyLe", "Ngọc Phách: tỷ lệ điểm hóa thành công", "%"],
+  ["luyen_khi.json:luat.phachKhiTinh", "Ngọc Phách: Khí Tinh mỗi lần điểm hóa", "số"],
+  ["luyen_khi.json:luat.danhKhiVanThiet", "Danh khí: Thiên Ngoại Vẫn Thiết mỗi lần luyện", "số"],
+  ["luyen_khi.json:luat.danhKhiKhiTinh", "Danh khí: Khí Tinh mỗi lần luyện", "số"],
+  ["luyen_khi.json:luat.danhKhiHoLo", "Danh khí: số thành viên hộ lô cùng tông (thêm 1 Tu rèn chủ lò)", "số"],
+  ["luyen_khi.json:luat.danhKhiTyLe.lo9", "Danh khí: tỷ lệ thành ở lò cấp 9", "%"],
+  ["luyen_khi.json:luat.danhKhiTyLe.lo10", "Danh khí: tỷ lệ thành ở lò cấp 10", "%"],
+  ["luyen_khi.json:luat.danhKhiYHeSo", "Danh khí: Ý của khí hình mạnh gấp Ý châu", "hệ số"],
+  ["luyen_khi.json:luat.danhKhiMoiNguoi", "Danh khí: mỗi người mặc tối đa", "số"],
+  ["luyen_khi.json:luat.baoGiamTuanLinhVanThach", "Bảo Giám: trang tuần thưởng Linh Văn Thạch", "số"],
+  ["luyen_khi.json:luat.teLuyenHoiChieuSan", "Tế luyện tầng: hồi chiêu pháp bảo sau mọi nguồn không dưới", "%"],
 ];
 
 // ---------- dựng lần đầu từ data/trang_bi ----------

@@ -210,7 +210,7 @@ export function kiem(d: Any, raw: Raw): Report {
   if (d["trang_bi.json"]) {
     const tb = d["trang_bi.json"], ngoc = d["ngoc.json"], set = d["set.json"], pb = d["phap_bao.json"], pk = d["phap_khi.json"], vp = d["vat_pham.json"];
     const codes = [
-      ...tb.kieu, ...ngoc.he, ...ngoc.y_chau, ...ngoc.an_bo, ...pb.mon, ...pb.tran_giao, ...pk.mon, ...vp.phu, ...vp.dan, ...vp.nguyen_lieu,
+      ...tb.kieu, ...ngoc.he, ...ngoc.y_chau, ...ngoc.an_bo, ...(ngoc.song_he ?? []), ...(ngoc.phach ?? []), ...pb.mon, ...pb.tran_giao, ...pk.mon, ...vp.phu, ...vp.dan, ...vp.nguyen_lieu,
     ].map((x: Any) => x.ma_vp);
     const dup = codes.filter((x, i) => codes.indexOf(x) !== i);
     if (dup.length) errors.push(`Trang bị: mã vật phẩm trùng ${[...new Set(dup)].slice(0, 8).join(", ")}`);
@@ -280,6 +280,60 @@ export function kiem(d: Any, raw: Raw): Report {
     for (const a of d["ngoc.json"].an_bo as Any[]) if (a.he !== undefined && a.he !== null && !he[a.he]) bad.push(`ấn ${a.ma_vp}: hệ lạ ${a.he}`);
     if (bad.length) errors.push(`Đạo Cơ Bàn: ${bad.join("; ")}`);
     else notes.push(`Đạo Cơ Bàn: 19 ô lục giác bán kính 2 (ô cạnh kề 2, ô góc kề 1 ô vòng trong), ${(dcb.cong_huong ?? []).length} cộng hưởng, mạch đủ ${rels.length} quan hệ tổ hợp`);
+  }
+
+  // Luyện khí sau cấp tối đa: tẩy luyện loại 1 là chỉ số phụ mặc định, khí linh cộng dồn đúng, Phách đủ 12 hệ, danh khí có kiểu đỏ
+  const lk = d["luyen_khi.json"];
+  if (lk && d["trang_bi.json"]) {
+    const tb = d["trang_bi.json"], ngoc = d["ngoc.json"], bad: string[] = [];
+    for (const o of tb.o as Any[]) {
+      const rows = (lk.tay_luyen as Any[]).filter((x) => x.o === o.id);
+      const l1 = rows.find((x) => x.loai === 1);
+      if (rows.length !== 4 || new Set(rows.map((x) => x.stat)).size !== 4) bad.push(`tẩy luyện ${o.id}: cần 4 loại khác nhau, có ${rows.length}`);
+      if (!l1 || l1.stat !== o.phu.stat || l1.gia_tri !== o.phu.gia_tri) bad.push(`tẩy luyện ${o.id}: loại 1 phải là chỉ số phụ mặc định ${o.phu.stat} ${o.phu.gia_tri}`);
+    }
+    let sum = 0;
+    for (const k of lk.khi_linh as Any[]) {
+      sum += k.kinh_nghiem;
+      if (k.kinh_nghiem_tich_luy !== sum) bad.push(`khí linh cấp ${k.cap}: tích lũy ${k.kinh_nghiem_tich_luy}, cộng dồn ra ${sum}`);
+    }
+    const slotsOpen = (lk.khi_linh as Any[]).filter((k) => k.mo_o_khi_van).length;
+    const khiVanMax = Math.max(...Object.values(lk.luat.khiVanToiDa as Record<string, number>));
+    if (slotsOpen !== khiVanMax) bad.push(`khí linh mở ${slotsOpen} ô khí văn, luat.khiVanToiDa cao nhất ${khiVanMax}`);
+    for (const g of ["cong", "thu"]) if ((lk.khi_van as Any[]).filter((v) => v.nhom === g).length < 3) bad.push(`khí văn nhóm ${g} dưới 3 lựa chọn`);
+    if (new Set((lk.khi_van as Any[]).map((v) => v.ma)).size !== lk.khi_van.length) bad.push("mã khí văn trùng");
+    const rarities = new Set(tb.do_hiem.map((x: Any) => x.id));
+    for (const p of lk.phan_giai as Any[]) if (!rarities.has(p.do_hiem)) bad.push(`phân giải: độ hiếm lạ ${p.do_hiem}`);
+    const phachHe = (ngoc.phach ?? []).map((p: Any) => p.he);
+    if (ELEMENTS.some((e) => !phachHe.includes(e)) || phachHe.length !== ELEMENTS.length) bad.push(`Ngọc Phách: ${phachHe.length} viên, cần đúng 12 hệ`);
+    for (const p of ngoc.phach ?? []) if (tran && !(p.tran_toi_da > tran.satThuongToiDa)) bad.push(`${p.ma_vp}: trần nâng ${p.tran_toi_da} không cao hơn trần ngọc ${tran.satThuongToiDa}`);
+    const kieu = new Map((tb.kieu as Any[]).map((k) => [k.ma_vp, k]));
+    const shapes = new Set(d["vu_khi.json"].khi_hinh.map((k: Any) => k.id));
+    const nl = new Set(d["vat_pham.json"].nguyen_lieu.map((x: Any) => x.ma_vp));
+    for (const dk of lk.danh_khi as Any[]) {
+      const k = kieu.get(dk.ma_vp);
+      if (!k || k.o !== "vu_khi" || k.do_hiem !== "do" || k.khi_hinh !== dk.khi_hinh || k.ten !== dk.ten) bad.push(`${dk.ma_vp}: cần kiểu vũ khí đỏ cùng tên, khí hình ở Kiểu trang bị`);
+      if (!shapes.has(dk.khi_hinh)) bad.push(`${dk.ma_vp}: khí hình lạ ${dk.khi_hinh}`);
+      if (!nl.has(dk.do_pho)) bad.push(`${dk.ma_vp}: đồ phổ ${dk.do_pho} không có ở Nguyên liệu rèn`);
+    }
+    if (new Set((lk.danh_khi as Any[]).map((x) => x.khi_hinh)).size !== lk.danh_khi.length) bad.push("danh khí: hai món cùng khí hình");
+    for (const m of ["NL-KT-001", "NL-KT-002"]) if (!nl.has(m)) bad.push(`thiếu nguyên liệu ${m}`);
+    const tang = lk.te_luyen_tang as Any[];
+    if (tang.some((t, i) => i > 0 && !(t.linh_luc > tang[i - 1].linh_luc && t.hoi_chieu < tang[i - 1].hoi_chieu))) bad.push("tế luyện tầng: linh lực phải tăng, hồi chiêu phải giảm dần");
+    // Bảo Giám: số kiểu cần đủ của mỗi trang bằng số kiểu có thật
+    const pool: Record<string, Any[]> = {
+      trang_bi: tb.kieu, phap_bao: d["phap_bao.json"].mon, phap_khi: d["phap_khi.json"].mon, y_chau: ngoc.y_chau, an_bo: ngoc.an_bo,
+      phach: ngoc.phach ?? [], danh_khi: lk.danh_khi,
+    };
+    for (const p of lk.bao_giam as Any[]) {
+      const { loai, ...loc } = p.dem ?? {};
+      const list = pool[loai];
+      if (!list) { bad.push(`Bảo Giám ${p.ma}: loại đếm lạ ${loai}`); continue; }
+      const n = list.filter((x) => Object.entries(loc).every(([k, v]) => x[k === "phap_bao" ? "loai" : k] === v)).length;
+      if (n !== p.so_luong) bad.push(`Bảo Giám ${p.ma}: cần đủ ${p.so_luong}, có ${n} kiểu`);
+    }
+    if (bad.length) errors.push(`Luyện khí: ${bad.join("; ")}`);
+    else notes.push(`Luyện khí: tẩy luyện ${lk.tay_luyen.length} dòng (loại 1 khớp chỉ số phụ mặc định), khí linh ${lk.khi_linh.length - 1} cấp, ${lk.khi_van.length} khí văn, ${phachHe.length} Phách, ${lk.danh_khi.length} danh khí, ${lk.bao_giam.length} trang Bảo Giám`);
   }
 
   // Chỗ khác code đang chạy (code chưa đọc JSON thì phải sửa tay theo file)

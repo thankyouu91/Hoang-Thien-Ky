@@ -727,6 +727,106 @@
       "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
     },
     {
+      "ma_vp": "TB-KI-061",
+      "o": "vu_khi",
+      "so": 61,
+      "ten": "Thiên Vấn Kiếm",
+      "do_hiem": "do",
+      "khi_hinh": "kiem",
+      "mo_ta": "Danh khí (thần binh có tên): Cận chiến đơn chí mạng thì chiêu đó hồi chiêu nhanh 0,5 s",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-062",
+      "o": "vu_khi",
+      "so": 62,
+      "ten": "Đoạn Nhạc Đao",
+      "do_hiem": "do",
+      "khi_hinh": "dao",
+      "mo_ta": "Danh khí (thần binh có tên): Mỗi mục tiêu trúng quét từ thứ 3 trở đi cho người cầm khiên 1% máu tối đa",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-063",
+      "o": "vu_khi",
+      "so": 63,
+      "ten": "Lạc Tinh Cung",
+      "do_hiem": "do",
+      "khi_hinh": "cung",
+      "mo_ta": "Danh khí (thần binh có tên): Đòn tầm xa vào kẻ đang vận công +20% sát thương",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-064",
+      "o": "vu_khi",
+      "so": 64,
+      "ten": "Phong Lôi Phiến",
+      "do_hiem": "do",
+      "khi_hinh": "phien",
+      "mo_ta": "Danh khí (thần binh có tên): Diện rộng trúng từ 6 mục tiêu thì lần vận công kế tiếp nhanh gấp đôi",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-065",
+      "o": "vu_khi",
+      "so": 65,
+      "ten": "Bất Động Côn",
+      "do_hiem": "do",
+      "khi_hinh": "con",
+      "mo_ta": "Danh khí (thần binh có tên): Khiên hộ thể của người cầm đỡ thêm 1 lần khống chế cho người được che",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-066",
+      "o": "vu_khi",
+      "so": 66,
+      "ten": "Tạo Hóa Bút",
+      "do_hiem": "do",
+      "khi_hinh": "but",
+      "mo_ta": "Danh khí (thần binh có tên): Bùa chú thêm 1 lần mỗi trận, mỗi lần −15% sát thương",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-067",
+      "o": "vu_khi",
+      "so": 67,
+      "ten": "Tinh La Kỳ",
+      "do_hiem": "do",
+      "khi_hinh": "ky",
+      "mo_ta": "Danh khí (thần binh có tên): Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-068",
+      "o": "vu_khi",
+      "so": 68,
+      "ten": "Vọng Nguyệt Cầm",
+      "do_hiem": "do",
+      "khi_hinh": "cam",
+      "mo_ta": "Danh khí (thần binh có tên): Hồi phục giải luôn 1 hiệu ứng thiêu đốt hoặc độc",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-069",
+      "o": "vu_khi",
+      "so": 69,
+      "ten": "Ngọc Lâu Tiêu",
+      "do_hiem": "do",
+      "khi_hinh": "tieu",
+      "mo_ta": "Danh khí (thần binh có tên): Khống chế trúng kẻ đang vận công thì chiêu đó mất luôn, không hoàn hồi chiêu",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-070",
+      "o": "vu_khi",
+      "so": 70,
+      "ten": "Phá Thiên Thương",
+      "do_hiem": "do",
+      "khi_hinh": "thuong",
+      "mo_ta": "Danh khí (thần binh có tên): Lướt tới xong, đòn kế tiếp xuyên 20% khiên",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
       "ma_vp": "TB-MU-001",
       "o": "mu",
       "so": 1,

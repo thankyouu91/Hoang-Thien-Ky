@@ -1223,6 +1223,90 @@
       "mo_ta": "Rèn lại món vàng, đỏ để quay lại 1–2 dòng khảm thêm của đồ bí cảnh",
       "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
       "moi": true
+    },
+    {
+      "ma_vp": "NL-KT-001",
+      "ten": "Khí Tinh",
+      "mo_ta": "Phân giải đồ từ lam trở lên ra; dùng tẩy luyện, dưỡng khí linh, luyện danh khí, tế luyện tầng pháp bảo. Từ đồ khóa thì khóa, từ đồ chưa khóa thì bán được bằng linh thạch",
+      "nguon": ["phan_giai"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-KT-002",
+      "ten": "Linh Văn Thạch",
+      "mo_ta": "Tẩy văn: quay lại 3 lựa chọn khí văn của một ô",
+      "nguon": ["bao_giam_trang_tuan"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-001",
+      "ten": "Thiên Vấn Kiếm đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Thiên Vấn Kiếm; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-002",
+      "ten": "Đoạn Nhạc Đao đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Đoạn Nhạc Đao; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-003",
+      "ten": "Lạc Tinh Cung đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Lạc Tinh Cung; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-004",
+      "ten": "Phong Lôi Phiến đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Phong Lôi Phiến; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-005",
+      "ten": "Bất Động Côn đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Bất Động Côn; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-006",
+      "ten": "Tạo Hóa Bút đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Tạo Hóa Bút; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-007",
+      "ten": "Tinh La Kỳ đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Tinh La Kỳ; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-008",
+      "ten": "Vọng Nguyệt Cầm đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Vọng Nguyệt Cầm; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-009",
+      "ten": "Ngọc Lâu Tiêu đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Ngọc Lâu Tiêu; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
+    },
+    {
+      "ma_vp": "NL-DP-010",
+      "ten": "Phá Thiên Thương đồ phổ",
+      "mo_ta": "Đồ phổ luyện danh khí Phá Thiên Thương; khóa",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh"],
+      "moi": true
     }
   ]
 }

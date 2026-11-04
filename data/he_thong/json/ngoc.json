@@ -4,7 +4,8 @@
     "Ô 'cong' (vũ khí, bao tay, ngọc bội): tăng sát thương chiêu có hệ chủ là hệ ngọc. Ô 'thu' (mũ, áo, đai, giày): kháng hệ ngọc. Tổng kháng một hệ từ mọi nguồn (ngọc, set, cộng hưởng, đan) tối đa resistCap ở tham_so.json (20%).",
     "Nén 3 viên cùng hệ cùng cấp lên 1 viên cấp trên; ty_le_nen_len là tỷ lệ đậu khi nén lên cấp đó (đề xuất). Ngọc từ cấp 7 khóa vào nhân vật (chốt mục 13).",
     "Cấp là thuộc tính của từng viên, không nằm trong mã. Mã NG-KH giữ như danh_sach.json; ten_han_viet là tên hiện trong tooltip (đề xuất).",
-    "tran (đề xuất 2026-11-04): mỗi hệ, phần sát thương từ ngọc trên satThuongMem chỉ tính một nửa và không vượt satThuongToiDa; kháng từ ngọc trên khangMem tính một nửa và không vượt khangToiDa."
+    "tran (đề xuất 2026-11-04): mỗi hệ, phần sát thương từ ngọc trên satThuongMem chỉ tính một nửa và không vượt satThuongToiDa; kháng từ ngọc trên khangMem tính một nửa và không vượt khangToiDa.",
+    "song_he, phach (luyện khí, đề xuất 2026-11-04): song hệ hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp, mỗi hệ moi_he giá trị một viên thường, tính trong trần mềm của hệ đó. Phách điểm hóa từ 1 ngọc cấp 10 (luyen_khi.json luat.phachKhiTinh, luat.phachTyLe), khảm ô công, cho gia_tri và nâng trần sát thương hệ đó lên tran_toi_da; mỗi hệ 1 Phách tính trần; khóa."
   ],
   "he": [
     {
@@ -105,6 +106,125 @@
     {"cap":10,"gia_tri":110,"ty_le_nen_len":50,"khoa":true}
   ],
   "tran": {"satThuongMem":150,"satThuongToiDa":250,"khangMem":100,"khangToiDa":150},
+  "song_he": [
+    {
+      "ma_vp": "NG-SH-001",
+      "ten": "Song Hệ Ngọc",
+      "moi_he": 600,
+      "mo_ta": "Hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp; hai hệ và cấp là thuộc tính từng viên. Tỷ lệ đậu như nén lên chính cấp đó",
+      "nguon": ["hop_ngoc"]
+    }
+  ],
+  "phach": [
+    {
+      "ma_vp": "NG-PH-001",
+      "he": "kim",
+      "ten": "Canh Kim Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-002",
+      "he": "moc",
+      "ten": "Thanh Mộc Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-003",
+      "he": "thuy",
+      "ten": "Huyền Thủy Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-004",
+      "he": "hoa",
+      "ten": "Xích Diễm Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-005",
+      "he": "tho",
+      "ten": "Hậu Thổ Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-006",
+      "he": "loi",
+      "ten": "Tử Lôi Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-007",
+      "he": "phong",
+      "ten": "Thanh Phong Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-008",
+      "he": "quang",
+      "ten": "Diệu Quang Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-009",
+      "he": "am_lanh",
+      "ten": "U Lãnh Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-010",
+      "he": "cuc_duong",
+      "ten": "Thuần Dương Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-011",
+      "he": "cuc_am",
+      "ten": "Huyền Âm Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    },
+    {
+      "ma_vp": "NG-PH-012",
+      "he": "cuc_han",
+      "ten": "Hàn Tủy Phách",
+      "gia_tri": 110,
+      "tran_toi_da": 280,
+      "khoa": true,
+      "nguon": ["diem_hoa_ngoc_cap_10"]
+    }
+  ],
   "y_chau": [
     {
       "ma_vp": "NG-YC-001",

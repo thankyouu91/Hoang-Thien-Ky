@@ -371,7 +371,7 @@ export function toJson(kind: Kind, v: unknown, unit?: unknown): unknown {
 }
 
 /** Chữ đơn vị trong Excel ↔ mã đơn vị trong JSON (cột kiểu unit). */
-const UNIT_CODE: Record<string, string> = { "%": "phan_nghin", "giây": "tick", "số ô": "o" };
+const UNIT_CODE: Record<string, string> = { "%": "phan_nghin", "giây": "tick", "số ô": "o", "hệ số": "he_so" };
 export function unitLabel(code: string): string {
   const label = Object.keys(UNIT_CODE).find((k) => UNIT_CODE[k] === code);
   if (!label) throw new Error(`Mã đơn vị lạ: ${code}`);
