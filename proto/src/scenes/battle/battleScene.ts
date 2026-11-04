@@ -10,6 +10,7 @@ import { ELEMENT_STYLE } from "../../theme/elements.ts";
 import { animInfo, assignLooks, drawCharacter, resolveLook, type Anim } from "./character.ts";
 import { ReplayControls } from "./controls.ts";
 import { FxLayer, type Point } from "../../hieu_ung/fx2d.ts";
+import { createSkillFx, type SkillFx } from "../../hieu_ung/index.ts";
 import { drawMotif } from "../../hieu_ung/motifs.ts";
 import { VfxLib } from "../../hieu_ung/vfx.ts";
 
@@ -50,6 +51,8 @@ export class BattleScene implements Scene {
   private sprites: Sprites;
   private vfx: VfxLib;
   private fx = new FxLayer();
+  /** Hiệu ứng chiêu Three.js phủ trên canvas (hieu_ung/); chưa sẵn sàng hay không có WebGL2 thì vẽ bản 2D của `fx` */
+  private fx3d: SkillFx | null = null;
   private index: ReplayIndex | null = null;
   private player: ReplayPlayer | null = null;
   private error = "";
@@ -91,6 +94,12 @@ export class BattleScene implements Scene {
   enter(v: View): void {
     if (this.loads === 0) this.load(this.source);
     this.fitIfRotated(v);
+    this.fx3d ??= createSkillFx(v.ctx.canvas);
+    this.fx3d.show(true);
+  }
+
+  leave(): void {
+    this.fx3d?.show(false);
   }
 
   private load(source: ReplaySource): void {
@@ -142,36 +151,43 @@ export class BattleScene implements Scene {
 
     const life = (s: number) => Math.min(2 * tps, s * tps * player.speed);
     const cam = this.camera;
+    const at = (id: number, time = t) => {
+      const ut = index.byId.get(id);
+      return ut ? this.place(ut.pos.moving(time), this.lat(id)) : null;
+    };
+    const zone = (center: number, radius: number) => {
+      const p = this.place(center, 0);
+      const along = (radius / 1000) * CELL;
+      const half = 3.5 * LANE;
+      return this.vertical ? { ...p, rx: half, ry: along } : { ...p, rx: along, ry: half };
+    };
     this.fx.prepare({
-      ctx, index, t, life, size: SIZE, zoom: cam.zoom, dpr: v.dpr,
-      at: (id, time = t) => {
-        const ut = index.byId.get(id);
-        return ut ? this.place(ut.pos.moving(time), this.lat(id)) : null;
-      },
-      zone: (center, radius) => {
-        const p = this.place(center, 0);
-        const along = (radius / 1000) * CELL;
-        const half = 3.5 * LANE;
-        return this.vertical ? { ...p, rx: half, ry: along } : { ...p, rx: along, ry: half };
-      },
+      ctx, index, t, life, size: SIZE, zoom: cam.zoom, dpr: v.dpr, at, zone,
       toScreen: (p) => cam.toScreen(p.x, p.y, v),
       image: (key) => this.sprites.get(key),
       vfx: this.vfx,
     });
+    // Lớp Three.js vẽ cả bốn pha hiệu ứng; khung nào nó chưa vẽ được (chưa nạp, không có WebGL2) thì giữ bản 2D.
+    const fx3d = !!this.fx3d?.active;
 
     cam.apply(v);
     // Rung màn hình khi có đòn lớn: dời cả sân theo px màn hình.
     const shake = this.fx.shake();
     if (shake.x || shake.y) ctx.translate(shake.x / cam.zoom, shake.y / cam.zoom);
     this.drawField(ctx, index.replay.fieldLength);
-    this.fx.ground();
+    if (!fx3d) this.fx.ground();
 
     // Ai vừa trúng đòn trong 3 tick gần nhất thì nháy trắng.
     const flashed = new Set(between(index.hits, t - 3, t).filter((h) => h.kind === "hit").map((h) => h.unit));
     const lunges = this.fx.lunges();
     for (const ut of index.units) this.drawUnit(ctx, ut, t, flashed.has(ut.unit.id), lunges.get(ut.unit.id));
 
-    this.fx.air();
+    if (!fx3d) this.fx.air();
+    this.fx3d?.frame(
+      { index, t, speed: player.speed, life, at, zone, size: SIZE },
+      { w: v.w, h: v.h, bottom: v.bottom, x: cam.x, y: cam.y, zoom: cam.zoom, shakeX: shake.x, shakeY: shake.y },
+      0,
+    );
     // Lớp trước của sân Three.js (cành, nhũ đá, mây, viền tối mép sân) phủ lên người và hiệu ứng, dưới số sát thương.
     ctx.imageSmoothingEnabled = true;
     this.arenaBackdrop()?.drawFront(ctx, performance.now() / 1000, !!this.vertical);
