@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 753 món, đã vẽ 211, cần vẽ lại 26.
+Tổng 753 món, đã vẽ 237, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -59,36 +59,36 @@ Tổng 753 món, đã vẽ 211, cần vẽ lại 26.
 | TB-KI-028 | Kiếm Bích Lạc | Lam | kiem | trang_bi/kiem/28.webp | ✓ |
 | TB-KI-029 | Kiếm Nguyệt Ảnh | Lam | kiem | trang_bi/kiem/29.webp | ✓ |
 | TB-KI-030 | Kiếm Tinh Thần | Lam | kiem | trang_bi/kiem/30.webp | ✓ |
-| TB-KI-031 | Đao Hổ Khiếu | Lam | dao | trang_bi/kiem/31.webp | vẽ lại |
-| TB-KI-032 | Thương Ngân Long | Lam | thuong | trang_bi/kiem/32.webp | vẽ lại |
-| TB-KI-033 | Côn Bàn Long | Lam | con | trang_bi/kiem/33.webp | vẽ lại |
-| TB-KI-034 | Cung Hạc Vũ | Lam | cung | trang_bi/kiem/34.webp | vẽ lại |
-| TB-KI-035 | Phiến Thu Thủy | Lam | phien | trang_bi/kiem/35.webp | vẽ lại |
-| TB-KI-036 | Bút Phán Quan | Lam | but | trang_bi/kiem/36.webp | vẽ lại |
-| TB-KI-037 | Kỳ Ngũ Hành | Lam | ky | trang_bi/kiem/37.webp | vẽ lại |
-| TB-KI-038 | Cầm Lưu Thủy | Lam | cam | trang_bi/kiem/38.webp | vẽ lại |
-| TB-KI-039 | Tiêu Bích Ngọc | Lam | tieu | trang_bi/kiem/39.webp | vẽ lại |
-| TB-KI-040 | Đao Nguyệt Nha | Lam | dao | trang_bi/kiem/40.webp | vẽ lại |
+| TB-KI-031 | Đao Hổ Khiếu | Lam | dao | trang_bi/kiem/31.webp | ✓ |
+| TB-KI-032 | Thương Ngân Long | Lam | thuong | trang_bi/kiem/32.webp | ✓ |
+| TB-KI-033 | Côn Bàn Long | Lam | con | trang_bi/kiem/33.webp | ✓ |
+| TB-KI-034 | Cung Hạc Vũ | Lam | cung | trang_bi/kiem/34.webp | ✓ |
+| TB-KI-035 | Phiến Thu Thủy | Lam | phien | trang_bi/kiem/35.webp | ✓ |
+| TB-KI-036 | Bút Phán Quan | Lam | but | trang_bi/kiem/36.webp | ✓ |
+| TB-KI-037 | Kỳ Ngũ Hành | Lam | ky | trang_bi/kiem/37.webp | ✓ |
+| TB-KI-038 | Cầm Lưu Thủy | Lam | cam | trang_bi/kiem/38.webp | ✓ |
+| TB-KI-039 | Tiêu Bích Ngọc | Lam | tieu | trang_bi/kiem/39.webp | ✓ |
+| TB-KI-040 | Đao Nguyệt Nha | Lam | dao | trang_bi/kiem/40.webp | ✓ |
 | TB-KI-041 | Kiếm Bạch Ngọc | Tím | kiem | trang_bi/kiem/41.webp | ✓ |
 | TB-KI-042 | Kiếm Tử Vân | Tím | kiem | trang_bi/kiem/42.webp | ✓ |
-| TB-KI-043 | Thương Lôi Minh | Tím | thuong | trang_bi/kiem/43.webp | vẽ lại |
-| TB-KI-044 | Côn Kim Cang | Tím | con | trang_bi/kiem/44.webp | vẽ lại |
-| TB-KI-045 | Cung Truy Tinh | Tím | cung | trang_bi/kiem/45.webp | vẽ lại |
-| TB-KI-046 | Phiến Hàn Băng | Tím | phien | trang_bi/kiem/46.webp | vẽ lại |
-| TB-KI-047 | Bút Xuân Thu | Tím | but | trang_bi/kiem/47.webp | vẽ lại |
-| TB-KI-048 | Kỳ Thất Tinh | Tím | ky | trang_bi/kiem/48.webp | vẽ lại |
-| TB-KI-049 | Cầm Tiêu Vĩ | Tím | cam | trang_bi/kiem/49.webp | vẽ lại |
-| TB-KI-050 | Tiêu Phượng Minh | Tím | tieu | trang_bi/kiem/50.webp | vẽ lại |
-| TB-KI-051 | Đao Hàn Nguyệt | Tím | dao | trang_bi/kiem/51.webp | vẽ lại |
-| TB-KI-052 | Thương Truy Phong | Tím | thuong | trang_bi/kiem/52.webp | vẽ lại |
+| TB-KI-043 | Thương Lôi Minh | Tím | thuong | trang_bi/kiem/43.webp | ✓ |
+| TB-KI-044 | Côn Kim Cang | Tím | con | trang_bi/kiem/44.webp | ✓ |
+| TB-KI-045 | Cung Truy Tinh | Tím | cung | trang_bi/kiem/45.webp | ✓ |
+| TB-KI-046 | Phiến Hàn Băng | Tím | phien | trang_bi/kiem/46.webp | ✓ |
+| TB-KI-047 | Bút Xuân Thu | Tím | but | trang_bi/kiem/47.webp | ✓ |
+| TB-KI-048 | Kỳ Thất Tinh | Tím | ky | trang_bi/kiem/48.webp | ✓ |
+| TB-KI-049 | Cầm Tiêu Vĩ | Tím | cam | trang_bi/kiem/49.webp | ✓ |
+| TB-KI-050 | Tiêu Phượng Minh | Tím | tieu | trang_bi/kiem/50.webp | ✓ |
+| TB-KI-051 | Đao Hàn Nguyệt | Tím | dao | trang_bi/kiem/51.webp | ✓ |
+| TB-KI-052 | Thương Truy Phong | Tím | thuong | trang_bi/kiem/52.webp | ✓ |
 | TB-KI-053 | Kiếm Hoàng Long | Vàng | kiem | trang_bi/kiem/53.webp | ✓ |
-| TB-KI-054 | Cung Xạ Nhật | Vàng | cung | trang_bi/kiem/54.webp | vẽ lại |
-| TB-KI-055 | Phiến Thái Hư | Vàng | phien | trang_bi/kiem/55.webp | vẽ lại |
-| TB-KI-056 | Cầm Thiên Lại | Vàng | cam | trang_bi/kiem/56.webp | vẽ lại |
-| TB-KI-057 | Kỳ Vạn Tượng | Vàng | ky | trang_bi/kiem/57.webp | vẽ lại |
+| TB-KI-054 | Cung Xạ Nhật | Vàng | cung | trang_bi/kiem/54.webp | ✓ |
+| TB-KI-055 | Phiến Thái Hư | Vàng | phien | trang_bi/kiem/55.webp | ✓ |
+| TB-KI-056 | Cầm Thiên Lại | Vàng | cam | trang_bi/kiem/56.webp | ✓ |
+| TB-KI-057 | Kỳ Vạn Tượng | Vàng | ky | trang_bi/kiem/57.webp | ✓ |
 | TB-KI-058 | Kiếm Huyết Long | Đỏ | kiem | trang_bi/kiem/58.webp | ✓ |
-| TB-KI-059 | Đao Phần Thiên | Đỏ | dao | trang_bi/kiem/59.webp | vẽ lại |
-| TB-KI-060 | Phiến Hỗn Độn | Đỏ | phien | trang_bi/kiem/60.webp | vẽ lại |
+| TB-KI-059 | Đao Phần Thiên | Đỏ | dao | trang_bi/kiem/59.webp | ✓ |
+| TB-KI-060 | Phiến Hỗn Độn | Đỏ | phien | trang_bi/kiem/60.webp | ✓ |
 
 ## Trang bị · Mũ (60)
 
