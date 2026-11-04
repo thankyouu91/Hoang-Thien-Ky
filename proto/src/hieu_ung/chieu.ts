@@ -449,7 +449,7 @@ function area(x: Ctx, s: Shot): void {
   // Pha 3: chớp, sóng xung kích, mảnh hệ văng lên khắp vùng.
   const a = (t - c.tick) / s.S(0.6);
   if (a >= 0 && a < 1) {
-    groundGlow(e, L.GROUND, z.x, zy, z.rx * 1.1, z.ry * 1.1, r.main.glow, r.bright * pulse(a, 0.06), 1);
+    groundGlow(e, L.GROUND, z.x, zy, z.rx * 1.1, z.ry * 1.1, r.main.glow, 0.45 * r.bright * pulse(a, 0.06), 0.8);
     ring(e, L.GROUND, z.x, zy, z.rx * (0.3 + 0.85 * easeOut(a)) * r.impact, z.ry * (0.3 + 0.85 * easeOut(a)) * r.impact, r.main.glow, r.bright * (1 - a), { width: 8 * (1 - a) + 1, halo: 0.6, add: 0.85 });
     if (r.subs.length) ring(e, L.GROUND, z.x, zy, z.rx * (0.2 + 0.7 * easeOut(a)), z.ry * (0.2 + 0.7 * easeOut(a)), r.trail.glow, 0.8 * r.bright * (1 - a), { width: 4 * (1 - a) + 1, add: 0.9 });
     const n = count(r, 14);
@@ -662,19 +662,21 @@ function dash(x: Ctx, s: Shot): void {
   // Pha 2: bóng mờ dọc đường lướt (Tốc nhiều bóng hơn), vệt tốc độ.
   const a = (t - (c.tick - 1)) / s.S(0.5);
   if (a >= 0 && a < 1) {
-    const ghosts = 3 + 2 * r.streaks;
+    // Bóng so le hai bên đường lướt để không chồng thành một cột khi lướt dọc màn hình; hòa màu thường cho rõ dáng người.
+    const ghosts = 2 + r.streaks;
     for (let i = 0; i < ghosts; i++) {
       const q = (i + 0.5) / ghosts;
-      const show = clamp01((t - (c.tick - 1)) / Math.max(0.01, q)) ;
-      const gx = before.x + (after.x - before.x) * q;
-      const gy = before.y + (after.y - before.y) * q;
-      const col = i % 2 ? r.trail.glow : r.main.glow;
-      sprite(e, L.BODY, CELL.ghost, gx, gy, 28, 13, 28, 0, col, show * (1 - a) * (0.15 + 0.5 * q) * r.bright, 0.55, 0.2);
+      const show = clamp01((t - (c.tick - 1)) / Math.max(0.01, q));
+      const side = i % 2 ? 8 : -8;
+      const gx = before.x + (after.x - before.x) * q - d.y * side;
+      const gy = before.y + (after.y - before.y) * q + d.x * side;
+      const col = mix(i % 2 ? r.trail.base : r.main.base, WHITE, 0.35);
+      sprite(e, L.BODY, CELL.ghost, gx, gy, 28, 13, 28, 0, col, show * (1 - a) * (0.3 + 0.4 * q) * r.bright, 0.1, 0);
     }
     const ang = Math.atan2(after.y - before.y, after.x - before.x);
-    for (let i = 0; i < 2 + r.streaks; i++) {
-      const off = sym(s.seed, 1000 + i) * 14;
-      beam(e, L.AIR, before.x - d.y * off, before.y + d.x * off, BODY_Z + off * 0.5, after.x - d.x * 10 - d.y * off, after.y - d.y * 10 + d.x * off, BODY_Z + off * 0.5, 1.4, r.main.glow, 0, (1 - a) * r.bright, 1, 0.6, 0.5, 0.5);
+    for (let i = 0; i < 2; i++) {
+      const off = (i ? 1 : -1) * 13;
+      beam(e, L.AIR, before.x - d.y * off, before.y + d.x * off, BODY_Z, after.x - d.x * 10 - d.y * off, after.y - d.y * 10 + d.x * off, BODY_Z, 0.9, r.trail.glow, 0, 0.35 * (1 - a) * r.bright, 0.6, 0, 0.6, 0.5);
     }
     sprite(e, L.GROUND, CELL.smoke, before.x, before.y, 4, 16 + 10 * a, 9 + 4 * a, ang, WHITE, 0.4 * (1 - a), 0);
   }

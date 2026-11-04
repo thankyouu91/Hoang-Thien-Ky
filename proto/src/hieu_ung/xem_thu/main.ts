@@ -94,10 +94,10 @@ const battle = new BattleScene([source], sprites);
 const canvas = document.getElementById("view") as HTMLCanvasElement;
 const app = new App(canvas, document.getElementById("hud")!, document.getElementById("tabbar")!, [battle]);
 app.start();
-void sprites.load();
+const spritesReady = sprites.load();
 
 /** Phần riêng của BattleScene mà trang thử cần đọc (không đổi màn Trận vì trang thử). */
-const inner = battle as unknown as { player: ReplayPlayer | null; index: ReplayIndex | null; fx3d: SkillFx | null; place(pos: number, lat: number): { x: number; y: number }; lat(id: number): number };
+const inner = battle as unknown as { player: ReplayPlayer | null; index: ReplayIndex | null; fx3d: SkillFx | null; place(pos: number, lat: number): { x: number; y: number }; lat(id: number): number; vertical: boolean | null; arenaBackdrop(): { ready(vertical: boolean): Promise<boolean> } | null };
 
 // ---- bảng chọn ----------------------------------------------------------------------------------------------------
 
@@ -235,8 +235,12 @@ function frameCamera(): void {
   const ys = pts.map((p) => p.y);
   const pad = 90;
   const r = { x: Math.min(...xs) - pad, y: Math.min(...ys) - pad - 40, w: Math.max(...xs) - Math.min(...xs) + 2 * pad, h: Math.max(...ys) - Math.min(...ys) + 2 * pad + 40 };
-  battle.camera.fit(r, v, 8);
-  battle.camera.y -= 60 / battle.camera.zoom;
+  // Vừa khoảng giữa bảng chọn và thanh điều khiển: tâm vùng nhìn của camera nằm giữa màn chừa đáy, nên dời xuống nửa bảng.
+  const top = panel.getBoundingClientRect().bottom;
+  const cam = battle.camera;
+  cam.zoom = Math.min((v.w - 16) / r.w, (v.h - v.bottom - top - 16) / r.h);
+  cam.x = r.x + r.w / 2;
+  cam.y = r.y + r.h / 2 - top / (2 * cam.zoom);
 }
 
 /** Mốc bốn pha của chiêu trong trận mẫu, theo tốc độ đang phát. */
@@ -253,7 +257,7 @@ function timeline(): CastTimeline | null {
  * Tấm ảnh các pha: mỗi hàng một bản (2D cũ, Three.js), mỗi cột một mốc (giữa khởi chiêu, đường bay, chạm trúng, giữa
  * pha chạm trúng, trạng thái). Vẽ đồng bộ từng khung bằng chính màn Trận, cắt vùng dưới bảng chọn.
  */
-function film(rows: ("old" | "new")[] = ["old", "new"]): HTMLCanvasElement | null {
+function film(rows: ("old" | "new")[] = ["old", "new"], only?: number[], title?: string): HTMLCanvasElement | null {
   const player = inner.player;
   const tl = timeline();
   if (!player || !tl) return null;
@@ -285,19 +289,32 @@ function film(rows: ("old" | "new")[] = ["old", "new"]): HTMLCanvasElement | nul
     tl.hit + 0.45 * (tl.settle - tl.hit),
     Math.min(linger, current.ticks - 2),
   ];
-  const labels = ["1 Khởi chiêu", "2 Đường bay", "3 Chạm trúng", "3 Chạm trúng (giữa)", "4 Trạng thái"];
-  // Hai bản thì mỗi hàng một mốc (2D cũ | Three.js); một bản thì xếp hai mốc mỗi hàng. Vừa bề ngang điện thoại.
-  const cols = rows.length === 1 ? 2 : rows.length;
+  const allLabels = ["1 Khởi chiêu", "2 Đường bay", "3 Chạm trúng", "3 Chạm trúng (giữa)", "4 Trạng thái"];
+  const pickIdx = only ?? [0, 1, 2, 3, 4];
+  const labels = pickIdx.map((i) => allLabels[i]);
+  const allTimes = times.slice();
+  times.length = 0;
+  for (const i of pickIdx) times.push(allTimes[i]);
+  // Hai bản thì mỗi hàng một mốc (2D cũ | Three.js); một bản thì xếp hai mốc mỗi hàng; chọn ít mốc thì cả hàng một chiêu.
+  // Tấm nhóm (`only`): mỗi bản một hàng (2D cũ, rồi Three.js), mỗi cột một mốc.
+  const cols = only ? only.length : rows.length === 1 ? 2 : rows.length;
   const cw = Math.round((v.w * 2) / cols) - 4;
   const ch = Math.round((sh * cw) / sw);
   const out = document.createElement("canvas");
   const head = 28;
+  const cap = title ? 34 : 0;
   const cells = times.length * rows.length;
   out.width = (cw + 4) * cols;
-  out.height = (ch + head) * Math.ceil(cells / cols);
+  out.height = (ch + head) * Math.ceil(cells / cols) + cap;
   const o = out.getContext("2d")!;
   o.fillStyle = "#14110f";
   o.fillRect(0, 0, out.width, out.height);
+  if (title) {
+    o.fillStyle = "#ffd34d";
+    o.font = "bold 24px system-ui, sans-serif";
+    o.textBaseline = "top";
+    o.fillText(title, 8, 4);
+  }
   const was = { t: player.t, playing: player.playing };
   player.playing = false;
   rows.forEach((row, ri) => {
@@ -311,9 +328,9 @@ function film(rows: ("old" | "new")[] = ["old", "new"]): HTMLCanvasElement | nul
         ctx.fillRect(0, 0, v.w, v.h);
         battle.draw(v);
       }
-      const cell = rows.length === 1 ? ci : ci * rows.length + ri;
+      const cell = only ? ri * only.length + ci : rows.length === 1 ? ci : ci * rows.length + ri;
       const dx = (cell % cols) * (cw + 4);
-      const top0 = Math.floor(cell / cols) * (ch + head);
+      const top0 = Math.floor(cell / cols) * (ch + head) + cap;
       const dy = top0 + head;
       o.drawImage(canvas, sx * v.dpr, sy * v.dpr, sw * v.dpr, sh * v.dpr, dx, dy, cw, ch);
       if (row === "new" && gl && inner.fx3d?.active) {
@@ -332,9 +349,41 @@ function film(rows: ("old" | "new")[] = ["old", "new"]): HTMLCanvasElement | nul
   return out;
 }
 
+/**
+ * Tấm so sánh một nhóm chiêu: mỗi chiêu một dải (tên công pháp, rồi các mốc `only` ở bản 2D cũ và Three.js), xếp dọc.
+ * Dùng để gửi ảnh trước/sau cho người dùng.
+ */
+async function sheet(items: Partial<Pick>[], only: number[] = [1, 2], rows: ("old" | "new")[] = ["old", "new"]): Promise<HTMLCanvasElement | null> {
+  await spritesReady;
+  const parts: HTMLCanvasElement[] = [];
+  for (const it of items) {
+    await go(it);
+    battle.draw(app.view);
+    await inner.arenaBackdrop()?.ready(!!inner.vertical);
+    const { mau, style } = styleOf(pick);
+    const subs = style.subs?.length ? " + " + style.subs.map((e) => ELEMENT_STYLE[e].name).join(", ") : "";
+    const title = `${mau.name}${pick.ult ? " · Chiêu cuối" : ""} — ${SKILL_NAME[style.skill]} · ${ELEMENT_STYLE[style.element].name}${subs} · ${VARIANT_NAMES[style.variant!]} · ${GRADE_NAMES[(style.grade ?? 1) - 1]}`;
+    const c = film(rows, only, title);
+    if (c) parts.push(c);
+  }
+  if (!parts.length) return null;
+  const out = document.createElement("canvas");
+  out.width = Math.max(...parts.map((p) => p.width));
+  out.height = parts.reduce((h, p) => h + p.height + 6, 0);
+  const o = out.getContext("2d")!;
+  o.fillStyle = "#0c0a08";
+  o.fillRect(0, 0, out.width, out.height);
+  let y = 0;
+  for (const p of parts) {
+    o.drawImage(p, 0, y);
+    y += p.height + 6;
+  }
+  return out;
+}
+
 /** Hiện tấm ảnh các pha phủ lên trang (bấm để đóng). */
-function showFilm(rows?: ("old" | "new")[]): void {
-  const c = film(rows);
+function showFilm(rows?: ("old" | "new")[], canvasIn?: HTMLCanvasElement | null): void {
+  const c = canvasIn ?? film(rows);
   if (!c) return;
   document.getElementById("xt-film")?.remove();
   const wrap = document.createElement("div");
@@ -363,4 +412,4 @@ window.addEventListener("hashchange", () => {
   pick = next;
   reload();
 });
-Object.assign(window, { xemThu: { battle, app, inner, sampleReplay, film, showFilm, timeline, showcase, go, styleOf: () => styleOf(pick) } });
+Object.assign(window, { xemThu: { battle, app, inner, sampleReplay, film, showFilm, timeline, showcase, go, sheet, styleOf: () => styleOf(pick) } });
