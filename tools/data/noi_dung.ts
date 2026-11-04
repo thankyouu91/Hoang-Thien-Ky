@@ -367,6 +367,11 @@ export const CODE_PARAMS: Record<"SKILL_RULES" | "CAST_FLOOR" | "BATTLE" | "UNIT
     ["exposedTicks", "Thân pháp: lộ vị trí", "giây", "8", "gdd"],
     ["selfShieldCooldownTicks", "Thổ: khiên bản thân tối đa một lần mỗi khoảng này", "giây", "", "code"],
     ["meleeKnockback", "Phong: chiêu cận chiến cũng đẩy lùi", "có/không", "", "code"],
+    // Hợp trận (người dùng đổi luật trận pháp 2026-11-04): nhiều người cùng bày trận pháp gần nhau thì nhập một trận
+    ["formationJoinRange", "Hợp trận: tâm trận cách nhau trong khoảng này thì nhập một trận", "ô", "", "de_xuat"],
+    ["formationBond2", "Hợp trận 2 người: hệ số", "hệ số", "8", "gdd"],
+    ["formationBond3", "Hợp trận 3 người: hệ số", "hệ số", "8", "gdd"],
+    ["formationBond5", "Hợp trận 5 người: hệ số", "hệ số", "8", "gdd"],
   ],
   BATTLE: [
     ["fieldLength", "Chiều dài sân", "ô", "", "code"],

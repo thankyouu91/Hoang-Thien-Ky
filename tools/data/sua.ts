@@ -14,6 +14,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { unzip, zip, readXlsx, sheetParts, colName, esc, FILL_COLORS, type Fill, type SheetIn, type Value } from "./xlsx.ts";
 import * as B from "./bang.ts";
 import * as TB from "./trang_bi.ts";
+import { recalcFiles } from "./tinh.ts";
 
 export interface Edit { sheet: string; id: string; col: string; value: string }
 
@@ -75,6 +76,9 @@ export function editCells(buf: Buffer, edits: Edit[]): { buf: Buffer; log: strin
     (s.cells[r] ??= [])[col] = value;
     log.push(`${e.sheet}!${colName(col)}${r + 1} (${e.id}, ${colDef?.header ?? e.col}): ${JSON.stringify(old)} → ${JSON.stringify(value)}`);
   }
+  // Ô công thức dựa vào ô vừa sửa: tính lại để giá trị lưu sẵn không cũ
+  const n = recalcFiles(files);
+  if (n) log.push(`tính lại ${n} ô công thức`);
   return { buf: zip([...files].map(([name, data]) => ({ name, data }))), log };
 }
 

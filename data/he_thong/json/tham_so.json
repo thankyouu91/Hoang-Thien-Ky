@@ -121,7 +121,11 @@
     "dashStandOff": 500,
     "exposedTicks": 60,
     "selfShieldCooldownTicks": 120,
-    "meleeKnockback": false
+    "meleeKnockback": false,
+    "formationJoinRange": 2000,
+    "formationBond2": 1300,
+    "formationBond3": 1600,
+    "formationBond5": 2000
   },
   "CAST_FLOOR": {"formationTicks":20,"channelTicks":10},
   "BATTLE": {

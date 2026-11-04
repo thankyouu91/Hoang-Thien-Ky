@@ -15,6 +15,7 @@ import {
   type Cell, type SheetIn, type SheetOut, type Value,
 } from "./xlsx.ts";
 import { patchCell } from "./sua.ts";
+import { recalcFiles } from "./tinh.ts";
 import * as B from "./bang.ts";
 import * as N from "./noi_dung.ts";
 import * as TB from "./trang_bi.ts";
@@ -59,6 +60,30 @@ export class Workbook {
     const add = rows.map((r, i) => rowXml(last + i, r, this.styleOf, sheet)).join("");
     xml = xml.includes("</sheetData>") ? xml.replace("</sheetData>", `${add}</sheetData>`) : xml.replace("<sheetData/>", `<sheetData>${add}</sheetData>`);
     this.put(part, xml.replace(/<dimension\b[^>]*\/>/, "")); // Excel tự tính lại vùng dữ liệu
+  }
+
+  /**
+   * Chèn dòng ngay sau dòng Excel `after` (đếm từ 1), dời các dòng phía dưới xuống. Chỉ dùng cho sheet không có công thức
+   * và không bị sheet khác trỏ tới bằng địa chỉ cố định (như sheet Tham số, tra theo cả cột).
+   */
+  insertRows(sheet: string, after: number, rows: (Cell | null)[][]): void {
+    if (this.sheet(sheet).formulas.some((r) => r?.some(Boolean))) throw new Error(`Sheet "${sheet}" có công thức, không chèn dòng giữa được`);
+    const n = rows.length, part = this.part(sheet);
+    const shift = (k: number) => (k > after ? k + n : k);
+    let xml = this.text(part).replace(/<row\b([^>]*?)\br="(\d+)"([^>]*?)(\/>|>([\s\S]*?)<\/row>)/g, (m, pre: string, k: string, post: string, tail: string, body?: string) => {
+      const r = Number(k);
+      if (r <= after) return m;
+      const newBody = (body ?? "").replace(/(<c\b[^>]*?\br=")([A-Z]+)(\d+)"/g, (_, a: string, c: string, rr: string) => `${a}${c}${shift(Number(rr))}"`);
+      return `<row${pre}r="${shift(r)}"${post}${body === undefined ? tail : `>${newBody}</row>`}`;
+    });
+    // Vùng chọn từ danh sách và vùng gộp ô: dời phần nằm dưới chỗ chèn
+    xml = xml.replace(/\b(sqref|ref)="([^"]+)"/g, (_, attr: string, v: string) =>
+      `${attr}="${v.replace(/([A-Z]+)(\d+)/g, (__, c: string, r: string) => `${c}${shift(Number(r))}`)}"`);
+    const add = rows.map((r, i) => rowXml(after + i, r, this.styleOf, sheet)).join("");
+    const at = new RegExp(`<row\\b[^>]*?\\br="${after}"[^>]*?(?:/>|>[\\s\\S]*?</row>)`).exec(xml);
+    if (!at) throw new Error(`Sheet "${sheet}" không có dòng ${after}`);
+    xml = xml.slice(0, at.index + at[0].length) + add + xml.slice(at.index + at[0].length);
+    this.put(part, xml.replace(/<dimension\b[^>]*\/>/, ""));
   }
 
   /** Thêm một cột sau cột cuối: ô tiêu đề ở dòng 1, ô dữ liệu do `cellFor(dòng Excel đếm từ 0, giá trị dòng)` trả về. */
@@ -114,8 +139,11 @@ export class Workbook {
     this.put("[Content_Types].xml", types);
   }
 
+  /** Số ô công thức đã tính lại ở lần save gần nhất. */
+  recalculated = 0;
   save(): Buffer {
     this.put("xl/styles.xml", this.styles.xml);
+    this.recalculated = recalcFiles(this.files);
     return zip([...this.files].map(([name, data]) => ({ name, data })));
   }
 }
@@ -344,7 +372,33 @@ const tranLan2: Step = (wb, log) => {
   log.push(`Ghi chú trang bị: sửa ${GHI_CHU_NGOC.length - add.length}, thêm ${add.length} dòng của ngoc.json`);
 };
 
-export const STEPS: Record<string, Step> = { artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2 };
+/** Số hợp trận theo đơn vị code (người dùng đổi luật trận pháp 2026-11-04; tầm nhập là đề xuất). */
+const HOP_TRAN: Record<string, number> = { formationJoinRange: 2000, formationBond2: 1300, formationBond3: 1600, formationBond5: 2000 };
+
+/**
+ * Trận pháp cá nhân ×6,0 (bù 5 s gồng, đã chốt) và hợp trận 2–3–5 người: k của tran_phap ở sheet Loại chiêu, 4 khóa mới của
+ * SKILL_RULES chèn ngay sau dòng SKILL_RULES cuối ở sheet Tham số.
+ */
+const hopTran: Step = (wb, log) => {
+  const lc = B.LOAI_CHIEU, lh = (k: string) => lc.cols.find((c) => c.key === k)!.header;
+  wb.setCell(lc.sheet, ...locate(wb, lc.sheet, lh("ma"), "tran_phap", lh("k")), { v: 6, fill: "gdd" });
+  log.push("Loại chiêu: tran_phap k ×6,0");
+
+  const ts = B.PARAMS.sheet, s = wb.sheet(ts);
+  const groupAt = (s.cells[0] ?? []).map(norm).indexOf("Nhóm"), keyAt = (s.cells[0] ?? []).map(norm).indexOf("Khóa");
+  const have = new Set(s.cells.map((r) => norm(r?.[keyAt])));
+  const desc = N.CODE_PARAMS.SKILL_RULES.filter(([k]) => k in HOP_TRAN && !have.has(k));
+  if (!desc.length) return void log.push("Tham số: đã có 4 khóa hợp trận, bỏ qua");
+  const last = s.cells.reduce((a, r, i) => (norm(r?.[groupAt]) === "SKILL_RULES" ? i : a), -1);
+  if (last < 0) throw new Error("Tham số: không có nhóm SKILL_RULES");
+  wb.insertRows(ts, last + 1, desc.map(([key, name, kieu, muc, src]) =>
+    paramCells("SKILL_RULES", key, name, B.paramFromCode(kieu, HOP_TRAN[key]), kieu, muc, src)));
+  log.push(`Tham số: chèn ${desc.length} khóa hợp trận sau dòng ${last + 1} (SKILL_RULES)`);
+};
+
+export const STEPS: Record<string, Step> = {
+  artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
+};
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const names = process.argv.slice(2);
@@ -358,6 +412,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const log: string[] = [];
   for (const n of names) STEPS[n](wb, log);
   writeFileSync(path, wb.save());
+  log.push(`Tính lại ${wb.recalculated} ô công thức`);
   for (const l of log) console.log(`  ${l}`);
   console.log("Xuất lại JSON:");
   execFileSync(process.execPath, [...process.execArgv, fileURLToPath(new URL("xuat.ts", import.meta.url))], { stdio: "inherit" });

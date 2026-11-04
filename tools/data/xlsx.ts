@@ -344,6 +344,19 @@ export function sheetParts(files: Map<string, Buffer>): [string, string][] {
   });
 }
 
+/** Dời các địa chỉ tương đối (không có $) của công thức đi `dr` dòng, `dc` cột; bỏ qua chuỗi "..." và tên sheet '...'. */
+export function shiftFormula(f: string, dr: number, dc: number): string {
+  if (!dr && !dc) return f;
+  return f.split(/("(?:[^"]|"")*"|'(?:[^']|'')*')/).map((part, i) => i % 2 ? part
+    : part.replace(/(?<![A-Za-z0-9_.])(\$?)([A-Z]{1,3})(\$?)(\d+)(?![\d(A-Za-z_])/g, (m, cAbs: string, c: string, rAbs: string, r: string) => {
+      let col = 0;
+      for (const ch of c) col = col * 26 + ch.charCodeAt(0) - 64;
+      const nc = cAbs ? c : colName(col - 1 + dc);
+      const nr = rAbs ? r : String(Number(r) + dr);
+      return `${cAbs}${nc}${rAbs}${nr}`;
+    })).join("");
+}
+
 export function readXlsx(buf: Buffer): SheetIn[] {
   return readFiles(unzip(buf));
 }
@@ -360,12 +373,23 @@ export function readFiles(files: Map<string, Buffer>): SheetIn[] {
     const xml = get(part);
     const cells: Value[][] = [];
     const formulas: (string | null)[][] = [];
+    // Công thức chung (Excel lưu công thức lặp lại một lần ở ô đầu, các ô sau chỉ ghi si): dời địa chỉ theo khoảng cách tới ô đầu
+    const masters = new Map<string, { text: string; row: number; col: number }>();
     for (const c of xml.matchAll(/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g)) {
       const ca = attrs(c[1]);
       const body = c[2] ?? "";
       const { row, col } = parseRef(ca.r);
       const vm = /<v>([\s\S]*?)<\/v>/.exec(body);
-      const fm = /<f(?:\s[^>]*)?>([\s\S]*?)<\/f>/.exec(body);
+      const fe = /<f\b([^>]*?)(?:\/>|>([\s\S]*?)<\/f>)/.exec(body);
+      let fm: [string, string] | null = null;
+      if (fe) {
+        const fa = attrs(fe[1]), text = unesc(fe[2] ?? "");
+        if (fa.t === "shared" && fa.si !== undefined) {
+          if (text) masters.set(fa.si, { text, row, col });
+          const m = masters.get(fa.si);
+          fm = m ? ["", shiftFormula(m.text, row - m.row, col - m.col)] : null;
+        } else fm = ["", text];
+      }
       let v: Value = null;
       switch (ca.t) {
         case "s": v = vm ? shared[Number(vm[1])] : null; break;
@@ -376,7 +400,7 @@ export function readFiles(files: Map<string, Buffer>): SheetIn[] {
         default: v = vm ? Number(vm[1]) : null;
       }
       (cells[row] ??= [])[col] = v === "" ? null : v;
-      if (fm) (formulas[row] ??= [])[col] = unesc(fm[1]);
+      if (fm) (formulas[row] ??= [])[col] = fm[1];
     }
     for (let r = 0; r < cells.length; r++) {
       cells[r] ??= [];

@@ -86,7 +86,7 @@
   "tran_phap": {
     "id": "tran_phap",
     "name": "Trận pháp",
-    "k": 5000,
+    "k": 6000,
     "targets": 6,
     "cooldownTicks": 400,
     "critPerMille": 0,
