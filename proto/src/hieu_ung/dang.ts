@@ -3,11 +3,12 @@
 // mọi hạt là hàm của (seed, t).
 import { aim, BODY_Z, type Ctx } from "./ctx.ts";
 import type { CastTimeline } from "./chieu.ts";
-import { dir, flightSeconds, impact, windup, type Shot } from "./chung.ts";
+import { areaOf, dir, flightSeconds, hits, inZone, warning, windup, type Shot } from "./chung.ts";
 import type { Dang } from "./dang_chon.ts";
+import { drawHeDang, heTimeline, isHeDang } from "./dang_he.ts";
 import { CELL, COLORS, L, mix, WHITE, type RGB } from "./emit.ts";
 import { count } from "./recipe.ts";
-import type { Cast, Point, Zone } from "./types.ts";
+import type { Cast, Point } from "./types.ts";
 import {
   arc, beam, bolt, clamp01, easeBack, easeIn, easeOut, glow, motif, pulse, ramp, ring, rnd, rune, sprite, sym,
 } from "./ve.ts";
@@ -19,6 +20,7 @@ const DARK: RGB = [0.16, 0.14, 0.18];
 
 /** Mốc pha của dáng (thay mốc của loại chiêu), để trang xem thử báo pha và chụp đúng lúc. */
 export function dangTimeline(d: Dang, c: Cast, S: (s: number) => number, tl: CastTimeline): CastTimeline {
+  if (isHeDang(d)) return heTimeline(d, c, S, tl);
   const hit = c.tick;
   const channel = c.start ?? hit - S(0.45);
   switch (d) {
@@ -47,6 +49,7 @@ export function dangTimeline(d: Dang, c: Cast, S: (s: number) => number, tl: Cas
 /** Vẽ dáng `d` của lần ra chiêu; false nếu dáng không dùng được (thiếu mục tiêu), để chieu.ts vẽ hình gốc. */
 export function drawDang(x: Ctx, s: Shot, d: Dang): boolean {
   if (!s.c.targets.length && s.c.center === undefined) return false;
+  if (isHeDang(d)) return drawHeDang(x, s, d);
   switch (d) {
     case "dao_khi":
       return daoKhi(x, s);
@@ -69,42 +72,6 @@ export function drawDang(x: Ctx, s: Shot, d: Dang): boolean {
     case "tien_dong":
       return tienDong(x, s);
   }
-}
-
-// ---- dùng chung -------------------------------------------------------------------------------------------------
-
-/** Vùng đánh (chân người, toạ độ đất) của chiêu có vùng; không có thì vòng nhỏ quanh giữa các mục tiêu. */
-function areaOf(x: Ctx, s: Shot): Zone {
-  const { c } = s;
-  if (c.center !== undefined && c.radius) {
-    const z = x.f.zone(c.center, c.radius);
-    return { x: z.x, y: z.y + x.f.size / 2, rx: z.rx, ry: z.ry };
-  }
-  const p = aim(x, c, c.tick) ?? s.src;
-  return { x: p.x, y: p.y, rx: 46, ry: 30 };
-}
-
-/** Điểm ngẫu nhiên thứ i trong elip vùng (phân bố đều theo diện tích). */
-function inZone(z: Zone, seed: number, i: number): Point {
-  const ang = rnd(seed, 2 * i) * TAU;
-  const rr = Math.sqrt(rnd(seed, 2 * i + 1)) * 0.9;
-  return { x: z.x + Math.cos(ang) * z.rx * rr, y: z.y + Math.sin(ang) * z.ry * rr };
-}
-
-/** Pha 3 chung cho mọi mục tiêu. */
-function hits(x: Ctx, s: Shot, dur: number, scale = 1, sigK = 1): void {
-  for (const id of s.c.targets) impact(x, s, id, (x.t - s.c.tick) / s.S(dur), scale, sigK);
-}
-
-/** Vòng báo trước của chiêu vận công (diện rộng) trong lúc vận. */
-function warning(x: Ctx, s: Shot, z: Zone, from: number): void {
-  const { t, e } = x;
-  const { c, r } = s;
-  if (c.start === undefined || t < from || t >= c.tick) return;
-  const q = (t - from) / Math.max(1, c.tick - from);
-  const k = r.bright * x.zoneK;
-  ring(e, L.GROUND, z.x, z.y, z.rx, z.ry, r.main.glow, (0.45 + 0.3 * Math.sin(t * (0.4 + q))) * k, { width: 2.5, dashes: 28, phase: -t * 0.01, duty: 0.65, fill: 0.12 * q });
-  ring(e, L.GROUND, z.x, z.y, z.rx * q, z.ry * q, r.main.glow, 0.45 * k, { width: 1.5, add: 0.8 });
 }
 
 /** Thanh kiếm trỏ theo góc `rot` (màn hình), cỡ `size`. */

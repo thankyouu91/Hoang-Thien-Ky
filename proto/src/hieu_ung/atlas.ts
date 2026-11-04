@@ -550,6 +550,74 @@ export function drawAtlas(): HTMLCanvasElement {
     c.bezierCurveTo(-13, 6, -9, -4, 0, -20);
     c.fill();
   });
+  cell(ctx, CELL.palm, (c) => {
+    // bàn tay xoè, ngón hướng lên (Phật thủ ấn, quỷ thủ)
+    c.fillStyle = W;
+    c.beginPath();
+    c.roundRect(-15, -2, 30, 26, 9);
+    c.fill();
+    const fingers: [number, number, number][] = [[-12, -16, -0.25], [-4, -22, -0.08], [4, -23, 0.05], [12, -18, 0.2]];
+    for (const [fx, fy, rot] of fingers) {
+      c.save();
+      c.translate(fx, fy);
+      c.rotate(rot);
+      c.beginPath();
+      c.roundRect(-3.6, -6, 7.2, 26, 3.6);
+      c.fill();
+      c.restore();
+    }
+    c.save();
+    c.translate(17, 8);
+    c.rotate(0.9);
+    c.beginPath();
+    c.roundRect(-3.6, -12, 7.2, 18, 3.6);
+    c.fill();
+    c.restore();
+    c.strokeStyle = "rgba(170,170,170,1)";
+    c.lineWidth = 1.5;
+    c.beginPath();
+    c.arc(0, 12, 6, Math.PI, Math.PI * 2);
+    c.stroke();
+  });
+  cell(ctx, CELL.vajra, (c) => {
+    // chày kim cương nằm ngang: cán giữa, hai đầu chĩa ba
+    c.fillStyle = W;
+    c.fillRect(-9, -3, 18, 6);
+    c.beginPath();
+    c.arc(0, 0, 5.5, 0, Math.PI * 2);
+    c.fill();
+    for (const sgn of [-1, 1]) {
+      c.beginPath();
+      c.ellipse(sgn * 13, 0, 5, 7, 0, 0, Math.PI * 2);
+      c.fill();
+      c.strokeStyle = W;
+      c.lineWidth = 3;
+      c.beginPath();
+      c.moveTo(sgn * 16, 0);
+      c.lineTo(sgn * 29, 0);
+      c.moveTo(sgn * 16, -4);
+      c.quadraticCurveTo(sgn * 24, -12, sgn * 28, -3);
+      c.moveTo(sgn * 16, 4);
+      c.quadraticCurveTo(sgn * 24, 12, sgn * 28, 3);
+      c.stroke();
+    }
+    c.fillStyle = "rgba(170,170,170,1)";
+    c.fillRect(-9, 1, 18, 2);
+  });
+  cell(ctx, CELL.petal, (c) => {
+    c.fillStyle = W;
+    c.beginPath();
+    c.moveTo(0, 22);
+    c.bezierCurveTo(16, 6, 12, -16, 0, -24);
+    c.bezierCurveTo(-12, -16, -16, 6, 0, 22);
+    c.fill();
+    c.strokeStyle = "rgba(200,200,200,1)";
+    c.lineWidth = 1.5;
+    c.beginPath();
+    c.moveTo(0, 18);
+    c.lineTo(0, -16);
+    c.stroke();
+  });
   MOTIF_ORDER.forEach((el, i) => cell(ctx, CELL.motif + i, (c) => motifShape(c, el)));
   return cv;
 }

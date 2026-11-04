@@ -1,10 +1,10 @@
 // Phần dùng chung của hiệu ứng theo loại chiêu (chieu.ts) và dáng chiêu đặc trưng (dang.ts): khung một lần ra chiêu,
 // tụ lực (pha 1), chạm trúng kèm nét hệ (pha 3), vệt kéo, thời gian bay.
-import { BODY_Z, palette, type Ctx } from "./ctx.ts";
+import { aim, BODY_Z, palette, type Ctx } from "./ctx.ts";
 import { CELL, COLORS, L, WHITE } from "./emit.ts";
 import { hitSignature } from "./he.ts";
 import { count, type Recipe } from "./recipe.ts";
-import type { Cast, Point } from "./types.ts";
+import type { Cast, Point, Zone } from "./types.ts";
 import { beam, clamp01, easeOut, glow, motif, pulse, ramp, rays, ring, rnd, rune, sprite } from "./ve.ts";
 
 const TAU = Math.PI * 2;
@@ -105,5 +105,42 @@ export function flightSeconds(skill: Cast["skill"], cells: number): number {
   if (skill === "bua_chu") return Math.min(0.6, Math.max(0.25, 0.22 + 0.04 * cells));
   const base = Math.min(0.42, Math.max(0.1, 0.08 + 0.035 * cells));
   return skill === "khong_che" ? base * 1.15 : base;
+}
+
+
+// ---- dùng cho dáng chiêu (dang.ts, dang_he.ts) -----------------------------------------------------------------
+
+/** Vùng đánh (chân người, toạ độ đất) của chiêu có vùng; không có thì vòng nhỏ quanh giữa các mục tiêu. */
+export function areaOf(x: Ctx, s: Shot): Zone {
+  const { c } = s;
+  if (c.center !== undefined && c.radius) {
+    const z = x.f.zone(c.center, c.radius);
+    return { x: z.x, y: z.y + x.f.size / 2, rx: z.rx, ry: z.ry };
+  }
+  const p = aim(x, c, c.tick) ?? s.src;
+  return { x: p.x, y: p.y, rx: 46, ry: 30 };
+}
+
+/** Điểm ngẫu nhiên thứ i trong elip vùng (phân bố đều theo diện tích). */
+export function inZone(z: Zone, seed: number, i: number): Point {
+  const ang = rnd(seed, 2 * i) * TAU;
+  const rr = Math.sqrt(rnd(seed, 2 * i + 1)) * 0.9;
+  return { x: z.x + Math.cos(ang) * z.rx * rr, y: z.y + Math.sin(ang) * z.ry * rr };
+}
+
+/** Pha 3 chung cho mọi mục tiêu. */
+export function hits(x: Ctx, s: Shot, dur: number, scale = 1, sigK = 1): void {
+  for (const id of s.c.targets) impact(x, s, id, (x.t - s.c.tick) / s.S(dur), scale, sigK);
+}
+
+/** Vòng báo trước của chiêu vận công (diện rộng) trong lúc vận. */
+export function warning(x: Ctx, s: Shot, z: Zone, from: number): void {
+  const { t, e } = x;
+  const { c, r } = s;
+  if (c.start === undefined || t < from || t >= c.tick) return;
+  const q = (t - from) / Math.max(1, c.tick - from);
+  const k = r.bright * x.zoneK;
+  ring(e, L.GROUND, z.x, z.y, z.rx, z.ry, r.main.glow, (0.45 + 0.3 * Math.sin(t * (0.4 + q))) * k, { width: 2.5, dashes: 28, phase: -t * 0.01, duty: 0.65, fill: 0.12 * q });
+  ring(e, L.GROUND, z.x, z.y, z.rx * q, z.ry * q, r.main.glow, 0.45 * k, { width: 1.5, add: 0.8 });
 }
 

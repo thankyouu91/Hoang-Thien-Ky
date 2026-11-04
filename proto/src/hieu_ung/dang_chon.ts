@@ -7,6 +7,9 @@ import type { ElementId, SkillId } from "../replay/types.ts";
 
 export const DANG = [
   "dao_khi", "kiem_tran", "mua_kiem", "cu_kiem", "dau_lau", "huyet_tuyen", "thien_loi", "gai_troi", "loc_xoay", "tien_dong",
+  // đợt theo hệ (2026-11-04)
+  "hoa_long", "luu_tinh", "thuy_long", "song_than", "re_cay", "hoa_no", "phat_thu", "thanh_quang", "liet_nhat",
+  "nguyet_thuc", "quy_thu", "bao_tuyet", "kim_cuong_xu",
 ] as const;
 export type Dang = (typeof DANG)[number];
 
@@ -21,6 +24,19 @@ export const DANG_NAME: Record<Dang, string> = {
   gai_troi: "Gai trồi (đá, băng)",
   loc_xoay: "Lốc xoáy",
   tien_dong: "Đồng tiền bay",
+  hoa_long: "Hỏa long cuộn tới",
+  luu_tinh: "Thiên hỏa lưu tinh",
+  thuy_long: "Thủy long quyển",
+  song_than: "Sóng thần quét ngang",
+  re_cay: "Rễ cây trói",
+  hoa_no: "Hoa nở",
+  phat_thu: "Phật thủ ấn",
+  thanh_quang: "Thánh quang thập tự",
+  liet_nhat: "Liệt nhật",
+  nguyet_thuc: "Nguyệt thực",
+  quy_thu: "Quỷ thủ",
+  bao_tuyet: "Bão tuyết",
+  kim_cuong_xu: "Kim cương xử",
 };
 
 /** Loại chiêu mỗi dáng dùng được; ngoài danh sách thì vẽ hình gốc. */
@@ -35,6 +51,19 @@ export const DANG_FOR: Record<Dang, readonly SkillId[]> = {
   gai_troi: ["dien_rong", "khong_che"],
   loc_xoay: ["dien_rong", "khong_che"],
   tien_dong: ["tam_xa", "bua_chu"],
+  hoa_long: ["tam_xa", "bua_chu", "khong_che"],
+  luu_tinh: ["dien_rong", "tran_phap", "bua_chu"],
+  thuy_long: ["dien_rong", "khong_che"],
+  song_than: ["can_quet", "dien_rong"],
+  re_cay: ["khong_che", "dien_rong"],
+  hoa_no: ["hoi_phuc", "ho_the"],
+  phat_thu: ["bua_chu", "dien_rong", "can_don"],
+  thanh_quang: ["hoi_phuc", "ho_the"],
+  liet_nhat: ["dien_rong", "bua_chu", "tran_phap"],
+  nguyet_thuc: ["dien_rong", "khong_che"],
+  quy_thu: ["khong_che", "dien_rong"],
+  bao_tuyet: ["dien_rong"],
+  kim_cuong_xu: ["can_don", "bua_chu"],
 };
 
 /** Người ra chiêu: vũ khí đang cầm (kiem, dao, truong…) và tài năng (tu_the, sat_thu…), nếu biết. */
@@ -43,29 +72,41 @@ export interface Persona {
   talent?: string;
 }
 
+/** Dáng theo hệ chủ cho từng loại chiêu (đợt theo hệ, đề xuất 2026-11-04). */
+const BY_ELEMENT: Partial<Record<ElementId, Partial<Record<SkillId, Dang>>>> = {
+  hoa: { tam_xa: "hoa_long", bua_chu: "hoa_long", dien_rong: "luu_tinh" },
+  thuy: { dien_rong: "thuy_long", khong_che: "thuy_long", can_quet: "song_than" },
+  moc: { khong_che: "re_cay", dien_rong: "re_cay", hoi_phuc: "hoa_no" },
+  quang: { bua_chu: "phat_thu", dien_rong: "phat_thu", hoi_phuc: "thanh_quang", ho_the: "thanh_quang" },
+  cuc_duong: { dien_rong: "liet_nhat", bua_chu: "liet_nhat" },
+  cuc_am: { dien_rong: "nguyet_thuc" },
+  am_lanh: { khong_che: "quy_thu", dien_rong: "quy_thu" },
+  cuc_han: { dien_rong: "bao_tuyet", khong_che: "gai_troi" },
+  tho: { dien_rong: "gai_troi" },
+  loi: { dien_rong: "thien_loi" },
+  phong: { dien_rong: "loc_xoay" },
+  kim: { can_don: "kim_cuong_xu" },
+};
+
 /**
  * Luật chọn dáng (đề xuất, đọc từ trên xuống, gặp luật khớp thì dừng):
- * 1. Sát thủ đánh cận chiến, thân pháp: huyết tuyến.
- * 2. Âm tà (hệ chủ Âm lãnh, Cực âm) đánh tầm xa, khống chế, bùa chú: đầu lâu.
- * 3. Diện rộng theo hệ: Lôi thiên lôi giáng; Thổ, Cực hàn gai trồi; Phong lốc xoáy (hệ rõ hơn vũ khí với chiêu vùng).
+ * 1. Tài năng: sát thủ đánh cận chiến, thân pháp ra huyết tuyến; Tu kim tiền đánh tầm xa ra đồng tiền bay.
+ * 2. Hệ chủ (bảng BY_ELEMENT): mỗi hệ một dáng cho chiêu vùng và vài loại chiêu hợp tính hệ.
+ * 3. Âm tà còn lại (Âm lãnh, Cực âm) đánh tầm xa, khống chế, bùa chú: đầu lâu.
  * 4. Kim hệ hoặc cầm kiếm: diện rộng là mưa kiếm; bùa chú là cự kiếm; tầm xa, cận chiến quét là kiếm trận.
  * 5. Cầm đao, cận chiến quét hoặc diện rộng: đao khí chém ngang.
- * 6. Tu kim tiền đánh tầm xa: đồng tiền bay.
  */
 export function autoDang(skill: SkillId, element: ElementId, p: Persona = {}): Dang | null {
-  const kiem = p.weapon === "kiem" || element === "kim";
   if (p.talent === "sat_thu" && (skill === "can_don" || skill === "than_phap" || skill === "can_quet")) return "huyet_tuyen";
+  if (p.talent === "tu_kim_tien" && skill === "tam_xa") return "tien_dong";
+  const byEl = BY_ELEMENT[element]?.[skill];
+  if (byEl) return byEl;
   if ((element === "am_lanh" || element === "cuc_am") && (skill === "tam_xa" || skill === "khong_che" || skill === "bua_chu")) return "dau_lau";
-  if (skill === "dien_rong") {
-    if (element === "loi") return "thien_loi";
-    if (element === "tho" || element === "cuc_han") return "gai_troi";
-    if (element === "phong") return "loc_xoay";
-  }
+  const kiem = p.weapon === "kiem" || element === "kim";
   if (kiem && skill === "dien_rong") return "mua_kiem";
   if (kiem && skill === "bua_chu") return "cu_kiem";
   if (kiem && (skill === "tam_xa" || skill === "can_quet")) return "kiem_tran";
   if (p.weapon === "dao" && (skill === "can_quet" || skill === "dien_rong")) return "dao_khi";
-  if (p.talent === "tu_kim_tien" && skill === "tam_xa") return "tien_dong";
   return null;
 }
 
