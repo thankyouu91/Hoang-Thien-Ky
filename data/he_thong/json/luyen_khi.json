@@ -6,7 +6,7 @@
     "khi_linh: mỗi cấp cộng cong_chi_so vào hệ số cùng chỗ với cường hóa; món có khí linh từ cấp 1 khóa vào nhân vật. Cấp 3, 6, 9 mở ô khí văn, tối đa luat.khiVanToiDa theo độ hiếm; chọn 1 trong 3 khí văn của nhóm ô (cong: vũ khí, bao tay, ngọc bội; thu: mũ, áo, đai, giày).",
     "khi_van: gia_tri là số chính của tác dụng để chỉnh. Mỗi người chọn tối đa luat.khiVanKichToiDa khí văn đang kích, khác nhau, mỗi khí văn tính 1 lần; tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi nguồn làm mềm vẫn còn ít nhất tham_so.json cong_phap.counterFloor (×1,2). khi_van[].tham_so: ngưỡng, chu kỳ trong câu tác dụng (nguongMau phần nghìn máu, chuKyTicks tick); trống là không có.",
     "phan_giai: món từ lam ra Khí Tinh theo độ hiếm, cộng luat.phanGiaiKhiTinhMoiCapKhiLinh mỗi cấp khí linh; ngọc, Ý châu, ấn trả nguyên vẹn; luat.phanGiaiTraNac số nấc cường hóa trả lại thành Luyện Khí Thạch đúng phẩm. Khí Tinh từ đồ khóa cũng khóa.",
-    "danh_khi: luyện ở lò tông môn cấp luat.danhKhiLoToiThieu trở lên theo đồ phổ, phôi là 1 vũ khí đỏ cùng khí hình; Ý của khí hình mạnh gấp luat.danhKhiYHeSo lần Ý châu, không chiếm dòng khảm, cộng danh văn riêng. Mỗi người mặc luat.danhKhiMoiNguoi danh khí; khóa. Thất bại mất Khí Tinh và Vẫn Thiết, giữ phôi và đồ phổ. danh_khi[].tham_so: số của danh văn theo đơn vị code (phần nghìn, tick, số lần); loại chiêu của danh văn là loại chiêu của khí hình.",
+    "danh_khi: luyện ở lò tông môn cấp luat.danhKhiLoToiThieu trở lên theo đồ phổ, phôi là 1 vũ khí đỏ cùng khí hình; Ý của khí hình mạnh bằng Ý châu (luat.danhKhiYHeSo), không chiếm dòng khảm, cộng danh văn riêng. Mỗi người mặc luat.danhKhiMoiNguoi danh khí; khóa. Thất bại mất Khí Tinh và Vẫn Thiết, giữ phôi và đồ phổ. danh_khi[].tham_so: số của danh văn theo đơn vị code (phần nghìn, tick, số lần); loại chiêu của danh văn là loại chiêu của khí hình.",
     "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu, loại thưởng theo thứ được đếm (vũ khí, danh khí: ánh sáng vũ khí; ô khác: khung ô; pháp bảo, Phách: danh hiệu; pháp khí: ô kho; ấn bộ: ô túi; Ý châu: Khí Tinh). Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch.",
     "te_luyen_tang: pháp bảo đã tế luyện, từ Trung vị, lên tầng 1–5; linh_luc, hoi_chieu là cộng dồn tới tầng đó. Hồi chiêu pháp bảo sau mọi nguồn (set Cổ Tông, tầng) không dưới luat.teLuyenHoiChieuSan hồi chiêu gốc."
   ],
@@ -129,8 +129,8 @@
       "ma": "KV-TH-001",
       "nhom": "thu",
       "ten": "Hộ Mệnh Văn",
-      "tac_dung": "Lần đầu máu dưới 25%: khiên 3% máu tối đa",
-      "gia_tri": 30,
+      "tac_dung": "Lần đầu máu dưới 25%: khiên 1,8% máu tối đa",
+      "gia_tri": 18,
       "don_vi": "phan_nghin",
       "tham_so": {"nguongMau":250}
     },
@@ -521,7 +521,7 @@
     "khiLinhKnKhiTinh": 10,
     "khiVanToiDa": {"tim":1,"vang":2,"do":3},
     "khiVanKichToiDa": 3,
-    "khiVanTranLucChien": 10,
+    "khiVanTranLucChien": 20,
     "taoVanLinhVanThach": 1,
     "phachTyLe": 300,
     "phachKhiTinh": 20,
@@ -529,7 +529,7 @@
     "danhKhiKhiTinh": 50,
     "danhKhiHoLo": 3,
     "danhKhiTyLe": {"lo9":400,"lo10":600},
-    "danhKhiYHeSo": 1250,
+    "danhKhiYHeSo": 1000,
     "danhKhiMoiNguoi": 1,
     "baoGiamTuanLinhVanThach": 2,
     "teLuyenHoiChieuSan": 600

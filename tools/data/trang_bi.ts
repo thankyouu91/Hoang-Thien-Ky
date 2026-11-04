@@ -268,7 +268,7 @@ export const LUAT: [string, string, string][] = [
   ["luyen_khi.json:luat.danhKhiHoLo", "Danh khí: số thành viên hộ lô cùng tông (thêm 1 Tu rèn chủ lò)", "số"],
   ["luyen_khi.json:luat.danhKhiTyLe.lo9", "Danh khí: tỷ lệ thành ở lò cấp 9", "%"],
   ["luyen_khi.json:luat.danhKhiTyLe.lo10", "Danh khí: tỷ lệ thành ở lò cấp 10", "%"],
-  ["luyen_khi.json:luat.danhKhiYHeSo", "Danh khí: Ý của khí hình mạnh gấp Ý châu", "hệ số"],
+  ["luyen_khi.json:luat.danhKhiYHeSo", "Danh khí: Ý của khí hình so với Ý châu (hệ số)", "hệ số"],
   ["luyen_khi.json:luat.danhKhiMoiNguoi", "Danh khí: mỗi người mặc tối đa", "số"],
   ["luyen_khi.json:luat.baoGiamTuanLinhVanThach", "Bảo Giám: trang tuần thưởng Linh Văn Thạch", "số"],
   ["luyen_khi.json:luat.teLuyenHoiChieuSan", "Tế luyện tầng: hồi chiêu pháp bảo sau mọi nguồn không dưới", "%"],

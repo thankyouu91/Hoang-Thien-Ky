@@ -13,6 +13,7 @@
 //   luyen_khi_3     khiVanTinhToiDa 1 và khiVanKichToiDa 3, Hộ Mệnh 3%, Định Thân 50%, Ý danh khí ×1,25, 2 danh văn, counterFloor
 //   luyen_khi_4     cột tham số danh văn ở Danh khí, tham số phụ (ngưỡng, chu kỳ) ở Khí văn
 //   luyen_khi_5     xóa dòng luật khiVanTinhToiDa (code thôi đọc), bỏ câu nhắc nó trong ghi chú khi_van
+//   luyen_khi_6     Hộ Mệnh 1,8%, Ý danh khí ×1,0, ngân sách khí văn khiVanTranLucChien 2% (lần đo 2)
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -461,7 +462,7 @@ const KHI_VAN: [string, string, string, number, string][] = [
   ["KV-CO-006", "Tụ Linh Văn", "Hạ gục kẻ địch thì hồi 3% mana", 0.03, "%"],
   ["KV-CO-007", "Phá Trận Văn", "Sát thương lên trận nhãn, hộ trận +3% (chiến tranh)", 0.03, "%"],
   ["KV-CO-008", "Liệp Yêu Văn", "Sát thương lên dị thú và boss PvE +4%", 0.04, "%"],
-  ["KV-TH-001", "Hộ Mệnh Văn", "Lần đầu máu dưới 25%: khiên 3% máu tối đa", 0.03, "%"],
+  ["KV-TH-001", "Hộ Mệnh Văn", "Lần đầu máu dưới 25%: khiên 1,8% máu tối đa", 0.018, "%"],
   ["KV-TH-002", "Ngự Khắc Văn", "Trúng đòn hệ khắc mình: hệ số ×1,5 thành ×1,47", 1.47, "hệ số"],
   ["KV-TH-003", "Phản Chấn Văn", "Phản 3% sát thương cận chiến nhận được", 0.03, "%"],
   ["KV-TH-004", "Thiết Bích Văn", "Đứng hàng trước: phòng thủ +3%", 0.03, "%"],
@@ -491,10 +492,10 @@ const LUAT_LK: [string, number][] = [
   ["songHeCapNgoc", 7], ["phachCapNgoc", 10], ["danhKhiMoCap", 250], ["danhKhiLoToiThieu", 9],
   ["phanGiaiKhiTinhMoiCapKhiLinh", 1], ["phanGiaiTraNac", 500], ["tayLuyenKhiTinh", 2],
   ["khiLinhKnTran", 1], ["khiLinhKnBiCanh", 5], ["khiLinhKnKhiTinh", 10],
-  ["khiVanToiDa.tim", 1], ["khiVanToiDa.vang", 2], ["khiVanToiDa.do", 3], ["khiVanKichToiDa", 3], ["khiVanTranLucChien", 10],
+  ["khiVanToiDa.tim", 1], ["khiVanToiDa.vang", 2], ["khiVanToiDa.do", 3], ["khiVanKichToiDa", 3], ["khiVanTranLucChien", 20],
   ["taoVanLinhVanThach", 1], ["phachTyLe", 300], ["phachKhiTinh", 20],
   ["danhKhiVanThiet", 5], ["danhKhiKhiTinh", 50], ["danhKhiHoLo", 3], ["danhKhiTyLe.lo9", 400], ["danhKhiTyLe.lo10", 600],
-  ["danhKhiYHeSo", 1250], ["danhKhiMoiNguoi", 1], ["baoGiamTuanLinhVanThach", 2], ["teLuyenHoiChieuSan", 600],
+  ["danhKhiYHeSo", 1000], ["danhKhiMoiNguoi", 1], ["baoGiamTuanLinhVanThach", 2], ["teLuyenHoiChieuSan", 600],
 ];
 const GHI_CHU_LK = [
   "Luyện khí sau cấp tối đa (GDD tab Trang bị, pháp bảo và set đồ, phần 13; mọi số là đề xuất): mở rộng theo chiều ngang (thêm lựa chọn, thứ để thử, thứ để sưu tầm), cả lớp cộng tối đa khoảng 3 điểm lực chiến, trong trần 35% của đồ.",
@@ -688,6 +689,13 @@ const luyenKhi2: Step = (wb, log) => {
 
 // ---------- luyện khí lần 3 (sau lần đo đầu của phiên Sprint: khí văn vượt trần; GDD tab Trang bị phần 13 rev 55; đề xuất) ----------
 
+/** Số luật luyện khí hiện hành (đơn vị code) theo LUAT_LK; các bước sau ghi đúng số này nên chạy lại không lệch nhau. */
+const lkLuat = (k: string): number => {
+  const x = LUAT_LK.find(([key]) => key === k);
+  if (!x) throw new Error(`LUAT_LK không có ${k}`);
+  return x[1];
+};
+
 const luyenKhi3: Step = (wb, log) => {
   const text = (v: string): Cell => ({ v, fill: "de_xuat" });
   const colOf = (def: B.TableDef, key: string) => def.cols.find((c) => c.key === key)!.header;
@@ -705,8 +713,8 @@ const luyenKhi3: Step = (wb, log) => {
     }
     log.push("Luật trang bị: khiVanTinhToiDa 2 → 1, thêm khiVanKichToiDa 3");
   } else if (!keys.includes(moi)) throw new Error(`Luật trang bị: không có dòng ${cu} lẫn ${moi}`);
-  put(luat, "luyen_khi.json:luat.danhKhiYHeSo", "gia_tri", { v: 1.25, fill: "de_xuat" });
-  log.push("Luật trang bị: danhKhiYHeSo ×1,25");
+  put(luat, "luyen_khi.json:luat.danhKhiYHeSo", "gia_tri", { v: lkLuat("danhKhiYHeSo") / 1000, fill: "de_xuat" });
+  log.push(`Luật trang bị: danhKhiYHeSo ×${lkLuat("danhKhiYHeSo") / 1000}`);
 
   // 2–3. Khí văn Hộ Mệnh, Định Thân (số và chữ theo KHI_VAN)
   const kv = partDef("Khí văn");
@@ -810,9 +818,35 @@ const luyenKhi5: Step = (wb, log) => {
   if (next !== cur) { wb.setCell(gc.sheet, i, hd("noi_dung"), { v: next, fill: "de_xuat" }); log.push("Ghi chú trang bị: bỏ câu khiVanTinhToiDa ở dòng khi_van"); }
 };
 
+// ---------- luyện khí lần 6 (sau lần đo 2 của phiên Sprint; GDD tab Trang bị phần 13 rev 62; đề xuất) ----------
+
+const luyenKhi6: Step = (wb, log) => {
+  const text = (v: string): Cell => ({ v, fill: "de_xuat" });
+  const colOf = (def: B.TableDef, key: string) => def.cols.find((c) => c.key === key)!.header;
+  const put = (def: B.TableDef, id: string, key: string, c: Cell) => wb.setCell(def.sheet, ...locate(wb, def.sheet, colOf(def, def.id), id, colOf(def, key)), c);
+  // Hộ Mệnh Văn khiên 1,8% máu tối đa
+  const kv = partDef("Khí văn"), [, , tacDung, giaTri] = KHI_VAN.find((x) => x[0] === "KV-TH-001")!;
+  put(kv, "KV-TH-001", "tac_dung", text(tacDung));
+  put(kv, "KV-TH-001", "gia_tri", pctCell(giaTri));
+  // Ý danh khí bằng Ý châu; ngân sách khí văn khoảng 2% lực chiến
+  const luat = partDef("Luật trang bị"), y = "luyen_khi.json:luat.danhKhiYHeSo";
+  put(luat, y, "ten", text(TB.LUAT.find((l) => l[0] === y)![1]));
+  put(luat, y, "gia_tri", { v: lkLuat("danhKhiYHeSo") / 1000, fill: "de_xuat" });
+  put(luat, "luyen_khi.json:luat.khiVanTranLucChien", "gia_tri", pctCell(lkLuat("khiVanTranLucChien") / 1000));
+  log.push(`Khí văn: KV-TH-001 khiên ${Math.round(giaTri * 1000) / 10}%; Luật: danhKhiYHeSo ×${lkLuat("danhKhiYHeSo") / 1000}, khiVanTranLucChien ${lkLuat("khiVanTranLucChien") / 10}%`);
+  // Ghi chú danh_khi
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), gh = (gs.cells[0] ?? []).map(norm);
+  const hd = (k: string) => gh.indexOf(gc.cols.find((c) => c.key === k)!.header);
+  const i = gs.cells.findIndex((r) => norm(r?.[hd("file")]) === "luyen_khi.json" && norm(r?.[hd("noi_dung")]).startsWith("danh_khi:"));
+  if (i < 0) throw new Error("Ghi chú trang bị: không có dòng danh_khi của luyen_khi.json");
+  const cur = norm(gs.cells[i][hd("noi_dung")]);
+  const next = cur.replace("Ý của khí hình mạnh gấp luat.danhKhiYHeSo lần Ý châu, không chiếm dòng khảm", "Ý của khí hình mạnh bằng Ý châu (luat.danhKhiYHeSo), không chiếm dòng khảm");
+  if (next !== cur) { wb.setCell(gc.sheet, i, hd("noi_dung"), text(next)); log.push("Ghi chú trang bị: danh_khi, Ý bằng Ý châu"); }
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
-  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5,
+  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
