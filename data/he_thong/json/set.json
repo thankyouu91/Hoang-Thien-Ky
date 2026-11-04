@@ -83,8 +83,8 @@
         {
           "so": 7,
           "loai": "hanh_vi",
-          "mo_ta": "Lần đầu mỗi trận máu dưới 30%: hóa đá 1,5 s, miễn sát thương nhưng không ra chiêu; khai khoáng thủ công +5%",
-          "tham_so": {"nguongMau":300,"hoaDaTicks":30,"khaiKhoang":50}
+          "mo_ta": "Lần đầu mỗi trận máu dưới 15%: hóa đá 0,5 s, miễn sát thương nhưng không ra chiêu; khai khoáng thủ công +5%",
+          "tham_so": {"nguongMau":150,"hoaDaTicks":10,"khaiKhoang":50}
         }
       ],
       "an": "NG-AN-003"
