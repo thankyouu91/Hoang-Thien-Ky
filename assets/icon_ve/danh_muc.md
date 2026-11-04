@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 753 món, đã vẽ 237, cần vẽ lại 0.
+Tổng 753 món, đã vẽ 261, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -185,32 +185,32 @@ Tổng 753 món, đã vẽ 237, cần vẽ lại 0.
 | TB-AO-024 | Bào Mực Nhạt | Lục | trang_bi/ao/24.webp | ✓ |
 | TB-AO-025 | Đạo Bào Lưu Vân | Lam | trang_bi/ao/25.webp | ✓ |
 | TB-AO-026 | Giáp Huyền Thiết | Lam | trang_bi/ao/26.webp | ✓ |
-| TB-AO-027 | Bào Hạc Văn | Lam | trang_bi/ao/27.webp |  |
-| TB-AO-028 | Giáp Thiết Lân | Lam | trang_bi/ao/28.webp |  |
-| TB-AO-029 | Sam Bích Hà | Lam | trang_bi/ao/29.webp |  |
-| TB-AO-030 | Bào Tùng Hạc | Lam | trang_bi/ao/30.webp |  |
-| TB-AO-031 | Giáp Hổ Văn | Lam | trang_bi/ao/31.webp |  |
-| TB-AO-032 | Y Phi Yến | Lam | trang_bi/ao/32.webp |  |
-| TB-AO-033 | Bào Mai Hoa | Lam | trang_bi/ao/33.webp |  |
-| TB-AO-034 | Giáp Ngân Lân | Lam | trang_bi/ao/34.webp |  |
-| TB-AO-035 | Bào Thanh Liên | Lam | trang_bi/ao/35.webp |  |
-| TB-AO-036 | Áo Choàng Hắc Ưng | Lam | trang_bi/ao/36.webp |  |
-| TB-AO-037 | Giáp Quy Bối | Lam | trang_bi/ao/37.webp |  |
-| TB-AO-038 | Bào Trúc Lâm | Lam | trang_bi/ao/38.webp |  |
-| TB-AO-039 | Sam Tử La | Lam | trang_bi/ao/39.webp |  |
-| TB-AO-040 | Giáp Long Lân | Lam | trang_bi/ao/40.webp |  |
+| TB-AO-027 | Bào Hạc Văn | Lam | trang_bi/ao/27.webp | ✓ |
+| TB-AO-028 | Giáp Thiết Lân | Lam | trang_bi/ao/28.webp | ✓ |
+| TB-AO-029 | Sam Bích Hà | Lam | trang_bi/ao/29.webp | ✓ |
+| TB-AO-030 | Bào Tùng Hạc | Lam | trang_bi/ao/30.webp | ✓ |
+| TB-AO-031 | Giáp Hổ Văn | Lam | trang_bi/ao/31.webp | ✓ |
+| TB-AO-032 | Y Phi Yến | Lam | trang_bi/ao/32.webp | ✓ |
+| TB-AO-033 | Bào Mai Hoa | Lam | trang_bi/ao/33.webp | ✓ |
+| TB-AO-034 | Giáp Ngân Lân | Lam | trang_bi/ao/34.webp | ✓ |
+| TB-AO-035 | Bào Thanh Liên | Lam | trang_bi/ao/35.webp | ✓ |
+| TB-AO-036 | Áo Choàng Hắc Ưng | Lam | trang_bi/ao/36.webp | ✓ |
+| TB-AO-037 | Giáp Quy Bối | Lam | trang_bi/ao/37.webp | ✓ |
+| TB-AO-038 | Bào Trúc Lâm | Lam | trang_bi/ao/38.webp | ✓ |
+| TB-AO-039 | Sam Tử La | Lam | trang_bi/ao/39.webp | ✓ |
+| TB-AO-040 | Giáp Long Lân | Lam | trang_bi/ao/40.webp | ✓ |
 | TB-AO-041 | Pháp Y Tinh Hà | Tím | trang_bi/ao/41.webp | ✓ |
 | TB-AO-042 | Giáp Kỳ Lân | Tím | trang_bi/ao/42.webp | ✓ |
-| TB-AO-043 | Bào Phượng Vũ | Tím | trang_bi/ao/43.webp |  |
-| TB-AO-044 | Y Lưu Ly | Tím | trang_bi/ao/44.webp |  |
-| TB-AO-045 | Giáp Huyễn Ảnh | Tím | trang_bi/ao/45.webp |  |
-| TB-AO-046 | Bào Tử Vân | Tím | trang_bi/ao/46.webp |  |
-| TB-AO-047 | Pháp Y Bát Quái | Tím | trang_bi/ao/47.webp |  |
-| TB-AO-048 | Giáp Thiên Lang | Tím | trang_bi/ao/48.webp |  |
-| TB-AO-049 | Bào Nguyệt Hoa | Tím | trang_bi/ao/49.webp |  |
-| TB-AO-050 | Y Thiên Tằm | Tím | trang_bi/ao/50.webp |  |
-| TB-AO-051 | Giáp Bích Lân | Tím | trang_bi/ao/51.webp |  |
-| TB-AO-052 | Bào Vạn Hoa | Tím | trang_bi/ao/52.webp |  |
+| TB-AO-043 | Bào Phượng Vũ | Tím | trang_bi/ao/43.webp | ✓ |
+| TB-AO-044 | Y Lưu Ly | Tím | trang_bi/ao/44.webp | ✓ |
+| TB-AO-045 | Giáp Huyễn Ảnh | Tím | trang_bi/ao/45.webp | ✓ |
+| TB-AO-046 | Bào Tử Vân | Tím | trang_bi/ao/46.webp | ✓ |
+| TB-AO-047 | Pháp Y Bát Quái | Tím | trang_bi/ao/47.webp | ✓ |
+| TB-AO-048 | Giáp Thiên Lang | Tím | trang_bi/ao/48.webp | ✓ |
+| TB-AO-049 | Bào Nguyệt Hoa | Tím | trang_bi/ao/49.webp | ✓ |
+| TB-AO-050 | Y Thiên Tằm | Tím | trang_bi/ao/50.webp | ✓ |
+| TB-AO-051 | Giáp Bích Lân | Tím | trang_bi/ao/51.webp | ✓ |
+| TB-AO-052 | Bào Vạn Hoa | Tím | trang_bi/ao/52.webp | ✓ |
 | TB-AO-053 | Tiên Y Vũ Linh | Vàng | trang_bi/ao/53.webp | ✓ |
 | TB-AO-054 | Giáp Hoàng Long | Vàng | trang_bi/ao/54.webp |  |
 | TB-AO-055 | Bào Cửu Long | Vàng | trang_bi/ao/55.webp |  |
