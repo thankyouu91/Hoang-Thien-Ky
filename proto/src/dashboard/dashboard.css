@@ -685,8 +685,8 @@ details.dev select { height: 36px; max-width: 60vw; padding: 0 8px; border: 0; b
 .nv-ic .ic { width: 16px; height: 16px; }
 .nv-ic:hover { border-color: var(--fr); color: var(--c-accent-ink); }
 .nv-tabs { margin-bottom: var(--sp-4); font-family: var(--font); }
-.nv-cols[data-tab="thong-tin"] > :not(.nv-info), .nv-cols[data-tab="phap-tuong"] > :not(.nv-form), .nv-cols[data-tab="linh-tran"] > :not(.nv-form), .nv-cols[data-tab="tui"] > :not(.nv-bag) { display: none; }
-/* Điện thoại: Pháp tướng và Linh trận là hai tab ngoài; nút chuyển trong cột giữa chỉ dùng trên màn rộng */
+.nv-cols[data-tab="thong-tin"] > :not(.nv-info), .nv-cols[data-tab="phap-tuong"] > :not(.nv-form), .nv-cols[data-tab="dao-co"] > :not(.nv-form), .nv-cols[data-tab="tui"] > :not(.nv-bag) { display: none; }
+/* Điện thoại: Pháp tướng và Đạo Cơ Bàn là hai tab ngoài; nút chuyển trong cột giữa chỉ dùng trên màn rộng */
 @media (max-width: 1099px) { .nv-sub .nv-center { display: none; } }
 @media (min-width: 1100px) {
   .nv-tabs { display: none; }
@@ -795,12 +795,17 @@ button.nv-row:hover { background: var(--c-sunken); }
 .pt-legend .lg-yen { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 2px; background: var(--c-accent); color: var(--c-on-accent); }
 .pt-legend .lg-yen .ic { width: 11px; height: 11px; }
 
-/* ---- Linh trận (tên tạm): bàn ô lục giác đặt đồ bổ trợ kích set, cảnh three ở art/linhTranScene.ts ---- */
+/* ---- Đạo Cơ Bàn (GDD tab Trang bị phần 8): bàn ô lục giác đặt ấn bộ, ngọc hệ; cảnh three ở art/daoCoBanScene.ts ---- */
 .nv-sub .nv-center { flex: 0 0 auto; }
 .nv-center button { flex: 0 0 auto; min-height: 30px; padding: 0 12px; font-size: 13px; }
 .nv-roots { margin-left: auto; color: var(--c-ink-3); font-size: 13px; white-space: nowrap; }
 .lt-board { position: relative; width: 100%; max-width: 420px; aspect-ratio: 1 / 0.95; margin: 6px auto 0; }
-.lt-three { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.lt-three { position: absolute; inset: 0; z-index: 0; pointer-events: none; -webkit-mask-image: radial-gradient(closest-side, #000 74%, transparent 100%); mask-image: radial-gradient(closest-side, #000 74%, transparent 100%); }
+/* Có nền theo tài năng thì không cần bóng pháp tướng phía sau */
+.lt-board.live .pt-ghost { display: none; }
+.lt-cell.off > * { opacity: 0.55; }
+.lt-realm { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0 0; color: var(--c-ink-3); font-size: var(--fs-xs); }
+.lt-realm select { min-height: 28px; padding: 0 6px; border: 1px solid var(--c-line-2); border-radius: 2px; background: var(--c-raised); color: var(--c-ink); font: 12px var(--font); }
 .lt-cell { position: absolute; z-index: 1; display: grid; place-items: center; padding: 0; border: 0; background: none; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); cursor: pointer; }
 .lt-cell > * { position: relative; z-index: 1; }
 .lt-cell:hover { background: rgba(179, 38, 30, 0.07); }
@@ -826,10 +831,13 @@ button.nv-row:hover { background: var(--c-sunken); }
 .lt-gear .pt-slot img.ve { left: 12%; top: 8%; width: 76%; height: 76%; }
 .lt-gear .pt-slot .gems { display: none; }
 .lt-gear .pt-slot .lbl { font-size: 10px; }
-.pt-legend .lg-mach { border-top-width: 3px; border-color: #2f7fd0; box-shadow: 0 0 4px rgba(47, 127, 208, 0.6); }
+.pt-legend .lg-m { border-top-width: 3px; }
+.pt-legend .lg-m-thuan { border-color: #a8842f; box-shadow: 0 0 4px rgba(168, 132, 47, 0.6); }
+.pt-legend .lg-m-sinh { border-color: #2e8b4a; box-shadow: 0 0 4px rgba(46, 139, 74, 0.6); }
+.pt-legend .lg-m-cuc { border-color: #7b4fb0; box-shadow: 0 0 4px rgba(123, 79, 176, 0.6); }
+.pt-legend .lg-m-trung { border-color: #8a7f70; }
+.pt-legend .lg-m-dut { border-top-style: dashed; border-color: #c0392b; }
 .pt-legend .lg-lock { width: 12px; height: 12px; border: 1px dashed var(--c-ink-3); }
-.pt-legend .lg-core { width: 12px; height: 12px; border: 2px solid var(--c-accent); }
-.page .lt-tmp { margin-top: var(--sp-2); font-style: italic; }
 #sheet .lt-pick { display: grid; place-items: center; width: 40px; }
 #sheet .lt-pick .lt-seal { transform: none; }
 
