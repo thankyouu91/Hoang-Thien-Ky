@@ -685,8 +685,8 @@ details.dev select { height: 36px; max-width: 60vw; padding: 0 8px; border: 0; b
 .nv-ic .ic { width: 16px; height: 16px; }
 .nv-ic:hover { border-color: var(--fr); color: var(--c-accent-ink); }
 .nv-tabs { margin-bottom: var(--sp-4); font-family: var(--font); }
-.nv-cols[data-tab="thong-tin"] > :not(.nv-info), .nv-cols[data-tab="phap-tuong"] > :not(.nv-form), .nv-cols[data-tab="dao-co"] > :not(.nv-form), .nv-cols[data-tab="tui"] > :not(.nv-bag) { display: none; }
-/* Điện thoại: Pháp tướng và Đạo Cơ Bàn là hai tab ngoài; nút chuyển trong cột giữa chỉ dùng trên màn rộng */
+.nv-cols[data-tab="thong-tin"] > :not(.nv-info), .nv-cols[data-tab="phap-tuong"] > :not(.nv-form), .nv-cols[data-tab="dao-co"] > :not(.nv-form), .nv-cols[data-tab="luyen-khi"] > :not(.nv-form), .nv-cols[data-tab="tui"] > :not(.nv-bag) { display: none; }
+/* Điện thoại: Pháp tướng, Đạo Cơ Bàn, Luyện khí là ba tab ngoài; nút chuyển trong cột giữa chỉ dùng trên màn rộng */
 @media (max-width: 1099px) { .nv-sub .nv-center { display: none; } }
 @media (min-width: 1100px) {
   .nv-tabs { display: none; }
@@ -840,6 +840,130 @@ button.nv-row:hover { background: var(--c-sunken); }
 .pt-legend .lg-lock { width: 12px; height: 12px; border: 1px dashed var(--c-ink-3); }
 #sheet .lt-pick { display: grid; place-items: center; width: 40px; }
 #sheet .lt-pick .lt-seal { transform: none; }
+
+/* ---- Luyện khí (GDD tab Trang bị phần 13): phân giải, tẩy luyện, khí linh, ngọc, Bảo Giám; lò danh khí ở Luyện Khí Các ---- */
+/* Điện thoại: 5 tab màn Nhân vật rộng theo chữ để "Pháp tướng" không bị cắt */
+@media (max-width: 1099px) { .page .nv-tabs { gap: 3px; } .page .nv-tabs button { flex: 1 1 auto; padding: 0 3px; font-size: 12.5px; } }
+.lk-purse { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2px 12px; margin-left: auto; color: var(--c-ink-3); font-size: 13px; white-space: nowrap; }
+.lk-purse b { color: var(--c-ink); font-variant-numeric: tabular-nums; }
+.lk-purse .muted { font-size: 12px; }
+.page .lk-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin: 0 0 var(--sp-3); }
+.page .lk-tabs button { position: relative; min-height: 34px; padding: 0 2px; font-size: 13px; white-space: nowrap; }
+.lk-dot { position: absolute; right: 3px; top: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--c-accent); }
+.lk-lock { display: grid; justify-items: center; gap: 6px; padding: var(--sp-6) var(--sp-4); border: 1px dashed var(--c-line-2); border-radius: 3px; color: var(--c-ink-2); text-align: center; }
+.lk-lock .lg-lock { display: block; width: 14px; height: 14px; border: 1px dashed var(--c-ink-3); }
+.lk-lock .nv-note { margin: 0; }
+.lk-body .list .bag-cell { flex: 0 0 auto; width: 44px; }
+/* Mục nhiều chữ: núi sương dưới cột nhạt hơn để chữ đọc rõ */
+.nv-form:has(.lk-tabs) .pt-mist { opacity: 0.18; }
+#sheet .bd-head + dl.kv { margin-top: var(--sp-3); }
+.lk-tools { flex-wrap: wrap; margin-top: var(--sp-4); }
+.lk-check { display: inline-flex; align-items: center; gap: 4px; }
+.lk-link { padding: 0; border: 0; background: none; color: var(--c-accent-ink); font: inherit; text-decoration: underline; cursor: pointer; }
+
+/* Phân giải: chạm chọn nhiều món, ô chọn viền son có dấu tích; ô cho Khí Tinh khóa ghi chữ "khóa" */
+.lk-quick { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 8px; }
+.lk-quick .chip { min-height: 30px; border: 0; color: var(--c-ink-2); font: inherit; font-size: 12.5px; cursor: pointer; }
+.lk-quick .chip:hover { color: var(--c-accent-ink); box-shadow: inset 0 0 0 1px var(--c-frame); }
+.lk-grid .bag-cell.lk-on { border-color: var(--c-accent); box-shadow: inset 0 0 0 2px var(--c-accent); }
+.lk-tick { position: absolute; left: 3px; top: 3px; width: 15px; height: 15px; border-radius: 2px; background: var(--c-accent); }
+.lk-tick::after { content: ""; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px; border: solid var(--c-on-accent); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.lk-k { position: absolute; left: 2px; bottom: 2px; padding: 0 2px; border-radius: 2px; background: rgba(255, 250, 240, 0.9); color: var(--rar-vang-ink); font-size: 9px; font-weight: 700; line-height: 1.3; }
+.lk-sum { margin-top: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--c-frame-soft); border-radius: 3px; background: var(--c-surface); }
+.lk-yield { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; color: var(--c-ink-2); font-size: 14px; }
+.lk-yield b { color: var(--c-accent-ink); font-size: var(--fs-xl); font-variant-numeric: tabular-nums; }
+.lk-sum .nv-note { margin-left: 0; }
+.page .seal.wide { width: 100%; margin-top: var(--sp-2); }
+
+/* Tẩy luyện: hàng 7 ô chọn, 4 loại của ô; loại đang có nền son nhạt, loại vừa đổi lóe vàng một lần */
+.lk-slots { margin-bottom: var(--sp-2); }
+.lk-slots .pt-slot.sel { outline: 2px solid var(--c-accent); outline-offset: 1px; }
+.lk-sub { gap: 8px; }
+.lk-i { flex: 0 0 auto; display: inline-grid; place-items: center; width: 20px; height: 20px; border: 1px solid var(--c-line-2); border-radius: 2px; color: var(--c-ink-3); font-size: 11px; }
+.list .lk-sub.cur { background: var(--c-accent-soft); }
+.lk-sub.cur .lk-i { border-color: var(--c-frame); color: var(--c-accent-ink); font-weight: 700; }
+.list .lk-sub.new { animation: lk-flash 1.4s ease-out; }
+@keyframes lk-flash { from { background: rgba(195, 150, 47, 0.45); } to { background: var(--c-accent-soft); } }
+.lk-gt { flex: 0 0 auto; min-width: 46px; text-align: right; font-variant-numeric: tabular-nums; }
+.lk-subs .badge { min-width: 58px; }
+
+/* Thanh khí linh 0–9 ở mép trên ô đồ (vàng); có ô khí văn chờ chọn thì sáng nhịp */
+.pt-slot .kl { position: absolute; left: 0; right: 0; top: 0; z-index: 1; height: 3px; background: rgba(42, 32, 24, 0.14); }
+.pt-slot .kl i { display: block; height: 100%; background: var(--rar-vang); }
+.pt-slot .kl.ready { background: rgba(179, 38, 30, 0.25); animation: lk-glow 1.6s ease-in-out infinite; }
+.pt-slot:has(.kl) .plus { top: 5px; }
+@keyframes lk-glow { 50% { box-shadow: 0 0 6px 1px rgba(195, 150, 47, 0.9); } }
+
+/* Khí linh: mỗi ô một dòng, thanh kinh nghiệm, dấu khí văn hình thoi */
+.lk-kl { align-items: center; }
+.list .lk-kl.ready { box-shadow: inset 2px 0 0 var(--c-accent); }
+.lk-kl.off { opacity: 0.7; }
+.lk-bar { display: block; height: 5px; margin: 4px 0 2px; background: rgba(42, 32, 24, 0.1); }
+.lk-bar i { display: block; height: 100%; background: var(--rar-vang); }
+.lk-bar.big { height: 8px; margin: 10px 0; }
+.lk-bar.small { width: 64px; height: 3px; margin: 3px 0 0; }
+.lk-exp { font-size: 12px; }
+.lk-pips { flex: 0 0 auto; display: inline-flex; gap: 6px; padding: 0 2px; }
+i.pip, .pt-legend i.pip { flex: 0 0 auto; display: inline-block; width: 9px; height: 9px; border: 1px solid var(--c-ink-3); transform: rotate(45deg); }
+i.pip.on, .pt-legend i.pip.on { border-color: var(--rar-vang-ink); background: var(--rar-vang); }
+i.pip.ready, .pt-legend i.pip.ready { border-color: var(--c-accent); background: var(--c-accent-soft); animation: lk-pulse 1.6s ease-in-out infinite; }
+@keyframes lk-pulse { 50% { box-shadow: 0 0 0 3px rgba(179, 38, 30, 0.2); } }
+#sheet .list i.pip { margin: 0 4px; }
+
+/* Bảng chọn khí văn: ba thẻ giấy, chạm để khắc */
+#sheet .lk-vans { display: grid; gap: 8px; margin: var(--sp-2) 0; }
+#sheet .lk-van { display: grid; gap: 3px; padding: 10px 12px; border: 1px solid var(--c-line-2); border-radius: 3px; background: var(--c-raised); color: var(--c-ink); font: inherit; text-align: left; cursor: pointer; }
+#sheet .lk-van:hover { border-color: var(--c-frame); background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-frame-soft); }
+#sheet .lk-van b { color: var(--c-accent-ink); font-size: 15px; }
+#sheet .lk-van span { color: var(--c-ink-2); font-size: 13.5px; }
+#sheet .lk-van em { color: var(--c-ink-3); font-size: 12px; font-style: normal; }
+#sheet .lk-van em.bad { color: var(--c-accent); }
+
+/* Ngọc: viên chọn viền son, viên ghép được viền đứt xanh, còn lại mờ; song hệ là hai hình chéo nhau */
+.lk-gems { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 6px; margin-bottom: 6px; }
+.lk-gems.center { display: flex; justify-content: center; align-items: center; gap: 10px; margin: var(--sp-2) 0; }
+.lk-gems.center .bag-cell { width: 56px; }
+.lk-gem.sel { border-color: var(--c-accent); box-shadow: inset 0 0 0 2px var(--c-accent); }
+.lk-gem.ok { outline: 2px dashed var(--c-ok); outline-offset: 1px; }
+.lk-gem.dim { opacity: 0.35; }
+.bag-cell.lk-gem img.he1 { position: absolute; left: 4%; top: 4%; width: 64%; height: 64%; }
+.bag-cell.lk-gem img.he2 { position: absolute; right: 4%; bottom: 4%; width: 64%; height: 64%; }
+.lk-cap { position: absolute; left: 3px; top: 1px; z-index: 1; color: var(--c-ink); font-size: 11px; font-weight: 700; text-shadow: 0 0 2px #fff, 0 0 2px #fff; }
+.lk-plus { color: var(--c-ink-3); font-size: 20px; }
+.page .lk-phachs { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0; }
+
+/* Bảo Giám: trang tuần trên cùng, các trang có thanh tiến độ; sổ là lưới, ô chưa có là bóng mực mờ */
+.lk-week { display: grid; gap: 4px; padding: var(--sp-3); border: 1px solid var(--c-frame-soft); border-radius: 3px; background: var(--c-surface); font-size: 14px; }
+.lk-week > b { color: var(--c-accent-ink); font-size: 15px; }
+.lk-week .muted { font-size: 12.5px; }
+.lk-page { align-items: center; }
+.lk-prog { flex: 0 0 auto; display: grid; white-space: nowrap; justify-items: end; color: var(--c-ink-3); font-size: 13px; font-variant-numeric: tabular-nums; }
+.lk-prog b { color: var(--c-ink); }
+#sheet .lk-book { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 5px; }
+.lk-entry { overflow: hidden; cursor: pointer; }
+.lk-entry .glyph { position: absolute; width: 22px; height: 22px; color: var(--el, var(--c-ink-2)); }
+.lk-entry:has(img) .glyph { display: none; }
+.lk-entry:not(.have) { border-color: var(--c-line); background: var(--c-sunken); }
+.lk-entry:not(.have) img.ve { filter: grayscale(1) brightness(0.25); opacity: 0.22; }
+.lk-entry:not(.have) .glyph { opacity: 0.3; }
+.lk-entry.sel { outline: 2px solid var(--c-accent); outline-offset: 1px; }
+#sheet .lk-caption { min-height: 2.8em; margin: var(--sp-2) 0 0; }
+#sheet .lk-pager { justify-content: space-between; }
+
+/* Lò danh khí (bảng chi tiết Luyện Khí Các): danh sách 10 thần binh, điều kiện xanh hoặc đỏ, 4 ghế người luyện */
+.lk-dk-art { flex: 0 0 auto; width: 44px; }
+.lk-dk-art .glyph { position: absolute; width: 22px; height: 22px; color: var(--rar-do-ink); }
+.lk-dk-art:has(img) .glyph { display: none; }
+#sheet .lk-need .row { min-height: 0; padding-top: 6px; padding-bottom: 6px; color: var(--c-ink); }
+#sheet .lk-need .row.ok b { color: var(--c-ok); }
+#sheet .lk-need .row.bad b { color: var(--c-accent); font-weight: 600; }
+#sheet .lk-crew { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+#sheet .lk-seat { display: grid; align-content: center; gap: 2px; min-height: 58px; padding: 6px; border: 1px dashed var(--c-line-2); border-radius: 3px; background: none; color: var(--c-ink); font: inherit; font-size: 12px; text-align: center; cursor: pointer; }
+#sheet .lk-seat:hover { border-color: var(--c-frame); }
+#sheet .lk-seat.full { border-style: solid; border-color: var(--c-frame-soft); background: var(--c-surface); }
+#sheet .lk-seat b { color: var(--c-accent-ink); font-size: 13px; }
+@media (max-width: 420px) { #sheet .lk-crew { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .pt-slot .kl.ready, i.pip.ready, .list .lk-sub.new { animation: none !important; } }
 
 /* Cột phải: túi 50 ô, nền theo phẩm (khung chi tiết ghi chữ phẩm, không chỉ dựa vào màu) */
 .bag-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: var(--sp-2); }

@@ -6,7 +6,8 @@ import { loadLocationArt, locationArt, LOCATIONS, pixelArtEnabled, pointArt, sec
 import { icon } from "../icons.ts";
 import { MiniMap } from "../minimap.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
-import type { TongMonView } from "../source.ts";
+import type { NhanVatView, TongMonView } from "../source.ts";
+import { forgeHtml, openDanhKhi } from "./forge.ts";
 import { term } from "../terms.ts";
 import { assetUrl, cd, closeSheet, esc, fmt, openSheet, ROLE_NAMES, toast } from "../ui.ts";
 
@@ -194,10 +195,22 @@ export class TongMonScene extends PageScene<TongMonView> {
          ${busy ? `<dt>Đang lên cấp ${b.level + 1}</dt><dd>còn ${cd(b.upgradingUntil!)}</dd>` : ""}
          ${b.locked ? `<dt>Điều kiện</dt><dd>${esc(b.locked)}</dd>` : ""}
        </dl>
-       ${v.can.xay && !busy && !b.locked ? `<div class="actions"><button type="button" class="seal" data-a="build">${b.level === 0 ? "Xây" : `Nâng lên cấp ${b.level + 1}`}</button></div>` : ""}`,
+       ${v.can.xay && !busy && !b.locked ? `<div class="actions"><button type="button" class="seal" data-a="build">${b.level === 0 ? "Xây" : `Nâng lên cấp ${b.level + 1}`}</button></div>` : ""}
+       ${id === "luyen_khi_cac" ? `<div class="lk-forge"><p class="muted">Đang đọc lò danh khí…</p></div>` : ""}`,
     );
+    // Luyện Khí Các: lò danh khí cần túi của người chơi (phôi, đồ phổ), nên đọc thêm màn Nhân vật.
+    let nv: NhanVatView | undefined;
+    if (id === "luyen_khi_cac")
+      void this.ctx.source.nhanVat().then((x) => {
+        nv = x;
+        const slot = body.querySelector(".lk-forge");
+        if (slot) slot.innerHTML = forgeHtml(b.level, x);
+      });
     body.addEventListener("click", (e) => {
-      if ((e.target as HTMLElement).closest("[data-a=build]")) toast("Hàng xây và nâng công trình có ở Sprint 5.");
+      const t = e.target as HTMLElement;
+      if (t.closest("[data-a=build]")) toast("Hàng xây và nâng công trình có ở Sprint 5.");
+      const dk = t.closest<HTMLElement>("[data-a=dk]");
+      if (dk && nv) openDanhKhi(Number(dk.dataset.i), b.level, nv, v.members, () => this.openLocation(v, id));
     });
   }
 

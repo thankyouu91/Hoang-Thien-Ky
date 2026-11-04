@@ -4,9 +4,11 @@
 //  - Pháp tướng (theo mẫu người dùng gửi 2026-11-03): bóng lớn của chính nhân vật vẽ màu mực nâu mờ dần vào núi sương
 //    (nướng bằng three), tu sĩ đứng trước, 7 ô trang bị hai bên (icon vẽ assets/icon_ve, nền màu theo độ hiếm), 4 ô công pháp mang vào trận, 5 ô thú (ô đang cưỡi có dấu
 //    yên), chú giải một dòng ở đáy. Vòng 12 hệ (elementWheel.ts) chỉ hiện khi bấm "Vòng hệ".
+//  - Cột giữa còn hai chế độ: Đạo Cơ Bàn (daoCoBan.ts) và Luyện khí (luyenKhiPanel.ts: phân giải, tẩy luyện, khí linh, ngọc,
+//    Bảo Giám); thanh khí linh 0–9 hiện trên ô đồ.
 //  - Túi: 50 ô, lọc theo loại và theo phẩm, khung chi tiết món đang chọn.
 // Màn rộng (từ 1100 px) hiện đủ ba cột và kéo thả bằng chuột: kéo đồ hay công pháp từ túi vào ô để mặc, kéo ra túi để
-// tháo. Điện thoại đổi thành ba thẻ Thông tin · Pháp tướng · Túi và dùng chạm: chạm ô mở bảng chọn món, chạm món mở chi
+// tháo. Điện thoại đổi thành năm thẻ Thông tin · Pháp tướng · Đạo cơ · Luyện khí · Túi và dùng chạm: chạm ô mở bảng chọn món, chạm món mở chi
 // tiết; việc nào cũng trong 2 chạm.
 import type { Element } from "@ktlp/sim";
 import type { Sprites } from "../../assets/sprites.ts";
@@ -19,6 +21,8 @@ import {
 import { animInfo, drawCharacter } from "../../scenes/battle/character.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { elementWheel } from "../elementWheel.ts";
+import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
+import { LuyenKhiPanel, type LkTab } from "./luyenKhiPanel.ts";
 import { icon, type IconName } from "../icons.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { BagItem, GearItem, GearSlot, ItemGrade, ItemKind, NhanVatView, Rarity, StatLine, TechniqueCard } from "../source.ts";
@@ -26,7 +30,9 @@ import { REALM_TERM, term } from "../terms.ts";
 import { artUrl, assetUrl, cd, closeSheet, cropIcons, elementChip, esc, fmt, openSheet, pctText, ROLE_NAMES, skillChip, toast } from "../ui.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 
-export type NhanVatTab = "thong-tin" | "phap-tuong" | "dao-co" | "tui";
+export type NhanVatTab = "thong-tin" | "phap-tuong" | "dao-co" | "luyen-khi" | "tui";
+type Center = "phap-tuong" | "dao-co" | "luyen-khi";
+const CENTERS: [Center, string][] = [["phap-tuong", "Pháp tướng"], ["dao-co", "Đạo Cơ Bàn"], ["luyen-khi", "Luyện khí"]];
 
 const SLOT_NAMES: Record<GearSlot, string> = { vu_khi: "Vũ khí", mu: "Mũ", ao: "Áo", dai: "Đai", bao_tay: "Bao tay", giay: "Giày", ngoc_boi: "Ngọc bội" };
 /** 7 ô (người dùng chốt 2026-11-03, thêm bao tay): bên trái theo thân từ đầu xuống chân, bên phải tay cầm và đeo. */
@@ -77,8 +83,10 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   private mistEl: HTMLElement;
   private mist?: SceneHandle;
   private showWheel = false;
-  /** Cột giữa: Pháp tướng (đồ quanh hình) hay Đạo Cơ Bàn (bàn ô đặt ấn bộ, ngọc hệ kích set). */
-  private center: "phap-tuong" | "dao-co" = "phap-tuong";
+  /** Cột giữa: Pháp tướng (đồ quanh hình), Đạo Cơ Bàn (bàn ô đặt ấn bộ, ngọc hệ kích set) hay Luyện khí. */
+  private center: Center = "phap-tuong";
+  /** Mục Luyện khí: giữ phần đang mở và lựa chọn qua các lần vẽ lại. */
+  private lk: LuyenKhiPanel;
   /** Đạo Cơ Bàn: viên đang đặt và số món mang ấn trên đồ. TẠM giữ ở màn, chờ DashboardSource. */
   private ban?: { pieces: Record<string, BoardPiece>; gear: Record<string, number> };
   /** Công cụ thử: xem ô mở ở cảnh giới nào (chỉ số trong REALMS); mặc định Nguyên Anh để thấy 7 ô. */
@@ -100,7 +108,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         this.grade = "all";
       } else if (el.dataset.filter === "grade") this.grade = el.value as ItemGrade | Rarity | "all";
       else if (el.dataset.filter === "realm") this.realm = Number(el.value);
-      else return;
+      else if (!this.lk.change(el)) return;
       if (this.data) this.render(this.data);
     });
     this.page.addEventListener("pointerdown", (e) => this.dragStart(e));
@@ -110,11 +118,17 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     this.mistEl = document.createElement("div");
     this.mistEl.className = "pt-mist";
     this.mistEl.setAttribute("aria-hidden", "true");
+    this.lk = new LuyenKhiPanel({
+      redraw: () => this.data && this.render(this.data),
+      forge: () => this.ctx.nav.go({ screen: "tong-mon", tab: "son-mon" }),
+      gearIcon: (g, s) => this.gearIcon(g, s),
+      itemIcon: (it) => this.itemIcon(it),
+    });
   }
 
   setTab(t: NhanVatTab): void {
     this.tab = t;
-    if (t === "phap-tuong" || t === "dao-co") this.center = t;
+    if (t === "phap-tuong" || t === "dao-co" || t === "luyen-khi") this.center = t;
     if (this.data) this.render(this.data);
   }
 
@@ -146,7 +160,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
           <button type="button" class="nv-ic" data-act="help" aria-label="Cách dùng màn Nhân vật">${icon("help")}</button>
           <button type="button" class="nv-ic" data-act="back" aria-label="Đóng">${icon("close")}</button>
         </header>
-        <div class="seg nv-tabs" role="tablist" aria-label="Phần của màn Nhân vật">${tab("thong-tin", "Thông tin")}${tab("phap-tuong", "Pháp tướng")}${tab("dao-co", "Đạo cơ")}${tab("tui", "Túi")}</div>
+        <div class="seg nv-tabs" role="tablist" aria-label="Phần của màn Nhân vật">${tab("thong-tin", "Thông tin")}${tab("phap-tuong", "Pháp tướng")}${tab("dao-co", "Đạo cơ")}${tab("luyen-khi", "Luyện khí")}${tab("tui", "Túi")}</div>
         <div class="nv-cols" data-tab="${this.tab}">
           <div class="nv-col nv-info">${this.info(v)}</div>
           <div class="nv-col nv-form">${this.form(v)}</div>
@@ -205,6 +219,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         <div class="bar"><i style="width:${(exp * 100).toFixed(1)}%"></i></div>
         <button type="button" class="nv-row" data-act="cultivation"><span>Tốc độ bế quan</span><b>${fmt(c.perHour)}/giờ</b></button>
         ${row("Mốc đột phá", `cấp ${c.breakAt.level} → ${esc(c.breakAt.realm)}`)}
+        <div class="nv-row nv-dev"><span>Thử hiệu ứng (prototype)</span><span><button type="button" class="btn small" data-act="dev_cap">+1 cấp</button><button type="button" class="btn small" data-act="dev_dot_pha">Tới mốc đột phá</button></span></div>
         ${c.retreat ? row("Đang bế quan", `<span data-cd="${c.retreat.endsAt}">${cd(c.retreat.endsAt)}</span>`) : ""}`)}
       ${s ? group("Tài khoản", `
         ${row("Số điện thoại", esc(s.phoneMasked))}
@@ -221,12 +236,11 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const wheelLegend = this.showWheel
       ? `<li><i class="lg-root"></i>Linh căn</li><li><i class="lg-sinh"></i>Tương sinh</li><li><i class="lg-khac"></i>Tương khắc</li><li><i class="lg-cuc"></i>Đối cực</li><li><i class="lg-bien"></i>Biến dị</li>`
       : "";
-    const switcher = `<div class="seg nv-center" role="tablist" aria-label="Cột giữa">${(
-      [["phap-tuong", "Pháp tướng"], ["dao-co", "Đạo Cơ Bàn"]] as const
-    )
+    const switcher = `<div class="seg nv-center" role="tablist" aria-label="Cột giữa">${CENTERS
       .map(([id, label]) => `<button type="button" role="tab" data-act="center" data-c="${id}" aria-selected="${this.center === id}">${label}</button>`)
       .join("")}</div>`;
     if (this.center === "dao-co") return this.banView(v, switcher);
+    if (this.center === "luyen-khi") return this.lk.view(v, switcher);
     return `
       <div class="nv-sub">${switcher}<span class="nv-roots">${esc(v.roots.map((e) => ELEMENT_STYLE[e].name).join(", "))} linh căn</span>
         <button type="button" class="nv-tog" data-act="wheel" aria-pressed="${this.showWheel}">Vòng hệ</button></div>
@@ -437,12 +451,16 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const g = v.gear[s];
     if (!g) return `<button type="button" class="pt-slot empty" data-act="slot" data-slot="${s}" data-drop="gear:${s}"><span class="lbl">${SLOT_NAMES[s]}</span></button>`;
     const dur = g.durability / g.durabilityMax;
-    return `<button type="button" class="pt-slot r-${g.rarity}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}`)}">
-      ${g.art ? `<img class="ve" src="${artUrl(g.art)}" alt="">` : g.icon ? `<img src="${assetUrl(g.icon)}" alt="" data-crop>` : icon(SLOT_GLYPH[s], "glyph")}
+    return `<button type="button" class="pt-slot r-${g.rarity}" data-act="slot" data-slot="${s}" data-drop="gear:${s}" data-drag="gear:${s}" aria-label="${esc(`${SLOT_NAMES[s]}: ${g.name} +${g.plus}${this.lk.slotLabel(v, s)}`)}">
+      ${this.gearIcon(g, s)}${this.lk.slotBar(v, s)}
       <span class="plus">+${g.plus}</span>
       ${g.sockets ? `<span class="gems">◆${g.gems.length}/${g.sockets}</span>` : ""}
       <span class="dur${g.durability < LOW ? " low" : ""}"><i style="width:${(dur * 100).toFixed(0)}%"></i></span>
     </button>`;
+  }
+
+  private gearIcon(g: GearItem, s: GearSlot): string {
+    return g.art ? `<img class="ve" src="${artUrl(g.art)}" alt="">` : g.icon ? `<img src="${assetUrl(g.icon)}" alt="" data-crop>` : icon(SLOT_GLYPH[s], "glyph");
   }
 
   private techSlot(t: TechniqueCard | null, i: number): string {
@@ -457,7 +475,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
 
   // ---- Cột phải: túi ------------------------------------------------------------------------------------------
 
-  private bag(v: NhanVatView): string {
+  private bag(view: NhanVatView): string {
+    const v = { ...view, bag: { ...view.bag, items: view.bag.items.filter((it) => !this.lk.gone(view, it.uid)) } };
     const real = v.bag.items.filter((it) => it.kind !== "cong_phap");
     const byRarity = this.kind === "trang_bi";
     const shown = v.bag.items.filter(
@@ -516,6 +535,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       body += `<p>${elementChip(t.element)} ${t.subElements.map((e) => elementChip(e)).join(" ")} ${skillChip(t.type)}</p>`;
       act = `<button type="button" class="seal" data-act="carry" data-id="${t.id}"${v.loadout.every(Boolean) ? " disabled" : ""}>Mang vào trận</button>${v.loadout.every(Boolean) ? `<span class="muted">Đủ 4 ô; kéo vào một ô để thay.</span>` : ""}`;
     } else if (it.kind === "tan_quyen") act = `<button type="button" class="seal" data-act="deposit" data-uid="${it.uid}">Nộp Tàng Kinh Các</button>`;
+    else if (it.kind === "ngoc") act = `<button type="button" class="btn small" data-act="use" data-uid="${it.uid}">Khảm</button><button type="button" class="btn small" data-act="goto-lk" data-lk="ngoc">Hợp, điểm hóa</button>`;
     else act = `<button type="button" class="btn small" data-act="use" data-uid="${it.uid}">Dùng</button>`;
     return `${head}${body}<div class="actions">${act}</div>`;
   }
@@ -587,16 +607,18 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   protected override act(name: string, el: HTMLElement): void {
     const v = this.data;
     if (!v || this.dropped) return;
+    if (this.lk.act(name, el, v)) return;
     const uid = Number(el.dataset.uid);
     if (name === "back") this.ctx.nav.back();
     else if (name === "help") this.openHelp();
     else if (name === "tab") this.setTab(el.dataset.tab as NhanVatTab);
     else if (name === "center") {
-      this.center = el.dataset.c as "phap-tuong" | "dao-co";
+      this.center = el.dataset.c as Center;
       this.tab = this.center;
       this.render(v);
     } else if (name === "lt-cell") this.openBanCell(v, el.dataset.cell!);
     else if (name === "lt-set") this.openBanSet(el.dataset.set!);
+    else if (name === "goto-lk") this.gotoLk(el.dataset.lk as LkTab);
     else if (name === "wheel") {
       this.showWheel = !this.showWheel;
       this.render(v);
@@ -606,7 +628,12 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       location.reload();
     } else if (name === "stat") this.openStat(v.stats.find((s) => s.id === el.dataset.stat)!);
     else if (name === "cultivation") this.openCultivation(v);
-    else if (name === "main") toast(v.cultivation.canBreak ? "Đột phá cảnh giới và thiên kiếp có ở khối M4; prototype chưa làm." : "Bế quan có ở khối M4; prototype chưa làm.");
+    else if (name === "main") {
+      if (v.cultivation.canBreak) void this.send({ type: "dot_pha" });
+      else toast("Bế quan có ở khối M4; prototype chưa làm.");
+    } else if (name === "dev_cap") void this.send({ type: "dev_len_cap", levels: 1 });
+    // Tới cấp cuối cảnh giới và đầy tu vi của cấp đó (thêm một cấp nữa; tu vi dừng ở mức đủ để Đột phá).
+    else if (name === "dev_dot_pha") void this.send({ type: "dev_len_cap", levels: v.cultivation.breakAt.level - v.level + 1 });
     else if (name === "slot") this.openSlot(v, el.dataset.slot as GearSlot);
     else if (name === "tech") this.openTech(v, Number(el.dataset.i));
     else if (name === "pet") this.openPet(v, Number(el.dataset.i));
@@ -630,6 +657,13 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     else if (name === "use") toast("Dùng đan, phù và ấp trứng có ở khối M6; prototype chưa làm.");
   }
 
+  /** Mở mục Luyện khí ở một phần (từ bảng ô trang bị, chi tiết ngọc). */
+  private gotoLk(tab: LkTab, slot?: GearSlot): void {
+    this.lk.goto(tab, slot);
+    this.center = this.tab = "luyen-khi";
+    if (this.data) this.render(this.data);
+  }
+
   /** Đặt công pháp vào ô i (thay món đang ở đó); i = -1 hoặc ô sau cùng thì thêm vào cuối. */
   private carry(v: NhanVatView, id: number, i: number): Promise<unknown> {
     const ids = v.loadout.map((t) => t?.id ?? null).map((x) => (x === id ? null : x));
@@ -644,6 +678,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       `<ul class="list nv-help">
         <li><b>Thông tin</b>: thân phận, linh căn, chỉ số chiến đấu, tu luyện. Chạm một chỉ số để xem nguồn.</li>
         <li><b>Pháp tướng</b>: 7 ô trang bị quanh hình (màu nền ô là độ hiếm: lục, lam, tím, vàng, đỏ), 4 ô công pháp mang vào trận, 5 ô thú. Bấm "Vòng hệ" để xem 12 hệ: hệ linh căn sáng, vạch xanh là tương sinh, vạch đỏ là tương khắc, nét đứt là đối cực.</li>
+        <li><b>Đạo Cơ Bàn</b>: bàn 19 ô mở dần theo cảnh giới. Đặt ấn bộ, ngọc hệ nối về ô tâm để kích thêm tối đa 2 món cho một bộ; hai bộ kề nhau theo quan hệ hệ thì cộng hưởng.</li>
+        <li><b>Luyện khí</b>: phân giải đồ ra Khí Tinh, tẩy luyện chỉ số phụ, nuôi khí linh (thanh vàng trên ô đồ; cấp 3, 6, 9 chọn khí văn), hợp ngọc song hệ, điểm hóa Phách, sổ Bảo Giám. Danh khí luyện ở Luyện Khí Các của tông môn.</li>
         <li><b>Túi</b>: 50 ô gốc, lọc theo loại và phẩm. Màn rộng kéo món sang ô để mặc, kéo về túi để tháo; điện thoại chạm ô hoặc chạm món rồi chọn.</li>
       </ul>`,
     );
@@ -676,7 +712,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
        ${spare.length ? `<h3>Trong túi</h3><ul class="list">${spare
          .map((it) => `<li class="row"><span class="bag-cell ${tone(it)}">${this.itemIcon(it)}</span><span class="grow"><b>${esc(it.name)}</b><span class="muted block">${it.rarity ? RARITY_NAMES[it.rarity] : esc(it.gradeLabel)} · +${it.gear!.plus}</span></span><button type="button" class="btn small" data-a="wear" data-uid="${it.uid}">Mặc</button></li>`)
          .join("")}</ul>` : ""}
-       ${g ? `<div class="actions"><button type="button" data-a="off">Tháo về túi</button><button type="button" data-a="ren">Rèn</button></div>` : ""}`,
+       ${g ? `<div class="actions"><button type="button" data-a="off">Tháo về túi</button><button type="button" data-a="ren">Rèn</button><button type="button" data-a="tay">Tẩy luyện</button>${hasKhiLinh(g.rarity) ? `<button type="button" data-a="kl">Khí linh</button>` : ""}</div>` : ""}`,
     );
     cropIcons(body);
     body.addEventListener("click", (e) => {
@@ -685,6 +721,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       closeSheet();
       if (a.dataset.a === "wear") void this.send({ type: "mac_do", uid: Number(a.dataset.uid) });
       else if (a.dataset.a === "off") void this.send({ type: "thao_do", slot });
+      else if (a.dataset.a === "tay") this.gotoLk("tay-luyen", slot);
+      else if (a.dataset.a === "kl") this.gotoLk("khi-linh", slot);
       else toast("Rèn, sửa, khảm có ở khối MVP M6; prototype chưa làm.");
     });
   }
@@ -694,7 +732,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const stats = (Object.entries(g.stats) as [string, number][])
       .map(([key, val]) => `<dt>${STAT_KEYS[key]}</dt><dd>${fmt(val * k)} <span class="muted">(${fmt(val)} + ${g.plus * 3}%)</span></dd>`)
       .join("");
-    const gems = g.gems.map((gem) => `<li class="row">${elementChip(gem.element)} <span class="grow">Ngọc cấp ${gem.level}</span><span class="muted">+${pctText(2.5 * gem.level * (gem.level + 1))}</span></li>`).join("");
+    const gems = g.gems.map((gem) => `<li class="row">${elementChip(gem.element)} <span class="grow">Ngọc cấp ${gem.level}</span><span class="muted">+${pctText(gemValue(gem.level))}</span></li>`).join("");
     return `<dl class="kv">
         <dt>Độ hiếm</dt><dd class="rar r-${g.rarity}">${RARITY_NAMES[g.rarity]}</dd>
         <dt>Cường hóa</dt><dd>+${g.plus} / +30</dd>
