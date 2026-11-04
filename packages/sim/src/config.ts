@@ -146,8 +146,11 @@ export function maxGradeAtLevel(level: number): number {
   return level >= 150 ? 4 : level >= 100 ? 3 : level >= 50 ? 2 : 1;
 }
 
-/** Kháng hệ (từ ngọc) giảm tối đa 80% sát thương của hệ đó; đề xuất. */
-export const RESIST_CAP = 800;
+/**
+ * Tổng kháng một hệ từ mọi nguồn (ngọc, set, cộng hưởng, đan) giảm tối đa 20% sát thương của hệ đó, để khắc ×1,5 sau kháng
+ * vẫn còn ít nhất ×1,2 (đề xuất, đổi 2026-11-04 theo lần đo trần 2; trước là 80%).
+ */
+export const RESIST_CAP = 200;
 
 /**
  * Chỉ số nhân vật mà buff linh căn, tài năng, trang bị và set cộng vào, theo phần nghìn trừ các chỉ số ghi tick.

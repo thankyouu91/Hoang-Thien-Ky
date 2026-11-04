@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { Battle, baseStats, composeTechnique, type UnitSpec } from "@ktlp/sim";
-import { gearStats, withGear, kieuInfo, maxInlayLines, setTier, isKnownSetStat, yChauMod, toSkillMod, type EquipItem, type InlayLine } from "../src/index.ts";
+import { gearStats, withGear, kieuInfo, maxInlayLines, setTier, isKnownSetStat, yChauMod, toSkillMod, softCap, type EquipItem, type InlayLine } from "../src/index.ts";
 import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
 import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
 
@@ -31,22 +31,22 @@ test("kiểu trang bị cho ô và độ hiếm", () => {
   assert.throws(() => kieuInfo("TB-XX-999"));
 });
 
-test("vũ khí lục +0: công lực 8% chỉ số chuẩn, sát thương chí mạng +4%", () => {
+test("vũ khí lục +0: công lực 4% chỉ số chuẩn, sát thương chí mạng +2%", () => {
   const g = gearStats([item("TB-KI-001")], LV, []);
-  assert.equal(g.atk, 40);
-  assert.equal(g.bonuses.critDamage, 40);
+  assert.equal(g.atk, 20);
+  assert.equal(g.bonuses.critDamage, 20);
 });
 
 test("vũ khí đỏ +30 rơi bí cảnh (+8%): × 1,55 × 1,9 × 1,08", () => {
   const g = gearStats([item("TB-KI-058", { nac: 30, biCanh: 80, dongThem: 2 })], LV, []);
-  assert.equal(g.atk, 127); // 500 × 8% × 3,18
-  assert.equal(g.bonuses.critDamage, 127);
+  assert.equal(g.atk, 63); // 500 × 4% × 3,18
+  assert.equal(g.bonuses.critDamage, 63);
 });
 
 test("mũ: máu theo chỉ số chuẩn, mana theo mana tối đa chuẩn", () => {
   const g = gearStats([item("TB-MU-001")], LV, []);
-  assert.equal(g.hp, 285); // 7.140 × 4%
-  assert.equal(g.manaMax, 12); // 300 × 4%
+  assert.equal(g.hp, 142); // 7.140 × 2%
+  assert.equal(g.manaMax, 6); // 300 × 2%
 });
 
 test("độ bền 0 thì món không cộng gì, kể cả ngọc", () => {
@@ -56,10 +56,24 @@ test("độ bền 0 thì món không cộng gì, kể cả ngọc", () => {
 
 test("ngọc: ô công cộng sát thương hệ, ô thủ cộng kháng hệ, trùng linh căn ×1,2", () => {
   const weapon = item("TB-KI-001", { kham: [gem("kim", 5)] });
-  assert.equal(gearStats([weapon], LV, []).elementDamage.kim, 75);
-  assert.equal(gearStats([weapon], LV, ["kim"]).elementDamage.kim, 90);
+  assert.equal(gearStats([weapon], LV, []).elementDamage.kim, 30);
+  assert.equal(gearStats([weapon], LV, ["kim"]).elementDamage.kim, 36);
   const armor = item("TB-AO-001", { kham: [gem("hoa", 3)] });
-  assert.deepEqual(gearStats([armor], LV, []).resist, { hoa: 30 });
+  assert.deepEqual(gearStats([armor], LV, []).resist, { hoa: 12 });
+});
+
+test("trần mềm của ngọc mỗi hệ: phần trên mức mềm tính một nửa, không vượt tối đa", () => {
+  assert.deepEqual([100, 150, 220, 350, 900].map((x) => softCap(x, 150, 250)), [100, 150, 185, 250, 250]);
+  const red = (kieu: string, gems: InlayLine[]) => item(kieu, { nac: 30, biCanh: 80, dongThem: 2, kham: gems });
+  const kim10 = Array(5).fill(gem("kim", 10));
+  // Vũ khí và bao tay, 10 ngọc Kim cấp 10 = 1.100‰ thô → trần 250‰.
+  assert.equal(gearStats([red("TB-KI-058", kim10), red("TB-BT-058", kim10)], LV, []).elementDamage.kim, 250);
+  // 2 ngọc cấp 10 = 220‰ → 150 + 70 / 2 = 185‰.
+  assert.equal(gearStats([red("TB-KI-058", kim10.slice(0, 2))], LV, []).elementDamage.kim, 185);
+  // Kháng: 2 ngọc Hỏa cấp 8 ở áo = 144‰ → 100 + 44 / 2 = 122‰; đủ 5 dòng = 360‰ → trần 150‰.
+  const hoa8 = Array(5).fill(gem("hoa", 8));
+  assert.equal(gearStats([red("TB-AO-058", hoa8.slice(0, 2))], LV, []).resist.hoa, 122);
+  assert.equal(gearStats([red("TB-AO-058", hoa8)], LV, []).resist.hoa, 150);
 });
 
 test("dòng khảm theo độ hiếm, đồ bí cảnh thêm 1 hoặc 2 dòng theo từng món, tối đa 5", () => {
@@ -80,13 +94,13 @@ test("món sai thì báo lỗi: trùng ô, nấc, thưởng bí cảnh, cấp ng
   assert.throws(() => gearStats([item("TB-KI-001", { kham: [gem("kim", 11)] })], LV, []));
 });
 
-test("bộ đỏ +30 rơi bí cảnh đủ 7 ô: công lực, máu, phòng thủ mỗi thứ cộng khoảng 35–40%", () => {
+test("bộ đỏ +30 rơi bí cảnh đủ 7 ô: công lực, máu, phòng thủ mỗi thứ cộng khoảng 18–20%", () => {
   const full = ["TB-KI-058", "TB-MU-058", "TB-AO-058", "TB-DA-058", "TB-BT-058", "TB-GI-058", "TB-NB-058"].map((k) => item(k, { nac: 30, biCanh: 80, dongThem: 2 }));
   const g = gearStats(full, LV, []);
   const s = baseStats(LV);
   for (const [name, add, base] of [["công lực", g.atk, s.atk], ["máu", g.hp, s.hp], ["phòng thủ", g.def, s.def]] as const) {
     const pct = Math.round((add * 1000) / base);
-    assert.ok(pct >= 350 && pct <= 400, `${name} +${pct / 10}%`);
+    assert.ok(pct >= 180 && pct <= 200, `${name} +${pct / 10}%`);
   }
 });
 
@@ -94,13 +108,13 @@ test("áp bộ đồ vào đơn vị trong trận", () => {
   const tech = composeTechnique({ element: "kim", type: "can_don", variant: "bao", grade: 1 }, [{ element: "kim", type: "can_don", variant: "ben", grade: 1 }]);
   const spec: UnitSpec = { id: 1, level: LV, element: "kim", row: 0, ...baseStats(LV), techniques: [tech] };
   const geared = withGear(spec, [item("TB-KI-001", { kham: [gem("kim", 5)] }), item("TB-MU-001")]);
-  assert.equal(geared.atk, 540);
-  assert.equal(geared.hp, baseStats(LV).hp + 285);
-  assert.equal(geared.manaMax, 312);
+  assert.equal(geared.atk, 520);
+  assert.equal(geared.hp, baseStats(LV).hp + 142);
+  assert.equal(geared.manaMax, 306);
   const b = new Battle({ seed: 1, teamA: [geared], teamB: [{ ...spec, id: 101 }] });
   const u = b.units.find((x) => x.id === 1)!;
-  assert.equal(u.slots[0].bonus, 90); // ngọc Kim cấp 5 trùng linh căn Kim
-  assert.equal(u.b.critDamage, 120 + 40); // buff Kim (luyện đúng hệ) + sát thương chí mạng của vũ khí
+  assert.equal(u.slots[0].bonus, 36); // ngọc Kim cấp 5 trùng linh căn Kim
+  assert.equal(u.b.critDamage, 120 + 20); // buff Kim (luyện đúng hệ) + sát thương chí mạng của vũ khí
 });
 
 // Set đồ: ấn bộ trên dòng khảm, mốc 2/4/7 (set.json; mọi số là đề xuất)
@@ -136,10 +150,10 @@ test("Lôi Trì 5 món là mốc 4: chí mạng +2%, tê liệt +5 tick, xuyên 
 
 test("kháng từ set cộng với kháng từ ngọc; Hỗn Độn kháng mọi hệ", () => {
   const items = sealed("NG-AN-016", "NG-AN-016", "NG-AN-020", "NG-AN-020");
-  items[2].kham = [gem("loi", 3)]; // áo: ô thủ, ngọc Lôi cấp 3 = 30, thay ấn Hỗn Độn
+  items[2].kham = [gem("loi", 3)]; // áo: ô thủ, ngọc Lôi cấp 3 = 12, thay ấn Hỗn Độn
   items.push(item("TB-GI-001", { kham: [seal("NG-AN-020")] }));
   const g = gearStats(items, LV, []);
-  assert.equal(g.resist.loi, 40 + 30 + 20);
+  assert.equal(g.resist.loi, 40 + 12 + 20);
   assert.equal(g.resist.kim, 20);
   assert.equal(g.resist.cuc_han, 20);
 });

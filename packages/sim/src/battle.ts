@@ -44,7 +44,7 @@ export interface UnitSpec {
   hp: number;
   atk: number; // công lực: sát thương = D × atk / 100
   def: number;
-  resist?: Partial<Record<Element, number>>; // kháng theo hệ, phần nghìn (từ ngọc)
+  resist?: Partial<Record<Element, number>>; // kháng theo hệ, phần nghìn (ngọc, set); trận chặn ở RESIST_CAP
   row: 0 | 1; // 0 hàng trước, 1 hàng sau
   techniques: Technique[]; // 1–4 công pháp, theo thứ tự ưu tiên
   manaMax?: number; // mặc định BATTLE.manaMax

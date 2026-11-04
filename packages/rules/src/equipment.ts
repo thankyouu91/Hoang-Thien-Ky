@@ -1,7 +1,8 @@
 // Chỉ số trang bị và ngọc khảm (đặc tả của phiên set đồ; mọi số là đề xuất). Số đọc từ data/he_thong/json,
 // xuất từ file Excel số liệu bằng tools/data/xuat.ts: đổi số thì sửa Excel rồi xuất lại.
 // Món: chỉ số chính và phụ của ô × độ hiếm × (1 + 3% mỗi nấc) × (1 + thưởng bí cảnh). Độ bền 0 thì món không cộng gì.
-// Ngọc: ô "công" cộng sát thương cho công pháp cùng hệ chủ, ô "thủ" cộng kháng hệ; trùng linh căn ×1,2.
+// Ngọc: ô "công" cộng sát thương cho công pháp cùng hệ chủ, ô "thủ" cộng kháng hệ; trùng linh căn ×1,2. Mỗi hệ có trần mềm
+// (ngoc.json `tran`); tổng kháng một hệ từ mọi nguồn còn chặn ở RESIST_CAP trong trận.
 // Set: ấn bộ khảm ở một dòng; đủ 2/4/7 món cùng ấn (còn độ bền) thì mở mốc. Bước này áp hiệu ứng loại chi_so;
 // các loại khác (kinh tế, hành vi, khắc chế, hộ trận) chỉ được liệt kê trong `sets` để các bước sau dùng.
 // Ý châu: chỉ khảm vũ khí, mỗi vũ khí 1 viên; đổi hành vi một loại chiêu cho mọi công pháp loại đó (sim: UnitSpec.skillMods).
@@ -195,11 +196,18 @@ function statAmount(stat: string, giaTri: number, factor: number, level: number)
   return Math.trunc((base * giaTri * factor) / 1_000_000);
 }
 
+/** Trần mềm của ngọc (ngoc.json `tran`): phần trên `knee` chỉ tính một nửa, không vượt `max`. */
+export function softCap(raw: number, knee: number, max: number): number {
+  return raw <= knee ? raw : Math.min(max, knee + Math.trunc((raw - knee) / 2));
+}
+
 /** Cộng chỉ số chính, phụ và ngọc của các món đang mặc (mỗi ô tối đa một món). */
 export function gearStats(items: EquipItem[], level: number, roots: Element[]): GearStats {
   const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {} };
   const used: string[] = [];
   const pieces: Record<string, number> = {}; // id bộ → số món còn độ bền mang ấn bộ đó
+  const gemDamage: Partial<Record<Element, number>> = {}; // tổng thô từ ngọc ô công, trước trần mềm
+  const gemResist: Partial<Record<Element, number>> = {}; // tổng thô từ ngọc ô thủ, trước trần mềm
   for (const item of items) {
     validate(item);
     const info = kieuInfo(item.kieu);
@@ -222,10 +230,13 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[]): 
       if (!line || line.loai !== "ngoc") continue;
       let v = GEM_VALUE[line.cap - 1];
       if (roots.indexOf(line.he) >= 0) v = mul(v, GEAR.rootGemBonus);
-      const target = slot.ngoc === "cong" ? out.elementDamage : out.resist;
+      const target = slot.ngoc === "cong" ? gemDamage : gemResist;
       target[line.he] = (target[line.he] ?? 0) + v;
     }
   }
+  const t = NGOC.tran;
+  for (const e of Object.keys(gemDamage) as Element[]) out.elementDamage[e] = softCap(gemDamage[e] ?? 0, t.satThuongMem, t.satThuongToiDa);
+  for (const e of Object.keys(gemResist) as Element[]) out.resist[e] = softCap(gemResist[e] ?? 0, t.khangMem, t.khangToiDa);
   // 7 ô, mỗi món tối đa 1 ấn, nên tối đa 3 bộ cùng mở (2+2+2 hoặc 2+2+3) và chỉ một bộ đạt mốc 7.
   for (const bo of Object.keys(pieces).sort()) {
     const moc = setTier(pieces[bo]);
