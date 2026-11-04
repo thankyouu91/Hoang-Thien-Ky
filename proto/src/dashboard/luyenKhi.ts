@@ -1,22 +1,36 @@
 // Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13; đặc tả luyen-khi.md của phiên set đồ, mọi số là đề xuất).
-// Lớp chuyển đổi cho mục Luyện khí ở màn Nhân vật và lò danh khí ở Luyện Khí Các. File này không vẽ gì.
-// Số đã có JSON thì đọc thẳng: giá trị và tỷ lệ ngọc (ngoc.json), 420 kiểu đồ (trang_bi.json), pháp bảo, pháp khí, Ý châu,
-// ấn bộ. Bảng TẠM chép từ đặc tả, chờ phiên bảng số liệu xuất JSON và phiên Sprint viết rules: chỉ số phụ tẩy luyện, khí
-// văn, Khí Tinh khi phân giải, kinh nghiệm khí linh, Phách, danh khí, phần thưởng Bảo Giám. Trạng thái (Khí Tinh, khí linh,
-// ngọc cấp cao, sổ Bảo Giám) cũng là mẫu TẠM ở màn, chờ DashboardSource.
+// Bảng số và hàm dùng chung cho mục Luyện khí ở màn Nhân vật (screens/luyenKhiPanel.ts), lò danh khí ở Luyện Khí Các
+// (screens/forge.ts) và nguồn đọc mẫu (mock/source.ts). File này không vẽ gì. Số đọc thẳng từ data/he_thong/json:
+// luyen_khi.json (tẩy luyện, khí linh, khí văn, phân giải, danh khí, Bảo Giám, luat), ngoc.json (cấp, Phách, song hệ,
+// Ý châu, ấn bộ), trang_bi.json (430 kiểu, ô công hay thủ, bậc độ hiếm), phap_bao.json, phap_khi.json, vu_khi.json.
+// Khi @ktlp/rules có luật luyện khí thì các hàm addExp, rerollSub, rollOffer… chuyển sang gọi rules.
 import { machBetween, type Progress } from "@ktlp/rules";
 import type { Element } from "@ktlp/sim";
+import LK from "../../../data/he_thong/json/luyen_khi.json";
 import NGOC from "../../../data/he_thong/json/ngoc.json";
 import PHAP_BAO from "../../../data/he_thong/json/phap_bao.json";
 import PHAP_KHI from "../../../data/he_thong/json/phap_khi.json";
 import TRANG_BI from "../../../data/he_thong/json/trang_bi.json";
-import type { GearSlot, NhanVatView, Rarity } from "./source.ts";
+import VU_KHI from "../../../data/he_thong/json/vu_khi.json";
+import { REALMS } from "./daoCoBan.ts";
+import type { GearSlot, Rarity } from "./source.ts";
+
+const L = LK.luat as unknown as {
+  phanGiaiMoCap: number; baoGiamMoCap: number; tayLuyenMoCap: number; khiLinhMoCap: number; khiLinhBacToiThieu: number; songHeCapNgoc: number;
+  phachCapNgoc: number; danhKhiMoCap: number; danhKhiLoToiThieu: number; phanGiaiKhiTinhMoiCapKhiLinh: number; phanGiaiTraNac: number;
+  tayLuyenKhiTinh: number; tayLuyenLinhThach: Record<Rarity, number>; khiLinhKnTran: number; khiLinhKnBiCanh: number; khiLinhKnKhiTinh: number;
+  khiVanToiDa: Partial<Record<Rarity, number>>; khiVanKichToiDa?: number; khiVanTinhToiDa?: number; khiVanTranLucChien: number; taoVanLinhVanThach: number; phachTyLe: number;
+  phachKhiTinh: number; danhKhiVanThiet: number; danhKhiKhiTinh: number; danhKhiHoLo: number; danhKhiTyLe: Record<string, number>;
+  danhKhiYHeSo: number; baoGiamTuanLinhVanThach: number;
+};
 
 export const SLOTS: GearSlot[] = ["vu_khi", "mu", "ao", "dai", "bao_tay", "giay", "ngoc_boi"];
-export const SLOT_NAMES: Record<GearSlot, string> = { vu_khi: "Vũ khí", mu: "Mũ", ao: "Áo", dai: "Đai", bao_tay: "Bao tay", giay: "Giày", ngoc_boi: "Ngọc bội" };
-export const RARITY_NAMES: Record<Rarity, string> = { luc: "Lục", lam: "Lam", tim: "Tím", vang: "Vàng", do: "Đỏ" };
-const RANK: Record<Rarity, number> = { luc: 0, lam: 1, tim: 2, vang: 3, do: 4 };
-export const atLeast = (r: Rarity, min: Rarity) => RANK[r] >= RANK[min];
+const O = TRANG_BI.o as { id: GearSlot; ten: string; ngoc: "cong" | "thu" }[];
+export const SLOT_NAMES = Object.fromEntries(O.map((o) => [o.id, o.ten])) as Record<GearSlot, string>;
+const DO_HIEM = TRANG_BI.do_hiem as { id: Rarity; ten: string; bac: number }[];
+export const RARITY_NAMES = Object.fromEntries(DO_HIEM.map((r) => [r.id, r.ten])) as Record<Rarity, string>;
+const bac = (r: Rarity) => DO_HIEM.find((x) => x.id === r)?.bac ?? 0;
+export const atLeast = (r: Rarity, min: Rarity) => bac(r) >= bac(min);
 
 // ---- Mở khóa ------------------------------------------------------------------------------------------------------
 
@@ -26,14 +40,20 @@ export interface Gate {
   cap: number;
   ten: string;
 }
-/** Mốc mở của từng phần (đặc tả mục Mở khóa). Hợp ngọc và Phách mở theo viên ngọc đang có, xét riêng. */
+/** Tên mốc: cảnh giới Hạ vị chứa cấp đó, kèm số cấp. */
+const gate = (cap: number, ten?: string): Gate => ({
+  viDien: "ha",
+  cap,
+  ten: ten ?? `${REALMS.filter((r) => r.p.viDien === "ha" && r.p.cap <= cap).at(-1)?.ten ?? ""} (cấp ${cap})`,
+});
+/** Mốc mở của từng phần (luyen_khi.json luat). Hợp ngọc và Phách mở theo viên ngọc đang có, xét riêng. */
 export const UNLOCK = {
-  phanGiai: { viDien: "ha", cap: 20, ten: "cấp 20" },
-  baoGiam: { viDien: "ha", cap: 20, ten: "cấp 20" },
-  tayLuyen: { viDien: "ha", cap: 101, ten: "Kết Đan (cấp 101)" },
-  khiLinh: { viDien: "ha", cap: 201, ten: "Hóa Thần (cấp 201)" },
-  danhKhi: { viDien: "ha", cap: 250, ten: "cấp 250 Hạ vị hoặc từ Trung vị" },
-} satisfies Record<string, Gate>;
+  phanGiai: gate(L.phanGiaiMoCap, `cấp ${L.phanGiaiMoCap}`),
+  baoGiam: gate(L.baoGiamMoCap, `cấp ${L.baoGiamMoCap}`),
+  tayLuyen: gate(L.tayLuyenMoCap),
+  khiLinh: gate(L.khiLinhMoCap),
+  danhKhi: gate(L.danhKhiMoCap, `cấp ${L.danhKhiMoCap} Hạ vị hoặc từ Trung vị`),
+};
 
 export function reached(p: Progress, g: Gate): boolean {
   const now = VI_DIEN.indexOf(p.viDien);
@@ -43,35 +63,45 @@ export function reached(p: Progress, g: Gate): boolean {
 
 // ---- 1. Phân giải --------------------------------------------------------------------------------------------------
 
-/** Khí Tinh mỗi món theo độ hiếm (lục không phân giải được), cộng 1 mỗi cấp khí linh. */
-const KHI_TINH: Record<Rarity, number> = { luc: 0, lam: 1, tim: 3, vang: 10, do: 25 };
-export const canDecompose = (r: Rarity) => atLeast(r, "lam");
-export const khiTinhOf = (r: Rarity, klCap = 0) => KHI_TINH[r] + (KHI_TINH[r] ? klCap : 0);
+const PHAN_GIAI = LK.phan_giai as { do_hiem: Rarity; khi_tinh: number }[];
+/** Món phân giải được: có dòng ở phan_giai (từ lam). */
+export const canDecompose = (r: Rarity) => PHAN_GIAI.some((x) => x.do_hiem === r);
+export const khiTinhOf = (r: Rarity, klCap = 0) => {
+  const row = PHAN_GIAI.find((x) => x.do_hiem === r);
+  return row ? row.khi_tinh + klCap * L.phanGiaiKhiTinhMoiCapKhiLinh : 0;
+};
+/** Bảng Khí Tinh theo độ hiếm, để ghi chú. */
+export const KHI_TINH_TEXT = PHAN_GIAI.map((x) => `${RARITY_NAMES[x.do_hiem].toLowerCase()} ${x.khi_tinh}`).join(", ");
+export const KHI_TINH_PER_KL = L.phanGiaiKhiTinhMoiCapKhiLinh;
 /** Khí Tinh từ đồ khóa (vàng, đỏ, đồ đã dưỡng khí linh) cũng khóa, không bán được. */
 export const yieldLocked = (r: Rarity, klCap = 0) => atLeast(r, "vang") || klCap >= 1;
-/** Nửa số nấc cường hóa trả thành Luyện Khí Thạch đúng phẩm. */
-export const stoneBack = (plus: number) => Math.floor(plus / 2);
+/** Phần số nấc cường hóa trả thành Luyện Khí Thạch đúng phẩm (phanGiaiTraNac phần nghìn). */
+export const stoneBack = (plus: number) => Math.floor((plus * L.phanGiaiTraNac) / 1000);
 
 // ---- 2. Tẩy luyện ---------------------------------------------------------------------------------------------------
 
 export interface SubStat {
   stat: string;
   ten: string;
+  /** Giá trị ở lục +0, phần nghìn. */
+  giaTri: number;
+  /** Chữ hiện: "+2%", giảm hồi chiêu không có dấu cộng. */
   gt: string;
 }
-const sub = (stat: string, ten: string, gt: string): SubStat => ({ stat, ten, gt });
-/** 4 loại chỉ số phụ của mỗi ô, loại 1 là mặc định; giá trị ở lục +0 (đã chia đôi ngày 2026-11-04). */
-export const SUB: Record<GearSlot, SubStat[]> = {
-  vu_khi: [sub("critDamage", "Sát thương chí mạng", "+2%"), sub("armorPen", "Xuyên giáp", "+1%"), sub("attackSpeed", "Tốc đánh", "+1%"), sub("lifesteal", "Hút máu", "+0,5%")],
-  mu: [sub("manaMax", "Mana tối đa", "+2%"), sub("cooldownCut", "Giảm hồi chiêu", "0,5%"), sub("controlTime", "Thời gian khống chế", "+2%"), sub("healPower", "Hiệu quả hồi máu và khiên", "+1%")],
-  ao: [sub("hp", "Máu", "+1,5%"), sub("shieldTaken", "Khiên nhận", "+2%"), sub("healTaken", "Hồi máu nhận", "+1%"), sub("manaMax", "Mana tối đa", "+1%")],
-  dai: [sub("healTaken", "Hồi máu nhận", "+1%"), sub("hp", "Máu", "+1%"), sub("healPower", "Hiệu quả hồi máu và khiên", "+1%"), sub("shieldTaken", "Khiên nhận", "+1%")],
-  bao_tay: [sub("critBonus", "Chí mạng", "+0,5%"), sub("critDamage", "Sát thương chí mạng", "+1%"), sub("resistPen", "Xuyên kháng", "+1%"), sub("attackSpeed", "Tốc đánh", "+0,5%")],
-  giay: [sub("attackSpeed", "Tốc đánh", "+1%"), sub("cooldownCut", "Giảm hồi chiêu", "0,5%"), sub("controlTime", "Thời gian khống chế", "+2%"), sub("def", "Phòng thủ", "+1%")],
-  ngoc_boi: [sub("cooldownCut", "Giảm hồi chiêu", "0,5%"), sub("manaMax", "Mana tối đa", "+1%"), sub("dot", "Sát thương theo thời gian", "+2%"), sub("resistPen", "Xuyên kháng", "+1%")],
-};
-/** Mỗi lần tẩy luyện tốn 2 Khí Tinh, cộng linh thạch theo độ hiếm (số chờ sheet Tẩy luyện). */
-export const REROLL_KHI_TINH = 2;
+const pct = (perMille: number) => `${(perMille / 10).toLocaleString("vi-VN", { maximumFractionDigits: 1 })}%`;
+const TAY = LK.tay_luyen as { o: GearSlot; loai: number; stat: string; ten: string; gia_tri: number }[];
+/** 4 loại chỉ số phụ của mỗi ô theo thứ tự loai 1–4 (chỉ số 0–3 trong UI và lệnh), loại 1 là mặc định. */
+export const SUB = Object.fromEntries(
+  SLOTS.map((s) => [
+    s,
+    TAY.filter((x) => x.o === s)
+      .sort((a, b) => a.loai - b.loai)
+      .map((x) => ({ stat: x.stat, ten: x.ten, giaTri: x.gia_tri, gt: `${x.stat === "cooldownCut" ? "" : "+"}${pct(x.gia_tri)}` })),
+  ]),
+) as Record<GearSlot, SubStat[]>;
+/** Mỗi lần tẩy luyện: Khí Tinh, cộng linh thạch đúng phẩm của vị diện theo độ hiếm món. */
+export const REROLL_KHI_TINH = L.tayLuyenKhiTinh;
+export const rerollStone = (r: Rarity) => L.tayLuyenLinhThach[r] ?? 0;
 
 /** Người thường quay ngẫu nhiên trong 3 loại còn lại. */
 export function rerollSub(cur: number): number {
@@ -81,53 +111,35 @@ export function rerollSub(cur: number): number {
 
 // ---- 3. Khí linh và khí văn -------------------------------------------------------------------------------------------
 
-export const KL_MAX = 9;
-/** Kinh nghiệm để lên cấp kế tiếp: 100 × cấp kế (cấp 9 cần tổng 4.500). */
-export const klNeed = (cap: number) => (cap >= KL_MAX ? 0 : 100 * (cap + 1));
-export const KL_PER_KHI_TINH = 10;
-/** Mỗi cấp +0,5% chỉ số gốc của món (phần nghìn). */
-export const klBonus = (cap: number) => cap * 5;
-/** Ô khí văn mở ở cấp 3, 6, 9; tím tối đa 1 ô, vàng 2, đỏ 3. */
-export const VAN_AT = [3, 6, 9];
-export const vanSlots = (r: Rarity): number => ({ luc: 0, lam: 0, tim: 1, vang: 2, do: 3 })[r];
-export const hasKhiLinh = (r: Rarity) => atLeast(r, "tim");
-/** Một khí văn trên nhiều món chỉ tính tối đa 2 lần. */
-export const VAN_STACK = 2;
-/** Tẩy văn (quay lại 3 lựa chọn) tốn 1 Linh Văn Thạch. */
-export const VAN_REROLL = 1;
+const KHI_LINH = LK.khi_linh as { cap: number; kinh_nghiem: number; cong_chi_so: number; mo_o_khi_van: boolean }[];
+export const KL_MAX = KHI_LINH[KHI_LINH.length - 1].cap;
+/** Kinh nghiệm để lên cấp kế tiếp (cấp tối đa thì 0). */
+export const klNeed = (cap: number) => KHI_LINH.find((x) => x.cap === cap + 1)?.kinh_nghiem ?? 0;
+export const KL_PER_KHI_TINH = L.khiLinhKnKhiTinh;
+export const KL_PER_TRAN = L.khiLinhKnTran;
+export const KL_PER_BI_CANH = L.khiLinhKnBiCanh;
+/** Cộng chỉ số gốc của món ở cấp đó (phần nghìn). */
+export const klBonus = (cap: number) => KHI_LINH.find((x) => x.cap === cap)?.cong_chi_so ?? 0;
+/** Cấp mở ô khí văn (3, 6, 9); số ô tối đa theo độ hiếm. */
+export const VAN_AT = KHI_LINH.filter((x) => x.mo_o_khi_van).map((x) => x.cap);
+export const vanSlots = (r: Rarity): number => L.khiVanToiDa[r] ?? 0;
+export const hasKhiLinh = (r: Rarity) => bac(r) >= L.khiLinhBacToiThieu;
+/** Một khí văn trên nhiều món chỉ tính tối đa ngần này lần; tổng mọi khí văn không quá VAN_CAP lực chiến (phần nghìn). */
+export const VAN_STACK = L.khiVanKichToiDa ?? L.khiVanTinhToiDa ?? 2;
+export const VAN_CAP = L.khiVanTranLucChien;
+/** Tẩy văn (quay lại 3 lựa chọn) tốn Linh Văn Thạch. */
+export const VAN_REROLL = L.taoVanLinhVanThach;
 
 export interface KhiVan {
   ma: string;
   ten: string;
   tac: string;
 }
-const kv = (ma: string, ten: string, tac: string): KhiVan => ({ ma, ten, tac });
-/** Ô công: vũ khí, bao tay, ngọc bội. */
-export const VAN_CONG: KhiVan[] = [
-  kv("KV-CO-001", "Phá Thuẫn Văn", "Đòn đầu tiên lên mục tiêu đang có khiên +10% sát thương"),
-  kv("KV-CO-002", "Truy Mệnh Văn", "Mục tiêu dưới 20% máu nhận thêm 5% sát thương"),
-  kv("KV-CO-003", "Tiên Phát Văn", "Chiêu đầu tiên mỗi trận +15% sát thương"),
-  kv("KV-CO-004", "Liên Kích Văn", "Đánh cùng mục tiêu 3 lần liên tiếp thì lần thứ 3 +8% sát thương"),
-  kv("KV-CO-005", "Khắc Hệ Văn", "Đánh hệ mình khắc: hệ số ×1,5 thành ×1,53"),
-  kv("KV-CO-006", "Tụ Linh Văn", "Hạ gục kẻ địch thì hồi 3% mana"),
-  kv("KV-CO-007", "Phá Trận Văn", "Sát thương lên trận nhãn, hộ trận +3% (chiến tranh)"),
-  kv("KV-CO-008", "Liệp Yêu Văn", "Sát thương lên dị thú và boss PvE +4%"),
-];
-/** Ô thủ: mũ, áo, đai, giày. */
-export const VAN_THU: KhiVan[] = [
-  kv("KV-TH-001", "Hộ Mệnh Văn", "Lần đầu máu dưới 25%: khiên 8% máu tối đa"),
-  kv("KV-TH-002", "Ngự Khắc Văn", "Trúng đòn hệ khắc mình: hệ số ×1,5 thành ×1,47"),
-  kv("KV-TH-003", "Phản Chấn Văn", "Phản 3% sát thương cận chiến nhận được"),
-  kv("KV-TH-004", "Thiết Bích Văn", "Đứng hàng trước: phòng thủ +3%"),
-  kv("KV-TH-005", "Tĩnh Tâm Văn", "Đứng hàng sau: mana tối đa +3%"),
-  kv("KV-TH-006", "Hồi Xuân Văn", "Hồi 1% máu mỗi 5 s"),
-  kv("KV-TH-007", "Định Thân Văn", "Bị đẩy lùi thì đứng lại sau 0,5 s thay vì bị đẩy hết ô"),
-  kv("KV-TH-008", "Tị Kiếp Văn", "Lôi kiếp gây ít hơn 5% sát thương (ngoài trận)"),
-];
-const CONG_SLOTS: GearSlot[] = ["vu_khi", "bao_tay", "ngoc_boi"];
-export const vanPool = (s: GearSlot) => (CONG_SLOTS.includes(s) ? VAN_CONG : VAN_THU);
-export const vanGroup = (s: GearSlot) => (CONG_SLOTS.includes(s) ? "công" : "thủ");
-export const khiVan = (ma: string) => [...VAN_CONG, ...VAN_THU].find((x) => x.ma === ma);
+const KHI_VAN = (LK.khi_van as { ma: string; nhom: "cong" | "thu"; ten: string; tac_dung: string }[]).map((x) => ({ ma: x.ma, ten: x.ten, tac: x.tac_dung, nhom: x.nhom }));
+/** Ô công (vũ khí, bao tay, ngọc bội) hay ô thủ, theo trang_bi.json o[].ngoc. */
+export const vanGroup = (s: GearSlot) => (O.find((o) => o.id === s)?.ngoc === "cong" ? "công" : "thủ");
+export const vanPool = (s: GearSlot): KhiVan[] => KHI_VAN.filter((x) => x.nhom === (vanGroup(s) === "công" ? "cong" : "thu"));
+export const khiVan = (ma: string): KhiVan | undefined => KHI_VAN.find((x) => x.ma === ma);
 
 /** 3 khí văn quay ngẫu nhiên từ nhóm của ô. */
 export function rollOffer(s: GearSlot): string[] {
@@ -139,6 +151,28 @@ export function rollOffer(s: GearSlot): string[] {
   return pool.slice(0, 3);
 }
 
+/** Nạp kinh nghiệm; trả về các cấp vừa vượt. */
+export function addExp(kl: { cap: number; exp: number }, exp: number): number[] {
+  const passed: number[] = [];
+  kl.exp += exp;
+  while (kl.cap < KL_MAX && kl.exp >= klNeed(kl.cap)) {
+    kl.exp -= klNeed(kl.cap);
+    kl.cap++;
+    passed.push(kl.cap);
+  }
+  if (kl.cap >= KL_MAX) kl.exp = 0;
+  return passed;
+}
+
+/** Số Khí Tinh cần để lên cấp kế. */
+export const khiTinhToNext = (kl: { cap: number; exp: number }) => Math.ceil(Math.max(0, klNeed(kl.cap) - kl.exp) / KL_PER_KHI_TINH);
+
+/** Đồng bộ ô khí văn với cấp khí linh: mở ô đến cấp 3, 6, 9 theo độ hiếm. */
+export function syncVan(s: { kl: { cap: number }; van: (string | null)[] }, r: Rarity): void {
+  const open = VAN_AT.filter((at, i) => i < vanSlots(r) && s.kl.cap >= at).length;
+  while (s.van.length < open) s.van.push(null);
+}
+
 // ---- 4. Ngọc ------------------------------------------------------------------------------------------------------------
 
 const GEM_CAP = NGOC.cap as { cap: number; gia_tri: number; ty_le_nen_len: number | null }[];
@@ -146,25 +180,28 @@ const GEM_CAP = NGOC.cap as { cap: number; gia_tri: number; ty_le_nen_len: numbe
 export const gemValue = (cap: number) => GEM_CAP[cap - 1]?.gia_tri ?? 0;
 export const gemRate = (cap: number) => GEM_CAP[cap - 1]?.ty_le_nen_len ?? 1000;
 export const GEM_NAME: Record<string, string> = Object.fromEntries((NGOC.he as { he: string; ten: string }[]).map((h) => [h.he, h.ten]));
-export const SONG_HE_FROM = 7;
-/** Viên song hệ cho mỗi hệ 60% giá trị một viên thường. */
-export const SONG_HE_PART = 600;
+
+const SONG_HE = (NGOC.song_he as { moi_he: number; ty_le_dau: number; that_bai_mat: number; phu_giu: string }[])[0];
+export const SONG_HE_FROM = L.songHeCapNgoc;
+/** Viên song hệ cho mỗi hệ phần này của một viên thường (phần nghìn). */
+export const SONG_HE_PART = SONG_HE.moi_he;
+/** Tỷ lệ đậu cố định (không theo bảng nén); thất bại mất SONG_HE_LOSE viên (viên đặt thứ hai), phù SONG_HE_PHU giữ cả hai. */
+export const SONG_HE_RATE = SONG_HE.ty_le_dau;
+export const SONG_HE_LOSE = SONG_HE.that_bai_mat;
+export const SONG_HE_PHU = SONG_HE.phu_giu;
 /** Hai hệ tương sinh hoặc tương hợp (mạch "sinh" của bảng quan hệ). */
 export const songHeOk = (a: Element, b: Element) => a !== b && machBetween(a, b) === "sinh";
 
-export const PHACH_FROM = 10;
-export const PHACH_KHI_TINH = 20;
-export const PHACH_RATE = 300;
-const PHACH: Record<string, string> = {
-  kim: "Canh Kim Phách", moc: "Thanh Mộc Phách", thuy: "Huyền Thủy Phách", hoa: "Xích Diễm Phách", tho: "Hậu Thổ Phách", loi: "Tử Lôi Phách",
-  phong: "Thanh Phong Phách", quang: "Diệu Quang Phách", am_lanh: "U Lãnh Phách", cuc_duong: "Thuần Dương Phách", cuc_am: "Huyền Âm Phách", cuc_han: "Hàn Tủy Phách",
-};
-const ELEMENT_ORDER = (NGOC.he as { he: string }[]).map((h) => h.he);
-export const phachName = (he: string) => PHACH[he] ?? he;
-export const phachCode = (he: string) => `NG-PH-${String(ELEMENT_ORDER.indexOf(he) + 1).padStart(3, "0")}`;
-/** Trần mềm sát thương hệ từ ngọc (phần nghìn): 25%, có Phách hệ đó thì 28%. */
+const PHACH = NGOC.phach as { ma_vp: string; he: string; ten: string; gia_tri: number; tran_toi_da: number }[];
+export const PHACH_FROM = L.phachCapNgoc;
+export const PHACH_KHI_TINH = L.phachKhiTinh;
+export const PHACH_RATE = L.phachTyLe;
+export const phachName = (he: string) => PHACH.find((x) => x.he === he)?.ten ?? he;
+export const phachCode = (he: string) => PHACH.find((x) => x.he === he)?.ma_vp ?? he;
+/** Phách cho như ngọc cấp 10 và nâng trần mềm sát thương hệ đó (phần nghìn). */
+export const PHACH_VALUE = PHACH[0].gia_tri;
 export const DMG_CAP = (NGOC.tran as { satThuongToiDa: number }).satThuongToiDa;
-export const DMG_CAP_PHACH = 280;
+export const DMG_CAP_PHACH = PHACH[0].tran_toi_da;
 
 // ---- 5. Danh khí ----------------------------------------------------------------------------------------------------------
 
@@ -172,28 +209,30 @@ export interface DanhKhi {
   ma: string;
   ten: string;
   khiHinh: string;
+  /** Tên khí hình (vu_khi.json). */
   hinh: string;
   van: string;
+  doPho: string;
 }
-const dk = (n: number, ten: string, khiHinh: string, hinh: string, van: string): DanhKhi => ({ ma: `TB-KI-0${60 + n}`, ten, khiHinh, hinh, van });
-export const DANH_KHI: DanhKhi[] = [
-  dk(1, "Thiên Vấn Kiếm", "kiem", "Kiếm", "Cận chiến đơn chí mạng thì chiêu đó hồi chiêu nhanh 0,5 s"),
-  dk(2, "Đoạn Nhạc Đao", "dao", "Đao", "Mỗi mục tiêu trúng quét từ thứ 3 trở đi cho người cầm khiên 1% máu tối đa"),
-  dk(3, "Lạc Tinh Cung", "cung", "Cung", "Đòn tầm xa vào kẻ đang vận công +20% sát thương"),
-  dk(4, "Phong Lôi Phiến", "phien", "Phiến", "Diện rộng trúng từ 6 mục tiêu thì lần vận công kế tiếp nhanh gấp đôi"),
-  dk(5, "Bất Động Côn", "con", "Côn", "Khiên hộ thể của người cầm đỡ thêm 1 lần khống chế cho người được che"),
-  dk(6, "Tạo Hóa Bút", "but", "Bút", "Bùa chú thêm 1 lần mỗi trận, mỗi lần −15% sát thương"),
-  dk(7, "Tinh La Kỳ", "ky", "Kỳ", "Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ"),
-  dk(8, "Vọng Nguyệt Cầm", "cam", "Cầm", "Hồi phục giải luôn 1 hiệu ứng thiêu đốt hoặc độc"),
-  dk(9, "Ngọc Lâu Tiêu", "tieu", "Tiêu", "Khống chế trúng kẻ đang vận công thì chiêu đó mất luôn, không hoàn hồi chiêu"),
-  dk(10, "Phá Thiên Thương", "thuong", "Thương", "Lướt tới xong, đòn kế tiếp xuyên 20% khiên"),
-];
-/** Đồ phổ NL-DP-001…010 theo thứ tự danh khí. */
-export const doPhoCode = (i: number) => `NL-DP-${String(i + 1).padStart(3, "0")}`;
-export const DANH_KHI_COST = { vanThiet: 5, khiTinh: 50, hoLo: 3 };
-/** Lò từ cấp 9; tỷ lệ thành theo cấp lò (phần nghìn). */
-export const LO_MIN = 9;
-export const loRate = (lv: number) => (lv >= 10 ? 600 : lv >= 9 ? 400 : 0);
+const KHI_HINH = VU_KHI.khi_hinh as { id: string; ten: string }[];
+export const DANH_KHI: DanhKhi[] = (LK.danh_khi as { ma_vp: string; ten: string; khi_hinh: string; danh_van: string; do_pho: string }[]).map((d) => ({
+  ma: d.ma_vp,
+  ten: d.ten,
+  khiHinh: d.khi_hinh,
+  hinh: KHI_HINH.find((k) => k.id === d.khi_hinh)?.ten ?? d.khi_hinh,
+  van: d.danh_van,
+  doPho: d.do_pho,
+}));
+/** Đồ phổ của danh khí thứ i. */
+export const doPhoCode = (i: number) => DANH_KHI[i].doPho;
+export const DANH_KHI_COST = { vanThiet: L.danhKhiVanThiet, khiTinh: L.danhKhiKhiTinh, hoLo: L.danhKhiHoLo };
+/** Ý của khí hình trên danh khí so với Ý châu (phần nghìn). */
+export const DANH_KHI_Y = L.danhKhiYHeSo;
+/** Lò từ cấp LO_MIN; tỷ lệ thành theo cấp lò (phần nghìn), lò cao hơn bảng thì lấy mức cao nhất. */
+export const LO_MIN = L.danhKhiLoToiThieu;
+const LO_TOP = Math.max(...Object.keys(L.danhKhiTyLe).map((k) => Number(k.slice(2))));
+export const loRate = (lv: number) => (lv < LO_MIN ? 0 : (L.danhKhiTyLe[`lo${Math.min(lv, LO_TOP)}`] ?? 0));
+export const LO_RATES = Object.entries(L.danhKhiTyLe).map(([k, v]) => ({ lv: Number(k.slice(2)), rate: v }));
 
 /** Khí hình của một kiểu vũ khí (trang_bi.json), để tìm phôi đỏ cùng khí hình. */
 const KIEU = TRANG_BI.kieu as { ma_vp: string; o: GearSlot; so: number; ten: string; do_hiem: Rarity; khi_hinh?: string }[];
@@ -211,148 +250,52 @@ export interface BaoEntry {
 export interface BaoPage {
   id: string;
   ten: string;
+  nhom: "Trang bị" | "Pháp bảo" | "Khác";
   entries: BaoEntry[];
-  /** Phần thưởng khi đủ trang: đề xuất của tab giao diện, chờ sheet Bảo Giám. Không cộng chỉ số chiến đấu. */
+  /** Phần thưởng khi đủ trang, không cộng chỉ số chiến đấu. */
   thuong: string;
 }
 const ART_DIR: Record<GearSlot, string> = { vu_khi: "kiem", mu: "mu", ao: "ao", dai: "dai", bao_tay: "bao_tay", giay: "giay", ngoc_boi: "ngoc_boi" };
-const gearPage = (s: GearSlot): BaoPage => ({
-  id: s,
-  ten: SLOT_NAMES[s],
-  // Vũ khí 70 kiểu đã gồm 10 danh khí TB-KI-061…070 (nguồn luyen_danh_khi).
-  entries: KIEU.filter((k) => k.o === s).map((k) => ({ ma: k.ma_vp, ten: k.ten, rarity: k.do_hiem, art: `trang_bi/${ART_DIR[s]}/${String(k.so).padStart(2, "0")}` })),
-  thuong: s === "vu_khi" ? "Ánh sáng vũ khí" : `Khung ô ${SLOT_NAMES[s].toLowerCase()}`,
-});
-export const BAO_PAGES: BaoPage[] = [
-  ...SLOTS.map(gearPage),
-  { id: "phap_bao", ten: "Pháp bảo", entries: (PHAP_BAO.mon as { ma_vp: string; ten: string; do_hiem: Rarity }[]).map((m) => ({ ma: m.ma_vp, ten: m.ten, rarity: m.do_hiem })), thuong: "Danh hiệu" },
-  { id: "phap_khi", ten: "Pháp khí", entries: (PHAP_KHI.mon as { ma_vp: string; ten: string; do_hiem: Rarity }[]).map((m) => ({ ma: m.ma_vp, ten: m.ten, rarity: m.do_hiem })), thuong: "Thêm ô kho" },
-  { id: "y_chau", ten: "Ý châu", entries: (NGOC.y_chau as { ma_vp: string; ten: string }[]).map((m) => ({ ma: m.ma_vp, ten: m.ten })), thuong: "Khí Tinh" },
-  { id: "an_bo", ten: "Ấn bộ", entries: (NGOC.an_bo as { ma_vp: string; ten: string; he: string | null }[]).map((m) => ({ ma: m.ma_vp, ten: m.ten, he: m.he ?? undefined })), thuong: "Thêm ô túi" },
-  { id: "phach", ten: "Ngọc Phách", entries: ELEMENT_ORDER.map((he) => ({ ma: phachCode(he), ten: phachName(he), he })), thuong: "Danh hiệu" },
-];
-
-// ---- Trạng thái mẫu ----------------------------------------------------------------------------------------------------
-
-export interface KhiLinh {
-  cap: number;
-  exp: number;
+const gearEntry = (k: (typeof KIEU)[number]): BaoEntry => ({ ma: k.ma_vp, ten: k.ten, rarity: k.do_hiem, art: `trang_bi/${ART_DIR[k.o]}/${String(k.so).padStart(2, "0")}` });
+const PB = PHAP_BAO.mon as { ma_vp: string; ten: string; loai: string; do_hiem: Rarity }[];
+interface Dem {
+  loai: string;
+  o?: GearSlot;
+  phap_bao?: string;
 }
-export interface LkSlot {
-  /** Loại chỉ số phụ đang có (0–3). */
-  sub: number;
-  kl: KhiLinh;
-  /** Khí văn theo ô (3, 6, 9); null là ô đã mở mà chưa chọn. */
-  van: (string | null)[];
-  /** 3 lựa chọn đang chờ cho ô khí văn `offerAt`. */
-  offer?: string[];
-  offerAt?: number;
+function entriesOf(d: Dem): BaoEntry[] {
+  switch (d.loai) {
+    case "trang_bi":
+      return KIEU.filter((k) => k.o === d.o).map(gearEntry);
+    case "phap_bao":
+      return PB.filter((m) => !d.phap_bao || m.loai === d.phap_bao).map((m) => ({ ma: m.ma_vp, ten: m.ten, rarity: m.do_hiem }));
+    case "phap_khi":
+      return (PHAP_KHI.mon as { ma_vp: string; ten: string; do_hiem: Rarity }[]).map((m) => ({ ma: m.ma_vp, ten: m.ten, rarity: m.do_hiem }));
+    case "y_chau":
+      return (NGOC.y_chau as { ma_vp: string; ten: string }[]).map((m) => ({ ma: m.ma_vp, ten: m.ten }));
+    case "an_bo":
+      return (NGOC.an_bo as { ma_vp: string; ten: string; he: string | null }[]).map((m) => ({ ma: m.ma_vp, ten: m.ten, he: m.he ?? undefined }));
+    case "phach":
+      return PHACH.map((m) => ({ ma: m.ma_vp, ten: m.ten, he: m.he }));
+    case "danh_khi":
+      return DANH_KHI.map((dk) => KIEU.find((k) => k.ma_vp === dk.ma)).filter((k): k is (typeof KIEU)[number] => !!k).map(gearEntry);
+    default:
+      return [];
+  }
 }
-export interface LkGem {
-  id: string;
-  he: Element;
-  he2?: Element;
-  cap: number;
-  n: number;
-}
-export interface LkState {
-  khiTinh: number;
-  khiTinhKhoa: number;
-  linhVanThach: number;
-  vanThiet: number;
-  slots: Partial<Record<GearSlot, LkSlot>>;
-  /** uid món đã phân giải (ẩn khỏi túi ở màn). */
-  gone: Set<number>;
-  gems: LkGem[];
-  phach: Element[];
-  /** Mã kiểu từng sở hữu (Bảo Giám), kể cả món đã phân giải. */
-  owned: Set<string>;
-  doPho: Set<string>;
-  week: { text: string; have: number; need: number; thuong: string; endsAt: number };
-}
-
-let shared: LkState | undefined;
-/** Trạng thái mẫu dùng chung cho màn Nhân vật và Luyện Khí Các (TẠM, sống đến khi tải lại trang). */
-export function lkState(v: NhanVatView): LkState {
-  return (shared ??= sampleLuyenKhi(v, v.serverNow));
-}
-/**
- * Công cụ xem thử của prototype: cảnh giới (chỉ số trong REALMS của daoCoBan.ts, mặc định Luyện Hư để mở đủ các phần)
- * và có xem như Tu rèn không (mặc định theo tài năng thật).
- */
-export const lkPreview: { realm: number; tuRen?: boolean } = { realm: 5 };
+/** Các trang theo luyen_khi.json bao_giam (đếm theo loại, ô, loại pháp bảo); một kiểu có thể nằm ở nhiều trang. */
+export const BAO_PAGES: BaoPage[] = (LK.bao_giam as { ma: string; ten: string; dem: Dem; thuong: string }[]).map((p) => ({
+  id: p.ma,
+  ten: p.ten,
+  nhom: p.dem.loai === "trang_bi" ? "Trang bị" : p.dem.loai === "phap_bao" ? "Pháp bảo" : "Khác",
+  entries: entriesOf(p.dem),
+  thuong: p.thuong,
+}));
+/** Tổng số kiểu khác nhau trong sổ. */
+export const BAO_TOTAL = new Set(BAO_PAGES.flatMap((p) => p.entries.map((e) => e.ma))).size;
+export const BAO_WEEK_REWARD = L.baoGiamTuanLinhVanThach;
 
 /** Số lần một khí văn đang có trên mọi món (tính tối đa VAN_STACK). */
-export function vanCount(st: LkState, ma: string): number {
-  return Object.values(st.slots).reduce((n, s) => n + (s?.van.filter((x) => x === ma).length ?? 0), 0);
-}
-
-/** Nạp kinh nghiệm; trả về các cấp vừa vượt. */
-export function addExp(kl: KhiLinh, exp: number): number[] {
-  const passed: number[] = [];
-  kl.exp += exp;
-  while (kl.cap < KL_MAX && kl.exp >= klNeed(kl.cap)) {
-    kl.exp -= klNeed(kl.cap);
-    kl.cap++;
-    passed.push(kl.cap);
-  }
-  if (kl.cap >= KL_MAX) kl.exp = 0;
-  return passed;
-}
-
-/** Số Khí Tinh cần để lên cấp kế. */
-export const khiTinhToNext = (kl: KhiLinh) => Math.ceil(Math.max(0, klNeed(kl.cap) - kl.exp) / KL_PER_KHI_TINH);
-
-/** Đồng bộ ô khí văn với cấp khí linh: mở ô đến cấp 3, 6, 9 theo độ hiếm. */
-export function syncVan(s: LkSlot, r: Rarity): void {
-  const open = VAN_AT.filter((at, i) => i < vanSlots(r) && s.kl.cap >= at).length;
-  while (s.van.length < open) s.van.push(null);
-}
-
-/**
- * Mẫu TẠM cho Lăng Vân: dùng đồ đang mặc của nguồn đọc; vũ khí tím khí linh 4 đã chọn 1 văn, áo tím sắp lên cấp 3,
- * ngọc bội vàng cấp 6 còn ô văn thứ hai chờ chọn. Ngọc cấp cao, Khí Tinh và sổ Bảo Giám cũng là mẫu.
- */
-export function sampleLuyenKhi(v: NhanVatView, now: number): LkState {
-  const slots: Partial<Record<GearSlot, LkSlot>> = {};
-  const preset: Partial<Record<GearSlot, Omit<LkSlot, "van"> & { van?: (string | null)[] }>> = {
-    vu_khi: { sub: 0, kl: { cap: 4, exp: 150 }, van: ["KV-CO-003"] },
-    ao: { sub: 1, kl: { cap: 2, exp: 260 } },
-    ngoc_boi: { sub: 2, kl: { cap: 6, exp: 300 }, van: ["KV-CO-001", null] },
-    giay: { sub: 3, kl: { cap: 0, exp: 0 } },
-  };
-  for (const s of SLOTS) {
-    const g = v.gear[s];
-    if (!g) continue;
-    const p = preset[s];
-    const slot: LkSlot = { sub: p?.sub ?? 0, kl: hasKhiLinh(g.rarity) ? { ...(p?.kl ?? { cap: 0, exp: 0 }) } : { cap: 0, exp: 0 }, van: [...(p?.van ?? [])] };
-    syncVan(slot, g.rarity);
-    slots[s] = slot;
-  }
-  const owned = new Set<string>();
-  for (const g of Object.values(v.gear)) if (g?.code) owned.add(g.code);
-  for (const it of v.bag.items) if (it.code && it.gear) owned.add(it.code);
-  const seen = ["TB-KI-001", "TB-KI-002", "TB-KI-003", "TB-KI-005", "TB-KI-008", "TB-KI-013", "TB-KI-021", "TB-KI-030", "TB-MU-001", "TB-MU-002", "TB-MU-004", "TB-MU-007", "TB-MU-011", "TB-MU-016",
-    "TB-AO-001", "TB-AO-003", "TB-AO-009", "TB-DA-002", "TB-DA-005", "TB-GI-001", "TB-GI-006", "TB-BT-001", "TB-NB-002", "PB-TH-001", "PK-CU-001", "NG-AN-001", "NG-AN-003", "NG-AN-010", "NG-YC-001"];
-  for (const c of seen) owned.add(c);
-  return {
-    khiTinh: 46,
-    khiTinhKhoa: 18,
-    linhVanThach: 3,
-    vanThiet: 2,
-    slots,
-    gone: new Set(),
-    gems: [
-      { id: "g1", he: "loi", cap: 7, n: 2 },
-      { id: "g2", he: "quang", cap: 7, n: 1 },
-      { id: "g3", he: "hoa", cap: 7, n: 1 },
-      { id: "g4", he: "tho", cap: 7, n: 1 },
-      { id: "g5", he: "kim", cap: 10, n: 1 },
-      { id: "g6", he: "loi", cap: 10, n: 1 },
-    ],
-    phach: [],
-    owned,
-    doPho: new Set([doPhoCode(0)]),
-    week: { text: "Mặc 3 món khí hình Cầm khác nhau trong tuần", have: 1, need: 3, thuong: "Linh Văn Thạch", endsAt: now + 3 * 86_400_000 + 5 * 3_600_000 },
-  };
+export function vanCount(slots: Partial<Record<GearSlot, { van: (string | null)[] }>>, ma: string): number {
+  return Object.values(slots).reduce((n, s) => n + (s?.van.filter((x) => x === ma).length ?? 0), 0);
 }

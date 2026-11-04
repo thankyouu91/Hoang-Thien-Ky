@@ -860,8 +860,6 @@ button.nv-row:hover { background: var(--c-sunken); }
 /* Mục nhiều chữ: núi sương dưới cột nhạt hơn để chữ đọc rõ */
 .nv-form:has(.lk-tabs) .pt-mist { opacity: 0.18; }
 #sheet .bd-head + dl.kv { margin-top: var(--sp-3); }
-.lk-tools { flex-wrap: wrap; margin-top: var(--sp-4); }
-.lk-check { display: inline-flex; align-items: center; gap: 4px; }
 .lk-link { padding: 0; border: 0; background: none; color: var(--c-accent-ink); font: inherit; text-decoration: underline; cursor: pointer; }
 
 /* Phân giải: chạm chọn nhiều món, ô chọn viền son có dấu tích; ô cho Khí Tinh khóa ghi chữ "khóa" */
@@ -940,6 +938,8 @@ i.pip.ready, .pt-legend i.pip.ready { border-color: var(--c-accent); background:
 .lk-week > b { color: var(--c-accent-ink); font-size: 15px; }
 .lk-week .muted { font-size: 12.5px; }
 .lk-page { align-items: center; }
+.page .lk-group { margin-top: var(--sp-3); color: var(--c-accent-ink); font-size: 13px; }
+.list .lk-page.done .lk-prog b { color: var(--c-ok); }
 .lk-prog { flex: 0 0 auto; display: grid; white-space: nowrap; justify-items: end; color: var(--c-ink-3); font-size: 13px; font-variant-numeric: tabular-nums; }
 .lk-prog b { color: var(--c-ink); }
 #sheet .lk-book { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 5px; }

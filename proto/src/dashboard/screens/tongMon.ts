@@ -210,7 +210,12 @@ export class TongMonScene extends PageScene<TongMonView> {
       const t = e.target as HTMLElement;
       if (t.closest("[data-a=build]")) toast("Hàng xây và nâng công trình có ở Sprint 5.");
       const dk = t.closest<HTMLElement>("[data-a=dk]");
-      if (dk && nv) openDanhKhi(Number(dk.dataset.i), b.level, nv, v.members, () => this.openLocation(v, id));
+      if (dk && nv)
+        openDanhKhi(Number(dk.dataset.i), b.level, nv, v.members, {
+          read: () => this.ctx.source.nhanVat(),
+          send: (cmd) => this.send(cmd),
+          back: () => this.openLocation(v, id),
+        });
     });
   }
 

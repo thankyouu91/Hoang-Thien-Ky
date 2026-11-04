@@ -106,7 +106,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         this.grade = "all";
       } else if (el.dataset.filter === "grade") this.grade = el.value as ItemGrade | Rarity | "all";
       else if (el.dataset.filter === "realm") this.realm = Number(el.value);
-      else if (!this.lk.change(el)) return;
+      else return;
       if (this.data) this.render(this.data);
     });
     this.page.addEventListener("pointerdown", (e) => this.dragStart(e));
@@ -117,6 +117,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     this.mistEl.className = "pt-mist";
     this.mistEl.setAttribute("aria-hidden", "true");
     this.lk = new LuyenKhiPanel({
+      data: () => this.data,
+      send: (cmd) => this.send(cmd),
       redraw: () => this.data && this.render(this.data),
       forge: () => this.ctx.nav.go({ screen: "tong-mon", tab: "son-mon" }),
       gearIcon: (g, s) => this.gearIcon(g, s),
@@ -478,8 +480,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
 
   // ---- Cột phải: túi ------------------------------------------------------------------------------------------
 
-  private bag(view: NhanVatView): string {
-    const v = { ...view, bag: { ...view.bag, items: view.bag.items.filter((it) => !this.lk.gone(view, it.uid)) } };
+  private bag(v: NhanVatView): string {
     const real = v.bag.items.filter((it) => it.kind !== "cong_phap");
     const byRarity = this.kind === "trang_bi";
     const shown = v.bag.items.filter(
