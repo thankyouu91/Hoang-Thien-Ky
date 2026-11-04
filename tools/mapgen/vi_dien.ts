@@ -17,9 +17,10 @@ const LEVELS = [1, 2, 4, 6];
 const TILE = 1024;
 
 /** Nhãn hiện khi rê chuột, và màu khung ô nút gợi ý theo loại điểm (đề xuất; trong ô là ký hiệu hệ của vùng) */
-const TYPES: Record<string, { label: string; color: string }> = {
+const TYPES: Record<string, { label: string; color: string; hidden?: boolean }> = {
   thanh_chu: { label: "Thành chủ", color: "#b03a2e" },
-  son_mon: { label: "Vị trí sơn môn", color: "#6c3483" },
+  // chỗ sơn môn ẩn: người chơi lập tông môn thì được đặt ngẫu nhiên vào một chỗ còn trống (GDD mục 3), chỗ đó mới hiện
+  son_mon: { label: "Sơn môn", color: "#6c3483", hidden: true },
   cua_bi_canh: { label: "Cửa bí cảnh", color: "#1f618d" },
   hang_di_thu: { label: "Hang dị thú", color: "#7b241c" },
   linh_tuyen: { label: "Linh tuyền", color: "#2e86c1" },

@@ -128,6 +128,10 @@ Xong khi: trận 10 đấu 10 chạy 60 khung/giây trên một máy Android t�
     - Giữ nguyên bộ đệm cũ: Azgaar sửa độ cao khi nạp lại `.map` (lệch tới ±9 ở 5.615 ô vùng). Nếu dựng bộ đệm từ bản đã nạp, chạy lại `diem.ts` sẽ xê dịch điểm 12 vùng. Đã kiểm: chạy lại `diem.ts` 12 vùng ra file y hệt.
     - `ha_vi_dien.json` thêm `zones` và loại `hang_thu_hoang`; 10 đoạn ranh giới giáp khu ghi `cam_khu` thay cho `null`. `ha_nhan.json` có thêm điểm, tên khu và 6 tên địa hình của Cấm Khu.
     - Giao phiên khác: giao diện cảnh báo và lớp phủ khu (dashboard), ký hiệu hệ `hon_don` (PixelLab), ghi luật vào GDD và packages/sim (CDD).
+- Đổi ngày 2026-11-04 (người dùng): vị trí sơn môn là **chỗ ẩn**. Người chơi lập tông môn thì được đặt ngẫu nhiên vào một chỗ còn trống (GDD mục 3 đã chốt), chỗ đó mới hiện trên bản đồ.
+    - Có 1.101 chỗ (trung bình 90 mỗi vùng, đúng GDD mục 5 và 16; thêm 20 chỗ trong Cấm Khu). `ha_vi_dien.json` ghi `types.son_mon.hidden = true`, `ha_nhan.json` ghi `hidden: ["son_mon"]` (z, t là null), proto vẽ sơn môn có chủ như điểm động.
+    - Người dùng thấy mỗi vùng mới dùng khoảng 50% diện tích. Đo lại: điểm đã phủ khoảng 98% ô của mọi vùng (chỉ 1–3% ô cách điểm gần nhất quá 12 đơn vị). Cái trống là do sương mù và lớp sàng lọc theo độ phóng.
+    - Đã hạ mức phóng sàn: đèo, bến đò, linh tuyền 0,8; hang 1,2; mỏ 1,4. Ở độ phóng cả vùng (1,5), cả vị diện hiện 636 điểm (trước 183), ở độ phóng 2 hiện 1.015; vẫn không hai hình hay tên nào chồng nhau.
 - Diện tích 12 vùng trong khung chênh nhau tới 2,5 lần (Bích Ba Hải nhỏ nhất, Cuồng Phong Nguyên lớn nhất). Đã chọn ngày 2026-11-02: chia số điểm theo diện tích (xem `diem.ts` ở trên).
 - Prototype vẽ bản đồ, kéo và zoom, sương mù theo số chặng.
 - PixelLab: icon 10 loại điểm.

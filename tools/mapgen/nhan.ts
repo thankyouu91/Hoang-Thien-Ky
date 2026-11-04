@@ -28,7 +28,10 @@ const ORDER = ["thanh_chu", "hang_thu_hoang", "cua_bi_canh", "son_mon", "deo", "
  * khi tên cũng có chỗ (như bản đồ mẫu, ô nào cũng kèm tên); chấm hiện trước, tên hiện khi đủ chỗ */
 const FORM: Record<string, "nut" | "cham"> = { mo_linh_thach: "cham", mo_duoc: "cham", mo_quang: "cham" };
 /** Độ phóng sàn theo loại: thu nhỏ chỉ còn thành chủ, cửa bí cảnh, sơn môn; phóng dần mới hiện đường đi, hang, mỏ */
-const FLOOR: Record<string, number> = { hang_thu_hoang: 0.7, son_mon: 0.7, deo: 1.1, ben_do: 1.1, linh_tuyen: 1.1, hang_di_thu: 1.8, mo_linh_thach: 2.4, mo_duoc: 2.4, mo_quang: 2.4 };
+const FLOOR: Record<string, number> = { hang_thu_hoang: 0.7, deo: 0.8, ben_do: 0.8, linh_tuyen: 0.8, hang_di_thu: 1.2, mo_linh_thach: 1.4, mo_duoc: 1.4, mo_quang: 1.4 };
+/** Vị trí sơn môn là chỗ ẩn: người chơi lập tông môn thì được đặt ngẫu nhiên vào một chỗ còn trống (GDD mục 3), chỗ đó mới hiện
+ * trên bản đồ (người dùng 2026-11-04). Không xếp chỗ tĩnh cho loại này (z, t là null); proto vẽ sơn môn có chủ như điểm động */
+const HIDDEN = new Set(["son_mon"]);
 /** Địa hình đặt tên: núi theo độ cao, còn lại theo biome Azgaar; mảng ít ô hơn MIN_PATCH thì không đặt tên */
 const BIOME_KIND: Record<string, string> = {
   Grassland: "dong_co", Savanna: "dong_co", "Cold desert": "sa_mac", "Hot desert": "sa_mac", Wetland: "dam_lay", Tundra: "bang_nguyen", Glacier: "bang_nguyen",
@@ -107,7 +110,7 @@ function placeAll(pointsOf: Point[][], extras: Extra[]): Item[][] {
     const size = form === "cham" ? BOX.dot : big ? BOX.big : BOX.node;
     const h = size / 2 + (form === "cham" ? BOX.dotGap : BOX.gap) / 2;
     const top = size / 2 + BOX.below;
-    for (const { k, p } of spread(all.filter((a) => a.p.type === type), capitals)) {
+    for (const { k, p } of HIDDEN.has(type) ? [] : spread(all.filter((a) => a.p.type === type), capitals)) {
       const w = textW(p.name, form === "cham" ? BOX.dotFont : big ? BOX.font + 1 : BOX.font, BOX.charW) / 2 + 2;
       const it: Item = { k, p, form, box: [-h, -h, h, h], label: [-w, top, w, top + BOX.line], z: 0, t: 0 };
       const floor = FLOOR[type] ?? 0;
@@ -287,6 +290,8 @@ function build(plane: string, dataDir: URL) {
     boxes: BOX,
     order: ORDER,
     forms: Object.fromEntries(ORDER.map((t) => [t, FORM[t] ?? "nut"])),
+    // loại điểm ẩn (chỗ sơn môn trống): z, t là null; chỉ hiện khi có tông môn đóng, proto vẽ như điểm động
+    hidden: [...HIDDEN],
     // theo vùng, chỉ số mảng là id điểm: z = độ phóng hiện hình, t = độ phóng hiện tên
     points,
     regions: regionLabels,
