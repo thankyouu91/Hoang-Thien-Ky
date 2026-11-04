@@ -655,9 +655,9 @@ export class Battle {
   }
 
   /**
-   * Hợp trận: trận chung của đồng đội đang bày trận pháp (còn sống, chưa kích), tâm cách tâm mới không quá formationJoinRange,
-   * và người mới bày xong (`resolveTick`) không muộn hơn người xong sớm nhất của trận đó quá formationJoinWait.
-   * Có nhiều trận thì nhập trận bắt đầu bày sớm nhất, rồi id người bày đầu nhỏ hơn.
+   * Hợp trận: trận chung của đồng đội đang bày trận pháp (còn sống, chưa kích), tâm cách tâm mới không quá formationJoinRange.
+   * Có nhiều trận thì chọn trận bắt đầu bày sớm nhất, rồi id người bày đầu nhỏ hơn. Người mới bày xong (`resolveTick`) muộn
+   * hơn người xong sớm nhất của trận đó quá formationJoinWait thì không nhập, bày trận riêng.
    */
   private formationToJoin(u: Unit, center: number, resolveTick: number): Channel | null {
     let best: Channel | null = null;
@@ -665,12 +665,12 @@ export class Battle {
       const ch = a.channel;
       if (a === u || a.curHp <= 0 || !ch || a.slots[ch.slot].tech.type !== "tran_phap") continue;
       if (Math.abs(ch.center - center) > R.formationJoinRange) continue;
-      let earliest = ch.resolveTick;
-      for (const m of this.formationMembers(u.team, ch.group)) earliest = Math.min(earliest, m.channel!.resolveTick);
-      if (resolveTick > earliest + R.formationJoinWait) continue;
       if (!best || ch.startTick < best.startTick || (ch.startTick === best.startTick && ch.group < best.group)) best = ch;
     }
-    return best;
+    if (!best) return null;
+    let first = best.resolveTick;
+    for (const m of this.formationMembers(u.team, best.group)) first = Math.min(first, m.channel!.resolveTick);
+    return resolveTick > first + R.formationJoinWait ? null : best;
   }
 
   /** Người còn sống đang bày trận pháp trong trận chung `group`, theo id. Ai chết hay bị cắt ngang thì đã rời nhóm. */
