@@ -44,7 +44,8 @@ export interface SkillMod {
   densest?: boolean; // trận pháp đặt vào chỗ đông địch nhất (Chu Thiên)
   // Danh văn của danh khí (tab Trang bị, phần 13):
   critCooldownCut?: number; // cận chiến đơn chí mạng thì chiêu đó hồi chiêu nhanh chừng này tick (Thiên Vấn Kiếm)
-  sweepShield?: number; // mỗi mục tiêu quét trúng từ thứ 3 cho người cầm khiên chừng này phần nghìn máu tối đa (Đoạn Nhạc Đao)
+  sweepShield?: number; // mỗi mục tiêu quét trúng từ thứ sweepShieldFrom cho người cầm khiên chừng này phần nghìn máu tối đa (Đoạn Nhạc Đao)
+  sweepShieldFrom?: number; // mục tiêu thứ mấy bắt đầu cho khiên (mặc định 3)
   channelTargetBonus?: number; // đòn vào kẻ đang vận công thêm chừng này sát thương (Lạc Tinh Cung)
   bigAoeHaste?: number; // diện rộng trúng từ chừng này mục tiêu thì lần vận công kế tiếp nhanh gấp đôi (Phong Lôi Phiến)
   shieldBlocksControl?: boolean; // khiên hộ thể đỡ thêm 1 lần khống chế cho người được che (Bất Động Côn)
@@ -929,8 +930,9 @@ export class Battle {
       if (t.curHp <= 0) continue;
       this.applyEffects(u, s, t, dmg, crit);
     }
-    // Đoạn Nhạc Đao: mỗi mục tiêu quét trúng từ thứ 3 cho người cầm khiên.
-    if (s.mod.sweepShield && swept > 2) this.addShield(u, u, mul(u.hp, s.mod.sweepShield * (swept - 2)));
+    // Đoạn Nhạc Đao: mỗi mục tiêu quét trúng từ thứ sweepShieldFrom (mặc định 3) cho người cầm khiên.
+    const from = s.mod.sweepShieldFrom ?? 3;
+    if (s.mod.sweepShield && swept >= from) this.addShield(u, u, mul(u.hp, s.mod.sweepShield * (swept - from + 1)));
     // Phong Lôi Phiến: diện rộng trúng đủ nhiều thì lần vận công kế tiếp nhanh gấp đôi.
     if (s.mod.bigAoeHaste && swept >= s.mod.bigAoeHaste) u.hasteAoe = true;
   }

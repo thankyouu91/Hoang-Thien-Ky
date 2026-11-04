@@ -149,6 +149,8 @@ test("danh văn: Đoạn Nhạc Đao, Phong Lôi Phiến, Bất Động Côn, Ti
   const pos = { 1: 5000, 101: 5500, 102: 5500, 103: 5500, 104: 5500, 105: 5500, 106: 5500 };
   const sweep = castNow({ seed: 1, teamA: [unit(1, 0, [tech("can_quet")], { bonuses: noCrit, skillMods: { can_quet: { sweepShield: 10 } } })], teamB: foes.slice(0, 4) }, (x) => place(x, pos));
   assert.equal(get(sweep, 1).shield, mul(get(sweep, 1).hp, 20)); // 4 mục tiêu: 2 từ thứ 3
+  const sweep2 = castNow({ seed: 1, teamA: [unit(1, 0, [tech("can_quet")], { bonuses: noCrit, skillMods: { can_quet: { sweepShield: 10, sweepShieldFrom: 2 } } })], teamB: foes.slice(0, 4) }, (x) => place(x, pos));
+  assert.equal(get(sweep2, 1).shield, mul(get(sweep2, 1).hp, 30)); // từ thứ 2: 3 mục tiêu
   const fan = new Battle({ seed: 1, teamA: [unit(1, 0, [tech("dien_rong")], { skillMods: { dien_rong: { bigAoeHaste: 6 } } })], teamB: foes }, true);
   place(fan, pos);
   while (!fan.events.some((e) => e.unitId === 1)) fan.step();

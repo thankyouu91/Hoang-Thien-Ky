@@ -1,17 +1,18 @@
 // Luyện khí sau cấp tối đa (GDD tab Trang bị, phần 13; số trong data/he_thong/json/luyen_khi.json, mọi số là đề xuất).
 // Khí linh cộng chỉ số gốc cùng chỗ với cường hóa và mở ô khí văn; tẩy luyện đổi loại chỉ số phụ; phân giải ra Khí Tinh;
-// danh khí là vũ khí đỏ có sẵn Ý của khí hình ×1,5 (không chiếm dòng khảm) cộng một danh văn. Khí văn và danh văn đổi sang
+// danh khí là vũ khí đỏ có sẵn Ý của khí hình ×luat.danhKhiYHeSo (không chiếm dòng khảm) cộng một danh văn. Khí văn và danh văn đổi sang
 // dữ liệu trận của sim (SetFx, SkillMod) ở đây.
 import { type SetFx, type SkillMod, type SkillType } from "@ktlp/sim";
 import LK from "../../../data/he_thong/json/luyen_khi.json" with { type: "json" };
 import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
 import TRANG_BI from "../../../data/he_thong/json/trang_bi.json" with { type: "json" };
+import VU_KHI from "../../../data/he_thong/json/vu_khi.json" with { type: "json" };
 
 export const LUYEN_KHI = LK.luat;
 interface LevelRow { cap: number; kinh_nghiem_tich_luy: number; cong_chi_so: number; mo_o_khi_van: boolean }
 interface PhuRow { o: string; loai: number; stat: string; gia_tri: number }
-interface KhiVanRow { ma: string; nhom: "cong" | "thu"; gia_tri: number }
-interface DanhKhiRow { ma_vp: string; khi_hinh: string }
+interface KhiVanRow { ma: string; nhom: "cong" | "thu"; gia_tri: number; tham_so: Record<string, number> | null }
+interface DanhKhiRow { ma_vp: string; khi_hinh: string; tham_so: Record<string, number | boolean> }
 const LEVELS = LK.khi_linh as LevelRow[];
 const PHU = LK.tay_luyen as PhuRow[];
 const KHI_VAN: Record<string, KhiVanRow> = {};
@@ -104,22 +105,47 @@ export function scaleSkillMod(mod: SkillMod, heSo: number): SkillMod {
   return out;
 }
 
-/**
- * Danh văn theo danh khí. Dữ liệu chỉ có câu mô tả nên số lấy từ câu đó; thời gian phòng thủ của Tinh La Kỳ chưa ghi,
- * lấy 5 s (đề xuất).
- */
-const DANH_VAN: Record<string, { loai: SkillType; mod: SkillMod }> = {
-  "TB-KI-061": { loai: "can_don", mod: { critCooldownCut: 10 } },
-  "TB-KI-062": { loai: "can_quet", mod: { sweepShield: 10 } },
-  "TB-KI-063": { loai: "tam_xa", mod: { channelTargetBonus: 200 } },
-  "TB-KI-064": { loai: "dien_rong", mod: { bigAoeHaste: 6 } },
-  "TB-KI-065": { loai: "ho_the", mod: { shieldBlocksControl: true } },
-  "TB-KI-066": { loai: "bua_chu", mod: { extraUses: 1, useDamage: 850 } },
-  "TB-KI-067": { loai: "tran_phap", mod: { allyDefBuff: 50, allyDefTicks: 100 } },
-  "TB-KI-068": { loai: "hoi_phuc", mod: { cleanseBurn: true } },
-  "TB-KI-069": { loai: "khong_che", mod: { breakChannel: true } },
-  "TB-KI-070": { loai: "than_phap", mod: { dashPierceNext: 200 } },
-};
+const LOAI_CHIEU: Record<string, SkillType> = {};
+for (const k of VU_KHI.khi_hinh as { id: string; loai_chieu: SkillType }[]) LOAI_CHIEU[k.id] = k.loai_chieu;
+
+/** Đổi tham_so danh văn (luyen_khi.json danh_khi[].tham_so) sang SkillMod của sim, theo khí hình. */
+function danhVanTuDuLieu(d: DanhKhiRow): SkillMod {
+  const t = d.tham_so;
+  const n = (k: string): number => {
+    const v = t[k];
+    if (typeof v !== "number") throw new Error(`${d.ma_vp}: thiếu số ${k}`);
+    return v;
+  };
+  // Sim chỉ làm được đúng 1 lần (đỡ 1 khống chế, giải 1 thiêu đốt, hủy chiêu): số khác thì báo.
+  const mot = (k: string): true => {
+    if (t[k] !== true && t[k] !== 1) throw new Error(`${d.ma_vp}: sim chỉ làm được ${k} = 1`);
+    return true;
+  };
+  switch (d.khi_hinh) {
+    case "kiem": return { critCooldownCut: n("hoiChieuNhanhTicks") };
+    case "dao": return { sweepShield: n("khienMoiMucTieu"), sweepShieldFrom: n("tuMucTieuThu") };
+    case "cung": return { channelTargetBonus: n("satThuongThem") };
+    case "phien": return { bigAoeHaste: n("tuSoMucTieu") };
+    case "con": return { shieldBlocksControl: mot("doThemKhongChe") };
+    case "but": return { extraUses: n("themLan"), useDamage: n("heSoSatThuong") };
+    case "ky": return { allyDefBuff: n("phongThuThem"), allyDefTicks: n("thoiGianTicks") };
+    case "cam": return { cleanseBurn: mot("giaiHieuUng") };
+    case "tieu": return { breakChannel: mot("huyChieu") };
+    case "thuong": return { dashPierceNext: n("xuyenKhien") };
+    default: throw new Error(`Chưa biết đổi danh văn của khí hình ${d.khi_hinh}`);
+  }
+}
+
+/** Danh văn theo danh khí: loại chiêu theo khí hình (vu_khi.json), số theo luyen_khi.json danh_khi[].tham_so. */
+const DANH_VAN: Record<string, { loai: SkillType; mod: SkillMod }> = {};
+for (const d of LK.danh_khi as DanhKhiRow[]) DANH_VAN[d.ma_vp] = { loai: LOAI_CHIEU[d.khi_hinh], mod: danhVanTuDuLieu(d) };
+
+/** Số phụ của khí văn (luyen_khi.json khi_van[].tham_so). */
+function khiVanSo(ma: string, k: string): number {
+  const v = KHI_VAN[ma].tham_so?.[k];
+  if (typeof v !== "number") throw new Error(`${ma}: thiếu số ${k}`);
+  return v;
+}
 
 /** Danh văn của một danh khí. */
 export function danhVanMod(kieu: string): { loai: SkillType; mod: SkillMod } {
@@ -137,8 +163,7 @@ export function khiVanInfo(ma: string): { nhom: "cong" | "thu"; giaTri: number }
 export interface KhiVanFx { setFx: SetFx; monsterDamage: number; outside: Record<string, number> }
 
 /**
- * Đổi số lần tính của từng khí văn (mỗi khí văn kích tính 1 lần) sang sim. Ngưỡng trong mô tả (20% máu, 25% máu,
- * 5 s) chưa có cột số trong dữ liệu nên ghi ở đây. Định Thân: mỗi lần tính bị đẩy lùi ngắn đi một nửa (đề xuất).
+ * Đổi số lần tính của từng khí văn (mỗi khí văn kích tính 1 lần) sang sim. Ngưỡng máu và chu kỳ lấy ở khi_van[].tham_so.
  */
 export function khiVanFx(counts: Record<string, number>): KhiVanFx {
   const out: KhiVanFx = { setFx: {}, monsterDamage: 0, outside: {} };
@@ -148,19 +173,19 @@ export function khiVanFx(counts: Record<string, number>): KhiVanFx {
     const v = khiVanInfo(ma).giaTri;
     switch (ma) {
       case "KV-CO-001": f.shieldBreakBonus = v * c; break;
-      case "KV-CO-002": f.lowHpAllBelow = 200; f.lowHpAllBonus = v * c; break;
+      case "KV-CO-002": f.lowHpAllBelow = khiVanSo(ma, "nguongMau"); f.lowHpAllBonus = v * c; break;
       case "KV-CO-003": f.openerBonus = v * c; break;
       case "KV-CO-004": f.comboThirdBonus = v * c; break;
       case "KV-CO-005": f.counterBoost = (v - 1500) * c; break;
       case "KV-CO-006": f.killMana = v * c; break;
       case "KV-CO-007": out.outside.satThuongHoTran = (out.outside.satThuongHoTran ?? 0) + v * c; break;
       case "KV-CO-008": out.monsterDamage += v * c; break;
-      case "KV-TH-001": f.lastStandBelow = 250; f.lastStandShield = v * c; break;
+      case "KV-TH-001": f.lastStandBelow = khiVanSo(ma, "nguongMau"); f.lastStandShield = v * c; break;
       case "KV-TH-002": f.counterCap = 1500 - (1500 - v) * c; break;
       case "KV-TH-003": f.meleeReflect = v * c; break;
       case "KV-TH-004": f.frontDef = v * c; break;
       case "KV-TH-005": f.backMana = v * c; break;
-      case "KV-TH-006": f.regenPulse = v * c; f.regenPulseTicks = 100; break;
+      case "KV-TH-006": f.regenPulse = v * c; f.regenPulseTicks = khiVanSo(ma, "chuKyTicks"); break;
       case "KV-TH-007": f.knockbackResist = Math.min(1000, v * c); break; // bị đẩy ngắn đi v phần nghìn quãng
       case "KV-TH-008": out.outside.loiKiepGiam = (out.outside.loiKiepGiam ?? 0) + v * c; break;
       default: throw new Error(`Chưa biết đổi khí văn ${ma}`);

@@ -46,6 +46,11 @@ test("khí văn trên nhiều món tính 1 lần; Ngự Khắc Văn với Hỗn 
   const lieu = gearStats([kv("KI", "KV-CO-008")], LV, []);
   assert.equal(lieu.bonuses.monsterDamage, kvGia("KV-CO-008"));
   assert.equal(gearStats([kv("MU", "KV-TH-007")], LV, []).setFx.knockbackResist, kvGia("KV-TH-007")); // Định Thân: đẩy ngắn đi
+  const kvSo = (ma: string) => LK.khi_van.find((k) => k.ma === ma)!.tham_so as Record<string, number>;
+  const hm = gearStats([kv("MU", "KV-TH-001")], LV, []).setFx;
+  assert.deepEqual([hm.lastStandBelow, hm.lastStandShield], [kvSo("KV-TH-001").nguongMau, kvGia("KV-TH-001")]);
+  assert.equal(gearStats([kv("MU", "KV-TH-006")], LV, []).setFx.regenPulseTicks, kvSo("KV-TH-006").chuKyTicks);
+  assert.equal(gearStats([kv("KI", "KV-CO-002")], LV, []).setFx.lowHpAllBelow, kvSo("KV-CO-002").nguongMau);
 });
 
 test("khí văn kích: tối đa luat.khiVanKichToiDa khí văn khác nhau có trên đồ; không chọn thì lấy theo thứ tự món", () => {
@@ -102,7 +107,12 @@ test("danh khí: Ý của khí hình nhân luat.danhKhiYHeSo, không chiếm dò
     return scaleSkillMod(base, LK.luat.danhKhiYHeSo);
   };
   const kiem = yOf("TB-KI-061", "can_don");
-  assert.deepEqual(gearStats([red("TB-KI-061")], LV, []).skillMods, { can_don: { ...kiem, critCooldownCut: 10 } });
+  const dv = (ma: string) => LK.danh_khi.find((d) => d.ma_vp === ma)!.tham_so as Record<string, number>;
+  assert.deepEqual(gearStats([red("TB-KI-061")], LV, []).skillMods, { can_don: { ...kiem, critCooldownCut: dv("TB-KI-061").hoiChieuNhanhTicks } });
+  const dao = gearStats([red("TB-KI-062")], LV, []).skillMods.can_quet!;
+  assert.deepEqual([dao.sweepShield, dao.sweepShieldFrom], [dv("TB-KI-062").khienMoiMucTieu, dv("TB-KI-062").tuMucTieuThu]);
+  const ky = gearStats([red("TB-KI-067")], LV, []).skillMods.tran_phap!;
+  assert.deepEqual([ky.allyDefBuff, ky.allyDefTicks], [dv("TB-KI-067").phongThuThem, dv("TB-KI-067").thoiGianTicks]);
   if (LK.luat.danhKhiYHeSo === 1500) assert.equal(kiem.shieldPierce, 225);
   const cam = gearStats([red("TB-KI-068")], LV, []).skillMods.hoi_phuc!;
   const camY = yOf("TB-KI-068", "hoi_phuc");
