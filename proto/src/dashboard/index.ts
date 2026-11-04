@@ -1,9 +1,7 @@
 // Ghép dashboard vào khung proto (GDD mục 14): thanh dưới Động phủ · Bản đồ · Tông môn · Công pháp · Liên minh,
 // thanh trên ở mọi màn chính, màn Nhân vật mở từ thanh trên, Trận mở từ chiến báo.
-import "@fontsource/noto-serif/400.css";
-import "@fontsource/noto-serif/600.css";
-import "@fontsource/noto-serif/700.css";
 import "./dashboard.css";
+import "./fonts.css";
 import type { App } from "../app/app.ts";
 import type { Scene } from "../app/scene.ts";
 import type { Sprites } from "../assets/sprites.ts";

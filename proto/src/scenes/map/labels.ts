@@ -6,8 +6,9 @@ import type { Camera } from "../../app/camera.ts";
 import type { View } from "../../app/view.ts";
 import type { Placer } from "./nodes.ts";
 import type { MapLabels } from "./region.ts";
+import { FONT_TEXT } from "../../theme/fonts.ts";
 
-const SERIF = '"Noto Serif", Cambria, "Times New Roman", serif';
+const SERIF = FONT_TEXT;
 const HALO = "rgba(246, 239, 223, 0.92)";
 /** Màu chữ theo loại địa hình. */
 const FEATURE_INK: Record<string, string> = {

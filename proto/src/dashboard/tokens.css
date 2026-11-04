@@ -58,9 +58,11 @@
   --rar-do: #c25446; --rar-do-bg: #f7ddd6; --rar-do-ink: #9a2a1e;
 
   /* Chữ */
-  /* Chữ có chân cho cả dashboard, theo mẫu tranh giấy người dùng gửi (2026-11-03); Noto Serif OFL, đủ dấu tiếng Việt */
-  --font: "Noto Serif", Cambria, "Times New Roman", serif;
+  /* Chữ có chân theo mẫu tranh giấy (2026-11-03). Từ 2026-11-04: Lora cho chữ đọc, Cormorant Garamond cho tiêu đề, tên và
+     số cấp (fonts.css nạp, canvas dùng theme/fonts.ts); cả hai OFL, đủ dấu tiếng Việt. */
+  --font: "Lora Variable", Cambria, "Times New Roman", serif;
   --font-serif: var(--font);
+  --font-display: "Cormorant Garamond", "Lora Variable", Cambria, serif;
   --fs-xs: 12px;
   --fs-sm: 13px;
   --fs-md: 15px;

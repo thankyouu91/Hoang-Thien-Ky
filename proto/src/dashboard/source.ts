@@ -17,6 +17,9 @@ export interface TopBarView {
   portrait: string;
   level: number;
   realm: string; // cảnh giới, Hạ vị suy từ cấp (GDD mục 7)
+  /** Tu vi đã có trong cấp hiện tại và tu vi cần để lên cấp kế (vòng quanh chân dung). */
+  exp: number;
+  expToNext: number;
   linhThach: number; // linh thạch đúng phẩm vị diện
   tienNgoc: number;
   satNghiep: number; // chỉ hiện khi lớn hơn 0
@@ -443,6 +446,10 @@ export type DashboardCommand =
   | { type: "dat_vien"; cell: string; uid: number }
   /** Gỡ viên ở một ô Đạo Cơ Bàn về túi. */
   | { type: "go_vien"; cell: string }
+  /** Đột phá sang cảnh giới kế khi ở cấp cuối cảnh giới và đủ tu vi (cultivation.canBreak). */
+  | { type: "dot_pha" }
+  /** Chỉ prototype: thêm tu vi cho đủ lên `levels` cấp (dừng ở mốc đột phá) để xem hiệu ứng lên cấp. */
+  | { type: "dev_len_cap"; levels: number }
   /** Chọn thú cưỡi trong 5 ô thú (GDD mục 6). */
   | { type: "cuoi_thu"; index: number }
   | { type: "chat"; text: string }

@@ -15,6 +15,7 @@ import type { DashCtx } from "../../dashboard/shell.ts";
 import type { BanDoView, Go, PointOwner, PointType } from "../../dashboard/source.ts";
 import { loadLocationArt, pointArt } from "../../dashboard/art/sectScene.ts";
 import { cd, closeSheet, esc, fmt, openSheet, toast } from "../../dashboard/ui.ts";
+import { FONT_DISPLAY, FONT_TEXT, loadCanvasFonts } from "../../theme/fonts.ts";
 import { drawFeatureNames, drawRiverNames } from "./labels.ts";
 import { WorldLayers } from "./layers.ts";
 import { NODE, NODE_BIG, NodeSprites, Placer } from "./nodes.ts";
@@ -40,8 +41,8 @@ const SECT_ZOOM = 1;
 const GHOST_NODE = 11;
 const GHOST_FILL = "rgba(42, 29, 20, 0.14)";
 const GHOST_EDGE = "rgba(42, 29, 20, 0.34)";
-// Tên địa danh dùng cùng chữ có chân với dashboard (mẫu tranh giấy, 2026-11-03).
-const FONT = '"Noto Serif", Cambria, "Times New Roman", serif';
+// Tên địa danh dùng chữ đọc của dashboard; tên vùng và chữ CẤM KHU dùng chữ tiêu đề (theme/fonts.ts).
+const FONT = FONT_TEXT;
 const INK = "#2a1d14";
 const HALO = "rgba(243, 231, 201, 0.92)";
 const TYPE_ORDER: PointType[] = ["thanh_chu", "son_mon", "cua_bi_canh", "deo", "ben_do", "linh_tuyen", "mo_linh_thach", "mo_quang", "mo_duoc", "hang_di_thu"];
@@ -301,6 +302,7 @@ export class MapScene implements Scene {
     this.ctx.topbar.set(d.top);
     this.data = d;
     layers.prefetch();
+    void loadCanvasFonts();
     const home = await this.ensureRegion(d.map.region);
     for (const z of this.world?.zones ?? []) void this.ensureRegion(z.code);
     layers.setRevealed(d.map.revealed.map((id) => home.points[id]));
@@ -627,10 +629,10 @@ export class MapScene implements Scene {
         const r = this.labels!.regions.find((r) => r.code === zn.code);
         if (!r) continue;
         let size = regionPx + 6;
-        ctx.font = `700 ${size}px ${FONT}`;
+        ctx.font = `700 ${size}px ${FONT_DISPLAY}`;
         const fit = ((zn.bbox[2] - zn.bbox[0]) * z * 0.75) / ctx.measureText(ZONE_TAG).width;
         if (fit < 1) size = Math.max(12, Math.floor(size * fit));
-        ctx.font = `700 ${size}px ${FONT}`;
+        ctx.font = `700 ${size}px ${FONT_DISPLAY}`;
         const half = ctx.measureText(ZONE_TAG).width / 2;
         const s = cam.toScreen(r.x, r.y, v);
         const box = ([dx, dy]: number[]) => [s.x + dx - half, s.y + dy - size / 2, s.x + dx + half, s.y + dy + size / 2] as const;
@@ -678,11 +680,11 @@ export class MapScene implements Scene {
       ctx.letterSpacing = "4px";
       ctx.fillStyle = "#a3171b";
       for (const t of zoneTags) {
-        ctx.font = `700 ${t.size}px ${FONT}`;
+        ctx.font = `700 ${t.size}px ${FONT_DISPLAY}`;
         ctx.strokeText(ZONE_TAG, t.x, t.y);
         ctx.fillText(ZONE_TAG, t.x, t.y);
       }
-      ctx.font = `italic 700 ${px}px ${FONT}`;
+      ctx.font = `italic 700 ${px + 3}px ${FONT_DISPLAY}`;
       ctx.letterSpacing = "2px";
       ctx.fillStyle = "#5a2a17";
       for (const r of this.labels!.regions) {

@@ -15,7 +15,8 @@ html, body {
   height: 100%;
   background: var(--bg);
   color: var(--ink);
-  font: 14px/1.3 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Chữ của cả hệ thống: --font ở dashboard/tokens.css (Lora); chưa có token thì chữ hệ thống. */
+  font: 14px/1.3 var(--font, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
   overflow: hidden;
   overscroll-behavior: none;
   -webkit-user-select: none;

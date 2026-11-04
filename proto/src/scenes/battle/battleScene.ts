@@ -4,6 +4,7 @@ import { Camera, type Rect } from "../../app/camera.ts";
 import type { Scene } from "../../app/scene.ts";
 import type { View } from "../../app/view.ts";
 import { ReplayPlayer } from "../../replay/player.ts";
+import { FONT_DISPLAY, FONT_TEXT } from "../../theme/fonts.ts";
 import { between, ReplayIndex, type UnitTimeline } from "../../replay/timeline.ts";
 import type { Look, ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
@@ -140,7 +141,7 @@ export class BattleScene implements Scene {
     const player = this.player;
     if (!index || !player) {
       ctx.fillStyle = "#a89c88";
-      ctx.font = "15px system-ui, sans-serif";
+      ctx.font = `15px ${FONT_TEXT}`;
       ctx.textAlign = "center";
       ctx.fillText(this.error || `Đang tải ${this.source.label}…`, v.w / 2, (v.h - v.bottom) / 2);
       return;
@@ -437,7 +438,7 @@ export class BattleScene implements Scene {
         ctx.drawImage(icon, x - 12, y - 12, 24, 24);
       } else {
         ctx.fillStyle = style.ink;
-        ctx.font = "bold 12px system-ui, sans-serif";
+        ctx.font = `bold 12px ${FONT_TEXT}`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(style.short, x, y + 1);
@@ -499,7 +500,7 @@ export class BattleScene implements Scene {
         size = 17;
       }
       ctx.globalAlpha = 1 - age * age;
-      ctx.font = `bold ${size}px system-ui, sans-serif`;
+      ctx.font = `bold ${size}px ${FONT_TEXT}`;
       ctx.strokeText(text, x, y);
       ctx.fillStyle = color;
       ctx.fillText(text, x, y);
@@ -513,13 +514,13 @@ export class BattleScene implements Scene {
     ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
     ctx.textBaseline = "top";
     ctx.textAlign = "center";
-    ctx.font = "bold 14px system-ui, sans-serif";
+    ctx.font = `bold 14px ${FONT_TEXT}`;
     ctx.fillStyle = "#efe6d6";
     ctx.fillText(`Đội A ${index.alive(0, t)}  ·  ${index.alive(1, t)} Đội B`, v.w / 2, 8);
     if (t < index.replay.ticks || player.playing) return;
     const w = index.replay.winner;
     const text = w === "draw" ? "Hoà" : `Đội ${w} thắng`;
-    ctx.font = "bold 28px system-ui, sans-serif";
+    ctx.font = `bold 32px ${FONT_DISPLAY}`;
     ctx.textBaseline = "middle";
     ctx.lineWidth = 6;
     ctx.strokeStyle = "rgba(0, 0, 0, 0.7)";

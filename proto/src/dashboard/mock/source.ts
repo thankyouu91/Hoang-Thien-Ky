@@ -105,6 +105,11 @@ function pieceLabel(piece: BoardPiece): string {
   return piece.loai === "an" ? name : `${name} cấp ${piece.cap}`;
 }
 
+/** Cấp cuối cảnh giới chứa `level`: tới đây tu vi dừng ở mức đủ, chờ Đột phá (Hạ vị tối đa cấp 250). */
+function breakLevelOf(level: number): number {
+  return Math.min(250, Math.ceil(level / 50) * 50);
+}
+
 /** Cảnh giới Hạ vị theo cấp (GDD mục 7). */
 export function realmOf(level: number): string {
   return level <= 50 ? "Luyện Khí" : level <= 100 ? "Trúc Cơ" : level <= 150 ? "Kết Đan" : level <= 200 ? "Nguyên Anh" : "Hóa Thần";
@@ -183,6 +188,18 @@ export class MockDashboardSource implements DashboardSource {
     return this.w.rules.members[PLAYER];
   }
 
+  /** Thêm tu vi: lên cấp trong cảnh giới; ở cấp cuối cảnh giới thì tu vi dừng ở mức đủ, chờ Đột phá. */
+  private gainExp(amount: number): void {
+    const p = this.w.player;
+    const me = this.me;
+    p.exp += amount;
+    while (me.level < breakLevelOf(me.level) && p.exp >= expToNext(me.level)) {
+      p.exp -= expToNext(me.level);
+      me.level++;
+    }
+    if (me.level === breakLevelOf(me.level)) p.exp = Math.min(p.exp, expToNext(me.level));
+  }
+
   private bagFull(): boolean {
     return this.w.player.bag.length + this.me.bag.length >= BAG_CAPACITY;
   }
@@ -211,6 +228,8 @@ export class MockDashboardSource implements DashboardSource {
       portrait: "nhan_vat/nam_khoe/dao_bao",
       level: this.me.level,
       realm: realmOf(this.me.level),
+      exp: p.exp,
+      expToNext: expToNext(this.me.level),
       linhThach: p.linhThach,
       tienNgoc: p.tienNgoc,
       satNghiep: p.satNghiep,
@@ -491,7 +510,7 @@ export class MockDashboardSource implements DashboardSource {
     // Tu luyện: gốc theo cấp, nhân linh khí vị diện, cộng linh tuyền tông đang giữ.
     const perHourBase = Math.round(expToNext(me.level) / RETREAT_HOURS_PER_LEVEL);
     const spring = w.held.some((h) => h.type === "linh_tuyen") ? Math.round(perHourBase * LINH_KHI_HA * SPRING_BONUS) : 0;
-    const breakLevel = Math.min(250, Math.ceil(me.level / 50) * 50);
+    const breakLevel = breakLevelOf(me.level);
     const retreat = w.jobs.find((j) => j.kind === "be_quan" && j.endsAt > now);
     const byId = (id: number) => me.learned.find((l) => l.techniqueId === id)!;
     const loadout: (TechniqueCard | null)[] = [];
@@ -810,6 +829,21 @@ export class MockDashboardSource implements DashboardSource {
         delete p.gear[cmd.slot];
         p.bag.push(gearBagItem(p.nextUid++, g));
         return { ok: true, message: `${g.name} về túi` };
+      }
+      case "dot_pha": {
+        const p = w.player;
+        const me = this.me;
+        if (me.level !== breakLevelOf(me.level) || me.level >= 250 || p.exp < expToNext(me.level)) return { ok: false, error: "chua_du_tu_vi" };
+        p.exp -= expToNext(me.level);
+        me.level++;
+        // Không báo bằng chữ: thanh trên phát màn đột phá khi cảnh giới đổi.
+        return { ok: true };
+      }
+      case "dev_len_cap": {
+        let need = -w.player.exp;
+        for (let i = 0, lv = this.me.level; i < Math.max(1, cmd.levels); i++, lv++) need += expToNext(lv);
+        this.gainExp(Math.max(0, need));
+        return { ok: true };
       }
       case "dat_vien": {
         const p = w.player;

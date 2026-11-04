@@ -1,6 +1,7 @@
 import { Camera } from "../app/camera.ts";
 import type { Scene } from "../app/scene.ts";
 import type { View } from "../app/view.ts";
+import { FONT_DISPLAY } from "../theme/fonts.ts";
 
 const CELL = 64;
 
@@ -57,7 +58,7 @@ export class PlaceholderScene implements Scene {
     ctx.stroke();
 
     ctx.fillStyle = "#a89c88";
-    ctx.font = "bold 96px system-ui, sans-serif";
+    ctx.font = `bold 96px ${FONT_DISPLAY}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(this.label, this.size / 2, this.size / 2 - 60);

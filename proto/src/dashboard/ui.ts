@@ -225,5 +225,6 @@ export const ERROR_TEXT: Record<string, string> = {
   khong_co_tan_quyen: "Không còn tàn quyển này.",
   tong_chu_khong_roi_duoc: "Tông chủ không rời tông được.",
   khong_du_linh_thach: "Không đủ linh thạch.",
+  chua_du_tu_vi: "Chưa đủ tu vi để đột phá.",
   chua_co_trong_proto: "Chức năng này chưa có trong prototype.",
 };

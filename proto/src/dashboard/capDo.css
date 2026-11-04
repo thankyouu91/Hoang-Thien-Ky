@@ -1,0 +1,151 @@
+/* Cấp độ người chơi trên thanh trên: vòng tu vi quanh chân dung, số cấp chữ tiêu đề; hiệu ứng lên cấp (ấn son "升", bụi
+   vàng, băng giấy) và đột phá cảnh giới (cả màn, tia sáng, chớp thiên kiếp, ấn "破"). Logic ở capDo.ts. */
+@property --xp {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+:root {
+  --c-xp: #c3962f;
+  --c-xp-hi: #f3d27a;
+  --c-xp-track: rgba(138, 31, 22, 0.14);
+  --font-cjk: "Noto Serif SC", "Songti SC", "SimSun", "Microsoft YaHei", serif;
+}
+
+/* Vòng tu vi: cung vàng theo --xp (0–1) quanh chân dung, có vệt sáng chạy chậm. */
+#topbar .xp-ring {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  padding: 3px;
+  border-radius: 50%;
+  background: conic-gradient(var(--c-xp) calc(var(--xp) * 1turn), var(--c-xp-track) 0);
+  transition: --xp 0.6s cubic-bezier(0.3, 0.7, 0.3, 1);
+}
+#topbar .xp-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0turn, transparent 0 0.82turn, rgba(255, 244, 205, 0.9) 0.9turn, transparent 0.98turn);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  animation: xp-sheen 5s linear infinite;
+  pointer-events: none;
+}
+@keyframes xp-sheen { to { transform: rotate(1turn); } }
+#topbar .xp-ring.full { box-shadow: 0 0 10px rgba(243, 210, 122, 0.85); }
+#topbar .xp-ring .avatar { display: block; }
+
+#topbar .who b { display: inline-flex; align-items: baseline; gap: 4px; }
+#topbar .who b .lv {
+  color: var(--c-accent-ink);
+  font: 700 21px/1 var(--font-display);
+  font-variant-numeric: lining-nums;
+  text-shadow: 0 0 6px rgba(243, 210, 122, 0.55);
+}
+#topbar .who b .lv.pop { animation: lv-pop 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+@keyframes lv-pop {
+  0% { transform: scale(1.9); color: #9a6b00; text-shadow: 0 0 18px rgba(243, 210, 122, 1); }
+  60% { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+
+/* Lớp hiệu ứng: cố định trên mọi màn, không chặn chạm (trừ màn đột phá). */
+#cap-fx { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
+.cap-burst {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  border: 2px solid var(--c-xp-hi);
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(243, 210, 122, 0.9), inset 0 0 10px rgba(243, 210, 122, 0.7);
+}
+.cap-mote {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: radial-gradient(circle, #fff6d8 0 30%, var(--c-xp-hi) 45%, rgba(195, 150, 47, 0) 70%);
+  transform: rotate(45deg);
+}
+
+/* Băng giấy lên cấp: giấy kem, khung đỏ mảnh như thẻ, số cấp lớn và ấn son. */
+.cap-banner {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--top-h, 56px) + 12px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px 10px 20px;
+  background: linear-gradient(180deg, #fffaf0, #f6ecd6);
+  box-shadow: inset 0 0 0 1px var(--c-frame, #a83a2c), 0 0 0 3px #fffaf0, 0 0 0 4px rgba(138, 31, 22, 0.25), 0 10px 30px rgba(74, 52, 30, 0.25);
+  color: var(--c-ink);
+  transform: translateX(-50%);
+}
+.cap-banner .t { display: grid; line-height: 1.1; }
+.cap-banner small { color: var(--c-ink-3); font: 600 12px var(--font); letter-spacing: 0.18em; text-transform: uppercase; }
+.cap-banner b { color: var(--c-accent-ink); font: 700 34px/1 var(--font-display); font-variant-numeric: lining-nums; }
+.cap-banner b em { font-style: normal; background: linear-gradient(180deg, #d9a93a, #8a5a00); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cap-seal {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 4px;
+  background: var(--c-accent, #b3261e);
+  box-shadow: inset 0 0 0 2px var(--c-accent, #b3261e), inset 0 0 0 4px rgba(255, 238, 222, 0.55);
+  color: #fff6ec;
+  font: 700 28px/1 var(--font-cjk);
+}
+
+/* Đột phá cảnh giới: cả màn, chạm để đóng. */
+#cap-fx .cap-break {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(ellipse at 50% 45%, rgba(255, 250, 236, 0.97) 0 28%, rgba(246, 236, 214, 0.94) 55%, rgba(84, 52, 26, 0.55) 100%);
+  pointer-events: auto;
+  cursor: pointer;
+}
+.cap-break .rays {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 180vmax;
+  height: 180vmax;
+  margin: -90vmax 0 0 -90vmax;
+  background: repeating-conic-gradient(rgba(243, 210, 122, 0.32) 0 4deg, rgba(243, 210, 122, 0) 4deg 15deg);
+  -webkit-mask: radial-gradient(circle, #000 0, rgba(0, 0, 0, 0.6) 18%, transparent 45%);
+  mask: radial-gradient(circle, #000 0, rgba(0, 0, 0, 0.6) 18%, transparent 45%);
+  animation: rays-turn 24s linear infinite;
+}
+@keyframes rays-turn { to { transform: rotate(1turn); } }
+.cap-break .flash { position: absolute; inset: 0; background: #fffdf5; opacity: 0; }
+.cap-break .cap-panel { position: relative; display: grid; justify-items: center; gap: 6px; padding: 0 24px; text-align: center; }
+.cap-break small { color: var(--c-accent-ink); font: 600 13px var(--font); letter-spacing: 0.32em; text-transform: uppercase; }
+.cap-break h2 {
+  margin: 0;
+  font: 700 clamp(52px, 13vw, 96px)/1 var(--font-display);
+  letter-spacing: 0.06em;
+  background: linear-gradient(180deg, #e7bb4c 10%, #9a6b00 60%, #6b3f00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 0 rgba(255, 248, 225, 0.9)) drop-shadow(0 0 22px rgba(243, 210, 122, 0.8));
+}
+.cap-break p { margin: 0; color: var(--c-ink-2); font: 500 16px var(--font); }
+.cap-break .cap-seal { width: 64px; height: 64px; margin-top: 10px; font-size: 40px; }
+.cap-break .hint { position: absolute; bottom: calc(24px + var(--safe-bottom, 0px)); left: 0; right: 0; color: var(--c-ink-3); font: 12px var(--font); text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  #topbar .xp-ring::after, .cap-break .rays { animation: none; }
+  #topbar .xp-ring { transition: none; }
+}
+
+/* Nút thử hiệu ứng ở màn Nhân vật (chỉ prototype). */
+.nv-dev > span:last-child { display: flex; gap: 6px; }
