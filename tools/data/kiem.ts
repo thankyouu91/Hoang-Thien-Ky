@@ -315,6 +315,11 @@ export function kiem(d: Any, raw: Raw): Report {
       if (!k || k.o !== "vu_khi" || k.do_hiem !== "do" || k.khi_hinh !== dk.khi_hinh || k.ten !== dk.ten) bad.push(`${dk.ma_vp}: cần kiểu vũ khí đỏ cùng tên, khí hình ở Kiểu trang bị`);
       if (!shapes.has(dk.khi_hinh)) bad.push(`${dk.ma_vp}: khí hình lạ ${dk.khi_hinh}`);
       if (!nl.has(dk.do_pho)) bad.push(`${dk.ma_vp}: đồ phổ ${dk.do_pho} không có ở Nguyên liệu rèn`);
+      if (dk.tham_so !== undefined && !(dk.tham_so && Object.keys(dk.tham_so).length)) bad.push(`${dk.ma_vp}: thiếu tham số danh văn`);
+    }
+    for (const v of lk.khi_van as Any[]) {
+      const m = v.tham_so?.nguongMau;
+      if (m !== undefined && !(m > 0 && m < 1000)) bad.push(`${v.ma}: nguongMau ${m} ngoài 0–1000`);
     }
     if (new Set((lk.danh_khi as Any[]).map((x) => x.khi_hinh)).size !== lk.danh_khi.length) bad.push("danh khí: hai món cùng khí hình");
     for (const m of ["NL-KT-001", "NL-KT-002"]) if (!nl.has(m)) bad.push(`thiếu nguyên liệu ${m}`);

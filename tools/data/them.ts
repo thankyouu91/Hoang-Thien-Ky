@@ -11,6 +11,7 @@
 //   hop_tran_2      3 khóa hợp trận ở SKILL_RULES: formationJoinWait, formationExtraTargets, formationMaxTargets (đề xuất)
 //   luyen_khi_2     song hệ ngọc đậu cố định, giá linh thạch tẩy luyện theo độ hiếm, thưởng Bảo Giám theo loại (đề xuất)
 //   luyen_khi_3     khiVanTinhToiDa 1 và khiVanKichToiDa 3, Hộ Mệnh 3%, Định Thân 50%, Ý danh khí ×1,25, 2 danh văn, counterFloor
+//   luyen_khi_4     cột tham số danh văn ở Danh khí, tham số phụ (ngưỡng, chu kỳ) ở Khí văn
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -722,9 +723,59 @@ const luyenKhi3: Step = (wb, log) => {
   log.push("Ghi chú trang bị: sửa dòng khi_van");
 };
 
+// ---------- luyện khí lần 4: cột số cho danh văn và ngưỡng khí văn (phiên Sprint nhờ; số lấy từ câu mô tả, đề xuất) ----------
+
+/** Số của danh văn theo đơn vị code (phần nghìn, tick, số lần); rules đổi sang SkillMod của sim. */
+const DANH_VAN_SO: Record<string, string> = {
+  "TB-KI-061": "hoiChieuNhanhTicks: 10",
+  "TB-KI-062": "khienMoiMucTieu: 10; tuMucTieuThu: 3",
+  "TB-KI-063": "satThuongThem: 200",
+  "TB-KI-064": "tuSoMucTieu: 6",
+  "TB-KI-065": "doThemKhongChe: 1",
+  "TB-KI-066": "themLan: 1; heSoSatThuong: 850",
+  "TB-KI-067": "phongThuThem: 50; thoiGianTicks: 100",
+  "TB-KI-068": "giaiHieuUng: 1",
+  "TB-KI-069": "huyChieu: true",
+  "TB-KI-070": "xuyenKhien: 200",
+};
+/** Ngưỡng, chu kỳ trong câu tác dụng của khí văn (số chính vẫn ở gia_tri). */
+const KHI_VAN_PHU: Record<string, string> = {
+  "KV-CO-002": "nguongMau: 200",
+  "KV-TH-001": "nguongMau: 250",
+  "KV-TH-006": "chuKyTicks: 100",
+};
+
+const luyenKhi4: Step = (wb, log) => {
+  const text = (v: string): Cell => ({ v, fill: "de_xuat" });
+  for (const [sheet, values, label] of [["Danh khí", DANH_VAN_SO, "danh văn"], ["Khí văn", KHI_VAN_PHU, "khí văn"]] as const) {
+    const def = partDef(sheet), col = def.cols.find((c) => c.key === "tham_so")!;
+    const idHeader = def.cols.find((c) => c.key === def.id)!.header;
+    const s = wb.sheet(sheet), h = (s.cells[0] ?? []).map(norm), idAt = h.indexOf(idHeader);
+    const cellOf = (row: Value[] | undefined) => { const v = (values as Record<string, string>)[norm(row?.[idAt])]; return v ? text(v) : null; };
+    const at = h.indexOf(col.header);
+    if (at < 0) wb.addColumn(sheet, { v: col.header, fill: "tieu_de", bold: true, wrap: true }, (_r, row) => cellOf(row), col.width);
+    else s.cells.forEach((row, r) => { const c = r > 0 ? cellOf(row) : null; if (c) wb.setCell(sheet, r, at, c); });
+    log.push(`${sheet}: cột ${col.header}, ${Object.keys(values).length} ${label}`);
+  }
+  // Ghi chú: nói rõ cột mới
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), gh = (gs.cells[0] ?? []).map(norm);
+  const hd = (k: string) => gh.indexOf(gc.cols.find((c) => c.key === k)!.header);
+  const add: [string, string][] = [
+    ["danh_khi:", " danh_khi[].tham_so: số của danh văn theo đơn vị code (phần nghìn, tick, số lần); loại chiêu của danh văn là loại chiêu của khí hình."],
+    ["khi_van:", " khi_van[].tham_so: ngưỡng, chu kỳ trong câu tác dụng (nguongMau phần nghìn máu, chuKyTicks tick); trống là không có."],
+  ];
+  for (const [start, more] of add) {
+    const i = gs.cells.findIndex((r) => norm(r?.[hd("file")]) === "luyen_khi.json" && norm(r?.[hd("noi_dung")]).startsWith(start));
+    if (i < 0) throw new Error(`Ghi chú trang bị: không có dòng luyen_khi.json "${start}…"`);
+    const cur = norm(gs.cells[i][hd("noi_dung")]);
+    if (!cur.endsWith(more.trim())) wb.setCell(gc.sheet, i, hd("noi_dung"), text(cur + more));
+  }
+  log.push("Ghi chú trang bị: thêm câu về cột tham_so ở danh_khi, khi_van");
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
-  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3,
+  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

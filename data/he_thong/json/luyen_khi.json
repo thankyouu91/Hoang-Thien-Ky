@@ -4,9 +4,9 @@
     "Mở khóa (số ở luat): phân giải và Bảo Giám từ cấp 20; tẩy luyện từ Kết Đan; khí linh và khí văn từ Hóa Thần, món từ tím; song hệ khi có ngọc cấp 7; Ngọc Phách khi có ngọc cấp 10; danh khí từ cấp 250 Hạ vị hoặc từ Trung vị, tông môn có lò rèn cấp 9; tế luyện tầng pháp bảo từ Trung vị.",
     "tay_luyen: đổi loại chỉ số phụ của một món sang loại khác trong 4 loại của ô, cùng thang giá trị (giá trị ở lục +0, nhân độ hiếm, cường hóa, bí cảnh như chỉ số phụ cũ). Loại 1 là chỉ số phụ mặc định ở trang_bi.json o[].phu. Người thường quay ngẫu nhiên trong 3 loại còn lại; Tu rèn chọn thẳng. Mỗi lần tốn luat.tayLuyenKhiTinh Khí Tinh và luat.tayLuyenLinhThach linh thạch theo độ hiếm món, linh thạch đúng phẩm của vị diện.",
     "khi_linh: mỗi cấp cộng cong_chi_so vào hệ số cùng chỗ với cường hóa; món có khí linh từ cấp 1 khóa vào nhân vật. Cấp 3, 6, 9 mở ô khí văn, tối đa luat.khiVanToiDa theo độ hiếm; chọn 1 trong 3 khí văn của nhóm ô (cong: vũ khí, bao tay, ngọc bội; thu: mũ, áo, đai, giày).",
-    "khi_van: gia_tri là số chính của tác dụng để chỉnh. Mỗi người chọn tối đa luat.khiVanKichToiDa khí văn đang kích, khác nhau, mỗi khí văn tính 1 lần (luat.khiVanTinhToiDa = 1, giữ tạm cho code); tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi nguồn làm mềm vẫn còn ít nhất tham_so.json cong_phap.counterFloor (×1,2).",
+    "khi_van: gia_tri là số chính của tác dụng để chỉnh. Mỗi người chọn tối đa luat.khiVanKichToiDa khí văn đang kích, khác nhau, mỗi khí văn tính 1 lần (luat.khiVanTinhToiDa = 1, giữ tạm cho code); tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi nguồn làm mềm vẫn còn ít nhất tham_so.json cong_phap.counterFloor (×1,2). khi_van[].tham_so: ngưỡng, chu kỳ trong câu tác dụng (nguongMau phần nghìn máu, chuKyTicks tick); trống là không có.",
     "phan_giai: món từ lam ra Khí Tinh theo độ hiếm, cộng luat.phanGiaiKhiTinhMoiCapKhiLinh mỗi cấp khí linh; ngọc, Ý châu, ấn trả nguyên vẹn; luat.phanGiaiTraNac số nấc cường hóa trả lại thành Luyện Khí Thạch đúng phẩm. Khí Tinh từ đồ khóa cũng khóa.",
-    "danh_khi: luyện ở lò tông môn cấp luat.danhKhiLoToiThieu trở lên theo đồ phổ, phôi là 1 vũ khí đỏ cùng khí hình; Ý của khí hình mạnh gấp luat.danhKhiYHeSo lần Ý châu, không chiếm dòng khảm, cộng danh văn riêng. Mỗi người mặc luat.danhKhiMoiNguoi danh khí; khóa. Thất bại mất Khí Tinh và Vẫn Thiết, giữ phôi và đồ phổ.",
+    "danh_khi: luyện ở lò tông môn cấp luat.danhKhiLoToiThieu trở lên theo đồ phổ, phôi là 1 vũ khí đỏ cùng khí hình; Ý của khí hình mạnh gấp luat.danhKhiYHeSo lần Ý châu, không chiếm dòng khảm, cộng danh văn riêng. Mỗi người mặc luat.danhKhiMoiNguoi danh khí; khóa. Thất bại mất Khí Tinh và Vẫn Thiết, giữ phôi và đồ phổ. danh_khi[].tham_so: số của danh văn theo đơn vị code (phần nghìn, tick, số lần); loại chiêu của danh văn là loại chiêu của khí hình.",
     "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu, loại thưởng theo thứ được đếm (vũ khí, danh khí: ánh sáng vũ khí; ô khác: khung ô; pháp bảo, Phách: danh hiệu; pháp khí: ô kho; ấn bộ: ô túi; Ý châu: Khí Tinh). Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch.",
     "te_luyen_tang: pháp bảo đã tế luyện, từ Trung vị, lên tầng 1–5; linh_luc, hoi_chieu là cộng dồn tới tầng đó. Hồi chiêu pháp bảo sau mọi nguồn (set Cổ Tông, tầng) không dưới luat.teLuyenHoiChieuSan hồi chiêu gốc."
   ],
@@ -59,7 +59,8 @@
       "ten": "Phá Thuẫn Văn",
       "tac_dung": "Đòn đầu tiên lên mục tiêu đang có khiên +10% sát thương",
       "gia_tri": 100,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-CO-002",
@@ -67,7 +68,8 @@
       "ten": "Truy Mệnh Văn",
       "tac_dung": "Mục tiêu dưới 20% máu nhận thêm 5% sát thương",
       "gia_tri": 50,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": {"nguongMau":200}
     },
     {
       "ma": "KV-CO-003",
@@ -75,7 +77,8 @@
       "ten": "Tiên Phát Văn",
       "tac_dung": "Chiêu đầu tiên mỗi trận +15% sát thương",
       "gia_tri": 150,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-CO-004",
@@ -83,7 +86,8 @@
       "ten": "Liên Kích Văn",
       "tac_dung": "Đánh cùng mục tiêu 3 lần liên tiếp thì lần thứ 3 +8% sát thương",
       "gia_tri": 80,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-CO-005",
@@ -91,7 +95,8 @@
       "ten": "Khắc Hệ Văn",
       "tac_dung": "Đánh hệ mình khắc: hệ số ×1,5 thành ×1,53",
       "gia_tri": 1530,
-      "don_vi": "he_so"
+      "don_vi": "he_so",
+      "tham_so": null
     },
     {
       "ma": "KV-CO-006",
@@ -99,7 +104,8 @@
       "ten": "Tụ Linh Văn",
       "tac_dung": "Hạ gục kẻ địch thì hồi 3% mana",
       "gia_tri": 30,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-CO-007",
@@ -107,7 +113,8 @@
       "ten": "Phá Trận Văn",
       "tac_dung": "Sát thương lên trận nhãn, hộ trận +3% (chiến tranh)",
       "gia_tri": 30,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-CO-008",
@@ -115,7 +122,8 @@
       "ten": "Liệp Yêu Văn",
       "tac_dung": "Sát thương lên dị thú và boss PvE +4%",
       "gia_tri": 40,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-TH-001",
@@ -123,7 +131,8 @@
       "ten": "Hộ Mệnh Văn",
       "tac_dung": "Lần đầu máu dưới 25%: khiên 3% máu tối đa",
       "gia_tri": 30,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": {"nguongMau":250}
     },
     {
       "ma": "KV-TH-002",
@@ -131,7 +140,8 @@
       "ten": "Ngự Khắc Văn",
       "tac_dung": "Trúng đòn hệ khắc mình: hệ số ×1,5 thành ×1,47",
       "gia_tri": 1470,
-      "don_vi": "he_so"
+      "don_vi": "he_so",
+      "tham_so": null
     },
     {
       "ma": "KV-TH-003",
@@ -139,7 +149,8 @@
       "ten": "Phản Chấn Văn",
       "tac_dung": "Phản 3% sát thương cận chiến nhận được",
       "gia_tri": 30,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-TH-004",
@@ -147,7 +158,8 @@
       "ten": "Thiết Bích Văn",
       "tac_dung": "Đứng hàng trước: phòng thủ +3%",
       "gia_tri": 30,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-TH-005",
@@ -155,7 +167,8 @@
       "ten": "Tĩnh Tâm Văn",
       "tac_dung": "Đứng hàng sau: mana tối đa +3%",
       "gia_tri": 30,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-TH-006",
@@ -163,7 +176,8 @@
       "ten": "Hồi Xuân Văn",
       "tac_dung": "Hồi 1% máu mỗi 5 s",
       "gia_tri": 10,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": {"chuKyTicks":100}
     },
     {
       "ma": "KV-TH-007",
@@ -171,7 +185,8 @@
       "ten": "Định Thân Văn",
       "tac_dung": "Mỗi lần bị đẩy lùi chỉ bị đẩy một nửa quãng",
       "gia_tri": 500,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     },
     {
       "ma": "KV-TH-008",
@@ -179,7 +194,8 @@
       "ten": "Tị Kiếp Văn",
       "tac_dung": "Lôi kiếp gây ít hơn 5% sát thương (ngoài trận)",
       "gia_tri": 50,
-      "don_vi": "phan_nghin"
+      "don_vi": "phan_nghin",
+      "tham_so": null
     }
   ],
   "phan_giai": [
@@ -194,70 +210,80 @@
       "ten": "Thiên Vấn Kiếm",
       "khi_hinh": "kiem",
       "danh_van": "Cận chiến đơn chí mạng thì chiêu đó hồi chiêu nhanh 0,5 s",
-      "do_pho": "NL-DP-001"
+      "do_pho": "NL-DP-001",
+      "tham_so": {"hoiChieuNhanhTicks":10}
     },
     {
       "ma_vp": "TB-KI-062",
       "ten": "Đoạn Nhạc Đao",
       "khi_hinh": "dao",
       "danh_van": "Mỗi mục tiêu trúng quét từ thứ 3 trở đi cho người cầm khiên 1% máu tối đa",
-      "do_pho": "NL-DP-002"
+      "do_pho": "NL-DP-002",
+      "tham_so": {"khienMoiMucTieu":10,"tuMucTieuThu":3}
     },
     {
       "ma_vp": "TB-KI-063",
       "ten": "Lạc Tinh Cung",
       "khi_hinh": "cung",
       "danh_van": "Đòn tầm xa vào kẻ đang vận công +20% sát thương",
-      "do_pho": "NL-DP-003"
+      "do_pho": "NL-DP-003",
+      "tham_so": {"satThuongThem":200}
     },
     {
       "ma_vp": "TB-KI-064",
       "ten": "Phong Lôi Phiến",
       "khi_hinh": "phien",
       "danh_van": "Diện rộng trúng từ 6 mục tiêu thì lần vận công kế tiếp nhanh gấp đôi",
-      "do_pho": "NL-DP-004"
+      "do_pho": "NL-DP-004",
+      "tham_so": {"tuSoMucTieu":6}
     },
     {
       "ma_vp": "TB-KI-065",
       "ten": "Bất Động Côn",
       "khi_hinh": "con",
       "danh_van": "Khiên hộ thể của người cầm đỡ thêm 1 lần khống chế cho người được che",
-      "do_pho": "NL-DP-005"
+      "do_pho": "NL-DP-005",
+      "tham_so": {"doThemKhongChe":1}
     },
     {
       "ma_vp": "TB-KI-066",
       "ten": "Tạo Hóa Bút",
       "khi_hinh": "but",
       "danh_van": "Bùa chú thêm 1 lần mỗi trận, mỗi lần −15% sát thương",
-      "do_pho": "NL-DP-006"
+      "do_pho": "NL-DP-006",
+      "tham_so": {"themLan":1,"heSoSatThuong":850}
     },
     {
       "ma_vp": "TB-KI-067",
       "ten": "Tinh La Kỳ",
       "khi_hinh": "ky",
       "danh_van": "Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ trong 5 s",
-      "do_pho": "NL-DP-007"
+      "do_pho": "NL-DP-007",
+      "tham_so": {"phongThuThem":50,"thoiGianTicks":100}
     },
     {
       "ma_vp": "TB-KI-068",
       "ten": "Vọng Nguyệt Cầm",
       "khi_hinh": "cam",
       "danh_van": "Hồi phục giải luôn 1 hiệu ứng thiêu đốt hoặc độc",
-      "do_pho": "NL-DP-008"
+      "do_pho": "NL-DP-008",
+      "tham_so": {"giaiHieuUng":1}
     },
     {
       "ma_vp": "TB-KI-069",
       "ten": "Ngọc Lâu Tiêu",
       "khi_hinh": "tieu",
       "danh_van": "Khống chế trúng kẻ đang vận công hoặc đang bày trận thì chiêu đó mất luôn, không hoàn hồi chiêu",
-      "do_pho": "NL-DP-009"
+      "do_pho": "NL-DP-009",
+      "tham_so": {"huyChieu":true}
     },
     {
       "ma_vp": "TB-KI-070",
       "ten": "Phá Thiên Thương",
       "khi_hinh": "thuong",
       "danh_van": "Lướt tới xong, đòn kế tiếp xuyên 20% khiên",
-      "do_pho": "NL-DP-010"
+      "do_pho": "NL-DP-010",
+      "tham_so": {"xuyenKhien":200}
     }
   ],
   "bao_giam": [

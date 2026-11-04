@@ -146,6 +146,7 @@ export const PARTS: PartDef[] = [
     c("ma", "Mã", "text", { width: 11 }), c("nhom", "Nhóm ô (cong, thu)", "text", { width: 9 }), c("ten", "Tên", "text", { width: 15 }),
     c("tac_dung", "Tác dụng", "text", { width: 60 }), c("gia_tri", "Số chính", "qty", { unitCol: "don_vi", width: 9 }),
     c("don_vi", "Đơn vị", "unit", { width: 8 }),
+    c("tham_so", "Tham số phụ (đơn vị code: ngưỡng, chu kỳ)", "kv", { width: 24, nullable: true }),
   ]),
   T("Phân giải", "luyen_khi.json", "phan_giai", "do_hiem", [
     c("do_hiem", "Độ hiếm", "text", { width: 9 }), c("khi_tinh", "Khí Tinh nhận được", "int", { width: 10 }),
@@ -165,6 +166,7 @@ export const PARTS: PartDef[] = [
   T("Danh khí", "luyen_khi.json", "danh_khi", "ma_vp", [
     c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text", { width: 16 }), c("khi_hinh", "Khí hình", "text", { width: 9 }),
     c("danh_van", "Danh văn", "text", { width: 60 }), c("do_pho", "Đồ phổ", "text", { width: 11 }),
+    c("tham_so", "Tham số danh văn (đơn vị code)", "kv", { width: 36 }),
   ]),
   T("Bảo Giám", "luyen_khi.json", "bao_giam", "ma", [
     c("ma", "Mã trang", "text", { width: 11 }), c("ten", "Tên trang", "text", { width: 18 }),
