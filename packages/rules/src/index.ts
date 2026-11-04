@@ -5,5 +5,6 @@ export * from "./library.ts";
 export * from "./transmission.ts";
 export * from "./departure.ts";
 export * from "./equipment.ts";
+export * from "./board.ts";
 export * from "./artifacts.ts";
 export * from "./apply.ts";
