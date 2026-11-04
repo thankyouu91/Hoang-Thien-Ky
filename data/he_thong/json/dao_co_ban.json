@@ -40,8 +40,8 @@
       "mach": "cuc",
       "ten": "Âm Dương",
       "heSoMoc2": 2000,
-      "manaMax": -50,
-      "mo_ta": "Số ở mốc 2 của cả hai bộ ×2; mana tối đa −5% (như tổ hợp đối cực: mạnh mà tốn mana)"
+      "manaMax": -20,
+      "mo_ta": "Số ở mốc 2 của cả hai bộ ×2; mana tối đa −2% (như tổ hợp đối cực: mạnh mà tốn mana)"
     }
   ],
   "mach": {"thuan":"thuan","tuong_sinh":"sinh","tuong_hop":"sinh","doi_cuc":"cuc","trung_tinh":"trung","tuong_khac":"dut"},
