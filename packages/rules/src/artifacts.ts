@@ -3,6 +3,7 @@
 // Linh lực thay độ bền: mỗi lần kích hoạt tốn 1, hết thì không kích hoạt. Sim báo số lần đã dùng, rules trừ linh lực sau trận.
 import { mul, type ArtifactKind, type ArtifactSpec, type UnitSpec } from "@ktlp/sim";
 import PHAP_BAO from "../../../data/he_thong/json/phap_bao.json" with { type: "json" };
+import LK from "../../../data/he_thong/json/luyen_khi.json" with { type: "json" };
 import { GEAR } from "./config.ts";
 
 /** Một pháp bảo của nhân vật. */
@@ -11,6 +12,23 @@ export interface PhapBaoItem {
   linhLuc: number; // linh lực còn lại, 0 … tối đa của món
   teLuyen: boolean; // đã tế luyện (nhận chủ); chưa tế luyện thì chưa dùng được
   tuRen: boolean; // do chính nhân vật rèn (Tu rèn): +10% chỉ số chính
+  tang?: number; // tế luyện tầng 1–5 (từ Trung vị): linh lực tối đa thêm, hồi chiêu ngắn hơn (luyen_khi.json te_luyen_tang)
+}
+
+interface TangRow { tang: number; linh_luc: number; hoi_chieu: number }
+const TANG = LK.te_luyen_tang as TangRow[];
+const tangRow = (tang: number): TangRow | null => {
+  if (tang === 0) return null;
+  const r = TANG.find((x) => x.tang === tang);
+  if (!r) throw new Error(`Tế luyện tầng ${tang} sai`);
+  return r;
+};
+
+/** Linh lực tối đa của món sau tế luyện tầng. */
+export function phapBaoLinhLucToiDa(item: PhapBaoItem): number {
+  const base = phapBaoInfo(item.ma).linhLucToiDa;
+  const t = tangRow(item.tang ?? 0);
+  return t ? mul(base, 1000 + t.linh_luc) : base;
 }
 
 interface LoaiRow { id: string; chinh: { don_vi: string } }
@@ -44,7 +62,8 @@ export function artifactSpecs(items: PhapBaoItem[], trungViTroLen: boolean): Art
   return items.map((item) => {
     const info = phapBaoInfo(item.ma);
     if (!item.teLuyen) throw new Error(`${item.ma}: chưa tế luyện`);
-    if (item.linhLuc !== Math.floor(item.linhLuc) || item.linhLuc < 0 || item.linhLuc > info.linhLucToiDa) {
+    if ((item.tang ?? 0) > 0 && !trungViTroLen) throw new Error(`${item.ma}: tế luyện tầng chỉ từ Trung vị`);
+    if (item.linhLuc !== Math.floor(item.linhLuc) || item.linhLuc < 0 || item.linhLuc > phapBaoLinhLucToiDa(item)) {
       throw new Error(`${item.ma}: linh lực ${item.linhLuc} sai`);
     }
     const m = MON[item.ma];
@@ -52,7 +71,14 @@ export function artifactSpecs(items: PhapBaoItem[], trungViTroLen: boolean): Art
     if (!scale) throw new Error(`${item.ma}: chưa biết đơn vị ${LOAI[m.loai].chinh.don_vi}`);
     let power = m.chinh.gia_tri * scale;
     if (item.tuRen) power = mul(power, GEAR.selfForgedArtifact);
-    return { kind: info.loai, power, uses: Math.min(m.phu.so_lan_moi_tran, item.linhLuc), cooldownTicks: m.phu.hoi_chieu_ticks, energy: item.linhLuc };
+    const t = tangRow(item.tang ?? 0);
+    const base = m.phu.hoi_chieu_ticks;
+    return {
+      kind: info.loai, power, uses: Math.min(m.phu.so_lan_moi_tran, item.linhLuc),
+      cooldownTicks: t ? mul(base, 1000 + t.hoi_chieu) : base,
+      energy: item.linhLuc,
+      minCooldownTicks: mul(base, LK.luat.teLuyenHoiChieuSan), // sau mọi nguồn (Cổ Tông, tầng) không dưới 60% hồi chiêu gốc
+    };
   });
 }
 

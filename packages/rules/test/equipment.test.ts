@@ -51,7 +51,7 @@ test("mũ: máu theo chỉ số chuẩn, mana theo mana tối đa chuẩn", () =
 
 test("độ bền 0 thì món không cộng gì, kể cả ngọc", () => {
   const g = gearStats([item("TB-KI-001", { doBen: 0, kham: [gem("kim", 5)] })], LV, []);
-  assert.deepEqual(g, { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {} });
+  assert.deepEqual(g, { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {}, khiVan: {} });
 });
 
 test("ngọc: ô công cộng sát thương hệ, ô thủ cộng kháng hệ, trùng linh căn ×1,2", () => {

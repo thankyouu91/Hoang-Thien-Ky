@@ -22,7 +22,7 @@ test("mọi pháp bảo trong phap_bao.json đổi được sang sim", () => {
 });
 
 test("chỉ số chính theo đơn vị của sim; vàng, đỏ thêm 1 lần; tự rèn +10%", () => {
-  assert.deepEqual(artifactSpecs([pb("PB-TH-001")], false), [{ kind: "thuan", power: 500, uses: 2, cooldownTicks: 160, energy: 20 }]);
+  assert.deepEqual(artifactSpecs([pb("PB-TH-001")], false), [{ kind: "thuan", power: 500, uses: 2, cooldownTicks: 160, energy: 20, minCooldownTicks: 96 }]);
   assert.equal(artifactSpecs([pb("PB-TH-005")], false)[0].uses, 3);
   assert.equal(artifactSpecs([pb("PB-LU-004")], false)[0].power, 2000); // 2 ô = 2.000 milli-ô
   assert.equal(artifactSpecs([pb("PB-TH-001", { tuRen: true })], false)[0].power, 550);

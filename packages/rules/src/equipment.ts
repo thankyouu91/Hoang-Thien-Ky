@@ -14,13 +14,25 @@ import TRANG_BI from "../../../data/he_thong/json/trang_bi.json" with { type: "j
 import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
 import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
 import { GEAR } from "./config.ts";
-import { boardBonus, resonanceSideEffects, type BoardResult, type BoardSetup } from "./board.ts";
+import { boardBonus, machBetween, resonanceSideEffects, type BoardResult, type BoardSetup } from "./board.ts";
 import { addSetBehavior, emptySetFxAcc, setMilestoneAllowed } from "./setfx.ts";
+import {
+  LUYEN_KHI, canHaveKhiLinh, danhKhiOf, danhVanMod, khiLinhBonus, khiVanFx, khiVanInfo, khiVanSlots, phuRow, scaleSkillMod,
+} from "./luyen_khi.ts";
 
 export type SlotId = "vu_khi" | "mu" | "ao" | "dai" | "bao_tay" | "giay" | "ngoc_boi";
 export type RarityId = "luc" | "lam" | "tim" | "vang" | "do";
-/** Một dòng khảm: ngọc hệ, ấn bộ (set), Ý châu (chỉ vũ khí), hoặc dòng trống. */
-export type InlayLine = { loai: "ngoc"; he: Element; cap: number } | { loai: "an"; ma: string } | { loai: "y_chau"; ma: string } | null;
+/**
+ * Một dòng khảm: ngọc hệ, ngọc song hệ (hai hệ tương sinh hoặc tương hợp, mỗi hệ 60%), Phách (ô công, nâng trần mềm hệ đó),
+ * ấn bộ (set), Ý châu (chỉ vũ khí), hoặc dòng trống.
+ */
+export type InlayLine =
+  | { loai: "ngoc"; he: Element; cap: number }
+  | { loai: "song_he"; he: [Element, Element]; cap: number }
+  | { loai: "phach"; ma: string }
+  | { loai: "an"; ma: string }
+  | { loai: "y_chau"; ma: string }
+  | null;
 
 /** Một món cụ thể đang mặc. Ô và độ hiếm lấy theo kiểu trong trang_bi.json. */
 export interface EquipItem {
@@ -30,6 +42,9 @@ export interface EquipItem {
   biCanh: number; // thưởng bí cảnh 40–80 (phần nghìn), 0 nếu không phải đồ bí cảnh
   dongThem: number; // dòng khảm thêm của đồ bí cảnh, 1 hoặc 2 (quay khi rơi); 0 nếu không phải đồ bí cảnh
   kham: InlayLine[];
+  phu?: number; // loại chỉ số phụ 1–4 sau tẩy luyện; không ghi là loại 1 (mặc định)
+  khiLinhKn?: number; // kinh nghiệm khí linh (món từ tím); cấp tính theo luyen_khi.json
+  khiVan?: string[]; // khí văn đã chọn ở các ô mở theo cấp khí linh
 }
 
 /** Một hiệu ứng set như trong set.json. */
@@ -61,8 +76,10 @@ export interface GearStats {
   skillMods: Partial<Record<SkillType, SkillMod>>;
   /** Đạo Cơ Bàn: ô thông, món thêm mỗi bộ, cộng hưởng; chỉ có khi tính kèm bàn. */
   board?: BoardResult;
-  /** Hiệu ứng hành vi và khắc chế của set theo người mặc (sim UnitSpec.setFx). */
+  /** Hiệu ứng hành vi và khắc chế của set và khí văn theo người mặc (sim UnitSpec.setFx). */
   setFx: SetFx;
+  /** Khí văn đang có và số lần được tính (tối đa luat.khiVanTinhToiDa mỗi khí văn). */
+  khiVan: Record<string, number>;
 }
 
 interface SlotRow { id: string; chinh: { stat: string; gia_tri: number }; phu: { stat: string; gia_tri: number }; ngoc: string }
@@ -76,6 +93,10 @@ for (const r of TRANG_BI.do_hiem as RarityRow[]) RARITIES[r.id] = r;
 const KIEU: Record<string, KieuRow> = {};
 for (const k of TRANG_BI.kieu as KieuRow[]) KIEU[k.ma_vp] = k;
 const GEM_VALUE: number[] = (NGOC.cap as { gia_tri: number }[]).map((c) => c.gia_tri);
+interface PhachRow { ma_vp: string; he: Element; gia_tri: number; tran_toi_da: number }
+const PHACH: Record<string, PhachRow> = {};
+for (const p of NGOC.phach as PhachRow[]) PHACH[p.ma_vp] = p;
+const SONG_HE_SHARE = (NGOC.song_he as { moi_he: number }[])[0].moi_he;
 interface YChauRow { ma_vp: string; loai_chieu: string; chi_kham_vao: string; tham_so: Record<string, number | string> }
 const Y_CHAU: Record<string, YChauRow> = {};
 for (const y of NGOC.y_chau as unknown as YChauRow[]) Y_CHAU[y.ma_vp] = y;
@@ -138,10 +159,28 @@ function validate(item: EquipItem): void {
   const extraOk = item.biCanh === 0 ? item.dongThem === 0 : item.dongThem >= 1 && item.dongThem <= GEAR.secretExtraLines;
   if (!extraOk) throw new Error(`${item.kieu}: dòng khảm thêm ${item.dongThem} sai`);
   if (item.kham.length > maxInlayLines(item)) throw new Error(`${item.kieu}: quá số dòng khảm`);
+  const info = kieuInfo(item.kieu);
+  const slot = SLOTS[info.o];
+  if (item.phu !== undefined) phuRow(info.o, item.phu);
+  const kn = item.khiLinhKn ?? 0;
+  if (kn < 0) throw new Error(`${item.kieu}: kinh nghiệm khí linh sai`);
+  if (kn > 0 && !canHaveKhiLinh(info.doHiem)) throw new Error(`${item.kieu}: đồ ${info.doHiem} không có khí linh`);
+  const vans = item.khiVan ?? [];
+  if (vans.length > khiVanSlots(kn, info.doHiem)) throw new Error(`${item.kieu}: quá số ô khí văn đã mở`);
+  for (const ma of vans) if (khiVanInfo(ma).nhom !== slot.ngoc) throw new Error(`${item.kieu}: khí văn ${ma} không thuộc ô ${slot.ngoc}`);
+  const danhKhi = danhKhiOf(item.kieu) !== null;
   let seals = 0;
   let yChau = 0;
   for (const line of item.kham) {
-    if (line && line.loai === "ngoc" && (line.cap < 1 || line.cap > GEM_VALUE.length)) throw new Error(`${item.kieu}: ngọc cấp ${line.cap} sai`);
+    if (line && (line.loai === "ngoc" || line.loai === "song_he") && (line.cap < 1 || line.cap > GEM_VALUE.length)) throw new Error(`${item.kieu}: ngọc cấp ${line.cap} sai`);
+    if (line && line.loai === "song_he" && (line.he[0] === line.he[1] || machBetween(line.he[0], line.he[1]) !== "sinh")) {
+      throw new Error(`${item.kieu}: song hệ cần hai hệ tương sinh hoặc tương hợp`);
+    }
+    if (line && line.loai === "phach") {
+      if (!has(PHACH, line.ma)) throw new Error(`${item.kieu}: không có Phách ${line.ma}`);
+      if (slot.ngoc !== "cong") throw new Error(`${item.kieu}: Phách chỉ khảm vào ô công`);
+    }
+    if (line && line.loai === "y_chau" && danhKhi) throw new Error(`${item.kieu}: danh khí đã có sẵn Ý, không khảm thêm Ý châu`);
     if (line && line.loai === "an") {
       if (!has(SEAL_SET, line.ma)) throw new Error(`${item.kieu}: không có ấn bộ ${line.ma}`);
       seals++;
@@ -195,7 +234,8 @@ export function toSkillMod(loai: SkillType, thamSo: Record<string, number | stri
 /** Hệ số nhân của một món theo phần nghìn: độ hiếm × (1 + 3% mỗi nấc) × (1 + thưởng bí cảnh). */
 function itemFactor(item: EquipItem): number {
   const r = RARITIES[kieuInfo(item.kieu).doHiem];
-  return mul(mul(r.he_so, 1000 + GEAR.enhancePerLevel * item.nac), 1000 + item.biCanh);
+  // Khí linh cộng vào cùng chỗ với cường hóa (luyen_khi.json khi_linh[].cong_chi_so).
+  return mul(mul(r.he_so, 1000 + GEAR.enhancePerLevel * item.nac + khiLinhBonus(item.khiLinhKn ?? 0)), 1000 + item.biCanh);
 }
 
 function statAmount(stat: string, giaTri: number, factor: number, level: number): number {
@@ -214,11 +254,13 @@ export function softCap(raw: number, knee: number, max: number): number {
  * `mainElements` = hệ chủ các công pháp mang theo, để xét ràng buộc mốc 7 (không có thì không xét).
  */
 export function gearStats(items: EquipItem[], level: number, roots: Element[], board?: BoardSetup, mainElements?: Element[]): GearStats {
-  const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {} };
+  const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {}, khiVan: {} };
   const used: string[] = [];
   const pieces: Record<string, number> = {}; // id bộ → số món còn độ bền mang ấn bộ đó
   const gemDamage: Partial<Record<Element, number>> = {}; // tổng thô từ ngọc ô công, trước trần mềm
   const gemResist: Partial<Record<Element, number>> = {}; // tổng thô từ ngọc ô thủ, trước trần mềm
+  const phachCap: Partial<Record<Element, number>> = {}; // trần mềm sát thương hệ được Phách nâng
+  const khiVan = out.khiVan;
   for (const item of items) {
     validate(item);
     const info = kieuInfo(item.kieu);
@@ -227,7 +269,7 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[], b
     if (item.doBen <= 0) continue;
     const slot = SLOTS[info.o];
     const factor = itemFactor(item);
-    for (const part of [slot.chinh, slot.phu]) {
+    for (const part of [slot.chinh, phuRow(info.o, item.phu ?? 1)]) {
       const v = statAmount(part.stat, part.gia_tri, factor, level);
       if (FLAT.indexOf(part.stat) >= 0) out[part.stat as "hp" | "atk" | "def" | "manaMax"] += v;
       else out.bonuses[part.stat as BuffStat] = (out.bonuses[part.stat as BuffStat] ?? 0) + v;
@@ -238,15 +280,29 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[], b
         const y = yChauMod(line.ma);
         out.skillMods[y.loai] = y.mod;
       }
-      if (!line || line.loai !== "ngoc") continue;
-      let v = GEM_VALUE[line.cap - 1];
-      if (roots.indexOf(line.he) >= 0) v = mul(v, GEAR.rootGemBonus);
+      if (!line || (line.loai !== "ngoc" && line.loai !== "song_he" && line.loai !== "phach")) continue;
       const target = slot.ngoc === "cong" ? gemDamage : gemResist;
-      target[line.he] = (target[line.he] ?? 0) + v;
+      const add = (e: Element, base: number) => {
+        target[e] = (target[e] ?? 0) + (roots.indexOf(e) >= 0 ? mul(base, GEAR.rootGemBonus) : base);
+      };
+      if (line.loai === "ngoc") add(line.he, GEM_VALUE[line.cap - 1]);
+      else if (line.loai === "song_he") for (const e of line.he) add(e, mul(GEM_VALUE[line.cap - 1], SONG_HE_SHARE));
+      else {
+        const p = PHACH[line.ma];
+        add(p.he, p.gia_tri);
+        phachCap[p.he] = Math.max(phachCap[p.he] ?? 0, p.tran_toi_da); // mỗi hệ chỉ một Phách tính trần
+      }
+    }
+    for (const ma of item.khiVan ?? []) khiVan[ma] = Math.min(LUYEN_KHI.khiVanTinhToiDa, (khiVan[ma] ?? 0) + 1);
+    const dk = danhKhiOf(item.kieu);
+    if (dk) {
+      // Danh khí: Ý của khí hình ×1,5, không chiếm dòng khảm, cộng danh văn cùng loại chiêu.
+      const y = yChauMod(dk.yChau);
+      out.skillMods[y.loai] = { ...scaleSkillMod(y.mod, LUYEN_KHI.danhKhiYHeSo), ...danhVanMod(item.kieu).mod };
     }
   }
   const t = NGOC.tran;
-  for (const e of Object.keys(gemDamage) as Element[]) out.elementDamage[e] = softCap(gemDamage[e] ?? 0, t.satThuongMem, t.satThuongToiDa);
+  for (const e of Object.keys(gemDamage) as Element[]) out.elementDamage[e] = softCap(gemDamage[e] ?? 0, t.satThuongMem, phachCap[e] ?? t.satThuongToiDa);
   for (const e of Object.keys(gemResist) as Element[]) out.resist[e] = softCap(gemResist[e] ?? 0, t.khangMem, t.khangToiDa);
   // Bàn chỉ thêm món cho bộ đã có ít nhất 2 món trên đồ, nên vẫn tối đa 3 bộ cùng mở (7 ô, mỗi món tối đa 1 ấn).
   let heSo: Record<string, number> = {};
@@ -269,9 +325,14 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[], b
       else if (m.loai === "hanh_vi" || m.loai === "khac_che") addSetBehavior(acc, bo, m.so, m.tham_so as Record<string, number | boolean | string>);
     }
   }
-  // Ý châu đứng trước set nếu cùng loại chiêu có cùng khóa.
+  // Ý châu (và Ý của danh khí) đứng trước set nếu cùng loại chiêu có cùng khóa.
   for (const t of Object.keys(acc.mods) as SkillType[]) out.skillMods[t] = { ...acc.mods[t], ...out.skillMods[t] };
-  out.setFx = acc.setFx;
+  // Khí văn: các trường riêng với set, trừ trần khắc (Hỗn Độn và Ngự Khắc Văn) thì lấy mức thấp hơn.
+  const kv = khiVanFx(khiVan);
+  out.setFx = { ...acc.setFx, ...kv.setFx };
+  if (acc.setFx.counterCap !== undefined && kv.setFx.counterCap !== undefined) out.setFx.counterCap = Math.min(acc.setFx.counterCap, kv.setFx.counterCap);
+  if (kv.monsterDamage) out.bonuses.monsterDamage = (out.bonuses.monsterDamage ?? 0) + kv.monsterDamage;
+  for (const k of Object.keys(kv.outside)) out.outside[k] = (out.outside[k] ?? 0) + kv.outside[k];
   for (const k of Object.keys(acc.outside)) out.outside[k] = (out.outside[k] ?? 0) + acc.outside[k];
   // Ngọc Tủy: kháng thêm mọi hệ đang khắc linh căn chính (đánh nó ×1,5 trở lên).
   if (acc.resistVsCounters && roots.length > 0) {
