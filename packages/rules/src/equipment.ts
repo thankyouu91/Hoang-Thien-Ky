@@ -78,7 +78,7 @@ export interface GearStats {
   board?: BoardResult;
   /** Hiệu ứng hành vi và khắc chế của set và khí văn theo người mặc (sim UnitSpec.setFx). */
   setFx: SetFx;
-  /** Khí văn có trên đồ đang mặc và số lần được tính (1 lần; dữ liệu cũ có luat.khiVanTinhToiDa thì theo khóa đó). */
+  /** Khí văn có trên đồ đang mặc; mỗi khí văn tính 1 lần dù khảm trên nhiều món. */
   khiVan: Record<string, number>;
   /** Khí văn đang kích (có tác dụng): tối đa luat.khiVanKichToiDa khí văn khác nhau; các ô còn lại để sưu tầm. */
   khiVanKich: string[];
@@ -303,8 +303,7 @@ export function gearStats(
         phachCap[p.he] = Math.max(phachCap[p.he] ?? 0, p.tran_toi_da); // mỗi hệ chỉ một Phách tính trần
       }
     }
-    const tinh = (LUYEN_KHI as { khiVanTinhToiDa?: number }).khiVanTinhToiDa ?? 1;
-    for (const ma of item.khiVan ?? []) khiVan[ma] = Math.min(tinh, (khiVan[ma] ?? 0) + 1);
+    for (const ma of item.khiVan ?? []) khiVan[ma] = 1;
     const dk = danhKhiOf(item.kieu);
     if (dk) {
       // Danh khí: Ý của khí hình ×1,5, không chiếm dòng khảm, cộng danh văn cùng loại chiêu.

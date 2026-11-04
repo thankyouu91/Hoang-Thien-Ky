@@ -14,7 +14,6 @@ const red = (kieu: string, extra: Partial<EquipItem> = {}) => item(kieu, { nac: 
 const gem = (he: "kim" | "moc" | "thuy", cap: number): InlayLine => ({ loai: "ngoc", he, cap });
 const MAX_KN = 4500;
 const LV = 100;
-const TINH = (LK.luat as { khiVanTinhToiDa?: number }).khiVanTinhToiDa ?? 1;
 const KICH = (LK.luat as { khiVanKichToiDa?: number }).khiVanKichToiDa ?? 3;
 const kvGia = (ma: string) => LK.khi_van.find((k) => k.ma === ma)!.gia_tri;
 
@@ -35,19 +34,18 @@ test("ô khí văn: mở ở cấp 3, 6, 9, tối đa theo độ hiếm; đúng 
   assert.deepEqual(gearStats([red("TB-KI-058", { khiLinhKn: 600, khiVan: ["KV-CO-003"] })], LV, []).setFx, { openerBonus: 150 });
 });
 
-test("khí văn trên nhiều món tính 1 lần (dữ liệu cũ: luat.khiVanTinhToiDa); Ngự Khắc Văn với Hỗn Độn lấy trần khắc thấp hơn", () => {
+test("khí văn trên nhiều món tính 1 lần; Ngự Khắc Văn với Hỗn Độn lấy trần khắc thấp hơn", () => {
   const kv = (o: string, ma: string) => red(`TB-${o}-058`, { khiLinhKn: MAX_KN, khiVan: [ma] });
   const g = gearStats([kv("KI", "KV-CO-005"), kv("BT", "KV-CO-005"), kv("NB", "KV-CO-005")], LV, []);
-  const n = Math.min(3, TINH);
-  assert.deepEqual([g.khiVan["KV-CO-005"], g.setFx.counterBoost], [n, (kvGia("KV-CO-005") - 1500) * n]);
+  assert.deepEqual([g.khiVan["KV-CO-005"], g.setFx.counterBoost], [1, kvGia("KV-CO-005") - 1500]);
   const t = gearStats([kv("MU", "KV-TH-002"), kv("AO", "KV-TH-002")], LV, []);
-  assert.equal(t.setFx.counterCap, 1500 - (1500 - kvGia("KV-TH-002")) * Math.min(2, TINH));
+  assert.equal(t.setFx.counterCap, kvGia("KV-TH-002"));
   const hd = SET.bo.find((b) => b.id === "hon_don")!.an;
   const both = [{ ...kv("MU", "KV-TH-002"), kham: [{ loai: "an", ma: hd } as InlayLine] }, ...["AO", "DA", "GI"].map((o) => red(`TB-${o}-058`, { kham: [{ loai: "an", ma: hd }] }))];
   assert.equal(gearStats(both, LV, []).setFx.counterCap, 1400); // Hỗn Độn mốc 4 ×1,4 thấp hơn 1470
   const lieu = gearStats([kv("KI", "KV-CO-008")], LV, []);
   assert.equal(lieu.bonuses.monsterDamage, kvGia("KV-CO-008"));
-  assert.equal(gearStats([kv("MU", "KV-TH-007")], LV, []).setFx.knockbackResist, 500); // Định Thân: đẩy một nửa quãng
+  assert.equal(gearStats([kv("MU", "KV-TH-007")], LV, []).setFx.knockbackResist, kvGia("KV-TH-007")); // Định Thân: đẩy ngắn đi
 });
 
 test("khí văn kích: tối đa luat.khiVanKichToiDa khí văn khác nhau có trên đồ; không chọn thì lấy theo thứ tự món", () => {

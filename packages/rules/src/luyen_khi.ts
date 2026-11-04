@@ -10,7 +10,7 @@ import TRANG_BI from "../../../data/he_thong/json/trang_bi.json" with { type: "j
 export const LUYEN_KHI = LK.luat;
 interface LevelRow { cap: number; kinh_nghiem_tich_luy: number; cong_chi_so: number; mo_o_khi_van: boolean }
 interface PhuRow { o: string; loai: number; stat: string; gia_tri: number }
-interface KhiVanRow { ma: string; nhom: "cong" | "thu"; gia_tri: number; don_vi: string }
+interface KhiVanRow { ma: string; nhom: "cong" | "thu"; gia_tri: number }
 interface DanhKhiRow { ma_vp: string; khi_hinh: string }
 const LEVELS = LK.khi_linh as LevelRow[];
 const PHU = LK.tay_luyen as PhuRow[];
@@ -161,8 +161,7 @@ export function khiVanFx(counts: Record<string, number>): KhiVanFx {
       case "KV-TH-004": f.frontDef = v * c; break;
       case "KV-TH-005": f.backMana = v * c; break;
       case "KV-TH-006": f.regenPulse = v * c; f.regenPulseTicks = 100; break;
-      // Định Thân: bị đẩy một nửa quãng (gia_tri phần nghìn); dữ liệu cũ ghi 10 tick thì lấy 500.
-      case "KV-TH-007": f.knockbackResist = Math.min(1000, (KHI_VAN[ma].don_vi === "phan_nghin" ? v : 500) * c); break;
+      case "KV-TH-007": f.knockbackResist = Math.min(1000, v * c); break; // bị đẩy ngắn đi v phần nghìn quãng
       case "KV-TH-008": out.outside.loiKiepGiam = (out.outside.loiKiepGiam ?? 0) + v * c; break;
       default: throw new Error(`Chưa biết đổi khí văn ${ma}`);
     }
