@@ -400,6 +400,11 @@ export interface BanDoView extends Stamped {
   /** Khoá hình đảo của tông mình (sơn môn trên bản đồ). */
   sectIsland: string;
   owners: Record<number, PointOwner>;
+  /**
+   * Sơn môn có chủ ở các vùng khác, theo mã vùng rồi id điểm (vùng mình xem owners). Chỗ sơn môn còn trống không có ở đây
+   * và không hiện trên bản đồ (GDD mục 3: lập tông thì đặt ngẫu nhiên vào một chỗ còn trống).
+   */
+  sectSites: Record<string, Record<number, PointOwner>>;
   /** Điểm trong tầm Truyền Tống Trận của tông mình: chỉ chiếm được các điểm này (GDD mục 5). */
   inRange: number[];
   held: number;

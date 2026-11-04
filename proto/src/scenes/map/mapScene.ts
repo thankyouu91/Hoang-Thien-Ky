@@ -34,6 +34,12 @@ const ROAD_ZOOM = 1.2;
 const REGION_LABEL_ZOOM = 1.3;
 /** Chữ thay tên vùng cho khu đặc biệt khi thu nhỏ. */
 const ZONE_TAG = "CẤM KHU";
+/** Sơn môn của tông NPC hay tông ở vùng khác: hiện hình và tên từ độ phóng này (dữ liệu để z/t của sơn môn trống). */
+const SECT_ZOOM = 1;
+/** Bóng điểm dưới sương: ô nhỏ hơn ô nút, màu mực nhạt. */
+const GHOST_NODE = 11;
+const GHOST_FILL = "rgba(42, 29, 20, 0.14)";
+const GHOST_EDGE = "rgba(42, 29, 20, 0.34)";
 // Tên địa danh dùng cùng chữ có chân với dashboard (mẫu tranh giấy, 2026-11-03).
 const FONT = '"Noto Serif", Cambria, "Times New Roman", serif';
 const INK = "#2a1d14";
@@ -269,7 +275,7 @@ export class MapScene implements Scene {
         .map((t) =>
           t === "cua_bi_canh"
             ? `${row(t, w.types[t].label, w.types[t].color, L.forms[t])}${TIERS.map((k) => row(`${t}:${k}`, w.tiers[k].label, w.tiers[k].color, L.forms[t], true)).join("")}`
-            : row(t, w.types[t].label, w.types[t].color, L.forms[t]),
+            : row(t, w.types[t].hidden ? `${w.types[t].label} (có chủ)` : w.types[t].label, w.types[t].color, L.forms[t]),
         )
         .join("")}
       <button type="button" class="reset" data-show-all>Hiện tất cả</button>`;
@@ -301,10 +307,7 @@ export class MapScene implements Scene {
     this.rebuild();
     this.updateHere();
     this.showProgress();
-    if (!this.fitted && this.v) {
-      this.fitted = true;
-      this.showHome(false);
-    }
+    this.fitFirst();
     this.applyPending();
     this.syncMini();
   }
@@ -321,26 +324,41 @@ export class MapScene implements Scene {
     const alerts = new Map(d.map.alerts.flatMap((a) => a.points.map((id) => [id, { title: a.title, endsAt: a.endsAt }] as const)));
     const hidden = (p: RegionPoint) => this.hidden.has(p.type) || (p.type === "cua_bi_canh" && !!p.tier && this.hidden.has(`cua_bi_canh:${p.tier}`));
     const out: Cand[] = [];
+    // Bóng điểm dưới sương (không tên, không bấm được); loại ẩn chỉ có bóng khi có chủ, sơn môn có chủ hiện từ SECT_ZOOM.
+    const ghosts: typeof this.ghosts = [];
+    const ghost = (p: RegionPoint, z: number | null | undefined, owned: boolean) => {
+      const zz = w.types[p.type].hidden ? (owned ? SECT_ZOOM : null) : z;
+      if (zz != null) ghosts.push({ x: p.x, y: p.y, form: L.forms[p.type] ?? "nut", z: zz });
+    };
     for (const r of w.regions) {
       const m = this.regions.get(r.code);
       const home = r.code === d.map.region;
       const zt = L.points[r.code];
+      const sites = home ? d.owners : (d.sectSites[r.code] ?? {});
       if (!m || (!home && this.prefs.fog)) {
-        if (this.hidden.has("thanh_chu")) continue;
-        const p = m?.points[r.capital.id];
-        out.push(this.cand(w, r, p, "thanh_chu", r.capital.name, r.capital.x, r.capital.y, { z: zt?.z[r.capital.id], t: zt?.t[r.capital.id] }));
+        if (!this.hidden.has("thanh_chu")) {
+          const p = m?.points[r.capital.id];
+          out.push(this.cand(w, r, p, "thanh_chu", r.capital.name, r.capital.x, r.capital.y, { z: zt?.z[r.capital.id], t: zt?.t[r.capital.id] }));
+        }
+        for (const p of m?.points ?? []) if (p.id !== r.capital.id) ghost(p, zt?.z[p.id], !!sites[p.id]);
         continue;
       }
       for (const p of m.points) {
+        const own = sites[p.id];
+        const mine = home && p.id === d.map.sonMon;
+        // Chỗ sơn môn còn trống không vẽ, kể cả khi tắt sương: tông mới bốc ngẫu nhiên vào đó.
+        if (w.types[p.type].hidden && !own && !mine) continue;
         // Điểm của sự kiện đang diễn ra hiện cả trong sương (sự kiện được báo cho cả vùng).
         const alert = home ? alerts.get(p.id) : undefined;
-        if (home && this.prefs.fog && !revealed.has(p.id) && p.type !== "thanh_chu" && !alert) continue;
-        const own = home ? d.owners[p.id] : undefined;
-        const mine = home && p.id === d.map.sonMon;
+        if (home && this.prefs.fog && !revealed.has(p.id) && p.type !== "thanh_chu" && !alert) {
+          ghost(p, zt?.z[p.id], !!own);
+          continue;
+        }
         // Sơn môn của mình, điểm đang bị đánh, điểm của sự kiện và chỗ mình đứng không bị lọc mất.
         if (hidden(p) && !mine && !own?.attacked && !alert && !(home && p.id === hereId)) continue;
         const name = p.type === "son_mon" && own ? own.name : (p.name ?? POINT_NAMES[p.type]);
-        out.push(this.cand(w, r, p, p.type, name, p.x, p.y, { own, gate: home && gates.has(p.id), mine, here: home && p.id === hereId, alert, z: zt?.z[p.id], t: zt?.t[p.id] }));
+        const zz = w.types[p.type].hidden ? SECT_ZOOM : undefined;
+        out.push(this.cand(w, r, p, p.type, name, p.x, p.y, { own, gate: home && gates.has(p.id), mine, here: home && p.id === hereId, alert, z: zz ?? zt?.z[p.id], t: zz ?? zt?.t[p.id] }));
       }
     }
     // Khu đặc biệt: bật sương thì chỉ thấy các cửa ải (luôn hiện, như mốc đã biết); khu phủ sương tới khi vào tận nơi.
@@ -351,7 +369,12 @@ export class MapScene implements Scene {
       const gates = new Set(zn.gates);
       const zt = L.points[zn.code];
       for (const p of m.points) {
-        if ((this.prefs.fog && !gates.has(p.id)) || hidden(p)) continue;
+        if (w.types[p.type].hidden) continue;
+        if (this.prefs.fog && !gates.has(p.id)) {
+          ghost(p, zt?.z[p.id], false);
+          continue;
+        }
+        if (hidden(p)) continue;
         const c = this.cand(w, zr, p, p.type, p.name ?? POINT_NAMES[p.type], p.x, p.y, { z: zt?.z[p.id], t: zt?.t[p.id] });
         if (gates.has(p.id)) c.dyn = true;
         out.push({ ...c, zone: zn });
@@ -359,7 +382,11 @@ export class MapScene implements Scene {
     }
     out.sort((a, b) => a.prio - b.prio || a.order - b.order);
     this.cands = out;
+    this.ghosts = ghosts;
   }
+
+  /** Điểm dưới sương: chỉ vẽ bóng mờ để thấy vùng có điểm mà chưa biết là gì. */
+  private ghosts: { x: number; y: number; form: PointForm; z: number }[] = [];
 
   private zoneRegions = new Map<string, WorldRegion>();
   /** Khu đặc biệt dưới dạng vùng cho ô nút và đường (không có thành chủ). */
@@ -374,11 +401,14 @@ export class MapScene implements Scene {
     o: { own?: PointOwner; gate?: boolean; mine?: boolean; here?: boolean; alert?: Cand["alert"]; z?: number | null; t?: number | null } = {},
   ): Cand {
     const { own, gate = false, mine = false } = o;
+    // Điểm của tông NPC không là điểm động: hiện theo độ phóng như điểm thường.
+    const npc = own?.owner === "npc";
+    const ownDyn = !!own && !npc;
     const prio =
-      type === "thanh_chu" || mine ? 0 : own || gate || o.alert || type === "cua_bi_canh" ? 1 : type === "deo" || type === "ben_do" || type === "linh_tuyen" ? 2 : 3;
+      type === "thanh_chu" || mine ? 0 : ownDyn || gate || o.alert || type === "cua_bi_canh" ? 1 : npc || type === "deo" || type === "ben_do" || type === "linh_tuyen" ? 2 : 3;
     const color = type === "cua_bi_canh" && p?.tier ? w.tiers[p.tier].color : w.types[type].color;
     const order = (own?.attacked || o.alert ? 0 : 1) * 1e7 + TYPE_ORDER.indexOf(type) * 1e5 + (p?.id ?? 0);
-    const dyn = mine || !!own || gate || !!o.here || !!o.alert;
+    const dyn = mine || ownDyn || gate || !!o.here || !!o.alert;
     // Mỏ của mình hay đang bị đánh vẽ thành ô nút cho dễ thấy, mỏ khác là chấm.
     const form = dyn ? "nut" : (this.labels?.forms[type] ?? "nut");
     const z = o.z ?? Infinity;
@@ -448,6 +478,17 @@ export class MapScene implements Scene {
   }
 
   /** Phóng tới vùng của mình: thấy cả vùng, vị trí của mình nằm trong khung. */
+  /**
+   * Lần đầu có dữ liệu và khung nhìn thật thì phóng tới vùng mình. Khung đang ẩn có cỡ 0: phóng theo đó ra số âm, bản đồ
+   * lật ngược, nên chờ khung có cỡ (draw gọi lại mỗi khung).
+   */
+  private fitFirst(): void {
+    const v = this.v;
+    if (this.fitted || !this.data || !v || v.w <= 0 || v.h - v.bottom <= 0) return;
+    this.fitted = true;
+    this.showHome(false);
+  }
+
   private showHome(animate = true): void {
     const v = this.v;
     const w = this.world;
@@ -467,7 +508,7 @@ export class MapScene implements Scene {
   }
 
   private fitZoom(r: Rect, v: View, pad = 8): number {
-    return Math.min((v.w - 2 * pad) / r.w, (v.h - v.bottom - 2 * pad) / r.h);
+    return Math.max(0.01, Math.min((v.w - 2 * pad) / r.w, (v.h - v.bottom - 2 * pad) / r.h));
   }
 
   private flyTo(x: number, y: number, zoom: number): void {
@@ -509,6 +550,7 @@ export class MapScene implements Scene {
 
   draw(v: View): void {
     this.v = v;
+    this.fitFirst();
     const w = this.world;
     const L = this.layers;
     const d = this.data;
@@ -525,9 +567,10 @@ export class MapScene implements Scene {
     }
     L.drawBackground(ctx, view, z * v.dpr);
     const inView = (r: WorldRegion) => r.bbox[0] < view.x + view.w && r.bbox[2] > view.x && r.bbox[1] < view.y + view.h && r.bbox[3] > view.y;
-    const shown = [...w.regions, ...(w.zones ?? []).map((zn) => this.zoneRegion(zn))].filter((r) => inView(r) && (!this.prefs.fog || r.code === d.map.region));
-    if (!this.prefs.fog && z >= PRIO_ZOOM[1])
-      for (const r of shown) if (!this.regions.has(r.code) && !this.loadingRegions.has(r.code)) void this.ensureRegion(r.code);
+    const near = [...w.regions, ...(w.zones ?? []).map((zn) => this.zoneRegion(zn))].filter(inView);
+    const shown = near.filter((r) => !this.prefs.fog || r.code === d.map.region);
+    // Phóng đủ gần thì tải file điểm các vùng trong khung nhìn, cả dưới sương (để vẽ bóng điểm).
+    if (z >= PRIO_ZOOM[1]) for (const r of near) if (!this.regions.has(r.code) && !this.loadingRegions.has(r.code)) void this.ensureRegion(r.code);
     if (z >= ROAD_ZOOM) L.drawRoads(ctx, z, shown.map((r) => r.code));
     if (this.prefs.fog) L.drawFog(ctx, view);
     L.drawZones(ctx, z);
@@ -663,6 +706,30 @@ export class MapScene implements Scene {
       drawRiverNames(ctx, this.labels!.rivers.filter(seen), cam, v, z, placer);
     }
 
+    // Bóng điểm dưới sương: ô hoặc chấm nhạt, không tên, không bấm được, chỉ đặt vào chỗ còn trống. Đang lọc ở Chú giải thì
+    // không vẽ (bóng không cho biết loại).
+    if (this.prefs.fog && !filtered) {
+      ctx.fillStyle = GHOST_FILL;
+      ctx.strokeStyle = GHOST_EDGE;
+      ctx.lineWidth = 1;
+      for (const g of this.ghosts) {
+        if (z < g.z) continue;
+        const s = cam.toScreen(g.x, g.y, v);
+        if (s.x < -pad || s.y < -pad || s.x > v.w + pad || s.y > v.h + pad) continue;
+        const dot = g.form === "cham";
+        if (!placer.node(s.x, s.y, dot ? B.dot : GHOST_NODE, dot ? B.dotGap : B.gap)) continue;
+        if (dot) {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, B.dot / 2 - 0.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        } else {
+          ctx.fillRect(s.x - GHOST_NODE / 2, s.y - GHOST_NODE / 2, GHOST_NODE, GHOST_NODE);
+          ctx.strokeRect(s.x - GHOST_NODE / 2 + 0.5, s.y - GHOST_NODE / 2 + 0.5, GHOST_NODE - 1, GHOST_NODE - 1);
+        }
+      }
+    }
+
     // Ô nút, chấm mỏ, dấu chủ điểm, điểm đang bị đánh, cửa bí cảnh đang mở.
     const blink = Math.floor(this.t * 2) % 2 === 0;
     for (const { c, x, y, size } of placed) {
@@ -793,12 +860,13 @@ export class MapScene implements Scene {
     const w = this.world!;
     const p = c.p!;
     const home = c.region.code === d.map.region;
-    const own = home ? d.owners[p.id] : undefined;
+    const own = c.own ?? (home ? d.owners[p.id] : undefined);
     const lit = !home || d.map.revealed.includes(p.id);
     const rows: [string, string][] = [];
     rows.push(["Loại", w.types[p.type].label]);
+    if (p.type === "son_mon" && own && p.name) rows.push(["Địa danh", esc(p.name)]);
     rows.push(["Vùng", esc(c.region.name)]);
-    if (home) rows.push(["Chủ", own ? esc(own.name) : p.type === "hang_di_thu" ? "Dị thú" : HOLDABLE.includes(p.type) ? "Chưa ai giữ" : "—"]);
+    if (home || own) rows.push(["Chủ", own ? esc(own.name) : p.type === "hang_di_thu" ? "Dị thú" : HOLDABLE.includes(p.type) ? "Chưa ai giữ" : "—"]);
     rows.push(["Cấp nguy hiểm", String(p.danger)]);
     rows.push(["Tới thành chủ", `${p.stages} chặng · ${p.distance} ô`]);
     if (own?.level) rows.push(["Cấp mỏ", `${own.level} · ${fmt(own.perHour ?? 0)}/giờ`]);

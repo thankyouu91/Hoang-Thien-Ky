@@ -11,8 +11,12 @@ import { HOLDABLE, stagesFrom, type RegionMap } from "../../scenes/map/region.ts
 export const PLAYER = "p1";
 export const SECT = "loi_tri_phong";
 export const REGION = "loi_dinh_coc";
-/** Vị trí sơn môn của tông mẫu: Cổ tích, cách thành chủ 2 chặng, 6 điểm giữ được trong 1 chặng. */
-const SON_MON = 84;
+/** Hạt giống bốc chỗ sơn môn: cố định để bản mẫu giống nhau mỗi lần tải; máy chủ thật bốc ngẫu nhiên khi lập tông. */
+const LANDING_SEED = 20_261_104;
+/** Tầm Truyền Tống Trận lớn nhất ở Hạ vị: chỗ bốc cách sơn môn tông mạnh hơn quá chừng này chặng (đề xuất GDD mục 7). */
+const SAFE_STAGES = 5;
+/** Phần chỗ sơn môn còn trống của mỗi vùng đã có tông NPC lập (bản mẫu). */
+const NPC_SHARE = 0.3;
 
 const H = 3600_000;
 const MIN = 60_000;
@@ -188,6 +192,79 @@ function buildRules(now: number): GameState {
   return s;
 }
 
+/** Số ngẫu nhiên có hạt giống (mulberry32), cho bản mẫu ổn định. */
+function seeded(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4_294_967_296;
+  };
+}
+
+/**
+ * Bốc một chỗ sơn môn còn trống (GDD mục 3: lập tông thì đặt ngẫu nhiên vào chỗ còn trống). Theo đề xuất GDD mục 7, chỗ bốc
+ * cách sơn môn các tông mạnh hơn quá SAFE_STAGES chặng; không còn chỗ như vậy thì bốc trong các chỗ xa họ nhất. `fit` lọc
+ * thêm (bản mẫu cần chỗ có đủ điểm quanh), không chỗ nào hợp thì bỏ qua lọc này.
+ */
+export function landSect(m: RegionMap, taken: Set<number>, stronger: number[], rand: () => number, fit = (_id: number) => true): number {
+  const all = m.points.filter((p) => p.type === "son_mon" && !taken.has(p.id)).map((p) => p.id);
+  const fitting = all.filter(fit);
+  const free = fitting.length ? fitting : all;
+  const far = stronger.map((id) => stagesFrom(m, id));
+  const gap = (id: number) => Math.min(Infinity, ...far.map((d) => d.get(id) ?? Infinity));
+  const safe = free.filter((id) => gap(id) > SAFE_STAGES);
+  const best = Math.max(...free.map(gap));
+  const pool = safe.length ? safe : free.filter((id) => gap(id) === best);
+  const id = pool[Math.floor(rand() * pool.length)];
+  taken.add(id);
+  return id;
+}
+
+export interface NpcSect {
+  pointId: number;
+  name: string;
+  level: number;
+}
+
+const NPC_HEAD = ["Thanh", "Huyền", "Tử", "Kim", "Ngọc", "Vân", "Thiên", "Bích", "Huyết", "Hàn", "Liệt", "Lưu", "Tinh", "Nguyệt", "Phong", "Thủy", "Hỏa", "Mộc", "Thạch", "Linh", "Vạn", "Cửu", "Bạch", "Hắc", "Xích", "Thương", "Vô", "Lạc", "Tuyết", "Kiếm"];
+const NPC_TAIL = ["Vân", "Hà", "Sơn", "Kiếm", "Tuyết", "Lâm", "Nguyệt", "Dương", "Tiêu", "Hư", "Diệp", "Tâm", "Hồ", "Uyên", "Châu", "Long", "Hạc", "Tùng", "Liên", "Nhạn"];
+const NPC_KIND = ["Môn", "Tông", "Các", "Cung", "Phái", "Điện", "Cốc", "Phong", "Đài", "Lâu", "Trang", "Viện"];
+
+/**
+ * Tông NPC lấp NPC_SHARE chỗ sơn môn còn trống của mỗi vùng (bản mẫu: tông của người chơi khác đã lập; Cấm Khu không có).
+ * Mỗi vùng bốc theo hạt giống riêng, xét vùng theo mã, nên kết quả không đổi theo thứ tự tải; tên không trùng cả vị diện
+ * và không trùng `used`. `taken` là các chỗ đã có tông trong vùng mình.
+ */
+export function npcSects(maps: RegionMap[], home: string, taken: Set<number>, used: Set<string>): Record<string, NpcSect[]> {
+  const out: Record<string, NpcSect[]> = {};
+  const names = new Set(used);
+  for (const m of [...maps].sort((a, b) => a.region.code.localeCompare(b.region.code))) {
+    const code = m.region.code;
+    const rand = seeded(LANDING_SEED + [...code].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7));
+    const free = m.points.filter((p) => p.type === "son_mon" && !(code === home && taken.has(p.id))).map((p) => p.id);
+    // Xáo Fisher–Yates rồi lấy phần đầu.
+    for (let i = free.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [free[i], free[j]] = [free[j], free[i]];
+    }
+    out[code] = free.slice(0, Math.round(free.length * NPC_SHARE)).map((pointId) => {
+      let name = "";
+      while (!name || names.has(name)) {
+        const pick = (a: string[]) => a[Math.floor(rand() * a.length)];
+        const head = pick(NPC_HEAD);
+        const tail = pick(NPC_TAIL);
+        if (head !== tail) name = `${head} ${tail} ${pick(NPC_KIND)}`;
+      }
+      names.add(name);
+      return { pointId, name, level: 5 + Math.floor(rand() * 56) };
+    });
+  }
+  return out;
+}
+
 /** Điểm giữ được trong `range` chặng quanh một sơn môn, gần nhất trước. */
 function nearbyHoldable(m: RegionMap, sonMon: number, range: number, taken: Set<number>): number[] {
   const d = stagesFrom(m, sonMon);
@@ -201,9 +278,27 @@ export function createWorld(region: RegionMap, now: number): World {
   const rules = buildRules(now);
   const point = (id: number) => region.points[id];
 
-  // Lãnh thổ: 6 điểm trong 1 chặng quanh sơn môn (cấp 34: tối đa 6 điểm, tầm 1 chặng).
+  // Các tông khác trong vùng: hai đồng minh, hai đối thủ; mỗi tông giữ vài điểm quanh sơn môn của họ.
+  const others: Omit<OtherSect, "points" | "sonMon">[] = [
+    { id: "van_loi_cac", name: "Vạn Lôi Các", level: 41, faction: "Chính", ally: true, online: 6, color: "#5aa9e6" },
+    { id: "thien_loi_dai", name: "Thiên Lôi Đài", level: 27, faction: "Chính", ally: true, online: 3, color: "#7bc96f" },
+    { id: "thanh_phong_cac", name: "Thanh Phong Các", level: 38, faction: "Tà", ally: false, online: 9, color: "#c77dff" },
+    { id: "tu_dien_mon", name: "Tử Điện Môn", level: 22, faction: "Tà", ally: false, online: 2, color: "#e9a23b" },
+  ];
+  // Sơn môn bốc ngẫu nhiên vào chỗ còn trống, tông mạnh lập trước; tông mình cần chỗ có đủ 6 điểm giữ được trong 1 chặng.
+  const rand = seeded(LANDING_SEED);
   const taken = new Set<number>();
-  const mine = nearbyHoldable(region, SON_MON, 1, taken).slice(0, 6);
+  const order = [...others.map((o) => ({ id: o.id, level: o.level })), { id: SECT, level: rules.sects[SECT].level }].sort((a, b) => b.level - a.level);
+  const site = new Map<string, number>();
+  for (const s of order) {
+    const stronger = order.filter((o) => o.level > s.level && site.has(o.id)).map((o) => site.get(o.id)!);
+    const fit = s.id === SECT ? (id: number) => nearbyHoldable(region, id, 1, taken).length >= 6 : undefined;
+    site.set(s.id, landSect(region, taken, stronger, rand, fit));
+  }
+  const sonMon = site.get(SECT)!;
+
+  // Lãnh thổ: 6 điểm trong 1 chặng quanh sơn môn (cấp 34: tối đa 6 điểm, tầm 1 chặng).
+  const mine = nearbyHoldable(region, sonMon, 1, taken).slice(0, 6);
   mine.forEach((id) => taken.add(id));
   const mineLevel: Partial<Record<PointType, number>> = { mo_linh_thach: 3, mo_quang: 2, mo_duoc: 2 };
   const held: HeldPoint[] = mine.map((id, i) => ({
@@ -217,18 +312,11 @@ export function createWorld(region: RegionMap, now: number): World {
   const target = held.find((h) => h.type === "mo_linh_thach" && h !== held[1]) ?? held[0];
   target.attacked = { by: "Huyết Sát Môn", endsAt: now + 38 * MIN };
 
-  // Các tông khác trong vùng: hai đồng minh, hai đối thủ; mỗi tông giữ vài điểm quanh sơn môn của họ.
-  const others: Omit<OtherSect, "points">[] = [
-    { id: "van_loi_cac", name: "Vạn Lôi Các", level: 41, faction: "Chính", sonMon: 29, ally: true, online: 6, color: "#5aa9e6" },
-    { id: "thien_loi_dai", name: "Thiên Lôi Đài", level: 27, faction: "Chính", sonMon: 39, ally: true, online: 3, color: "#7bc96f" },
-    { id: "thanh_phong_cac", name: "Thanh Phong Các", level: 38, faction: "Tà", sonMon: 44, ally: false, online: 9, color: "#c77dff" },
-    { id: "tu_dien_mon", name: "Tử Điện Môn", level: 22, faction: "Tà", sonMon: 53, ally: false, online: 2, color: "#e9a23b" },
-  ];
   const sects: OtherSect[] = others.map((o) => {
-    taken.add(o.sonMon);
-    const pts = nearbyHoldable(region, o.sonMon, o.level >= 50 ? 2 : 1, taken).slice(0, 5);
+    const sonMon = site.get(o.id)!;
+    const pts = nearbyHoldable(region, sonMon, o.level >= 50 ? 2 : 1, taken).slice(0, 5);
     pts.forEach((id) => taken.add(id));
-    return { ...o, points: pts };
+    return { ...o, sonMon, points: pts };
   });
 
   const thanhChu = region.points.find((p) => p.type === "thanh_chu")!.id;
@@ -240,7 +328,7 @@ export function createWorld(region: RegionMap, now: number): World {
   return {
     rules,
     region,
-    sonMon: SON_MON,
+    sonMon,
     names,
     online: { p1: true, m2: true, m3: false, m4: true, m5: true, m6: false, m7: false, m8: true, m9: false, m10: true, n1: true, n2: true, n3: true },
     npc: { n1: true, n2: true, n3: true },
@@ -298,7 +386,7 @@ export function createWorld(region: RegionMap, now: number): World {
       { id: "phi_thang_dai", name: "Phi Thăng Đài", level: 0, locked: "Mở ở cấp tông môn 200" },
     ],
     // Đang đi từ thành chủ về sơn môn, còn 14 phút.
-    travel: { from: thanhChu, to: SON_MON, startsAt: now - 9 * MIN, endsAt: now + 14 * MIN },
+    travel: { from: thanhChu, to: sonMon, startsAt: now - 9 * MIN, endsAt: now + 14 * MIN },
     reports: [
       { id: 1, seed: 11, title: "Thủ mỏ linh thạch trước Huyết Sát Môn", at: now - 2 * H, arena: "mo_linh_thach" },
       { id: 2, seed: 2, title: "Hang dị thú cấp 58", at: now - 5 * H, arena: "cao_nguyen" },

@@ -18,13 +18,13 @@ import THU_CANH_GIOI from "../../../../data/he_thong/json/thu_canh_gioi.json";
 import THU_KICH_PHAT from "../../../../data/he_thong/json/thu_kich_phat.json";
 import NHIEM_VU from "../../../../data/nhiem_vu/ha_nhiem_vu.json";
 import { sampleBattle } from "../../mock/sampleBattle.ts";
-import { loadRegion, POINT_NAMES, stagesFrom } from "../../scenes/map/region.ts";
+import { loadRegion, loadWorld, POINT_NAMES, stagesFrom } from "../../scenes/map/region.ts";
 import type {
   BagItem, BanDoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, GearItem, Go, LienMinhView,
   MiniMapView, MountView, NhanVatView, ScrollCard, StatLine, StatSource, TechniqueCard, TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
 import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.ts";
-import { createWorld, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, todayAt, type World } from "./world.ts";
+import { createWorld, npcSects, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, todayAt, type NpcSect, type World } from "./world.ts";
 
 const H = 3600_000;
 const KT = THAM_SO.kinh_te;
@@ -673,11 +673,25 @@ export class MockDashboardSource implements DashboardSource {
     };
   }
 
+  private npc?: Promise<Record<string, NpcSect[]>>;
+  /** Tông NPC cả vị diện: dựng lần đầu mở bản đồ (cần file điểm mọi vùng; màn bản đồ cũng dùng lại các file này). */
+  private npcSects(): Promise<Record<string, NpcSect[]>> {
+    const w = this.w;
+    return (this.npc ??= loadWorld()
+      .then((plane) => Promise.all(plane.regions.map((r) => loadRegion(r.code))))
+      .then((maps) => npcSects(maps, REGION, new Set([w.sonMon, ...w.sects.map((s) => s.sonMon)]), new Set([w.sect.name, ...w.sects.map((s) => s.name), "Huyết Sát Môn"]))));
+  }
+
   async banDo(): Promise<BanDoView> {
     const w = this.w;
     const now = this.now();
     const role = this.me.role;
+    const npc = await this.npcSects();
     const owners: BanDoView["owners"] = {};
+    for (const s of npc[REGION] ?? []) owners[s.pointId] = { owner: "npc", name: s.name };
+    const sectSites: BanDoView["sectSites"] = {};
+    for (const [code, list] of Object.entries(npc))
+      if (code !== REGION) sectSites[code] = Object.fromEntries(list.map((s) => [s.pointId, { owner: "npc", name: s.name }]));
     owners[w.sonMon] = { owner: "minh", name: w.sect.name };
     for (const h of w.held) {
       owners[h.pointId] = {
@@ -703,6 +717,7 @@ export class MockDashboardSource implements DashboardSource {
       map: this.miniMap(),
       sectIsland: `tong_mon/${w.sect.model.id}`,
       owners,
+      sectSites,
       inRange: [...dist].filter(([, d]) => d <= row.range).map(([id]) => id),
       held: w.held.length,
       maxHeld: row.maxPoints,

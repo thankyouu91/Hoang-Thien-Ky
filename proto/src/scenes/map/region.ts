@@ -66,7 +66,8 @@ export interface WorldMap {
   map: { width: number; height: number };
   /** Ảnh nền chia ô: ô (col, row) ở mức L phủ [col, row, col + 1, row + 1] × tile / L đơn vị bản đồ. */
   background: { tile: number; path: string; levels: { level: number; cols: number; rows: number }[] };
-  types: Record<PointType, { label: string; color: string }>;
+  /** hidden: loại chỉ hiện chỗ có chủ (sơn môn: chỗ còn trống để tông mới bốc vào, không vẽ). */
+  types: Record<PointType, { label: string; color: string; hidden?: boolean }>;
   tiers: Record<Tier, { label: string; color: string }>;
   terrains: Record<string, string>;
   regions: WorldRegion[];
@@ -94,6 +95,8 @@ export interface MapLabels {
   /** Loại điểm theo thứ tự quan trọng. */
   order: PointType[];
   forms: Record<PointType, PointForm>;
+  /** Loại không tự hiện theo độ phóng (z/t null): chỉ vẽ chỗ có chủ. */
+  hidden?: PointType[];
   /** Theo mã vùng, chỉ số là id điểm: z độ phóng bắt đầu hiện hình, t độ phóng bắt đầu hiện tên. */
   points: Record<string, { z: (number | null)[]; t: (number | null)[] }>;
   /** Chỗ rộng nhất của vùng, đặt tên vùng ở đây. */
