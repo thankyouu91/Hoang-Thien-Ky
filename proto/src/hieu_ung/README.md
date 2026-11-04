@@ -58,7 +58,7 @@ Mỗi lần ra chiêu có bốn pha: khởi chiêu, đường bay, chạm trúng
 
 ## Dáng chiêu đặc trưng (người dùng đề xuất 2026-11-04)
 
-Dáng thay hình gốc của loại chiêu ở pha 1–3 (`dang.ts`). Nét hệ khi trúng và trạng thái kéo dài vẫn giữ. Đã có 10 dáng:
+Dáng thay hình gốc của loại chiêu ở pha 1–3 (`dang.ts`, `dang_he.ts`). Nét hệ khi trúng và trạng thái kéo dài vẫn giữ. Đã có 23 dáng; đợt đầu 10 dáng:
 
 | Dáng | Loại chiêu dùng được | Hình |
 |---|---|---|
@@ -73,24 +73,34 @@ Dáng thay hình gốc của loại chiêu ở pha 1–3 (`dang.ts`). Nét hệ 
 | Lốc xoáy | diện rộng, khống chế | lốc xoáy thành hình ở người ra chiêu, lướt tới vùng, cuốn bụi lá |
 | Đồng tiền bay | tầm xa, bùa chú | chuỗi đồng tiền vàng lật bay tới, chạm thì tung toé |
 
+Đợt theo hệ, 13 dáng (người dùng chọn 2026-11-04):
+
+| Dáng | Hệ, loại chiêu tự chọn | Hình |
+|---|---|---|
+| Hỏa long cuộn tới | Hỏa: tầm xa, bùa chú | rồng lửa thân nhiều đốt lượn sóng bay tới, tàn lửa rơi |
+| Thiên hỏa lưu tinh | Hỏa: diện rộng | thiên thạch lửa rơi chéo xuống từng mục tiêu, nổ hố, khói |
+| Thủy long quyển | Thủy: diện rộng, khống chế | gợn nước rồi cột nước xoáy dâng giữa vùng, đổ xuống loang ra |
+| Sóng thần quét ngang | Thủy: cận chiến quét | con sóng lớn có bọt trắng trên đỉnh lướt ngang qua mục tiêu |
+| Rễ cây trói | Mộc: khống chế, diện rộng | vết nứt xanh chạy dưới đất, rễ cây trồi quấn lên chân |
+| Hoa nở | Mộc: hồi phục | cánh hoa bay tới đồng đội, hoa nở dưới chân rồi cánh bay lên |
+| Phật thủ ấn | Quang: bùa chú, diện rộng | bàn tay vàng khổng lồ hiện trên không, ấn xuống, in dấu tay lên đất |
+| Thánh quang thập tự | Quang: hồi phục, hộ thể | tia sáng từ trời xuống, thập tự sáng đứng trên đồng đội |
+| Liệt nhật | Cực dương: diện rộng, bùa chú | mặt trời nhỏ thành hình trên vùng rồi rơi xuống nổ tia |
+| Nguyệt thực | Cực âm: diện rộng | vùng tối với trăng khuyết hút hạt vào tâm, co lại rồi bùng tím |
+| Quỷ thủ | Âm lãnh: khống chế, diện rộng | vệt tối bò dưới đất, tay ma trồi lên nắm chân mục tiêu |
+| Bão tuyết | Cực hàn: diện rộng | gió tuyết thổi chéo khắp vùng, sương băng phủ đất |
+| Kim cương xử | Kim: cận chiến đơn | chày kim cương xoay trên không rồi giáng thẳng xuống |
+
 Chọn dáng (`dang_chon.ts`, đề xuất; trận thật chưa có dữ liệu dáng của từng công pháp):
-1. Sát thủ đánh cận chiến, thân pháp: huyết tuyến.
-2. Hệ chủ Âm lãnh, Cực âm (âm tà) đánh tầm xa, khống chế, bùa chú: đầu lâu.
-3. Diện rộng theo hệ: Lôi thiên lôi, Thổ và Cực hàn gai trồi, Phong lốc xoáy.
+1. Tài năng: sát thủ đánh cận chiến, thân pháp ra huyết tuyến; Tu kim tiền đánh tầm xa ra đồng tiền bay.
+2. Hệ chủ theo bảng `BY_ELEMENT` (cột "Hệ, loại chiêu tự chọn" ở trên, cùng Lôi thiên lôi, Thổ gai trồi, Cực hàn khống chế gai băng, Phong lốc xoáy).
+3. Âm tà còn lại (Âm lãnh, Cực âm) đánh tầm xa, khống chế, bùa chú: đầu lâu.
 4. Kim hệ hoặc cầm kiếm: diện rộng là mưa kiếm, bùa chú là cự kiếm, tầm xa và quét là kiếm trận.
 5. Cầm đao, quét hoặc diện rộng: đao khí.
-6. Tu kim tiền đánh tầm xa: đồng tiền bay.
 
 Vũ khí lấy theo ngoại hình màn Trận (`assignLooks`), tài năng theo `tu_si/<tài năng>` của replay. Đề xuất về sau: thêm cột "Dáng chiêu" cho tàn quyển trong Excel, sim mang theo lên replay, dáng ghi sẵn được ưu tiên hơn luật trên. Trang xem thử có ô "Dáng chiêu" để ép một dáng.
 
 Ý tưởng cho đợt sau (chưa làm):
-- Theo hệ:
-  - Hỏa: hỏa long cuộn tới; thiên hỏa lưu tinh (thiên thạch lửa rơi).
-  - Thủy: thủy long quyển (cột nước xoáy); sóng thần quét ngang.
-  - Mộc: rễ cây trồi trói cả vùng; hoa nở khi hồi phục.
-  - Quang: Phật thủ ấn (bàn tay vàng khổng lồ ấn xuống); thánh quang thập tự.
-  - Cực dương: liệt nhật (mặt trời nhỏ rơi). Cực âm: nguyệt thực (vùng tối hút vào).
-  - Âm lãnh: quỷ thủ trồi từ đất kéo chân. Cực hàn: bão tuyết. Kim: kim cương xử giáng.
 - Theo tài năng, vũ khí GDD mục 6:
   - Tu thể: quyền ảnh dồn dập. Tu pháp: vòng phù văn quanh pháp trượng bắn tia.
   - Tu trận: trận bàn bay ra xoay rồi nổ. Tu đan: hồ lô phun lửa đan, độc vụ.

@@ -184,21 +184,21 @@ function luuTinh(x: Ctx, s: Shot): boolean {
   const fire = COLORS.hoa.glow;
   if (t >= start && t < c.tick + s.S(0.3)) {
     const q = ramp(t, start, c.tick);
-    glow(e, L.AIR, z.x - 60, z.y, 220, 40 + 20 * q, mix(fire, BLACK, 0.3), 0.35 * q * (1 - ramp(t, c.tick, c.tick + s.S(0.3))) * x.zoneK, 0.6, 0);
+    glow(e, L.AIR, z.x - 40, z.y, 160, 40 + 20 * q, mix(fire, BLACK, 0.3), 0.35 * q * (1 - ramp(t, c.tick, c.tick + s.S(0.3))) * x.zoneK, 0.6, 0);
   }
-  const D = Math.max(2, s.S(0.25));
+  const D = Math.max(2, s.S(0.35));
   const n = count(r, 5) + c.targets.length;
   for (let j = 0; j < n; j++) {
     const id = j < c.targets.length ? c.targets[j] : undefined;
     const p = id !== undefined ? x.foot(id, c.tick) : inZone(z, s.seed, 700 + j);
     if (!p) continue;
     const tf = id !== undefined ? c.tick : c.tick - s.S(0.15) + rnd(s.seed, 720 + j) * s.S(0.35);
-    const sx = p.x - 90;
+    const sx = p.x - 60;
     if (t >= tf - D && t < tf) {
       const q = easeIn((t - (tf - D)) / D);
       const hx = sx + (p.x - sx) * q;
-      const hz = 230 * (1 - q);
-      beam(e, L.AIR, sx + (p.x - sx) * Math.max(0, q - 0.3), p.y, 230 * (1 - Math.max(0, q - 0.3)), hx, p.y, hz, 4, fire, 0, 0.8 * r.bright, 0.8, 0.4, 0.7, 0.6);
+      const hz = 160 * (1 - q);
+      beam(e, L.AIR, sx + (p.x - sx) * Math.max(0, q - 0.3), p.y, 160 * (1 - Math.max(0, q - 0.3)), hx, p.y, hz, 4, fire, 0, 0.8 * r.bright, 0.8, 0.4, 0.7, 0.6);
       glow(e, L.AIR, hx, p.y, hz, 14, fire, r.bright, 0.8, 0.8);
       sprite(e, L.AIR, CELL.rock, hx, p.y, hz, 6, 6, t * 0.3, mix(COLORS.tho.base, fire, 0.5), r.bright, 0.2, 0.2);
     }
@@ -429,12 +429,12 @@ function phatThu(x: Ctx, s: Shot): boolean {
   if (t >= w0 && t < t0) {
     const q = (t - w0) / (t0 - w0);
     const k = easeOut(q / 0.5);
-    sprite(e, L.AIR, CELL.palm, p.x, p.y, 170 + size, size * k, size * k, 0, gold, k * r.bright, 0.5, 0.5);
-    glow(e, L.AIR, p.x, p.y, 170 + size * 0.6, size, gold, 0.4 * q * r.bright, 1, 0.4);
-    rays(e, L.AIR, p.x, p.y, 170 + size * 0.6, size * 1.8, gold, 0.4 * q * r.bright, 10, t * 0.02, 10, 0.2);
+    sprite(e, L.AIR, CELL.palm, p.x, p.y, 110 + size, size * k, size * k, 0, gold, k * r.bright, 0.5, 0.5);
+    glow(e, L.AIR, p.x, p.y, 110 + size * 0.6, size, gold, 0.4 * q * r.bright, 1, 0.4);
+    rays(e, L.AIR, p.x, p.y, 110 + size * 0.6, size * 1.8, gold, 0.4 * q * r.bright, 10, t * 0.02, 10, 0.2);
   } else if (t >= t0 && t < c.tick) {
     const q = easeIn((t - t0) / Math.max(1, c.tick - t0));
-    const pz = 170 * (1 - q) + 6 * q;
+    const pz = 110 * (1 - q) + 6 * q;
     sprite(e, L.AIR, CELL.palm, p.x, p.y, pz + size, size, size, 0, gold, r.bright, 0.5, 0.6);
     for (let i = 0; i < 3; i++) beam(e, L.AIR, p.x + (i - 1) * size * 0.4, p.y, pz + size * 2 + 50, p.x + (i - 1) * size * 0.4, p.y, pz + size * 1.6, 1.2, gold, 0, 0.6 * r.bright, 1, 0.4, 0.6, 0.6);
   }
@@ -504,7 +504,7 @@ function lietNhat(x: Ctx, s: Shot): boolean {
   if (t >= w0 && t < c.tick) {
     const grow = easeOut(ramp(t, w0, t0));
     const fallq = easeIn(ramp(t, t0, c.tick));
-    const pz = 190 * (1 - fallq) + 12 * fallq;
+    const pz = 95 * (1 - fallq) + 12 * fallq;
     const rad = big * (0.3 + 0.7 * grow);
     glow(e, L.AIR, p.x, p.y, pz, rad * 1.8, sun, 0.6 * r.bright, 1, 0.2);
     glow(e, L.AIR, p.x, p.y, pz, rad, mix(sun, WHITE, 0.5), r.bright, 0.6, 1, 0.6);
@@ -625,7 +625,7 @@ function baoTuyet(x: Ctx, s: Shot): boolean {
   if (t >= start && t < end) {
     const k = ramp(t, start, c.tick - s.S(0.2)) * (1 - ramp(t, c.tick + s.S(0.4), end)) * x.zoneK;
     groundGlow(e, L.GROUND, z.x, z.y, z.rx, z.ry, ice, 0.25 * k, 0.5);
-    const n = count(r, 26);
+    const n = count(r, 34);
     const wx = 0.9;
     const wy = 0.35;
     for (let i = 0; i < n; i++) {
@@ -638,8 +638,8 @@ function baoTuyet(x: Ctx, s: Shot): boolean {
       const inside = (px - z.x) ** 2 / z.rx ** 2 + (py - z.y) ** 2 / z.ry ** 2 < 1;
       if (!inside) continue;
       const pz = 8 + 50 * rnd(s.seed, 1430 + i);
-      if (i % 3 === 0) motif(e, L.AIR, "cuc_han", px, py, pz, 3.2, t * 0.2 + i, WHITE, 0.9 * k * r.bright, 0.4);
-      else sprite(e, L.AIR, CELL.streak, px, py, pz, 7, 1.2, Math.atan2(wy, wx), ice, 0.8 * k * r.bright, 0.6, 0.4);
+      if (i % 3 === 0) motif(e, L.AIR, "cuc_han", px, py, pz, 4.2, t * 0.2 + i, WHITE, k * r.bright, 0.4);
+      else sprite(e, L.AIR, CELL.streak, px, py, pz, 10, 1.7, Math.atan2(wy, wx), ice, k * r.bright, 0.6, 0.4);
     }
   }
   hits(x, s, 0.45, 0.8, 0.9);
@@ -660,12 +660,12 @@ function kimCuongXu(x: Ctx, s: Shot): boolean {
   if (t >= w0 && t < t0) {
     const q = (t - w0) / (t0 - w0);
     const k = easeOut(q / 0.4);
-    sprite(e, L.AIR, CELL.vajra, p.x, p.y, 150 - 10 * q, size * k, size * k, t * 0.06, gold, k * r.bright, 0.5, 0.5);
-    glow(e, L.AIR, p.x, p.y, 150 - 10 * q, size, gold, 0.5 * q * r.bright, 1, 0.4);
-    rays(e, L.AIR, p.x, p.y, 150 - 10 * q, size * 2, gold, 0.4 * q * r.bright, 8, t * 0.04, 10, 0.2);
+    sprite(e, L.AIR, CELL.vajra, p.x, p.y, 115 - 10 * q, size * k, size * k, t * 0.06, gold, k * r.bright, 0.5, 0.5);
+    glow(e, L.AIR, p.x, p.y, 115 - 10 * q, size, gold, 0.5 * q * r.bright, 1, 0.4);
+    rays(e, L.AIR, p.x, p.y, 115 - 10 * q, size * 2, gold, 0.4 * q * r.bright, 8, t * 0.04, 10, 0.2);
   } else if (t >= t0 && t < c.tick) {
     const q = easeIn((t - t0) / Math.max(1, c.tick - t0));
-    const pz = 140 * (1 - q) + 22 * q;
+    const pz = 105 * (1 - q) + 22 * q;
     sprite(e, L.AIR, CELL.vajra, p.x, p.y, pz + size * 0.9, size, size, Math.PI / 2, gold, r.bright, 0.5, 0.6);
     for (let i = 0; i < 2; i++) beam(e, L.AIR, p.x + (i ? 6 : -6), p.y, pz + size + 60, p.x + (i ? 6 : -6), p.y, pz + size, 1.2, gold, 0, 0.6 * r.bright, 1, 0.5, 0.6, 0.6);
   }
