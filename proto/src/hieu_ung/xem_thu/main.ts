@@ -259,6 +259,12 @@ function film(rows: ("old" | "new")[] = ["old", "new"]): HTMLCanvasElement | nul
   if (!player || !tl) return null;
   const v = app.view;
   const gl = document.querySelector<HTMLCanvasElement>(".ktlp-hieu-ung canvas");
+  // Pane ẩn thì rAF thưa: tự vẽ một khung để màn Trận chọn chiều sân, rồi khung camera nếu chưa.
+  battle.draw(v);
+  if (!framed) {
+    framed = true;
+    frameCamera();
+  }
   // Vùng cắt: ôm mọi người trong trận mẫu (toạ độ màn hình px CSS), chừa chỗ cho hiệu ứng bay cao.
   const pts = current.units.map((u) => {
     const p = inner.place(u.pos, inner.lat(u.id));
@@ -344,10 +350,17 @@ function showFilm(rows?: ("old" | "new")[]): void {
 }
 $("xt-film").onclick = () => showFilm();
 
+/** Đổi lựa chọn rồi chờ trận mẫu mới nạp xong (dùng từ console khi chụp ảnh). */
+async function go(p: Partial<Pick>): Promise<void> {
+  pick = { ...pick, grade: null, variant: null, sub: null, ult: false, ...p };
+  reload();
+  while (!inner.player) await new Promise((r) => setTimeout(r, 20));
+}
+
 window.addEventListener("hashchange", () => {
   const next = readHash();
   if (JSON.stringify(next) === JSON.stringify(pick)) return;
   pick = next;
   reload();
 });
-Object.assign(window, { xemThu: { battle, app, inner, sampleReplay, film, showFilm, timeline, styleOf: () => styleOf(pick) } });
+Object.assign(window, { xemThu: { battle, app, inner, sampleReplay, film, showFilm, timeline, showcase, go, styleOf: () => styleOf(pick) } });

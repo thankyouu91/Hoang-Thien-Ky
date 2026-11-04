@@ -36,6 +36,11 @@ export class Emitter {
   readonly cap: number;
   /** Số tấm bị bỏ vì đầy bộ đệm ở khung này */
   dropped = 0;
+  /**
+   * Nhân phần cộng sáng của mọi tấm. Nền sân màn Trận sáng (đá, đất) nên cộng sáng dễ ngả trắng và mất màu hệ:
+   * giữ khoảng một nửa, phần còn lại hòa màu thường để màu hệ đọc được; lõi trắng nhỏ vẫn sáng.
+   */
+  addScale = 0.55;
 
   constructor(cap = 6144) {
     this.cap = cap;
@@ -72,7 +77,7 @@ export class Emitter {
     d[o + 3] = rot;
     d[o + 4] = hx;
     d[o + 5] = hy;
-    d[o + 6] = add;
+    d[o + 6] = add * this.addScale;
     d[o + 7] = kind;
     d[o + 8] = c[0];
     d[o + 9] = c[1];
@@ -137,7 +142,7 @@ export const COLORS = Object.fromEntries(
     const base = hex(ELEMENT_STYLE[el].color);
     const m = Math.max(base[0], base[1], base[2], 0.05);
     const lifted: RGB = [base[0] / m, base[1] / m, base[2] / m];
-    return [el, { base, glow: mix(lifted, WHITE, 0.25), deep: mix(base, BLACK, 0.35) }];
+    return [el, { base, glow: mix(lifted, WHITE, 0.12), deep: mix(base, BLACK, 0.35) }];
   }),
 ) as Record<ElementId, ElementColors>;
 

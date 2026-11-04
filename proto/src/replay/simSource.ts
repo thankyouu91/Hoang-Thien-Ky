@@ -5,9 +5,15 @@
 // - Nhiều đòn trúng một người trong cùng tick gộp thành một số; thiêu đốt không có người đánh.
 // - Không biết đòn nào chí mạng, và phần sát thương khiên hút không hiện thành số.
 import { Battle, BATTLE, TICKS_PER_SECOND, type BattleInput } from "@ktlp/sim";
-import type { Replay, ReplayEvent, ReplaySource, ReplayUnit } from "./types.ts";
+import type { Replay, ReplayEvent, ReplaySource, ReplayUnit, StatusKind } from "./types.ts";
 
 const ONE = 1000; // mana trong sim tính theo phần nghìn
+
+/** Trạng thái có thời hạn trên Unit của sim (khiên xét riêng vì còn có thể vỡ sớm). */
+const UNTIL = [
+  ["stun", "stunUntil"], ["root", "rootUntil"], ["slow", "slowUntil"], ["burn", "burnUntil"],
+  ["healCut", "healCutUntil"], ["exposed", "exposedUntil"], ["stealth", "stealthUntil"],
+] as const satisfies readonly (readonly [StatusKind, string])[];
 
 export function replayFromSim(input: BattleInput): Replay {
   const battle = new Battle(input, true);
@@ -29,7 +35,11 @@ export function replayFromSim(input: BattleInput): Replay {
   });
 
   const events: ReplayEvent[] = battle.units.map((u) => ({ tick: 0, kind: "mana" as const, unit: u.id, mana: u.mana / ONE }));
-  const prev = battle.units.map((u) => ({ hp: u.curHp, pos: u.pos, mana: u.mana }));
+  const prev = battle.units.map((u) => ({
+    hp: u.curHp, pos: u.pos, mana: u.mana,
+    until: Object.fromEntries(UNTIL.map(([k, f]) => [k, u[f]])) as Record<(typeof UNTIL)[number][0], number>,
+    shieldUntil: u.shieldUntil, shieldOn: u.shield > 0,
+  }));
   // Tâm vùng của chiêu đang vận công, chốt lúc bắt đầu; sim chỉ ghi sự kiện lúc chiêu phát.
   const centers = new Map<number, number>();
   // Chiêu cuối tông chủ: sim không ghi cờ trên sự kiện, nên suy ra từ lúc `ultReady` bị dùng mất.
@@ -56,7 +66,7 @@ export function replayFromSim(input: BattleInput): Replay {
       if (ult) ultUsedAt.delete(e.unitId);
       events.push({
         tick: e.tick, kind: "cast", unit: e.unitId, skill: slot.tech.type, element: slot.tech.element, targets: e.targets,
-        ...zone, ...subs, ...(ult ? { ult } : {}),
+        ...zone, ...subs, ...(ult ? { ult } : {}), grade: slot.tech.grade,
       });
       for (const t of e.targets) if (!hitBy.has(t)) hitBy.set(t, e.unitId);
     }
@@ -81,6 +91,18 @@ export function replayFromSim(input: BattleInput): Replay {
       } else if (u.mana === u.manaMax && p.mana < u.manaMax) {
         events.push({ tick, kind: "mana", unit: u.id, mana: u.mana / ONE });
       }
+      // Trạng thái: ghi lúc thời hạn đổi (áp mới, kéo dài); khiên ghi thêm lúc vỡ trước hạn (until = tick).
+      for (const [kind, field] of UNTIL) {
+        const until = u[field];
+        if (until === p.until[kind]) continue;
+        if (until > tick) events.push({ tick, kind: "status", unit: u.id, status: kind, until });
+        p.until[kind] = until;
+      }
+      const shieldOn = u.shield > 0 && u.shieldUntil > tick;
+      if (shieldOn && u.shieldUntil !== p.shieldUntil) events.push({ tick, kind: "status", unit: u.id, status: "shield", until: u.shieldUntil });
+      else if (!shieldOn && p.shieldOn && p.shieldUntil > tick + 1) events.push({ tick, kind: "status", unit: u.id, status: "shield", until: tick });
+      p.shieldUntil = u.shieldUntil;
+      p.shieldOn = shieldOn;
       p.hp = hp;
       p.pos = u.pos;
       p.mana = u.mana;

@@ -2,6 +2,7 @@ import type { Replay, ReplayEvent, ReplayUnit } from "./types.ts";
 
 type Hit = Extract<ReplayEvent, { kind: "hit" | "heal" }>;
 type Cast = Extract<ReplayEvent, { kind: "cast" }>;
+type Status = Extract<ReplayEvent, { kind: "status" }>;
 
 /** Chuỗi mẫu (tick, giá trị) của một đơn vị; tra theo thời gian có phần lẻ để vẽ mượt giữa hai tick. */
 export class Track {
@@ -71,6 +72,8 @@ export class ReplayIndex {
   readonly byId = new Map<number, UnitTimeline>();
   readonly hits: Hit[] = [];
   readonly casts: Cast[] = [];
+  /** Trạng thái lúc áp hay đổi thời hạn (hiệu ứng chiêu pha 4), xếp theo tick */
+  readonly statuses: Status[] = [];
 
   constructor(replay: Replay) {
     this.replay = replay;
@@ -100,6 +103,9 @@ export class ReplayIndex {
           break;
         case "cast":
           this.casts.push(e);
+          break;
+        case "status":
+          this.statuses.push(e);
           break;
         case "death":
           ut.death = e.tick;

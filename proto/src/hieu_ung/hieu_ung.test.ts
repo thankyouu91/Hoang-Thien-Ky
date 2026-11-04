@@ -148,3 +148,28 @@ test("công thức: biến thể, phẩm đổi đúng hướng; cùng công ph�
 function sub(el: ElementId): ElementId {
   return ELEMENT_IDS[(ELEMENT_IDS.indexOf(el) + 5) % ELEMENT_IDS.length];
 }
+
+test("replay từ sim thật: có sự kiện trạng thái, phẩm công pháp; vẫn khớp simulate()", async () => {
+  const { simulate } = await import("@ktlp/sim");
+  const { replayFromSim } = await import("../replay/simSource.ts");
+  const { sampleBattle } = await import("../mock/sampleBattle.ts");
+  for (const seed of [11, 2, 3]) {
+    const input = sampleBattle(seed);
+    const replay = replayFromSim(input);
+    const result = simulate(sampleBattle(seed));
+    assert.equal(replay.ticks, result.ticks, `seed ${seed}: số tick`);
+    assert.equal(replay.winner, result.winner, `seed ${seed}: bên thắng`);
+    const index = new ReplayIndex(replay);
+    assert.ok(index.statuses.length > 0, `seed ${seed}: có trạng thái`);
+    assert.ok(index.casts.every((c) => typeof c.grade === "number"), `seed ${seed}: cast có phẩm`);
+    for (const s of index.statuses) assert.ok(s.until >= s.tick, "until không trước tick");
+    // Pha 4 vẽ được trên trận thật.
+    const e = new Emitter();
+    let drawn = 0;
+    for (const s of index.statuses.slice(0, 40)) {
+      emitFrame(e, input(index, s.tick + 1));
+      drawn += e.total > 0 ? 1 : 0;
+    }
+    assert.ok(drawn > 0);
+  }
+});

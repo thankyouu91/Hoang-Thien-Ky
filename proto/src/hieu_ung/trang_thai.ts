@@ -6,19 +6,11 @@ import { between, type ReplayIndex } from "../replay/timeline.ts";
 import type { ActiveStatus, StatusLook } from "./he.ts";
 import { palette } from "./ctx.ts";
 import { recipeOf } from "./recipe.ts";
-import type { Cast, StatusKind, StatusSpan } from "./types.ts";
-import type { ElementId } from "../replay/types.ts";
+import type { Cast, StatusSpan } from "./types.ts";
+import type { ElementId, ReplayEvent } from "../replay/types.ts";
 
 /** Sự kiện trạng thái trong replay: `until` là tick hết hạn (bằng tick nếu trạng thái vừa mất, ví dụ khiên bị phá). */
-export interface StatusEvent {
-  tick: number;
-  kind: "status";
-  unit: number;
-  status: StatusKind;
-  until: number;
-}
-
-const STATUS_KINDS: ReadonlySet<string> = new Set(["stun", "root", "slow", "burn", "healCut", "shield", "exposed", "stealth"]);
+export type StatusEvent = Extract<ReplayEvent, { kind: "status" }>;
 
 /** Khiên hộ thể khi replay không ghi trạng thái: chỉ hiện một lúc vì không biết lúc vỡ. */
 const GUESS_SHIELD_TICKS = 30;
@@ -55,9 +47,7 @@ export function activeAt(track: StatusTrack, t: number, tail: number): StatusTra
 
 /** Gộp sự kiện "status": cùng người, cùng trạng thái, còn hiệu lực thì kéo dài; until ≤ tick là mất sớm. */
 function spansFromEvents(index: ReplayIndex): StatusSpan[] | null {
-  const events = (index.replay.events as unknown as { kind: string }[]).filter(
-    (e): e is StatusEvent => e.kind === "status" && STATUS_KINDS.has((e as StatusEvent).status),
-  );
+  const events = index.statuses;
   if (!events.length) return null;
   const open = new Map<string, StatusSpan>();
   const out: StatusSpan[] = [];

@@ -66,11 +66,22 @@ export type ReplayEvent =
       subElements?: ElementId[];
       /** Đòn mang chiêu cuối tông chủ */
       ult?: boolean;
+      /** Phẩm công pháp 1–10 (GDD mục 9); hiệu ứng chiêu càng cao phẩm càng nhiều hạt, càng sáng */
+      grade?: number;
     }
   | { tick: number; kind: "hit"; unit: number; src: number; amount: number; crit: boolean; hp: number }
   | { tick: number; kind: "heal"; unit: number; src: number; amount: number; hp: number }
   | { tick: number; kind: "mana"; unit: number; mana: number }
-  | { tick: number; kind: "death"; unit: number };
+  | { tick: number; kind: "death"; unit: number }
+  /**
+   * Trạng thái do chiêu hay hệ gây ra (choáng, trói, chậm, thiêu, giảm hồi máu, khiên, lộ vị trí, ẩn thân), lấy từ sim
+   * lúc thời hạn đổi: `until` là tick hết hạn; bằng `tick` khi trạng thái mất sớm (khiên bị phá hết).
+   */
+  | { tick: number; kind: "status"; unit: number; status: StatusKind; until: number };
+
+/** Trạng thái theo thời gian, cùng tên với các trường *Until của Unit trong @ktlp/sim. */
+export const STATUS_KINDS = ["stun", "root", "slow", "burn", "healCut", "shield", "exposed", "stealth"] as const;
+export type StatusKind = (typeof STATUS_KINDS)[number];
 
 export interface Replay {
   /** Tick mỗi giây */

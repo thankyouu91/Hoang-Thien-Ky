@@ -44,7 +44,7 @@ export function hitSignature(x: Ctx, el: ElementId, r: Recipe, k: number, a: num
       for (let i = 0; i < n(4); i++) {
         const ang = Math.atan2(d.y, d.x) + sym(seed, 10 + i) * 0.7;
         const dist = (18 + 34 * rnd(seed, 20 + i)) * easeOut(a);
-        sprite(e, L.AIR, CELL.shard, p.x + Math.cos(ang) * dist, p.y + Math.sin(ang) * dist, BODY_Z + 10 * Math.sin(Math.PI * a), 7, 7, ang + a * 6, col.base, k * fade, 0.3, 0.4);
+        sprite(e, L.AIR, CELL.shard, p.x + Math.cos(ang) * dist, p.y + Math.sin(ang) * dist, BODY_Z + 10 * Math.sin(Math.PI * a), 5, 5, ang + a * 6, col.base, k * fade, 0.3, 0.4);
       }
       ring(e, L.BODY, p.x, p.y, 16 + 10 * a, 7 + 4 * a, col.glow, 0.8 * k * fade, { width: 2, dashes: 7, duty: 0.55, phase: rnd(seed, 3), z: BODY_Z - 6, add: 0.8 });
       break;
@@ -94,13 +94,13 @@ export function hitSignature(x: Ctx, el: ElementId, r: Recipe, k: number, a: num
     }
     case "hoa": {
       // Thiêu: lửa bùng lên từ thân, tàn lửa bay.
-      glow(e, L.AIR, p.x, p.y, BODY_Z, 26 * big, col.glow, 0.7 * k * fade, 1, 0.3);
-      for (let i = 0; i < n(8); i++) {
+      glow(e, L.AIR, p.x, p.y, BODY_Z, 16 * big, col.glow, 0.4 * Math.min(1, k) * fade, 1, 0);
+      for (let i = 0; i < n(6); i++) {
         const ang = rnd(seed, 70 + i) * TAU;
         const dist = 6 + 16 * rnd(seed, 80 + i) * easeOut(a);
         const z = BODY_Z - 8 + 40 * a * (0.5 + rnd(seed, 90 + i));
-        const s = (6 + 4 * rnd(seed, 95 + i)) * (1 - a * 0.6) * big;
-        motif(e, L.AIR, "hoa", p.x + Math.cos(ang) * dist, p.y + Math.sin(ang) * dist * 0.4, z, s, sym(seed, 99 + i) * 0.3, mix(col.glow, GOLD, rnd(seed, 98 + i) * 0.5), k * fade, 0.6);
+        const s = (4 + 3 * rnd(seed, 95 + i)) * (1 - a * 0.6) * big;
+        motif(e, L.AIR, "hoa", p.x + Math.cos(ang) * dist, p.y + Math.sin(ang) * dist * 0.4, z, s, sym(seed, 99 + i) * 0.3, mix(col.glow, GOLD, rnd(seed, 98 + i) * 0.5), Math.min(1, k) * fade, 0.3);
       }
       break;
     }
@@ -110,11 +110,11 @@ export function hitSignature(x: Ctx, el: ElementId, r: Recipe, k: number, a: num
         const ang = rnd(seed, 110 + i) * TAU;
         const dist = (10 + 26 * rnd(seed, 120 + i)) * easeOut(a);
         const z = Math.max(0, 28 * Math.sin(Math.PI * Math.min(1, a * 1.4)) * rnd(seed, 130 + i));
-        sprite(e, L.AIR, CELL.rock, p.x + Math.cos(ang) * dist, p.y + Math.sin(ang) * dist * 0.5, z + 2, 6 * big, 6 * big, ang + a * 5, col.base, k * fade, 0, 0.1);
+        sprite(e, L.AIR, CELL.rock, p.x + Math.cos(ang) * dist, p.y + Math.sin(ang) * dist * 0.5, z + 2, 5 * big, 5 * big, ang + a * 5, col.base, Math.min(1, k) * fade, 0, 0.1);
       }
       for (let i = 0; i < 3; i++) {
         const ang = rnd(seed, 140 + i) * TAU;
-        sprite(e, L.GROUND, CELL.smoke, p.x + Math.cos(ang) * 14 * a, p.y + Math.sin(ang) * 5 * a, 4, 14 + 10 * a, 10 + 6 * a, ang, col.base, 0.6 * k * fade, 0);
+        sprite(e, L.GROUND, CELL.smoke, p.x + Math.cos(ang) * 14 * a, p.y + Math.sin(ang) * 5 * a, 4, 10 + 8 * a, 7 + 5 * a, ang, col.base, 0.4 * Math.min(1, k) * fade, 0);
       }
       break;
     }
@@ -132,12 +132,12 @@ export function hitSignature(x: Ctx, el: ElementId, r: Recipe, k: number, a: num
             if (!q) continue;
             const s = seed ^ (flick * 7919) ^ id;
             bolt(e, L.AIR, from.x, from.y, BODY_Z, q.x, q.y, BODY_Z, s, col.glow, k * (1 - a / 0.65), 1.8, 12, 6);
-            glow(e, L.AIR, q.x, q.y, BODY_Z, 14, col.glow, 0.7 * k, 1, 0.5);
+            glow(e, L.AIR, q.x, q.y, BODY_Z, 10, col.glow, 0.5 * Math.min(1, k), 1, 0.3);
             from = q;
             jumps++;
           }
         }
-        if (!jumps) glow(e, L.AIR, p.x, p.y, BODY_Z, 18, col.glow, 0.6 * k * fade, 1, 0.5);
+        if (!jumps) glow(e, L.AIR, p.x, p.y, BODY_Z, 12, col.glow, 0.5 * Math.min(1, k) * fade, 1, 0.3);
       }
       crackle(x, p, col.glow, k * fade, seed ^ (flick * 131), 4);
       break;
@@ -151,7 +151,7 @@ export function hitSignature(x: Ctx, el: ElementId, r: Recipe, k: number, a: num
         const cy = p.y + d.y * (a * 40 - 10) + d.x * off;
         arc(e, L.AIR, cx, cy, BODY_Z + off * 0.5, 16 + 4 * i, ang - 1.2, 2.4, 1, 0.3, 2.2, col.glow, k * fade, 0.8, 0.6, 0.6);
       }
-      motif(e, L.AIR, "phong", p.x + d.x * 18 * a, p.y + d.y * 18 * a, BODY_Z, 9 * big, x.t * 0.5, col.glow, k * fade, 0.6);
+      motif(e, L.AIR, "phong", p.x + d.x * 18 * a, p.y + d.y * 18 * a, BODY_Z, 7 * big, x.t * 0.5, col.glow, k * fade, 0.6);
       for (let i = 0; i < 3; i++) {
         sprite(e, L.GROUND, CELL.smoke, p.x - d.x * (6 + 20 * a) + sym(seed, 150 + i) * 8, p.y - d.y * (6 + 20 * a) + sym(seed, 160 + i) * 4, 3, 10 + 8 * a, 7 + 4 * a, 0, WHITE, 0.35 * k * fade, 0);
       }
@@ -168,9 +168,9 @@ export function hitSignature(x: Ctx, el: ElementId, r: Recipe, k: number, a: num
         const my = (p.y + src.y) / 2 + d.x * bend;
         const bx = (1 - q) * (1 - q) * p.x + 2 * (1 - q) * q * mx + q * q * src.x;
         const by = (1 - q) * (1 - q) * p.y + 2 * (1 - q) * q * my + q * q * src.y;
-        sprite(e, L.AIR, CELL.star, bx, by, BODY_Z + 18 * Math.sin(Math.PI * q), 6, 6, q * 3, col.glow, k * (1 - q * 0.4), 1, 0.6);
+        sprite(e, L.AIR, CELL.star, bx, by, BODY_Z + 18 * Math.sin(Math.PI * q), 4.5, 4.5, q * 3, col.glow, k * (1 - q * 0.4), 1, 0.6);
       }
-      glow(e, L.AIR, src.x, src.y, BODY_Z, 22, col.glow, 0.6 * k * pulse(ramp(a, 0.5, 1)), 1, 0.4);
+      glow(e, L.AIR, src.x, src.y, BODY_Z, 16, col.glow, 0.45 * Math.min(1, k) * pulse(ramp(a, 0.5, 1)), 1, 0.2);
       break;
     }
     case "am_lanh": {
@@ -185,14 +185,14 @@ export function hitSignature(x: Ctx, el: ElementId, r: Recipe, k: number, a: num
         const my = (p.y + src.y) / 2 + d.x * bend;
         const bx = (1 - q) * (1 - q) * p.x + 2 * (1 - q) * q * mx + q * q * src.x;
         const by = (1 - q) * (1 - q) * p.y + 2 * (1 - q) * q * my + q * q * src.y;
-        motif(e, L.AIR, "am_lanh", bx, by, BODY_Z + 10 * Math.sin(Math.PI * q), 5.5, 0, drain, k * (1 - q * 0.3), 0.5);
+        motif(e, L.AIR, "am_lanh", bx, by, BODY_Z + 10 * Math.sin(Math.PI * q), 4.5, 0, drain, k * (1 - q * 0.3), 0.5);
       }
-      glow(e, L.AIR, src.x, src.y, BODY_Z, 20, drain, 0.55 * k * pulse(ramp(a, 0.5, 1)), 0.8, 0.2);
+      glow(e, L.AIR, src.x, src.y, BODY_Z, 14, drain, 0.45 * Math.min(1, k) * pulse(ramp(a, 0.5, 1)), 0.8, 0.1);
       break;
     }
     case "cuc_duong": {
       // Xuyên kháng: tia mặt trời toả, vòng kháng vỡ thành mảnh.
-      rays(e, L.AIR, p.x, p.y, BODY_Z, 34 * big, col.glow, k * fade, 8, a * 1.2, 8, 0.5);
+      rays(e, L.AIR, p.x, p.y, BODY_Z, 26 * big, col.glow, 0.7 * Math.min(1, k) * fade, 8, a * 1.2, 8, 0.3);
       if (a < 0.22) ring(e, L.AIR, p.x, p.y, 18, 18, col.glow, k, { width: 2.5, z: BODY_Z, halo: 0.4, add: 0.8 });
       else {
         for (let i = 0; i < n(8); i++) {
@@ -206,7 +206,7 @@ export function hitSignature(x: Ctx, el: ElementId, r: Recipe, k: number, a: num
     case "cuc_am": {
       // Giảm hồi máu: trăng khuyết đen đè xuống đầu, sương tối, dấu cộng bị gạch.
       const drop = easeOut(a / 0.4);
-      motif(e, L.AIR, "cuc_am", p.x, p.y, TOP_Z + 18 - 12 * drop, 13 * big, -0.3, col.base, k * fade, 0);
+      motif(e, L.AIR, "cuc_am", p.x, p.y, TOP_Z + 18 - 12 * drop, 10 * big, -0.3, col.base, Math.min(1, k) * fade, 0);
       glow(e, L.AIR, p.x, p.y, TOP_Z + 6, 18, col.glow, 0.5 * k * fade, 0.6);
       for (let i = 0; i < 3; i++) {
         const ang = rnd(seed, 200 + i) * TAU;
@@ -220,7 +220,7 @@ export function hitSignature(x: Ctx, el: ElementId, r: Recipe, k: number, a: num
     }
     case "cuc_han": {
       // Đóng băng: bông tuyết và mảnh băng bắn ra, mặt đất đóng sương.
-      groundGlow(e, L.GROUND, p.x, p.y, 26 * big, 10 * big, col.glow, 0.5 * k * fade, 0.5);
+      groundGlow(e, L.GROUND, p.x, p.y, 24 * big, 9 * big, col.glow, 0.4 * Math.min(1, k) * fade, 0.5);
       for (let i = 0; i < n(5); i++) {
         const ang = rnd(seed, 210 + i) * TAU;
         const dist = (10 + 26 * rnd(seed, 220 + i)) * easeOut(a);
@@ -404,7 +404,7 @@ export function statusFx(x: Ctx, s: ActiveStatus, fadeIn: number, fadeOut: numbe
     }
     case "dome": {
       const pop = s.r ? 1 : 1;
-      dome(e, L.BODY, p.x, p.y + 2, 26 * pop, col.glow, 0.5 * k * bright, t / 40, 1, 1.15);
+      dome(e, L.BODY, p.x, p.y + 2, 27 * pop, col.glow, Math.min(1, 0.85 * k * bright), t / 40, 1, 1.15);
       break;
     }
     case "stone": {

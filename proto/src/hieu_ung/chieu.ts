@@ -256,13 +256,16 @@ function sweep(x: Ctx, s: Shot): void {
   if (t >= t0 && t < t0 + dur) {
     const q = (t - t0) / dur;
     const ang = Math.atan2(face.y, face.x);
-    const R = (38 + 26 * easeOut(q)) * r.impact;
+    // Bán kính theo khoảng cách tới giữa các mục tiêu, để cung quét chạm tới người đứng trước mặt.
+    const aimP = aim(x, c, c.tick);
+    const reach = aimP ? Math.min(90, Math.max(42, 0.85 * Math.hypot(aimP.x - src.x, aimP.y - src.y))) : 50;
+    const R = reach * (0.75 + 0.35 * easeOut(q)) * r.impact;
     for (let i = 0; i <= r.streaks; i++) {
       const dq = i * 0.1;
       const head = clamp01(easeOut((q - dq) * 2));
       if (head <= 0) continue;
       const col = i ? r.trail.glow : r.main.glow;
-      arc(e, L.BODY, src.x, src.y, BODY_Z - 4, R - i * 7, ang - 1.3, 2.6, head, clamp01(easeIn(q - dq) * 1.1), (i ? 4 : 10) * r.impact, col, r.bright * (i ? 0.7 : 1), 0.75, 0.8, 0.7);
+      arc(e, L.AIR, src.x, src.y, BODY_Z - 4, R - i * 8, ang - 1.3, 2.6, head, clamp01(easeIn(q - dq) * 1.1), (i ? 4 : 12) * r.impact, col, Math.min(1, r.bright * 1.25) * (i ? 0.7 : 1), 0.6, 0.8, 0.7);
     }
   }
   for (const id of c.targets) impact(x, s, id, (t - c.tick) / s.S(0.32), 0.8, 0.8);
@@ -488,7 +491,8 @@ function formation(x: Ctx, s: Shot): void {
     const after = clamp01((t - c.tick) / s.S(0.9));
     const rot = t * 0.012;
     const flare = after > 0 ? pulse(after, 0.08) : 0;
-    const alpha = (after > 0 ? (1 - after) * 0.9 + flare * 0.6 : 0.5 + 0.5 * ramp(q, 0, 0.15)) * r.bright;
+    // Lúc bày trận giữ trong để vẫn thấy người đứng trên trận đồ; lúc kích bùng sáng ngắn.
+    const alpha = (after > 0 ? (1 - after) * 0.8 + flare * 0.5 : 0.32 + 0.28 * ramp(q, 0, 0.15) + 0.15 * q) * r.bright;
     rune(e, L.GROUND, z.x, zy, z.rx, z.ry, r.main.glow, alpha, rot, after > 0 ? 1 : q, 0, 1 + flare, 0.75);
     if (r.subs.length) rune(e, L.GROUND, z.x, zy, z.rx * 0.5, z.ry * 0.5, r.trail.glow, alpha * 0.7, -rot * 2, after > 0 ? 1 : q, 3, 1, 0.8);
     groundGlow(e, L.GROUND, z.x, zy, z.rx, z.ry, r.main.glow, 0.12 * q * r.bright + 0.4 * flare);
@@ -718,8 +722,9 @@ function ultimate(x: Ctx, s: Shot): void {
   // Bùng: chớp vàng, tia toả, sóng xung kích quét sân, cột sáng trời; kiếm quang giáng xuống từng mục tiêu.
   const a = (t - c.tick) / dur;
   shade(e, L.GROUND, src.x, src.y, 0, 2000, 0.42 * (1 - easeOut(a / 0.5)), 60 + 300 * a, 220 + 400 * a);
-  glow(e, L.AIR, src.x, src.y, BODY_Z, 220, mix(gold, WHITE, 0.3), pulse(a, 0.04) * 0.9, 1, 0.5);
-  rays(e, L.AIR, src.x, src.y, BODY_Z, 320, gold, 0.8 * (1 - a), 14, a * 0.8, 14, 0.9);
+  // Chớp vàng ngắn (tắt hẳn sau khoảng 0,3 s) để không trắng xoá cả sân.
+  glow(e, L.AIR, src.x, src.y, BODY_Z, 150, mix(gold, WHITE, 0.15), pulse(a, 0.03) ** 2.5 * 0.7, 1, 0.15);
+  rays(e, L.AIR, src.x, src.y, BODY_Z, 300, gold, 0.6 * (1 - a) ** 1.5, 14, a * 0.8, 14, 0.5);
   const wave = easeOut(a);
   ring(e, L.GROUND, src.x, src.y, 40 + 420 * wave, (40 + 420 * wave) * 0.45, gold, 1 - a, { width: 10 * (1 - a) + 2, halo: 0.8, add: 0.9 });
   ring(e, L.GROUND, src.x, src.y, 30 + 300 * wave, (30 + 300 * wave) * 0.45, r.main.glow, 0.8 * (1 - a), { width: 5 * (1 - a) + 1, add: 0.9 });
@@ -732,7 +737,7 @@ function ultimate(x: Ctx, s: Shot): void {
     if (a < 0.22) beam(e, L.AIR, p.x, p.y, 300, p.x, p.y, 300 - 300 * fall, 7, gold, 0.3, 1, 1, 0.9, 0.3, 0.4);
     const hit = clamp01((a - 0.2) / 0.5);
     if (hit > 0 && hit < 1) {
-      glow(e, L.AIR, p.x, p.y, BODY_Z, 50 * easeOut(hit) + 10, mix(gold, WHITE, 0.4), pulse(hit, 0.06), 1, 0.8);
+      glow(e, L.AIR, p.x, p.y, BODY_Z, 36 * easeOut(hit) + 10, mix(gold, WHITE, 0.25), 0.7 * pulse(hit, 0.06), 1, 0.4);
       ring(e, L.GROUND, p.x, p.y, 10 + 50 * easeOut(hit), (10 + 50 * easeOut(hit)) * 0.4, gold, 1 - hit, { width: 4 * (1 - hit) + 1, halo: 0.5 });
       sprite(e, L.AIR, CELL.sword, p.x, p.y, BODY_Z + 30 - 26 * easeOut(hit / 0.2), 22, 22, -Math.PI / 2, mix(gold, WHITE, 0.5), 1 - hit, 0.5, 0.6);
     }

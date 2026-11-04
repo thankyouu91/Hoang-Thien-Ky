@@ -1,6 +1,6 @@
 // Kiểu dữ liệu chung của lớp hiệu ứng chiêu, không cần three (Node chạy thẳng được để test).
 import type { ReplayIndex } from "../replay/timeline.ts";
-import type { ElementId, ReplayEvent } from "../replay/types.ts";
+import type { ElementId, ReplayEvent, StatusKind } from "../replay/types.ts";
 
 export type Cast = Extract<ReplayEvent, { kind: "cast" }>;
 
@@ -11,9 +11,6 @@ export interface Point {
 
 /** Vùng đánh trên sân thành elip theo toạ độ thế giới màn Trận. */
 export type Zone = Point & { rx: number; ry: number };
-
-/** Trạng thái do chiêu hay hệ gây ra, có thời hạn (tick). */
-export type StatusKind = "stun" | "root" | "slow" | "burn" | "healCut" | "shield" | "exposed" | "stealth";
 
 export interface StatusSpan {
   unit: number;
@@ -56,4 +53,4 @@ export interface FxCamera {
   shakeY: number;
 }
 
-export type { ElementId };
+export type { ElementId, StatusKind };

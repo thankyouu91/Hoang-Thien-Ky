@@ -79,7 +79,7 @@ export function sampleReplay(style: FxStyle, opts: { ult?: boolean } = {}): Repl
   }
   if (palette.includes("tho") && !ALLY.has(skill)) statuses.push(st(tick, 1, "shield", SKILL_RULES.shieldTicks / 2));
   if (skill === "than_phap") statuses.push(st(tick, 1, "exposed", SKILL_RULES.exposedTicks));
-  for (const s of statuses) events.push(s as unknown as ReplayEvent);
+  events.push(...statuses);
   events.sort((a, b) => a.tick - b.tick);
   return {
     tps: TPS,
