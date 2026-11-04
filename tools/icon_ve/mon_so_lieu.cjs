@@ -151,6 +151,9 @@ function monSoLieu(HE) {
     "NL-GL-005": "a folded bolt of cloud-pattern brocade silk in pale blue and silver",
     "NL-PB-001": "an unformed magic treasure blank, a rough glowing metal core with swirling runes, floating",
     "NL-DB-001": "a chunk of dark meteoric iron with a star-speckled surface and glowing blue-white cracks",
+    // Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13; phiên set đồ báo 2026-11-04).
+    "NL-KT-001": "a cluster of refined qi crystals, translucent amber-white with swirling essence inside and small floating sparks",
+    "NL-KT-002": "a smooth flat grey-blue stone tablet carved with glowing turquoise rune inscriptions (no readable text)",
   };
   for (const n of J("vat_pham").nguyen_lieu) if (NL[n.ma_vp])
     add({ ma_vp: n.ma_vp, ma: `nguyen_lieu/${slug(n.ten)}`, ten: n.ten, nguon: "data/he_thong/json/vat_pham.json (nguyen_lieu)", mo_ta: NL[n.ma_vp],
@@ -234,6 +237,46 @@ function monSoLieu(HE) {
     if (!h || !NUM[a.bo]) throw new Error("Ấn bộ thiếu " + a.ma_vp);
     add({ ma_vp: a.ma_vp, ma: `an_bo/${a.bo}`, ten: a.ten, nguon: "data/he_thong/json/ngoc.json (an_bo)",
       mo_ta: `a small square spirit seal stamp carved from ${h.mau} jade, its knob carved as ${NUM[a.bo]}, ${h.tt} glow` });
+  }
+
+  // Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13; phiên set đồ báo 2026-11-04, ghi chú chung luyen-khi.md).
+  // Danh khí đồ phổ NL-DP-001…010: một hình chung, khí hình tô bằng UI; vẽ màu trung tính.
+  const dp = J("vat_pham").nguyen_lieu.filter(n => n.ma_vp.startsWith("NL-DP-")).map(n => n.ma_vp);
+  if (dp.length)
+    add({ ma_vp: dp[0], ma_vp_chung: dp, ma: "nguyen_lieu/danh_khi_do_pho", ten: "Danh khí đồ phổ", nguon: "data/he_thong/json/vat_pham.json (nguyen_lieu)",
+      mo_ta: "a rolled ancient weapon blueprint scroll on carved bronze rods, partly unrolled to show faint schematic weapon drawings in neutral ink (no readable text), pale parchment, soft glow along the edges",
+      ghi_chu: `Hình chung cho ${dp[0]}…${dp[dp.length - 1]} (đồ phổ từng danh khí); khí hình tô bằng UI` });
+  // Song hệ ngọc: một hình, hai hệ tô bằng UI; vẽ hai nửa màu trung tính.
+  for (const s of ng.song_he || [])
+    add({ ma_vp: s.ma_vp, ma: "ngoc/song_he", ten: s.ten, nguon: "data/he_thong/json/ngoc.json (song_he)",
+      mo_ta: "a faceted spirit gemstone made of two fused halves, one pearl-white and one pale silver-grey, a thin glowing seam where the halves meet, set in an ornate silver filigree setting with a silk tassel",
+      ghi_chu: "Một hình; hai hệ và cấp là thuộc tính từng viên, màu hệ tô bằng UI" });
+  // Ngọc Phách 12 hệ: lộng lẫy hơn ngọc khảm thường (đế vàng hình vương miện, không tua), cùng màu hệ.
+  for (const p of ng.phach || []) {
+    const h = he[p.he];
+    if (!h) throw new Error("Ngọc Phách lạ hệ " + p.ma_vp);
+    add({ ma_vp: p.ma_vp, ma: `ngoc_phach/${p.he}`, ten: p.ten, nguon: "data/he_thong/json/ngoc.json (phach)",
+      mo_ta: `a large magnificent ${h.mau} soul crystal, flawless and brilliantly faceted, ${h.kh} symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant ${h.tt} aura and floating light motes` });
+  }
+  // Danh khí TB-KI-061…070: thần vật có tên, mỗi khí hình một món, độ hiếm đỏ.
+  const DK = {
+    61: "the blade glowing with pale celestial light, a floating ring of runes around the hilt, cloud and lightning engravings",
+    62: "a massive blade shaped like a cleft mountain ridge, stone-grey steel with molten gold cracks",
+    63: "limbs of dark starry metal, a glowing meteor streak along the string, small star fragments orbiting it",
+    64: "jade-teal and violet ribs crackling with lightning inside a swirling whirlwind",
+    65: "a massive golden-bronze staff engraved with mountain seals, a still golden barrier glow around it",
+    66: "a jade shaft and a glowing rainbow bristle tip trailing streams of light",
+    67: "a deep indigo banner embroidered with a glowing constellation net, the golden pole tipped with a star",
+    68: "silver-white body with a full-moon disc inlaid and strings of moonlight, soft blue glow",
+    69: "white jade carved with a tiny many-tiered tower, golden bands, emerald glow",
+    70: "a crimson-gold spearhead tearing a crack of light, a long red-gold tassel, flaming aura",
+  };
+  for (const k of J("trang_bi").kieu.filter(k => k.o === "vu_khi" && k.so > 60)) {
+    if (!DK[k.so] || !KHI_HINH[k.khi_hinh]) throw new Error("Danh khí thiếu mô tả " + k.ma_vp);
+    add({ ma_vp: k.ma_vp, ma: `trang_bi/kiem/${k.so}`, ten: k.ten, loai: "Vũ khí", do_hiem: k.do_hiem, khi_hinh: k.khi_hinh,
+      nguon: "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      mo_ta: `${KHI_HINH[k.khi_hinh][1]}: a legendary named divine weapon, ${DK[k.so]}, ${HOAN_THIEN.do}`,
+      ghi_chu: "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng" });
   }
   return ra;
 }

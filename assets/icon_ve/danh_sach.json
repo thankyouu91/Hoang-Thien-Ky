@@ -5,6 +5,7 @@
     "Trang bị (người dùng chốt 2026-11-03): 7 loại (kiếm, mũ, áo, đai, bao tay, giày, ngọc bội), mỗi loại 60 kiểu có tên riêng. Độ hiếm là màu nền ô trên UI, không vẽ vào hình: lục (đồ shop) < lam < tím < vàng < đỏ. Mỗi loại 24 lục, 16 lam, 12 tím, 5 vàng, 3 đỏ (đề xuất); vàng và đỏ rơi khi săn linh thú, thần thú. Thuộc tính chỉ hiện khi khảm ngọc, nên hình và tên không gắn hệ.",
     "Vũ khí (người dùng chốt 2026-11-03, data/he_thong/json/vu_khi.json): 60 kiểu chia 10 khí hình (khi_hinh). 34 kiểu giữ hình kiếm; 26 kiểu lam trở lên đổi sang đao, thương, côn, cung, phiến, bút, kỳ, cầm, tiêu với tên mới. File vẫn ở trang_bi/kiem/NN, mã vẫn TB-KI-0NN. Cầm trên người vẫn hiện nhóm vũ khí theo tài năng.",
     "Pháp bảo, pháp khí, Ý châu, ấn bộ, nguyên liệu và các đan, phù mới lấy từ data/he_thong/json (phiên set đồ); mã ma_vp đúng như số liệu. Độ hiếm pháp bảo, pháp khí là màu nền ô như trang bị.",
+    "Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13, phiên set đồ báo 2026-11-04): Khí Tinh, Linh Văn Thạch, Danh khí đồ phổ (một hình cho NL-DP-001…010, mã ở ma_vp_chung), Song Hệ Ngọc (một hình, màu hệ tô bằng UI), 12 Ngọc Phách, 10 danh khí TB-KI-061…070 ở trang_bi/kiem/61–70.",
     "Phẩm, cấp (1–10) và nấc cường hóa của các món khác hiện bằng viền và số trên UI, không vẽ riêng.",
     "uu_tien 1: món đang hiện trong prototype (túi, ô trang bị, Bảo Khố, Công pháp) và 10 kiểu đầu mỗi loại trang bị trải đủ 5 độ hiếm. 2: phần còn lại. 3: làm sau.",
     "File ảnh: assets/icon_ve/<ma>.webp, 512 px; nguồn gốc từng ảnh ở manifest.json cùng thư mục.",
@@ -63,8 +64,8 @@
     }
   },
   "tien_to_ma": {
-    "TB": "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu)",
-    "NG": "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ)",
+    "TB": "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu; KI 061–070 là danh khí)",
+    "NG": "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ)",
     "TQ": "Tàn quyển (HE; số = thứ tự hệ)",
     "CP": "Công pháp (HE; số = thứ tự hệ)",
     "LT": "Linh thạch (PH: phẩm)",
@@ -78,7 +79,7 @@
     "MA": "Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo)",
     "DB": "Vật phẩm đặc biệt (DB)",
     "VK": "Vũ khí theo tài năng, hình khi cầm (TN)",
-    "NL": "Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh)",
+    "NL": "Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh, KT khí tinh và linh văn thạch, DP danh khí đồ phổ)",
     "PB": "Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo)",
     "PK": "Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính)"
   },
@@ -110,9 +111,9 @@
     }
   ],
   "so_luong": {
-    "tong": 753,
+    "tong": 779,
     "uu_tien_1": 116,
-    "uu_tien_2": 628,
+    "uu_tien_2": 654,
     "uu_tien_3": 9
   },
   "icon": [
@@ -6984,6 +6985,24 @@
       "mo_ta": "a chunk of dark meteoric iron with a star-speckled surface and glowing blue-white cracks"
     },
     {
+      "ma_vp": "NL-KT-001",
+      "ma": "nguyen_lieu/khi_tinh",
+      "nhom": "nguyen_lieu",
+      "ten": "Khí Tinh",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/vat_pham.json (nguyen_lieu)",
+      "mo_ta": "a cluster of refined qi crystals, translucent amber-white with swirling essence inside and small floating sparks"
+    },
+    {
+      "ma_vp": "NL-KT-002",
+      "ma": "nguyen_lieu/linh_van_thach",
+      "nhom": "nguyen_lieu",
+      "ten": "Linh Văn Thạch",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/vat_pham.json (nguyen_lieu)",
+      "mo_ta": "a smooth flat grey-blue stone tablet carved with glowing turquoise rune inscriptions (no readable text)"
+    },
+    {
       "ma_vp": "PB-TH-001",
       "ma": "phap_bao/thuan/01",
       "nhom": "phap_bao",
@@ -8120,6 +8139,276 @@
       "uu_tien": 2,
       "nguon": "data/he_thong/json/ngoc.json (an_bo)",
       "mo_ta": "a small square spirit seal stamp carved from black and crimson jade, its knob carved as a swirling chaos vortex, chaotic black-red glow"
+    },
+    {
+      "ma_vp": "NL-DP-001",
+      "ma_vp_chung": [
+        "NL-DP-001",
+        "NL-DP-002",
+        "NL-DP-003",
+        "NL-DP-004",
+        "NL-DP-005",
+        "NL-DP-006",
+        "NL-DP-007",
+        "NL-DP-008",
+        "NL-DP-009",
+        "NL-DP-010"
+      ],
+      "ma": "nguyen_lieu/danh_khi_do_pho",
+      "nhom": "nguyen_lieu",
+      "ten": "Danh khí đồ phổ",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/vat_pham.json (nguyen_lieu)",
+      "mo_ta": "a rolled ancient weapon blueprint scroll on carved bronze rods, partly unrolled to show faint schematic weapon drawings in neutral ink (no readable text), pale parchment, soft glow along the edges",
+      "ghi_chu": "Hình chung cho NL-DP-001…NL-DP-010 (đồ phổ từng danh khí); khí hình tô bằng UI"
+    },
+    {
+      "ma_vp": "NG-SH-001",
+      "ma": "ngoc/song_he",
+      "nhom": "ngoc",
+      "ten": "Song Hệ Ngọc",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (song_he)",
+      "mo_ta": "a faceted spirit gemstone made of two fused halves, one pearl-white and one pale silver-grey, a thin glowing seam where the halves meet, set in an ornate silver filigree setting with a silk tassel",
+      "ghi_chu": "Một hình; hai hệ và cấp là thuộc tính từng viên, màu hệ tô bằng UI"
+    },
+    {
+      "ma_vp": "NG-PH-001",
+      "ma": "ngoc_phach/kim",
+      "nhom": "ngoc_phach",
+      "ten": "Canh Kim Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent silver-white soul crystal, flawless and brilliantly faceted, a perfect circle symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant gleaming silver aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-002",
+      "ma": "ngoc_phach/moc",
+      "nhom": "ngoc_phach",
+      "ten": "Thanh Mộc Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent verdant green soul crystal, flawless and brilliantly faceted, a sprouting leaf symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant living green aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-003",
+      "ma": "ngoc_phach/thuy",
+      "nhom": "ngoc_phach",
+      "ten": "Huyền Thủy Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent deep blue soul crystal, flawless and brilliantly faceted, flowing wave ripples symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant deep sapphire blue aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-004",
+      "ma": "ngoc_phach/hoa",
+      "nhom": "ngoc_phach",
+      "ten": "Xích Diễm Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent vermilion red soul crystal, flawless and brilliantly faceted, a blazing flame symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant fiery vermilion aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-005",
+      "ma": "ngoc_phach/tho",
+      "nhom": "ngoc_phach",
+      "ten": "Hậu Thổ Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent earthy ochre yellow soul crystal, flawless and brilliantly faceted, a solid square symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant earthy ochre aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-006",
+      "ma": "ngoc_phach/loi",
+      "nhom": "ngoc_phach",
+      "ten": "Tử Lôi Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent electric violet soul crystal, flawless and brilliantly faceted, a lightning bolt symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant crackling violet aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-007",
+      "ma": "ngoc_phach/phong",
+      "nhom": "ngoc_phach",
+      "ten": "Thanh Phong Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent pale jade teal soul crystal, flawless and brilliantly faceted, a spiral whirlwind symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant pale jade-teal aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-008",
+      "ma": "ngoc_phach/quang",
+      "nhom": "ngoc_phach",
+      "ten": "Diệu Quang Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent radiant gold soul crystal, flawless and brilliantly faceted, radiating light rays symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant radiant golden aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-009",
+      "ma": "ngoc_phach/am_lanh",
+      "nhom": "ngoc_phach",
+      "ten": "U Lãnh Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent cold grey-blue soul crystal, flawless and brilliantly faceted, a ghostly will-o'-wisp flame symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant eerie grey-blue aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-010",
+      "ma": "ngoc_phach/cuc_duong",
+      "nhom": "ngoc_phach",
+      "ten": "Thuần Dương Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent blazing orange soul crystal, flawless and brilliantly faceted, a blazing sun disc symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant blazing orange aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-011",
+      "ma": "ngoc_phach/cuc_am",
+      "nhom": "ngoc_phach",
+      "ten": "Huyền Âm Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent dark charcoal purple soul crystal, flawless and brilliantly faceted, a crescent moon symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant shadowy charcoal-purple aura and floating light motes"
+    },
+    {
+      "ma_vp": "NG-PH-012",
+      "ma": "ngoc_phach/cuc_han",
+      "nhom": "ngoc_phach",
+      "ten": "Hàn Tủy Phách",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (phach)",
+      "mo_ta": "a large magnificent icy pale blue soul crystal, flawless and brilliantly faceted, a snowflake symbol blazing inside, held in an ornate golden crown-like setting with small gems, radiant frosty ice-blue aura and floating light motes"
+    },
+    {
+      "ma_vp": "TB-KI-061",
+      "ma": "trang_bi/kiem/61",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Thiên Vấn Kiếm",
+      "do_hiem": "do",
+      "khi_hinh": "kiem",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a Chinese straight sword (jian): a legendary named divine weapon, the blade glowing with pale celestial light, a floating ring of runes around the hilt, cloud and lightning engravings, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
+    },
+    {
+      "ma_vp": "TB-KI-062",
+      "ma": "trang_bi/kiem/62",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Đoạn Nhạc Đao",
+      "do_hiem": "do",
+      "khi_hinh": "dao",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a Chinese broadsword (dao), single-edged broad curved blade: a legendary named divine weapon, a massive blade shaped like a cleft mountain ridge, stone-grey steel with molten gold cracks, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
+    },
+    {
+      "ma_vp": "TB-KI-063",
+      "ma": "trang_bi/kiem/63",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Lạc Tinh Cung",
+      "do_hiem": "do",
+      "khi_hinh": "cung",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a Chinese recurve bow, strung: a legendary named divine weapon, limbs of dark starry metal, a glowing meteor streak along the string, small star fragments orbiting it, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
+    },
+    {
+      "ma_vp": "TB-KI-064",
+      "ma": "trang_bi/kiem/64",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Phong Lôi Phiến",
+      "do_hiem": "do",
+      "khi_hinh": "phien",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a Chinese folding war fan with iron ribs, opened: a legendary named divine weapon, jade-teal and violet ribs crackling with lightning inside a swirling whirlwind, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
+    },
+    {
+      "ma_vp": "TB-KI-065",
+      "ma": "trang_bi/kiem/65",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Bất Động Côn",
+      "do_hiem": "do",
+      "khi_hinh": "con",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a long Chinese fighting staff with metal-capped ends, shown diagonally: a legendary named divine weapon, a massive golden-bronze staff engraved with mountain seals, a still golden barrier glow around it, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
+    },
+    {
+      "ma_vp": "TB-KI-066",
+      "ma": "trang_bi/kiem/66",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Tạo Hóa Bút",
+      "do_hiem": "do",
+      "khi_hinh": "but",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a large Chinese calligraphy brush used as a weapon: a legendary named divine weapon, a jade shaft and a glowing rainbow bristle tip trailing streams of light, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
+    },
+    {
+      "ma_vp": "TB-KI-067",
+      "ma": "trang_bi/kiem/67",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Tinh La Kỳ",
+      "do_hiem": "do",
+      "khi_hinh": "ky",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a Chinese formation war banner on a short pole: a legendary named divine weapon, a deep indigo banner embroidered with a glowing constellation net, the golden pole tipped with a star, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
+    },
+    {
+      "ma_vp": "TB-KI-068",
+      "ma": "trang_bi/kiem/68",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Vọng Nguyệt Cầm",
+      "do_hiem": "do",
+      "khi_hinh": "cam",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a Chinese guqin zither: a legendary named divine weapon, silver-white body with a full-moon disc inlaid and strings of moonlight, soft blue glow, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
+    },
+    {
+      "ma_vp": "TB-KI-069",
+      "ma": "trang_bi/kiem/69",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Ngọc Lâu Tiêu",
+      "do_hiem": "do",
+      "khi_hinh": "tieu",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a Chinese vertical bamboo flute (xiao): a legendary named divine weapon, white jade carved with a tiny many-tiered tower, golden bands, emerald glow, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
+    },
+    {
+      "ma_vp": "TB-KI-070",
+      "ma": "trang_bi/kiem/70",
+      "nhom": "trang_bi",
+      "loai": "Vũ khí",
+      "ten": "Phá Thiên Thương",
+      "do_hiem": "do",
+      "khi_hinh": "thuong",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/trang_bi.json (kieu, danh khí)",
+      "mo_ta": "a Chinese spear (qiang), long shaft with a spearhead and a red horsehair tassel, shown diagonally: a legendary named divine weapon, a crimson-gold spearhead tearing a crack of light, a long red-gold tassel, flaming aura, legendary divine artifact, red and gold, blazing aura of power",
+      "ghi_chu": "Danh khí (thần binh có tên), luyện từ đồ phổ; hình riêng"
     }
   ]
 }

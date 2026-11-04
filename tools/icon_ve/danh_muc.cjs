@@ -24,7 +24,7 @@ const TEN_NHOM = {
   trang_bi: "Trang bị", ngoc: "Ngọc khảm", tan_quyen: "Tàn quyển", cong_phap: "Công pháp", linh_thach: "Linh thạch",
   quang: "Quặng", duoc: "Dược liệu", dan: "Đan", linh_don: "Linh đơn (thú)", phu: "Phù chú", trung_thu: "Trứng thú",
   lo_dinh: "Lô đỉnh", lo_ren: "Lò rèn", manh: "Mảnh", dac_biet: "Vật phẩm đặc biệt", vu_khi_tai_nang: "Vũ khí theo tài năng",
-  nguyen_lieu: "Nguyên liệu", phap_bao: "Pháp bảo", phap_khi: "Pháp khí", y_chau: "Ý châu", an_bo: "Ấn bộ",
+  nguyen_lieu: "Nguyên liệu", phap_bao: "Pháp bảo", phap_khi: "Pháp khí", y_chau: "Ý châu", an_bo: "Ấn bộ", ngoc_phach: "Ngọc Phách",
 };
 const dh = Object.fromEntries(DS.do_hiem.map(d => [d.id, d.ten]));
 let md = "# Danh mục vật phẩm có icon vẽ\n\n";
@@ -39,7 +39,7 @@ for (const n of nhom) {
   for (const l of coLoai ? [...new Set(cac.map(i => i.loai))] : [null]) {
     const ds = cac.filter(i => !coLoai || i.loai === l);
     md += `## ${TEN_NHOM[n]}${l ? ` · ${l}` : ""} (${ds.length})\n\n`;
-    const cot = [["Mã", i => i.ma_vp], ["Tên", i => i.ten]];
+    const cot = [["Mã", i => i.ma_vp_chung ? `${i.ma_vp_chung[0]}…${i.ma_vp_chung[i.ma_vp_chung.length - 1]}` : i.ma_vp], ["Tên", i => i.ten]];
     if (ds.some(i => i.do_hiem)) cot.push(["Độ hiếm", i => dh[i.do_hiem] || ""]);
     if (ds.some(i => i.khi_hinh)) cot.push(["Khí hình", i => i.khi_hinh || ""]);
     cot.push(["File", i => `${i.ma}.webp`], ["Hình", trangThai]);

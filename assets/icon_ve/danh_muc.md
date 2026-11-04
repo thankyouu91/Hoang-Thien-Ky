@@ -2,12 +2,12 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 753 món, đã vẽ 285, cần vẽ lại 0.
+Tổng 779 món, đã vẽ 285, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
-| TB | Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu) |
-| NG | Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ) |
+| TB | Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu; KI 061–070 là danh khí) |
+| NG | Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ) |
 | TQ | Tàn quyển (HE; số = thứ tự hệ) |
 | CP | Công pháp (HE; số = thứ tự hệ) |
 | LT | Linh thạch (PH: phẩm) |
@@ -21,11 +21,11 @@ Tổng 753 món, đã vẽ 285, cần vẽ lại 0.
 | MA | Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo) |
 | DB | Vật phẩm đặc biệt (DB) |
 | VK | Vũ khí theo tài năng, hình khi cầm (TN) |
-| NL | Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh) |
+| NL | Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh, KT khí tinh và linh văn thạch, DP danh khí đồ phổ) |
 | PB | Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo) |
 | PK | Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính) |
 
-## Trang bị · Vũ khí (60)
+## Trang bị · Vũ khí (70)
 
 | Mã | Tên | Độ hiếm | Khí hình | File | Hình |
 |---|---|---|---|---|---|
@@ -89,6 +89,16 @@ Tổng 753 món, đã vẽ 285, cần vẽ lại 0.
 | TB-KI-058 | Kiếm Huyết Long | Đỏ | kiem | trang_bi/kiem/58.webp | ✓ |
 | TB-KI-059 | Đao Phần Thiên | Đỏ | dao | trang_bi/kiem/59.webp | ✓ |
 | TB-KI-060 | Phiến Hỗn Độn | Đỏ | phien | trang_bi/kiem/60.webp | ✓ |
+| TB-KI-061 | Thiên Vấn Kiếm | Đỏ | kiem | trang_bi/kiem/61.webp |  |
+| TB-KI-062 | Đoạn Nhạc Đao | Đỏ | dao | trang_bi/kiem/62.webp |  |
+| TB-KI-063 | Lạc Tinh Cung | Đỏ | cung | trang_bi/kiem/63.webp |  |
+| TB-KI-064 | Phong Lôi Phiến | Đỏ | phien | trang_bi/kiem/64.webp |  |
+| TB-KI-065 | Bất Động Côn | Đỏ | con | trang_bi/kiem/65.webp |  |
+| TB-KI-066 | Tạo Hóa Bút | Đỏ | but | trang_bi/kiem/66.webp |  |
+| TB-KI-067 | Tinh La Kỳ | Đỏ | ky | trang_bi/kiem/67.webp |  |
+| TB-KI-068 | Vọng Nguyệt Cầm | Đỏ | cam | trang_bi/kiem/68.webp |  |
+| TB-KI-069 | Ngọc Lâu Tiêu | Đỏ | tieu | trang_bi/kiem/69.webp |  |
+| TB-KI-070 | Phá Thiên Thương | Đỏ | thuong | trang_bi/kiem/70.webp |  |
 
 ## Trang bị · Mũ (60)
 
@@ -480,7 +490,7 @@ Tổng 753 món, đã vẽ 285, cần vẽ lại 0.
 | TB-NB-059 | Bội Huyết Ngọc | Đỏ | trang_bi/ngoc_boi/59.webp |  |
 | TB-NB-060 | Bội Hỗn Nguyên | Đỏ | trang_bi/ngoc_boi/60.webp |  |
 
-## Ngọc khảm (12)
+## Ngọc khảm (13)
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
@@ -496,6 +506,7 @@ Tổng 753 món, đã vẽ 285, cần vẽ lại 0.
 | NG-KH-010 | Ngọc Cực dương | ngoc/cuc_duong.webp | ✓ |
 | NG-KH-011 | Ngọc Cực âm | ngoc/cuc_am.webp | ✓ |
 | NG-KH-012 | Ngọc Cực hàn | ngoc/cuc_han.webp | ✓ |
+| NG-SH-001 | Song Hệ Ngọc | ngoc/song_he.webp |  |
 
 ## Tàn quyển (12)
 
@@ -782,7 +793,7 @@ Tổng 753 món, đã vẽ 285, cần vẽ lại 0.
 | VK-TN-007 | Liềm hái thuốc (Tu dược) | vu_khi_tai_nang/liem_hai_thuoc.webp |  |
 | VK-TN-008 | Bàn tính (Tu kim tiền) | vu_khi_tai_nang/ban_tinh.webp |  |
 
-## Nguyên liệu (13)
+## Nguyên liệu (16)
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
@@ -799,6 +810,9 @@ Tổng 753 món, đã vẽ 285, cần vẽ lại 0.
 | NL-GL-005 | Vân Cẩm | nguyen_lieu/van_cam.webp |  |
 | NL-PB-001 | Pháp Bảo Phôi | nguyen_lieu/phap_bao_phoi.webp |  |
 | NL-DB-001 | Thiên Ngoại Vẫn Thiết | nguyen_lieu/thien_ngoai_van_thiet.webp |  |
+| NL-KT-001 | Khí Tinh | nguyen_lieu/khi_tinh.webp |  |
+| NL-KT-002 | Linh Văn Thạch | nguyen_lieu/linh_van_thach.webp |  |
+| NL-DP-001…NL-DP-010 | Danh khí đồ phổ | nguyen_lieu/danh_khi_do_pho.webp |  |
 
 ## Pháp bảo · Thuẫn (5)
 
@@ -1012,4 +1026,21 @@ Tổng 753 món, đã vẽ 285, cần vẽ lại 0.
 | NG-AN-018 | Ấn Chu Thiên | an_bo/chu_thien.webp |  |
 | NG-AN-019 | Ấn Phá Quân | an_bo/pha_quan.webp |  |
 | NG-AN-020 | Ấn Hỗn Độn | an_bo/hon_don.webp |  |
+
+## Ngọc Phách (12)
+
+| Mã | Tên | File | Hình |
+|---|---|---|---|
+| NG-PH-001 | Canh Kim Phách | ngoc_phach/kim.webp |  |
+| NG-PH-002 | Thanh Mộc Phách | ngoc_phach/moc.webp |  |
+| NG-PH-003 | Huyền Thủy Phách | ngoc_phach/thuy.webp |  |
+| NG-PH-004 | Xích Diễm Phách | ngoc_phach/hoa.webp |  |
+| NG-PH-005 | Hậu Thổ Phách | ngoc_phach/tho.webp |  |
+| NG-PH-006 | Tử Lôi Phách | ngoc_phach/loi.webp |  |
+| NG-PH-007 | Thanh Phong Phách | ngoc_phach/phong.webp |  |
+| NG-PH-008 | Diệu Quang Phách | ngoc_phach/quang.webp |  |
+| NG-PH-009 | U Lãnh Phách | ngoc_phach/am_lanh.webp |  |
+| NG-PH-010 | Thuần Dương Phách | ngoc_phach/cuc_duong.webp |  |
+| NG-PH-011 | Huyền Âm Phách | ngoc_phach/cuc_am.webp |  |
+| NG-PH-012 | Hàn Tủy Phách | ngoc_phach/cuc_han.webp |  |
 
