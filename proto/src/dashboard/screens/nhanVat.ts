@@ -18,7 +18,7 @@ import type { DaoCoBanProgram } from "../art/daoCoBanScene.ts";
 import {
   axialToXY, bonusOf, CELLS, CENTER, cellOpen, cellOpensAt, drawOf, hexSize, LINK_NAMES, onOpenCells, pieceName, REALMS, RESONANCE, sealSet, setLines, setName, type BanDraw,
 } from "../daoCoBan.ts";
-import { animInfo, drawCharacter } from "../../scenes/battle/character.ts";
+import { dangFor, dangHeadroom, dangLift, drawDang } from "../../scenes/battle/dangDung.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { elementWheel } from "../elementWheel.ts";
 import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
@@ -139,11 +139,11 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   override enter(): void {
     super.enter();
     clearInterval(this.anim);
-    // Hoạt ảnh đứng của nhân vật ghép, 6 khung mỗi giây như dải hình.
+    // Dáng đứng của nhân vật ghép (dangDung.ts): khung người chọn theo giờ, hiệu ứng quanh người chạy liên tục nên vẽ 24 lần mỗi giây.
     this.anim = window.setInterval(() => {
       this.frame++;
       this.drawDoll();
-    }, 1000 / 6);
+    }, 1000 / 24);
   }
 
   override leave(): void {
@@ -566,14 +566,18 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
     ctx.imageSmoothingEnabled = false;
-    ctx.fillStyle = "rgba(42, 29, 20, 0.25)";
-    ctx.beginPath();
-    ctx.ellipse(w / 2, h - 10, w * 0.28, 5, 0, 0, Math.PI * 2);
-    ctx.fill();
     const look = { body: v.look.body, outfit: v.look.outfit, hat: v.look.hat, weapon: v.look.weapon };
-    const info = animInfo(this.sprites, look, "dung");
-    const scale = Math.min(2.6, (h - 14) / 72);
-    if (!info || !drawCharacter(ctx, this.sprites, look, "dung", this.frame % info.frames, w / 2, h - 10, scale, false)) {
+    // Dáng đứng theo tài năng (tông chủ ngự kiếm); dáng bay chừa chỗ phía trên, bóng nhỏ và nhạt đi theo độ nhấc.
+    const dang = dangFor(v.talent.id, v.sect.role === "tong_chu");
+    const t = performance.now() / 1000;
+    const scale = Math.min(2.6, (h - 14) / (72 + dangHeadroom(dang)));
+    const k = 1 - Math.min(0.45, (dangLift(dang, "dung", t) * scale) / 60);
+    ctx.fillStyle = `rgba(42, 29, 20, ${0.25 * k})`;
+    ctx.beginPath();
+    ctx.ellipse(w / 2, h - 10, w * 0.28 * k, 5 * k, 0, 0, Math.PI * 2);
+    ctx.fill();
+    const tint = ELEMENT_STYLE[v.roots[0]]?.color;
+    if (!drawDang(ctx, this.sprites, look, dang, "dung", 0, t, w / 2, h - 10, scale, false, tint)) {
       // Chưa có dải hoạt ảnh: vẽ ảnh tĩnh của thân mặc áo.
       const img = this.sprites.get(`nhan_vat/${v.look.body}/${v.look.outfit}`);
       if (img) ctx.drawImage(img, w / 2 - 32 * scale, h - 10 - 56 * scale, 64 * scale, 64 * scale);
@@ -599,10 +603,10 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     ctx.clearRect(0, 0, w, h);
     ctx.imageSmoothingEnabled = true;
     const look = { body: v.look.body, outfit: v.look.outfit, hat: v.look.hat, weapon: v.look.weapon };
-    const info = animInfo(this.sprites, look, "dung");
+    const dang = dangFor(v.talent.id, v.sect.role === "tong_chu");
     const scale = (h * 1.18) / 72;
     const foot = h * 1.16;
-    if (!info || !drawCharacter(ctx, this.sprites, look, "dung", this.frame % info.frames, w / 2, foot, scale, false)) {
+    if (!drawDang(ctx, this.sprites, look, dang, "dung", 0, performance.now() / 1000, w / 2, foot, scale, false, ELEMENT_STYLE[v.roots[0]]?.color)) {
       const img = this.sprites.get(`nhan_vat/${v.look.body}/${v.look.outfit}`);
       if (img) ctx.drawImage(img, w / 2 - 32 * scale, foot - 56 * scale, 64 * scale, 64 * scale);
     }

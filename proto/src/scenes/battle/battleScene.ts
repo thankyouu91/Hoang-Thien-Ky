@@ -9,6 +9,7 @@ import { between, ReplayIndex, type UnitTimeline } from "../../replay/timeline.t
 import type { Look, ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 import { animInfo, assignLooks, drawCharacter, resolveLook, type Anim } from "./character.ts";
+import { assignDang, dangLift, drawDang, type DangId } from "./dangDung.ts";
 import { ReplayControls } from "./controls.ts";
 import { FxLayer, type Point } from "../../hieu_ung/fx2d.ts";
 import { createSkillFx, type SkillFx } from "../../hieu_ung/index.ts";
@@ -65,6 +66,8 @@ export class BattleScene implements Scene {
   private marks = new Map<number, { casts: number[]; hits: number[] }>();
   /** Ngoại hình ghép theo id (tạm theo đội và hàng khi replay chưa có) */
   private looks = new Map<number, Look>();
+  /** Dáng đứng theo id: theo tài năng (tu_si/<tài năng>), tông chủ ngự kiếm (dangDung.ts) */
+  private dangs = new Map<number, DangId>();
   /** Trục sân dọc khi màn hình đứng, ngang khi màn hình nằm */
   private vertical: boolean | null = null;
   /** Vùng nhìn và camera lúc căn sân lần cuối */
@@ -122,6 +125,7 @@ export class BattleScene implements Scene {
         this.layoutLanes();
         this.buildMarks();
         this.looks = assignLooks(replay.units);
+        this.dangs = assignDang(replay.units);
         this.vertical = null;
       },
       (e: unknown) => {
@@ -390,12 +394,20 @@ export class BattleScene implements Scene {
     const pose = look ? this.pose(ut, t, look) : null;
     const sprite = pose ? undefined : this.sprites.get(u.sprite);
     const icon = this.sprites.get("he/" + u.element);
+    const tps = this.index!.replay.tps;
+    const dang = this.dangs.get(u.id) ?? "thuong";
+    // Người bay (lơ lửng, ngự kiếm) nhấc khỏi mặt đất: bóng nhỏ và nhạt đi, thanh máu nhấc theo.
+    const lift = pose && look ? (dangLift(dang, pose.anim, t / tps, u.id * 0.37) * SIZE * 1.4) / 64 : 0;
+    const shrink = 1 - Math.min(0.45, lift / 30);
 
-    ctx.globalAlpha = dead ? 0.25 : 1;
+    ctx.globalAlpha = dead ? 0.25 : 1 - (1 - shrink) * 0.8;
     ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
     ctx.beginPath();
-    ctx.ellipse(x, y + h, h, h * 0.35, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y + h, h * shrink, h * 0.35 * shrink, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.globalAlpha = dead ? 0.25 : 1;
+    ctx.beginPath();
+    ctx.ellipse(x, y + h, h, h * 0.35, 0, 0, Math.PI * 2);
     ctx.imageSmoothingEnabled = false; // giữ nét pixel art khi phóng to
 
     const figure = !!(pose || sprite);
@@ -406,10 +418,10 @@ export class BattleScene implements Scene {
       ctx.stroke();
       const s = SIZE * 1.4;
       if (pose && look) {
-        // Nhân vật ghép có hoạt ảnh: ngã xong thì mờ dần; trúng đòn nháy nhẹ.
-        const tps = this.index!.replay.tps;
+        // Nhân vật ghép có hoạt ảnh: ngã xong thì mờ dần; trúng đòn nháy nhẹ. Lúc đứng thì vẽ theo dáng (dangDung.ts).
         ctx.globalAlpha = dead ? Math.max(0.35, 1 - (t - ut.death) / (1.5 * tps)) : flash ? 0.7 : 1;
-        drawCharacter(ctx, this.sprites, look, pose.anim, pose.frame, x, y + h, s / 64, u.team === 1);
+        const drawn = drawDang(ctx, this.sprites, look, dang, pose.anim, pose.frame, t / tps, x, y + h, s / 64, u.team === 1, style.color, u.id * 0.37);
+        if (!drawn) drawCharacter(ctx, this.sprites, look, pose.anim, pose.frame, x, y + h, s / 64, u.team === 1);
       } else if (u.team === 1) {
         if (flash && !dead) ctx.globalAlpha = 0.5;
         // Hình PixelLab nhìn hướng đông nam; đội B lật ngang để hai đội quay mặt vào nhau.
@@ -451,7 +463,7 @@ export class BattleScene implements Scene {
     const bw = SIZE + 4;
     const badge = figure ? BADGE + 2 : 0;
     const bx = x - (bw + badge) / 2 + badge;
-    const by = (figure ? y + h - SIZE * 1.4 : y - h) - 12;
+    const by = (figure ? y + h - SIZE * 1.4 - lift : y - h) - 12;
     if (figure) {
       const cx = bx - 2 - BADGE / 2;
       const cy = by + 3.5;

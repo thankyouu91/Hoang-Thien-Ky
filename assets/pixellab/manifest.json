@@ -11511,6 +11511,5974 @@
       },
       "created": "2026-11-03",
       "pixellab_id": "e1397dee-9530-4cb1-a5c1-c4e01df5a706"
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/dung_khoanh_tay.png",
+      "description": "Nhân vật nam khoe mặc dao bao, dáng đứng: khoanh tay trước ngực, ngẩng đầu, thở chậm; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-crosses arms over chest",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "c77236f5-781f-49a1-98e2-eebbba0395eb"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            50,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.6,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.6,
+            26.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.1,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.4,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.4,
+            26.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.3,
+            26.8,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/dung_chap_tay.png",
+      "description": "Nhân vật nam khoe mặc dao bao, dáng đứng: chắp tay sau lưng, ưỡn ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-clasps hands behind back",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "196d4955-7a87-4436-8d36-4ea01132df7a"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            47.8,
+            26.4,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.8,
+            26.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.6,
+            26.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            26.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.7,
+            26.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.8,
+            26.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.8,
+            26.3,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/dung_thien_toa.png",
+      "description": "Nhân vật nam khoe mặc dao bao, dáng đứng: ngồi thiền trên đất, hai tay đặt trong lòng; dải ngang 6 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-sits cross-legged meditating",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          4,
+          9
+        ],
+        "group": "69f66f62-009f-411b-8b48-74e016aa2315"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 4,
+      "neo": [
+        {
+          "dau": [
+            50.3,
+            48.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.3,
+            48.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.3,
+            48.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.3,
+            48.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.3,
+            48.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.3,
+            48.2,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/dung_the_thu.png",
+      "description": "Nhân vật nam khoe mặc dao bao, dáng đứng: thế thủ quyền, chân trụ rộng, nắm tay giơ trước ngực, nhún nhẹ; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-fighting stance, fists up",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "cab4f454-50b4-44e3-b818-e1cdbf4b6bfe"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            51.5,
+            30.1,
+            0
+          ],
+          "tay": [
+            60.7,
+            42.2
+          ]
+        },
+        {
+          "dau": [
+            51.6,
+            30.1,
+            0
+          ],
+          "tay": [
+            60.7,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            51.5,
+            31.2,
+            0
+          ],
+          "tay": [
+            60.8,
+            41.9
+          ]
+        },
+        {
+          "dau": [
+            51.6,
+            30.2,
+            0
+          ],
+          "tay": [
+            60.7,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            51.6,
+            30,
+            0
+          ],
+          "tay": [
+            60.9,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            51.6,
+            30.1,
+            0
+          ],
+          "tay": [
+            60.7,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            51.5,
+            31.1,
+            0
+          ],
+          "tay": [
+            61,
+            42
+          ]
+        },
+        {
+          "dau": [
+            51.6,
+            30.1,
+            0
+          ],
+          "tay": [
+            60.9,
+            42.1
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/dung_chong_nanh.png",
+      "description": "Nhân vật nam khoe mặc dao bao, dáng đứng: một tay chống hông, một tay cầm vật trước ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-hand on hip, other hand at che",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "9fdc6ede-363b-41ed-aeb8-6433b8deaf57"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.6,
+            27,
+            0
+          ],
+          "tay": [
+            51.8,
+            43
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27,
+            0
+          ],
+          "tay": [
+            51.7,
+            43
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27,
+            0
+          ],
+          "tay": [
+            51.7,
+            42.7
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27,
+            0
+          ],
+          "tay": [
+            51.7,
+            42.7
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27,
+            0
+          ],
+          "tay": [
+            51.7,
+            42.8
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27,
+            0
+          ],
+          "tay": [
+            51.8,
+            42.8
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27,
+            0
+          ],
+          "tay": [
+            52,
+            43
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/dung_vac_vai.png",
+      "description": "Nhân vật nam khoe mặc dao bao, dáng đứng: một tay giơ nắm cán vũ khí gác vai, tay kia chống hông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-rests fist on shoulder",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "b90a94cf-6e78-40a0-b37d-4d361d6880f0"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.6,
+            27.1,
+            0
+          ],
+          "tay": [
+            47.8,
+            43
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27.1,
+            0
+          ],
+          "tay": [
+            46.5,
+            41.6
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27.1,
+            0
+          ],
+          "tay": [
+            46.6,
+            41.7
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27.1,
+            0
+          ],
+          "tay": [
+            47.5,
+            42
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27.1,
+            0
+          ],
+          "tay": [
+            46.8,
+            41.7
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27.1,
+            0
+          ],
+          "tay": [
+            46.8,
+            41.6
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27.1,
+            0
+          ],
+          "tay": [
+            46.8,
+            41.6
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/dung_lo_lung.png",
+      "description": "Nhân vật nam khoe mặc dao bao, dáng đứng: bay lơ lửng (move hover), chân buông thõng, tay buông hơi dang; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-floats in the air, legs hangin",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "3a89d66a-2089-4347-b722-3882a77c18f2"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            50.6,
+            21.6,
+            0
+          ],
+          "tay": [
+            61.9,
+            45.2
+          ]
+        },
+        {
+          "dau": [
+            50.7,
+            21.3,
+            0
+          ],
+          "tay": [
+            62.1,
+            44.4
+          ]
+        },
+        {
+          "dau": [
+            50.6,
+            20.6,
+            0
+          ],
+          "tay": [
+            62.1,
+            43.4
+          ]
+        },
+        {
+          "dau": [
+            50.6,
+            19.7,
+            0
+          ],
+          "tay": [
+            62.1,
+            42.4
+          ]
+        },
+        {
+          "dau": [
+            50.6,
+            19.5,
+            0
+          ],
+          "tay": [
+            62.1,
+            42.4
+          ]
+        },
+        {
+          "dau": [
+            50.5,
+            19.6,
+            0
+          ],
+          "tay": [
+            62.1,
+            42.4
+          ]
+        },
+        {
+          "dau": [
+            50.6,
+            20.5,
+            0
+          ],
+          "tay": [
+            62.1,
+            43.7
+          ]
+        },
+        {
+          "dau": [
+            50.6,
+            20.7,
+            0
+          ],
+          "tay": [
+            62.1,
+            44.7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/dung_khoanh_tay.png",
+      "description": "Nhân vật nam manh mặc dao bao, dáng đứng: khoanh tay trước ngực, ngẩng đầu, thở chậm; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-crosses arms over chest",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "1d86d437-b315-4ed3-bc38-9f8eed466b4f"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            47.9,
+            26.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48,
+            26.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48,
+            26.7,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/dung_lo_lung.png",
+      "description": "Nhân vật nam manh mặc dao bao, dáng đứng: bay lơ lửng (move hover), chân buông thõng, tay buông hơi dang; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-floats in the air, legs hangin",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "5f88c6d1-ee51-422f-8952-72d2ebc1094e"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            50.9,
+            20.7,
+            0
+          ],
+          "tay": [
+            61.8,
+            42.7
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            19.7,
+            0
+          ],
+          "tay": [
+            61.1,
+            44
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            19.7,
+            0
+          ],
+          "tay": [
+            61.3,
+            41.7
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            18.7,
+            0
+          ],
+          "tay": [
+            61.8,
+            40.7
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            18.7,
+            0
+          ],
+          "tay": [
+            61,
+            40.5
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            18.7,
+            0
+          ],
+          "tay": [
+            61.8,
+            40.7
+          ]
+        },
+        {
+          "dau": [
+            51,
+            19.4,
+            0
+          ],
+          "tay": [
+            60.8,
+            42.5
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            19.7,
+            0
+          ],
+          "tay": [
+            61.8,
+            42.2
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/dung_khoanh_tay.png",
+      "description": "Nhân vật nu khoe mặc dao bao, dáng đứng: khoanh tay trước ngực, ngẩng đầu, thở chậm; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-crosses arms over chest",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "fe418eec-280a-4ca8-a071-fa471615926d"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.8,
+            28.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.7,
+            28.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.7,
+            28.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            28.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.7,
+            28.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.7,
+            28.4,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            28.4,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/dung_lo_lung.png",
+      "description": "Nhân vật nu khoe mặc dao bao, dáng đứng: bay lơ lửng (move hover), chân buông thõng, tay buông hơi dang; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-floats in the air, legs hangin",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "29673928-188a-4974-b144-c685a1dea3d6"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            50.8,
+            21.9,
+            0
+          ],
+          "tay": [
+            61.3,
+            43.7
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            21.7,
+            0
+          ],
+          "tay": [
+            61.3,
+            43.3
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            20.9,
+            0
+          ],
+          "tay": [
+            61.2,
+            42.5
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            20.6,
+            0
+          ],
+          "tay": [
+            61.2,
+            41.5
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            19.8,
+            0
+          ],
+          "tay": [
+            61.2,
+            41.2
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            20.8,
+            0
+          ],
+          "tay": [
+            61.1,
+            41.8
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            21.8,
+            0
+          ],
+          "tay": [
+            61,
+            42.8
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            21.9,
+            0
+          ],
+          "tay": [
+            61.1,
+            43
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/dung_khoanh_tay.png",
+      "description": "Nhân vật nu manh mặc dao bao, dáng đứng: khoanh tay trước ngực, ngẩng đầu, thở chậm; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-crosses arms over chest",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "31aa8312-3434-4f3e-8639-7b859e1512ce"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.2,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.2,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27.3,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/dung_lo_lung.png",
+      "description": "Nhân vật nu manh mặc dao bao, dáng đứng: bay lơ lửng (move hover), chân buông thõng, tay buông hơi dang; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-floats in the air, legs hangin",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "b642b504-73f0-4b7d-9083-b01c9c5e8cc5"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            49.9,
+            21.9,
+            0
+          ],
+          "tay": [
+            62,
+            42.5
+          ]
+        },
+        {
+          "dau": [
+            50,
+            21.5,
+            0
+          ],
+          "tay": [
+            62.1,
+            41.6
+          ]
+        },
+        {
+          "dau": [
+            50,
+            20.6,
+            0
+          ],
+          "tay": [
+            62.1,
+            41
+          ]
+        },
+        {
+          "dau": [
+            50.2,
+            20.4,
+            0
+          ],
+          "tay": [
+            62,
+            40
+          ]
+        },
+        {
+          "dau": [
+            50,
+            19.5,
+            0
+          ],
+          "tay": [
+            61.6,
+            40.3
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            20.5,
+            0
+          ],
+          "tay": [
+            61.9,
+            40.4
+          ]
+        },
+        {
+          "dau": [
+            50.1,
+            21.1,
+            0
+          ],
+          "tay": [
+            61.8,
+            41.5
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            21.5,
+            0
+          ],
+          "tay": [
+            61.8,
+            41.9
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/dung_khoanh_tay.png",
+      "description": "Nhân vật nam khoe mặc vo phuc, dáng đứng: khoanh tay trước ngực, ngẩng đầu, thở chậm; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-crosses arms over chest",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "f03bfc7c-5242-48e0-9f60-5a6ec4bb7e58"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            50.6,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.8,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.7,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.7,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.7,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.7,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.7,
+            27.1,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/dung_lo_lung.png",
+      "description": "Nhân vật nam khoe mặc vo phuc, dáng đứng: bay lơ lửng (move hover), chân buông thõng, tay buông hơi dang; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-floats in the air, legs hangin",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "1d3aba33-33c1-4e05-a8d0-2f13c5b621e2"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            51.9,
+            21.4,
+            0
+          ],
+          "tay": [
+            62.4,
+            43.9
+          ]
+        },
+        {
+          "dau": [
+            51.9,
+            21.4,
+            0
+          ],
+          "tay": [
+            62.9,
+            43.1
+          ]
+        },
+        {
+          "dau": [
+            51.9,
+            20.2,
+            0
+          ],
+          "tay": [
+            62.4,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            51.8,
+            19.3,
+            0
+          ],
+          "tay": [
+            62.4,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            52,
+            19.4,
+            0
+          ],
+          "tay": [
+            62.9,
+            41.1
+          ]
+        },
+        {
+          "dau": [
+            51.9,
+            19.3,
+            0
+          ],
+          "tay": [
+            62.6,
+            42
+          ]
+        },
+        {
+          "dau": [
+            51.9,
+            20.2,
+            0
+          ],
+          "tay": [
+            62.6,
+            42.8
+          ]
+        },
+        {
+          "dau": [
+            51.8,
+            20.3,
+            0
+          ],
+          "tay": [
+            62.8,
+            43
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/dung_khoanh_tay.png",
+      "description": "Nhân vật nam manh mặc vo phuc, dáng đứng: khoanh tay trước ngực, ngẩng đầu, thở chậm; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-crosses arms over chest",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "125e2c6a-d22f-41cd-9417-4c75a8a13cde"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.1,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.2,
+            27,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/dung_lo_lung.png",
+      "description": "Nhân vật nam manh mặc vo phuc, dáng đứng: bay lơ lửng (move hover), chân buông thõng, tay buông hơi dang; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-floats in the air, legs hangin",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "3700ab2e-967a-4ccc-afeb-a5321b576e1f"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            50.8,
+            19.8,
+            0
+          ],
+          "tay": [
+            62.8,
+            41.9
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            19.5,
+            0
+          ],
+          "tay": [
+            63.3,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            18.5,
+            0
+          ],
+          "tay": [
+            62.9,
+            40.8
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            17.6,
+            0
+          ],
+          "tay": [
+            62.8,
+            39.8
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            17.6,
+            0
+          ],
+          "tay": [
+            63.3,
+            39.6
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            17.9,
+            0
+          ],
+          "tay": [
+            63,
+            39.8
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            18.6,
+            0
+          ],
+          "tay": [
+            63,
+            40.6
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            18.6,
+            0
+          ],
+          "tay": [
+            63,
+            40.6
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/dung_khoanh_tay.png",
+      "description": "Nhân vật nu khoe mặc vo phuc, dáng đứng: khoanh tay trước ngực, ngẩng đầu, thở chậm; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-crosses arms over chest",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "f36a3b1c-b613-4448-8596-9e5b9c57d65e"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.8,
+            28.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            28.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            28.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            28.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            28.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            28.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            28.1,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/dung_lo_lung.png",
+      "description": "Nhân vật nu khoe mặc vo phuc, dáng đứng: bay lơ lửng (move hover), chân buông thõng, tay buông hơi dang; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-floats in the air, legs hangin",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "daa7de5f-6972-4abc-be56-a16a1efa60b5"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            51,
+            21.9,
+            0
+          ],
+          "tay": [
+            62.4,
+            43.2
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            21.6,
+            0
+          ],
+          "tay": [
+            62.5,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            20.5,
+            0
+          ],
+          "tay": [
+            62.4,
+            41.1
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            19.8,
+            0
+          ],
+          "tay": [
+            62.6,
+            40.1
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            19.5,
+            0
+          ],
+          "tay": [
+            62.4,
+            39.9
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            20.6,
+            0
+          ],
+          "tay": [
+            62.4,
+            40.8
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            20.6,
+            0
+          ],
+          "tay": [
+            62.4,
+            41.8
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            21.6,
+            0
+          ],
+          "tay": [
+            62.4,
+            42.2
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/dung_khoanh_tay.png",
+      "description": "Nhân vật nu manh mặc vo phuc, dáng đứng: khoanh tay trước ngực, ngẩng đầu, thở chậm; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-crosses arms over chest",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "0f3451ac-810a-4320-b5fc-c7631e7ecd5c"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.3,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.4,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.4,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.4,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.4,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.4,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.4,
+            28,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/dung_lo_lung.png",
+      "description": "Nhân vật nu manh mặc vo phuc, dáng đứng: bay lơ lửng (move hover), chân buông thõng, tay buông hơi dang; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-floats in the air, legs hangin",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "6cc0abe7-cca5-42cc-a3b7-6e14c9cc060e"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 6,
+      "neo": [
+        {
+          "dau": [
+            50.2,
+            21.3,
+            0
+          ],
+          "tay": [
+            61.2,
+            42
+          ]
+        },
+        {
+          "dau": [
+            50.1,
+            21.3,
+            0
+          ],
+          "tay": [
+            61,
+            41
+          ]
+        },
+        {
+          "dau": [
+            50,
+            20.3,
+            0
+          ],
+          "tay": [
+            61.2,
+            40.3
+          ]
+        },
+        {
+          "dau": [
+            50.2,
+            19.5,
+            0
+          ],
+          "tay": [
+            61.5,
+            39.3
+          ]
+        },
+        {
+          "dau": [
+            50,
+            19.4,
+            0
+          ],
+          "tay": [
+            61.4,
+            39.3
+          ]
+        },
+        {
+          "dau": [
+            50,
+            20.4,
+            0
+          ],
+          "tay": [
+            61.3,
+            39.8
+          ]
+        },
+        {
+          "dau": [
+            50.1,
+            20.4,
+            0
+          ],
+          "tay": [
+            60.9,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            50,
+            21.4,
+            0
+          ],
+          "tay": [
+            61.2,
+            41.4
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/dung_bat_an.png",
+      "description": "Nhân vật nam khoe mặc dao bao, dáng đứng: một tay dựng trước mặt bắt ấn, tay kia buông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one hand before face in",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "b5c4c914-97b0-4a97-a8fb-8f5e841b7a56"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49.6,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.6,
+            26.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.6,
+            26.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.7,
+            26.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.6,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.5,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.6,
+            27.1,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/dung_the_thu.png",
+      "description": "Nhân vật nam manh mặc dao bao, dáng đứng: thế thủ quyền, chân trụ rộng, nắm tay giơ trước ngực, nhún nhẹ; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-fighting stance, fists up",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "3af592b1-77e1-40f1-8369-c11211a1378f"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            50.8,
+            29.1,
+            0
+          ],
+          "tay": [
+            59.8,
+            40.7
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            29.1,
+            0
+          ],
+          "tay": [
+            59.8,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            29.9,
+            0
+          ],
+          "tay": [
+            59.6,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            30,
+            0
+          ],
+          "tay": [
+            59.8,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            29.1,
+            0
+          ],
+          "tay": [
+            59.8,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            29.1,
+            0
+          ],
+          "tay": [
+            59.8,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            51,
+            30,
+            0
+          ],
+          "tay": [
+            59.9,
+            41.5
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            29.1,
+            0
+          ],
+          "tay": [
+            59.8,
+            40.9
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/dung_the_thu.png",
+      "description": "Nhân vật nu khoe mặc dao bao, dáng đứng: thế thủ quyền, chân trụ rộng, nắm tay giơ trước ngực, nhún nhẹ; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-fighting stance, fists up",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "bed29cb1-6b8a-422f-848b-679eea6e291b"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            50.8,
+            30.9,
+            0
+          ],
+          "tay": [
+            58.8,
+            42.7
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            30.9,
+            0
+          ],
+          "tay": [
+            58.8,
+            42.7
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            31.7,
+            0
+          ],
+          "tay": [
+            58.9,
+            44.5
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            31,
+            0
+          ],
+          "tay": [
+            58.8,
+            43.3
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            30.9,
+            0
+          ],
+          "tay": [
+            58.8,
+            42.9
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            31.3,
+            0
+          ],
+          "tay": [
+            58.8,
+            42.9
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            31.7,
+            0
+          ],
+          "tay": [
+            59.1,
+            43.6
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            31.6,
+            0
+          ],
+          "tay": [
+            59,
+            42.7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/dung_the_thu.png",
+      "description": "Nhân vật nu manh mặc dao bao, dáng đứng: thế thủ quyền, chân trụ rộng, nắm tay giơ trước ngực, nhún nhẹ; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-fighting stance, fists up",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "a41183c0-76d7-468a-81b5-c287a70556d8"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            51.2,
+            30.3,
+            0
+          ],
+          "tay": [
+            58.3,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            51,
+            30.9,
+            0
+          ],
+          "tay": [
+            58.1,
+            41
+          ]
+        },
+        {
+          "dau": [
+            51,
+            31.1,
+            0
+          ],
+          "tay": [
+            58,
+            41.7
+          ]
+        },
+        {
+          "dau": [
+            51,
+            31,
+            0
+          ],
+          "tay": [
+            58.3,
+            41
+          ]
+        },
+        {
+          "dau": [
+            51,
+            31,
+            0
+          ],
+          "tay": [
+            58.1,
+            41
+          ]
+        },
+        {
+          "dau": [
+            51,
+            31,
+            0
+          ],
+          "tay": [
+            58.3,
+            41.1
+          ]
+        },
+        {
+          "dau": [
+            51,
+            31,
+            0
+          ],
+          "tay": [
+            58.1,
+            42
+          ]
+        },
+        {
+          "dau": [
+            51,
+            30.9,
+            0
+          ],
+          "tay": [
+            58.1,
+            41
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/dung_the_thu.png",
+      "description": "Nhân vật nam khoe mặc vo phuc, dáng đứng: thế thủ quyền, chân trụ rộng, nắm tay giơ trước ngực, nhún nhẹ; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-fighting stance, fists up",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "a00f357c-e7a2-4258-94d8-22a6e5a21a23"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            51.7,
+            29.5,
+            0
+          ],
+          "tay": [
+            60.5,
+            41.9
+          ]
+        },
+        {
+          "dau": [
+            51.7,
+            29.5,
+            0
+          ],
+          "tay": [
+            60.3,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            51.8,
+            29.7,
+            0
+          ],
+          "tay": [
+            60.5,
+            41.8
+          ]
+        },
+        {
+          "dau": [
+            51.7,
+            29.5,
+            0
+          ],
+          "tay": [
+            60.5,
+            41.8
+          ]
+        },
+        {
+          "dau": [
+            51.7,
+            29.6,
+            0
+          ],
+          "tay": [
+            60.5,
+            41.8
+          ]
+        },
+        {
+          "dau": [
+            51.7,
+            29.6,
+            0
+          ],
+          "tay": [
+            60.5,
+            41.7
+          ]
+        },
+        {
+          "dau": [
+            51.7,
+            29.6,
+            0
+          ],
+          "tay": [
+            60.5,
+            41.9
+          ]
+        },
+        {
+          "dau": [
+            51.7,
+            29.6,
+            0
+          ],
+          "tay": [
+            60.6,
+            41.8
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/dung_the_thu.png",
+      "description": "Nhân vật nam manh mặc vo phuc, dáng đứng: thế thủ quyền, chân trụ rộng, nắm tay giơ trước ngực, nhún nhẹ; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-fighting stance, fists up",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "7dc4aecf-d01e-4085-9294-dbd928f2ca6a"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            51.3,
+            28.7,
+            0
+          ],
+          "tay": [
+            59.2,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            51.3,
+            28.9,
+            0
+          ],
+          "tay": [
+            59.6,
+            41.2
+          ]
+        },
+        {
+          "dau": [
+            51.3,
+            29.7,
+            0
+          ],
+          "tay": [
+            59.2,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            51.2,
+            29.2,
+            0
+          ],
+          "tay": [
+            59.5,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            51.3,
+            28.7,
+            0
+          ],
+          "tay": [
+            59.8,
+            40.7
+          ]
+        },
+        {
+          "dau": [
+            51.4,
+            29.3,
+            0
+          ],
+          "tay": [
+            59.8,
+            41
+          ]
+        },
+        {
+          "dau": [
+            51.2,
+            29.7,
+            0
+          ],
+          "tay": [
+            60.1,
+            41.7
+          ]
+        },
+        {
+          "dau": [
+            51.3,
+            28.8,
+            0
+          ],
+          "tay": [
+            60.1,
+            40.9
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/dung_the_thu.png",
+      "description": "Nhân vật nu khoe mặc vo phuc, dáng đứng: thế thủ quyền, chân trụ rộng, nắm tay giơ trước ngực, nhún nhẹ; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-fighting stance, fists up",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "77b6dc44-1b07-4b57-b102-8cc3c02c35a2"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            51,
+            30,
+            0
+          ],
+          "tay": [
+            58.7,
+            42.6
+          ]
+        },
+        {
+          "dau": [
+            51,
+            30.1,
+            0
+          ],
+          "tay": [
+            58.6,
+            42.7
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            31.1,
+            0
+          ],
+          "tay": [
+            58.4,
+            44.1
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            30.1,
+            0
+          ],
+          "tay": [
+            58.6,
+            43.6
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            30.1,
+            0
+          ],
+          "tay": [
+            58.6,
+            42.4
+          ]
+        },
+        {
+          "dau": [
+            51,
+            30.1,
+            0
+          ],
+          "tay": [
+            58.4,
+            43.2
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            31.1,
+            0
+          ],
+          "tay": [
+            58.4,
+            44.1
+          ]
+        },
+        {
+          "dau": [
+            51,
+            30,
+            0
+          ],
+          "tay": [
+            58.6,
+            42.4
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/dung_the_thu.png",
+      "description": "Nhân vật nu manh mặc vo phuc, dáng đứng: thế thủ quyền, chân trụ rộng, nắm tay giơ trước ngực, nhún nhẹ; dải ngang 8 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-fighting stance, fists up",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          0,
+          7
+        ],
+        "group": "96fad38f-0a52-41be-ab19-29da057be128"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 8,
+      "neo": [
+        {
+          "dau": [
+            51.3,
+            30,
+            0
+          ],
+          "tay": [
+            58.6,
+            41.6
+          ]
+        },
+        {
+          "dau": [
+            51,
+            30.8,
+            0
+          ],
+          "tay": [
+            58.5,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            51.1,
+            30.9,
+            0
+          ],
+          "tay": [
+            58.3,
+            42.3
+          ]
+        },
+        {
+          "dau": [
+            51.2,
+            30.8,
+            0
+          ],
+          "tay": [
+            58.5,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            30.5,
+            0
+          ],
+          "tay": [
+            58.5,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            51.3,
+            30.8,
+            0
+          ],
+          "tay": [
+            58.5,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            51.2,
+            30.8,
+            0
+          ],
+          "tay": [
+            58.3,
+            42.3
+          ]
+        },
+        {
+          "dau": [
+            50.9,
+            30.5,
+            0
+          ],
+          "tay": [
+            58.4,
+            41.6
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/dung_chap_tay.png",
+      "description": "Nhân vật nam manh mặc dao bao, dáng đứng: chắp tay sau lưng, ưỡn ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-clasps hands behind back",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "021ad67e-b184-4604-b141-afc55025ba15"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            47.9,
+            26,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.6,
+            25.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.7,
+            25.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.7,
+            26,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            25.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.7,
+            25.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.6,
+            25.7,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/dung_chap_tay.png",
+      "description": "Nhân vật nu khoe mặc dao bao, dáng đứng: chắp tay sau lưng, ưỡn ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-clasps hands behind back",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "6fcb0d55-e165-43d4-a359-a6aa65a8d1ac"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.2,
+            27.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.2,
+            27.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.2,
+            27.4,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.3,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.3,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.3,
+            27.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.3,
+            27.6,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/dung_chap_tay.png",
+      "description": "Nhân vật nu manh mặc dao bao, dáng đứng: chắp tay sau lưng, ưỡn ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-clasps hands behind back",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "8e28c615-aa5e-4b24-b974-eb0e496832e8"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48,
+            27.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.6,
+            27.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.6,
+            27.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.5,
+            27.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.5,
+            27.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.5,
+            27.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.5,
+            27.5,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/dung_chap_tay.png",
+      "description": "Nhân vật nam khoe mặc vo phuc, dáng đứng: chắp tay sau lưng, ưỡn ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-clasps hands behind back",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "4c316894-18e8-4ed2-8f94-d0102b3e5832"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.3,
+            26.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            26.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            26.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            26.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            26.6,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/dung_chap_tay.png",
+      "description": "Nhân vật nam manh mặc vo phuc, dáng đứng: chắp tay sau lưng, ưỡn ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-clasps hands behind back",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "57306cfa-e9e9-4feb-8d34-7d4e4fa96929"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            47.4,
+            26.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.3,
+            25.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.2,
+            26,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.4,
+            26.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.4,
+            26.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.5,
+            26.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.5,
+            26.1,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/dung_chap_tay.png",
+      "description": "Nhân vật nu khoe mặc vo phuc, dáng đứng: chắp tay sau lưng, ưỡn ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-clasps hands behind back",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "b3aa6ca3-b54f-4e08-86d8-6be3ed9c387e"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            28.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            28.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            28.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            28.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            28.2,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/dung_chap_tay.png",
+      "description": "Nhân vật nu manh mặc vo phuc, dáng đứng: chắp tay sau lưng, ưỡn ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-clasps hands behind back",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "69d9539d-79ba-4437-8bc9-a71f4cee93ae"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            47.7,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.5,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.4,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.4,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.4,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.4,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.4,
+            27.2,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/dung_thien_toa.png",
+      "description": "Nhân vật nam manh mặc dao bao, dáng đứng: ngồi thiền trên đất, hai tay đặt trong lòng; dải ngang 6 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-sits cross-legged meditating",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          4,
+          9
+        ],
+        "group": "51860876-f435-461e-bbfb-29155a87c49f"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 4,
+      "neo": [
+        {
+          "dau": [
+            49.7,
+            47.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.3,
+            47.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.7,
+            47.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49,
+            47.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.7,
+            47.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.7,
+            47.9,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/dung_thien_toa.png",
+      "description": "Nhân vật nu khoe mặc dao bao, dáng đứng: ngồi thiền trên đất, hai tay đặt trong lòng; dải ngang 6 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-sits cross-legged meditating",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          4,
+          9
+        ],
+        "group": "80575e17-75d8-4463-b44e-ae34ad9370f5"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 4,
+      "neo": [
+        {
+          "dau": [
+            49.8,
+            47.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.7,
+            48.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            48.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            48.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.7,
+            48.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.7,
+            48,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/dung_thien_toa.png",
+      "description": "Nhân vật nu manh mặc dao bao, dáng đứng: ngồi thiền trên đất, hai tay đặt trong lòng; dải ngang 6 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-sits cross-legged meditating",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          4,
+          9
+        ],
+        "group": "3c912c9f-8047-4492-8155-2c8400f4ce6c"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 4,
+      "neo": [
+        {
+          "dau": [
+            48.9,
+            47.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            47.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            47.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            47.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.8,
+            47.4,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.8,
+            47.4,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/dung_thien_toa.png",
+      "description": "Nhân vật nam khoe mặc vo phuc, dáng đứng: ngồi thiền trên đất, hai tay đặt trong lòng; dải ngang 6 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-sits cross-legged meditating",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          4,
+          9
+        ],
+        "group": "4ac2608c-0619-422c-9f81-ac43f482a395"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 4,
+      "neo": [
+        {
+          "dau": [
+            50.5,
+            47.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.5,
+            47.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.5,
+            47.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.4,
+            47.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50.5,
+            47.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            51.1,
+            47.6,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/dung_thien_toa.png",
+      "description": "Nhân vật nam manh mặc vo phuc, dáng đứng: ngồi thiền trên đất, hai tay đặt trong lòng; dải ngang 6 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-sits cross-legged meditating",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          4,
+          9
+        ],
+        "group": "8003bbe2-9d14-4e81-af71-fdaf49489025"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 4,
+      "neo": [
+        {
+          "dau": [
+            49.8,
+            48.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.8,
+            48,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.2,
+            47.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.6,
+            48.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.8,
+            48.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.8,
+            48.1,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/dung_thien_toa.png",
+      "description": "Nhân vật nu khoe mặc vo phuc, dáng đứng: ngồi thiền trên đất, hai tay đặt trong lòng; dải ngang 6 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-sits cross-legged meditating",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          4,
+          9
+        ],
+        "group": "1c2ba53d-d71d-479d-8871-67707c236d2d"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 4,
+      "neo": [
+        {
+          "dau": [
+            50,
+            48.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.9,
+            48.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50,
+            48.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50,
+            48.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50,
+            48.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            50,
+            48.1,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/dung_thien_toa.png",
+      "description": "Nhân vật nu manh mặc vo phuc, dáng đứng: ngồi thiền trên đất, hai tay đặt trong lòng; dải ngang 6 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-sits cross-legged meditating",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          4,
+          9
+        ],
+        "group": "cfdcb630-6d1b-40d3-b988-ef2f6399a2ca"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 6,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 4,
+      "neo": [
+        {
+          "dau": [
+            49.8,
+            48.8,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.1,
+            47.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.1,
+            47.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49,
+            47.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.4,
+            47.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.8,
+            48.5,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/dung_bat_an.png",
+      "description": "Nhân vật nam manh mặc dao bao, dáng đứng: một tay dựng trước mặt bắt ấn, tay kia buông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one hand before face in",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "8d13e264-fc4a-4b80-9f98-609ec1a3950a"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.7,
+            26.5,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.6,
+            26.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.6,
+            26.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            47.9,
+            26.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            26.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            26.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            26.6,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/dung_bat_an.png",
+      "description": "Nhân vật nu khoe mặc dao bao, dáng đứng: một tay dựng trước mặt bắt ấn, tay kia buông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one hand before face in",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "e1e52bd9-5126-4ec2-99fa-d679edf233e1"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.8,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/dung_bat_an.png",
+      "description": "Nhân vật nu manh mặc dao bao, dáng đứng: một tay dựng trước mặt bắt ấn, tay kia buông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one hand before face in",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "7061939b-d276-49c3-9518-b5020a1e7c7d"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.6,
+            27.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.3,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.2,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49,
+            27.4,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/dung_bat_an.png",
+      "description": "Nhân vật nam khoe mặc vo phuc, dáng đứng: một tay dựng trước mặt bắt ấn, tay kia buông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one hand before face in",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "8ae9f5f0-52ea-4a8b-b146-99991c182a51"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49.9,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.4,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            26.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            26.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.9,
+            27,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.9,
+            27,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/dung_bat_an.png",
+      "description": "Nhân vật nam manh mặc vo phuc, dáng đứng: một tay dựng trước mặt bắt ấn, tay kia buông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one hand before face in",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "7b019dd4-c947-4f53-9755-3a28da1f285b"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49,
+            27.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.1,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.4,
+            27.1,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49,
+            27.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49,
+            27.2,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/dung_bat_an.png",
+      "description": "Nhân vật nu khoe mặc vo phuc, dáng đứng: một tay dựng trước mặt bắt ấn, tay kia buông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one hand before face in",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "96a98bc6-cad0-4305-bb89-ae6092615289"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            28,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.9,
+            28,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/dung_bat_an.png",
+      "description": "Nhân vật nu manh mặc vo phuc, dáng đứng: một tay dựng trước mặt bắt ấn, tay kia buông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one hand before face in",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "f5a7a5f1-8f40-40ef-a3ba-e9255a204ba0"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49.2,
+            28.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.2,
+            28.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.8,
+            28.7,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            48.5,
+            28.6,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.2,
+            28.2,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.2,
+            28.3,
+            0
+          ],
+          "tay": null
+        },
+        {
+          "dau": [
+            49.2,
+            28.3,
+            0
+          ],
+          "tay": null
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/dung_vac_vai.png",
+      "description": "Nhân vật nam manh mặc dao bao, dáng đứng: một tay giơ nắm cán vũ khí gác vai, tay kia chống hông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-rests fist on shoulder",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "9b985c0a-93a5-469c-9f91-f3cab7475aeb"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49.1,
+            26.6,
+            0
+          ],
+          "tay": [
+            53.9,
+            43.9
+          ]
+        },
+        {
+          "dau": [
+            48.2,
+            26.6,
+            0
+          ],
+          "tay": [
+            53.9,
+            43.7
+          ]
+        },
+        {
+          "dau": [
+            48.2,
+            26.6,
+            0
+          ],
+          "tay": [
+            54,
+            43.7
+          ]
+        },
+        {
+          "dau": [
+            48.2,
+            26.6,
+            0
+          ],
+          "tay": [
+            53.9,
+            43.7
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.6,
+            0
+          ],
+          "tay": [
+            50.8,
+            43.1
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.6,
+            0
+          ],
+          "tay": [
+            54,
+            43.7
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.6,
+            0
+          ],
+          "tay": [
+            53.9,
+            43.9
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/dung_vac_vai.png",
+      "description": "Nhân vật nu khoe mặc dao bao, dáng đứng: một tay giơ nắm cán vũ khí gác vai, tay kia chống hông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-rests fist on shoulder",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "f3df05bc-d7b5-4a21-ba78-da291124fd54"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49.2,
+            28.1,
+            0
+          ],
+          "tay": [
+            44.4,
+            35.2
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            28.1,
+            0
+          ],
+          "tay": [
+            44.6,
+            35.1
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            28.1,
+            0
+          ],
+          "tay": [
+            44.4,
+            35.1
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            28.1,
+            0
+          ],
+          "tay": [
+            44.4,
+            35.1
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            28.1,
+            0
+          ],
+          "tay": [
+            44.4,
+            35.1
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            28.1,
+            0
+          ],
+          "tay": [
+            44.6,
+            35.1
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            28.1,
+            0
+          ],
+          "tay": [
+            44.6,
+            35.2
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/dung_vac_vai.png",
+      "description": "Nhân vật nu manh mặc dao bao, dáng đứng: một tay giơ nắm cán vũ khí gác vai, tay kia chống hông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-rests fist on shoulder",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "f7bd9562-7e9b-464d-8765-29a3cf3e9b9d"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.5,
+            27.3,
+            0
+          ],
+          "tay": [
+            49.9,
+            42.6
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.3,
+            0
+          ],
+          "tay": [
+            50.4,
+            43.4
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.3,
+            0
+          ],
+          "tay": [
+            50,
+            42.8
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.2,
+            0
+          ],
+          "tay": [
+            49.9,
+            42.6
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.2,
+            0
+          ],
+          "tay": [
+            49.9,
+            42.4
+          ]
+        },
+        {
+          "dau": [
+            49.1,
+            27.4,
+            0
+          ],
+          "tay": [
+            49.4,
+            42.8
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.6,
+            0
+          ],
+          "tay": [
+            49.7,
+            42.9
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/dung_vac_vai.png",
+      "description": "Nhân vật nam khoe mặc vo phuc, dáng đứng: một tay giơ nắm cán vũ khí gác vai, tay kia chống hông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-rests fist on shoulder",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "68e46f54-3e6f-4f6c-853f-fd642680e597"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49,
+            26.9,
+            0
+          ],
+          "tay": [
+            44.5,
+            40.2
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            26.9,
+            0
+          ],
+          "tay": [
+            43.8,
+            38
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            26.9,
+            0
+          ],
+          "tay": [
+            44.3,
+            37.9
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            26.9,
+            0
+          ],
+          "tay": [
+            44.3,
+            38.2
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            26.9,
+            0
+          ],
+          "tay": [
+            44,
+            37.7
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            26.9,
+            0
+          ],
+          "tay": [
+            43.8,
+            37.9
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            26.9,
+            0
+          ],
+          "tay": [
+            43.8,
+            38.8
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/dung_vac_vai.png",
+      "description": "Nhân vật nam manh mặc vo phuc, dáng đứng: một tay giơ nắm cán vũ khí gác vai, tay kia chống hông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-rests fist on shoulder",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "6416640c-95fb-4638-8187-c3cba8bc73f3"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49.2,
+            27,
+            0
+          ],
+          "tay": [
+            48.1,
+            41.1
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27,
+            0
+          ],
+          "tay": [
+            46.3,
+            35.4
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27,
+            0
+          ],
+          "tay": [
+            45.3,
+            35.4
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27,
+            0
+          ],
+          "tay": [
+            45.8,
+            35.3
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27,
+            0
+          ],
+          "tay": [
+            45.6,
+            35.3
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            27,
+            0
+          ],
+          "tay": [
+            45.9,
+            35.3
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27,
+            0
+          ],
+          "tay": [
+            47.9,
+            37.4
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/dung_vac_vai.png",
+      "description": "Nhân vật nu khoe mặc vo phuc, dáng đứng: một tay giơ nắm cán vũ khí gác vai, tay kia chống hông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-rests fist on shoulder",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "ff6b06e9-40f8-4838-8402-0cbbf2f0aea7"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49.3,
+            28.2,
+            0
+          ],
+          "tay": [
+            44,
+            36.5
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            28.2,
+            0
+          ],
+          "tay": [
+            43.8,
+            36.5
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            28.2,
+            0
+          ],
+          "tay": [
+            43.8,
+            36.7
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            28.2,
+            0
+          ],
+          "tay": [
+            43.8,
+            37
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            28.2,
+            0
+          ],
+          "tay": [
+            43.7,
+            38.5
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            28.2,
+            0
+          ],
+          "tay": [
+            43.7,
+            37.4
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            28.2,
+            0
+          ],
+          "tay": [
+            43.8,
+            36.5
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/dung_vac_vai.png",
+      "description": "Nhân vật nu manh mặc vo phuc, dáng đứng: một tay giơ nắm cán vũ khí gác vai, tay kia chống hông; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-rests fist on shoulder",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "cac90c2f-23fd-4f81-9367-d07864a2ddd4"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49.2,
+            27.6,
+            0
+          ],
+          "tay": [
+            55.6,
+            37.6
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.7,
+            0
+          ],
+          "tay": [
+            55.4,
+            37.3
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.7,
+            0
+          ],
+          "tay": [
+            55.6,
+            36.1
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.7,
+            0
+          ],
+          "tay": [
+            55.6,
+            36.7
+          ]
+        },
+        {
+          "dau": [
+            48.8,
+            27.8,
+            0
+          ],
+          "tay": [
+            55.4,
+            37.1
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            27.9,
+            0
+          ],
+          "tay": [
+            55.6,
+            37.3
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            27.9,
+            0
+          ],
+          "tay": [
+            55.6,
+            37.7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/dung_chong_nanh.png",
+      "description": "Nhân vật nam manh mặc dao bao, dáng đứng: một tay chống hông, một tay cầm vật trước ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-hand on hip, other hand at che",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "1df77ccc-4c0a-49ef-9e87-41c051596003"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48,
+            26.8,
+            0
+          ],
+          "tay": [
+            53.4,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            48,
+            26.8,
+            0
+          ],
+          "tay": [
+            53.4,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            48.1,
+            26.8,
+            0
+          ],
+          "tay": [
+            50.9,
+            41.3
+          ]
+        },
+        {
+          "dau": [
+            48.1,
+            26.8,
+            0
+          ],
+          "tay": [
+            50.9,
+            41.3
+          ]
+        },
+        {
+          "dau": [
+            48,
+            26.8,
+            0
+          ],
+          "tay": [
+            51.2,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            48,
+            26.8,
+            0
+          ],
+          "tay": [
+            51.2,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            48,
+            26.8,
+            0
+          ],
+          "tay": [
+            51.2,
+            41.3
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/dung_chong_nanh.png",
+      "description": "Nhân vật nu khoe mặc dao bao, dáng đứng: một tay chống hông, một tay cầm vật trước ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-hand on hip, other hand at che",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "d85be809-3c0e-48ee-bf8b-3fb98f8bb436"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.7,
+            28.5,
+            0
+          ],
+          "tay": [
+            51.8,
+            43.3
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            28.5,
+            0
+          ],
+          "tay": [
+            51.9,
+            43.3
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            28.5,
+            0
+          ],
+          "tay": [
+            51.9,
+            43.3
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            28.5,
+            0
+          ],
+          "tay": [
+            51.9,
+            43.1
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            28.5,
+            0
+          ],
+          "tay": [
+            52.1,
+            43.1
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            28.5,
+            0
+          ],
+          "tay": [
+            52.1,
+            43.1
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            28.5,
+            0
+          ],
+          "tay": [
+            52.1,
+            43.1
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/dung_chong_nanh.png",
+      "description": "Nhân vật nu manh mặc dao bao, dáng đứng: một tay chống hông, một tay cầm vật trước ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-hand on hip, other hand at che",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "0bc171c6-0b8e-44fc-804d-d89d4e2a6094"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.2,
+            27.6,
+            0
+          ],
+          "tay": [
+            53.3,
+            42.5
+          ]
+        },
+        {
+          "dau": [
+            48.2,
+            27.5,
+            0
+          ],
+          "tay": [
+            52.8,
+            42.4
+          ]
+        },
+        {
+          "dau": [
+            48.2,
+            27.6,
+            0
+          ],
+          "tay": [
+            53.3,
+            42.5
+          ]
+        },
+        {
+          "dau": [
+            48.1,
+            27.6,
+            0
+          ],
+          "tay": [
+            53.1,
+            42.5
+          ]
+        },
+        {
+          "dau": [
+            48.1,
+            27.6,
+            0
+          ],
+          "tay": [
+            52.8,
+            42.2
+          ]
+        },
+        {
+          "dau": [
+            48.1,
+            27.6,
+            0
+          ],
+          "tay": [
+            52.8,
+            42.4
+          ]
+        },
+        {
+          "dau": [
+            48.2,
+            27.6,
+            0
+          ],
+          "tay": [
+            52.8,
+            42.4
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/dung_chong_nanh.png",
+      "description": "Nhân vật nam khoe mặc vo phuc, dáng đứng: một tay chống hông, một tay cầm vật trước ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-hand on hip, other hand at che",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "b5101d25-19ea-4a74-9d02-f15ad7ce165c"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49,
+            26.9,
+            0
+          ],
+          "tay": [
+            52.3,
+            43.6
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.9,
+            0
+          ],
+          "tay": [
+            52.1,
+            43.4
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.9,
+            0
+          ],
+          "tay": [
+            52.5,
+            43.1
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.9,
+            0
+          ],
+          "tay": [
+            52.5,
+            43.1
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.9,
+            0
+          ],
+          "tay": [
+            52.5,
+            43.1
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.8,
+            0
+          ],
+          "tay": [
+            52.3,
+            43.3
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.9,
+            0
+          ],
+          "tay": [
+            52.3,
+            43.3
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/dung_chong_nanh.png",
+      "description": "Nhân vật nam manh mặc vo phuc, dáng đứng: một tay chống hông, một tay cầm vật trước ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-hand on hip, other hand at che",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "8e446112-5a44-458f-8877-389832fcb2c0"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.3,
+            27.1,
+            0
+          ],
+          "tay": [
+            56.5,
+            41
+          ]
+        },
+        {
+          "dau": [
+            48.3,
+            27.1,
+            0
+          ],
+          "tay": [
+            56.7,
+            41.9
+          ]
+        },
+        {
+          "dau": [
+            48.3,
+            27.1,
+            0
+          ],
+          "tay": [
+            56.5,
+            41.4
+          ]
+        },
+        {
+          "dau": [
+            48.3,
+            27.1,
+            0
+          ],
+          "tay": [
+            56.5,
+            41.3
+          ]
+        },
+        {
+          "dau": [
+            48.3,
+            27.1,
+            0
+          ],
+          "tay": [
+            56.5,
+            41.6
+          ]
+        },
+        {
+          "dau": [
+            48.3,
+            27.1,
+            0
+          ],
+          "tay": [
+            56.5,
+            41.6
+          ]
+        },
+        {
+          "dau": [
+            48.3,
+            27.1,
+            0
+          ],
+          "tay": [
+            56.7,
+            41.7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/dung_chong_nanh.png",
+      "description": "Nhân vật nu khoe mặc vo phuc, dáng đứng: một tay chống hông, một tay cầm vật trước ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-hand on hip, other hand at che",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "e47fc011-f24e-424c-a6a1-af3248ae19a3"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            49,
+            28.5,
+            0
+          ],
+          "tay": [
+            52.4,
+            42.8
+          ]
+        },
+        {
+          "dau": [
+            49,
+            28.5,
+            0
+          ],
+          "tay": [
+            52.9,
+            42.4
+          ]
+        },
+        {
+          "dau": [
+            49,
+            28.5,
+            0
+          ],
+          "tay": [
+            55,
+            42.5
+          ]
+        },
+        {
+          "dau": [
+            48.8,
+            28.4,
+            0
+          ],
+          "tay": [
+            55,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            28.4,
+            0
+          ],
+          "tay": [
+            55,
+            42.1
+          ]
+        },
+        {
+          "dau": [
+            49,
+            28.4,
+            0
+          ],
+          "tay": [
+            52.7,
+            42.7
+          ]
+        },
+        {
+          "dau": [
+            49,
+            28.4,
+            0
+          ],
+          "tay": [
+            55,
+            42.7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/dung_chong_nanh.png",
+      "description": "Nhân vật nu manh mặc vo phuc, dáng đứng: một tay chống hông, một tay cầm vật trước ngực; dải ngang 7 khung 96×96 lặp được, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo.",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-hand on hip, other hand at che",
+        "directions": [
+          "south-east"
+        ],
+        "frames_kept": [
+          3,
+          9
+        ],
+        "group": "89aa5b38-1b56-4b7e-a3cc-e985b3560fae"
+      },
+      "created": "2026-11-04",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 7,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 5,
+      "neo": [
+        {
+          "dau": [
+            48.5,
+            27.9,
+            0
+          ],
+          "tay": [
+            47.3,
+            41
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            28,
+            0
+          ],
+          "tay": [
+            47.4,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            28,
+            0
+          ],
+          "tay": [
+            47.4,
+            40.4
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.9,
+            0
+          ],
+          "tay": [
+            47.3,
+            40.4
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.9,
+            0
+          ],
+          "tay": [
+            47.1,
+            40.9
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.9,
+            0
+          ],
+          "tay": [
+            47.1,
+            41
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            27.9,
+            0
+          ],
+          "tay": [
+            47.1,
+            41
+          ]
+        }
+      ]
     }
   ]
 }
