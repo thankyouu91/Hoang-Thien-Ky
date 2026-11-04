@@ -47,7 +47,8 @@ export const SKILL_SPECS: Record<SkillType, SkillSpec> = {
   dien_rong: { k: 600, targets: 10, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 35, range: 4000, radius: 2000 },
   ho_the: { k: 200, targets: 3, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 25, range: 4000, radius: 0 },
   bua_chu: { k: 3000, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 160, range: 4000, radius: 0 },
-  tran_phap: { k: 5000, targets: 6, cooldownTicks: 20 * SEC, critPerMille: 0, mana: 240, range: 4000, radius: 2000 },
+  // Trận pháp ×6,0 (đã chốt 2026-11-04, trước ×5,0): bù 5 s bày trận.
+  tran_phap: { k: 6000, targets: 6, cooldownTicks: 20 * SEC, critPerMille: 0, mana: 240, range: 4000, radius: 2000 },
   hoi_phuc: { k: 900, targets: 3, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 180, range: 4000, radius: 0 },
   khong_che: { k: 500, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 10, range: 3000, radius: 0 },
   than_phap: { k: 1600, targets: 1, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 25, range: 6000, radius: 0 },
@@ -75,6 +76,11 @@ export const SKILL_RULES = {
   exposedTicks: 3 * SEC, // thân pháp: lộ vị trí 3 s, địch ưu tiên đánh
   selfShieldCooldownTicks: 6 * SEC, // Thổ: khiên bản thân tối đa một lần mỗi 6 s, không phải mỗi lần ra chiêu; đề xuất
   meleeKnockback: false, // Phong: chiêu cận chiến không đẩy lùi, để không đẩy địch ra khỏi tầm của chính mình; đề xuất
+  // Hợp trận 2–3–5 người (dữ liệu 890ce26). Sim CHƯA dùng các số này: chờ đặc tả của phiên trận pháp.
+  formationJoinRange: 2000, // người bày cùng trận đứng trong 2 ô; đề xuất
+  formationBond2: 1300, // hệ số hợp trận 2 người (đã chốt)
+  formationBond3: 1600, // 3 người (đã chốt)
+  formationBond5: 2000, // 5 người (đã chốt)
 };
 
 /**
