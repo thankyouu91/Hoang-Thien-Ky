@@ -173,3 +173,26 @@ test("replay từ sim thật: có sự kiện trạng thái, phẩm công pháp;
     assert.ok(drawn > 0);
   }
 });
+
+test("trạng thái bị giải sớm (until = tick, ví dụ Chuông giải choáng, trói) thì pha 4 tắt đúng lúc", async () => {
+  const { activeAt, statusTrack } = await import("./trang_thai.ts");
+  const replay = sampleReplay({ skill: "khong_che", element: "moc", grade: 3 });
+  const stun = replay.events.find((e) => e.kind === "status" && e.status === "stun");
+  const root = replay.events.find((e) => e.kind === "status" && e.status === "root");
+  assert.ok(stun && stun.kind === "status" && root && root.kind === "status");
+  const cut = stun.tick + 6;
+  assert.ok(stun.until > cut && root.until > cut, "trận mẫu có choáng, trói dài hơn mốc giải");
+  // Như simSource ghi khi sim đặt stunUntil, rootUntil về tick hiện tại.
+  replay.events.push(
+    { tick: cut, kind: "status", unit: stun.unit, status: "stun", until: cut },
+    { tick: cut, kind: "status", unit: root.unit, status: "root", until: cut },
+  );
+  replay.events.sort((a, b) => a.tick - b.tick);
+  const index = new ReplayIndex(replay);
+  const track = statusTrack(index);
+  const spans = track.list.filter((s) => s.unit === stun.unit && (s.status === "stun" || s.status === "root"));
+  assert.equal(spans.length, 2);
+  for (const s of spans) assert.equal(s.until, cut, `${s.status} hết đúng tick giải`);
+  assert.equal(activeAt(track, cut - 1, 0).filter((s) => s.unit === stun.unit).length, 2, "trước lúc giải còn hiệu lực");
+  assert.equal(activeAt(track, cut + 1, 0).filter((s) => s.unit === stun.unit).length, 0, "sau lúc giải hết hiệu lực");
+});
