@@ -12,7 +12,7 @@ export const LUYEN_KHI = LK.luat;
 interface LevelRow { cap: number; kinh_nghiem_tich_luy: number; cong_chi_so: number; mo_o_khi_van: boolean }
 interface PhuRow { o: string; loai: number; stat: string; gia_tri: number }
 interface KhiVanRow { ma: string; nhom: "cong" | "thu"; gia_tri: number; tham_so: Record<string, number> | null }
-interface DanhKhiRow { ma_vp: string; khi_hinh: string; tham_so: Record<string, number | boolean> }
+interface DanhKhiRow { ma_vp: string; khi_hinh: string; tham_so: Partial<Record<string, number | boolean>> }
 const LEVELS = LK.khi_linh as LevelRow[];
 const PHU = LK.tay_luyen as PhuRow[];
 const KHI_VAN: Record<string, KhiVanRow> = {};
