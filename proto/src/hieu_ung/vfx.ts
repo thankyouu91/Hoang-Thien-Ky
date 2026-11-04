@@ -1,8 +1,8 @@
 // Hiệu ứng pixel làm bằng PixelLab vfx_workbench (assets/pixellab/vfx/): lưới khung, điểm gốc, fps trong manifest.
 // Bản xám được tô theo màu hệ lúc chạy (một bộ khung dùng cho cả 12 hệ); khung trống ở cuối tự bỏ.
-import type { Asset, Sprites } from "../../assets/sprites.ts";
-import type { ElementId } from "../../replay/types.ts";
-import { ELEMENT_STYLE } from "../../theme/elements.ts";
+import type { Asset, Sprites } from "../assets/sprites.ts";
+import type { ElementId } from "../replay/types.ts";
+import { ELEMENT_STYLE } from "../theme/elements.ts";
 
 export interface VfxInfo {
   /** Số khung có hình (đã bỏ khung trống ở cuối) */

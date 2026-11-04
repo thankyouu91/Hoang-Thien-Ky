@@ -1,9 +1,9 @@
 // Hiệu ứng ra chiêu thay cho đường thẳng: mỗi loại chiêu một hình dạng (GDD mục 8), hạt mang họa tiết của hệ (mục 15).
 // Mọi hiệu ứng là hàm của thời điểm phát t: tua tới lui vẫn thấy y hệt. Hạt sinh theo seed của từng sự kiện.
 import { SKILL_RULES } from "@ktlp/sim";
-import { between, type ReplayIndex } from "../../replay/timeline.ts";
-import type { ElementId, ReplayEvent, SkillId } from "../../replay/types.ts";
-import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
+import { between, type ReplayIndex } from "../replay/timeline.ts";
+import type { ElementId, ReplayEvent, SkillId } from "../replay/types.ts";
+import { ELEMENT_STYLE, SKILL_NAME } from "../theme/elements.ts";
 import { burst, drawMotif, next, particle, seed, unit01 } from "./motifs.ts";
 import type { VfxLib } from "./vfx.ts";
 

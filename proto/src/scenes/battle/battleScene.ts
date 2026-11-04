@@ -9,9 +9,9 @@ import type { Look, ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 import { animInfo, assignLooks, drawCharacter, resolveLook, type Anim } from "./character.ts";
 import { ReplayControls } from "./controls.ts";
-import { FxLayer, type Point } from "./fx.ts";
-import { drawMotif } from "./motifs.ts";
-import { VfxLib } from "./vfx.ts";
+import { FxLayer, type Point } from "../../hieu_ung/fx2d.ts";
+import { drawMotif } from "../../hieu_ung/motifs.ts";
+import { VfxLib } from "../../hieu_ung/vfx.ts";
 
 const CELL = 64; // đơn vị thế giới mỗi ô sân
 const LANE = 60; // khoảng cách ngang giữa hai người cùng hàng

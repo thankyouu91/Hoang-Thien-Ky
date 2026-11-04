@@ -1,7 +1,7 @@
 // Họa tiết hạt của 12 hệ, theo ký hiệu ở GDD mục 15, để nhận ra hệ cả khi không phân biệt được màu.
 // Mỗi họa tiết vẽ một lần vào canvas nhỏ rồi dùng lại; chuyển động của hạt (rơi, bay lên, xoay) cũng theo hệ.
-import type { ElementId } from "../../replay/types.ts";
-import { ELEMENT_STYLE } from "../../theme/elements.ts";
+import type { ElementId } from "../replay/types.ts";
+import { ELEMENT_STYLE } from "../theme/elements.ts";
 
 interface Motion {
   /** Rơi xuống (dương) hay bay lên (âm) khi hạt tàn, đơn vị thế giới */
