@@ -487,7 +487,7 @@ export type DashboardCommand =
   | { type: "dev_len_cap"; levels: number }
   /** Phân giải đồ trong túi (từ lam) ra Khí Tinh; ngọc, ấn khảm trên món về túi. */
   | { type: "phan_giai"; uids: number[] }
-  /** Tẩy luyện chỉ số phụ của ô: quay trong 3 loại còn lại; Tu rèn chọn thẳng `loai`. */
+  /** Tẩy luyện chỉ số phụ của ô (Khí Tinh và linh thạch theo độ hiếm món): quay trong 3 loại còn lại; Tu rèn chọn thẳng `loai`. */
   | { type: "tay_luyen"; slot: GearSlot; loai?: number }
   /** Nạp Khí Tinh cho khí linh của ô (10 kinh nghiệm mỗi viên); qua cấp 3, 6, 9 thì mở ô khí văn và có 3 lựa chọn chờ. */
   | { type: "nap_khi_linh"; slot: GearSlot; khiTinh: number }
@@ -495,8 +495,11 @@ export type DashboardCommand =
   | { type: "chon_khi_van"; slot: GearSlot; o: number; ma: string }
   /** Tẩy văn: quay lại 3 lựa chọn cho ô khí văn `o` (1 Linh Văn Thạch). */
   | { type: "tay_van"; slot: GearSlot; o: number }
-  /** Hợp hai viên cùng cấp (từ 7), hai hệ tương sinh, thành ngọc song hệ; không đậu thì mất cả hai. */
-  | { type: "hop_song_he"; a: string; b: string }
+  /**
+   * Hợp hai viên cùng cấp (từ 7), hai hệ tương sinh, thành ngọc song hệ; tỷ lệ đậu cố định. Không đậu thì mất viên b,
+   * giữ viên a; `phu` dùng một Phù bảo ngọc trong túi để giữ cả hai.
+   */
+  | { type: "hop_song_he"; a: string; b: string; phu?: boolean }
   /** Điểm hóa ngọc cấp 10 thành Phách (20 Khí Tinh); không đậu mất Khí Tinh, giữ ngọc. */
   | { type: "diem_hoa_phach"; gem: string }
   /** Khai lò danh khí ở Luyện Khí Các: `nguoi` là 4 thành viên (chủ lò Tu rèn trước, rồi 3 hộ lô). */

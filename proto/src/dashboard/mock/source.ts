@@ -27,8 +27,9 @@ import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.
 import { createWorld, npcSects, pieceBagItem, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, samePiece, todayAt, type NpcSect, type World } from "./world.ts";
 import NGOC from "../../../../data/he_thong/json/ngoc.json";
 import {
-  addExp, canDecompose, DANH_KHI, DANH_KHI_COST, doPhoCode, gemRate, hasKhiLinh, khiHinhOf, khiTinhOf, KL_MAX, KL_PER_KHI_TINH, LO_MIN, loRate, PHACH_FROM,
-  PHACH_KHI_TINH, PHACH_RATE, phachCode, phachName, reached, REROLL_KHI_TINH, rerollSub, rollOffer, SONG_HE_FROM, songHeOk, stoneBack, SUB, syncVan, UNLOCK,
+  addExp, canDecompose, DANH_KHI, DANH_KHI_COST, doPhoCode, hasKhiLinh, khiHinhOf, khiTinhOf, KL_MAX, KL_PER_KHI_TINH, LO_MIN, loRate, PHACH_FROM,
+  PHACH_KHI_TINH, PHACH_RATE, phachCode, phachName, reached, REROLL_KHI_TINH, rerollStone, rerollSub, rollOffer, SONG_HE_FROM, SONG_HE_LOSE, SONG_HE_PHU,
+  SONG_HE_RATE, songHeOk, stoneBack, SUB, syncVan, UNLOCK,
   VAN_REROLL, yieldLocked,
 } from "../luyenKhi.ts";
 
@@ -924,10 +925,13 @@ export class MockDashboardSource implements DashboardSource {
         if (!reached(progressOf(this.me.level), UNLOCK.tayLuyen)) return { ok: false, error: "chua_mo" };
         if (!ls || !p.gear[cmd.slot]) return { ok: false, error: "khong_thay_mon" };
         if (p.luyenKhi.khiTinh < REROLL_KHI_TINH) return { ok: false, error: "khong_du_khi_tinh" };
+        const stone = rerollStone(p.gear[cmd.slot]!.rarity);
+        if (p.linhThach < stone) return { ok: false, error: "khong_du_linh_thach" };
         // Chỉ Tu rèn chọn thẳng loại; người khác quay trong 3 loại còn lại.
         if (cmd.loai !== undefined && String(p.talent) !== "tu_ren") return { ok: false, error: "chi_tu_ren" };
         if (cmd.loai !== undefined && (cmd.loai < 0 || cmd.loai > 3 || cmd.loai === ls.sub)) return { ok: false, error: "sai_loai" };
         this.spendKhiTinh(REROLL_KHI_TINH);
+        p.linhThach -= stone;
         ls.sub = cmd.loai ?? rerollSub(ls.sub);
         const x = SUB[cmd.slot][ls.sub];
         return { ok: true, message: `Chỉ số phụ mới: ${x.ten} ${x.gt}` };
@@ -976,10 +980,19 @@ export class MockDashboardSource implements DashboardSource {
         const b = lk.gems.find((x) => x.id === cmd.b && x.n > 0);
         if (!a || !b || a === b) return { ok: false, error: "khong_thay_mon" };
         if (a.he2 || b.he2 || a.cap !== b.cap || a.cap < SONG_HE_FROM || !songHeOk(a.he, b.he)) return { ok: false, error: "khong_hop_duoc" };
+        // Phù bảo ngọc dùng mỗi lần hợp (đậu hay không đều tiêu một tấm).
+        const bag = w.player.bag;
+        const phu = cmd.phu ? bag.find((it) => it.code === SONG_HE_PHU && it.count > 0) : undefined;
+        if (cmd.phu && !phu) return { ok: false, error: "khong_thay_mon" };
+        if (phu && --phu.count === 0) bag.splice(bag.indexOf(phu), 1);
+        // Tỷ lệ đậu cố định (GDD rev 47). Không đậu: mất viên b (SONG_HE_LOSE viên), giữ viên a; có phù thì giữ cả hai.
+        if (Math.random() * 1000 >= SONG_HE_RATE) {
+          if (phu) return { ok: true, message: "Hợp không đậu: Phù bảo ngọc giữ lại cả hai viên" };
+          b.n -= SONG_HE_LOSE;
+          return { ok: true, message: "Hợp không đậu: mất viên thứ hai" };
+        }
         a.n--;
         b.n--;
-        // Tỷ lệ như nén lên cấp đó; không đậu thì mất cả hai viên như nén ngọc thất bại.
-        if (Math.random() * 1000 >= gemRate(a.cap)) return { ok: true, message: "Hợp không đậu: mất hai viên" };
         const same = lk.gems.find((x) => x.he === a.he && x.he2 === b.he && x.cap === a.cap);
         if (same) same.n++;
         else lk.gems.push({ id: `sh${w.player.nextUid++}`, he: a.he, he2: b.he, cap: a.cap, n: 1 });
