@@ -5,11 +5,12 @@
 //   4. trạng thái kéo dài: vẽ ở he.ts statusFx theo thời hạn trạng thái.
 // Pha 1–2 nằm trước tick ra chiêu (replay biết trước), pha 3 bắt đầu đúng tick đó. Thời lượng tính bằng giây thực đổi ra
 // tick theo tốc độ phát (FxInput.life), nên ×1, ×2, ×4 đều đọc được; mọi hạt là hàm của (seed, t).
-import { BODY_Z, castSeed, HEAD_Z, palette, aim, type Ctx } from "./ctx.ts";
+import { BODY_Z, castSeed, HEAD_Z, aim, type Ctx } from "./ctx.ts";
 import { CELL, COLORS, DANGER, GOLD, GOLD_DEEP, L, mix, SEAL, WHITE, type RGB } from "./emit.ts";
-import { hitSignature } from "./he.ts";
 import { count, type Recipe } from "./recipe.ts";
 import type { Cast, FxInput, Point } from "./types.ts";
+import { dir, flightSeconds, impact, trail, windup, type Shot } from "./chung.ts";
+import { drawDang, dangTimeline } from "./dang.ts";
 import {
   arc, beam, bolt, clamp01, dome, easeBack, easeIn, easeOut, glow, groundGlow, motif, pulse, ramp, rays, ring, rnd,
   rune, shade, sprite, sym,
@@ -21,24 +22,6 @@ const TAU = Math.PI * 2;
 export const LOOK_AHEAD = 170;
 export const LOOK_BACK = 50;
 
-interface Shot {
-  c: Cast;
-  r: Recipe;
-  seed: number;
-  /** Chân người ra chiêu (hiện tại) và hướng mặt về phía mục tiêu */
-  src: Point;
-  face: Point;
-  /** giây thực × nhịp biến thể → tick */
-  S: (s: number) => number;
-}
-
-function dir(a: Point, b: Point): Point {
-  const dx = b.x - a.x;
-  const dy = b.y - a.y;
-  const len = Math.hypot(dx, dy) || 1;
-  return { x: dx / len, y: dy / len };
-}
-
 /** Vẽ đủ bốn pha (trừ trạng thái) của một lần ra chiêu ở thời điểm x.t. */
 export function drawCast(x: Ctx, c: Cast, r: Recipe): void {
   const src = x.foot(c.unit);
@@ -46,6 +29,11 @@ export function drawCast(x: Ctx, c: Cast, r: Recipe): void {
   const target = aim(x, c, c.tick) ?? { x: src.x + 1, y: src.y };
   const face = dir(src, target);
   const s: Shot = { c, r, seed: castSeed(c) ^ r.seed, src, face, S: (sec) => x.f.life(sec * r.pace) };
+  // Dáng chiêu đặc trưng (đao khí, kiếm trận, mưa kiếm, đầu lâu, huyết tuyến…) thay hình gốc của loại chiêu ở pha 1–3.
+  if (r.dang && drawDang(x, s, r.dang)) {
+    if (c.ult) ultimate(x, s);
+    return;
+  }
   switch (c.skill) {
     case "can_don":
       melee(x, s);
@@ -123,86 +111,12 @@ export function castTimeline(f: Pick<FxInput, "index" | "life">, c: Cast, r: Rec
       tl = { windup: hit - S(0.2), travel: hit - 1, hit, settle: hit + S(0.5) };
       break;
   }
+  if (r.dang) tl = dangTimeline(r.dang, c, S, tl);
   if (c.ult) {
     tl.windup = Math.min(tl.windup, hit - f.life(0.9));
     tl.settle = Math.max(tl.settle, hit + f.life(1.4));
   }
   return tl;
-}
-
-// ---- dùng chung ----------------------------------------------------------------------------------------------------
-
-/** Pha 1 chung: quầng tụ lực ở tay và hạt hệ xoáy vào; chiêu đặc biệt thêm vòng phù văn dưới chân. */
-function windup(x: Ctx, s: Shot, from: number, to: number, strength = 1): void {
-  const { t, e } = x;
-  if (t < from || t >= to) return;
-  const q = (t - from) / Math.max(1, to - from);
-  const { r, src, face } = s;
-  const hx = src.x + face.x * 10;
-  const hy = src.y + face.y * 10;
-  const k = r.bright * strength;
-  glow(e, L.AIR, hx, hy, BODY_Z + 4, (8 + 14 * q) * (0.8 + 0.2 * r.impact), r.main.glow, (0.25 + 0.6 * q) * k, 1, 0.5 * q);
-  const n = count(r, r.special ? 5 : 3);
-  for (let i = 0; i < n; i++) {
-    const ph = (q * 1.4 + i / n) % 1;
-    const ang = rnd(s.seed, 300 + i) * TAU + t * 0.12;
-    const rr = 30 * (1 - ph);
-    const el = i % 3 === 2 && r.subs[0] ? r.subs[0] : r.el;
-    motif(e, L.AIR, el, hx + Math.cos(ang) * rr, hy + Math.sin(ang) * rr * 0.5, BODY_Z + 4 + Math.sin(ang) * rr * 0.4, 3.5 + 2 * ph, ang, COLORS[el].glow, k * ph, 0.5);
-  }
-  if (r.special) {
-    const rad = 18 + 4 * r.tier;
-    rune(e, L.GROUND, src.x, src.y, rad, rad * 0.38, r.main.glow, 0.75 * k * ramp(q, 0, 0.3), t * 0.04, 1, 3, 1, 0.7);
-  }
-}
-
-/** Pha 3 chung trên một mục tiêu: chớp, tia lửa, vòng nhỏ, nét hệ chủ và các hệ phụ. */
-function impact(x: Ctx, s: Shot, id: number, a: number, scale = 1, sigK = 1): void {
-  if (a < 0 || a >= 1) return;
-  const { e } = x;
-  const { r, c } = s;
-  const p = x.foot(id, c.tick);
-  if (!p) return;
-  const k = r.bright;
-  const seed = s.seed ^ (id * 2654435761);
-  const big = r.impact * scale;
-  // Chớp ngắn và trong để vẫn thấy người, thanh máu, số sát thương bên dưới.
-  glow(e, L.AIR, p.x, p.y, BODY_Z, 13 * big * (0.6 + 0.5 * easeOut(a)), r.main.glow, 0.6 * k * pulse(a, 0.06), 1, 0.25);
-  ring(e, L.AIR, p.x, p.y, 8 + 22 * easeOut(a) * big, 8 + 22 * easeOut(a) * big, r.main.glow, 0.7 * k * (1 - a), { width: 2.2 * big * (1 - a) + 0.6, z: BODY_Z, add: 0.9 });
-  const n = count(r, 4 + (r.variant === "bao" ? 3 : 0));
-  for (let i = 0; i < n; i++) {
-    const ang = rnd(seed, 400 + i) * TAU;
-    const dist = (10 + 26 * rnd(seed, 410 + i)) * easeOut(a) * big;
-    const col = i % 3 === 2 ? r.trail.glow : r.main.glow;
-    sprite(e, L.AIR, CELL.spark, p.x + Math.cos(ang) * dist, p.y + Math.sin(ang) * dist, BODY_Z + Math.sin(ang) * dist * 0.3, 7 * (1 - a) + 2, 2, ang, col, k * (1 - a), 1, 0.8);
-  }
-  if (r.tier >= 1) {
-    for (let i = 0; i < r.tier + 1; i++) {
-      const ang = rnd(seed, 420 + i) * TAU;
-      sprite(e, L.AIR, CELL.star, p.x + Math.cos(ang) * 16 * big, p.y + Math.sin(ang) * 8, BODY_Z + 12 * rnd(seed, 430 + i), 5, 5, a * 3, WHITE, k * pulse(a, 0.3), 1, 0.5);
-    }
-  }
-  if (r.tier >= 2) rays(e, L.AIR, p.x, p.y, BODY_Z, 30 * big, r.main.glow, 0.7 * k * pulse(a, 0.1), 6 + 2 * r.tier, rnd(seed, 440) * TAU, 10, 0.4);
-  const src = x.foot(c.unit, c.tick);
-  const pal = palette(c);
-  hitSignature(x, pal[0], r, r.sig * sigK, a, p, src, seed, id);
-  for (let i = 1; i < pal.length; i++) hitSignature(x, pal[i], r, 0.5 * r.sig * sigK, clamp01(a * 1.15 - 0.08 * i), p, src, seed ^ (i * 977), id);
-}
-
-/** Vệt kéo của đạn: các đoạn dải sáng phía sau đầu đạn, màu hệ phụ ở ngoài, hệ chủ ở lõi. */
-function trail(x: Ctx, s: Shot, pt: (q: number) => [number, number, number], q: number, len: number, w: number, k: number): void {
-  const { r } = s;
-  const segs = 5;
-  for (let j = 0; j < segs; j++) {
-    const q0 = q - (len * (j + 1)) / segs;
-    const q1 = q - (len * j) / segs;
-    if (q1 <= 0) break;
-    const [x0, y0, z0] = pt(Math.max(0, q0));
-    const [x1, y1, z1] = pt(q1);
-    const fade = 1 - j / segs;
-    beam(x.e, L.AIR, x0, y0, z0, x1, y1, z1, w * (0.5 + 0.5 * fade) * 1.8, r.trail.glow, k * fade * 0.45, k * (fade + 0.2) * 0.45, 1, 0, 0, 1);
-    beam(x.e, L.AIR, x0, y0, z0, x1, y1, z1, w * (0.4 + 0.6 * fade), r.main.glow, k * fade * 0.8, k * Math.min(1, fade + 0.2), 1, 0.5, 0.3, 0.5);
-  }
 }
 
 // ---- cận chiến đơn: vệt chém -------------------------------------------------------------------------------------
@@ -272,13 +186,6 @@ function sweep(x: Ctx, s: Shot): void {
 }
 
 // ---- tầm xa, khống chế, bùa chú: đạn bay ------------------------------------------------------------------------
-
-/** Thời gian bay (giây thực) theo khoảng cách ô. */
-function flightSeconds(skill: Cast["skill"], cells: number): number {
-  if (skill === "bua_chu") return Math.min(0.6, Math.max(0.25, 0.22 + 0.04 * cells));
-  const base = Math.min(0.42, Math.max(0.1, 0.08 + 0.035 * cells));
-  return skill === "khong_che" ? base * 1.15 : base;
-}
 
 function projectile(x: Ctx, s: Shot): void {
   const { t, e } = x;

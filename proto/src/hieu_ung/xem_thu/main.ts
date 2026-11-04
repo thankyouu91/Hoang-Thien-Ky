@@ -13,7 +13,8 @@ import { GRADE_NAMES, scrollKind, VARIANT_NAMES } from "@ktlp/rules";
 import MAU from "../../../../data/he_thong/json/cong_phap_mau.json" with { type: "json" };
 import { castTimeline, type CastTimeline } from "../chieu.ts";
 import type { SkillFx } from "../index.ts";
-import { recipeOf, VARIANTS, type FxStyle, type Variant } from "../recipe.ts";
+import { DANG, DANG_FOR, DANG_NAME, type Dang } from "../dang_chon.ts";
+import { recipe, recipeOf, VARIANTS, type FxStyle, type Variant } from "../recipe.ts";
 import { sampleReplay } from "./mau.ts";
 
 interface Mau {
@@ -31,6 +32,8 @@ interface Pick {
   grade: number | null;
   variant: Variant | null;
   sub: ElementId | "none" | null;
+  /** Dáng chiêu: null tự chọn theo dữ liệu, "goc" hình gốc của loại chiêu */
+  dang: Dang | "goc" | null;
   ult: boolean;
   old: boolean;
   loop: boolean;
@@ -57,6 +60,7 @@ function readHash(): Pick {
     grade: num("pham"),
     variant: (q.get("bt") as Variant | null) ?? null,
     sub: (q.get("phu") as Pick["sub"]) ?? null,
+    dang: (q.get("dang") as Pick["dang"]) ?? null,
     ult: q.get("ult") === "1",
     old: q.get("cu") === "1",
     loop: q.get("lap") !== "0",
@@ -70,6 +74,7 @@ function writeHash(p: Pick): void {
   if (p.grade !== null) q.set("pham", String(p.grade));
   if (p.variant) q.set("bt", p.variant);
   if (p.sub) q.set("phu", p.sub);
+  if (p.dang) q.set("dang", p.dang);
   if (p.ult) q.set("ult", "1");
   if (p.old) q.set("cu", "1");
   if (!p.loop) q.set("lap", "0");
@@ -81,7 +86,8 @@ function styleOf(p: Pick): { style: FxStyle; mau: Mau } {
   const mau = LIST.find((m) => m.no === p.no) ?? LIST[0];
   const main = scrollKind(mau.main);
   const subs = p.sub === "none" ? [] : p.sub ? [p.sub] : mau.subs.map((s) => scrollKind(s).element);
-  return { mau, style: { skill: main.type, element: main.element, subs, variant: p.variant ?? main.variant, grade: p.grade ?? mau.grade } };
+  const dang = p.dang === null ? undefined : p.dang === "goc" ? null : p.dang;
+  return { mau, style: { skill: main.type, element: main.element, subs, variant: p.variant ?? main.variant, grade: p.grade ?? mau.grade, dang } };
 }
 
 // ---- màn Trận với replay mẫu ------------------------------------------------------------------------------------
@@ -138,6 +144,9 @@ panel.innerHTML = `
     <select id="xt-phu" aria-label="Hệ phụ"><option value="">Hệ phụ gốc</option><option value="none">Không hệ phụ</option>${elOptions(null)}</select>
   </div>
   <div class="row">
+    <select id="xt-dang" class="wide" aria-label="Dáng chiêu"><option value="">Dáng tự chọn theo dữ liệu</option><option value="goc">Hình gốc của loại chiêu</option>${DANG.map((d) => `<option value="${d}">${DANG_NAME[d]}</option>`).join("")}</select>
+  </div>
+  <div class="row">
     <label><input type="checkbox" id="xt-ult"> Chiêu cuối</label>
     <label><input type="checkbox" id="xt-cu"> 2D cũ</label>
     <label><input type="checkbox" id="xt-lap"> Lặp</label>
@@ -151,6 +160,7 @@ const selMau = $<HTMLSelectElement>("xt-mau");
 const selPham = $<HTMLSelectElement>("xt-pham");
 const selBt = $<HTMLSelectElement>("xt-bt");
 const selPhu = $<HTMLSelectElement>("xt-phu");
+const selDang = $<HTMLSelectElement>("xt-dang");
 const chkUlt = $<HTMLInputElement>("xt-ult");
 const chkCu = $<HTMLInputElement>("xt-cu");
 const chkLap = $<HTMLInputElement>("xt-lap");
@@ -162,12 +172,16 @@ function syncPanel(): void {
   selPham.value = pick.grade === null ? "" : String(pick.grade);
   selBt.value = pick.variant ?? "";
   selPhu.value = pick.sub ?? "";
+  selDang.value = pick.dang ?? "";
   chkUlt.checked = pick.ult;
   chkCu.checked = pick.old;
   chkLap.checked = pick.loop;
   const { style } = styleOf(pick);
+  // Dáng không hợp loại chiêu đang chọn thì làm mờ.
+  for (const o of selDang.options) if (o.value && o.value !== "goc") o.disabled = !DANG_FOR[o.value as Dang].includes(style.skill);
+  const shown = recipe(style).dang;
   const subs = style.subs?.length ? " + " + style.subs.map((e) => ELEMENT_STYLE[e].name).join(", ") : "";
-  info.textContent = `${SKILL_NAME[style.skill]} · ${ELEMENT_STYLE[style.element].name}${subs} · ${VARIANT_NAMES[style.variant!]} · ${GRADE_NAMES[(style.grade ?? 1) - 1]}`;
+  info.textContent = `${SKILL_NAME[style.skill]} · ${ELEMENT_STYLE[style.element].name}${subs} · ${VARIANT_NAMES[style.variant!]} · ${GRADE_NAMES[(style.grade ?? 1) - 1]}${shown ? " · " + DANG_NAME[shown] : ""}`;
 }
 
 let framed = false;
@@ -180,12 +194,13 @@ function reload(): void {
 }
 
 selMau.onchange = () => {
-  pick = { ...pick, no: Number(selMau.value), grade: null, variant: null, sub: null };
+  pick = { ...pick, no: Number(selMau.value), grade: null, variant: null, sub: null, dang: null };
   reload();
 };
 selPham.onchange = () => ((pick = { ...pick, grade: selPham.value ? Number(selPham.value) : null }), reload());
 selBt.onchange = () => ((pick = { ...pick, variant: (selBt.value || null) as Variant | null }), reload());
 selPhu.onchange = () => ((pick = { ...pick, sub: (selPhu.value || null) as Pick["sub"] }), reload());
+selDang.onchange = () => ((pick = { ...pick, dang: (selDang.value || null) as Pick["dang"] }), reload());
 chkUlt.onchange = () => ((pick = { ...pick, ult: chkUlt.checked }), reload());
 chkLap.onchange = () => ((pick = { ...pick, loop: chkLap.checked }), writeHash(pick));
 chkCu.onchange = () => {
@@ -197,7 +212,7 @@ const showcase = SHOWCASE.map(([el, type]) => showcaseNo(el, type));
 const step = (d: number) => {
   const i = showcase.indexOf(pick.no);
   const next = showcase[(i < 0 ? 0 : i + d + showcase.length) % showcase.length];
-  pick = { ...pick, no: next, grade: null, variant: null, sub: null };
+  pick = { ...pick, no: next, grade: null, variant: null, sub: null, dang: null };
   reload();
 };
 $("xt-prev").onclick = () => step(-1);
@@ -401,7 +416,7 @@ $("xt-film").onclick = () => showFilm();
 
 /** Đổi lựa chọn rồi chờ trận mẫu mới nạp xong (dùng từ console khi chụp ảnh). */
 async function go(p: Partial<Pick>): Promise<void> {
-  pick = { ...pick, grade: null, variant: null, sub: null, ult: false, ...p };
+  pick = { ...pick, grade: null, variant: null, sub: null, dang: null, ult: false, ...p };
   reload();
   while (!inner.player) await new Promise((r) => setTimeout(r, 20));
 }

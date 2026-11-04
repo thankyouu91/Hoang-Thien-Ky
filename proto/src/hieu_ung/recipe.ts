@@ -4,8 +4,10 @@
 // - hệ phụ cho màu phụ và vệt kéo đi kèm;
 // - biến thể: Bạo va chạm to; Tốc nhanh, nhiều vệt mảnh; Linh nét hệ đậm hơn; Bền chậm, êm;
 // - phẩm càng cao càng nhiều hạt và càng sáng;
-// - chiêu đặc biệt (không phải đòn thường) và chiêu cuối tông chủ được vẽ riêng cho nổi bật.
+// - chiêu đặc biệt (không phải đòn thường) và chiêu cuối tông chủ được vẽ riêng cho nổi bật;
+// - dáng chiêu đặc trưng (dang_chon.ts): đao khí, kiếm trận, mưa kiếm, đầu lâu, huyết tuyến… theo người ra chiêu.
 // Cùng một công pháp thì công thức và seed giống hệt, nên lúc nào cũng ra đúng một hình.
+import { autoDang, fits, type Dang, type Persona } from "./dang_chon.ts";
 import { COLORS, type ElementColors } from "./emit.ts";
 import { hash } from "./ve.ts";
 import type { ElementId, SkillId } from "../replay/types.ts";
@@ -22,6 +24,11 @@ export interface FxStyle {
   variant?: Variant;
   /** Phẩm 1–10 (GDD mục 9) */
   grade?: number;
+  /** Vũ khí, tài năng của người ra chiêu (để chọn dáng chiêu) */
+  weapon?: string;
+  talent?: string;
+  /** Dáng chiêu ép sẵn: undefined thì tự chọn (autoDang), null thì không dùng dáng */
+  dang?: Dang | null;
 }
 
 export interface Recipe {
@@ -38,6 +45,8 @@ export interface Recipe {
   trailEl: ElementId;
   /** Chiêu đặc biệt: mọi loại trừ đòn thường cận chiến đơn và tầm xa */
   special: boolean;
+  /** Dáng chiêu đặc trưng, null là hình gốc của loại chiêu */
+  dang: Dang | null;
   /** Cỡ va chạm (Bạo to hơn) */
   impact: number;
   /** Nhân thời lượng (Tốc ngắn, Bền dài) */
@@ -70,7 +79,9 @@ export function recipe(s: FxStyle): Recipe {
   for (const el of s.subs ?? []) if (el !== s.element && !subs.includes(el)) subs.push(el);
   const grade = Math.max(1, Math.min(10, Math.round(s.grade ?? DEFAULT_GRADE)));
   const variant = s.variant ?? null;
-  const key = `${s.skill}|${s.element}|${subs.join(",")}|${variant ?? "-"}|${grade}`;
+  // Dáng: ép sẵn (hợp loại chiêu) thì dùng, undefined thì tự chọn theo người ra chiêu, null thì hình gốc.
+  const dang = s.dang === undefined ? autoDang(s.skill, s.element, { weapon: s.weapon, talent: s.talent }) : fits(s.dang, s.skill) ? s.dang : null;
+  const key = `${s.skill}|${s.element}|${subs.join(",")}|${variant ?? "-"}|${grade}|${dang ?? "-"}`;
   const hit = cache.get(key);
   if (hit) return hit;
   let h = 0;
@@ -87,6 +98,7 @@ export function recipe(s: FxStyle): Recipe {
     trail: COLORS[trailEl],
     trailEl,
     special: !BASIC.has(s.skill),
+    dang,
     impact: variant === "bao" ? 1.45 : variant === "ben" ? 0.92 : 1,
     pace: variant === "toc" ? 0.72 : variant === "ben" ? 1.35 : 1,
     streaks: variant === "toc" ? 3 : 1,
@@ -115,8 +127,11 @@ export function count(r: Recipe, n: number): number {
   return Math.max(1, Math.round(n * r.density * crowd));
 }
 
-/** Công thức của một lần ra chiêu trong replay: phẩm và biến thể nếu replay có ghi, không thì mặc định. */
-export function recipeOf(c: Cast): Recipe {
-  const extra = c as Cast & { grade?: number; variant?: Variant };
-  return recipe({ skill: c.skill, element: c.element, subs: c.subElements, variant: extra.variant, grade: extra.grade });
+/**
+ * Công thức của một lần ra chiêu trong replay: phẩm, biến thể, dáng nếu replay có ghi, không thì mặc định; `who` là vũ khí,
+ * tài năng của người ra chiêu để tự chọn dáng.
+ */
+export function recipeOf(c: Cast, who: Persona = {}): Recipe {
+  const extra = c as Cast & { grade?: number; variant?: Variant; dang?: Dang | null };
+  return recipe({ skill: c.skill, element: c.element, subs: c.subElements, variant: extra.variant, grade: extra.grade, dang: extra.dang, ...who });
 }

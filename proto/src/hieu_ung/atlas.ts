@@ -499,6 +499,57 @@ export function drawAtlas(): HTMLCanvasElement {
     c.arc(-28, 0, 3, 0, Math.PI * 2);
     c.fill();
   });
+  cell(ctx, CELL.skull, (c) => {
+    // đầu lâu: sọ trắng, hốc mắt và mũi tối (tô theo hệ thì thành lửa ma)
+    c.fillStyle = W;
+    c.beginPath();
+    c.ellipse(0, -5, 20, 19, 0, 0, Math.PI * 2);
+    c.fill();
+    c.beginPath();
+    c.roundRect(-12, 6, 24, 15, 4);
+    c.fill();
+    c.fillStyle = "rgba(40,40,40,1)";
+    c.beginPath();
+    c.ellipse(-8, -3, 6, 7, 0.2, 0, Math.PI * 2);
+    c.ellipse(8, -3, 6, 7, -0.2, 0, Math.PI * 2);
+    c.fill();
+    c.beginPath();
+    c.moveTo(0, 5);
+    c.lineTo(-3, 10);
+    c.lineTo(3, 10);
+    c.closePath();
+    c.fill();
+    c.fillRect(-7, 15, 2, 6);
+    c.fillRect(-1, 15, 2, 6);
+    c.fillRect(5, 15, 2, 6);
+  });
+  cell(ctx, CELL.coin, (c) => {
+    // đồng tiền lỗ vuông
+    c.fillStyle = "#f2c230";
+    c.beginPath();
+    c.arc(0, 0, 22, 0, Math.PI * 2);
+    c.fill();
+    c.strokeStyle = "#a8781a";
+    c.lineWidth = 3;
+    c.stroke();
+    c.fillStyle = "rgba(0,0,0,0)";
+    c.globalCompositeOperation = "destination-out";
+    c.fillRect(-6, -6, 12, 12);
+    c.globalCompositeOperation = "source-over";
+    c.strokeRect(-7, -7, 14, 14);
+    c.fillStyle = "#fff2b0";
+    c.beginPath();
+    c.arc(-9, -11, 4, 0, Math.PI * 2);
+    c.fill();
+  });
+  cell(ctx, CELL.drop, (c) => {
+    c.fillStyle = W;
+    c.beginPath();
+    c.moveTo(0, -20);
+    c.bezierCurveTo(9, -4, 13, 6, 0, 18);
+    c.bezierCurveTo(-13, 6, -9, -4, 0, -20);
+    c.fill();
+  });
   MOTIF_ORDER.forEach((el, i) => cell(ctx, CELL.motif + i, (c) => motifShape(c, el)));
   return cv;
 }

@@ -196,3 +196,44 @@ test("trạng thái bị giải sớm (until = tick, ví dụ Chuông giải cho
   assert.equal(activeAt(track, cut - 1, 0).filter((s) => s.unit === stun.unit).length, 2, "trước lúc giải còn hiệu lực");
   assert.equal(activeAt(track, cut + 1, 0).filter((s) => s.unit === stun.unit).length, 0, "sau lúc giải hết hiệu lực");
 });
+
+test("10 dáng chiêu: mỗi loại chiêu dùng được đều vẽ đủ khởi chiêu, đường bay, chạm trúng và tất định", async () => {
+  const { DANG, DANG_FOR } = await import("./dang_chon.ts");
+  const e = new Emitter();
+  for (const dang of DANG) {
+    for (const skill of DANG_FOR[dang]) {
+      const element: ElementId = dang === "dau_lau" ? "am_lanh" : dang === "thien_loi" ? "loi" : "kim";
+      const index = new ReplayIndex(sampleReplay({ skill, element, subs: ["hoa"], grade: 6, dang }));
+      const c = index.casts[0];
+      const r = recipeOf(c);
+      assert.equal(r.dang, dang, `${dang} ${skill}: công thức giữ dáng ép`);
+      const tl = castTimeline({ index, life: (s) => Math.min(40, s * 20) }, c, r);
+      assert.ok(tl.windup < tl.hit && tl.travel <= tl.hit && tl.hit < tl.settle, `${dang} ${skill}: mốc pha`);
+      for (const [name, t] of [["khởi chiêu", tl.windup + 0.7 * (tl.travel - tl.windup)], ["đường bay", tl.travel + 0.5 * (tl.hit - tl.travel)], ["chạm trúng", tl.hit + 0.5]] as const) {
+        emitFrame(e, input(index, t));
+        assert.ok(e.total > 0, `${dang} ${skill}: ${name} trống`);
+        const a = snap(e);
+        emitFrame(e, input(index, t));
+        assert.equal(snap(e), a, `${dang} ${skill}: ${name} tất định`);
+      }
+    }
+  }
+});
+
+test("chọn dáng tự động theo tài năng, vũ khí, hệ (đề xuất)", async () => {
+  const { autoDang } = await import("./dang_chon.ts");
+  assert.equal(autoDang("can_don", "hoa", { talent: "sat_thu" }), "huyet_tuyen");
+  assert.equal(autoDang("tam_xa", "am_lanh"), "dau_lau");
+  assert.equal(autoDang("dien_rong", "kim"), "mua_kiem");
+  assert.equal(autoDang("bua_chu", "moc", { weapon: "kiem" }), "cu_kiem");
+  assert.equal(autoDang("can_quet", "thuy", { weapon: "kiem" }), "kiem_tran");
+  assert.equal(autoDang("can_quet", "thuy", { weapon: "dao" }), "dao_khi");
+  assert.equal(autoDang("dien_rong", "loi"), "thien_loi");
+  assert.equal(autoDang("dien_rong", "cuc_han"), "gai_troi");
+  assert.equal(autoDang("dien_rong", "phong"), "loc_xoay");
+  assert.equal(autoDang("tam_xa", "hoa", { talent: "tu_kim_tien" }), "tien_dong");
+  assert.equal(autoDang("hoi_phuc", "quang"), null);
+  // Dáng ép không hợp loại chiêu thì bỏ, vẽ hình gốc.
+  assert.equal(recipe({ skill: "hoi_phuc", element: "quang", dang: "mua_kiem" }).dang, null);
+  assert.equal(recipe({ skill: "dien_rong", element: "kim", dang: null }).dang, null);
+});

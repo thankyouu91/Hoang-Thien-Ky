@@ -44,7 +44,7 @@ export function sampleReplay(style: FxStyle, opts: { ult?: boolean } = {}): Repl
   const statuses: StatusEvent[] = [];
   const zone = skill === "dien_rong" || skill === "tran_phap";
   if (skill === "than_phap") events.push({ tick, kind: "move", unit: 1, pos: 6200 - 500 });
-  const extra = { grade: style.grade, variant: style.variant };
+  const extra = { grade: style.grade, variant: style.variant, ...(style.dang !== undefined ? { dang: style.dang } : {}) };
   events.push({
     tick, kind: "cast", unit: 1, skill, element, targets,
     ...(castTicks ? { start: CAST } : {}),

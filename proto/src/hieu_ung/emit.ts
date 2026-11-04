@@ -169,6 +169,9 @@ export const CELL = {
   vine: 20,
   feather: 21,
   sword: 22,
+  skull: 23,
+  coin: 24,
+  drop: 25,
   motif: 32, // 32..43: họa tiết 12 hệ theo thứ tự MOTIF_ORDER
 } as const;
 
