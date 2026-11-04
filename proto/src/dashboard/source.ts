@@ -247,6 +247,41 @@ export interface NhanVatView extends Stamped {
    * bằng boardBonus của @ktlp/rules.
    */
   board: { cells: Record<string, BoardPiece>; gearSets: Record<string, number>; progress: Progress };
+  /** Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13; đặc tả luyen-khi.md, số đề xuất). Mở theo board.progress. */
+  luyenKhi: LuyenKhiView;
+}
+
+/** Một ô đồ đang mặc ở Luyện khí. */
+export interface LuyenKhiSlot {
+  /** Loại chỉ số phụ đang có (0–3, loại 0 là mặc định của ô). */
+  sub: number;
+  /** Khí linh 0–9 (đồ từ tím), kinh nghiệm trong cấp hiện tại. */
+  kl: { cap: number; exp: number };
+  /** Khí văn theo ô mở ở khí linh 3, 6, 9; null là ô đã mở mà chưa chọn. */
+  van: (string | null)[];
+  /** 3 khí văn đang chờ chọn cho ô `offerAt` (lệnh chon_khi_van; tay_van quay lại). */
+  offer?: string[];
+  offerAt?: number;
+}
+
+export interface LuyenKhiView {
+  /** Tổng Khí Tinh; `khiTinhKhoa` là phần khóa vào nhân vật (từ đồ vàng, đỏ, đồ có khí linh), tiêu trước. */
+  khiTinh: number;
+  khiTinhKhoa: number;
+  linhVanThach: number;
+  /** Thiên Ngoại Vẫn Thiết (luyện danh khí). */
+  vanThiet: number;
+  slots: Partial<Record<GearSlot, LuyenKhiSlot>>;
+  /** Kho ngọc cấp cao (từ cấp 7 hợp song hệ, từ cấp 10 điểm hóa Phách); `he2` có nghĩa là viên song hệ. */
+  gems: { id: string; he: Element; he2?: Element; cap: number; n: number }[];
+  /** Ngọc Phách đã có, theo hệ. */
+  phach: Element[];
+  /** Mã kiểu từng sở hữu (sổ Bảo Giám), kể cả món đã phân giải. */
+  owned: string[];
+  /** Đồ phổ danh khí đang có (NL-DP-…). */
+  doPho: string[];
+  /** Trang tuần của Bảo Giám. */
+  week: { text: string; have: number; need: number; thuong: string; endsAt: number };
 }
 
 export interface TerritoryPoint {
@@ -450,6 +485,22 @@ export type DashboardCommand =
   | { type: "dot_pha" }
   /** Chỉ prototype: thêm tu vi cho đủ lên `levels` cấp (dừng ở mốc đột phá) để xem hiệu ứng lên cấp. */
   | { type: "dev_len_cap"; levels: number }
+  /** Phân giải đồ trong túi (từ lam) ra Khí Tinh; ngọc, ấn khảm trên món về túi. */
+  | { type: "phan_giai"; uids: number[] }
+  /** Tẩy luyện chỉ số phụ của ô: quay trong 3 loại còn lại; Tu rèn chọn thẳng `loai`. */
+  | { type: "tay_luyen"; slot: GearSlot; loai?: number }
+  /** Nạp Khí Tinh cho khí linh của ô (10 kinh nghiệm mỗi viên); qua cấp 3, 6, 9 thì mở ô khí văn và có 3 lựa chọn chờ. */
+  | { type: "nap_khi_linh"; slot: GearSlot; khiTinh: number }
+  /** Chọn 1 trong 3 khí văn đang chờ cho ô khí văn `o`. */
+  | { type: "chon_khi_van"; slot: GearSlot; o: number; ma: string }
+  /** Tẩy văn: quay lại 3 lựa chọn cho ô khí văn `o` (1 Linh Văn Thạch). */
+  | { type: "tay_van"; slot: GearSlot; o: number }
+  /** Hợp hai viên cùng cấp (từ 7), hai hệ tương sinh, thành ngọc song hệ; không đậu thì mất cả hai. */
+  | { type: "hop_song_he"; a: string; b: string }
+  /** Điểm hóa ngọc cấp 10 thành Phách (20 Khí Tinh); không đậu mất Khí Tinh, giữ ngọc. */
+  | { type: "diem_hoa_phach"; gem: string }
+  /** Khai lò danh khí ở Luyện Khí Các: `nguoi` là 4 thành viên (chủ lò Tu rèn trước, rồi 3 hộ lô). */
+  | { type: "khai_lo_danh_khi"; ma: string; nguoi: string[] }
   /** Chọn thú cưỡi trong 5 ô thú (GDD mục 6). */
   | { type: "cuoi_thu"; index: number }
   | { type: "chat"; text: string }
