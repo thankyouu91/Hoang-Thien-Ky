@@ -52,7 +52,7 @@ export function artifactSpecs(items: PhapBaoItem[], trungViTroLen: boolean): Art
     if (!scale) throw new Error(`${item.ma}: chưa biết đơn vị ${LOAI[m.loai].chinh.don_vi}`);
     let power = m.chinh.gia_tri * scale;
     if (item.tuRen) power = mul(power, GEAR.selfForgedArtifact);
-    return { kind: info.loai, power, uses: Math.min(m.phu.so_lan_moi_tran, item.linhLuc), cooldownTicks: m.phu.hoi_chieu_ticks };
+    return { kind: info.loai, power, uses: Math.min(m.phu.so_lan_moi_tran, item.linhLuc), cooldownTicks: m.phu.hoi_chieu_ticks, energy: item.linhLuc };
   });
 }
 

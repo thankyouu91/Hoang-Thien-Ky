@@ -2,7 +2,7 @@
 import { mul, clamp, ONE } from "./fixed.ts";
 import { Rng } from "./rng.ts";
 import { Hasher } from "./hash.ts";
-import { elementMultiplier, type Element } from "./elements.ts";
+import { ELEMENTS, elementMultiplier, type Element } from "./elements.ts";
 import {
   BATTLE, SKILL_SPECS, ALLY_SKILLS, SKILL_RULES as R, CAST_FLOOR, ARTIFACT_RULES as A, RESIST_CAP, MAX_RANGE_BONUS,
   type SkillType, type Talent, type BuffStat,
@@ -33,6 +33,42 @@ export interface SkillMod {
   pickUses?: number; // số lần ra chiêu đầu mỗi trận dùng `pick`; không ghi là mọi lần
   overhealShield?: number; // hồi phục: phần nghìn phần hồi tràn quá máu tối đa thành khiên
   overhealShieldTicks?: number; // khiên đó giữ bao lâu; mặc định như khiên hộ thể
+  // Hiệu ứng set gắn với một loại chiêu (tab Trang bị, phần 7):
+  firstTargetBonus?: number; // phần nghìn sát thương thêm cho mục tiêu đầu (Thiết Kỵ, cận chiến quét)
+  lowHpBelow?: number; // mục tiêu dưới ngưỡng máu này (phần nghìn) nhận thêm `lowHpBonus` (Vạn Kiếm, cận chiến đơn)
+  lowHpBonus?: number;
+  qiCycleTicks?: number; // mỗi chừng này tick, đòn kế tiếp trúng thêm kẻ đứng sau mục tiêu với `qiDamage` (Vạn Kiếm)
+  qiDamage?: number;
+  lastUseFree?: boolean; // lần dùng cuối mỗi trận không tốn mana (Độ Kiếp, bùa chú)
+  exposedTicks?: number; // thân pháp lộ vị trí bao lâu thay mặc định (Huyết Ảnh)
+  densest?: boolean; // trận pháp đặt vào chỗ đông địch nhất (Chu Thiên)
+}
+
+/**
+ * Hiệu ứng hành vi và khắc chế của set theo người mặc (tab Trang bị, phần 7; rules đổi từ set.json). Mọi số theo phần nghìn
+ * trừ trường ghi tick hoặc số lần; "mỗi trận" tính lại từ đầu mỗi trận. Không ghi trường nào thì không đổi gì.
+ */
+export interface SetFx {
+  cleanseHealCut?: number; // Bách Thảo: số lần tẩy giảm hồi máu cho mình hoặc đồng đội kề bên
+  guardSelfShield?: number; // Bàn Thạch: hộ thể che thêm chính mình với khiên bằng chừng này
+  petrifyBelow?: number; // Bàn Thạch: lần đầu máu dưới ngưỡng thì hóa đá `petrifyTicks` (miễn sát thương, không ra chiêu)
+  petrifyTicks?: number;
+  frontAoeCut?: number; // Thiết Kỵ: hàng trước, hàng sau còn từ 2 đồng đội, nhận ít hơn sát thương diện rộng
+  channelRefund?: number; // Văn Uyên: diện rộng bị cắt thì hoàn chừng này hồi chiêu
+  instantFirstAoe?: boolean; // Văn Uyên: diện rộng đầu tiên mỗi trận không cần vận công
+  resistTopEnemy?: number; // Ngọc Tủy: đầu trận cộng kháng hệ chủ xuất hiện nhiều nhất trong công pháp của đội địch
+  healerRegenPenalty?: number; // Linh Tuyền: cộng vào phạt hồi mana khi mang hồi phục (âm là nhẹ hơn)
+  resetHealOnFall?: number; // Linh Tuyền: số lần đồng đội ngã thì hồi phục hồi chiêu ngay
+  controlDr?: number; // Băng Phách: khống chế lặp cùng mục tiêu còn chừng này thay 500
+  chilledBonus?: number; // Băng Phách: sát thương thêm lên kẻ đang bị đóng băng hoặc làm chậm
+  bounceCrit?: number; // Lôi Trì: đòn chí mạng thứ mấy mỗi trận nảy sang kẻ địch khác với `bounceDamage`
+  bounceDamage?: number;
+  stealthOnDashKill?: number; // Huyết Ảnh: hạ gục bằng thân pháp thì ẩn thân chừng này tick (1 lần mỗi trận)
+  counterCap?: number; // Hỗn Độn: hệ số khắc hệ lên người mặc không quá chừng này
+  decoyTicks?: number; // Hỗn Độn: bao nhiêu tick đầu trận bị đánh tính theo `UnitSpec.decoyElement`
+  artifactCooldownCut?: number; // Cổ Tông: hồi chiêu pháp bảo giảm chừng này
+  artifactExtraUses?: number; // Cổ Tông: pháp bảo thêm lần mỗi trận, không quá `artifactMaxUses`
+  artifactMaxUses?: number;
 }
 
 export interface UnitSpec {
@@ -59,6 +95,10 @@ export interface UnitSpec {
   skillMods?: Partial<Record<SkillType, SkillMod>>;
   /** Pháp bảo đang mang, theo thứ tự ô. */
   artifacts?: ArtifactSpec[];
+  /** Hiệu ứng hành vi và khắc chế của set đang mặc. */
+  setFx?: SetFx;
+  /** Hệ ngụy linh căn người chơi chọn trước trận (set Hỗn Độn); không chọn thì không có tác dụng. */
+  decoyElement?: Element;
 }
 
 /** 10 loại pháp bảo, mỗi loại khắc một loại chiêu của địch (tab Trang bị, phần 9). */
@@ -69,6 +109,7 @@ export interface ArtifactSpec {
   power: number; // chỉ số chính: phần nghìn; Luân là milli-ô đẩy lùi; Chuông, Ấn là tick
   uses: number; // số lần kích hoạt tối đa trận này, đã tính linh lực còn lại
   cooldownTicks: number;
+  energy?: number; // linh lực còn lại; lần thêm của set Cổ Tông không vượt số này
 }
 interface ArtifactState extends ArtifactSpec {
   readyTick: number;
@@ -165,6 +206,14 @@ export interface Unit {
   channel: Channel | null;
   artifacts: ArtifactState[];
   controlImmuneUntil: number; // Chuông: miễn khống chế tới tick này
+  fx: SetFx;
+  stoneUntil: number; // Bàn Thạch: hóa đá tới tick này
+  frozenUntil: number; // đang bị đóng băng tới tick này (cho Băng Phách)
+  decoy: Element | null;
+  decoyUntil: number;
+  qiReadyTick: number; // Vạn Kiếm: tick sớm nhất có kiếm khí
+  critCount: number; // số đòn chí mạng đã ra trong trận (Lôi Trì)
+  once: { petrify: number; cleanse: number; instantAoe: number; resetHeal: number; stealthKill: number; bounce: number }; // số lần còn lại mỗi trận
 }
 
 /** Hệ số chênh lệch cấp (GDD mục 8): bên thấp còn tối thiểu 55%, bên cao cộng tối đa 30%. */
@@ -174,12 +223,17 @@ export function levelGapMultiplier(atkLevel: number, defLevel: number): number {
   return ONE + Math.min(300, 10 * gap);
 }
 
-/** Điều chỉnh cho một đòn: sát thương cộng thêm, sát thương chí mạng cộng thêm, xuyên giáp, xuyên kháng (phần nghìn). */
+/**
+ * Điều chỉnh cho một đòn: sát thương cộng thêm, sát thương chí mạng cộng thêm, xuyên giáp, xuyên kháng (phần nghìn);
+ * hệ bị đánh thay cho linh căn (ngụy linh căn) và trần hệ số khắc của bên bị đánh (set Hỗn Độn).
+ */
 export interface HitMods {
   damage?: number;
   critDamage?: number;
   armorPen?: number;
   resistPen?: number;
+  defElement?: Element;
+  counterCap?: number;
 }
 
 /** Sát thương một đòn lên một mục tiêu. */
@@ -193,7 +247,9 @@ export function hitDamage(
 ): number {
   let dmg = Math.trunc((tech.damage * a.atk) / (100 * ONE));
   if (mods.damage) dmg = mul(dmg, ONE + mods.damage);
-  dmg = mul(dmg, elementMultiplier(tech.element, d.element));
+  let em = elementMultiplier(tech.element, mods.defElement ?? d.element);
+  if (mods.counterCap && em > mods.counterCap) em = mods.counterCap;
+  dmg = mul(dmg, em);
   dmg = mul(dmg, levelGapMultiplier(a.level, d.level));
   if (ult) dmg = mul(dmg, BATTLE.ultMultiplier);
   if (crit) dmg = mul(dmg, BATTLE.critDamage + (mods.critDamage ?? 0));
@@ -254,6 +310,16 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
   const startA = spec.row === 0 ? BATTLE.frontPos : BATTLE.backPos;
   const hp = mul(spec.hp, ONE + b.hp);
   const manaMax = mul(spec.manaMax ?? BATTLE.manaMax, ONE + b.manaMax) * ONE;
+  const sfx = spec.setFx ?? {};
+  const decoy = sfx.decoyTicks && spec.decoyElement ? spec.decoyElement : null;
+  const qi = slots.find((s) => s.mod.qiCycleTicks);
+  // Cổ Tông: hồi chiêu pháp bảo ngắn hơn; thêm lần mỗi trận, không quá trần của set và không quá linh lực còn lại.
+  const artifacts = (spec.artifacts ?? []).map((a) => {
+    const cooldownTicks = sfx.artifactCooldownCut ? mul(a.cooldownTicks, ONE - sfx.artifactCooldownCut) : a.cooldownTicks;
+    let uses = a.uses;
+    if (sfx.artifactExtraUses) uses = Math.min(Math.max(a.uses, Math.min(a.uses + sfx.artifactExtraUses, sfx.artifactMaxUses ?? a.uses + sfx.artifactExtraUses)), a.energy ?? a.uses + sfx.artifactExtraUses);
+    return { ...a, cooldownTicks, uses, readyTick: 0, used: 0, charges: 0 };
+  });
   return {
     id: spec.id, team, level: spec.level, element: spec.element,
     hp, atk: mul(spec.atk, ONE + b.atk), def: mul(spec.def, ONE + b.def), resist: spec.resist ?? {}, boss: spec.boss ?? false,
@@ -262,7 +328,7 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
     pos: team === 0 ? startA : BATTLE.fieldLength - startA,
     mana: manaMax,
     manaMax,
-    regen: healer ? mul(MANA_REGEN_PER_TICK, ONE - R.healerRegenPenalty) : MANA_REGEN_PER_TICK,
+    regen: healer ? mul(MANA_REGEN_PER_TICK, ONE - R.healerRegenPenalty - (sfx.healerRegenPenalty ?? 0)) : MANA_REGEN_PER_TICK,
     slots,
     preferredRange: firstAttack ? firstAttack.range : BATTLE.supportStandoff,
     ultReady: false,
@@ -275,8 +341,19 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
     stealthUntil: b.stealthTicks > 0 ? b.stealthTicks : NEVER,
     selfShieldNext: NEVER,
     channel: null,
-    artifacts: (spec.artifacts ?? []).map((a) => ({ ...a, readyTick: 0, used: 0, charges: 0 })),
+    artifacts,
     controlImmuneUntil: NEVER,
+    fx: sfx,
+    stoneUntil: NEVER,
+    frozenUntil: NEVER,
+    decoy,
+    decoyUntil: decoy ? sfx.decoyTicks! : NEVER,
+    qiReadyTick: qi ? qi.mod.qiCycleTicks! : NEVER,
+    critCount: 0,
+    once: {
+      petrify: sfx.petrifyBelow ? 1 : 0, cleanse: sfx.cleanseHealCut ?? 0, instantAoe: sfx.instantFirstAoe ? 1 : 0,
+      resetHeal: sfx.resetHealOnFall ?? 0, stealthKill: sfx.stealthOnDashKill ? 1 : 0, bounce: sfx.bounceCrit ? 1 : 0,
+    },
   };
 }
 
@@ -303,6 +380,16 @@ export class Battle {
     this.hasArtifacts = [this.teams[0].some((u) => u.artifacts.length > 0), this.teams[1].some((u) => u.artifacts.length > 0)];
     this.cmds = [...(input.commands ?? [])].sort((x, y) => x.tick - y.tick || x.unitId - y.unitId);
     this.alive = [input.teamA.length, input.teamB.length];
+    for (const u of this.units) if (u.fx.resistTopEnemy) this.attuneResist(u);
+  }
+
+  /** Ngọc Tủy: đầu trận cộng kháng hệ chủ xuất hiện nhiều nhất trong công pháp của đội địch (hòa thì hệ đứng trước trong bảng 12 hệ). */
+  private attuneResist(u: Unit): void {
+    const n: Partial<Record<Element, number>> = {};
+    for (const e of this.teams[1 - u.team]) for (const s of e.slots) n[s.tech.element] = (n[s.tech.element] ?? 0) + 1;
+    let best: Element | null = null;
+    for (const el of ELEMENTS) if ((n[el] ?? 0) > (best ? n[best] ?? 0 : 0)) best = el;
+    if (best) u.resist = { ...u.resist, [best]: (u.resist[best] ?? 0) + u.fx.resistTopEnemy! };
   }
 
   get finished(): boolean {
@@ -337,7 +424,7 @@ export class Battle {
       if (u.channel) {
         // Chiêu vận công vẫn phát khi tới giờ; chiêu không bị cắt ngang thì phát cả khi đang choáng.
         if (tick >= u.channel.resolveTick) this.resolve(u);
-      } else if (tick >= u.stunUntil) {
+      } else if (tick >= u.stunUntil && tick >= u.stoneUntil) {
         this.act(u, slowed);
       }
       if (this.alive[0] === 0 || this.alive[1] === 0) break;
@@ -361,12 +448,21 @@ export class Battle {
     return r;
   }
 
-  /** Khống chế `t` trong `ticks`; bị khống chế lại trong cửa sổ thì còn một nửa. Cắt chiêu vận công. Chuông cho miễn khống chế. */
-  control(t: Unit, ticks: number): void {
+  /**
+   * Khống chế `t` trong `ticks`; bị khống chế lại trong cửa sổ thì còn một nửa (Băng Phách của người khống chế `src`: còn 75%).
+   * Cắt chiêu vận công (Văn Uyên: hoàn một phần hồi chiêu). Chuông cho miễn khống chế.
+   */
+  control(t: Unit, ticks: number, src?: Unit): void {
     if (t.curHp <= 0 || this.tick < t.controlImmuneUntil) return;
-    const dur = this.tick < t.stunUntil + R.controlDrWindow ? Math.trunc(ticks / 2) : ticks;
+    const dur = this.tick < t.stunUntil + R.controlDrWindow ? mul(ticks, src?.fx.controlDr ?? ONE / 2) : ticks;
     t.stunUntil = Math.max(t.stunUntil, this.tick + dur);
-    if (t.channel && t.channel.interruptible) t.channel = null;
+    if (t.channel && t.channel.interruptible) {
+      if (t.fx.channelRefund) {
+        const s = t.slots[t.channel.slot];
+        s.cd = Math.max(0, s.cd - mul(s.cooldown * ONE, t.fx.channelRefund));
+      }
+      t.channel = null;
+    }
   }
 
   /** Dùng công pháp đầu tiên sẵn sàng, đủ mana và có mục tiêu; không có thì tiến về địch gần nhất. */
@@ -376,7 +472,8 @@ export class Battle {
     const dist = Math.abs(foe.pos - u.pos);
     for (let i = 0; i < u.slots.length; i++) {
       const s = u.slots[i];
-      if (s.cd > 0 || u.mana < s.cost || s.uses === 0) continue;
+      const cost = s.mod.lastUseFree && s.uses === 1 ? 0 : s.cost; // Độ Kiếp: lần bùa chú cuối không tốn mana
+      if (s.cd > 0 || u.mana < cost || s.uses === 0) continue;
       if (!s.ally && dist > s.range) continue;
       const type = s.tech.type;
       let targets: Unit[] = [];
@@ -387,7 +484,7 @@ export class Battle {
       else if (s.radius === 0) targets = this.pickEnemies(u, s, u.pos, s.range, pick);
       if (targets.length === 0 && s.radius === 0) continue;
 
-      u.mana -= s.cost;
+      u.mana -= cost;
       s.cd = s.cooldown * ONE;
       if (s.uses > 0) s.uses--;
       if (pick && s.pickLeft > 0) s.pickLeft--;
@@ -404,23 +501,28 @@ export class Battle {
           resolveTick: this.tick + (formation
             ? Math.max(CAST_FLOOR.formationTicks, mul(R.formationCastTicks, ONE - u.b.formationCut) + u.b.formationTicks + (s.mod.castTicks ?? 0))
             : Math.max(CAST_FLOOR.channelTicks, R.aoeCastTicks + u.b.channelTicks + (s.mod.castTicks ?? 0))),
-          center: foe.pos,
+          center: formation && s.mod.densest ? this.densestSpot(u, s, foe) : foe.pos,
           ult: this.takeUlt(u),
           interruptible: !formation || R.formationInterruptible,
           guarded: [],
           guardCut: 0,
         };
         if (!formation && this.hasArtifacts[1 - u.team]) this.raiseTower(u.channel, 1 - u.team);
+        // Văn Uyên: diện rộng đầu tiên mỗi trận phát ngay, không vận công.
+        if (!formation && u.once.instantAoe > 0) {
+          u.once.instantAoe--;
+          this.resolve(u);
+        }
         return;
       }
       if (type === "hoi_phuc") this.heal(u, s, targets);
       else if (type === "ho_the") this.guard(u, s, targets, foe);
       else if (type === "than_phap") this.dash(u, s, targets[0]);
       else if (type === "can_quet" && this.hasArtifacts[1 - u.team] && this.spinWheel(targets)) {
-        this.log(u, i, this.tick, []); // Luân cắt chiêu quét: tốn mana và hồi chiêu, không trúng ai
+        targets = []; // Luân cắt chiêu quét: tốn mana và hồi chiêu, không trúng ai
       } else {
         this.strike(u, s, targets, this.takeUlt(u), 0, false);
-        if (type === "khong_che") for (const t of targets) this.control(t, this.controlTicks(u, R.stunTicks));
+        if (type === "khong_che") for (const t of targets) this.control(t, this.controlTicks(u, R.stunTicks), u);
       }
       this.log(u, i, this.tick, targets);
       return;
@@ -449,6 +551,26 @@ export class Battle {
     }
     this.strike(u, s, targets, ch.ult, 0, formation, opts);
     this.log(u, ch.slot, ch.startTick, targets);
+  }
+
+  /** Chu Thiên: tâm trận đặt ở kẻ địch trong tầm có nhiều kẻ địch nhất trong bán kính; hòa thì gần người bày hơn, rồi id. */
+  private densestSpot(u: Unit, s: Slot, foe: Unit): number {
+    const tick = this.tick;
+    const seen = this.teams[1 - u.team].filter((e) => e.curHp > 0 && tick >= e.stealthUntil);
+    let best = foe;
+    let bestN = -1;
+    for (const c of seen) {
+      const d = Math.abs(c.pos - u.pos);
+      if (d > s.range) continue;
+      let n = 0;
+      for (const e of seen) if (Math.abs(e.pos - c.pos) <= s.radius) n++;
+      const bd = Math.abs(best.pos - u.pos);
+      if (n > bestN || (n === bestN && (d < bd || (d === bd && c.id < best.id)))) {
+        best = c;
+        bestN = n;
+      }
+    }
+    return best.pos;
   }
 
   /** Chiêu cuối tông chủ áp vào lần đánh kế tiếp rồi hết. */
@@ -547,16 +669,23 @@ export class Battle {
     const ramp = this.rampMultiplier();
     const type = s.tech.type;
     const foeArtifacts = this.hasArtifacts[1 - u.team];
+    const tick = this.tick;
     for (let i = 0; i < targets.length; i++) {
       const t = targets[i];
-      if (t.curHp <= 0) continue;
+      if (t.curHp <= 0 || tick < t.stoneUntil) continue; // Bàn Thạch: đang hóa đá thì miễn sát thương
       if (execute && !t.boss && t.id !== opts.noExecute && realm(t.level) <= realm(u.level) && this.rng.chance(R.executeChance + u.b.executeBonus)) {
         this.hurt(t, t.curHp + t.shield);
         continue;
       }
       const crit = this.rng.chance(s.tech.critPerMille + u.b.critBonus + critBonus);
+      // Sát thương cộng thêm: dị thú (Liệp Thú), mục tiêu đầu (Thiết Kỵ), mục tiêu ít máu (Vạn Kiếm), mục tiêu bị đóng băng hoặc làm chậm (Băng Phách).
+      let extra = t.monster ? u.b.monsterDamage : 0;
+      if (i === 0 && s.mod.firstTargetBonus) extra += s.mod.firstTargetBonus;
+      if (s.mod.lowHpBonus && t.curHp * ONE < t.hp * (s.mod.lowHpBelow ?? 0)) extra += s.mod.lowHpBonus;
+      if (u.fx.chilledBonus && (tick < t.slowUntil || tick < t.frozenUntil)) extra += u.fx.chilledBonus;
       let dmg = hitDamage(u, s.tech, t, crit, ult, {
-        damage: s.bonus + (t.monster ? u.b.monsterDamage : 0), critDamage: u.b.critDamage, armorPen: fx.armorPen, resistPen: fx.resistPen + u.b.resistPen,
+        damage: s.bonus + extra, critDamage: u.b.critDamage, armorPen: fx.armorPen, resistPen: fx.resistPen + u.b.resistPen,
+        defElement: t.decoy !== null && tick < t.decoyUntil ? t.decoy : undefined, counterCap: t.fx.counterCap,
       });
       // Mục tiêu thêm của Đao Ý (sau số mục tiêu của loại chiêu) nhận ít sát thương hơn.
       if (i >= s.tech.targets) dmg = Math.max(1, mul(dmg, s.mod.extraTargetDamage ?? ONE));
@@ -565,13 +694,47 @@ export class Battle {
       if (opts.scale !== undefined) dmg = Math.max(1, mul(dmg, opts.scale));
       if (opts.guarded && opts.guardCut && opts.guarded.indexOf(t.id) >= 0) dmg = Math.max(1, dmg - mul(dmg, opts.guardCut));
       if (foeArtifacts) dmg = this.blockHit(type, t, dmg, crit);
+      // Thiết Kỵ: hàng trước, sau lưng còn từ 2 đồng đội hàng sau, nhận ít sát thương diện rộng hơn.
+      if (type === "dien_rong" && t.fx.frontAoeCut && t.row === 0 && this.backRowAlive(t.team) >= 2) dmg = Math.max(1, dmg - mul(dmg, t.fx.frontAoeCut));
       this.hurt(t, dmg, s.mod.shieldPierce ?? 0);
       if (foeArtifacts && type === "bua_chu") this.reflectTalisman(u, t, dmg);
+      if (crit && u.once.bounce > 0 && ++u.critCount === u.fx.bounceCrit) {
+        u.once.bounce = 0;
+        this.splash(u, t, mul(dmg, u.fx.bounceDamage ?? 0), false); // Lôi Trì: đòn chí mạng thứ 3 nảy sang kẻ khác
+      }
+      if (type === "can_don" && s.mod.qiCycleTicks && tick >= u.qiReadyTick) {
+        u.qiReadyTick = tick + s.mod.qiCycleTicks;
+        this.splash(u, t, mul(dmg, s.mod.qiDamage ?? 0), true); // Vạn Kiếm: kiếm khí trúng kẻ đứng sau mục tiêu
+      }
       const drain = fx.healOfDamage + mul(fx.lifesteal, ONE + u.b.lifesteal);
       if (drain > 0) this.restore(u, u, mul(dmg, drain));
       if (t.curHp <= 0) continue;
       this.applyEffects(u, s, t, dmg, crit);
     }
+  }
+
+  /** Số đồng đội hàng sau còn sống của đội `team`. */
+  private backRowAlive(team: number): number {
+    let n = 0;
+    for (const x of this.teams[team]) if (x.curHp > 0 && x.row === 1) n++;
+    return n;
+  }
+
+  /**
+   * Đánh lan `dmg` sang một kẻ địch khác `t`: gần `t` nhất (hòa thì id nhỏ). `behind` = chỉ kẻ đứng sau `t` (xa người đánh hơn),
+   * trong 1 ô. Đòn lan không chí mạng, không hiệu ứng hệ.
+   */
+  private splash(u: Unit, t: Unit, dmg: number, behind: boolean): void {
+    const tick = this.tick;
+    const dir = t.pos > u.pos ? 1 : t.pos < u.pos ? -1 : t.team === 1 ? 1 : -1;
+    let best: Unit | null = null;
+    for (const e of this.teams[t.team]) {
+      if (e === t || e.curHp <= 0 || tick < e.stealthUntil) continue;
+      const off = (e.pos - t.pos) * dir;
+      if (behind && (off < 0 || off > A.adjacentRange)) continue;
+      if (!best || Math.abs(e.pos - t.pos) < Math.abs(best.pos - t.pos)) best = e;
+    }
+    if (best) this.hurt(best, Math.max(1, dmg));
   }
 
   /** Hiệu ứng hệ lên mục tiêu còn sống sau đòn đánh (GDD mục 9). */
@@ -595,12 +758,23 @@ export class Battle {
     if (fx.healCut) {
       t.healCut = tick < t.healCutUntil ? Math.max(t.healCut, fx.healCut) : fx.healCut;
       t.healCutUntil = Math.max(t.healCutUntil, tick + fx.healCutTicks);
+      // Bách Thảo: lần đầu mỗi trận chủ nhân hoặc đồng đội kề bên bị giảm hồi máu thì tẩy ngay.
+      for (const o of this.teams[t.team]) {
+        if (o.once.cleanse <= 0 || o.curHp <= 0 || (o !== t && Math.abs(o.pos - t.pos) > A.adjacentRange)) continue;
+        o.once.cleanse--;
+        t.healCut = 0;
+        t.healCutUntil = tick;
+        break;
+      }
     }
     if (fx.knockback && (R.meleeKnockback || !CLOSE_RANGE.includes(s.tech.type))) {
       t.pos = clamp(t.pos + (t.pos >= u.pos ? fx.knockback : -fx.knockback), 0, BATTLE.fieldLength);
     }
-    if (fx.paralyze && crit) this.control(t, this.controlTicks(u, fx.paralyze));
-    if (fx.freezeChance && this.rng.chance(fx.freezeChance)) this.control(t, this.controlTicks(u, fx.freezeTicks));
+    if (fx.paralyze && crit) this.control(t, this.controlTicks(u, fx.paralyze), u);
+    if (fx.freezeChance && this.rng.chance(fx.freezeChance)) {
+      this.control(t, this.controlTicks(u, fx.freezeTicks), u);
+      t.frozenUntil = Math.max(t.frozenUntil, t.stunUntil);
+    }
   }
 
   /** Trận quá `rampStartTicks` thì sát thương tăng dần theo từng nấc để trận phân thắng bại (chống hòa). */
@@ -614,8 +788,12 @@ export class Battle {
     return mul(ticks, ONE + u.b.controlTime);
   }
 
-  /** Trừ khiên trước, rồi trừ máu; phần `pierce` (phần nghìn) của sát thương đi thẳng vào máu. */
+  /**
+   * Trừ khiên trước, rồi trừ máu; phần `pierce` (phần nghìn) của sát thương đi thẳng vào máu. Đang hóa đá thì miễn.
+   * Bàn Thạch: lần đầu máu xuống dưới ngưỡng thì hóa đá. Linh Tuyền: đồng đội ngã thì hồi phục của người mặc hồi chiêu ngay.
+   */
   private hurt(t: Unit, dmg: number, pierce = 0): void {
+    if (this.tick < t.stoneUntil) return;
     if (t.shield > 0) {
       const absorbed = Math.min(t.shield, dmg - (pierce > 0 ? mul(dmg, pierce) : 0));
       t.shield -= absorbed;
@@ -626,6 +804,16 @@ export class Battle {
     if (t.curHp <= 0) {
       this.alive[t.team]--;
       t.channel = null;
+      for (const a of this.teams[t.team]) {
+        if (a.curHp <= 0 || a.once.resetHeal <= 0) continue;
+        const heal = a.slots.filter((s) => s.tech.type === "hoi_phuc");
+        if (heal.length === 0) continue;
+        a.once.resetHeal--;
+        for (const s of heal) s.cd = 0;
+      }
+    } else if (t.once.petrify > 0 && t.curHp * ONE < t.hp * (t.fx.petrifyBelow ?? 0)) {
+      t.once.petrify = 0;
+      t.stoneUntil = this.tick + (t.fx.petrifyTicks ?? 0);
     }
   }
 
@@ -673,6 +861,8 @@ export class Battle {
   private guard(u: Unit, s: Slot, targets: Unit[], foe: Unit): void {
     const amount = mul(shieldAmount(u.atk, s.tech), ONE + u.b.melee);
     for (const t of targets) this.addShield(u, t, amount);
+    // Bàn Thạch: che thêm chính mình nếu chưa nằm trong số được che, khiên phần thêm nhỏ hơn.
+    if (u.fx.guardSelfShield && targets.indexOf(u) < 0) this.addShield(u, u, mul(amount, u.fx.guardSelfShield));
     if (this.hasArtifacts[1 - u.team]) this.siphonShield(targets);
     if (Math.abs(foe.pos - u.pos) <= R.shieldHitRange) this.strike(u, s, [foe], this.takeUlt(u), 0, false);
   }
@@ -683,7 +873,12 @@ export class Battle {
     const seal = t.row === 1 && this.hasArtifacts[t.team] ? this.readyArtifact(t.team, "an") : null;
     if (seal) this.fire(seal.a);
     this.strike(u, s, [t], this.takeUlt(u), R.dashCritBonus, false, seal ? { scale: A.anDashDamage } : {});
-    u.exposedUntil = this.tick + R.exposedTicks;
+    u.exposedUntil = this.tick + (s.mod.exposedTicks ?? R.exposedTicks); // Huyết Ảnh: lộ vị trí ngắn hơn
+    // Huyết Ảnh: hạ gục bằng thân pháp thì ẩn thân (1 lần mỗi trận).
+    if (t.curHp <= 0 && u.once.stealthKill > 0) {
+      u.once.stealthKill = 0;
+      u.stealthUntil = this.tick + (u.fx.stealthOnDashKill ?? 0);
+    }
     if (seal) this.control(u, seal.a.power);
   }
 

@@ -7,14 +7,15 @@
 // các loại khác (kinh tế, hành vi, khắc chế, hộ trận) chỉ được liệt kê trong `sets` để các bước sau dùng.
 // Ý châu: chỉ khảm vũ khí, mỗi vũ khí 1 viên; đổi hành vi một loại chiêu cho mọi công pháp loại đó (sim: UnitSpec.skillMods).
 import {
-  baseStats, mul, ONE, BATTLE, ELEMENTS,
-  type Element, type BuffStat, type UnitSpec, type SkillType, type SkillMod, type TargetPick,
+  baseStats, mul, ONE, BATTLE, ELEMENTS, elementMultiplier,
+  type Element, type BuffStat, type UnitSpec, type SkillType, type SkillMod, type TargetPick, type SetFx,
 } from "@ktlp/sim";
 import TRANG_BI from "../../../data/he_thong/json/trang_bi.json" with { type: "json" };
 import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
 import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
 import { GEAR } from "./config.ts";
 import { boardBonus, resonanceSideEffects, type BoardResult, type BoardSetup } from "./board.ts";
+import { addSetBehavior, emptySetFxAcc, setMilestoneAllowed } from "./setfx.ts";
 
 export type SlotId = "vu_khi" | "mu" | "ao" | "dai" | "bao_tay" | "giay" | "ngoc_boi";
 export type RarityId = "luc" | "lam" | "tim" | "vang" | "do";
@@ -39,6 +40,8 @@ export interface ActiveSet {
   mon: number;
   moc: number;
   hieuUng: SetEffect[];
+  /** Mốc đã đạt nhưng chưa đủ ràng buộc (ví dụ Lôi Trì mốc 7 cần công pháp hệ chủ Lôi hoặc Kim), nên không có tác dụng. */
+  thieuDieuKien?: number[];
 }
 
 /** Tổng cộng của bộ đồ đang mặc. hp, atk, def, manaMax là số cộng thẳng; bonuses theo phần nghìn như UnitBonuses. */
@@ -58,6 +61,8 @@ export interface GearStats {
   skillMods: Partial<Record<SkillType, SkillMod>>;
   /** Đạo Cơ Bàn: ô thông, món thêm mỗi bộ, cộng hưởng; chỉ có khi tính kèm bàn. */
   board?: BoardResult;
+  /** Hiệu ứng hành vi và khắc chế của set theo người mặc (sim UnitSpec.setFx). */
+  setFx: SetFx;
 }
 
 interface SlotRow { id: string; chinh: { stat: string; gia_tri: number }; phu: { stat: string; gia_tri: number }; ngoc: string }
@@ -204,9 +209,12 @@ export function softCap(raw: number, knee: number, max: number): number {
   return raw <= knee ? raw : Math.min(max, knee + Math.trunc((raw - knee) / 2));
 }
 
-/** Cộng chỉ số chính, phụ và ngọc của các món đang mặc (mỗi ô tối đa một món), rồi set; `board` thêm món và cộng hưởng cho set. */
-export function gearStats(items: EquipItem[], level: number, roots: Element[], board?: BoardSetup): GearStats {
-  const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {} };
+/**
+ * Cộng chỉ số chính, phụ và ngọc của các món đang mặc (mỗi ô tối đa một món), rồi set; `board` thêm món và cộng hưởng cho set.
+ * `mainElements` = hệ chủ các công pháp mang theo, để xét ràng buộc mốc 7 (không có thì không xét).
+ */
+export function gearStats(items: EquipItem[], level: number, roots: Element[], board?: BoardSetup, mainElements?: Element[]): GearStats {
+  const out: GearStats = { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {} };
   const used: string[] = [];
   const pieces: Record<string, number> = {}; // id bộ → số món còn độ bền mang ấn bộ đó
   const gemDamage: Partial<Record<Element, number>> = {}; // tổng thô từ ngọc ô công, trước trần mềm
@@ -247,12 +255,27 @@ export function gearStats(items: EquipItem[], level: number, roots: Element[], b
     for (const bo of Object.keys(out.board.monThem)) pieces[bo] += out.board.monThem[bo];
     heSo = out.board.heSo;
   }
+  const acc = emptySetFxAcc();
   for (const bo of Object.keys(pieces).sort()) {
     const moc = setTier(pieces[bo]);
     if (moc === 0) continue;
-    const hieuUng = SETS[bo].moc.filter((m) => m.so <= moc).map((m) => (m.so === SETS_FIRST_TIER && heSo[bo] ? scaleEffect(m, heSo[bo]) : m));
-    out.sets.push({ bo, mon: pieces[bo], moc, hieuUng });
-    for (const m of hieuUng) if (m.loai === "chi_so") addSetStats(out, bo, m.tham_so, level);
+    const reached = SETS[bo].moc.filter((m) => m.so <= moc).map((m) => (m.so === SETS_FIRST_TIER && heSo[bo] ? scaleEffect(m, heSo[bo]) : m));
+    const hieuUng = reached.filter((m) => setMilestoneAllowed(bo, m.so, mainElements));
+    const set: ActiveSet = { bo, mon: pieces[bo], moc, hieuUng };
+    if (hieuUng.length < reached.length) set.thieuDieuKien = reached.filter((m) => hieuUng.indexOf(m) < 0).map((m) => m.so);
+    out.sets.push(set);
+    for (const m of hieuUng) {
+      if (m.loai === "chi_so") addSetStats(out, bo, m.tham_so, level);
+      else if (m.loai === "hanh_vi" || m.loai === "khac_che") addSetBehavior(acc, bo, m.so, m.tham_so as Record<string, number | boolean | string>);
+    }
+  }
+  // Ý châu đứng trước set nếu cùng loại chiêu có cùng khóa.
+  for (const t of Object.keys(acc.mods) as SkillType[]) out.skillMods[t] = { ...acc.mods[t], ...out.skillMods[t] };
+  out.setFx = acc.setFx;
+  for (const k of Object.keys(acc.outside)) out.outside[k] = (out.outside[k] ?? 0) + acc.outside[k];
+  // Ngọc Tủy: kháng thêm mọi hệ đang khắc linh căn chính (đánh nó ×1,5 trở lên).
+  if (acc.resistVsCounters && roots.length > 0) {
+    for (const e of ELEMENTS) if (elementMultiplier(e, roots[0]) >= 1500) out.resist[e] = (out.resist[e] ?? 0) + acc.resistVsCounters;
   }
   for (const r of out.board?.congHuong ?? []) {
     const side = resonanceSideEffects(r);
@@ -290,7 +313,7 @@ function addSetStats(out: GearStats, bo: string, params: Record<string, number |
 /** Áp bộ đồ (và Đạo Cơ Bàn nếu có) vào một đơn vị trong trận; linh căn lấy từ `element` và `element2` của đơn vị. */
 export function withGear(spec: UnitSpec, items: EquipItem[], board?: BoardSetup): UnitSpec {
   const roots = spec.element2 ? [spec.element, spec.element2] : [spec.element];
-  const g = gearStats(items, spec.level, roots, board);
+  const g = gearStats(items, spec.level, roots, board, spec.techniques.map((t) => t.element));
   const bonuses: Partial<Record<BuffStat, number>> = { ...spec.bonuses };
   for (const k of Object.keys(g.bonuses) as BuffStat[]) bonuses[k] = (bonuses[k] ?? 0) + (g.bonuses[k] ?? 0);
   const resist: Partial<Record<Element, number>> = { ...spec.resist };
@@ -305,5 +328,6 @@ export function withGear(spec: UnitSpec, items: EquipItem[], board?: BoardSetup)
     manaMax: (spec.manaMax ?? BATTLE.manaMax) + g.manaMax,
     bonuses, resist, elementDamage,
     skillMods: { ...spec.skillMods, ...g.skillMods },
+    setFx: { ...spec.setFx, ...g.setFx },
   };
 }
