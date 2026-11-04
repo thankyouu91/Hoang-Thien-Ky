@@ -91,11 +91,13 @@ export function replayFromSim(input: BattleInput): Replay {
       } else if (u.mana === u.manaMax && p.mana < u.manaMax) {
         events.push({ tick, kind: "mana", unit: u.id, mana: u.mana / ONE });
       }
-      // Trạng thái: ghi lúc thời hạn đổi (áp mới, kéo dài); khiên ghi thêm lúc vỡ trước hạn (until = tick).
+      // Trạng thái: ghi lúc thời hạn đổi (áp mới, kéo dài); giải sớm (Chuông giải choáng, trói cả đội) và khiên vỡ
+      // trước hạn thì ghi until = tick.
       for (const [kind, field] of UNTIL) {
         const until = u[field];
         if (until === p.until[kind]) continue;
         if (until > tick) events.push({ tick, kind: "status", unit: u.id, status: kind, until });
+        else if (p.until[kind] > tick) events.push({ tick, kind: "status", unit: u.id, status: kind, until: tick });
         p.until[kind] = until;
       }
       const shieldOn = u.shield > 0 && u.shieldUntil > tick;
