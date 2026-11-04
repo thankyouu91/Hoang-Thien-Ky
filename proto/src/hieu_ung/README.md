@@ -56,6 +56,48 @@ Mỗi lần ra chiêu có bốn pha: khởi chiêu, đường bay, chạm trúng
   - lúc tụ lực: tối màn trừ quanh tông chủ, phù trận vàng, linh khí khắp sân xoáy về;
   - lúc bùng: chớp vàng, tia toả, sóng quét sân, cột sáng trời, kiếm quang giáng xuống từng mục tiêu.
 
+## Dáng chiêu đặc trưng (người dùng đề xuất 2026-11-04)
+
+Dáng thay hình gốc của loại chiêu ở pha 1–3 (`dang.ts`). Nét hệ khi trúng và trạng thái kéo dài vẫn giữ. Đã có 10 dáng:
+
+| Dáng | Loại chiêu dùng được | Hình |
+|---|---|---|
+| Đao khí chém ngang | cận chiến quét, diện rộng, cận chiến đơn | tụ đao khí trước mặt, một lưỡi liềm khổng lồ lướt ngang qua cả vùng |
+| Kiếm trận xoay rồi đâm | tầm xa, cận chiến quét, khống chế | kiếm hiện dần, xoay quanh người, rồi lần lượt phóng vào mục tiêu |
+| Mưa kiếm | diện rộng, trận pháp | kiếm treo dày trên vùng, cắm xuống rất nhanh, cắm lại trên đất rồi tan |
+| Cự kiếm giáng | bùa chú, cận chiến đơn, trận pháp | thanh kiếm khổng lồ hiện trên đầu mục tiêu, cắm thẳng xuống, nứt đất |
+| Đầu lâu (âm tà) | tầm xa, khống chế, bùa chú, diện rộng | đầu lâu bốc lửa ma lượn tới, cắn, tan thành khói đen và hồn ma |
+| Huyết tuyến (sát thủ) | cận chiến đơn, thân pháp, cận chiến quét | sợi chỉ máu mảnh cắt ngang mục tiêu gần như cùng lúc, máu bắn rồi rơi |
+| Thiên lôi giáng | diện rộng, bùa chú | mây đen tụ lúc vận công, sét giáng thẳng xuống từng mục tiêu |
+| Gai trồi (đá, băng) | diện rộng, khống chế | gai đá hay gai băng trồi thành sóng từ tâm vùng ra ngoài |
+| Lốc xoáy | diện rộng, khống chế | lốc xoáy thành hình ở người ra chiêu, lướt tới vùng, cuốn bụi lá |
+| Đồng tiền bay | tầm xa, bùa chú | chuỗi đồng tiền vàng lật bay tới, chạm thì tung toé |
+
+Chọn dáng (`dang_chon.ts`, đề xuất; trận thật chưa có dữ liệu dáng của từng công pháp):
+1. Sát thủ đánh cận chiến, thân pháp: huyết tuyến.
+2. Hệ chủ Âm lãnh, Cực âm (âm tà) đánh tầm xa, khống chế, bùa chú: đầu lâu.
+3. Diện rộng theo hệ: Lôi thiên lôi, Thổ và Cực hàn gai trồi, Phong lốc xoáy.
+4. Kim hệ hoặc cầm kiếm: diện rộng là mưa kiếm, bùa chú là cự kiếm, tầm xa và quét là kiếm trận.
+5. Cầm đao, quét hoặc diện rộng: đao khí.
+6. Tu kim tiền đánh tầm xa: đồng tiền bay.
+
+Vũ khí lấy theo ngoại hình màn Trận (`assignLooks`), tài năng theo `tu_si/<tài năng>` của replay. Đề xuất về sau: thêm cột "Dáng chiêu" cho tàn quyển trong Excel, sim mang theo lên replay, dáng ghi sẵn được ưu tiên hơn luật trên. Trang xem thử có ô "Dáng chiêu" để ép một dáng.
+
+Ý tưởng cho đợt sau (chưa làm):
+- Theo hệ:
+  - Hỏa: hỏa long cuộn tới; thiên hỏa lưu tinh (thiên thạch lửa rơi).
+  - Thủy: thủy long quyển (cột nước xoáy); sóng thần quét ngang.
+  - Mộc: rễ cây trồi trói cả vùng; hoa nở khi hồi phục.
+  - Quang: Phật thủ ấn (bàn tay vàng khổng lồ ấn xuống); thánh quang thập tự.
+  - Cực dương: liệt nhật (mặt trời nhỏ rơi). Cực âm: nguyệt thực (vùng tối hút vào).
+  - Âm lãnh: quỷ thủ trồi từ đất kéo chân. Cực hàn: bão tuyết. Kim: kim cương xử giáng.
+- Theo tài năng, vũ khí GDD mục 6:
+  - Tu thể: quyền ảnh dồn dập. Tu pháp: vòng phù văn quanh pháp trượng bắn tia.
+  - Tu trận: trận bàn bay ra xoay rồi nổ. Tu đan: hồ lô phun lửa đan, độc vụ.
+  - Tu rèn: búa rèn giáng, tia lửa, sóng chấn. Tu dược: lưỡi liềm xanh, cánh hoa thuốc.
+- Phe tà: huyết hải dâng dưới chân, vạn hồn phiên (oan hồn bay quanh cờ), ma nhãn trên trời chiếu tia.
+- Chiêu cuối theo tông môn: pháp tướng khổng lồ hiện sau lưng tông chủ.
+
 Dữ liệu từ replay:
 - `cast.grade` lấy từ sim.
 - Sự kiện `status`: simSource so `stunUntil`, `rootUntil`, `slowUntil`, `burnUntil`, `healCutUntil`, `shieldUntil`, `exposedUntil`, `stealthUntil` giữa hai tick.
