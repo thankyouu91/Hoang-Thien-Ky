@@ -9,7 +9,7 @@ import { icon } from "../icons.ts";
 import {
   BAO_PAGES, BAO_TOTAL, BAO_WEEK_REWARD, canDecompose, DMG_CAP, DMG_CAP_PHACH, gemValue, GEM_NAME, hasKhiLinh, KHI_TINH_PER_KL, KHI_TINH_TEXT, khiTinhOf,
   khiTinhToNext, khiVan, klBonus, klNeed, KL_MAX, KL_PER_BI_CANH, KL_PER_KHI_TINH, KL_PER_TRAN, PHACH_FROM, PHACH_KHI_TINH, PHACH_RATE, PHACH_VALUE, phachName,
-  RARITY_NAMES, reached, REROLL_KHI_TINH, rerollStone, SLOT_NAMES, SLOTS, SONG_HE_FROM, SONG_HE_PART, SONG_HE_RATE, songHeOk, stoneBack, SUB, UNLOCK, VAN_AT,
+  RARITY_NAMES, reached, REROLL_KHI_TINH, rerollStone, SLOT_NAMES, SLOTS, SONG_HE_FROM, SONG_HE_PART, SONG_HE_PHU, SONG_HE_RATE, songHeOk, stoneBack, SUB, UNLOCK, VAN_AT,
   VAN_CAP, VAN_REROLL, VAN_STACK, vanCount, vanGroup, vanSlots, yieldLocked, type Gate,
 } from "../luyenKhi.ts";
 import type { BagItem, CommandResult, DashboardCommand, GearItem, GearSlot, LuyenKhiView, NhanVatView } from "../source.ts";
@@ -436,6 +436,8 @@ export class LuyenKhiPanel {
       return;
     }
     const each = (gemValue(a.cap) * SONG_HE_PART) / 1000;
+    // Phù bảo ngọc trong túi: dùng thì thất bại giữ cả hai viên; mỗi lần dùng tốn một tấm, đậu hay không.
+    const phu = v.bag.items.filter((it) => it.code === SONG_HE_PHU).reduce((n, it) => n + it.count, 0);
     const body = openSheet(
       "Hợp song hệ",
       `<div class="lk-gems center">${this.gemCell(a, "", "x")}<span class="lk-plus">+</span>${this.gemCell(g, "", "x")}</div>
@@ -444,14 +446,16 @@ export class LuyenKhiPanel {
          <dt>Mỗi hệ</dt><dd>+${pctText(each)} <span class="muted">(${pctText(SONG_HE_PART)} của ${pctText(gemValue(a.cap))})</span></dd>
          <dt>Tỷ lệ đậu</dt><dd>${pctText(SONG_HE_RATE)}</dd>
        </dl>
-       <p class="muted">Thất bại mất viên thứ hai (${esc(gemLabel(g))}), giữ viên thứ nhất; dùng Phù bảo ngọc thì giữ cả hai. Dành cho người mang công pháp hai hệ hoặc cần kháng hai hệ trong ít dòng khảm.</p>
+       <p class="muted">Thất bại mất viên thứ hai (${esc(gemLabel(g))}), giữ viên thứ nhất. Dành cho người mang công pháp hai hệ hoặc cần kháng hai hệ trong ít dòng khảm.</p>
+       <label class="lk-phu${phu ? "" : " off"}"><input type="checkbox" data-phu${phu ? "" : " disabled"}><span><b>Dùng Phù bảo ngọc</b><span class="muted block">${phu ? `Thất bại thì giữ cả hai viên. Tốn 1 tấm mỗi lần, còn ${phu}.` : "Túi không còn Phù bảo ngọc."}</span></span></label>
        <div class="actions"><button type="button" data-close>Thôi</button><button type="button" class="seal" data-a="ok">Hợp</button></div>`,
     );
     body.addEventListener("click", (e) => {
       if (!(e.target as HTMLElement).closest("[data-a=ok]")) return;
       closeSheet();
       this.gemA = undefined;
-      void this.host.send({ type: "hop_song_he", a: a.id, b: g.id });
+      const usePhu = !!body.querySelector<HTMLInputElement>("[data-phu]")?.checked;
+      void this.host.send(usePhu ? { type: "hop_song_he", a: a.id, b: g.id, phu: true } : { type: "hop_song_he", a: a.id, b: g.id });
     });
   }
 

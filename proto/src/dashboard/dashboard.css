@@ -931,6 +931,11 @@ i.pip.ready, .pt-legend i.pip.ready { border-color: var(--c-accent); background:
 .bag-cell.lk-gem img.he2 { position: absolute; right: 4%; bottom: 4%; width: 64%; height: 64%; }
 .lk-cap { position: absolute; left: 3px; top: 1px; z-index: 1; color: var(--c-ink); font-size: 11px; font-weight: 700; text-shadow: 0 0 2px #fff, 0 0 2px #fff; }
 .lk-plus { color: var(--c-ink-3); font-size: 20px; }
+/* Ô dùng Phù bảo ngọc khi hợp song hệ */
+#sheet .lk-phu { display: flex; align-items: flex-start; gap: 10px; margin: var(--sp-3) 0 0; padding: 10px 12px; border: 1px solid var(--c-line-2); border-radius: 3px; background: var(--c-raised); cursor: pointer; }
+#sheet .lk-phu:has(input:checked) { border-color: var(--c-frame); background: var(--c-accent-soft); }
+#sheet .lk-phu input { flex: 0 0 auto; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--c-accent); }
+#sheet .lk-phu.off { opacity: 0.6; cursor: default; }
 .page .lk-phachs { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 0; }
 
 /* Bảo Giám: trang tuần trên cùng, các trang có thanh tiến độ; sổ là lưới, ô chưa có là bóng mực mờ */
