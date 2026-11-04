@@ -158,6 +158,9 @@ export const PARTS: PartDef[] = [
   T("Song hệ ngọc", "ngoc.json", "song_he", "ma_vp", [
     c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text"), c("moi_he", "Mỗi hệ so với một viên thường", "pct", { width: 12 }),
     moTa, nguon,
+    c("ty_le_dau", "Tỷ lệ đậu (cố định, không theo bảng nén)", "pct", { width: 12 }),
+    c("that_bai_mat", "Thất bại mất số viên (viên đặt thứ hai)", "int", { width: 12 }),
+    c("phu_giu", "Phù giữ lại cả hai", "text", { width: 11 }),
   ]),
   T("Danh khí", "luyen_khi.json", "danh_khi", "ma_vp", [
     c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text", { width: 16 }), c("khi_hinh", "Khí hình", "text", { width: 9 }),
@@ -167,6 +170,8 @@ export const PARTS: PartDef[] = [
     c("ma", "Mã trang", "text", { width: 11 }), c("ten", "Tên trang", "text", { width: 18 }),
     c("dem", "Đếm (đơn vị code)", "kv", { width: 30 }), c("so_luong", "Số kiểu cần đủ", "int", { width: 9 }),
     c("thuong", "Thưởng (không cộng chỉ số)", "text", { width: 45 }),
+    c("loai_thuong", "Loại thưởng", "text", { width: 15 }),
+    c("so_thuong", "Số thưởng (ô, Khí Tinh)", "int", { width: 10, nullable: true }),
   ]),
   T("Tế luyện tầng", "luyen_khi.json", "te_luyen_tang", "tang", [
     c("tang", "Tầng", "int", { width: 6 }), c("linh_luc", "Linh lực tối đa (cộng dồn)", "pct", { width: 11 }),
@@ -239,6 +244,11 @@ export const LUAT: [string, string, string][] = [
   ["luyen_khi.json:luat.phanGiaiKhiTinhMoiCapKhiLinh", "Phân giải: Khí Tinh thêm mỗi cấp khí linh của món", "số"],
   ["luyen_khi.json:luat.phanGiaiTraNac", "Phân giải: số nấc cường hóa trả lại thành Luyện Khí Thạch", "%"],
   ["luyen_khi.json:luat.tayLuyenKhiTinh", "Tẩy luyện: Khí Tinh mỗi lần", "số"],
+  ["luyen_khi.json:luat.tayLuyenLinhThach.luc", "Tẩy luyện món lục: linh thạch (đúng phẩm của vị diện) mỗi lần", "số"],
+  ["luyen_khi.json:luat.tayLuyenLinhThach.lam", "Tẩy luyện món lam: linh thạch (đúng phẩm của vị diện) mỗi lần", "số"],
+  ["luyen_khi.json:luat.tayLuyenLinhThach.tim", "Tẩy luyện món tím: linh thạch (đúng phẩm của vị diện) mỗi lần", "số"],
+  ["luyen_khi.json:luat.tayLuyenLinhThach.vang", "Tẩy luyện món vàng: linh thạch (đúng phẩm của vị diện) mỗi lần", "số"],
+  ["luyen_khi.json:luat.tayLuyenLinhThach.do", "Tẩy luyện món đỏ: linh thạch (đúng phẩm của vị diện) mỗi lần", "số"],
   ["luyen_khi.json:luat.khiLinhKnTran", "Khí linh: kinh nghiệm mỗi trận món được mặc", "số"],
   ["luyen_khi.json:luat.khiLinhKnBiCanh", "Khí linh: kinh nghiệm mỗi lượt bí cảnh", "số"],
   ["luyen_khi.json:luat.khiLinhKnKhiTinh", "Khí linh: kinh nghiệm mỗi Khí Tinh nạp vào", "số"],

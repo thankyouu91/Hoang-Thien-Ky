@@ -2,12 +2,12 @@
   "ghi_chu": [
     "Luyện khí sau cấp tối đa (GDD tab Trang bị, pháp bảo và set đồ, phần 13; mọi số là đề xuất): mở rộng theo chiều ngang (thêm lựa chọn, thứ để thử, thứ để sưu tầm), cả lớp cộng tối đa khoảng 3 điểm lực chiến, trong trần 35% của đồ.",
     "Mở khóa (số ở luat): phân giải và Bảo Giám từ cấp 20; tẩy luyện từ Kết Đan; khí linh và khí văn từ Hóa Thần, món từ tím; song hệ khi có ngọc cấp 7; Ngọc Phách khi có ngọc cấp 10; danh khí từ cấp 250 Hạ vị hoặc từ Trung vị, tông môn có lò rèn cấp 9; tế luyện tầng pháp bảo từ Trung vị.",
-    "tay_luyen: đổi loại chỉ số phụ của một món sang loại khác trong 4 loại của ô, cùng thang giá trị (giá trị ở lục +0, nhân độ hiếm, cường hóa, bí cảnh như chỉ số phụ cũ). Loại 1 là chỉ số phụ mặc định ở trang_bi.json o[].phu. Người thường quay ngẫu nhiên trong 3 loại còn lại; Tu rèn chọn thẳng.",
+    "tay_luyen: đổi loại chỉ số phụ của một món sang loại khác trong 4 loại của ô, cùng thang giá trị (giá trị ở lục +0, nhân độ hiếm, cường hóa, bí cảnh như chỉ số phụ cũ). Loại 1 là chỉ số phụ mặc định ở trang_bi.json o[].phu. Người thường quay ngẫu nhiên trong 3 loại còn lại; Tu rèn chọn thẳng. Mỗi lần tốn luat.tayLuyenKhiTinh Khí Tinh và luat.tayLuyenLinhThach linh thạch theo độ hiếm món, linh thạch đúng phẩm của vị diện.",
     "khi_linh: mỗi cấp cộng cong_chi_so vào hệ số cùng chỗ với cường hóa; món có khí linh từ cấp 1 khóa vào nhân vật. Cấp 3, 6, 9 mở ô khí văn, tối đa luat.khiVanToiDa theo độ hiếm; chọn 1 trong 3 khí văn của nhóm ô (cong: vũ khí, bao tay, ngọc bội; thu: mũ, áo, đai, giày).",
     "khi_van: gia_tri là số chính của tác dụng để chỉnh. Một khí văn trên nhiều món tính tối đa luat.khiVanTinhToiDa lần; tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi thứ vẫn còn ít nhất ×1,2.",
     "phan_giai: món từ lam ra Khí Tinh theo độ hiếm, cộng luat.phanGiaiKhiTinhMoiCapKhiLinh mỗi cấp khí linh; ngọc, Ý châu, ấn trả nguyên vẹn; luat.phanGiaiTraNac số nấc cường hóa trả lại thành Luyện Khí Thạch đúng phẩm. Khí Tinh từ đồ khóa cũng khóa.",
     "danh_khi: luyện ở lò tông môn cấp luat.danhKhiLoToiThieu trở lên theo đồ phổ, phôi là 1 vũ khí đỏ cùng khí hình; Ý của khí hình mạnh gấp luat.danhKhiYHeSo lần Ý châu, không chiếm dòng khảm, cộng danh văn riêng. Mỗi người mặc luat.danhKhiMoiNguoi danh khí; khóa. Thất bại mất Khí Tinh và Vẫn Thiết, giữ phôi và đồ phổ.",
-    "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu. Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch.",
+    "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu, loại thưởng theo thứ được đếm (vũ khí, danh khí: ánh sáng vũ khí; ô khác: khung ô; pháp bảo, Phách: danh hiệu; pháp khí: ô kho; ấn bộ: ô túi; Ý châu: Khí Tinh). Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch.",
     "te_luyen_tang: pháp bảo đã tế luyện, từ Trung vị, lên tầng 1–5; linh_luc, hoi_chieu là cộng dồn tới tầng đó. Hồi chiêu pháp bảo sau mọi nguồn (set Cổ Tông, tầng) không dưới luat.teLuyenHoiChieuSan hồi chiêu gốc."
   ],
   "tay_luyen": [
@@ -266,114 +266,208 @@
       "ten": "Vũ khí phổ",
       "dem": {"loai":"trang_bi","o":"vu_khi"},
       "so_luong": 70,
-      "thuong": "Danh hiệu Vạn Binh; ánh sáng vũ khí"
+      "thuong": "Ánh sáng vũ khí",
+      "loai_thuong": "anh_sang_vu_khi",
+      "so_thuong": null
     },
-    {"ma":"BG-TB-MU","ten":"Mũ phổ","dem":{"loai":"trang_bi","o":"mu"},"so_luong":60,"thuong":"Khung ô mũ; 10 Khí Tinh"},
-    {"ma":"BG-TB-AO","ten":"Áo phổ","dem":{"loai":"trang_bi","o":"ao"},"so_luong":60,"thuong":"Khung ô áo; 10 Khí Tinh"},
+    {
+      "ma": "BG-TB-MU",
+      "ten": "Mũ phổ",
+      "dem": {"loai":"trang_bi","o":"mu"},
+      "so_luong": 60,
+      "thuong": "Khung ô mũ",
+      "loai_thuong": "khung_o",
+      "so_thuong": null
+    },
+    {
+      "ma": "BG-TB-AO",
+      "ten": "Áo phổ",
+      "dem": {"loai":"trang_bi","o":"ao"},
+      "so_luong": 60,
+      "thuong": "Khung ô áo",
+      "loai_thuong": "khung_o",
+      "so_thuong": null
+    },
     {
       "ma": "BG-TB-DAI",
       "ten": "Đai phổ",
       "dem": {"loai":"trang_bi","o":"dai"},
       "so_luong": 60,
-      "thuong": "Khung ô đai; 10 Khí Tinh"
+      "thuong": "Khung ô đai",
+      "loai_thuong": "khung_o",
+      "so_thuong": null
     },
     {
       "ma": "BG-TB-BAOTAY",
       "ten": "Bao tay phổ",
       "dem": {"loai":"trang_bi","o":"bao_tay"},
       "so_luong": 60,
-      "thuong": "Khung ô bao tay; 10 Khí Tinh"
+      "thuong": "Khung ô bao tay",
+      "loai_thuong": "khung_o",
+      "so_thuong": null
     },
     {
       "ma": "BG-TB-GIAY",
       "ten": "Giày phổ",
       "dem": {"loai":"trang_bi","o":"giay"},
       "so_luong": 60,
-      "thuong": "Khung ô giày; 10 Khí Tinh"
+      "thuong": "Khung ô giày",
+      "loai_thuong": "khung_o",
+      "so_thuong": null
     },
     {
       "ma": "BG-TB-NGOCBOI",
       "ten": "Ngọc bội phổ",
       "dem": {"loai":"trang_bi","o":"ngoc_boi"},
       "so_luong": 60,
-      "thuong": "Khung ô ngọc bội; 10 Khí Tinh"
+      "thuong": "Khung ô ngọc bội",
+      "loai_thuong": "khung_o",
+      "so_thuong": null
     },
     {
       "ma": "BG-PB-THUAN",
       "ten": "Thuẫn đủ năm màu",
       "dem": {"loai":"phap_bao","phap_bao":"thuan"},
       "so_luong": 5,
-      "thuong": "5 Khí Tinh"
+      "thuong": "Danh hiệu Thuẫn Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
     {
       "ma": "BG-PB-LUAN",
       "ten": "Luân đủ năm màu",
       "dem": {"loai":"phap_bao","phap_bao":"luan"},
       "so_luong": 5,
-      "thuong": "5 Khí Tinh"
+      "thuong": "Danh hiệu Luân Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
     {
       "ma": "BG-PB-CHAU",
       "ten": "Châu đủ năm màu",
       "dem": {"loai":"phap_bao","phap_bao":"chau"},
       "so_luong": 5,
-      "thuong": "5 Khí Tinh"
+      "thuong": "Danh hiệu Châu Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
     {
       "ma": "BG-PB-THAP",
       "ten": "Tháp đủ năm màu",
       "dem": {"loai":"phap_bao","phap_bao":"thap"},
       "so_luong": 5,
-      "thuong": "5 Khí Tinh"
+      "thuong": "Danh hiệu Tháp Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
     {
       "ma": "BG-PB-HOLO",
       "ten": "Hồ lô đủ năm màu",
       "dem": {"loai":"phap_bao","phap_bao":"ho_lo"},
       "so_luong": 5,
-      "thuong": "5 Khí Tinh"
+      "thuong": "Danh hiệu Hồ lô Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
     {
       "ma": "BG-PB-KINH",
       "ten": "Kính đủ năm màu",
       "dem": {"loai":"phap_bao","phap_bao":"kinh"},
       "so_luong": 5,
-      "thuong": "5 Khí Tinh"
+      "thuong": "Danh hiệu Kính Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
     {
       "ma": "BG-PB-PHIENCO",
       "ten": "Phiên đủ năm màu",
       "dem": {"loai":"phap_bao","phap_bao":"phien_co"},
       "so_luong": 5,
-      "thuong": "5 Khí Tinh"
+      "thuong": "Danh hiệu Phiên Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
     {
       "ma": "BG-PB-DINH",
       "ten": "Đỉnh đủ năm màu",
       "dem": {"loai":"phap_bao","phap_bao":"dinh"},
       "so_luong": 5,
-      "thuong": "5 Khí Tinh"
+      "thuong": "Danh hiệu Đỉnh Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
     {
       "ma": "BG-PB-CHUONG",
       "ten": "Chuông đủ năm màu",
       "dem": {"loai":"phap_bao","phap_bao":"chuong"},
       "so_luong": 5,
-      "thuong": "5 Khí Tinh"
+      "thuong": "Danh hiệu Chuông Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
-    {"ma":"BG-PB-AN","ten":"Ấn đủ năm màu","dem":{"loai":"phap_bao","phap_bao":"an"},"so_luong":5,"thuong":"5 Khí Tinh"},
+    {
+      "ma": "BG-PB-AN",
+      "ten": "Ấn đủ năm màu",
+      "dem": {"loai":"phap_bao","phap_bao":"an"},
+      "so_luong": 5,
+      "thuong": "Danh hiệu Ấn Chủ",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
+    },
     {
       "ma": "BG-PB-ALL",
       "ten": "Bách Bảo phổ",
       "dem": {"loai":"phap_bao"},
       "so_luong": 50,
-      "thuong": "Danh hiệu Bách Bảo; 10 ô kho"
+      "thuong": "Danh hiệu Bách Bảo",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
     },
-    {"ma":"BG-PK-ALL","ten":"Pháp khí phổ","dem":{"loai":"phap_khi"},"so_luong":24,"thuong":"10 ô túi"},
-    {"ma":"BG-YC-ALL","ten":"Ý châu phổ","dem":{"loai":"y_chau"},"so_luong":10,"thuong":"Ánh sáng vũ khí theo Ý"},
-    {"ma":"BG-AN-ALL","ten":"Ấn phổ","dem":{"loai":"an_bo"},"so_luong":20,"thuong":"Danh hiệu Ấn Tàng"},
-    {"ma":"BG-PH-ALL","ten":"Phách phổ","dem":{"loai":"phach"},"so_luong":12,"thuong":"Khung ô ngọc"},
-    {"ma":"BG-DK-ALL","ten":"Danh khí phổ","dem":{"loai":"danh_khi"},"so_luong":10,"thuong":"Danh hiệu Thần Binh"}
+    {
+      "ma": "BG-PK-ALL",
+      "ten": "Pháp khí phổ",
+      "dem": {"loai":"phap_khi"},
+      "so_luong": 24,
+      "thuong": "10 ô kho",
+      "loai_thuong": "o_kho",
+      "so_thuong": 10
+    },
+    {
+      "ma": "BG-YC-ALL",
+      "ten": "Ý châu phổ",
+      "dem": {"loai":"y_chau"},
+      "so_luong": 10,
+      "thuong": "10 Khí Tinh",
+      "loai_thuong": "khi_tinh",
+      "so_thuong": 10
+    },
+    {
+      "ma": "BG-AN-ALL",
+      "ten": "Ấn phổ",
+      "dem": {"loai":"an_bo"},
+      "so_luong": 20,
+      "thuong": "10 ô túi",
+      "loai_thuong": "o_tui",
+      "so_thuong": 10
+    },
+    {
+      "ma": "BG-PH-ALL",
+      "ten": "Phách phổ",
+      "dem": {"loai":"phach"},
+      "so_luong": 12,
+      "thuong": "Danh hiệu Thập Nhị Phách",
+      "loai_thuong": "danh_hieu",
+      "so_thuong": null
+    },
+    {
+      "ma": "BG-DK-ALL",
+      "ten": "Danh khí phổ",
+      "dem": {"loai":"danh_khi"},
+      "so_luong": 10,
+      "thuong": "Ánh sáng vũ khí riêng của danh khí",
+      "loai_thuong": "anh_sang_vu_khi",
+      "so_thuong": null
+    }
   ],
   "te_luyen_tang": [
     {"tang":1,"linh_luc":100,"hoi_chieu":-20,"khi_tinh":5},
@@ -395,6 +489,7 @@
     "phanGiaiKhiTinhMoiCapKhiLinh": 1,
     "phanGiaiTraNac": 500,
     "tayLuyenKhiTinh": 2,
+    "tayLuyenLinhThach": {"luc":50,"lam":200,"tim":500,"vang":1500,"do":3000},
     "khiLinhKnTran": 1,
     "khiLinhKnBiCanh": 5,
     "khiLinhKnKhiTinh": 10,

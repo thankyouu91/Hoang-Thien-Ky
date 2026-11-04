@@ -320,6 +320,24 @@ export function kiem(d: Any, raw: Raw): Report {
     for (const m of ["NL-KT-001", "NL-KT-002"]) if (!nl.has(m)) bad.push(`thiếu nguyên liệu ${m}`);
     const tang = lk.te_luyen_tang as Any[];
     if (tang.some((t, i) => i > 0 && !(t.linh_luc > tang[i - 1].linh_luc && t.hoi_chieu < tang[i - 1].hoi_chieu))) bad.push("tế luyện tầng: linh lực phải tăng, hồi chiêu phải giảm dần");
+    // Tẩy luyện: giá linh thạch đủ mọi độ hiếm, tăng dần; song hệ: tỷ lệ đậu 0–100%, phù giữ có thật
+    const gia = lk.luat?.tayLuyenLinhThach;
+    if (gia) {
+      const order = (tb.do_hiem as Any[]).map((x) => x.id);
+      if (order.some((r) => typeof gia[r] !== "number") || order.some((r, i) => i > 0 && !(gia[r] > gia[order[i - 1]]))) bad.push(`tẩy luyện: luat.tayLuyenLinhThach cần đủ ${order.join(", ")} và tăng dần`);
+    }
+    const phu = new Set(d["vat_pham.json"].phu.map((x: Any) => x.ma_vp));
+    for (const s of ngoc.song_he ?? []) {
+      if (s.ty_le_dau !== undefined && !(s.ty_le_dau > 0 && s.ty_le_dau <= 1000)) bad.push(`${s.ma_vp}: tỷ lệ đậu ${s.ty_le_dau} ngoài 0–1000`);
+      if (s.phu_giu !== undefined && !phu.has(s.phu_giu)) bad.push(`${s.ma_vp}: phù giữ ${s.phu_giu} không có ở sheet Phù`);
+    }
+    // Bảo Giám: loại thưởng theo thứ được đếm (GDD tab Trang bị phần 13 rev 47)
+    const thuong: Record<string, string> = { phap_bao: "danh_hieu", phach: "danh_hieu", phap_khi: "o_kho", an_bo: "o_tui", y_chau: "khi_tinh", danh_khi: "anh_sang_vu_khi" };
+    for (const p of lk.bao_giam as Any[]) {
+      if (p.loai_thuong === undefined) continue;
+      const want = p.dem?.loai === "trang_bi" ? (p.dem.o === "vu_khi" ? "anh_sang_vu_khi" : "khung_o") : thuong[p.dem?.loai];
+      if (p.loai_thuong !== want) bad.push(`Bảo Giám ${p.ma}: loại thưởng ${p.loai_thuong}, cần ${want}`);
+    }
     // Bảo Giám: số kiểu cần đủ của mỗi trang bằng số kiểu có thật
     const pool: Record<string, Any[]> = {
       trang_bi: tb.kieu, phap_bao: d["phap_bao.json"].mon, phap_khi: d["phap_khi.json"].mon, y_chau: ngoc.y_chau, an_bo: ngoc.an_bo,

@@ -387,7 +387,7 @@ export function kvText(o: Record<string, unknown>): string {
   const one = (x: unknown): string => (Array.isArray(x) ? `[${x.map(one).join(", ")}]` : String(x));
   return Object.entries(o).map(([k, x]) => `${k}: ${one(x)}`).join("; ");
 }
-function parseKv(s: string): Record<string, unknown> {
+export function parseKv(s: string): Record<string, unknown> {
   const one = (x: string): unknown => {
     x = x.trim();
     if (x.startsWith("[") && x.endsWith("]")) return x.slice(1, -1).split(",").map((y) => y.trim()).filter(Boolean).map(one);

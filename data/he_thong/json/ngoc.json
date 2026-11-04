@@ -5,7 +5,7 @@
     "Nén 3 viên cùng hệ cùng cấp lên 1 viên cấp trên; ty_le_nen_len là tỷ lệ đậu khi nén lên cấp đó (đề xuất). Ngọc từ cấp 7 khóa vào nhân vật (chốt mục 13).",
     "Cấp là thuộc tính của từng viên, không nằm trong mã. Mã NG-KH giữ như danh_sach.json; ten_han_viet là tên hiện trong tooltip (đề xuất).",
     "tran (đề xuất 2026-11-04): mỗi hệ, phần sát thương từ ngọc trên satThuongMem chỉ tính một nửa và không vượt satThuongToiDa; kháng từ ngọc trên khangMem tính một nửa và không vượt khangToiDa.",
-    "song_he, phach (luyện khí, đề xuất 2026-11-04): song hệ hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp, mỗi hệ moi_he giá trị một viên thường, tính trong trần mềm của hệ đó. Phách điểm hóa từ 1 ngọc cấp 10 (luyen_khi.json luat.phachKhiTinh, luat.phachTyLe), khảm ô công, cho gia_tri và nâng trần sát thương hệ đó lên tran_toi_da; mỗi hệ 1 Phách tính trần; khóa."
+    "song_he, phach (luyện khí, đề xuất 2026-11-04): song hệ hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp, mỗi hệ moi_he giá trị một viên thường, tính trong trần mềm của hệ đó; đậu theo ty_le_dau cố định (không theo bảng nén), thất bại mất that_bai_mat viên (viên đặt thứ hai), phù phu_giu giữ lại cả hai. Phách điểm hóa từ 1 ngọc cấp 10 (luyen_khi.json luat.phachKhiTinh, luat.phachTyLe), khảm ô công, cho gia_tri và nâng trần sát thương hệ đó lên tran_toi_da; mỗi hệ 1 Phách tính trần; khóa."
   ],
   "he": [
     {
@@ -111,8 +111,11 @@
       "ma_vp": "NG-SH-001",
       "ten": "Song Hệ Ngọc",
       "moi_he": 600,
-      "mo_ta": "Hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp; hai hệ và cấp là thuộc tính từng viên. Tỷ lệ đậu như nén lên chính cấp đó",
-      "nguon": ["hop_ngoc"]
+      "mo_ta": "Hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp; hai hệ và cấp là thuộc tính từng viên. Tỷ lệ đậu cố định, không theo bảng nén; thất bại mất viên đặt thứ hai, Bảo Ngọc Phù giữ lại cả hai",
+      "nguon": ["hop_ngoc"],
+      "ty_le_dau": 800,
+      "that_bai_mat": 1,
+      "phu_giu": "PH-CH-002"
     }
   ],
   "phach": [

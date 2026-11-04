@@ -9,6 +9,7 @@
 //   luyen_khi       Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13): 9 sheet sau Nguyên liệu rèn → luyen_khi.json, Phách và song
 //                   hệ vào ngoc.json; 10 danh khí ở Kiểu trang bị, Khí Tinh, Linh Văn Thạch, đồ phổ ở Nguyên liệu rèn; luật, ghi chú
 //   hop_tran_2      3 khóa hợp trận ở SKILL_RULES: formationJoinWait, formationExtraTargets, formationMaxTargets (đề xuất)
+//   luyen_khi_2     song hệ ngọc đậu cố định, giá linh thạch tẩy luyện theo độ hiếm, thưởng Bảo Giám theo loại (đề xuất)
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -579,9 +580,92 @@ const luyenKhi: Step = (wb, log) => {
   }
 };
 
+// ---------- luyện khí lần 2 (phiên set đồ chốt với tab giao diện, GDD tab Trang bị phần 13 rev 47; đề xuất) ----------
+
+/** Linh thạch đúng phẩm của vị diện mỗi lần tẩy luyện, theo độ hiếm món. */
+const TAY_LUYEN_LINH_THACH: [string, number][] = [["luc", 50], ["lam", 200], ["tim", 500], ["vang", 1500], ["do", 3000]];
+/** Loại thưởng Bảo Giám theo thứ được đếm: [loại thưởng, số thưởng] (số trống khi thưởng không có số). */
+function baoGiamThuong(dem: Record<string, string>, ten: string, oTen: Record<string, string>, pbTen: Record<string, string>): [string, string, number | null] {
+  switch (dem.loai) {
+    case "trang_bi": return dem.o === "vu_khi" ? ["Ánh sáng vũ khí", "anh_sang_vu_khi", null] : [`Khung ô ${oTen[dem.o].toLowerCase()}`, "khung_o", null];
+    case "danh_khi": return ["Ánh sáng vũ khí riêng của danh khí", "anh_sang_vu_khi", null]; // danh khí là vũ khí
+    case "phap_bao": return [dem.phap_bao ? `Danh hiệu ${pbTen[dem.phap_bao]} Chủ` : "Danh hiệu Bách Bảo", "danh_hieu", null];
+    case "phach": return ["Danh hiệu Thập Nhị Phách", "danh_hieu", null];
+    case "phap_khi": return ["10 ô kho", "o_kho", 10];
+    case "an_bo": return ["10 ô túi", "o_tui", 10];
+    case "y_chau": return ["10 Khí Tinh", "khi_tinh", 10];
+    default: throw new Error(`Bảo Giám ${ten}: loại đếm lạ ${dem.loai}`);
+  }
+}
+
+const luyenKhi2: Step = (wb, log) => {
+  const text = (v: string): Cell => ({ v, fill: "de_xuat" });
+  const hdr = (v: string): Cell => ({ v, fill: "tieu_de", bold: true, wrap: true });
+  const colOf = (def: B.TableDef, key: string) => def.cols.find((c) => c.key === key)!;
+
+  // 1. Song hệ ngọc: tỷ lệ đậu cố định, thất bại mất viên đặt thứ hai, Bảo Ngọc Phù giữ cả hai
+  const sh = partDef("Song hệ ngọc");
+  const shCols: [string, (r: number) => Cell | null][] = [
+    ["ty_le_dau", (r) => (r > 0 ? pctCell(0.8) : null)],
+    ["that_bai_mat", (r) => (r > 0 ? { v: 1, fill: "de_xuat" } : null)],
+    ["phu_giu", (r) => (r > 0 ? text("PH-CH-002") : null)],
+  ];
+  for (const [key, cell] of shCols) {
+    const c = colOf(sh, key);
+    if ((wb.sheet(sh.sheet).cells[0] ?? []).map(norm).includes(c.header)) continue;
+    wb.addColumn(sh.sheet, hdr(c.header), (r, row) => (norm(row[0]) ? cell(r) : null), c.width);
+    log.push(`Song hệ ngọc: thêm cột ${c.header}`);
+  }
+  wb.setCell(sh.sheet, ...locate(wb, sh.sheet, colOf(sh, "ma_vp").header, "NG-SH-001", colOf(sh, "mo_ta").header),
+    text("Hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp; hai hệ và cấp là thuộc tính từng viên. Tỷ lệ đậu cố định, không theo bảng nén; thất bại mất viên đặt thứ hai, Bảo Ngọc Phù giữ lại cả hai"));
+
+  // 2. Tẩy luyện: linh thạch mỗi lần theo độ hiếm, chèn ngay sau dòng tayLuyenKhiTinh
+  const luatDef = partDef("Luật trang bị"), ls = wb.sheet(luatDef.sheet);
+  const have = new Set(ls.cells.map((r) => norm(r?.[0])));
+  const luat = TAY_LUYEN_LINH_THACH.map(([k, v]) => [`luyen_khi.json:luat.tayLuyenLinhThach.${k}`, v] as const).filter(([k]) => !have.has(k))
+    .map(([khoa, v]) => ({ khoa, ten: TB.LUAT.find((l) => l[0] === khoa)![1], gia_tri: v, kieu: "số" }));
+  if (luat.length) {
+    const at = ls.cells.findIndex((r) => norm(r?.[0]) === "luyen_khi.json:luat.tayLuyenKhiTinh");
+    if (at < 0) throw new Error("Luật trang bị: không có dòng luyen_khi.json:luat.tayLuyenKhiTinh");
+    wb.insertRows(luatDef.sheet, at + 1, tableRows(luatDef, luat));
+  }
+  log.push(`Luật trang bị: chèn ${luat.length} dòng giá linh thạch tẩy luyện`);
+
+  // 3. Bảo Giám: thưởng theo loại; thêm cột loại thưởng và số thưởng
+  const bg = partDef("Bảo Giám");
+  const oTen: Record<string, string> = { vu_khi: "Vũ khí", mu: "Mũ", ao: "Áo", dai: "Đai", bao_tay: "Bao tay", giay: "Giày", ngoc_boi: "Ngọc bội" };
+  const pb = wb.sheet("Pháp bảo loại"), pbh = (pb.cells[0] ?? []).map(norm);
+  const pbTen = Object.fromEntries(pb.cells.slice(1).map((r) => [norm(r?.[pbh.indexOf("Mã")]), norm(r?.[pbh.indexOf("Tên")])]));
+  const bs = wb.sheet(bg.sheet), bh = (bs.cells[0] ?? []).map(norm);
+  const demAt = bh.indexOf(colOf(bg, "dem").header), maAt = bh.indexOf(colOf(bg, "ma").header), thuongAt = bh.indexOf(colOf(bg, "thuong").header);
+  const plan = bs.cells.map((r, i) => (i > 0 && norm(r?.[maAt]) ? baoGiamThuong(B.parseKv(norm(r[demAt])) as Record<string, string>, norm(r[maAt]), oTen, pbTen) : null));
+  plan.forEach((p, i) => p && wb.setCell(bg.sheet, i, thuongAt, text(p[0])));
+  for (const [key, pick] of [["loai_thuong", (p: [string, string, number | null]) => text(p[1])], ["so_thuong", (p: [string, string, number | null]) => (p[2] === null ? null : { v: p[2], fill: "de_xuat" as const })]] as const) {
+    const c = colOf(bg, key);
+    if ((wb.sheet(bg.sheet).cells[0] ?? []).map(norm).includes(c.header)) {
+      const at = (wb.sheet(bg.sheet).cells[0] ?? []).map(norm).indexOf(c.header);
+      plan.forEach((p, i) => { const v = p && pick(p); if (v) wb.setCell(bg.sheet, i, at, v); });
+    } else wb.addColumn(bg.sheet, hdr(c.header), (r) => (plan[r] ? pick(plan[r]!) : null), c.width);
+  }
+  log.push(`Bảo Giám: thưởng theo loại cho ${plan.filter(Boolean).length} trang`);
+
+  // Ghi chú: tẩy luyện tốn linh thạch; song hệ đậu cố định
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), gh = (gs.cells[0] ?? []).map(norm);
+  const fAt = gh.indexOf(colOf(gc, "file").header), nAt = gh.indexOf(colOf(gc, "noi_dung").header);
+  const note = (file: string, start: string, v: string) => {
+    const i = gs.cells.findIndex((r) => norm(r?.[fAt]) === file && norm(r?.[nAt]).startsWith(start));
+    if (i < 0) throw new Error(`Ghi chú trang bị: không có dòng ${file} "${start}…"`);
+    wb.setCell(gc.sheet, i, nAt, text(v));
+  };
+  note("luyen_khi.json", "tay_luyen:", "tay_luyen: đổi loại chỉ số phụ của một món sang loại khác trong 4 loại của ô, cùng thang giá trị (giá trị ở lục +0, nhân độ hiếm, cường hóa, bí cảnh như chỉ số phụ cũ). Loại 1 là chỉ số phụ mặc định ở trang_bi.json o[].phu. Người thường quay ngẫu nhiên trong 3 loại còn lại; Tu rèn chọn thẳng. Mỗi lần tốn luat.tayLuyenKhiTinh Khí Tinh và luat.tayLuyenLinhThach linh thạch theo độ hiếm món, linh thạch đúng phẩm của vị diện.");
+  note("luyen_khi.json", "bao_giam:", "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu, loại thưởng theo thứ được đếm (vũ khí, danh khí: ánh sáng vũ khí; ô khác: khung ô; pháp bảo, Phách: danh hiệu; pháp khí: ô kho; ấn bộ: ô túi; Ý châu: Khí Tinh). Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch.");
+  note("ngoc.json", "song_he, phach", "song_he, phach (luyện khí, đề xuất 2026-11-04): song hệ hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp, mỗi hệ moi_he giá trị một viên thường, tính trong trần mềm của hệ đó; đậu theo ty_le_dau cố định (không theo bảng nén), thất bại mất that_bai_mat viên (viên đặt thứ hai), phù phu_giu giữ lại cả hai. Phách điểm hóa từ 1 ngọc cấp 10 (luyen_khi.json luat.phachKhiTinh, luat.phachTyLe), khảm ô công, cho gia_tri và nâng trần sát thương hệ đó lên tran_toi_da; mỗi hệ 1 Phách tính trần; khóa.");
+  log.push("Ghi chú trang bị: sửa 3 dòng (tẩy luyện, Bảo Giám, song hệ)");
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
-  luyen_khi: luyenKhi, hop_tran_2: hopTran2,
+  luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
