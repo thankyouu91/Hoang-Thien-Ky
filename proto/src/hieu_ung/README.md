@@ -20,7 +20,7 @@ Màn Trận vẽ hiệu ứng chiêu bằng Three.js. Lớp này dùng renderer 
 | `canh.ts` | Ghép một khung: chiêu quanh t, trạng thái còn hiệu lực, giảm hạt khi đông chiêu. |
 | `fx2d.ts`, `motifs.ts`, `vfx.ts` | Bản 2D cũ (chuyển từ `scenes/battle/`, proto-shell đồng ý), giữ làm dự phòng. |
 | `xem_thu/` | Trang xem thử (xem dưới). |
-| `hieu_ung.test.ts` | Test: tua tới lui ra y hệt; đủ 10 loại × 12 hệ × chiêu cuối; 10 đấu 10 ở ×4 không tràn bộ đệm; replay từ sim khớp `simulate()`. Chạy `node --test src/hieu_ung/hieu_ung.test.ts` trong `proto/`. |
+| `hieu_ung.test.ts` | Test: tua tới lui ra y hệt; đủ 10 loại × 12 hệ × chiêu cuối; 10 đấu 10 ở ×4 không tràn bộ đệm; replay từ sim khớp `simulate()`. Chạy cùng test Three.js bằng `npm.cmd test -w @ktlp/proto` (từ `de5a5eb`), hoặc riêng `node --test src/hieu_ung/hieu_ung.test.ts` trong `proto/`. |
 
 ## Bốn pha, ghép tự động (người dùng chốt 2026-11-04)
 
