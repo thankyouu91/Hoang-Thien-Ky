@@ -76,11 +76,11 @@ export const SKILL_RULES = {
   exposedTicks: 3 * SEC, // thân pháp: lộ vị trí 3 s, địch ưu tiên đánh
   selfShieldCooldownTicks: 6 * SEC, // Thổ: khiên bản thân tối đa một lần mỗi 6 s, không phải mỗi lần ra chiêu; đề xuất
   meleeKnockback: false, // Phong: chiêu cận chiến không đẩy lùi, để không đẩy địch ra khỏi tầm của chính mình; đề xuất
-  // Hợp trận 2–3–5 người (dữ liệu 890ce26). Sim CHƯA dùng các số này: chờ đặc tả của phiên trận pháp.
-  formationJoinRange: 2000, // người bày cùng trận đứng trong 2 ô; đề xuất
-  formationBond2: 1300, // hệ số hợp trận 2 người (đã chốt)
-  formationBond3: 1600, // 3 người (đã chốt)
-  formationBond5: 2000, // 5 người (đã chốt)
+  // Hợp trận (GDD mục 8, đã chốt 2026-11-04): đồng đội bày trận pháp chồng nhau thì nhập một trận, kích một lần khi người cuối bày xong.
+  formationJoinRange: 2000, // nhập trận khi tâm cách tâm tới 2 ô; đề xuất
+  formationBond2: 1300, // 2 người (Lưỡng Nghi): tổng sát thương ×1,3
+  formationBond3: 1600, // 3 người (Tam Tài) ×1,6; 4 người cũng tính mức này (đề xuất)
+  formationBond5: 2000, // từ 5 người (Ngũ Hành) ×2,0
 };
 
 /**

@@ -61,7 +61,8 @@ test("Linh Tuyền, Bàn Thạch vào setFx; phần bế quan, khai khoáng đ�
   const lt = gearStats(sealed(Array(7).fill("NG-AN-008")), LV, []);
   assert.deepEqual([lt.setFx.healerRegenPenalty, lt.setFx.resetHealOnFall, lt.outside.beQuan], [-100, 1, 50]);
   const bt = gearStats(sealed(Array(7).fill("NG-AN-003")), LV, []);
-  assert.deepEqual([bt.setFx.guardSelfShield, bt.setFx.petrifyBelow, bt.setFx.petrifyTicks, bt.outside.khaiKhoang], [500, 300, 30, 50]);
+  const m7 = SET.bo.find((b) => b.id === "ban_thach")!.moc.find((m) => m.so === 7)!.tham_so as Record<string, number>;
+  assert.deepEqual([bt.setFx.guardSelfShield, bt.setFx.petrifyBelow, bt.setFx.petrifyTicks, bt.outside.khaiKhoang], [500, m7.nguongMau, m7.hoaDaTicks, m7.khaiKhoang]);
 });
 
 test("Cổ Tông 7 món: pháp bảo thêm 1 lần (tối đa 3, không quá linh lực), hồi chiêu −15% trong trận", async () => {

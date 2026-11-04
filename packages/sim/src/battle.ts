@@ -139,6 +139,9 @@ export interface CastEvent {
   unitId: number;
   slot: number; // vị trí công pháp trong danh sách ưu tiên
   targets: number[];
+  /** Hợp trận (từ 2 người): id người bày đầu nhóm và số người; mỗi người một sự kiện, cùng tick, cùng mục tiêu. */
+  groupLead?: number;
+  groupSize?: number;
 }
 
 interface Slot {
@@ -166,6 +169,7 @@ interface Channel {
   interruptible: boolean;
   guarded: number[]; // Tháp: id đồng đội của chủ pháp bảo nhận ít sát thương hơn từ chiêu này
   guardCut: number;
+  group: number; // trận pháp: id người bày đầu của trận chung (hợp trận); bày một mình là id của chính mình
 }
 export interface Unit {
   id: number;
@@ -495,17 +499,20 @@ export class Battle {
       if (s.radius > 0) {
         // Diện rộng vận công, trận pháp bày trận: phát sau, tâm chốt ở địch gần nhất lúc bắt đầu.
         const formation = type === "tran_phap";
+        const center = formation && s.mod.densest ? this.densestSpot(u, s, foe) : foe.pos;
+        const join = formation ? this.formationToJoin(u, center) : null;
         u.channel = {
           slot: i,
           startTick: this.tick,
           resolveTick: this.tick + (formation
             ? Math.max(CAST_FLOOR.formationTicks, mul(R.formationCastTicks, ONE - u.b.formationCut) + u.b.formationTicks + (s.mod.castTicks ?? 0))
             : Math.max(CAST_FLOOR.channelTicks, R.aoeCastTicks + u.b.channelTicks + (s.mod.castTicks ?? 0))),
-          center: formation && s.mod.densest ? this.densestSpot(u, s, foe) : foe.pos,
+          center,
           ult: this.takeUlt(u),
           interruptible: !formation || R.formationInterruptible,
           guarded: [],
           guardCut: 0,
+          group: join ? join.group : u.id,
         };
         if (!formation && this.hasArtifacts[1 - u.team]) this.raiseTower(u.channel, 1 - u.team);
         // Văn Uyên: diện rộng đầu tiên mỗi trận phát ngay, không vận công.
@@ -536,10 +543,19 @@ export class Battle {
 
   private resolve(u: Unit): void {
     const ch = u.channel!;
-    u.channel = null;
     const s = u.slots[ch.slot];
-    const targets = this.pickEnemies(u, s, ch.center, s.radius);
     const formation = s.tech.type === "tran_phap";
+    if (formation) {
+      const members = this.formationMembers(u.team, ch.group);
+      if (members.length > 1) {
+        // Hợp trận: ai bày xong trước thì đứng chờ; người cuối bày xong thì cả trận kích một lần.
+        if (members.some((m) => m.channel!.resolveTick > this.tick)) return;
+        this.resolveFormation(members);
+        return;
+      }
+    }
+    u.channel = null;
+    const targets = this.pickEnemies(u, s, ch.center, s.radius);
     const opts: StrikeOpts = { guarded: ch.guarded, guardCut: ch.guardCut };
     // Phiên: trận của địch bày xong thì yếu đi (sim không có trận kéo dài, nên "ngắn lại" là giảm sát thương), mục tiêu đầu không bị tuyệt sát.
     const flag = formation && targets.length > 0 && this.hasArtifacts[1 - u.team] ? this.readyArtifact(1 - u.team, "phien_co") : null;
@@ -551,6 +567,76 @@ export class Battle {
     }
     this.strike(u, s, targets, ch.ult, 0, formation, opts);
     this.log(u, ch.slot, ch.startTick, targets);
+  }
+
+  /**
+   * Hợp trận: trận chung của đồng đội đang bày trận pháp (còn sống, chưa kích), tâm cách tâm mới không quá formationJoinRange.
+   * Có nhiều trận thì nhập trận bắt đầu bày sớm nhất, rồi id người bày đầu nhỏ hơn.
+   */
+  private formationToJoin(u: Unit, center: number): Channel | null {
+    let best: Channel | null = null;
+    for (const a of this.teams[u.team]) {
+      const ch = a.channel;
+      if (a === u || a.curHp <= 0 || !ch || a.slots[ch.slot].tech.type !== "tran_phap") continue;
+      if (Math.abs(ch.center - center) > R.formationJoinRange) continue;
+      if (!best || ch.startTick < best.startTick || (ch.startTick === best.startTick && ch.group < best.group)) best = ch;
+    }
+    return best;
+  }
+
+  /** Người còn sống đang bày trận pháp trong trận chung `group`, theo id. Ai chết hay bị cắt ngang thì đã rời nhóm. */
+  private formationMembers(team: number, group: number): Unit[] {
+    const out: Unit[] = [];
+    for (const a of this.teams[team]) {
+      if (a.curHp > 0 && a.channel && a.channel.group === group && a.slots[a.channel.slot].tech.type === "tran_phap") out.push(a);
+    }
+    return out;
+  }
+
+  /** Hệ số hợp trận theo số người lúc kích: 2 người Lưỡng Nghi, 3–4 người Tam Tài, từ 5 người Ngũ Hành (GDD mục 8). */
+  private formationBond(n: number): number {
+    return n >= 5 ? R.formationBond5 : n >= 3 ? R.formationBond3 : n === 2 ? R.formationBond2 : ONE;
+  }
+
+  /**
+   * Kích trận chung: mục tiêu theo tâm và công pháp của người bày đầu (bắt đầu sớm nhất, rồi id nhỏ). Tuyệt sát tung một lần
+   * mỗi mục tiêu cho cả trận (15% cộng phần tuyệt sát cao nhất nhóm, xét cảnh giới theo cấp cao nhất nhóm); rồi từng người
+   * đánh theo thứ tự id, sát thương nhân hệ số hợp trận. Phiên (pháp bảo) xét một lần cho trận chung.
+   */
+  private resolveFormation(members: Unit[]): void {
+    let lead = members[0];
+    for (const m of members) {
+      const a = m.channel!, b = lead.channel!;
+      if (a.startTick < b.startTick || (a.startTick === b.startTick && m.id < lead.id)) lead = m;
+    }
+    const lc = lead.channel!;
+    const ls = lead.slots[lc.slot];
+    const targets = this.pickEnemies(lead, ls, lc.center, ls.radius);
+    const chans = members.map((m) => m.channel!);
+    for (const m of members) m.channel = null;
+    const opts: StrikeOpts = { scale: this.formationBond(members.length), guarded: lc.guarded, guardCut: lc.guardCut };
+    const flag = targets.length > 0 && this.hasArtifacts[1 - lead.team] ? this.readyArtifact(1 - lead.team, "phien_co") : null;
+    if (flag) {
+      this.fire(flag.a);
+      opts.guarded = targets.map((t) => t.id);
+      opts.guardCut = flag.a.power;
+      opts.noExecute = targets[0].id;
+    }
+    let bonus = 0;
+    let level = 0;
+    for (const m of members) {
+      bonus = Math.max(bonus, m.b.executeBonus);
+      level = Math.max(level, m.level);
+    }
+    for (const t of targets) {
+      if (t.curHp <= 0 || t.boss || t.id === opts.noExecute || this.tick < t.stoneUntil || realm(t.level) > realm(level)) continue;
+      if (this.rng.chance(R.executeChance + bonus)) this.hurt(t, t.curHp + t.shield);
+    }
+    members.forEach((m, i) => {
+      const ch = chans[i];
+      this.strike(m, m.slots[ch.slot], targets, ch.ult, 0, false, opts);
+      this.log(m, ch.slot, ch.startTick, targets, { groupLead: lead.id, groupSize: members.length });
+    });
   }
 
   /** Chu Thiên: tâm trận đặt ở kẻ địch trong tầm có nhiều kẻ địch nhất trong bán kính; hòa thì gần người bày hơn, rồi id. */
@@ -580,8 +666,8 @@ export class Battle {
     return ult;
   }
 
-  private log(u: Unit, slot: number, startTick: number, targets: Unit[]): void {
-    if (this.record) this.events.push({ tick: this.tick, startTick, unitId: u.id, slot, targets: targets.map((t) => t.id) });
+  private log(u: Unit, slot: number, startTick: number, targets: Unit[], group?: { groupLead: number; groupSize: number }): void {
+    if (this.record) this.events.push({ tick: this.tick, startTick, unitId: u.id, slot, targets: targets.map((t) => t.id), ...group });
   }
 
   /** Địch nhìn thấy được (không ẩn thân), gần nhất → máu thấp hơn → id nhỏ hơn. */
