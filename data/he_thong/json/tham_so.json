@@ -125,7 +125,10 @@
     "formationJoinRange": 2000,
     "formationBond2": 1300,
     "formationBond3": 1600,
-    "formationBond5": 2000
+    "formationBond5": 2000,
+    "formationJoinWait": 20,
+    "formationExtraTargets": 2,
+    "formationMaxTargets": 10
   },
   "CAST_FLOOR": {"formationTicks":20,"channelTicks":10},
   "BATTLE": {

@@ -356,7 +356,10 @@ export function kiem(d: Any, raw: Raw): Report {
   }
   const ts = d["tham_so.json"];
   const groups = { SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES } as Record<string, Record<string, number | boolean>>;
-  for (const [g, obj] of Object.entries(groups)) for (const [k, v] of Object.entries(obj)) cmp(`${g}.${k}`, ts[g]?.[k], v);
+  for (const [g, obj] of Object.entries(groups)) {
+    for (const [k, v] of Object.entries(obj)) cmp(`${g}.${k}`, ts[g]?.[k], v);
+    for (const k of Object.keys(ts[g] ?? {})) if (!(k in obj)) cmp(`${g}.${k}`, ts[g][k], undefined); // khóa mới chờ code thêm
+  }
   cmp("cong_phap.baseCrit", ts.cong_phap?.baseCrit, BASE_CRIT_PER_MILLE);
   if (diff.length) warnings.push(`Khác số đang chạy trong packages/sim (${diff.length} chỗ): ${diff.join("; ")}`);
   else notes.push("Loại chiêu, biến thể, hệ, tham số trận đấu: khớp số đang chạy trong packages/sim");

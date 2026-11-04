@@ -8,6 +8,7 @@
 //                   4 luật ở Luật trang bị; ghi chú của dao_co_ban.json
 //   luyen_khi       Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13): 9 sheet sau Nguyên liệu rèn → luyen_khi.json, Phách và song
 //                   hệ vào ngoc.json; 10 danh khí ở Kiểu trang bị, Khí Tinh, Linh Văn Thạch, đồ phổ ở Nguyên liệu rèn; luật, ghi chú
+//   hop_tran_2      3 khóa hợp trận ở SKILL_RULES: formationJoinWait, formationExtraTargets, formationMaxTargets (đề xuất)
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -385,18 +386,28 @@ const hopTran: Step = (wb, log) => {
   const lc = B.LOAI_CHIEU, lh = (k: string) => lc.cols.find((c) => c.key === k)!.header;
   wb.setCell(lc.sheet, ...locate(wb, lc.sheet, lh("ma"), "tran_phap", lh("k")), { v: 6, fill: "gdd" });
   log.push("Loại chiêu: tran_phap k ×6,0");
+  chenSkillRules(wb, log, HOP_TRAN, "hợp trận");
+};
 
+/** Chèn các khóa SKILL_RULES còn thiếu (tên, kiểu, nguồn lấy ở N.CODE_PARAMS) ngay sau dòng SKILL_RULES cuối của sheet Tham số. */
+function chenSkillRules(wb: Workbook, log: string[], values: Record<string, number>, label: string): void {
   const ts = B.PARAMS.sheet, s = wb.sheet(ts);
   const groupAt = (s.cells[0] ?? []).map(norm).indexOf("Nhóm"), keyAt = (s.cells[0] ?? []).map(norm).indexOf("Khóa");
   const have = new Set(s.cells.map((r) => norm(r?.[keyAt])));
-  const desc = N.CODE_PARAMS.SKILL_RULES.filter(([k]) => k in HOP_TRAN && !have.has(k));
-  if (!desc.length) return void log.push("Tham số: đã có 4 khóa hợp trận, bỏ qua");
+  const missing = Object.keys(values).filter((k) => !N.CODE_PARAMS.SKILL_RULES.some(([x]) => x === k));
+  if (missing.length) throw new Error(`Thiếu mô tả ở noi_dung.ts CODE_PARAMS.SKILL_RULES cho ${missing.join(", ")}`);
+  const desc = N.CODE_PARAMS.SKILL_RULES.filter(([k]) => k in values && !have.has(k));
+  if (!desc.length) return void log.push(`Tham số: đã có ${Object.keys(values).length} khóa ${label}, bỏ qua`);
   const last = s.cells.reduce((a, r, i) => (norm(r?.[groupAt]) === "SKILL_RULES" ? i : a), -1);
   if (last < 0) throw new Error("Tham số: không có nhóm SKILL_RULES");
   wb.insertRows(ts, last + 1, desc.map(([key, name, kieu, muc, src]) =>
-    paramCells("SKILL_RULES", key, name, B.paramFromCode(kieu, HOP_TRAN[key]), kieu, muc, src)));
-  log.push(`Tham số: chèn ${desc.length} khóa hợp trận sau dòng ${last + 1} (SKILL_RULES)`);
-};
+    paramCells("SKILL_RULES", key, name, B.paramFromCode(kieu, values[key]), kieu, muc, src)));
+  log.push(`Tham số: chèn ${desc.length} khóa ${label} sau dòng ${last + 1} (SKILL_RULES)`);
+}
+
+/** Hợp trận lần 2 (người dùng duyệt 2026-11-04, phiên trận pháp; đề xuất): chờ nhập trận, mục tiêu thêm mỗi người, trần mục tiêu. */
+const HOP_TRAN_2: Record<string, number> = { formationJoinWait: 20, formationExtraTargets: 2, formationMaxTargets: 10 };
+const hopTran2: Step = (wb, log) => chenSkillRules(wb, log, HOP_TRAN_2, "hợp trận lần 2");
 
 // ---------- luyện khí sau cấp tối đa (GDD tab Trang bị phần 13, rev 37; ghi chú chung luyen-khi.md; mọi số là đề xuất) ----------
 
@@ -570,7 +581,7 @@ const luyenKhi: Step = (wb, log) => {
 
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
-  luyen_khi: luyenKhi,
+  luyen_khi: luyenKhi, hop_tran_2: hopTran2,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

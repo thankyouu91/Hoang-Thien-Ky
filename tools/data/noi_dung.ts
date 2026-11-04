@@ -372,6 +372,10 @@ export const CODE_PARAMS: Record<"SKILL_RULES" | "CAST_FLOOR" | "BATTLE" | "UNIT
     ["formationBond2", "Hợp trận 2 người: hệ số", "hệ số", "8", "gdd"],
     ["formationBond3", "Hợp trận 3 người: hệ số", "hệ số", "8", "gdd"],
     ["formationBond5", "Hợp trận 5 người: hệ số", "hệ số", "8", "gdd"],
+    // Hợp trận lần 2 (người dùng duyệt 2026-11-04)
+    ["formationJoinWait", "Hợp trận: bày xong muộn hơn người sớm nhất của trận quá khoảng này thì bày trận riêng", "giây", "", "de_xuat"],
+    ["formationExtraTargets", "Hợp trận: mỗi người thêm, trận chung đánh thêm số mục tiêu", "số", "", "de_xuat"],
+    ["formationMaxTargets", "Hợp trận: số mục tiêu tối đa của trận chung", "số", "", "de_xuat"],
   ],
   BATTLE: [
     ["fieldLength", "Chiều dài sân", "ô", "", "code"],
