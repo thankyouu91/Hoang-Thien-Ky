@@ -136,7 +136,7 @@ export function recolor(buf: Buffer, fill: Exclude<Fill, "none">, sheet: string,
  * Thay một ô trong XML của sheet bằng `make(kiểu cũ, ô cũ)`; ô chưa có (Excel bỏ ô trống khi lưu) thì chèn đúng thứ tự cột
  * và mượn kiểu của ô cùng cột ở dòng trên.
  */
-function patchCell(xml: string, row: number, col: number, make: (style: string | undefined, cell: string | undefined) => string): string {
+export function patchCell(xml: string, row: number, col: number, make: (style: string | undefined, cell: string | undefined) => string): string {
   const ref = `${colName(col)}${row}`;
   const m = new RegExp(`<row\\b([^>]*?\\br="${row}"[^>]*?)(?:/>|>([\\s\\S]*?)</row>)`).exec(xml);
   if (!m) throw new Error(`Không thấy dòng ${row}`);

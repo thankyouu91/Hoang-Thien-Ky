@@ -75,7 +75,11 @@ export const PARTS: PartDef[] = [
   T("Đạo Cơ Bàn", "dao_co_ban.json", "o", "ma", [
     c("ma", "Mã ô", "text", { width: 7 }), c("vong", "Vòng (tam, trong, canh, goc)", "text", { width: 12 }),
     c("q", "q", "int", { width: 5 }), c("r", "r", "int", { width: 5 }),
-    c("mo", "Mở ở cảnh giới", "text", { width: 14 }), c("chi_nhan", "Nhận (an: ấn bộ, ngoc: ngọc hệ)", "list", { width: 16 }),
+    // Ô mở khi vị diện hiện tại cao hơn, hoặc cùng vị diện và cấp ≥ cap (Thần vực không còn cấp, xét cảnh giới)
+    c("mo_vi_dien", "Mở ở vị diện (ha, trung, than)", "text", { json: "mo.viDien", width: 11 }),
+    c("mo_cap", "Mở từ cấp (trống ở Thần vực)", "int", { json: "mo.cap", optional: true, width: 11 }),
+    c("mo_canh_gioi", "Mở ở cảnh giới (1 Luyện Khí … 9 Độ Kiếp)", "int", { json: "mo.canhGioi", width: 14 }),
+    c("chi_nhan", "Nhận (an: ấn bộ, ngoc: ngọc hệ)", "list", { width: 16 }),
   ]),
   T("Cộng hưởng", "dao_co_ban.json", "cong_huong", "mach", [
     c("mach", "Mạch", "text", { width: 8 }), c("ten", "Tên", "text"), c("heSoMoc2", "Nhân số ở mốc 2", "mul", { width: 10 }),

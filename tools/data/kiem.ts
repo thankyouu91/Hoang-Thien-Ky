@@ -250,6 +250,15 @@ export function kiem(d: Any, raw: Raw): Report {
       const accept = [...(x.chi_nhan ?? [])].sort().join(",");
       if (x.vong === "tam" ? accept !== "an" : accept !== "an,ngoc") bad.push(`${x.ma}: nhận "${accept}"`);
     }
+    // Ô mở: vị diện có thật, cảnh giới 1–9, có cấp trừ Thần vực trở lên; số ô mở cộng dồn theo cảnh giới như đặc tả phần 1
+    for (const x of o) {
+      const m = x.mo ?? {};
+      if (!d["vi_dien.json"][m.viDien]) bad.push(`${x.ma}: vị diện mở lạ ${m.viDien}`);
+      if (!(m.canhGioi >= 1 && m.canhGioi <= 9)) bad.push(`${x.ma}: cảnh giới mở ${m.canhGioi} ngoài 1–9`);
+      if ((m.viDien === "ha" || m.viDien === "trung") !== (m.cap !== undefined)) bad.push(`${x.ma}: cấp mở ${m.cap} không hợp vị diện ${m.viDien}`);
+    }
+    const open = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((g) => o.filter((x) => (x.mo?.canhGioi ?? 99) <= g).length).join("/");
+    if (open !== "1/3/5/7/10/13/16/18/19") bad.push(`số ô mở theo cảnh giới ${open}, đặc tả ghi 1/3/5/7/10/13/16/18/19`);
     const rels = Object.keys(d["quan_he_to_hop.json"]);
     const mach = dcb.mach ?? {};
     const noMach = rels.filter((r) => !(r in mach));

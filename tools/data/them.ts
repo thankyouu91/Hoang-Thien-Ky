@@ -11,9 +11,10 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { ARTIFACT_RULES } from "@ktlp/sim";
 import {
-  unzip, zip, readFiles, sheetParts, cellXml, rowXml, worksheetXml, esc, StyleBook,
+  unzip, zip, readFiles, sheetParts, cellXml, rowXml, worksheetXml, esc, colName, StyleBook,
   type Cell, type SheetIn, type SheetOut, type Value,
 } from "./xlsx.ts";
+import { patchCell } from "./sua.ts";
 import * as B from "./bang.ts";
 import * as N from "./noi_dung.ts";
 import * as TB from "./trang_bi.ts";
@@ -75,6 +76,12 @@ export class Workbook {
       xml = xml.includes("</cols>") ? xml.replace("</cols>", `${def}</cols>`) : xml.replace(/<sheetData\b/, `<cols>${def}</cols><sheetData`);
     }
     this.put(part, xml.replace(/<dimension\b[^>]*\/>/, ""));
+  }
+
+  /** Ghi đè một ô (dòng `r`, cột `col` đếm từ 0) bằng ô mới với màu, định dạng của `c`. */
+  setCell(sheet: string, r: number, col: number, c: Cell): void {
+    const part = this.part(sheet);
+    this.put(part, patchCell(this.text(part), r + 1, col, () => cellXml(r, col, c, this.styleOf, sheet) || `<c r="${colName(col)}${r + 1}"/>`));
   }
 
   /** Thêm sheet ngay sau sheet `after`. */
@@ -141,17 +148,22 @@ const AN_HE: Record<string, string | null> = {
   liep_thu: "phong", thiet_ky: "phong", van_uyen: "quang", co_tong: "am_lanh", pha_quan: "cuc_duong",
   huyet_anh: "cuc_am", bang_phach: "cuc_han", hon_don: null,
 };
-/** 19 ô: mã, vòng, q, r, mở ở cảnh giới. Ô tâm chỉ nhận ấn (ấn chủ). */
-const O_BAN: [string, string, number, number, string][] = [
-  ["O", "tam", 0, 0, "luyen_khi"],
-  ["T1", "trong", 1, 0, "truc_co"], ["T4", "trong", -1, 0, "truc_co"],
-  ["T2", "trong", 1, -1, "ket_dan"], ["T5", "trong", -1, 1, "ket_dan"],
-  ["T3", "trong", 0, -1, "nguyen_anh"], ["T6", "trong", 0, 1, "nguyen_anh"],
-  ["N2", "canh", 2, -1, "hoa_than"], ["N6", "canh", -1, -1, "hoa_than"], ["N10", "canh", -1, 2, "hoa_than"],
-  ["N4", "canh", 1, -2, "luyen_hu"], ["N8", "canh", -2, 1, "luyen_hu"], ["N12", "canh", 1, 1, "luyen_hu"],
-  ["N1", "goc", 2, 0, "hop_the"], ["N5", "goc", 0, -2, "hop_the"], ["N9", "goc", -2, 2, "hop_the"],
-  ["N3", "goc", 2, -2, "dai_thua"], ["N7", "goc", -2, 0, "dai_thua"], ["N11", "goc", 0, 2, "do_kiep"],
+/**
+ * 19 ô: mã, vòng, q, r, mở ở (vị diện, cấp, cảnh giới 1 Luyện Khí … 9 Độ Kiếp; chốt với phiên Sprint 2026-11-04).
+ * Trung vị đếm cấp lại từ 1; Thần vực không còn cấp. Ô tâm chỉ nhận ấn (ấn chủ).
+ */
+const O_BAN: [string, string, number, number, string, number | null, number][] = [
+  ["O", "tam", 0, 0, "ha", 20, 1],
+  ["T1", "trong", 1, 0, "ha", 51, 2], ["T4", "trong", -1, 0, "ha", 51, 2],
+  ["T2", "trong", 1, -1, "ha", 101, 3], ["T5", "trong", -1, 1, "ha", 101, 3],
+  ["T3", "trong", 0, -1, "ha", 151, 4], ["T6", "trong", 0, 1, "ha", 151, 4],
+  ["N2", "canh", 2, -1, "ha", 201, 5], ["N6", "canh", -1, -1, "ha", 201, 5], ["N10", "canh", -1, 2, "ha", 201, 5],
+  ["N4", "canh", 1, -2, "trung", 1, 6], ["N8", "canh", -2, 1, "trung", 1, 6], ["N12", "canh", 1, 1, "trung", 1, 6],
+  ["N1", "goc", 2, 0, "trung", 101, 7], ["N5", "goc", 0, -2, "trung", 101, 7], ["N9", "goc", -2, 2, "trung", 101, 7],
+  ["N3", "goc", 2, -2, "than", null, 8], ["N7", "goc", -2, 0, "than", null, 8], ["N11", "goc", 0, 2, "than", null, 9],
 ];
+const banRow = ([ma, vong, q, r, mo_vi_dien, mo_cap, mo_canh_gioi]: (typeof O_BAN)[number]) =>
+  ({ ma, vong, q, r, mo_vi_dien, mo_cap, mo_canh_gioi, chi_nhan: ma === "O" ? "an" : "an, ngoc" });
 const CONG_HUONG: [string, string, number, number | null, number | null, string][] = [
   ["thuan", "Đồng Khí", 1.25, 0.03, null, "Số ở mốc 2 của cả hai bộ ×1,25; kháng hệ đó +3%"],
   ["sinh", "Tương Dưỡng", 1.5, null, null, "Số ở mốc 2 của cả hai bộ ×1,5"],
@@ -189,7 +201,7 @@ const daoCoBan: Step = (wb, log) => {
 
   // Ba sheet mới, sau Set mốc
   const sheets: [string, Record<string, string | number | null>[]][] = [
-    ["Đạo Cơ Bàn", O_BAN.map(([ma, vong, q, r, mo]) => ({ ma, vong, q, r, mo, chi_nhan: ma === "O" ? "an" : "an, ngoc" }))],
+    ["Đạo Cơ Bàn", O_BAN.map(banRow)],
     ["Cộng hưởng", CONG_HUONG.map(([mach, ten, heSoMoc2, khangHe, manaMax, mo_ta]) => ({ mach, ten, heSoMoc2, khangHe, manaMax, mo_ta }))],
     ["Mạch cộng hưởng", MACH.map(([quan_he, mach]) => ({ quan_he, mach, ten: TB.MACH_INFO[mach][0], mau: TB.MACH_INFO[mach][1] }))],
   ];
@@ -226,7 +238,42 @@ const daoCoBan: Step = (wb, log) => {
   }
 };
 
-export const STEPS: Record<string, Step> = { artifact_rules: artifactRules, dao_co_ban: daoCoBan };
+/**
+ * Sheet Đạo Cơ Bàn dựng ở 3812b44 có một cột "Mở ở cảnh giới" ghi mã cảnh giới. Đổi sang 3 cột vị diện, cấp, số thứ tự cảnh giới
+ * (theo đề nghị của phiên Sprint, 2026-11-04): ghi lại cột cũ thành vị diện, cột Nhận thành cấp, rồi thêm cảnh giới và Nhận ở cuối,
+ * để thứ tự cột khớp thứ tự khóa trong JSON.
+ */
+const daoCoBanMo: Step = (wb, log) => {
+  const def = partDef("Đạo Cơ Bàn");
+  const s = wb.sheet(def.sheet), header = (s.cells[0] ?? []).map(norm);
+  const oldAt = header.indexOf("Mở ở cảnh giới");
+  if (oldAt < 0) return void log.push("Đạo Cơ Bàn: cột mở đã theo vị diện, cấp, cảnh giới, bỏ qua");
+  const col = (k: string) => def.cols.find((c) => c.key === k)!;
+  const nhanAt = header.indexOf(col("chi_nhan").header);
+  if (nhanAt !== oldAt + 1 || nhanAt !== header.length - 1) throw new Error("Đạo Cơ Bàn: thứ tự cột khác lúc dựng, cần sửa tay");
+  const maAt = header.indexOf(col("ma").header);
+  const byMa = new Map(O_BAN.map((o) => [o[0], banRow(o)]));
+  const head = (k: string): Cell => ({ v: col(k).header, fill: "tieu_de", bold: true, wrap: true });
+  const val = (v: string | number | null): Cell => ({ v, fill: "de_xuat" });
+  const rowOf = (r: number) => {
+    const b = byMa.get(norm(s.cells[r]?.[maAt]));
+    if (!b) throw new Error(`Đạo Cơ Bàn: ô lạ ${String(s.cells[r]?.[maAt])}`);
+    return b;
+  };
+  wb.setCell(def.sheet, 0, oldAt, head("mo_vi_dien"));
+  wb.setCell(def.sheet, 0, nhanAt, head("mo_cap"));
+  for (let r = 1; r < s.cells.length; r++) {
+    if (!norm(s.cells[r]?.[maAt])) continue;
+    wb.setCell(def.sheet, r, oldAt, val(rowOf(r).mo_vi_dien));
+    wb.setCell(def.sheet, r, nhanAt, val(rowOf(r).mo_cap));
+  }
+  wb.addColumn(def.sheet, head("mo_canh_gioi"), (r) => val(rowOf(r).mo_canh_gioi), col("mo_canh_gioi").width);
+  // Lấy giá trị Nhận từ bản đọc trước khi ghi đè cột đó
+  wb.addColumn(def.sheet, head("chi_nhan"), (r) => val(norm(s.cells[r]?.[nhanAt])), col("chi_nhan").width);
+  log.push("Đạo Cơ Bàn: cột mở thành vị diện, cấp, cảnh giới (19 ô); cột Nhận dời ra cuối");
+};
+
+export const STEPS: Record<string, Step> = { artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const names = process.argv.slice(2);
