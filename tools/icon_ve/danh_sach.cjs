@@ -77,7 +77,7 @@ for (const k of kieuTrangBi(cuMoTa)) {
   const so = k.ma.slice(-2);
   add(k.ma, k.ten, UU_TIEN_1.has(so) ? 1 : 2, "Người dùng 2026-11-03: 50–70 kiểu mỗi loại, độ hiếm theo màu nền", k.mo_ta,
     k.tu_hinh_cu ? `Hình vẽ trước với mã ${k.tu_hinh_cu}` : undefined);
-  Object.assign(ds[ds.length - 1], { loai: k.loai, do_hiem: k.do_hiem });
+  Object.assign(ds[ds.length - 1], { loai: k.loai, do_hiem: k.do_hiem, khi_hinh: k.khi_hinh });
 }
 
 // 2. Ngọc khảm 12 hệ (mẫu: Cực hàn).
@@ -136,7 +136,10 @@ const DAN = [
   ["tay_tuy_dan", "Tẩy Tủy Đan", 2, "a pearl-white marrow-cleansing pill glowing with rainbow iridescence inside a small open celadon porcelain bottle gourd"],
   ["dich_dung_dan", "Dịch Dung Đan", 2, "a shimmering iridescent face-changing pill that reflects many colors, resting in a small lacquered black box with a mirror lid"],
 ];
-for (const [id, ten, u, m] of DAN) add(`dan/${id}`, ten, u, "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13", m);
+for (const [id, ten, u, m] of DAN) {
+  add(`dan/${id}`, ten, u, "GDD mục 12 (Đan dược và lô đỉnh), mục 6, 7, 13", m);
+  ds[ds.length - 1].loai = id.startsWith("dan_duoc") ? "Đan dược" : id.startsWith("linh_dan") ? "Linh đan" : id.startsWith("than_dan") ? "Thần đan" : "Đan đặc biệt";
+}
 
 // 8. Linh đơn cho thú.
 const LD = [
@@ -236,7 +239,18 @@ for (const x of ds) {
   daDung.add(ma_vp);
   x.ma_vp = ma_vp;
 }
-const thuTuKhoa = ["ma_vp", "ma", "nhom", "loai", "ten", "do_hiem", "uu_tien", "nguon", "mo_ta", "ghi_chu", "mau_da_duyet"];
+// 15. Món mới từ số liệu của phiên set đồ (2026-11-03/04): mã ma_vp lấy đúng từ số liệu; món có mã đã nằm trong danh sách thì bỏ qua.
+const { monSoLieu } = require("./mon_so_lieu.cjs");
+const daCoMa = new Set(ds.map(x => x.ma));
+for (const m of monSoLieu(HE)) {
+  if (ds.some(x => x.ma_vp === m.ma_vp)) continue;
+  if (daDung.has(m.ma_vp) && cu[m.ma] !== m.ma_vp) throw new Error("Mã đã cấp cho món khác: " + m.ma_vp);
+  if (daCoMa.has(m.ma)) throw new Error("Trùng đường dẫn " + m.ma);
+  daDung.add(m.ma_vp); daCoMa.add(m.ma);
+  ds.push({ ...m, nhom: m.ma.split("/")[0] });
+}
+
+const thuTuKhoa = ["ma_vp", "ma", "nhom", "loai", "ten", "do_hiem", "khi_hinh", "uu_tien", "nguon", "mo_ta", "ghi_chu", "mau_da_duyet"];
 for (let i = 0; i < ds.length; i++) ds[i] = Object.fromEntries(thuTuKhoa.filter(k => ds[i][k] !== undefined).map(k => [k, ds[i][k]]));
 
 const out = {
@@ -244,6 +258,8 @@ const out = {
     "Danh sách icon vật phẩm vẽ bằng Canva (phong cách tranh vẽ 3D, nền trong). Nhân vật, thú, đảo vẫn là pixel art PixelLab.",
     "Lời mô tả gửi Canva: 'Game inventory item icon: <mo_ta>. ' + duoi_loi_mo_ta.",
     "Trang bị (người dùng chốt 2026-11-03): 7 loại (kiếm, mũ, áo, đai, bao tay, giày, ngọc bội), mỗi loại 60 kiểu có tên riêng. Độ hiếm là màu nền ô trên UI, không vẽ vào hình: lục (đồ shop) < lam < tím < vàng < đỏ. Mỗi loại 24 lục, 16 lam, 12 tím, 5 vàng, 3 đỏ (đề xuất); vàng và đỏ rơi khi săn linh thú, thần thú. Thuộc tính chỉ hiện khi khảm ngọc, nên hình và tên không gắn hệ.",
+    "Vũ khí (người dùng chốt 2026-11-03, data/he_thong/json/vu_khi.json): 60 kiểu chia 10 khí hình (khi_hinh). 34 kiểu giữ hình kiếm; 26 kiểu lam trở lên đổi sang đao, thương, côn, cung, phiến, bút, kỳ, cầm, tiêu với tên mới. File vẫn ở trang_bi/kiem/NN, mã vẫn TB-KI-0NN. Cầm trên người vẫn hiện nhóm vũ khí theo tài năng.",
+    "Pháp bảo, pháp khí, Ý châu, ấn bộ, nguyên liệu và các đan, phù mới lấy từ data/he_thong/json (phiên set đồ); mã ma_vp đúng như số liệu. Độ hiếm pháp bảo, pháp khí là màu nền ô như trang bị.",
     "Phẩm, cấp (1–10) và nấc cường hóa của các món khác hiện bằng viền và số trên UI, không vẽ riêng.",
     "uu_tien 1: món đang hiện trong prototype (túi, ô trang bị, Bảo Khố, Công pháp) và 10 kiểu đầu mỗi loại trang bị trải đủ 5 độ hiếm. 2: phần còn lại. 3: làm sau.",
     "File ảnh: assets/icon_ve/<ma>.webp, 512 px; nguồn gốc từng ảnh ở manifest.json cùng thư mục.",
@@ -252,7 +268,7 @@ const out = {
   duoi_loi_mo_ta: "Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
   ty_le: "SQUARE_1_1",
   mau_he: Object.fromEntries(HE.map(([id, ten, mau]) => [id, { ten, mau }])),
-  tien_to_ma: { TB: "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu)", NG: "Ngọc khảm (KH; số = thứ tự hệ 1–12)", TQ: "Tàn quyển (HE; số = thứ tự hệ)", CP: "Công pháp (HE; số = thứ tự hệ)", LT: "Linh thạch (PH: phẩm)", QU: "Quặng (BA: bậc)", DL: "Dược liệu (TH: 4 bậc thường, HI: hiếm)", DA: "Đan (DD đan dược, LD linh đan, TD thần đan, DB đặc biệt)", LD: "Linh đơn cho thú (TH)", PH: "Phù chú (CH)", TT: "Trứng thú (TH)", LO: "Lô đỉnh (LD), lò rèn (LR)", MA: "Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo)", DB: "Vật phẩm đặc biệt (DB)", VK: "Vũ khí theo tài năng, hình khi cầm (TN)" },
+  tien_to_ma: { TB: "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu)", NG: "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ)", TQ: "Tàn quyển (HE; số = thứ tự hệ)", CP: "Công pháp (HE; số = thứ tự hệ)", LT: "Linh thạch (PH: phẩm)", QU: "Quặng (BA: bậc)", DL: "Dược liệu (TH: 4 bậc thường, HI: hiếm)", DA: "Đan (DD đan dược, LD linh đan, TD thần đan, DB đặc biệt)", LD: "Linh đơn cho thú (TH)", PH: "Phù chú (CH)", TT: "Trứng thú (TH)", LO: "Lô đỉnh (LD), lò rèn (LR)", MA: "Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo)", DB: "Vật phẩm đặc biệt (DB)", VK: "Vũ khí theo tài năng, hình khi cầm (TN)", NL: "Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh)", PB: "Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo)", PK: "Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính)" },
   do_hiem: Object.entries(TEN_DO_HIEM).map(([id, ten], i) => ({ id, ten, bac: i + 1 })),
   so_luong: { tong: ds.length, uu_tien_1: ds.filter(x => x.uu_tien === 1).length, uu_tien_2: ds.filter(x => x.uu_tien === 2).length, uu_tien_3: ds.filter(x => x.uu_tien === 3).length },
   icon: ds,

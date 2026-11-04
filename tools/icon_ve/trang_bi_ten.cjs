@@ -1,9 +1,12 @@
 // Tên và hình 7 loại trang bị × 60 kiểu. Thứ tự theo độ hiếm: 24 lục, 16 lam, 12 tím, 5 vàng, 3 đỏ.
-// Mỗi kiểu: [tên, mô tả hình tiếng Anh, (tùy chọn) mã file cũ đã vẽ — giữ nguyên hình và lời mô tả cũ].
+// Mỗi kiểu: [tên, mô tả hình tiếng Anh, (tùy chọn) mã file cũ đã vẽ — giữ nguyên hình và lời mô tả cũ, (tùy chọn) khí hình].
+// Vũ khí (người dùng chốt 2026-11-03, data/he_thong/json/vu_khi.json): 60 kiểu chia 10 khí hình; 34 kiểu giữ khí hình kiếm,
+// 26 kiểu lam trở lên đổi sang đao, thương, côn, cung, phiến, bút, kỳ, cầm, tiêu với tên mới (ten_de_xuat ở trang_bi.json).
+// Đường dẫn file vẫn là trang_bi/kiem/NN và mã vẫn TB-KI-0NN.
 const DO_HIEM = [["luc", 24], ["lam", 16], ["tim", 12], ["vang", 5], ["do", 3]];
 
 const LOAI = [
-  { id: "kiem", ten: "Kiếm", goc: "a Chinese straight sword (jian)", kieu: [
+  { id: "kiem", ten: "Vũ khí", goc: "a Chinese straight sword (jian)", khi_hinh: "kiem", kieu: [
     ["Kiếm Thanh Cương", "", "trang_bi/vu_khi_linh"],
     ["Kiếm Thiết Phong", "plain iron blade, worn leather-wrapped grip, simple crossguard"],
     ["Kiếm Thanh Đồng", "ancient bronze leaf-shaped blade with green patina"],
@@ -34,36 +37,36 @@ const LOAI = [
     ["Kiếm Bích Lạc", "hilt inlaid with azure enamel, blue sheen on the blade"],
     ["Kiếm Nguyệt Ảnh", "crescent-moon pommel, silvery moonlit blade"],
     ["Kiếm Tinh Thần", "blade engraved with tiny star constellations"],
-    ["Kiếm Hổ Phách", "tiger-head guard, amber pommel stone"],
-    ["Kiếm Long Ngâm", "dragon-scale grip, blue-tempered steel blade"],
-    ["Kiếm Thu Hồ", "blade with an autumn-lake ripple pattern, maple leaf tassel charm"],
-    ["Kiếm Phi Yến", "swallow-shaped guard, light curved blade tip"],
-    ["Kiếm Mai Hoa", "plum blossom engravings on blade and guard"],
-    ["Kiếm Trường Hồng", "long blade with a faint rainbow sheen"],
-    ["Kiếm Tử Trúc", "purple bamboo hilt, silver fittings"],
-    ["Kiếm Kỳ Lân", "qilin-head guard in silver, scaled grip"],
-    ["Kiếm Huyền Quy", "tortoise-shell patterned black hilt, heavy blade"],
-    ["Kiếm Thanh Hồng", "blue-green blade with a red jade pommel"],
+    ["Đao Hổ Khiếu", "a tiger-head guard, amber pommel stone, tiger-stripe engraving on the blade", undefined, "dao"], // trước là Kiếm Hổ Phách
+    ["Thương Ngân Long", "a silver dragon-shaped spearhead, dragon-scale grip on the shaft", undefined, "thuong"], // trước là Kiếm Long Ngâm
+    ["Côn Bàn Long", "a dragon carved coiling around the whole staff, bronze-capped ends", undefined, "con"], // trước là Kiếm Thu Hồ
+    ["Cung Hạc Vũ", "bow limbs shaped like crane wings, black and white feathers wrapped on the grip", undefined, "cung"], // trước là Kiếm Phi Yến
+    ["Phiến Thu Thủy", "fan leaf painted with a serene autumn lake, steel ribs", undefined, "phien"], // trước là Kiếm Mai Hoa
+    ["Bút Phán Quan", "an iron-shafted judge's brush with a black bristle tip and bronze fittings", undefined, "but"], // trước là Kiếm Trường Hồng
+    ["Kỳ Ngũ Hành", "a five-colored banner with five-element symbols", undefined, "ky"], // trước là Kiếm Tử Trúc
+    ["Cầm Lưu Thủy", "flowing water carved along the body, silk strings and jade tuning pegs", undefined, "cam"], // trước là Kiếm Kỳ Lân
+    ["Tiêu Bích Ngọc", "carved from green jade with silver bands and a green tassel", undefined, "tieu"], // trước là Kiếm Huyền Quy
+    ["Đao Nguyệt Nha", "a crescent-moon shaped blade with a silvery sheen", undefined, "dao"], // trước là Kiếm Thanh Hồng
     ["Kiếm Bạch Ngọc", "", "trang_bi/vu_khi_thien"],
     ["Kiếm Tử Vân", "purple cloud engravings with amethyst inlay along the guard"],
-    ["Kiếm Phượng Vĩ", "phoenix-tail guard with sweeping feathers, ruby inlay"],
-    ["Kiếm Thất Tinh", "seven gems set in a line along the blade like the Big Dipper"],
-    ["Kiếm Thiên Hà", "blade patterned like a starry galaxy"],
-    ["Kiếm U Lan", "dark orchid engravings, faint violet glow"],
-    ["Kiếm Bích Huyết", "blade veined with deep crimson like blood jade"],
-    ["Kiếm Lưu Ly", "translucent glass-like crystal blade, gold hilt"],
-    ["Kiếm Vạn Hoa", "floral filigree hilt studded with many small colored gems"],
-    ["Kiếm Giao Long", "a flood dragon coiled around the hilt, sapphire eyes"],
-    ["Kiếm Tử Điện", "blade veined with violet lightning patterns"],
-    ["Kiếm Huyễn Ảnh", "phantom blade with shimmering afterimages"],
+    ["Thương Lôi Minh", "the spearhead crackling with violet lightning", undefined, "thuong"], // trước là Kiếm Phượng Vĩ
+    ["Côn Kim Cang", "heavy staff with golden vajra-shaped ends and patterned bands", undefined, "con"], // trước là Kiếm Thất Tinh
+    ["Cung Truy Tinh", "gems set along the limbs like constellations", undefined, "cung"], // trước là Kiếm Thiên Hà
+    ["Phiến Hàn Băng", "icy crystal blade ribs, frost patterns, pale blue glow", undefined, "phien"], // trước là Kiếm U Lan
+    ["Bút Xuân Thu", "a jade shaft carved with spring blossoms and autumn leaves", undefined, "but"], // trước là Kiếm Bích Huyết
+    ["Kỳ Thất Tinh", "a black banner embroidered with seven silver stars", undefined, "ky"], // trước là Kiếm Lưu Ly
+    ["Cầm Tiêu Vĩ", "a charred tail end, red lacquered body and gold studs", undefined, "cam"], // trước là Kiếm Vạn Hoa
+    ["Tiêu Phượng Minh", "carved with a phoenix, ruby inlays", undefined, "tieu"], // trước là Kiếm Giao Long
+    ["Đao Hàn Nguyệt", "a cold moonlit blade with frost along the edge, a sapphire in the guard", undefined, "dao"], // trước là Kiếm Tử Điện
+    ["Thương Truy Phong", "wind-swirl engravings on the spearhead, a teal tassel", undefined, "thuong"], // trước là Kiếm Huyễn Ảnh
     ["Kiếm Hoàng Long", "", "trang_bi/vu_khi_than"],
-    ["Kiếm Thái Hư", "taiji symbol on the guard, blade half black half white"],
-    ["Kiếm Xích Tiêu", "red-gold blade of an ancient emperor, cloud-dragon hilt"],
-    ["Kiếm Hiên Viên", "ancient sacred sword engraved with sun, moon and stars on the blade, mountains on the hilt"],
-    ["Kiếm Vạn Tượng", "golden sword carved with countless mythical beasts"],
+    ["Cung Xạ Nhật", "a golden bow with sun disks on both limbs", undefined, "cung"], // trước là Kiếm Thái Hư
+    ["Phiến Thái Hư", "a taiji fan, half black half white feathers", undefined, "phien"], // trước là Kiếm Xích Tiêu
+    ["Cầm Thiên Lại", "golden wood with cloud carvings, glowing strings", undefined, "cam"], // trước là Kiếm Hiên Viên
+    ["Kỳ Vạn Tượng", "a golden banner embroidered with countless mythical beasts", undefined, "ky"], // trước là Kiếm Vạn Tượng
     ["Kiếm Huyết Long", "crimson blade with a blood-red dragon coiled along it"],
-    ["Kiếm Phần Thiên", "blade wreathed in crimson and golden flames"],
-    ["Kiếm Hỗn Độn", "black and red blade swirling with a void of chaos energy"],
+    ["Đao Phần Thiên", "the blade wreathed in crimson and golden flames", undefined, "dao"], // trước là Kiếm Phần Thiên
+    ["Phiến Hỗn Độn", "black and red fan leaf swirling with a void of chaos energy", undefined, "phien"], // trước là Kiếm Hỗn Độn
   ]},
   { id: "mu", ten: "Mũ", goc: "a piece of headwear", kieu: [
     ["Ô Sa Mặc Ngọc", "", "trang_bi/mu_linh"],
@@ -439,6 +442,20 @@ const LOAI = [
   ]},
 ];
 
+// Hình gốc từng khí hình vũ khí (khóa theo khi_hinh ở data/he_thong/json/vu_khi.json).
+const KHI_HINH = {
+  kiem: ["Kiếm", "a Chinese straight sword (jian)"],
+  dao: ["Đao", "a Chinese broadsword (dao), single-edged broad curved blade"],
+  thuong: ["Thương", "a Chinese spear (qiang), long shaft with a spearhead and a red horsehair tassel, shown diagonally"],
+  con: ["Côn", "a long Chinese fighting staff with metal-capped ends, shown diagonally"],
+  cung: ["Cung", "a Chinese recurve bow, strung"],
+  phien: ["Phiến", "a Chinese folding war fan with iron ribs, opened"],
+  but: ["Bút", "a large Chinese calligraphy brush used as a weapon"],
+  ky: ["Kỳ", "a Chinese formation war banner on a short pole"],
+  cam: ["Cầm", "a Chinese guqin zither"],
+  tieu: ["Tiêu", "a Chinese vertical bamboo flute (xiao)"],
+};
+
 const HOAN_THIEN = {
   luc: "simple, practical and plainly crafted",
   lam: "well-crafted with refined engraved details",
@@ -454,11 +471,14 @@ function kieuTrangBi(cuMoTa) {
     if (l.kieu.length !== 60) throw new Error(`${l.id}: ${l.kieu.length} kiểu`);
     let i = 0;
     for (const [dh, n] of DO_HIEM) for (let k = 0; k < n; k++, i++) {
-      const [ten, en, cu] = l.kieu[i];
+      const [ten, en, cu, kh] = l.kieu[i];
       const so = String(i + 1).padStart(2, "0");
       const o = { ma: `trang_bi/${l.id}/${so}`, ten, loai: l.ten, do_hiem: dh };
+      const khi = kh || l.khi_hinh;
+      if (khi) { if (!KHI_HINH[khi]) throw new Error("Lạ khí hình " + khi); o.khi_hinh = khi; }
+      const goc = kh ? KHI_HINH[kh][1] : l.goc;
       if (cu) { o.mo_ta = cuMoTa[cu]; o.tu_hinh_cu = cu; }
-      else o.mo_ta = `${l.goc}: ${en}, ${HOAN_THIEN[dh]}`;
+      else o.mo_ta = `${goc}: ${en}, ${HOAN_THIEN[dh]}`;
       if (!o.mo_ta) throw new Error("Thiếu mô tả " + o.ma);
       ra.push(o);
     }
@@ -466,4 +486,4 @@ function kieuTrangBi(cuMoTa) {
   return ra;
 }
 
-module.exports = { LOAI, DO_HIEM, TEN_DO_HIEM, kieuTrangBi };
+module.exports = { LOAI, DO_HIEM, TEN_DO_HIEM, KHI_HINH, kieuTrangBi };

@@ -1,13 +1,13 @@
 # Danh mục vật phẩm có icon vẽ
 
-Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ.
+Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 519 món, đã vẽ 237.
+Tổng 753 món, đã vẽ 211, cần vẽ lại 26.
 
 | Tiền tố | Nghĩa |
 |---|---|
 | TB | Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu) |
-| NG | Ngọc khảm (KH; số = thứ tự hệ 1–12) |
+| NG | Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ) |
 | TQ | Tàn quyển (HE; số = thứ tự hệ) |
 | CP | Công pháp (HE; số = thứ tự hệ) |
 | LT | Linh thạch (PH: phẩm) |
@@ -21,71 +21,74 @@ Tổng 519 món, đã vẽ 237.
 | MA | Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo) |
 | DB | Vật phẩm đặc biệt (DB) |
 | VK | Vũ khí theo tài năng, hình khi cầm (TN) |
+| NL | Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh) |
+| PB | Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo) |
+| PK | Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính) |
 
-## Trang bị · Kiếm (60)
+## Trang bị · Vũ khí (60)
 
-| Mã | Tên | Độ hiếm | File | Hình |
-|---|---|---|---|---|
-| TB-KI-001 | Kiếm Thanh Cương | Lục | trang_bi/kiem/01.webp | ✓ |
-| TB-KI-002 | Kiếm Thiết Phong | Lục | trang_bi/kiem/02.webp | ✓ |
-| TB-KI-003 | Kiếm Thanh Đồng | Lục | trang_bi/kiem/03.webp | ✓ |
-| TB-KI-004 | Kiếm Đào Mộc | Lục | trang_bi/kiem/04.webp | ✓ |
-| TB-KI-005 | Kiếm Trúc Ảnh | Lục | trang_bi/kiem/05.webp | ✓ |
-| TB-KI-006 | Kiếm Bạch Cương | Lục | trang_bi/kiem/06.webp | ✓ |
-| TB-KI-007 | Kiếm Hắc Thiết | Lục | trang_bi/kiem/07.webp | ✓ |
-| TB-KI-008 | Kiếm Khách Hành | Lục | trang_bi/kiem/08.webp | ✓ |
-| TB-KI-009 | Kiếm Song Nhận | Lục | trang_bi/kiem/09.webp | ✓ |
-| TB-KI-010 | Kiếm Thạch Văn | Lục | trang_bi/kiem/10.webp | ✓ |
-| TB-KI-011 | Kiếm Thô Phong | Lục | trang_bi/kiem/11.webp | ✓ |
-| TB-KI-012 | Kiếm Liễu Diệp | Lục | trang_bi/kiem/12.webp | ✓ |
-| TB-KI-013 | Kiếm Thư Sinh | Lục | trang_bi/kiem/13.webp | ✓ |
-| TB-KI-014 | Kiếm Sơn Dã | Lục | trang_bi/kiem/14.webp | ✓ |
-| TB-KI-015 | Kiếm Hồng Anh | Lục | trang_bi/kiem/15.webp | ✓ |
-| TB-KI-016 | Kiếm Thiết Cốt | Lục | trang_bi/kiem/16.webp | ✓ |
-| TB-KI-017 | Kiếm Đồng Hoàn | Lục | trang_bi/kiem/17.webp | ✓ |
-| TB-KI-018 | Kiếm Ô Mộc | Lục | trang_bi/kiem/18.webp | ✓ |
-| TB-KI-019 | Kiếm Tế Vũ | Lục | trang_bi/kiem/19.webp | ✓ |
-| TB-KI-020 | Kiếm Quân Doanh | Lục | trang_bi/kiem/20.webp | ✓ |
-| TB-KI-021 | Kiếm Thiết Lân | Lục | trang_bi/kiem/21.webp | ✓ |
-| TB-KI-022 | Kiếm Ngân Tuyến | Lục | trang_bi/kiem/22.webp | ✓ |
-| TB-KI-023 | Kiếm Thanh Hà | Lục | trang_bi/kiem/23.webp | ✓ |
-| TB-KI-024 | Kiếm Tùng Văn | Lục | trang_bi/kiem/24.webp | ✓ |
-| TB-KI-025 | Kiếm Lưu Vân | Lam | trang_bi/kiem/25.webp | ✓ |
-| TB-KI-026 | Kiếm Hạc Vũ | Lam | trang_bi/kiem/26.webp | ✓ |
-| TB-KI-027 | Kiếm Thanh Liên | Lam | trang_bi/kiem/27.webp | ✓ |
-| TB-KI-028 | Kiếm Bích Lạc | Lam | trang_bi/kiem/28.webp | ✓ |
-| TB-KI-029 | Kiếm Nguyệt Ảnh | Lam | trang_bi/kiem/29.webp | ✓ |
-| TB-KI-030 | Kiếm Tinh Thần | Lam | trang_bi/kiem/30.webp | ✓ |
-| TB-KI-031 | Kiếm Hổ Phách | Lam | trang_bi/kiem/31.webp | ✓ |
-| TB-KI-032 | Kiếm Long Ngâm | Lam | trang_bi/kiem/32.webp | ✓ |
-| TB-KI-033 | Kiếm Thu Hồ | Lam | trang_bi/kiem/33.webp | ✓ |
-| TB-KI-034 | Kiếm Phi Yến | Lam | trang_bi/kiem/34.webp | ✓ |
-| TB-KI-035 | Kiếm Mai Hoa | Lam | trang_bi/kiem/35.webp | ✓ |
-| TB-KI-036 | Kiếm Trường Hồng | Lam | trang_bi/kiem/36.webp | ✓ |
-| TB-KI-037 | Kiếm Tử Trúc | Lam | trang_bi/kiem/37.webp | ✓ |
-| TB-KI-038 | Kiếm Kỳ Lân | Lam | trang_bi/kiem/38.webp | ✓ |
-| TB-KI-039 | Kiếm Huyền Quy | Lam | trang_bi/kiem/39.webp | ✓ |
-| TB-KI-040 | Kiếm Thanh Hồng | Lam | trang_bi/kiem/40.webp | ✓ |
-| TB-KI-041 | Kiếm Bạch Ngọc | Tím | trang_bi/kiem/41.webp | ✓ |
-| TB-KI-042 | Kiếm Tử Vân | Tím | trang_bi/kiem/42.webp | ✓ |
-| TB-KI-043 | Kiếm Phượng Vĩ | Tím | trang_bi/kiem/43.webp | ✓ |
-| TB-KI-044 | Kiếm Thất Tinh | Tím | trang_bi/kiem/44.webp | ✓ |
-| TB-KI-045 | Kiếm Thiên Hà | Tím | trang_bi/kiem/45.webp | ✓ |
-| TB-KI-046 | Kiếm U Lan | Tím | trang_bi/kiem/46.webp | ✓ |
-| TB-KI-047 | Kiếm Bích Huyết | Tím | trang_bi/kiem/47.webp | ✓ |
-| TB-KI-048 | Kiếm Lưu Ly | Tím | trang_bi/kiem/48.webp | ✓ |
-| TB-KI-049 | Kiếm Vạn Hoa | Tím | trang_bi/kiem/49.webp | ✓ |
-| TB-KI-050 | Kiếm Giao Long | Tím | trang_bi/kiem/50.webp | ✓ |
-| TB-KI-051 | Kiếm Tử Điện | Tím | trang_bi/kiem/51.webp | ✓ |
-| TB-KI-052 | Kiếm Huyễn Ảnh | Tím | trang_bi/kiem/52.webp | ✓ |
-| TB-KI-053 | Kiếm Hoàng Long | Vàng | trang_bi/kiem/53.webp | ✓ |
-| TB-KI-054 | Kiếm Thái Hư | Vàng | trang_bi/kiem/54.webp | ✓ |
-| TB-KI-055 | Kiếm Xích Tiêu | Vàng | trang_bi/kiem/55.webp | ✓ |
-| TB-KI-056 | Kiếm Hiên Viên | Vàng | trang_bi/kiem/56.webp | ✓ |
-| TB-KI-057 | Kiếm Vạn Tượng | Vàng | trang_bi/kiem/57.webp | ✓ |
-| TB-KI-058 | Kiếm Huyết Long | Đỏ | trang_bi/kiem/58.webp | ✓ |
-| TB-KI-059 | Kiếm Phần Thiên | Đỏ | trang_bi/kiem/59.webp | ✓ |
-| TB-KI-060 | Kiếm Hỗn Độn | Đỏ | trang_bi/kiem/60.webp | ✓ |
+| Mã | Tên | Độ hiếm | Khí hình | File | Hình |
+|---|---|---|---|---|---|
+| TB-KI-001 | Kiếm Thanh Cương | Lục | kiem | trang_bi/kiem/01.webp | ✓ |
+| TB-KI-002 | Kiếm Thiết Phong | Lục | kiem | trang_bi/kiem/02.webp | ✓ |
+| TB-KI-003 | Kiếm Thanh Đồng | Lục | kiem | trang_bi/kiem/03.webp | ✓ |
+| TB-KI-004 | Kiếm Đào Mộc | Lục | kiem | trang_bi/kiem/04.webp | ✓ |
+| TB-KI-005 | Kiếm Trúc Ảnh | Lục | kiem | trang_bi/kiem/05.webp | ✓ |
+| TB-KI-006 | Kiếm Bạch Cương | Lục | kiem | trang_bi/kiem/06.webp | ✓ |
+| TB-KI-007 | Kiếm Hắc Thiết | Lục | kiem | trang_bi/kiem/07.webp | ✓ |
+| TB-KI-008 | Kiếm Khách Hành | Lục | kiem | trang_bi/kiem/08.webp | ✓ |
+| TB-KI-009 | Kiếm Song Nhận | Lục | kiem | trang_bi/kiem/09.webp | ✓ |
+| TB-KI-010 | Kiếm Thạch Văn | Lục | kiem | trang_bi/kiem/10.webp | ✓ |
+| TB-KI-011 | Kiếm Thô Phong | Lục | kiem | trang_bi/kiem/11.webp | ✓ |
+| TB-KI-012 | Kiếm Liễu Diệp | Lục | kiem | trang_bi/kiem/12.webp | ✓ |
+| TB-KI-013 | Kiếm Thư Sinh | Lục | kiem | trang_bi/kiem/13.webp | ✓ |
+| TB-KI-014 | Kiếm Sơn Dã | Lục | kiem | trang_bi/kiem/14.webp | ✓ |
+| TB-KI-015 | Kiếm Hồng Anh | Lục | kiem | trang_bi/kiem/15.webp | ✓ |
+| TB-KI-016 | Kiếm Thiết Cốt | Lục | kiem | trang_bi/kiem/16.webp | ✓ |
+| TB-KI-017 | Kiếm Đồng Hoàn | Lục | kiem | trang_bi/kiem/17.webp | ✓ |
+| TB-KI-018 | Kiếm Ô Mộc | Lục | kiem | trang_bi/kiem/18.webp | ✓ |
+| TB-KI-019 | Kiếm Tế Vũ | Lục | kiem | trang_bi/kiem/19.webp | ✓ |
+| TB-KI-020 | Kiếm Quân Doanh | Lục | kiem | trang_bi/kiem/20.webp | ✓ |
+| TB-KI-021 | Kiếm Thiết Lân | Lục | kiem | trang_bi/kiem/21.webp | ✓ |
+| TB-KI-022 | Kiếm Ngân Tuyến | Lục | kiem | trang_bi/kiem/22.webp | ✓ |
+| TB-KI-023 | Kiếm Thanh Hà | Lục | kiem | trang_bi/kiem/23.webp | ✓ |
+| TB-KI-024 | Kiếm Tùng Văn | Lục | kiem | trang_bi/kiem/24.webp | ✓ |
+| TB-KI-025 | Kiếm Lưu Vân | Lam | kiem | trang_bi/kiem/25.webp | ✓ |
+| TB-KI-026 | Kiếm Hạc Vũ | Lam | kiem | trang_bi/kiem/26.webp | ✓ |
+| TB-KI-027 | Kiếm Thanh Liên | Lam | kiem | trang_bi/kiem/27.webp | ✓ |
+| TB-KI-028 | Kiếm Bích Lạc | Lam | kiem | trang_bi/kiem/28.webp | ✓ |
+| TB-KI-029 | Kiếm Nguyệt Ảnh | Lam | kiem | trang_bi/kiem/29.webp | ✓ |
+| TB-KI-030 | Kiếm Tinh Thần | Lam | kiem | trang_bi/kiem/30.webp | ✓ |
+| TB-KI-031 | Đao Hổ Khiếu | Lam | dao | trang_bi/kiem/31.webp | vẽ lại |
+| TB-KI-032 | Thương Ngân Long | Lam | thuong | trang_bi/kiem/32.webp | vẽ lại |
+| TB-KI-033 | Côn Bàn Long | Lam | con | trang_bi/kiem/33.webp | vẽ lại |
+| TB-KI-034 | Cung Hạc Vũ | Lam | cung | trang_bi/kiem/34.webp | vẽ lại |
+| TB-KI-035 | Phiến Thu Thủy | Lam | phien | trang_bi/kiem/35.webp | vẽ lại |
+| TB-KI-036 | Bút Phán Quan | Lam | but | trang_bi/kiem/36.webp | vẽ lại |
+| TB-KI-037 | Kỳ Ngũ Hành | Lam | ky | trang_bi/kiem/37.webp | vẽ lại |
+| TB-KI-038 | Cầm Lưu Thủy | Lam | cam | trang_bi/kiem/38.webp | vẽ lại |
+| TB-KI-039 | Tiêu Bích Ngọc | Lam | tieu | trang_bi/kiem/39.webp | vẽ lại |
+| TB-KI-040 | Đao Nguyệt Nha | Lam | dao | trang_bi/kiem/40.webp | vẽ lại |
+| TB-KI-041 | Kiếm Bạch Ngọc | Tím | kiem | trang_bi/kiem/41.webp | ✓ |
+| TB-KI-042 | Kiếm Tử Vân | Tím | kiem | trang_bi/kiem/42.webp | ✓ |
+| TB-KI-043 | Thương Lôi Minh | Tím | thuong | trang_bi/kiem/43.webp | vẽ lại |
+| TB-KI-044 | Côn Kim Cang | Tím | con | trang_bi/kiem/44.webp | vẽ lại |
+| TB-KI-045 | Cung Truy Tinh | Tím | cung | trang_bi/kiem/45.webp | vẽ lại |
+| TB-KI-046 | Phiến Hàn Băng | Tím | phien | trang_bi/kiem/46.webp | vẽ lại |
+| TB-KI-047 | Bút Xuân Thu | Tím | but | trang_bi/kiem/47.webp | vẽ lại |
+| TB-KI-048 | Kỳ Thất Tinh | Tím | ky | trang_bi/kiem/48.webp | vẽ lại |
+| TB-KI-049 | Cầm Tiêu Vĩ | Tím | cam | trang_bi/kiem/49.webp | vẽ lại |
+| TB-KI-050 | Tiêu Phượng Minh | Tím | tieu | trang_bi/kiem/50.webp | vẽ lại |
+| TB-KI-051 | Đao Hàn Nguyệt | Tím | dao | trang_bi/kiem/51.webp | vẽ lại |
+| TB-KI-052 | Thương Truy Phong | Tím | thuong | trang_bi/kiem/52.webp | vẽ lại |
+| TB-KI-053 | Kiếm Hoàng Long | Vàng | kiem | trang_bi/kiem/53.webp | ✓ |
+| TB-KI-054 | Cung Xạ Nhật | Vàng | cung | trang_bi/kiem/54.webp | vẽ lại |
+| TB-KI-055 | Phiến Thái Hư | Vàng | phien | trang_bi/kiem/55.webp | vẽ lại |
+| TB-KI-056 | Cầm Thiên Lại | Vàng | cam | trang_bi/kiem/56.webp | vẽ lại |
+| TB-KI-057 | Kỳ Vạn Tượng | Vàng | ky | trang_bi/kiem/57.webp | vẽ lại |
+| TB-KI-058 | Kiếm Huyết Long | Đỏ | kiem | trang_bi/kiem/58.webp | ✓ |
+| TB-KI-059 | Đao Phần Thiên | Đỏ | dao | trang_bi/kiem/59.webp | vẽ lại |
+| TB-KI-060 | Phiến Hỗn Độn | Đỏ | phien | trang_bi/kiem/60.webp | vẽ lại |
 
 ## Trang bị · Mũ (60)
 
@@ -542,7 +545,7 @@ Tổng 519 món, đã vẽ 237.
 | DL-HI-003 | Thiên Địa Linh Tủy | duoc/thien_dia_linh_tuy.webp |  |
 | DL-HI-004 | Đan thú | duoc/dan_thu.webp |  |
 
-## Đan (12)
+## Đan · Đan dược (50)
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
@@ -550,12 +553,137 @@ Tổng 519 món, đã vẽ 237.
 | DA-DD-002 | Đan dược hồi mana (Hồi Khí Đan) | dan/dan_duoc_hoi_mana.webp | ✓ |
 | DA-DD-003 | Đan dược tăng chỉ số tạm thời | dan/dan_duoc_tang_chi_so.webp |  |
 | DA-DD-004 | Đan dược giải độc | dan/dan_duoc_giai_doc.webp |  |
+| DA-DD-005 | Hồi Xuân Đan | dan/hoi_xuan_dan.webp |  |
+| DA-DD-006 | Đại Hoàn Đan | dan/dai_hoan_dan.webp |  |
+| DA-DD-007 | Ngưng Khí Đan | dan/ngung_khi_dan.webp |  |
+| DA-DD-008 | Bổ Nguyên Đan | dan/bo_nguyen_dan.webp |  |
+| DA-DD-009 | Thiết Bì Đan | dan/thiet_bi_dan.webp |  |
+| DA-DD-010 | Bồi Nguyên Đan | dan/boi_nguyen_dan.webp |  |
+| DA-DD-011 | Ưng Nhãn Đan | dan/ung_nhan_dan.webp |  |
+| DA-DD-012 | Bạo Huyết Đan | dan/bao_huyet_dan.webp |  |
+| DA-DD-013 | Tật Phong Đan | dan/tat_phong_dan.webp |  |
+| DA-DD-014 | Thanh Tâm Đan | dan/thanh_tam_dan.webp |  |
+| DA-DD-015 | Định Thần Đan | dan/dinh_than_dan.webp |  |
+| DA-DD-016 | Tị Kim Đan | dan/ti_kim_dan.webp |  |
+| DA-DD-017 | Tị Mộc Đan | dan/ti_moc_dan.webp |  |
+| DA-DD-018 | Tị Thủy Đan | dan/ti_thuy_dan.webp |  |
+| DA-DD-019 | Tị Hỏa Đan | dan/ti_hoa_dan.webp |  |
+| DA-DD-020 | Tị Thổ Đan | dan/ti_tho_dan.webp |  |
+| DA-DD-021 | Tị Lôi Đan | dan/ti_loi_dan.webp |  |
+| DA-DD-022 | Tị Phong Đan | dan/ti_phong_dan.webp |  |
+| DA-DD-023 | Tị Quang Đan | dan/ti_quang_dan.webp |  |
+| DA-DD-024 | Tị U Đan | dan/ti_u_dan.webp |  |
+| DA-DD-025 | Tị Dương Đan | dan/ti_duong_dan.webp |  |
+| DA-DD-026 | Tị Âm Đan | dan/ti_am_dan.webp |  |
+| DA-DD-027 | Tị Hàn Đan | dan/ti_han_dan.webp |  |
+| DA-DD-028 | Hộ Tâm Đan | dan/ho_tam_dan.webp |  |
+| DA-DD-029 | Tục Mệnh Đan | dan/tuc_menh_dan.webp |  |
+| DA-DD-030 | Phá Giáp Đan | dan/pha_giap_dan.webp |  |
+| DA-DD-031 | Xuyên Linh Đan | dan/xuyen_linh_dan.webp |  |
+| DA-DD-032 | Hấp Huyết Đan | dan/hap_huyet_dan.webp |  |
+| DA-DD-033 | Ngự Phong Đan | dan/ngu_phong_dan.webp |  |
+| DA-DD-034 | Thanh Lương Đan | dan/thanh_luong_dan.webp |  |
+| DA-DD-035 | Ôn Dương Đan | dan/on_duong_dan.webp |  |
+| DA-DD-036 | Khu Tà Đan | dan/khu_ta_dan.webp |  |
+| DA-DD-037 | Trấn Hồn Đan | dan/tran_hon_dan.webp |  |
+| DA-DD-038 | Bất Hoại Đan | dan/bat_hoai_dan.webp |  |
+| DA-DD-039 | Phấn Chiến Đan | dan/phan_chien_dan.webp |  |
+| DA-DD-040 | Cuồng Bạo Đan | dan/cuong_bao_dan.webp |  |
+| DA-DD-041 | Quy Tức Đan | dan/quy_tuc_dan.webp |  |
+| DA-DD-042 | Hồi Thiên Đan | dan/hoi_thien_dan.webp |  |
+| DA-DD-043 | Hóa Ứ Đan | dan/hoa_u_dan.webp |  |
+| DA-DD-044 | Hành Cước Đan | dan/hanh_cuoc_dan.webp |  |
+| DA-DD-045 | Linh Giác Đan | dan/linh_giac_dan.webp |  |
+| DA-DD-046 | Khai Sơn Đan | dan/khai_son_dan.webp |  |
+| DA-DD-047 | Linh Mục Đan | dan/linh_muc_dan.webp |  |
+| DA-DD-048 | Ngưng Hỏa Đan | dan/ngung_hoa_dan.webp |  |
+| DA-DD-049 | Tiếp Cốt Đan | dan/tiep_cot_dan.webp |  |
+| DA-DD-050 | Mê Hồn Đan | dan/me_hon_dan.webp |  |
+
+## Đan · Linh đan (40)
+
+| Mã | Tên | File | Hình |
+|---|---|---|---|
 | DA-LD-001 | Linh đan trị thương | dan/linh_dan_tri_thuong.webp |  |
 | DA-LD-002 | Linh đan tăng kinh nghiệm | dan/linh_dan_kinh_nghiem.webp |  |
 | DA-LD-003 | Linh đan tăng tốc tu luyện (Tụ Linh Đan) | dan/linh_dan_tu_luyen.webp | ✓ |
+| DA-LD-004 | Tục Cốt Đan | dan/tuc_cot_dan.webp |  |
+| DA-LD-005 | Sinh Cơ Đan | dan/sinh_co_dan.webp |  |
+| DA-LD-006 | Cố Bản Đan | dan/co_ban_dan.webp |  |
+| DA-LD-007 | Hộ Mạch Đan | dan/ho_mach_dan.webp |  |
+| DA-LD-008 | Dưỡng Hồn Đan | dan/duong_hon_dan.webp |  |
+| DA-LD-009 | Dưỡng Khí Đan | dan/duong_khi_dan.webp |  |
+| DA-LD-010 | Trúc Nguyên Đan | dan/truc_nguyen_dan.webp |  |
+| DA-LD-011 | Kim Nguyên Đan | dan/kim_nguyen_dan.webp |  |
+| DA-LD-012 | Anh Nguyên Đan | dan/anh_nguyen_dan.webp |  |
+| DA-LD-013 | Thần Nguyên Đan | dan/than_nguyen_dan.webp |  |
+| DA-LD-014 | Hư Nguyên Đan | dan/hu_nguyen_dan.webp |  |
+| DA-LD-015 | Hợp Nguyên Đan | dan/hop_nguyen_dan.webp |  |
+| DA-LD-016 | Đồng Tâm Đan | dan/dong_tam_dan.webp |  |
+| DA-LD-017 | Truyền Công Đan | dan/truyen_cong_dan.webp |  |
+| DA-LD-018 | Ngưng Thần Đan | dan/ngung_than_dan.webp |  |
+| DA-LD-019 | Tĩnh Tâm Đan | dan/tinh_tam_dan.webp |  |
+| DA-LD-020 | Linh Tuyền Đan | dan/linh_tuyen_dan.webp |  |
+| DA-LD-021 | Tụ Vi Đan | dan/tu_vi_dan.webp |  |
+| DA-LD-022 | Hộ Pháp Đan | dan/ho_phap_dan.webp |  |
+| DA-LD-023 | Khai Khiếu Đan | dan/khai_khieu_dan.webp |  |
+| DA-LD-024 | Thông Mạch Đan | dan/thong_mach_dan.webp |  |
+| DA-LD-025 | Định Căn Đan | dan/dinh_can_dan.webp |  |
+| DA-LD-026 | Phục Linh Đan | dan/phuc_linh_dan.webp |  |
+| DA-LD-027 | Minh Tâm Đan | dan/minh_tam_dan.webp |  |
+| DA-LD-028 | Quy Nguyên Đan | dan/quy_nguyen_dan.webp |  |
+| DA-LD-029 | Ngộ Pháp Đan | dan/ngo_phap_dan.webp |  |
+| DA-LD-030 | Tị Chướng Đan | dan/ti_chuong_dan.webp |  |
+| DA-LD-031 | Ngự Hàn Đan | dan/ngu_han_dan.webp |  |
+| DA-LD-032 | Tị Nhiệt Đan | dan/ti_nhiet_dan.webp |  |
+| DA-LD-033 | Tị Lôi Linh Đan | dan/ti_loi_linh_dan.webp |  |
+| DA-LD-034 | Định Phong Linh Đan | dan/dinh_phong_linh_dan.webp |  |
+| DA-LD-035 | Khinh Thân Đan | dan/khinh_than_dan.webp |  |
+| DA-LD-036 | Ẩn Hình Đan | dan/an_hinh_dan.webp |  |
+| DA-LD-037 | Dẫn Thú Đan | dan/dan_thu_dan.webp |  |
+| DA-LD-038 | Hồi Lộ Đan | dan/hoi_lo_dan.webp |  |
+| DA-LD-039 | Hộ Tống Đan | dan/ho_tong_dan.webp |  |
+| DA-LD-040 | Truy Tung Đan | dan/truy_tung_dan.webp |  |
+
+## Đan · Thần đan (30)
+
+| Mã | Tên | File | Hình |
+|---|---|---|---|
 | DA-TD-001 | Thần đan vượt cảnh giới (Phá Cảnh Đan) | dan/than_dan_pha_canh.webp | ✓ |
 | DA-TD-002 | Thần đan tăng ngộ đạo | dan/than_dan_ngo_dao.webp |  |
 | DA-TD-003 | Thần đan giảm lôi kiếp | dan/than_dan_giam_loi_kiep.webp |  |
+| DA-TD-004 | Trúc Cơ Đan | dan/truc_co_dan.webp |  |
+| DA-TD-005 | Kết Kim Đan | dan/ket_kim_dan.webp |  |
+| DA-TD-006 | Ngưng Anh Đan | dan/ngung_anh_dan.webp |  |
+| DA-TD-007 | Hóa Thần Đan | dan/hoa_than_dan.webp |  |
+| DA-TD-008 | Hợp Thể Đan | dan/hop_the_dan.webp |  |
+| DA-TD-009 | Độ Ách Đan | dan/do_ach_dan.webp |  |
+| DA-TD-010 | Phá Chướng Đan | dan/pha_chuong_dan.webp |  |
+| DA-TD-011 | Thông Huyền Đan | dan/thong_huyen_dan.webp |  |
+| DA-TD-012 | Tạo Hóa Đan | dan/tao_hoa_dan.webp |  |
+| DA-TD-013 | Thái Ất Đan | dan/thai_at_dan.webp |  |
+| DA-TD-014 | Cửu Chuyển Kim Đan | dan/cuu_chuyen_kim_dan.webp |  |
+| DA-TD-015 | Hỗn Nguyên Đan | dan/hon_nguyen_dan.webp |  |
+| DA-TD-016 | Kim Tâm Đan | dan/kim_tam_dan.webp |  |
+| DA-TD-017 | Mộc Tâm Đan | dan/moc_tam_dan.webp |  |
+| DA-TD-018 | Thủy Tâm Đan | dan/thuy_tam_dan.webp |  |
+| DA-TD-019 | Hỏa Tâm Đan | dan/hoa_tam_dan.webp |  |
+| DA-TD-020 | Thổ Tâm Đan | dan/tho_tam_dan.webp |  |
+| DA-TD-021 | Lôi Tâm Đan | dan/loi_tam_dan.webp |  |
+| DA-TD-022 | Phong Tâm Đan | dan/phong_tam_dan.webp |  |
+| DA-TD-023 | Quang Tâm Đan | dan/quang_tam_dan.webp |  |
+| DA-TD-024 | U Tâm Đan | dan/u_tam_dan.webp |  |
+| DA-TD-025 | Dương Tâm Đan | dan/duong_tam_dan.webp |  |
+| DA-TD-026 | Âm Tâm Đan | dan/am_tam_dan.webp |  |
+| DA-TD-027 | Hàn Tâm Đan | dan/han_tam_dan.webp |  |
+| DA-TD-028 | Thiết Cốt Đan | dan/thiet_cot_dan.webp |  |
+| DA-TD-029 | Dẫn Lôi Đan | dan/dan_loi_dan.webp |  |
+| DA-TD-030 | Tái Tạo Đan | dan/tai_tao_dan.webp |  |
+
+## Đan · Đan đặc biệt (2)
+
+| Mã | Tên | File | Hình |
+|---|---|---|---|
 | DA-DB-001 | Tẩy Tủy Đan | dan/tay_tuy_dan.webp |  |
 | DA-DB-002 | Dịch Dung Đan | dan/dich_dung_dan.webp |  |
 
@@ -567,7 +695,7 @@ Tổng 519 món, đã vẽ 237.
 | LD-TH-002 | Phá Cảnh Đơn (thú) | linh_don/pha_canh_don.webp |  |
 | LD-TH-003 | Hồi Linh Đơn | linh_don/hoi_linh_don.webp |  |
 
-## Phù chú (7)
+## Phù chú (10)
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
@@ -578,6 +706,9 @@ Tổng 519 món, đã vẽ 237.
 | PH-CH-005 | Phù hộ thân | phu/ho_than.webp |  |
 | PH-CH-006 | Phù độn thổ | phu/don_tho.webp |  |
 | PH-CH-007 | Ngự Thú Phù | phu/ngu_thu.webp |  |
+| PH-CH-008 | Thoát Khảm Phù | phu/thoat_kham.webp |  |
+| PH-CH-009 | Di Hồn Phù | phu/di_hon.webp |  |
+| PH-CH-010 | Hộ Khí Phù | phu/ho_khi.webp |  |
 
 ## Trứng thú (2)
 
@@ -650,4 +781,235 @@ Tổng 519 món, đã vẽ 237.
 | VK-TN-006 | Búa rèn (Tu rèn) | vu_khi_tai_nang/bua_ren.webp |  |
 | VK-TN-007 | Liềm hái thuốc (Tu dược) | vu_khi_tai_nang/liem_hai_thuoc.webp |  |
 | VK-TN-008 | Bàn tính (Tu kim tiền) | vu_khi_tai_nang/ban_tinh.webp |  |
+
+## Nguyên liệu (13)
+
+| Mã | Tên | File | Hình |
+|---|---|---|---|
+| NL-LK-001 | Hạ phẩm Luyện Khí Thạch | nguyen_lieu/ha_pham_luyen_khi_thach.webp |  |
+| NL-LK-002 | Trung phẩm Luyện Khí Thạch | nguyen_lieu/trung_pham_luyen_khi_thach.webp |  |
+| NL-LK-003 | Thượng phẩm Luyện Khí Thạch | nguyen_lieu/thuong_pham_luyen_khi_thach.webp |  |
+| NL-LK-004 | Cực phẩm Luyện Khí Thạch | nguyen_lieu/cuc_pham_luyen_khi_thach.webp |  |
+| NL-TB-001 | Tu Bổ Sa | nguyen_lieu/tu_bo_sa.webp |  |
+| NL-KM-001 | Khai Mạch Đinh | nguyen_lieu/khai_mach_dinh.webp |  |
+| NL-GL-001 | Yêu Thú Bì | nguyen_lieu/yeu_thu_bi.webp |  |
+| NL-GL-002 | Yêu Thú Cốt | nguyen_lieu/yeu_thu_cot.webp |  |
+| NL-GL-003 | Thiên Tằm Ti | nguyen_lieu/thien_tam_ti.webp |  |
+| NL-GL-004 | Linh Mộc | nguyen_lieu/linh_moc.webp |  |
+| NL-GL-005 | Vân Cẩm | nguyen_lieu/van_cam.webp |  |
+| NL-PB-001 | Pháp Bảo Phôi | nguyen_lieu/phap_bao_phoi.webp |  |
+| NL-DB-001 | Thiên Ngoại Vẫn Thiết | nguyen_lieu/thien_ngoai_van_thiet.webp |  |
+
+## Pháp bảo · Thuẫn (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-TH-001 | Đằng Giáp Thuẫn | Lục | phap_bao/thuan/01.webp |  |
+| PB-TH-002 | Huyền Thiết Thuẫn | Lam | phap_bao/thuan/02.webp |  |
+| PB-TH-003 | Huyền Quy Thuẫn | Tím | phap_bao/thuan/03.webp |  |
+| PB-TH-004 | Thái Sơn Thuẫn | Vàng | phap_bao/thuan/04.webp |  |
+| PB-TH-005 | Bàn Cổ Thuẫn | Đỏ | phap_bao/thuan/05.webp |  |
+
+## Pháp bảo · Luân (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-LU-001 | Mộc Phong Luân | Lục | phap_bao/luan/01.webp |  |
+| PB-LU-002 | Thiết Phong Luân | Lam | phap_bao/luan/02.webp |  |
+| PB-LU-003 | Phong Hỏa Luân | Tím | phap_bao/luan/03.webp |  |
+| PB-LU-004 | Càn Khôn Luân | Vàng | phap_bao/luan/04.webp |  |
+| PB-LU-005 | Nhật Nguyệt Luân | Đỏ | phap_bao/luan/05.webp |  |
+
+## Pháp bảo · Châu (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-CH-001 | Hộ Tâm Châu | Lục | phap_bao/chau/01.webp |  |
+| PB-CH-002 | Định Phong Châu | Lam | phap_bao/chau/02.webp |  |
+| PB-CH-003 | Tử Kim Châu | Tím | phap_bao/chau/03.webp |  |
+| PB-CH-004 | Định Hải Châu | Vàng | phap_bao/chau/04.webp |  |
+| PB-CH-005 | Hỗn Nguyên Châu | Đỏ | phap_bao/chau/05.webp |  |
+
+## Pháp bảo · Tháp (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-TA-001 | Thanh Thạch Tháp | Lục | phap_bao/thap/01.webp |  |
+| PB-TA-002 | Trấn Yêu Tháp | Lam | phap_bao/thap/02.webp |  |
+| PB-TA-003 | Trấn Ma Tháp | Tím | phap_bao/thap/03.webp |  |
+| PB-TA-004 | Linh Lung Bảo Tháp | Vàng | phap_bao/thap/04.webp |  |
+| PB-TA-005 | Cửu Tầng Thông Thiên Tháp | Đỏ | phap_bao/thap/05.webp |  |
+
+## Pháp bảo · Hồ lô (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-HL-001 | Tửu Hồ Lô | Lục | phap_bao/ho_lo/01.webp |  |
+| PB-HL-002 | Ngọc Tịnh Hồ Lô | Lam | phap_bao/ho_lo/02.webp |  |
+| PB-HL-003 | Thu Linh Hồ Lô | Tím | phap_bao/ho_lo/03.webp |  |
+| PB-HL-004 | Càn Khôn Hồ Lô | Vàng | phap_bao/ho_lo/04.webp |  |
+| PB-HL-005 | Thôn Thiên Hồ Lô | Đỏ | phap_bao/ho_lo/05.webp |  |
+
+## Pháp bảo · Kính (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-KN-001 | Đồng Kính | Lục | phap_bao/kinh/01.webp |  |
+| PB-KN-002 | Chiếu Yêu Kính | Lam | phap_bao/kinh/02.webp |  |
+| PB-KN-003 | Bát Quái Kính | Tím | phap_bao/kinh/03.webp |  |
+| PB-KN-004 | Côn Lôn Kính | Vàng | phap_bao/kinh/04.webp |  |
+| PB-KN-005 | Âm Dương Kính | Đỏ | phap_bao/kinh/05.webp |  |
+
+## Pháp bảo · Phiên (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-PN-001 | Thanh Bố Phiên | Lục | phap_bao/phien_co/01.webp |  |
+| PB-PN-002 | Ngũ Hành Phiên | Lam | phap_bao/phien_co/02.webp |  |
+| PB-PN-003 | Tụ Linh Phiên | Tím | phap_bao/phien_co/03.webp |  |
+| PB-PN-004 | Thất Tinh Phiên | Vàng | phap_bao/phien_co/04.webp |  |
+| PB-PN-005 | Hỗn Thiên Phiên | Đỏ | phap_bao/phien_co/05.webp |  |
+
+## Pháp bảo · Đỉnh (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-DI-001 | Thanh Đồng Đỉnh | Lục | phap_bao/dinh/01.webp |  |
+| PB-DI-002 | Tam Túc Đỉnh | Lam | phap_bao/dinh/02.webp |  |
+| PB-DI-003 | Cửu Long Đỉnh | Tím | phap_bao/dinh/03.webp |  |
+| PB-DI-004 | Thần Nông Đỉnh | Vàng | phap_bao/dinh/04.webp |  |
+| PB-DI-005 | Cửu Châu Đỉnh | Đỏ | phap_bao/dinh/05.webp |  |
+
+## Pháp bảo · Chuông (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-CU-001 | Đồng Linh | Lục | phap_bao/chuong/01.webp |  |
+| PB-CU-002 | Thanh Âm Chung | Lam | phap_bao/chuong/02.webp |  |
+| PB-CU-003 | Tỉnh Thần Chung | Tím | phap_bao/chuong/03.webp |  |
+| PB-CU-004 | Thái Cổ Chung | Vàng | phap_bao/chuong/04.webp |  |
+| PB-CU-005 | Thái Nhất Chung | Đỏ | phap_bao/chuong/05.webp |  |
+
+## Pháp bảo · Ấn (5)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PB-AN-001 | Thạch Ấn | Lục | phap_bao/an/01.webp |  |
+| PB-AN-002 | Trấn Sơn Ấn | Lam | phap_bao/an/02.webp |  |
+| PB-AN-003 | Lôi Công Ấn | Tím | phap_bao/an/03.webp |  |
+| PB-AN-004 | Phiên Thiên Ấn | Vàng | phap_bao/an/04.webp |  |
+| PB-AN-005 | Thiên Đế Ấn | Đỏ | phap_bao/an/05.webp |  |
+
+## Pháp bảo · Trấn giáo (4)
+
+| Mã | Tên | File | Hình |
+|---|---|---|---|
+| PB-TG-001 | Trấn Giáo Lệnh Bài | phap_bao/tran_giao/01.webp |  |
+| PB-TG-002 | Tứ Tượng Trấn Giáo Kỳ | phap_bao/tran_giao/02.webp |  |
+| PB-TG-003 | Thông Thiên Trấn Giáo Tháp | phap_bao/tran_giao/03.webp |  |
+| PB-TG-004 | Thái Cổ Trấn Giáo Đỉnh | phap_bao/tran_giao/04.webp |  |
+
+## Pháp khí · Cuốc (3)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PK-CU-001 | Thiết Cuốc | Lục | phap_khi/cuoc/01.webp |  |
+| PK-CU-002 | Huyền Thiết Cuốc | Lam | phap_khi/cuoc/02.webp |  |
+| PK-CU-003 | Khai Sơn Thần Cuốc | Tím | phap_khi/cuoc/03.webp |  |
+
+## Pháp khí · La bàn (3)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PK-LB-001 | Đồng La Bàn | Lục | phap_khi/la_ban/01.webp |  |
+| PK-LB-002 | Tầm Bảo La Bàn | Lam | phap_khi/la_ban/02.webp |  |
+| PK-LB-003 | Thiên Cơ La Bàn | Tím | phap_khi/la_ban/03.webp |  |
+
+## Pháp khí · Trận bàn (3)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PK-TB-001 | Mộc Trận Bàn | Lục | phap_khi/tran_ban/01.webp |  |
+| PK-TB-002 | Ngọc Trận Bàn | Lam | phap_khi/tran_ban/02.webp |  |
+| PK-TB-003 | Tinh Đấu Trận Bàn | Tím | phap_khi/tran_ban/03.webp |  |
+
+## Pháp khí · Quạt lửa (3)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PK-QP-001 | Bồ Phiến | Lục | phap_khi/quat_lua/01.webp |  |
+| PK-QP-002 | Khống Hỏa Phiến | Lam | phap_khi/quat_lua/02.webp |  |
+| PK-QP-003 | Tam Muội Hỏa Phiến | Tím | phap_khi/quat_lua/03.webp |  |
+
+## Pháp khí · Ngọc ẩn tức (3)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PK-AT-001 | Ẩn Tức Thạch | Lục | phap_khi/ngoc_an_tuc/01.webp |  |
+| PK-AT-002 | Ẩn Tức Ngọc | Lam | phap_khi/ngoc_an_tuc/02.webp |  |
+| PK-AT-003 | Vô Ảnh Ngọc | Tím | phap_khi/ngoc_an_tuc/03.webp |  |
+
+## Pháp khí · Chùy rèn (3)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PK-CR-001 | Thiết Chùy | Lục | phap_khi/chuy_ren/01.webp |  |
+| PK-CR-002 | Huyền Thiết Chùy | Lam | phap_khi/chuy_ren/02.webp |  |
+| PK-CR-003 | Bách Luyện Chùy | Tím | phap_khi/chuy_ren/03.webp |  |
+
+## Pháp khí · Liềm (3)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PK-LI-001 | Thiết Liêm | Lục | phap_khi/liem/01.webp |  |
+| PK-LI-002 | Thải Dược Liêm | Lam | phap_khi/liem/02.webp |  |
+| PK-LI-003 | Ngọc Cốt Liêm | Tím | phap_khi/liem/03.webp |  |
+
+## Pháp khí · Bàn tính (3)
+
+| Mã | Tên | Độ hiếm | File | Hình |
+|---|---|---|---|---|
+| PK-BA-001 | Mộc Bàn Tính | Lục | phap_khi/ban_tinh/01.webp |  |
+| PK-BA-002 | Kim Châu Bàn Tính | Lam | phap_khi/ban_tinh/02.webp |  |
+| PK-BA-003 | Thông Bảo Bàn Tính | Tím | phap_khi/ban_tinh/03.webp |  |
+
+## Ý châu (10)
+
+| Mã | Tên | Khí hình | File | Hình |
+|---|---|---|---|---|
+| NG-YC-001 | Kiếm Ý Châu | kiem | y_chau/kiem.webp |  |
+| NG-YC-002 | Đao Ý Châu | dao | y_chau/dao.webp |  |
+| NG-YC-003 | Cung Ý Châu | cung | y_chau/cung.webp |  |
+| NG-YC-004 | Phiến Ý Châu | phien | y_chau/phien.webp |  |
+| NG-YC-005 | Côn Ý Châu | con | y_chau/con.webp |  |
+| NG-YC-006 | Bút Ý Châu | but | y_chau/but.webp |  |
+| NG-YC-007 | Kỳ Ý Châu | ky | y_chau/ky.webp |  |
+| NG-YC-008 | Cầm Ý Châu | cam | y_chau/cam.webp |  |
+| NG-YC-009 | Tiêu Ý Châu | tieu | y_chau/tieu.webp |  |
+| NG-YC-010 | Thương Ý Châu | thuong | y_chau/thuong.webp |  |
+
+## Ấn bộ (20)
+
+| Mã | Tên | File | Hình |
+|---|---|---|---|
+| NG-AN-001 | Ấn Tụ Bảo | an_bo/tu_bao.webp |  |
+| NG-AN-002 | Ấn Bách Thảo | an_bo/bach_thao.webp |  |
+| NG-AN-003 | Ấn Bàn Thạch | an_bo/ban_thach.webp |  |
+| NG-AN-004 | Ấn Liệp Thú | an_bo/liep_thu.webp |  |
+| NG-AN-005 | Ấn Thiết Kỵ | an_bo/thiet_ky.webp |  |
+| NG-AN-006 | Ấn Văn Uyên | an_bo/van_uyen.webp |  |
+| NG-AN-007 | Ấn Ngọc Tủy | an_bo/ngoc_tuy.webp |  |
+| NG-AN-008 | Ấn Linh Tuyền | an_bo/linh_tuyen.webp |  |
+| NG-AN-009 | Ấn Băng Phách | an_bo/bang_phach.webp |  |
+| NG-AN-010 | Ấn Lôi Trì | an_bo/loi_tri.webp |  |
+| NG-AN-011 | Ấn Ngự Thú | an_bo/ngu_thu.webp |  |
+| NG-AN-012 | Ấn Cổ Tông | an_bo/co_tong.webp |  |
+| NG-AN-013 | Ấn Đan Tiên | an_bo/dan_tien.webp |  |
+| NG-AN-014 | Ấn Thiên Công | an_bo/thien_cong.webp |  |
+| NG-AN-015 | Ấn Huyết Ảnh | an_bo/huyet_anh.webp |  |
+| NG-AN-016 | Ấn Độ Kiếp | an_bo/do_kiep.webp |  |
+| NG-AN-017 | Ấn Vạn Kiếm | an_bo/van_kiem.webp |  |
+| NG-AN-018 | Ấn Chu Thiên | an_bo/chu_thien.webp |  |
+| NG-AN-019 | Ấn Phá Quân | an_bo/pha_quan.webp |  |
+| NG-AN-020 | Ấn Hỗn Độn | an_bo/hon_don.webp |  |
 
