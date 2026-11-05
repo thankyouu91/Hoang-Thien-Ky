@@ -86,6 +86,8 @@ export interface PhanHoiHopLe {
   loai: "loi" | "gop_y" | "khac";
   noi_dung: string;
   man: string | null;
+  /** Cách liên lạc người chơi tự để lại (email, Zalo...), có thể trống. */
+  lien_he: string | null;
   phien_ban: string | null;
 }
 
@@ -95,7 +97,13 @@ export function kiemPhanHoi(body: unknown): PhanHoiHopLe {
   if (loai !== "loi" && loai !== "gop_y" && loai !== "khac") throw new LoiApi(400, "loai_sai", "loai là loi, gop_y hoặc khac.");
   const noi_dung = chuoi(body.noi_dung, "noi_dung", GIOI_HAN.noiDungPhanHoi, true)!;
   if (noi_dung.length < 3) throw new LoiApi(400, "qua_ngan", "Nội dung ít nhất 3 ký tự.");
-  return { loai, noi_dung, man: chuoi(body.man, "man", 60, false), phien_ban: chuoi(body.phien_ban, "phien_ban", 40, false) };
+  return {
+    loai,
+    noi_dung,
+    man: chuoi(body.man, "man", 60, false),
+    lien_he: chuoi(body.lien_he, "lien_he", 120, false),
+    phien_ban: chuoi(body.phien_ban, "phien_ban", 40, false),
+  };
 }
 
 /** User-Agent rút gọn để lưu kèm phản hồi (không lưu IP). */

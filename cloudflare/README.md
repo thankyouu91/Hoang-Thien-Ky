@@ -1,15 +1,17 @@
 # cloudflare/ — bản chơi thử trên thienhoangky.fun
 
-Có hai Worker và một D1. Admin Dashboard (`admin.thienhoangky.fun`) là Worker riêng ở `admin/`. Hợp đồng API nằm ở `docs/api.md`.
+Thư mục này có hai Worker và một D1. Admin Dashboard ở `admin.thienhoangky.fun` là Worker riêng, mã ở `admin/`. Hợp đồng API nằm trong `docs/api.md`.
 
 | File | Việc |
 |---|---|
-| `wrangler.jsonc` | Worker `thienhoangky`: phục vụ `proto/dist` dưới dạng static assets (SPA) và `/api/*`, gắn tên miền `thienhoangky.fun` |
-| `wrangler.www.jsonc` | Worker `thienhoangky-www`: chuyển `www.thienhoangky.fun` về tên miền gốc bằng mã 301 |
-| `src/access.ts` | Xác minh JWT của Cloudflare Access: chữ ký theo bộ khoá của team, `iss`, `aud`, hạn dùng, email |
-| `src/game.ts`, `src/kiem.ts`, `src/http.ts` | Các API game |
+| `wrangler.jsonc` | Worker `thienhoangky`: cổng link mời, phục vụ `proto/dist` (static assets, SPA) và `/api/*`, gắn tên miền `thienhoangky.fun` |
+| `wrangler.www.jsonc` | Worker `thienhoangky-www`: chuyển `www.thienhoangky.fun` về tên miền gốc (301) |
+| `src/game.ts` | Worker game: `/moi/<ma>`, chặn HTML và API khi không có cookie hợp lệ, các API |
+| `src/moi.ts` | Thẻ cookie `thk_moi`, băm SHA-256, đọc cookie, kiểm mã link |
+| `src/trang.ts` | Các trang báo ngắn: cần link mời, link hỏng, bị khóa |
+| `src/kiem.ts`, `src/http.ts` | Kiểm dữ liệu đầu vào, hàm trả JSON, chặn ghi từ trang khác (CSRF) |
 | `migrations/` | Bảng game trong D1 `thienhoangky`. Bảng `qt_*` nằm ở `admin/migrations/` |
-| `scripts/chuan-bi.mjs` | Lệnh build mà wrangler tự chạy trước khi deploy: build `proto/dist`, chép `_headers`, kiểm số file và dung lượng |
+| `scripts/chuan-bi.mjs` | Lệnh build wrangler tự chạy trước khi deploy: build `proto/dist`, chép `_headers`, kiểm số file và dung lượng |
 | `_headers` | Header cache và header bảo mật cho asset |
 
 ## Chạy thử ở máy
@@ -17,17 +19,15 @@ Có hai Worker và một D1. Admin Dashboard (`admin.thienhoangky.fun`) là Work
 ```
 cd cloudflare
 npm.cmd install
-echo DEV_EMAIL=ban@local.test> .dev.vars
 npm.cmd run db:migrate:local
-npm.cmd run dev            # http://127.0.0.1:8787, có /api/* với email giả ở trên
-npm.cmd test               # test xác minh JWT và kiểm dữ liệu
+npx.cmd wrangler d1 execute thienhoangky --local --command "INSERT INTO loi_moi (ma, ten, tao_boi, tao_luc) VALUES ('thu-local-1', 'thử ở máy', 'dev', 0)"
+npm.cmd run dev            # mở http://127.0.0.1:8787/moi/thu-local-1
+npm.cmd test
 ```
-
-`DEV_EMAIL` chỉ có tác dụng khi request vào `localhost` hoặc `127.0.0.1`. Script `dev` đã gắn sẵn `--local-upstream localhost:8787` cho việc đó. Trên tên miền thật, biến này bị bỏ qua.
 
 ## Deploy
 
-Build phải chạy từ mã đã commit. Thư mục repo dùng chung còn file các phiên khác đang sửa dở, nên dùng một worktree riêng:
+Phải build từ mã đã commit. Thư mục repo dùng chung thường có file của phiên khác đang sửa dở, nên dùng worktree riêng:
 
 ```
 git worktree add --detach ..\KhaiTongLapPhai-deploy HEAD     # lần đầu
@@ -36,35 +36,36 @@ git checkout --detach <commit cần đưa lên>                   # các lần s
 npm.cmd ci
 cd cloudflare
 npm.cmd ci
-npx.cmd wrangler deploy                                       # tự build proto, kiểm giới hạn, rồi đẩy
-npx.cmd wrangler deploy -c wrangler.www.jsonc                 # chỉ cần khi sửa Worker www
 npx.cmd wrangler d1 migrations apply thienhoangky --remote    # khi có migration mới
+npx.cmd wrangler deploy                                       # tự build proto, kiểm giới hạn, rồi đẩy lên
+npx.cmd wrangler deploy -c wrangler.www.jsonc                 # chỉ khi sửa Worker www
 ```
 
-Thứ tự an toàn khi dựng lần đầu: tạo ứng dụng Access cho hostname trước, điền `ACCESS_TEAM_DOMAIN` và `ACCESS_AUD` vào `wrangler.jsonc`, rồi mới deploy. Lúc deploy, wrangler gắn tên miền và Cloudflare cấp chứng chỉ; mất khoảng một tới vài phút. Nếu gắn tên miền trước khi có Access, asset sẽ mở công khai trong khoảng thời gian đó.
+Cổng link mời nằm trong Worker, nên khi wrangler gắn tên miền ở lần deploy đầu, cổng đã chạy ngay. Không có đường nào vào game mà tránh được cổng:
 
-Không có đường nào vào game mà tránh được Access:
+- `workers_dev` và `preview_urls` đều tắt, nên không có địa chỉ `*.workers.dev` hay URL xem trước.
+- Mọi đường dẫn đều chạy Worker trước (`run_worker_first`), trừ `/assets/*`, `/pixellab/*`, `/icon_ve/*`. Ba thư mục này là file JS có mã băm trong tên và hình, được phục vụ thẳng, không tốn lượt request.
 
-- `workers_dev: false` và `preview_urls: false`, nên không có địa chỉ `*.workers.dev` hay URL xem trước.
-- Asset do Cloudflare phục vụ thẳng, nhưng vẫn nằm sau ứng dụng Access của hostname.
-- `/api/*` kiểm lại JWT. Thiếu cấu hình Access thì trả 503.
+## Link mời
 
-## Cloudflare Access
+Tạo và quản lý link ở Admin Dashboard. Khi chưa có Admin Dashboard thì tạo bằng lệnh. Không ghi mã thật vào repo, vì repo là public.
 
-Team: xem `ACCESS_TEAM_DOMAIN` trong `wrangler.jsonc`. Đăng nhập bằng mã một lần gửi qua email (One-time PIN).
+```
+npx.cmd wrangler d1 execute thienhoangky --remote --command "INSERT INTO loi_moi (ma, ten, toi_da, het_han, tao_boi, tao_luc) VALUES ('<mã ngẫu nhiên>', 'Đợt 1', 50, NULL, 'tab deploy', <Date.now()>)"
+npx.cmd wrangler d1 execute thienhoangky --remote --command "SELECT ma, ten, toi_da, da_dung, het_han, tat FROM loi_moi"
+npx.cmd wrangler d1 execute thienhoangky --remote --command "UPDATE loi_moi SET tat = 1 WHERE ma = '<mã>'"
+npx.cmd wrangler d1 execute thienhoangky --remote --command "UPDATE nguoi_choi_thu SET khoa = 1, ly_do_khoa = '<lý do>' WHERE id = '<id>'"
+```
 
-| Ứng dụng | Hostname | Ai được vào | Biến |
-|---|---|---|---|
-| Thiên Hoang Ký – chơi thử | `thienhoangky.fun` | Người chơi thử, admin, vận hành | `ACCESS_AUD` trong `wrangler.jsonc` |
-| Thiên Hoang Ký – quản trị | `admin.thienhoangky.fun` | Admin, vận hành | `ACCESS_AUD` trong `admin/wrangler.jsonc` |
+- Link có dạng `https://thienhoangky.fun/moi/<mã>`. Mỗi trình duyệt mở link lần đầu tốn một lượt. Đặt `toi_da` để giới hạn số người khi link bị chuyển tiếp.
+- Tắt link (`tat = 1`) chỉ chặn người mới. Người đã vào vẫn chơi tiếp; muốn chặn ai thì khoá đúng người đó.
 
-**Mời thêm người chơi thử:** vào Zero Trust → Access controls → Applications → Thiên Hoang Ký – chơi thử → Policies → sửa policy "Người chơi thử" → thêm email vào Include → Emails → Save. Người được mời mở https://thienhoangky.fun, nhập email, rồi nhập mã 6 số Cloudflare gửi về hộp thư. Mã đến từ `noreply@notify.cloudflare.com`; nếu không thấy, xem trong thư mục spam.
+## Admin: Cloudflare Access
 
-**Gỡ người chơi thử:** xoá email khỏi policy. Phiên đăng nhập Access đang mở vẫn còn tới hết hạn (24 giờ). Muốn gỡ ngay thì vào Zero Trust → Team & Resources → Users → chọn người đó → Revoke session. Khoá ở Admin Dashboard thì chỉ chặn API, người đó vẫn tải được game.
+Team: `https://jolly-water-a8bd.cloudflareaccess.com`. Chỉ ứng dụng "Thiên Hoang Ký – quản trị" (`admin.thienhoangky.fun`) dùng Access, đăng nhập bằng mã một lần gửi qua email. Người chơi không dùng Access, vì gói Zero Trust Free chỉ cho 50 người đăng nhập.
 
-## Giới hạn và chi phí (gói miễn phí)
+## Giới hạn của gói miễn phí
 
-- Static assets: tối đa 20.000 file mỗi phiên bản Worker và 25 MiB mỗi file. `proto/dist` hiện có khoảng 1.400 file, tổng 59 MB, file lớn nhất 766 KB. `scripts/chuan-bi.mjs` sẽ báo lỗi nếu vượt giới hạn.
-- Worker: 100.000 request mỗi ngày. Chỉ request tới `/api/*` mới tính; asset không chạy Worker nên không tính.
-- D1 free: 5 GB, 5 triệu lượt đọc và 100.000 lượt ghi mỗi ngày. Mỗi lô sự kiện (tối đa 50 sự kiện) tốn số lượt ghi bằng số sự kiện cộng 1.
-- Zero Trust Free: tối đa 50 người dùng, tính theo số email đã đăng nhập Access trong kỳ.
+- **Static assets:** tối đa 20.000 file mỗi phiên bản, mỗi file tối đa 25 MiB. `proto/dist` hiện có khoảng 1.400 file, tổng 59 MB, file lớn nhất 766 KB. `scripts/chuan-bi.mjs` báo lỗi nếu vượt.
+- **Worker:** 100.000 request mỗi ngày. Chỉ tính trang HTML, `/api/*` và `/moi/*`, vì JS và hình không chạy Worker. Mỗi người chơi tốn khoảng 10–20 request khi mở game, cộng 3 request mỗi phút khi gửi sự kiện.
+- **D1:** 5 GB, 5 triệu lượt đọc và 100.000 lượt ghi mỗi ngày. Mỗi request đã qua cổng tốn 1 lượt đọc. Mỗi lô sự kiện tốn số lượt ghi bằng số sự kiện cộng 1.

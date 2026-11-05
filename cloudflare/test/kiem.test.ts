@@ -50,7 +50,7 @@ test("khung lô sai thì 400/413", () => {
 });
 
 test("phản hồi", () => {
-  assert.deepEqual(kiemPhanHoi({ noi_dung: "  Nút Nhận mã bị che  ", man: "dang-nhap" }), { loai: "gop_y", noi_dung: "Nút Nhận mã bị che", man: "dang-nhap", phien_ban: null });
+  assert.deepEqual(kiemPhanHoi({ noi_dung: "  Nút Nhận mã bị che  ", man: "dang-nhap", lien_he: " zalo 09x " }), { loai: "gop_y", noi_dung: "Nút Nhận mã bị che", man: "dang-nhap", lien_he: "zalo 09x", phien_ban: null });
   assert.equal(ma(() => kiemPhanHoi({ loai: "spam", noi_dung: "abc" })), "loai_sai");
   assert.equal(ma(() => kiemPhanHoi({ noi_dung: "a" })), "qua_ngan");
   assert.equal(ma(() => kiemPhanHoi({ noi_dung: "a".repeat(2001) })), "qua_dai");

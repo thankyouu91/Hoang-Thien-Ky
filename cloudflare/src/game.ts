@@ -1,15 +1,23 @@
-// Worker `thienhoangky` ở thienhoangky.fun: phục vụ bản build proto/dist (static assets, SPA) và API cho người chơi thử.
-// Cả hostname nằm sau ứng dụng Access "Thiên Hoang Ký – chơi thử"; asset do Cloudflare phục vụ thẳng sau Access,
-// chỉ /api/* chạy qua Worker (run_worker_first) và mọi request API đều xác minh lại JWT của Access.
-// Hợp đồng: docs/api.md. Bảng game: migrations/0001_khoi_tao.sql. Bảng qt_* (thông báo, cấu hình, khóa) của Admin Dashboard.
+// Worker `thienhoangky` ở thienhoangky.fun: bản chơi thử mở bằng link mời (không qua Cloudflare Access).
+//   /moi/<ma>  — kiểm link mời (bảng loi_moi), tạo người chơi thử, cấp cookie thk_moi rồi chuyển về /.
+//   HTML, /api/* — chỉ cho trình duyệt có cookie thk_moi hợp lệ và chưa bị khóa.
+//   /assets/*, /pixellab/*, /icon_ve/* — Cloudflare phục vụ thẳng, không qua Worker (khỏi tốn lượt request của gói free);
+//     tên file JS có mã băm và chỉ biết được qua HTML đã chặn.
+// Hợp đồng: docs/api.md. Bảng game: migrations/. Bảng qt_* (thông báo, cấu hình) của Admin Dashboard.
 import { THAM_SO } from "../../admin/worker/cauHinh.ts";
-import { xacMinh, type CauHinhAccess } from "./access.ts";
 import { docJson, json, kiemGhi, loi, LoiApi, traLoi } from "./http.ts";
 import { GIOI_HAN, kiemLoSuKien, kiemPhanHoi, rutGonUA } from "./kiem.ts";
+import { bamThe, chuanMa, datCookie, docThe, maDoc, taoThe } from "./moi.ts";
+import { ROBOTS, trangBiKhoa, trangCanLinkMoi, trangLinkHong } from "./trang.ts";
 
-export interface EnvGame extends CauHinhAccess {
+export interface EnvGame {
   DB: D1Database;
   ASSETS: Fetcher;
+}
+
+interface NguoiChoi {
+  id: string;
+  khoa: number;
 }
 
 /** Bảng qt_* chưa tạo (Admin Dashboard chưa chạy migration): dùng mặc định thay vì lỗi. */
@@ -17,24 +25,37 @@ function thieuBang(e: unknown): boolean {
   return /no such table/i.test(String((e as Error)?.message ?? e));
 }
 
-async function biKhoa(db: D1Database, email: string): Promise<boolean> {
-  try {
-    const r = await db.prepare("SELECT khoa FROM qt_nguoi_choi WHERE email = ?1").bind(email).first<{ khoa: number }>();
-    return r?.khoa === 1;
-  } catch (e) {
-    if (thieuBang(e)) return false;
-    throw e;
-  }
+async function nguoiCuaCookie(req: Request, db: D1Database): Promise<NguoiChoi | null> {
+  const the = docThe(req.headers.get("Cookie"));
+  if (!the) return null;
+  return db.prepare("SELECT id, khoa FROM nguoi_choi_thu WHERE the_hash = ?1").bind(await bamThe(the)).first<NguoiChoi>();
 }
 
-async function ghiNguoiChoi(db: D1Database, email: string, now: number, phienMoi = 0): Promise<void> {
-  await db
-    .prepare(
-      `INSERT INTO nguoi_choi_thu (email, lan_dau, lan_cuoi, so_phien) VALUES (?1, ?2, ?2, ?3)
-       ON CONFLICT(email) DO UPDATE SET lan_cuoi = excluded.lan_cuoi, so_phien = nguoi_choi_thu.so_phien + excluded.so_phien`,
-    )
-    .bind(email, now, phienMoi)
+/** /moi/<ma>: dùng một lượt của link và cấp cookie. Trình duyệt đã có cookie hợp lệ thì không tốn lượt. */
+async function nhanLoiMoi(req: Request, env: EnvGame, raw: string): Promise<Response> {
+  const daCo = await nguoiCuaCookie(req, env.DB);
+  // Người bị khóa mở lại link mời thì vẫn báo khóa, không cấp danh tính mới.
+  if (daCo) return daCo.khoa === 1 ? trangBiKhoa() : Response.redirect(new URL("/", req.url).toString(), 302);
+  const ma = chuanMa(raw);
+  if (!ma) return trangLinkHong();
+  const now = Date.now();
+  const dung = await env.DB.prepare(
+    `UPDATE loi_moi SET da_dung = da_dung + 1
+     WHERE ma = ?1 AND tat = 0 AND (het_han IS NULL OR het_han > ?2) AND (toi_da IS NULL OR da_dung < toi_da)
+     RETURNING ma`,
+  )
+    .bind(ma, now)
+    .first<{ ma: string }>();
+  if (!dung) return trangLinkHong();
+  const the = taoThe();
+  await env.DB.prepare("INSERT INTO nguoi_choi_thu (id, the_hash, ma_moi, lan_dau, lan_cuoi) VALUES (?1, ?2, ?3, ?4, ?4)")
+    .bind(maDoc(10), await bamThe(the), ma, now)
     .run();
+  return new Response(null, { status: 302, headers: { Location: "/", "Set-Cookie": datCookie(the), "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" } });
+}
+
+async function ghiLanCuoi(db: D1Database, id: string, now: number, phienMoi = 0): Promise<void> {
+  await db.prepare("UPDATE nguoi_choi_thu SET lan_cuoi = ?2, so_phien = so_phien + ?3 WHERE id = ?1").bind(id, now, phienMoi).run();
 }
 
 async function thongBao(db: D1Database, now: number): Promise<unknown[]> {
@@ -54,18 +75,17 @@ async function thongBao(db: D1Database, now: number): Promise<unknown[]> {
   }
 }
 
+/** Mặc định ở admin/worker/cauHinh.ts, đè bằng mọi dòng trong qt_cau_hinh (cả khoá mới admin thêm sau). */
 async function cauHinh(db: D1Database): Promise<Record<string, unknown>> {
   const out: Record<string, unknown> = {};
   for (const t of THAM_SO) out[t.khoa] = t.mac_dinh;
   try {
     const { results } = await db.prepare("SELECT khoa, gia_tri FROM qt_cau_hinh").all<{ khoa: string; gia_tri: string }>();
     for (const r of results) {
-      // Chỉ trả khoá có trong định nghĩa; dòng hỏng thì giữ mặc định.
-      if (!(r.khoa in out)) continue;
       try {
         out[r.khoa] = JSON.parse(r.gia_tri);
       } catch {
-        // giữ mặc định
+        // dòng hỏng: giữ mặc định
       }
     }
   } catch (e) {
@@ -76,17 +96,13 @@ async function cauHinh(db: D1Database): Promise<Record<string, unknown>> {
 
 const DUONG = ["/api/toi", "/api/su-kien", "/api/phan-hoi", "/api/thong-bao", "/api/cau-hinh"];
 
-async function api(req: Request, env: EnvGame, ctx: ExecutionContext, path: string): Promise<Response> {
-  const auth = await xacMinh(req, env);
-  if (!auth.ok) return loi(auth.ma === "chua_cau_hinh" ? 503 : 401, auth.ma);
-  const email = auth.nguoi.email;
-  if (await biKhoa(env.DB, email)) return loi(403, "bi_khoa", "Tài khoản chơi thử này đang bị khóa.");
+async function api(req: Request, env: EnvGame, ctx: ExecutionContext, path: string, nguoi: NguoiChoi): Promise<Response> {
   const now = Date.now();
   const m = req.method;
 
   if (path === "/api/toi" && m === "GET") {
-    ctx.waitUntil(ghiNguoiChoi(env.DB, email, now));
-    return json({ email });
+    ctx.waitUntil(ghiLanCuoi(env.DB, nguoi.id, now));
+    return json({ nguoi_choi: nguoi.id });
   }
 
   if (path === "/api/su-kien" && m === "POST") {
@@ -95,21 +111,21 @@ async function api(req: Request, env: EnvGame, ctx: ExecutionContext, path: stri
     const stmt = env.DB.prepare("INSERT INTO su_kien (loai, an_danh, phien, luc, nhan_luc, du_lieu, phien_ban) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)");
     const batch = lo.su_kien.map((e) => stmt.bind(e.loai, lo.an_danh, lo.phien, e.luc, now, e.du_lieu, lo.phien_ban));
     if (batch.length) await env.DB.batch(batch);
-    // nguoi_choi_thu chỉ giữ email, lần đầu, lần cuối, số phiên; không nối email với mã ẩn danh.
-    const phienMoi = lo.su_kien.filter((e) => e.loai === "mo_phien").length;
-    ctx.waitUntil(ghiNguoiChoi(env.DB, email, now, phienMoi));
+    // Sự kiện không mang id người chơi; nguoi_choi_thu chỉ giữ lần cuối và số phiên.
+    ctx.waitUntil(ghiLanCuoi(env.DB, nguoi.id, now, lo.su_kien.filter((e) => e.loai === "mo_phien").length));
     return json({ nhan: batch.length, bo: lo.bo }, 202);
   }
 
   if (path === "/api/phan-hoi" && m === "POST") {
     kiemGhi(req);
     const ph = kiemPhanHoi(await docJson(req, GIOI_HAN.bodyPhanHoi));
-    const dem = await env.DB.prepare("SELECT COUNT(*) AS n FROM phan_hoi WHERE email = ?1 AND luc > ?2").bind(email, now - 24 * 3600 * 1000).first<{ n: number }>();
+    const dem = await env.DB.prepare("SELECT COUNT(*) AS n FROM phan_hoi WHERE nguoi_choi = ?1 AND luc > ?2").bind(nguoi.id, now - 24 * 3600 * 1000).first<{ n: number }>();
     if ((dem?.n ?? 0) >= GIOI_HAN.phanHoiMoiNgay) throw new LoiApi(429, "qua_nhieu", `Tối đa ${GIOI_HAN.phanHoiMoiNgay} phản hồi mỗi 24 giờ.`);
-    const r = await env.DB.prepare("INSERT INTO phan_hoi (email, loai, noi_dung, man, thiet_bi, phien_ban, luc) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) RETURNING id")
-      .bind(email, ph.loai, ph.noi_dung, ph.man, rutGonUA(req.headers.get("User-Agent")), ph.phien_ban, now)
+    const r = await env.DB.prepare(
+      "INSERT INTO phan_hoi (nguoi_choi, loai, noi_dung, man, lien_he, thiet_bi, phien_ban, luc) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8) RETURNING id",
+    )
+      .bind(nguoi.id, ph.loai, ph.noi_dung, ph.man, ph.lien_he, rutGonUA(req.headers.get("User-Agent")), ph.phien_ban, now)
       .first<{ id: number }>();
-    ctx.waitUntil(ghiNguoiChoi(env.DB, email, now));
     return json({ id: r?.id ?? null }, 201);
   }
 
@@ -120,17 +136,34 @@ async function api(req: Request, env: EnvGame, ctx: ExecutionContext, path: stri
   return DUONG.includes(path) ? loi(405, "sai_phuong_thuc") : loi(404, "khong_co");
 }
 
+/** Trang HTML của game: không để trình duyệt hay proxy giữ bản đã qua cổng. */
+async function phucVuTrang(req: Request, env: EnvGame): Promise<Response> {
+  const r = await env.ASSETS.fetch(req);
+  if (!(r.headers.get("Content-Type") ?? "").includes("text/html")) return r;
+  const out = new Response(r.body, r);
+  out.headers.set("Cache-Control", "private, no-cache");
+  out.headers.set("Referrer-Policy", "no-referrer");
+  return out;
+}
+
 export default {
   async fetch(req: Request, env: EnvGame, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
-    if (url.pathname === "/api" || url.pathname.startsWith("/api/")) {
-      try {
-        return await api(req, env, ctx, url.pathname.replace(/\/+$/, ""));
-      } catch (e) {
-        return traLoi(e);
-      }
+    const path = url.pathname;
+    const laApi = path === "/api" || path.startsWith("/api/");
+    try {
+      if (path === "/robots.txt") return new Response(ROBOTS, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
+      if (path.startsWith("/moi/")) return await nhanLoiMoi(req, env, path.slice(5).replace(/\/+$/, ""));
+
+      const nguoi = await nguoiCuaCookie(req, env.DB);
+      if (!nguoi) return laApi ? loi(401, "chua_co_loi_moi", "Cần mở link mời trước.") : trangCanLinkMoi();
+      if (nguoi.khoa === 1) return laApi ? loi(403, "bi_khoa", "Tài khoản chơi thử này đang bị khóa.") : trangBiKhoa();
+      if (laApi) return await api(req, env, ctx, path.replace(/\/+$/, ""), nguoi);
+      return await phucVuTrang(req, env);
+    } catch (e) {
+      if (laApi) return traLoi(e);
+      console.error("loi_trang", e instanceof Error ? e.message : String(e));
+      return new Response("Lỗi máy chủ, thử lại sau ít phút.", { status: 500, headers: { "Content-Type": "text/plain; charset=utf-8" } });
     }
-    // Phần còn lại là asset (thường Cloudflare phục vụ thẳng, không vào Worker).
-    return env.ASSETS.fetch(req);
   },
 } satisfies ExportedHandler<EnvGame>;

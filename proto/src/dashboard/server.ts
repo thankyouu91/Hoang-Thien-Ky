@@ -1,7 +1,8 @@
 // Nối bản chơi thử với API trên thienhoangky.fun (Worker `thienhoangky`, hợp đồng ở docs/api.md):
 //   - gửi sự kiện analytics GDD mục 19 lên POST /api/su-kien, gom 20 giây một lần, phần còn lại gửi bằng sendBeacon khi đóng trang;
 //   - gửi phản hồi POST /api/phan-hoi; đọc thông báo GET /api/thong-bao và cấu hình sống GET /api/cau-hinh.
-// Sự kiện ẩn danh: chỉ kèm mã ngẫu nhiên của trình duyệt (ktlp.an_danh) và của phiên, không kèm số điện thoại hay email.
+// Sự kiện ẩn danh: chỉ kèm mã ngẫu nhiên của trình duyệt (ktlp.an_danh) và của phiên. Server biết người chơi thử qua cookie
+// link mời thk_moi (HttpOnly, trình duyệt tự gửi), không có email hay số điện thoại.
 // Chạy `npm run dev` (không có API) thì /api/toi không trả JSON: module tự tắt, không gửi gì.
 import type { AuthSource } from "./auth.ts";
 
@@ -85,7 +86,7 @@ async function goi<T>(path: string, init?: RequestInit): Promise<{ ok: true; dat
 
 /** Hỏi /api/toi một lần; các hàm khác chờ kết quả này. */
 function sanSang(): Promise<boolean> {
-  san ??= goi<{ email: string }>("/api/toi").then((r) => {
+  san ??= goi<{ nguoi_choi: string }>("/api/toi").then((r) => {
     if (trangThai !== "bi_khoa") datTrangThai(r.ok ? "co" : "khong_co");
     return r.ok;
   });
@@ -130,9 +131,9 @@ function guiBeacon(): void {
 }
 
 /** Gửi phản hồi của người chơi. Trả lỗi bằng câu tiếng Việt để màn hiện thẳng. */
-export async function guiPhanHoi(loai: LoaiPhanHoi, noi_dung: string, man?: string): Promise<{ ok: true } | { ok: false; loi: string }> {
+export async function guiPhanHoi(loai: LoaiPhanHoi, noi_dung: string, man?: string, lien_he?: string): Promise<{ ok: true } | { ok: false; loi: string }> {
   if (!(await sanSang())) return { ok: false, loi: trangThai === "bi_khoa" ? "Tài khoản chơi thử này đang bị khóa." : "Bản này chưa nối máy chủ, chưa gửi được phản hồi." };
-  const r = await goi("/api/phan-hoi", { method: "POST", body: JSON.stringify({ loai, noi_dung, man: man ?? document.body.dataset.scene ?? null, phien_ban: PHIEN_BAN }) });
+  const r = await goi("/api/phan-hoi", { method: "POST", body: JSON.stringify({ loai, noi_dung, man: man ?? document.body.dataset.scene ?? null, lien_he: lien_he?.trim() || null, phien_ban: PHIEN_BAN }) });
   if (r.ok) {
     ghi("phan_hoi", { loai });
     return { ok: true };

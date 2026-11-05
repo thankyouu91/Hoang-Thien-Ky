@@ -1,11 +1,11 @@
-// Worker `thienhoangky`: game ở https://thienhoangky.fun (sau Cloudflare Access) + API /api/* + D1.
+// Worker `thienhoangky`: bản chơi thử ở https://thienhoangky.fun, vào bằng link mời /moi/<ma> (không qua Access), API /api/*, D1.
 // Hướng dẫn deploy: cloudflare/README.md. Hợp đồng API: docs/api.md.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "thienhoangky",
   "main": "src/game.ts",
   "compatibility_date": "2026-11-01",
-  // Không có đường vào nào ngoài tên miền đã gắn Access: tắt *.workers.dev và URL xem trước của từng phiên bản.
+  // Chỉ một đường vào là tên miền (có cổng link mời): tắt *.workers.dev và URL xem trước của từng phiên bản.
   "workers_dev": false,
   "preview_urls": false,
   "routes": [{ "pattern": "thienhoangky.fun", "custom_domain": true }],
@@ -15,8 +15,8 @@
     "directory": "../proto/dist",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
-    // Chỉ API chạy Worker; asset do Cloudflare phục vụ thẳng sau Access (không tốn lượt request của Worker).
-    "run_worker_first": ["/api/*"]
+    // Mọi đường dẫn qua cổng link mời của Worker, trừ file tĩnh có mã băm và hình (phục vụ thẳng, không tốn lượt request).
+    "run_worker_first": ["/*", "!/assets/*", "!/pixellab/*", "!/icon_ve/*"]
   },
   "d1_databases": [
     {
@@ -26,11 +26,6 @@
       "migrations_dir": "migrations"
     }
   ],
-  "vars": {
-    // Team Zero Trust và AUD tag của ứng dụng Access "Thiên Hoang Ký – chơi thử". Trống thì /api/* trả 503 (đóng khi thiếu).
-    "ACCESS_TEAM_DOMAIN": "",
-    "ACCESS_AUD": ""
-  },
-  // Log do Worker tự ghi; tắt invocation log để header JWT, email và đường dẫn không vào Workers Logs.
+  // Log do Worker tự ghi; tắt invocation log để cookie và đường dẫn link mời không vào Workers Logs.
   "observability": { "enabled": true, "logs": { "invocation_logs": false } }
 }
