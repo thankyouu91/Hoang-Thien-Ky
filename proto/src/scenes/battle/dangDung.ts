@@ -219,7 +219,7 @@ function idleStrip(sprites: Sprites, look: Look, d: DangDef): Anim {
 export function drawDang(
   ctx: CanvasRenderingContext2D, sprites: Sprites, look: Look, dang: DangId, anim: Anim, frame: number, time: number,
   x: number, footY: number, scale: number, mirror: boolean, tint = "#9fd8ff", phase = 0,
-  luan?: { spec: PhapLuanSpec; beat: PhapLuanBeat },
+  luan?: { spec: PhapLuanSpec; beat: PhapLuanBeat; hidden?: boolean },
 ): boolean {
   const d = DANG[dang];
   const idle = anim === "dung";
@@ -246,7 +246,7 @@ export function drawDang(
 
   const feet = lift + (body === d.strip ? d.footUp ?? 0 : 0);
   for (const k of shown) drawFx(ctx, k, "ground", time, lift, feet, tint, phase);
-  if (withLuan) {
+  if (withLuan && !luan!.hidden) {
     // Tâm pháp luân sau lưng, hơi dưới đầu và lệch về phía lưng; theo neo đầu nên ngồi thiền hay cúi vẫn đúng chỗ.
     const cx = anchor ? anchor.dau[0] - FRAME_X - 2 : 0;
     const cy = anchor ? anchor.dau[1] - FRAME_FOOT - lift + 10 : -38 - lift;
@@ -262,6 +262,69 @@ export function drawDang(
   for (const k of shown) drawFx(ctx, k, "front", time, lift, feet, tint, phase);
   ctx.restore();
   return true;
+}
+
+// ---- vệt vũ khí khi ra chiêu ----
+
+/** Mũi vũ khí so với chỗ cầm (pivot) trong ảnh đồ gốc, px; tay không thì vệt theo nắm tay. */
+const TIP: Record<string, [number, number]> = { kiem: [15.3, -27.4], dao: [16.3, -27.4], truong: [-2.7, -35.4] };
+
+/**
+ * Vệt vũ khí khi ra chiêu cận chiến: đuôi lấy từ chính đường đi của mũi vũ khí qua các khung ra chiêu trước đó (nội suy
+ * neo cổ tay giữa hai khung), thon và nhạt dần về đuôi, lõi trắng viền màu hệ. `age` giây (thời gian trận) từ lúc bắt
+ * đầu động tác ra chiêu; cùng phép đặt chân, co giãn và lật như drawCharacter.
+ */
+export function drawSwingTrail(
+  ctx: CanvasRenderingContext2D, sprites: Sprites, look: Look, age: number,
+  x: number, footY: number, scale: number, mirror: boolean, color: string,
+): void {
+  const meta = sprites.asset(`nhan_vat/${look.body}/${look.outfit}/ra_chieu`)?.meta;
+  const neo = meta && Array.isArray(meta.neo) ? meta.neo : undefined;
+  const frames = meta?.frames;
+  if (!frames || !neo) return;
+  const fps = meta.fps ?? 10;
+  const head = age * fps;
+  if (head < 0 || head >= frames) return;
+  const tip = look.weapon ? TIP[look.weapon] ?? [0, 0] : [0, 0];
+  const at = (ff: number): [number, number] | null => {
+    const i = Math.max(0, Math.min(frames - 1, Math.floor(ff)));
+    const j = Math.min(frames - 1, i + 1);
+    const a = neo[i]?.tay;
+    const b = neo[j]?.tay ?? a;
+    if (!a || !b) return null;
+    const f = ff - Math.floor(ff);
+    return [a[0] + (b[0] - a[0]) * f + tip[0], a[1] + (b[1] - a[1]) * f + tip[1]];
+  };
+  const pts: [number, number][] = [];
+  for (let k = 0; k <= 6; k++) {
+    const ff = head - k * 0.3;
+    if (ff < 0) break;
+    const p = at(ff);
+    if (p) pts.push(p);
+  }
+  if (pts.length < 2) return;
+  let len = 0;
+  for (let i = 1; i < pts.length; i++) len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+  if (len < 4) return; // mũi vũ khí gần như đứng yên: không có vệt
+  ctx.save();
+  ctx.translate(x, footY);
+  if (mirror) ctx.scale(-1, 1);
+  ctx.scale(scale, scale);
+  ctx.translate(-FRAME_X, -FRAME_FOOT);
+  ctx.lineCap = "round";
+  for (const [w, col, a] of [[4.2, color, 0.55], [1.8, "#ffffff", 0.9]] as const) {
+    ctx.strokeStyle = col;
+    for (let i = 1; i < pts.length; i++) {
+      const k = 1 - (i - 1) / (pts.length - 1);
+      ctx.globalAlpha = a * k;
+      ctx.lineWidth = w * k + 0.4;
+      ctx.beginPath();
+      ctx.moveTo(pts[i - 1][0], pts[i - 1][1]);
+      ctx.lineTo(pts[i][0], pts[i][1]);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
 }
 
 // ---- vũ khí ----

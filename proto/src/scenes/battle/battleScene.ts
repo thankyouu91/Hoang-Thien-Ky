@@ -9,7 +9,8 @@ import { between, ReplayIndex, type UnitTimeline } from "../../replay/timeline.t
 import type { Look, ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 import { animInfo, assignLooks, drawCharacter, resolveLook, type Anim } from "./character.ts";
-import { assignDang, dangLift, drawDang, type DangId } from "./dangDung.ts";
+import { assignDang, dangLift, drawDang, drawSwingTrail, type DangId } from "./dangDung.ts";
+import { drawDissolve, drawDust, impactFilter, ThanNguoi } from "./chuyenDong.ts";
 import { buildPhapLuan, phapLuanBeat, type PhapLuanUnit } from "./phapLuan.ts";
 import { ReplayControls } from "./controls.ts";
 import { FxLayer, type Point } from "../../hieu_ung/fx2d.ts";
@@ -71,6 +72,8 @@ export class BattleScene implements Scene {
   private dangs = new Map<number, DangId>();
   /** Pháp luân theo id (phapLuan.ts): công pháp chủ tu, cấp (ReplayUnit.level) và các lần ra chiêu */
   private luans = new Map<number, PhapLuanUnit>();
+  /** Chuyển động thân người (chuyenDong.ts): khựng, khung va chạm, bị đẩy, nhún bước, bụi, bóng lướt, tan khi ngã */
+  private than: ThanNguoi | null = null;
   /** Trục sân dọc khi màn hình đứng, ngang khi màn hình nằm */
   private vertical: boolean | null = null;
   /** Vùng nhìn và camera lúc căn sân lần cuối */
@@ -130,6 +133,7 @@ export class BattleScene implements Scene {
         this.looks = assignLooks(replay.units);
         this.dangs = assignDang(replay.units);
         this.luans = buildPhapLuan(replay.units, replay.events);
+        this.than = new ThanNguoi(this.index);
         this.vertical = null;
       },
       (e: unknown) => {
@@ -189,7 +193,7 @@ export class BattleScene implements Scene {
     // Ai vừa trúng đòn trong 3 tick gần nhất thì nháy trắng.
     const flashed = new Set(between(index.hits, t - 3, t).filter((h) => h.kind === "hit").map((h) => h.unit));
     const lunges = this.fx.lunges();
-    for (const ut of index.units) this.drawUnit(ctx, ut, t, flashed.has(ut.unit.id), lunges.get(ut.unit.id));
+    for (const ut of index.units) this.drawUnit(ctx, ut, t, flashed.has(ut.unit.id), lunges.get(ut.unit.id), life, at);
 
     if (!fx3d) this.fx.air();
     this.fx3d?.frame(
@@ -385,17 +389,26 @@ export class BattleScene implements Scene {
     ctx.globalAlpha = 1;
   }
 
-  private drawUnit(ctx: CanvasRenderingContext2D, ut: UnitTimeline, t: number, flash: boolean, lunge?: Point): void {
+  private drawUnit(
+    ctx: CanvasRenderingContext2D, ut: UnitTimeline, t: number, flash: boolean, lunge: Point | undefined,
+    life: (s: number) => number, at: (id: number, time?: number) => Point | null,
+  ): void {
     const u = ut.unit;
-    const p = this.place(ut.pos.moving(t), this.lat(u.id));
+    const lat = this.lat(u.id);
+    const p = this.place(ut.pos.moving(t), lat);
     const x = p.x + (lunge?.x ?? 0);
     const y = p.y + (lunge?.y ?? 0);
+    // Thân người (chuyenDong.ts): khựng khi trúng đòn nặng (tPose), dời vì bị đẩy và nhún bước; vòng đội, thanh máu, dấu
+    // hệ vẫn ở chỗ cũ (x, y) cho dễ đọc.
+    const mo = this.than?.motion(ut, t, life, (id, tick) => at(id, tick), (pos) => this.place(pos, lat));
+    const bodyX = x + (mo?.dx ?? 0);
+    const bodyY = y + (mo?.dy ?? 0);
     const dead = t >= ut.death;
     const style = ELEMENT_STYLE[u.element];
     const h = SIZE / 2;
     const wanted = this.looks.get(u.id);
     const look = wanted && resolveLook(this.sprites, wanted);
-    const pose = look ? this.pose(ut, t, look) : null;
+    const pose = look ? this.pose(ut, mo?.tPose ?? t, look) : null;
     const sprite = pose ? undefined : this.sprites.get(u.sprite);
     const icon = this.sprites.get("he/" + u.element);
     const tps = this.index!.replay.tps;
@@ -422,13 +435,41 @@ export class BattleScene implements Scene {
       ctx.stroke();
       const s = SIZE * 1.4;
       if (pose && look) {
-        // Nhân vật ghép có hoạt ảnh: ngã xong thì mờ dần; trúng đòn nháy nhẹ. Lúc đứng thì vẽ theo dáng (dangDung.ts).
-        ctx.globalAlpha = dead ? Math.max(0.35, 1 - (t - ut.death) / (1.5 * tps)) : flash ? 0.7 : 1;
         // Pháp luân từ Trúc Cơ: nhịp tụ lực, bung, khung chạm theo các lần ra chiêu, chỉ tính từ t (không giữ trạng thái).
         const pl = this.luans.get(u.id);
         const luan = pl ? { spec: pl.spec, beat: phapLuanBeat(pl.casts, t, tps) } : undefined;
-        const drawn = drawDang(ctx, this.sprites, look, dang, pose.anim, pose.frame, t / tps, x, y + h, s / 64, u.team === 1, style.color, u.id * 0.37, luan);
-        if (!drawn) drawCharacter(ctx, this.sprites, look, pose.anim, pose.frame, x, y + h, s / 64, u.team === 1);
+        const mirror = u.team === 1;
+        // withLuan: bóng lướt và khung va chạm không vẽ pháp luân (khỏi thành vòng trắng, mực to và đỡ tốn).
+        const paint = (px: number, py: number, withLuan: boolean) => {
+          const ok = drawDang(ctx, this.sprites, look, dang, pose.anim, pose.frame, t / tps, px, py, s / 64, mirror, style.color, u.id * 0.37, withLuan ? luan : luan && { ...luan, hidden: true });
+          if (!ok) drawCharacter(ctx, this.sprites, look, pose.anim, pose.frame, px, py, s / 64, mirror);
+        };
+        // Bụi dưới chân và bóng mờ khi lướt (đuôi lấy từ chính đường đã đi).
+        if (mo) {
+          drawDust(ctx, mo.dust, h);
+          for (const g of mo.ghosts) {
+            ctx.globalAlpha = g.alpha;
+            paint(g.x, g.y + h, false);
+          }
+        }
+        // Thân: bè ra hay nhún quanh chân; khung va chạm trắng rồi mực (thay nháy mờ); ngã thì tan dần còn 0,3.
+        // Khung va chạm cần ctx.filter; máy không có (Safari, WebView cũ) và đòn nhẹ thì giữ nháy 0,7 như cũ.
+        const filterOk = "filter" in ctx;
+        const struck = !!mo && mo.impact >= 0 && filterOk;
+        ctx.save();
+        ctx.globalAlpha = dead ? mo?.alpha ?? Math.max(0.35, 1 - (t - ut.death) / (1.5 * tps)) : flash && !struck ? 0.7 : 1;
+        if (mo && (mo.sx !== 1 || mo.sy !== 1)) {
+          ctx.translate(bodyX, bodyY + h);
+          ctx.scale(mo.sx, mo.sy);
+          ctx.translate(-bodyX, -(bodyY + h));
+        }
+        if (struck) ctx.filter = impactFilter(mo!.impact);
+        paint(bodyX, bodyY + h, !struck);
+        if (struck) ctx.filter = "none";
+        ctx.restore();
+        // Vệt mũi vũ khí khi ra chiêu cận chiến; hạt hệ khi tan.
+        if (mo?.swing !== undefined && pose.anim === "ra_chieu") drawSwingTrail(ctx, this.sprites, look, mo.swing, bodyX, bodyY + h, s / 64, mirror, style.color);
+        if (mo?.dissolve) drawDissolve(ctx, u.element, bodyX, bodyY - h * 0.2, mo.dissolve);
       } else if (u.team === 1) {
         if (flash && !dead) ctx.globalAlpha = 0.5;
         // Hình PixelLab nhìn hướng đông nam; đội B lật ngang để hai đội quay mặt vào nhau.
