@@ -306,7 +306,7 @@ export interface ParticleOpts {
   size: number;
   color: string;
   color2?: string;
-  /** 0 chấm mềm, 1 tàn lửa, 2 lá, 3 vệt mưa, 4 lửa ma, 5 tuyết. */
+  /** 0 chấm mềm, 1 tàn lửa, 2 lá, 3 vệt mưa, 4 lửa ma, 5 tuyết, 6 tia lửa (vệt dày, dùng với gravity). */
   shape?: number;
   alpha?: number;
   sway?: number;
@@ -315,6 +315,12 @@ export interface ParticleOpts {
   spin?: number;
   angle?: number;
   life?: number;
+  /** Lá, cánh hoa: rơi theo cung con lắc, nghiêng theo chiều lượn. */
+  arc?: boolean;
+  /** Văng theo cung trọng lực từ đáy vùng area (đơn vị khung/giây²); vel = (độ toả ngang, tốc độ bắn lên). */
+  gravity?: number;
+  /** Thời gian một lần văng, giây. */
+  flight?: number;
   additive?: boolean;
   depth?: number;
 }
@@ -339,6 +345,9 @@ export function particles(s: Stage, o: ParticleOpts): Points {
     uSpin: o.spin ?? 0,
     uAngle: o.angle ?? 0,
     uLife: o.life ?? 0,
+    uArc: o.arc ? 1 : 0,
+    uGrav: o.gravity ?? 0,
+    uFlight: o.flight ?? 1,
   }, o.additive ? { blending: AdditiveBlending } : {});
   // uArea là vec4, uVel là vec2: dùng mảng số để three gửi đúng kiểu.
   m.uniforms.uArea.value = [0, 0, 1, 1];

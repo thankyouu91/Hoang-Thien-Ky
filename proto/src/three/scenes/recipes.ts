@@ -186,7 +186,7 @@ export const ELEMENT_RECIPES: Record<ElementId, () => Recipe> = {
     midMist: { y0: 0.12, y1: 0.32, color: "#8fb889", color2: "#2c5232", alpha: 0.5, speed: 0.005, thresh: 0.22, soft: 0.35 },
     near: { base: 0.04, amp: 0.18, freq: 2.2, sharp: 0.3, ink: "#0a1a0f", wash: "#1c3a22", fog: "#000000", fade: 0.25, cun: 0.5, edge: 0.8,
       trees: { kind: "broad", color: "#08150c", count: 16, h: [0.12, 0.2] } },
-    particles: [{ count: 60, area: [-0.5, -0.05, 0.5, 1.05], vel: [0.03, -0.07], size: 0.022, color: "#6fbf5a", color2: "#c9b04a", shape: 2, sway: 0.05, swayF: 1, spin: 1, alpha: 0.9 }],
+    particles: [{ count: 60, area: [-0.5, -0.05, 0.5, 1.05], vel: [0.03, -0.07], size: 0.022, color: "#6fbf5a", color2: "#c9b04a", shape: 2, sway: 0.05, swayF: 1, arc: true, alpha: 0.9 }],
     vignette: { color: "#030805", amt: 0.45 },
   }),
 
@@ -209,7 +209,7 @@ export const ELEMENT_RECIPES: Record<ElementId, () => Recipe> = {
     },
     particles: [
       { count: 34, area: [-0.5, 0.15, 0.5, 0.95], vel: [0.32, 0.01], size: 0.07, color: "#e6fff8", shape: 3, angle: 1.5708, sway: 0.05, swayF: 2.2, alpha: 0.4, life: 0.3, additive: true },
-      { count: 30, area: [-0.5, 0.05, 0.5, 0.7], vel: [0.16, 0.015], size: 0.014, color: "#f2fff9", color2: "#f5c6d6", shape: 2, sway: 0.04, swayF: 1.6, spin: 1.2, alpha: 0.85 },
+      { count: 30, area: [-0.5, 0.05, 0.5, 0.7], vel: [0.16, 0.015], size: 0.014, color: "#f2fff9", color2: "#f5c6d6", shape: 2, sway: 0.04, swayF: 1.6, arc: true, alpha: 0.85 },
     ],
     vignette: { color: "#03100e", amt: 0.4 },
   }),

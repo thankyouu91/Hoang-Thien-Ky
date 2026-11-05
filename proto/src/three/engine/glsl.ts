@@ -20,6 +20,38 @@ float hash12(vec2 p) {
 }
 `;
 
+/**
+ * Nhịp chuyển động của vật cảnh, theo luật của người dùng (proto/src/hieu_ung/DONG_TAC.md): không nội suy tuyến tính
+ * cho chuyển động chính; gió giật có tụ lực (lùi nhẹ), vụt (bứt nhanh), lắng (vượt rồi về). Bốn hàm easing cùng dáng
+ * với ease.* trong hieu_ung/nhip.ts. Mọi thứ là hàm của t nên tua tới lui ra cùng hình.
+ */
+export const MOTION = /* glsl */ `
+float easeInOut(float k) {
+  k = clamp(k, 0.0, 1.0);
+  return k < 0.5 ? 4.0 * k * k * k : 1.0 - pow(-2.0 * k + 2.0, 3.0) / 2.0;
+}
+float easeWhip(float k) {
+  k = clamp(k, 0.0, 1.0);
+  return k >= 1.0 ? 1.0 : 1.0 - pow(2.0, -10.0 * k);
+}
+float easeSettle(float k) {
+  k = clamp(k, 0.0, 1.0) - 1.0;
+  return 1.0 + 2.7 * k * k * k + 1.7 * k * k;
+}
+// Một đợt gió giật, ph 0..1: lùi nhẹ ngược gió (tụ lực), bật theo gió (vụt), giữ và yếu dần, về vượt qua rồi đứng (lắng).
+float gust(float ph) {
+  if (ph < 0.12) return -0.22 * easeInOut(ph / 0.12);
+  if (ph < 0.26) return mix(-0.22, 1.0, easeWhip((ph - 0.12) / 0.14));
+  if (ph < 0.55) return 1.0 - 0.15 * easeInOut((ph - 0.26) / 0.29);
+  return 0.85 * (1.0 - easeSettle((ph - 0.55) / 0.45));
+}
+// Gió tại x (đơn vị khung chia uSpan) lúc t: lay nền nhẹ cộng đợt giật lan dọc khung (chỗ xa tới trễ hơn, chu kỳ 5,5 s).
+float wind(float x, float t) {
+  float ph = fract(t / 5.5 - x * 0.3);
+  return sin(t * 1.3 + x * 3.0) * 0.16 + sin(t * 0.7 + x * 1.1) * 0.1 + gust(ph);
+}
+`;
+
 /** Vertex cho mọi mảnh phẳng: vP là toạ độ trong vật, nên dời mảnh (thị sai) thì hình trôi theo. */
 export const QUAD_VERT = /* glsl */ `
 varying vec2 vP;
@@ -306,14 +338,21 @@ uniform float uTwinkle;
 uniform float uSpin;
 uniform float uAngle;
 uniform float uLife;
+uniform float uArc;
+uniform float uGrav;
+uniform float uFlight;
 varying vec4 vS;
 varying float vA;
 varying float vRot;
+varying float vK;
 void main() {
   vec2 span = uArea.zw - uArea.xy;
   float sp = mix(0.55, 1.45, aSeed.z);
   vec2 p = aSeed.xy * span + uVel * sp * uTime;
-  p.x += sin(uTime * uSwayF * (0.6 + aSeed.w) + aSeed.z * 6.2831) * uSway;
+  float psi = uTime * uSwayF * (0.6 + aSeed.w) + aSeed.z * 6.2831;
+  p.x += sin(psi) * uSway;
+  // lá, cánh hoa rơi theo cung con lắc: nâng nhẹ ở hai đầu cung, rơi nhanh nhất ở giữa (không lượn ngang phẳng)
+  if (uArc > 0.0) p.y += cos(2.0 * psi) * uSway * 0.35;
   vec2 f = mod(p, span) / span;
   vec2 pos = uArea.xy + f * span;
   float edge = smoothstep(0.0, 0.07, f.y) * smoothstep(1.0, 0.93, f.y) * smoothstep(0.0, 0.03, f.x) * smoothstep(1.0, 0.97, f.x);
@@ -326,8 +365,23 @@ void main() {
   vA = edge * mix(1.0, tw, uTwinkle) * life;
   vS = aSeed;
   vRot = uAngle + (aSeed.z * 6.2831 + uTime * (aSeed.w - 0.5) * 3.0) * uSpin;
+  // lá nghiêng theo chiều lượn (đổi chiều ở hai đầu cung)
+  if (uArc > 0.0) vRot = aSeed.z * 6.2831 + cos(psi) * 0.9;
+  vK = 1.0;
+  if (uGrav > 0.0) {
+    // Văng theo cung trọng lực từ đáy vùng: lên rồi rơi, kéo dài dọc vận tốc (smear), tắt ở 45% cuối đời.
+    float T = uFlight * mix(0.75, 1.25, aSeed.w);
+    float ph = fract(uTime / T + aSeed.y);
+    float tt = ph * T;
+    vec2 v0 = vec2(uVel.x * (aSeed.z * 2.0 - 1.0), uVel.y * mix(0.75, 1.25, aSeed.x));
+    vec2 vel = v0 + vec2(0.0, -uGrav * tt);
+    pos = vec2(mix(uArea.x, uArea.z, aSeed.x), uArea.y) + v0 * tt + vec2(0.0, -0.5 * uGrav * tt * tt);
+    vRot = atan(vel.x, -vel.y);
+    vK = clamp(0.8 + length(vel) * 1.6, 0.8, 2.6);
+    vA = smoothstep(0.0, 0.04, ph) * (1.0 - smoothstep(0.55, 1.0, ph)) * mix(1.0, tw, uTwinkle);
+  }
   gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 0.0, 1.0);
-  gl_PointSize = max(1.0, uSize * uPx * mix(0.55, 1.45, aSeed.w));
+  gl_PointSize = max(1.0, uSize * uPx * mix(0.55, 1.45, aSeed.w) * vK);
 }
 `;
 
@@ -339,6 +393,7 @@ uniform float uAlpha;
 varying vec4 vS;
 varying float vA;
 varying float vRot;
+varying float vK;
 void main() {
   vec2 c = gl_PointCoord - 0.5;
   float cs = cos(vRot);
@@ -360,7 +415,8 @@ void main() {
     a = 1.0 - smoothstep(0.4, 0.47, d);
     col *= 0.8 + 0.35 * (1.0 - smoothstep(0.0, 0.035, abs(r.x)));
   } else if (uShape < 3.5) {
-    a = (1.0 - smoothstep(0.015, 0.05, abs(r.x))) * smoothstep(0.5, 0.15, abs(r.y));
+    // vệt: hạt kéo dài theo tốc độ (vK) thì bề ngang co lại để giữ diện tích
+    a = (1.0 - smoothstep(0.015, 0.05, abs(r.x) * vK)) * smoothstep(0.5, 0.15, abs(r.y));
   } else if (uShape < 4.5) {
     vec2 q = c;
     q.y += 0.12;
@@ -368,11 +424,14 @@ void main() {
     float d = length(q * vec2(1.7, 1.0));
     a = smoothstep(0.32, 0.05, d);
     col = mix(col, vec3(0.92, 0.98, 1.0), smoothstep(0.14, 0.0, length(c + vec2(0.0, 0.1))));
-  } else {
+  } else if (uShape < 5.5) {
     float d = length(c);
     a = smoothstep(0.5, 0.2, d);
     float arms = abs(cos(atan(c.y, c.x) * 3.0));
     a = max(a * 0.55, (1.0 - smoothstep(0.03, 0.07, abs(r.x) * arms + abs(r.y) * (1.0 - arms) * 0.2)) * smoothstep(0.5, 0.3, d));
+  } else {
+    // tia lửa: vệt dày kéo theo vận tốc, nhọn hai đầu; nhanh thì dài ra, mảnh lại (giữ diện tích)
+    a = (1.0 - smoothstep(0.05, 0.12, abs(r.x) * vK)) * smoothstep(0.5, 0.05, abs(r.y));
   }
   a *= vA * uAlpha;
   if (a < 0.004) discard;
@@ -382,14 +441,31 @@ void main() {
 
 /** Bóng đen phẳng (cây, công trình, kiếm): mực đậm, dưới chân nhạt vào sương. */
 export const SILHOUETTE_VERT = /* glsl */ `
+uniform float uTime;
+uniform float uSpan;
+uniform float uSway;
+uniform float uSwayLag;
 varying vec2 vP;
 varying vec2 vW;
+` + MOTION + /* glsl */ `
 void main() {
   vP = position.xy;
   vec4 p = vec4(position, 1.0);
+  mat4 inst = mat4(1.0);
   #ifdef USE_INSTANCING
-  p = instanceMatrix * p;
+  inst = instanceMatrix;
   #endif
+  if (uSway > 0.0) {
+    // Lay theo cung quanh gốc (chân bóng ở y = 0): góc tăng dần lên ngọn, ngọn trễ nhịp so với gốc (overlap).
+    mat4 m = modelMatrix * inst;
+    vec4 base = m * vec4(0.0, 0.0, 0.0, 1.0);
+    float y = max(p.y, 0.0);
+    float a = -uSway * wind(base.x / uSpan, uTime - y * uSwayLag) * y * sign(m[0][0]);
+    float c = cos(a);
+    float s = sin(a);
+    p.xy = vec2(p.x * c - p.y * s, p.x * s + p.y * c);
+  }
+  p = inst * p;
   vec4 w = modelMatrix * p;
   vW = w.xy;
   gl_Position = projectionMatrix * viewMatrix * w;

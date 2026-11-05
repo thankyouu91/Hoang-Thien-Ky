@@ -330,6 +330,10 @@ export interface PlaceOpts {
   fadeFrom?: number;
   fadeTo?: number;
   flip?: boolean;
+  /** Lay theo gió (góc ở ngọn cho mỗi đơn vị chiều cao bóng, radian); 0 là đứng yên. */
+  sway?: number;
+  /** Ngọn trễ nhịp so với gốc: giây cho mỗi đơn vị chiều cao bóng. */
+  swayLag?: number;
 }
 
 export interface Placed {
@@ -347,12 +351,14 @@ export function place(s: Stage, b: Built, o: PlaceOpts): Placed {
     uFadeY1: o.fadeTo ?? 1,
     uSheen: o.sheen ?? 0,
     uOpacity: 1,
+    uSway: o.sway ?? 0,
+    uSwayLag: o.swayLag ?? 0.35,
   }, { side: DoubleSide });
   const body = s.add(new Mesh(new ShapeGeometry(b.body, 6), bodyMat), o.depth ?? 0.5);
   body.scale.set(sx, o.scale, 1);
   let glow: Mesh | null = null;
   if (b.glow.length && o.glow) {
-    const gm = s.material(G.SILHOUETTE_VERT, G.GLOW_FRAG, { uColor: col(o.glow), uAlpha: o.glowAlpha ?? 1, uFlicker: o.flicker ?? 0.5 }, { side: DoubleSide });
+    const gm = s.material(G.SILHOUETTE_VERT, G.GLOW_FRAG, { uColor: col(o.glow), uAlpha: o.glowAlpha ?? 1, uFlicker: o.flicker ?? 0.5, uSway: o.sway ?? 0, uSwayLag: o.swayLag ?? 0.35 }, { side: DoubleSide });
     glow = s.add(new Mesh(new ShapeGeometry(b.glow, 6), gm), o.depth ?? 0.5);
     glow.scale.set(sx, o.scale, 1);
   }
@@ -381,6 +387,8 @@ export function forest(s: Stage, variants: Built[], spots: () => { x: number; y:
       uFadeY1: o.fadeTo ?? 1,
       uSheen: o.sheen ?? 0,
       uOpacity: 1,
+      uSway: o.sway ?? 0,
+      uSwayLag: o.swayLag ?? 0.35,
     }, { side: DoubleSide });
     const max = 64;
     const mesh = s.add(new InstancedMesh(geo, mat, max), o.depth ?? 0.5);
@@ -412,7 +420,7 @@ export function portal(s: Stage, o: { x: number; y: number; r: number; color: st
 
 // ---- cỏ gợn gió ----------------------------------------------------------------------------------------------------
 
-const GRASS_VERT = G.NOISE + /* glsl */ `
+const GRASS_VERT = G.NOISE + G.MOTION + /* glsl */ `
 attribute vec4 aOff;
 attribute float aTint;
 uniform float uWind;
@@ -422,14 +430,14 @@ void main() {
   float v = position.y;
   float h = aOff.z;
   float xs = aOff.x / uSpan;
-  float wave = sin(xs * 7.0 - uTime * 1.6 + aOff.w) * 0.5 + sin(xs * 2.1 - uTime * 0.8) * 0.5;
-  float gust = smoothstep(0.35, 0.9, nR(vec2(xs * 0.18 - uTime * 0.04, 0.73)));
-  float bend = (wave * 0.35 + gust * 1.3 + 0.25) * uWind;
-  vec2 q = vec2(position.x * h * 0.09, v * h);
-  q.x += bend * v * v * h * 0.55;
-  q.y -= abs(bend) * v * v * h * 0.18;
-  vec4 w = modelMatrix * vec4(aOff.x + q.x, aOff.y + q.y, 0.0, 1.0);
-  gl_Position = projectionMatrix * viewMatrix * w;
+  // Gió giật lan dọc khung (tụ lực, vụt, lắng); ngọn trễ nhịp so với gốc (overlap).
+  float w = wind(xs + aOff.w * 0.015, uTime - v * 0.3) * uWind;
+  // Ngọn đi theo cung quanh gốc: góc uốn tăng dần lên ngọn, chiều dài lá giữ nguyên (không trượt ngang).
+  float ang = (w * 0.55 + 0.1 * uWind) * v;
+  vec2 dir = vec2(sin(ang), cos(ang));
+  vec2 q = dir * v * h + vec2(dir.y, -dir.x) * position.x * h * 0.09;
+  vec4 w4 = modelMatrix * vec4(aOff.x + q.x, aOff.y + q.y, 0.0, 1.0);
+  gl_Position = projectionMatrix * viewMatrix * w4;
   vV = v;
   vT = aTint;
 }
@@ -616,10 +624,12 @@ export function lightning(s: Stage, o: { color: string; glow: string; top: numbe
     }
     const age = t - strike;
     let a = 0;
-    if (age >= 0 && age < 0.45) {
-      // nháy 3 nhịp, tắt dần
-      const pulse = age < 0.06 ? 1 : age < 0.1 ? 0.25 : age < 0.18 ? 0.9 : age < 0.24 ? 0.3 : Math.max(0, 0.7 - (age - 0.24) * 3.3);
-      a = pulse;
+    if (age >= 0 && age < 0.5) {
+      // Khung va chạm: 2 khung (30 khung/giây) sáng đủ, một khung tắt, một nhịp giữ, rồi tắt dần có easing
+      // (không giảm tuyến tính).
+      const f = age * 30;
+      const k = Math.min(1, Math.max(0, (age - 0.2) / 0.3));
+      a = f < 2 ? 1 : f < 3 ? 0.2 : f < 6 ? 0.9 : 0.7 * (1 - k * k * (3 - 2 * k));
     }
     for (const g of [glow, core]) (g.m.uniforms.uAlpha as { value: number }).value = a * g.alpha;
     s.u.uFlash.value = a;

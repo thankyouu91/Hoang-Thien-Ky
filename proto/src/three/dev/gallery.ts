@@ -5,6 +5,7 @@
 //   #san                 renderArena: 3 sân, ngang và đứng, có chấm người mẫu giữa hai lớp
 //   #tran/<sân>          createArenaBackdrop như màn Trận: camera kéo, zoom chậm, vẽ nền, chấm người, lớp trước mỗi khung
 //   #tai_nang            8 nền bàn ô đặt đồ theo tài năng, có khung bàn ô mẫu 70% ở giữa
+//   #nhip/<cảnh>         duyệt chuyển động: 12 ảnh trải đều một chu kỳ gió 5,5 s (tụ lực, vụt, lắng), mỗi nhịp một ảnh
 //   #do                  đo thời gian vẽ một khung của mọi cảnh động ở 375 × 812, dpr 1,5 (mức tối đa của chế độ động)
 import { ELEMENT_IDS } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
@@ -49,7 +50,7 @@ document.body.innerHTML = `
   <div id="stage"><div id="title">Khai Tông Lập Phái</div><div id="card"><h1>Động phủ</h1><p>Chữ trên thẻ giấy phải đọc được trên mọi cảnh nền.</p></div></div>
   <div id="grid" hidden></div>
   <div id="bar">
-    <button data-mode="dong">Động</button><button data-mode="nuong">Nướng</button><button data-mode="nen">Ảnh nền</button><button data-mode="san">Sân đấu</button><button data-mode="tran">Trận</button><button data-mode="tai_nang">Tài năng</button><button data-mode="do">Đo</button>
+    <button data-mode="dong">Động</button><button data-mode="nuong">Nướng</button><button data-mode="nen">Ảnh nền</button><button data-mode="san">Sân đấu</button><button data-mode="tran">Trận</button><button data-mode="tai_nang">Tài năng</button><button data-mode="nhip">Nhịp</button><button data-mode="do">Đo</button>
     <select id="scene">${SCENES.map((s) => `<option value="${s.id}">${s.name}</option>`).join("")}</select>
     <select id="tone"><option value="giay">Giấy (kem)</option><option value="chang_vang">Chạng vạng</option></select>
     <label><input type="checkbox" id="lk"> linh khí</label>
@@ -152,6 +153,24 @@ async function render(): Promise<void> {
         out.textContent += `${(sc.name + (lkOn ? " + linh khí" : "")).padEnd(24)} ${r ? `${r.avg.toFixed(2)} ms (JS ${r.cpu.toFixed(2)})` : "không có WebGL"}
 `;
       }
+    }
+  } else if (mode === "nhip") {
+    grid.insertAdjacentHTML("beforeend", `<h2>${scene}: 12 nhịp trên một chu kỳ gió (t = 20 … 25,5 s)</h2>`);
+    const box = document.createElement("div");
+    box.className = "tiles";
+    box.style.gridTemplateColumns = "repeat(4, 1fr)";
+    grid.append(box);
+    for (let i = 0; i < 12; i++) {
+      const t = 20 + (i * 5.5) / 12;
+      const tile = document.createElement("div");
+      tile.innerHTML = `<div style="font-size:11px">t = ${t.toFixed(2)} s, pha ${((t / 5.5) % 1).toFixed(2)}</div>`;
+      box.append(tile);
+      void bakeScene(scene as SceneName, params(), 180, 240, 1.5, t).then((cv) => {
+        if (!cv) return;
+        cv.style.width = "100%";
+        cv.style.display = "block";
+        tile.append(cv);
+      });
     }
   } else if (mode === "tai_nang") {
     grid.style.background = "#f6efdf";

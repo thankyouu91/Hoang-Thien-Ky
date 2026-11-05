@@ -66,12 +66,12 @@ export function renderBackground(kind: BgKind, element: ElementId, seed: number 
   return p;
 }
 
-/** Vẽ một cảnh ra canvas cỡ w × h px CSS (nhân dpr). null khi không có WebGL. */
-export async function bakeScene(name: SceneName, params: SceneParams, w: number, h: number, dpr = deviceDpr(DPR_CAP.bake)): Promise<HTMLCanvasElement | null> {
+/** Vẽ một cảnh ra canvas cỡ w × h px CSS (nhân dpr), ở thời điểm t (giây; mặc định khung tĩnh). null khi không có WebGL. */
+export async function bakeScene(name: SceneName, params: SceneParams, w: number, h: number, dpr = deviceDpr(DPR_CAP.bake), t?: number): Promise<HTMLCanvasElement | null> {
   if (!hasWebGL()) return null;
   try {
     const e = await load();
-    return await enqueue(() => e.getHost().bake(e.sceneFactory(name, params), w, h, dpr, { transparent: name === "linh_khi" || params.sky === false }));
+    return await enqueue(() => e.getHost().bake(e.sceneFactory(name, params), w, h, dpr, { transparent: name === "linh_khi" || params.sky === false, t }));
   } catch (err) {
     console.warn("bakeScene lỗi", name, err);
     return null;

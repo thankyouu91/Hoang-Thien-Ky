@@ -14,7 +14,11 @@ export interface TreeRow {
   count: number;
   /** Chiều cao cây theo đơn vị khung. */
   h: [number, number];
+  /** Lay theo gió (radian ở ngọn); mặc định theo loại cây, cây khô gần như đứng yên. */
+  sway?: number;
 }
+
+const TREE_SWAY: Record<TreeKind, number> = { pine: 0.05, broad: 0.07, dead: 0.025 };
 
 export type LayerOpts = Omit<RidgeOpts, "depth"> & { trees?: TreeRow };
 
@@ -79,7 +83,7 @@ function trees(s: Stage, layer: Mesh & { shape: RidgeShape }, row: TreeRow, dept
         return { x, y: ridgeAt(s, layer.shape, x) - 0.012, h: row.h[0] + (row.h[1] - row.h[0]) * b, flip };
       });
     },
-    { color: row.color, color2: row.color2, depth, fadeFrom: layer.shape.base, fadeTo: layer.shape.base + layer.shape.amp },
+    { color: row.color, color2: row.color2, depth, fadeFrom: layer.shape.base, fadeTo: layer.shape.base + layer.shape.amp, sway: row.sway ?? TREE_SWAY[row.kind], swayLag: 0.4 },
   );
 }
 

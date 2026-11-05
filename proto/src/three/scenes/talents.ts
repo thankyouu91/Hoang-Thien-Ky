@@ -161,7 +161,7 @@ function warm(s: Stage, fx: number, y: number, r: number, color: string, alpha: 
 }
 
 /** Đặt bóng tại (fx theo nửa bề rộng khung, y). */
-function at(s: Stage, b: Built, fx: number, y: number, o: { color: string; color2?: string; glow?: string; scale: number; rot?: number; flip?: boolean; depth?: number; fadeFrom?: number; fadeTo?: number }): void {
+function at(s: Stage, b: Built, fx: number, y: number, o: { color: string; color2?: string; glow?: string; scale: number; rot?: number; flip?: boolean; depth?: number; fadeFrom?: number; fadeTo?: number; sway?: number; swayLag?: number }): void {
   const p = place(s, b, { ...o, depth: o.depth ?? 0.6 });
   s.onResize((a) => p.at((fx * a) / 2, y, o.rot ?? 0));
 }
@@ -326,13 +326,14 @@ const TALENT_SCENES: Record<TalentId, Build> = {
       disc: { x: 0.62, y: 0.84, r: 0.075, color: "#fdfcf7", glow: "#a9a497", glowSize: 0.9, glowAmt: 0.75, tex: 0.15 },
       far: ridgeK(t, 0.22, 0.06, { base: 0.18, amp: 0.2, freq: 1.4, sharp: 0.5, fade: 0.15, dissolve: 0.7, edge: 0.2 }),
       nearMist: whiteMist(t, -0.04, 0.2, 0.7),
-      particles: [{ count: 18, area: [-0.5, 0, 0.5, 1], vel: [0.02, -0.04], size: 0.016, color: ink(t, 0.6), shape: 2, sway: 0.04, spin: 1, alpha: 0.7 }],
+      particles: [{ count: 18, area: [-0.5, 0, 0.5, 1], vel: [0.02, -0.04], size: 0.016, color: ink(t, 0.6), shape: 2, sway: 0.04, swayF: 0.9, arc: true, alpha: 0.7 }],
     });
     const stalks: [number, number, number][] = [
       [-1.02, 1.15, 0.55], [-0.92, 1.05, 0.8], [-0.82, 1.2, 0.95], [-0.74, 0.9, 0.5],
       [0.76, 1.1, 0.6], [0.86, 1.25, 0.95], [0.97, 1.0, 0.75],
     ];
-    for (const [fx, h, k] of stalks) at(s, bamboo(s.rand, h), fx, -0.02, { color: ink(t, k), scale: 1, depth: 0.5 + k * 0.4 });
+    // trúc lay theo gió, ngọn trễ nhịp so với gốc; cây đậm (gần) lay nhiều hơn cây nhạt (xa)
+    for (const [fx, h, k] of stalks) at(s, bamboo(s.rand, h), fx, -0.02, { color: ink(t, k), scale: 1, depth: 0.5 + k * 0.4, sway: 0.02 + k * 0.025, swayLag: 0.45 });
   },
 
   // Lò rèn đỏ lửa: xưởng rèn mép trái, quầng lửa đỏ, tia lửa bắn, đe sắt góc phải.
@@ -344,7 +345,8 @@ const TALENT_SCENES: Record<TalentId, Build> = {
       midMist: whiteMist(t, 0.2, 0.42, 0.6),
       particles: [
         { count: 24, area: [-0.5, 0.35, -0.25, 1.05], vel: [0.01, 0.05], size: 0.12, color: ink(t, 0.45), color2: ink(t, 0.25), sway: 0.05, swayF: 0.35, alpha: 0.25, life: 0.08 },
-        { count: 40, area: [-0.42, 0.05, -0.16, 0.6], vel: [0.03, 0.12], size: 0.014, color: "#c8321e", color2: "#e8822a", shape: 1, sway: 0.03, twinkle: 0.7, alpha: 1 },
+        // tia lửa văng khỏi lò theo cung trọng lực, kéo dài dọc vận tốc
+        { count: 34, area: [-0.42, 0.1, -0.3, 0.1], vel: [0.14, 0.8], size: 0.03, color: "#c8321e", color2: "#e0702a", shape: 6, gravity: 1.2, flight: 1.3, twinkle: 0.3, alpha: 1 },
       ],
     });
     warm(s, -0.72, 0.1, 0.16, "#d8481e", 0.45);
@@ -367,7 +369,7 @@ const TALENT_SCENES: Record<TalentId, Build> = {
       midMist: whiteMist(t, 0.12, 0.34, 0.7),
       particles: [
         { count: 26, area: [-0.5, 0.0, 0.5, 0.2], vel: [0, 0], size: 0.009, color: "#c8506a", color2: "#d8a83a", twinkle: 0.4, alpha: 0.85 },
-        { count: 8, area: [-0.5, 0.1, 0.5, 0.6], vel: [0.03, 0.01], size: 0.014, color: ink(t, 0.5), shape: 2, sway: 0.05, swayF: 3, spin: 2, alpha: 0.7 },
+        { count: 8, area: [-0.5, 0.1, 0.5, 0.6], vel: [0.03, 0.01], size: 0.014, color: ink(t, 0.5), shape: 2, sway: 0.05, swayF: 3, arc: true, alpha: 0.7 },
       ],
     });
     at(s, terraces(s.rand), -0.86, 0.02, { color: ink(t, 0.6), scale: 0.32 });
