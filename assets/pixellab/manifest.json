@@ -7899,41 +7899,33 @@
     },
     {
       "file": "cong_trinh/cuc_am_huyen_am_dong/tang_kinh_cac.png",
-      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh, seed và bảng màu hệ.",
-      "tool": "create_image_pixflux",
+      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
       "params": {
         "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: a tall slender five-storey library pagoda of black stone with stacked curved dark roofs, shelves of scroll books visible through windows lit by cold pale blue light.",
         "width": 320,
         "height": 192,
         "no_background": false,
-        "view": "side",
-        "detail": "highly detailed",
-        "shading": "medium shading",
-        "outline": "selective outline",
-        "seed": 7,
-        "color_image": "bang_mau/cuc_am.png"
+        "seed": 7
       },
       "created": "2026-11-03",
-      "pixellab_id": "b07283a5-04ed-449a-80f1-17a1cefb44bf"
+      "pixellab_id": "b1fd65ff-3f6c-46ac-92ad-1b0adf3a7558",
+      "api": "REST v2 generate-image-v2"
     },
     {
       "file": "cong_trinh/cuc_han_bang_cung/tang_kinh_cac.png",
-      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) của mô hình tông môn Băng Cung (cuc_han_bang_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh, seed và bảng màu hệ.",
-      "tool": "create_image_pixflux",
+      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) của mô hình tông môn Băng Cung (cuc_han_bang_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
       "params": {
         "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora. A xianxia cultivation sect called Ice Palace, palaces of translucent blue ice crystal on snowy mountains, frost-covered pine trees, gently falling snow. No people, no text, no UI. Main subject in the center foreground: a tall slender five-storey library pagoda of blue ice crystal with stacked curved snow-covered roofs, shelves of scroll books visible through softly glowing windows.",
         "width": 320,
         "height": 192,
         "no_background": false,
-        "view": "side",
-        "detail": "highly detailed",
-        "shading": "medium shading",
-        "outline": "selective outline",
-        "seed": 7,
-        "color_image": "bang_mau/cuc_han.png"
+        "seed": 7
       },
       "created": "2026-11-03",
-      "pixellab_id": "4e9f7390-b750-434d-b5ef-63fc6c22b592"
+      "pixellab_id": "9fe807d6-62ce-47d0-bf4f-0c7938b5442f",
+      "api": "REST v2 generate-image-v2"
     },
     {
       "file": "diem_nen/loi_dinh_coc/mo_linh_thach.png",
@@ -39426,6 +39418,336 @@
       },
       "created": "2026-11-05",
       "pixellab_id": "6318ba08-ee7e-41df-90e3-449b0229c5db",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_duong_thai_duong_cung/luyen_dan_phong.png",
+      "description": "Hình nền công trình Luyện Đan Phòng (luyen_dan_phong) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: an alchemy house beside a big bronze three-legged pill cauldron, fire burning beneath the cauldron, thick fragrant smoke rising into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "4a8116b1-9399-4e02-9eb6-b30bb254d527",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_duong_thai_duong_cung/ho_son_dai_tran.png",
+      "description": "Hình nền công trình Hộ Sơn Đại Trận (ho_son_dai_tran) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: a huge translucent glowing protective barrier dome covering the sect buildings on the mountain, a ring of glowing rune array circles and hexagon patterns on the ground around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "c2cdaef4-5b2c-44b2-bca6-2b9f3fcc3c17",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_duong_thai_duong_cung/dien_vo_truong.png",
+      "description": "Hình nền công trình Diễn Võ Trường (dien_vo_truong) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: a large open stone martial arts training plaza, rows of wooden training dummies, weapon racks with spears and swords, tall banners on poles.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "84183b47-9ff0-4cd6-87c1-607b21096f6a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_duong_thai_duong_cung/luyen_khi_cac.png",
+      "description": "Hình nền công trình Luyện Khí Các (luyen_khi_cac) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: a blacksmith forge workshop with a tall stone chimney, a glowing furnace, a large anvil outside and bright sparks flying.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "8dc8987f-5432-4169-90ea-ef311fe0663e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_duong_thai_duong_cung/bao_kho.png",
+      "description": "Hình nền công trình Bảo Khố (bao_kho) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: a fortified stone treasury vault built into the rock, a heavy round bronze vault door with glowing runes, wooden treasure chests stacked outside.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "9db8cbac-238d-4010-b54e-b09e4f7c68a8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_duong_thai_duong_cung/truyen_tong_tran.png",
+      "description": "Hình nền công trình Truyền Tống Trận (truyen_tong_tran) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: a circular stone teleportation array platform surrounded by tall stone pillars, glowing runes on the floor, a bright beam of light shooting straight up into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "b8962033-6b5e-40c8-b22a-b8b91e9258d5",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_duong_thai_duong_cung/linh_duoc_vien.png",
+      "description": "Hình nền công trình Linh Dược Viên (linh_duoc_vien) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: terraced fields of softly glowing spirit herbs on the hillside, a small clear spring pond, a small wooden herb hut.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "00b132f4-dcd5-4c0a-b9f3-eac1de7471f1",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_duong_thai_duong_cung/thuong_hoi.png",
+      "description": "Hình nền công trình Thương hội (thuong_hoi) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: a small trading guild market street with wooden stalls under colorful cloth awnings and strings of glowing paper lanterns.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "4345b083-888d-4c34-935a-23f58c8716bf",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_duong_thai_duong_cung/phi_thang_dai.png",
+      "description": "Hình nền công trình Phi Thăng Đài (phi_thang_dai) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: a huge man-made ascension altar, a tall stepped stone pyramid platform with long straight stairways and carved stone railings, a small pavilion on its flat top, a pillar of bright light rising from the top into the clouds, glowing rings of light in the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "d9597e89-2621-4a9d-8a97-7e23a59642fc",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_am_huyen_am_dong/ho_son_dai_tran.png",
+      "description": "Hình nền công trình Hộ Sơn Đại Trận (ho_son_dai_tran) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: a huge translucent glowing protective barrier dome covering the sect buildings on the mountain, a ring of glowing rune array circles and hexagon patterns on the ground around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "ab8954fb-b11d-4b70-987c-23d29ce575d0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_am_huyen_am_dong/dien_vo_truong.png",
+      "description": "Hình nền công trình Diễn Võ Trường (dien_vo_truong) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: a large open stone martial arts training plaza, rows of wooden training dummies, weapon racks with spears and swords, tall banners on poles.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "e5ba77f8-6002-4462-af35-42ffff4c1957",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_am_huyen_am_dong/luyen_dan_phong.png",
+      "description": "Hình nền công trình Luyện Đan Phòng (luyen_dan_phong) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: an alchemy house beside a big bronze three-legged pill cauldron, fire burning beneath the cauldron, thick fragrant smoke rising into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "e0a5bcab-2182-4e74-af6b-f85ec9c45534",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_am_huyen_am_dong/luyen_khi_cac.png",
+      "description": "Hình nền công trình Luyện Khí Các (luyen_khi_cac) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: a blacksmith forge workshop with a tall stone chimney, a glowing furnace, a large anvil outside and bright sparks flying.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "709d2eed-9f16-4370-8b61-a45091298c3f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_am_huyen_am_dong/bao_kho.png",
+      "description": "Hình nền công trình Bảo Khố (bao_kho) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: a fortified stone treasury vault built into the rock, a heavy round bronze vault door with glowing runes, wooden treasure chests stacked outside.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "9a0710c6-21a8-4e9f-8152-8c45f85f211a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_am_huyen_am_dong/truyen_tong_tran.png",
+      "description": "Hình nền công trình Truyền Tống Trận (truyen_tong_tran) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: a circular stone teleportation array platform surrounded by tall stone pillars, glowing runes on the floor, a bright beam of light shooting straight up into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "eb694ca1-8752-4c54-be57-ac9ac3ddda1f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_am_huyen_am_dong/thuong_hoi.png",
+      "description": "Hình nền công trình Thương hội (thuong_hoi) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: a small trading guild market street with wooden stalls under colorful cloth awnings and strings of glowing paper lanterns.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "cceb9e93-83eb-4aaf-a21c-142ea17e9f40",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_am_huyen_am_dong/linh_duoc_vien.png",
+      "description": "Hình nền công trình Linh Dược Viên (linh_duoc_vien) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: terraced fields of softly glowing spirit herbs on the hillside, a small clear spring pond, a small wooden herb hut.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "c1b10642-5ea6-4789-a169-69903eee5b09",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_am_huyen_am_dong/phi_thang_dai.png",
+      "description": "Hình nền công trình Phi Thăng Đài (phi_thang_dai) của mô hình tông môn Huyền Âm Động (cuc_am_huyen_am_dong), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night. A xianxia cultivation sect called Profound Yin Cave, halls built inside an enormous dark cavern with black stone pillars and drifting violet mist, a thin crescent moon visible through a wide opening in the cave roof. No people, no text, no UI. Main subject in the center foreground: a huge man-made ascension altar, a tall stepped stone pyramid platform with long straight stairways and carved stone railings, a small pavilion on its flat top, a pillar of bright light rising from the top into the clouds, glowing rings of light in the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "fed6787e-bfc4-4195-9aae-31ef4578bdce",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_han_bang_cung/ho_son_dai_tran.png",
+      "description": "Hình nền công trình Hộ Sơn Đại Trận (ho_son_dai_tran) của mô hình tông môn Băng Cung (cuc_han_bang_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora. A xianxia cultivation sect called Ice Palace, palaces of translucent blue ice crystal on snowy mountains, frost-covered pine trees, gently falling snow. No people, no text, no UI. Main subject in the center foreground: a huge translucent glowing protective barrier dome covering the sect buildings on the mountain, a ring of glowing rune array circles and hexagon patterns on the ground around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "4abcc741-8370-4318-b73c-30846fa6654e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_han_bang_cung/dien_vo_truong.png",
+      "description": "Hình nền công trình Diễn Võ Trường (dien_vo_truong) của mô hình tông môn Băng Cung (cuc_han_bang_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora. A xianxia cultivation sect called Ice Palace, palaces of translucent blue ice crystal on snowy mountains, frost-covered pine trees, gently falling snow. No people, no text, no UI. Main subject in the center foreground: a large open stone martial arts training plaza, rows of wooden training dummies, weapon racks with spears and swords, tall banners on poles.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "96abcf36-4c5d-4277-9aa9-f657256728fb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_han_bang_cung/luyen_dan_phong.png",
+      "description": "Hình nền công trình Luyện Đan Phòng (luyen_dan_phong) của mô hình tông môn Băng Cung (cuc_han_bang_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora. A xianxia cultivation sect called Ice Palace, palaces of translucent blue ice crystal on snowy mountains, frost-covered pine trees, gently falling snow. No people, no text, no UI. Main subject in the center foreground: an alchemy house beside a big bronze three-legged pill cauldron, fire burning beneath the cauldron, thick fragrant smoke rising into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "61d46c93-191e-44c9-a88b-72ba7ac7017e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/cuc_han_bang_cung/luyen_khi_cac.png",
+      "description": "Hình nền công trình Luyện Khí Các (luyen_khi_cac) của mô hình tông môn Băng Cung (cuc_han_bang_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora. A xianxia cultivation sect called Ice Palace, palaces of translucent blue ice crystal on snowy mountains, frost-covered pine trees, gently falling snow. No people, no text, no UI. Main subject in the center foreground: a blacksmith forge workshop with a tall stone chimney, a glowing furnace, a large anvil outside and bright sparks flying.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-03",
+      "pixellab_id": "2ced8a4a-6081-4b52-b866-dc051dc95478",
       "api": "REST v2 generate-image-v2"
     }
   ]
