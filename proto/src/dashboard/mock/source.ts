@@ -1,7 +1,8 @@
 // Nguồn đọc gộp chạy ngay trong trang (chưa có server giả). Mỗi lệnh đọc dựng đủ các thẻ của một màn từ World,
 // kèm mốc giờ server; lệnh ghi đi qua apply() của @ktlp/rules khi luật đã có, phần còn lại sửa World trực tiếp.
 import {
-  apply, bacHeSo, binhBoOf, boardCell, boardCellOpen, diemTrangBi, DONG_REN, gearStats, ghepAn, GRADE_NAMES, kieuInfo, loadoutTechniques, RULES,
+  apply, bacHeSo, BINH_AN_O, binhBoOf, boardCell, boardCellOpen, diemTrangBi, DONG_REN, gearStats, ghepAn, GRADE_NAMES, kieuInfo, loadoutTechniques,
+  maxInlayLines, RULES,
   scrollKind, setLo, techniqueOf, transmissionSlots,
   type Bac, type BoardPiece, type Command, type EquipItem, type GearStats, type InlayLine, type LearnedTechnique, type Progress, type Role,
   type SectTechnique,
@@ -38,7 +39,7 @@ import TRANG_BI from "../../../../data/he_thong/json/trang_bi.json";
 import {
   addExp, canDecompose, DANH_KHI, DANH_KHI_COST, doPhoCode, hasKhiLinh, khiHinhOf, khiTinhOf, KL_MAX, KL_PER_KHI_TINH, LO_MIN, loRate, PHACH_FROM,
   PHACH_KHI_TINH, PHACH_RATE, phachCode, phachName, reached, REROLL_KHI_TINH, rerollStone, rerollSub, rollOffer, SONG_HE_FROM, SONG_HE_LOSE, SONG_HE_PHU,
-  SONG_HE_RATE, songHeOk, stoneBack, SUB, syncVan, UNLOCK,
+  SLOT_NAMES, SONG_HE_RATE, songHeOk, stoneBack, SUB, syncVan, UNLOCK,
   VAN_REROLL, yieldLocked,
 } from "../luyenKhi.ts";
 
@@ -202,6 +203,7 @@ function gearView(g: WorldGear, sub: number, level: number, roots: Element[], pa
   const out: GearItem = { ...v, gems: g.gems.map((x) => ({ ...x })) };
   if (dongAn?.length) out.hiddenLines = hiddenView(dongAn, pair);
   if (!kieuOk(g.code)) return out;
+  out.lines = maxInlayLines(toEquip(g, sub));
   if (ren?.length) out.forgeLines = forgeView(g, sub, level, roots);
   out.score = diemTrangBi(gearStats([toEquip(g, sub)], level, roots), level);
   return out;
@@ -1252,6 +1254,60 @@ export class MockDashboardSource implements DashboardSource {
         lk.doPho.splice(lk.doPho.indexOf(doPhoCode(i)), 1);
         if (!lk.owned.includes(d.ma)) lk.owned.push(d.ma);
         return { ok: true, message: `Luyện thành ${d.ten}` };
+      }
+      case "kham": {
+        const p = w.player;
+        const it = p.bag.find((x) => x.uid === cmd.uid && x.count > 0);
+        if (!it) return { ok: false, error: "khong_thay_mon" };
+        const g = p.gear[cmd.slot];
+        if (!g) return { ok: false, error: "chua_mac_do" };
+        const piece = it.boardPiece;
+        const binh = !piece && it.code?.startsWith("NG-BA-") ? it.code : undefined;
+        if (!piece && !binh) return { ok: false, error: "khong_kham_duoc" };
+        if (binh && !BINH_AN_O.includes(cmd.slot)) return { ok: false, error: "binh_an_sai_o" };
+        // Dòng khảm: ngọc, ấn, binh ấn mỗi thứ một dòng; số dòng theo độ hiếm (trang_bi.json), đồ cũ không có kiểu thì theo sockets.
+        const used = g.gems.length + (g.seal ? 1 : 0) + (g.binhAn ? 1 : 0);
+        const max = kieuOk(g.code) ? maxInlayLines(toEquip(g)) : Math.max(g.sockets, used);
+        const replaces = (piece?.loai === "an" && !!g.seal) || (!!binh && !!g.binhAn);
+        if (!replaces && used >= max) return { ok: false, error: "het_dong_kham" };
+        const take = () => {
+          if (--it.count === 0) p.bag.splice(p.bag.indexOf(it), 1);
+        };
+        const slotName = SLOT_NAMES[cmd.slot];
+        if (piece?.loai === "ngoc") {
+          take();
+          g.gems.push({ element: piece.he, level: piece.cap });
+          g.sockets = Math.max(g.sockets, used + 1);
+          return { ok: true, message: `Đã khảm ${it.name} vào ${slotName}` };
+        }
+        if (piece?.loai === "an") {
+          const old = g.seal ? ({ loai: "an", ma: g.seal, bac: g.sealTier ?? "tim" } as const) : undefined;
+          if (old && !this.pieceStack(old) && it.count > 1 && this.bagFull()) return { ok: false, error: "tui_day" };
+          take();
+          g.seal = piece.ma;
+          g.sealTier = piece.bac ?? "tim";
+          if (old) this.pieceToBag(old);
+          else g.sockets = Math.max(g.sockets, used + 1);
+          return { ok: true, message: old ? `Đã khảm ${it.name} vào ${slotName}, ấn cũ về túi` : `Đã khảm ${it.name} vào ${slotName}` };
+        }
+        // Binh ấn: bậc đọc từ nhãn ("Binh ấn Lam"); viên cũ về túi thành một món riêng (gộp chồng cùng mã, cùng bậc).
+        const tier = (Object.entries(RARITY_LABEL).find(([, l]) => it.gradeLabel.endsWith(l))?.[0] ?? "tim") as Bac;
+        const old = g.binhAn;
+        if (old && it.count > 1 && this.bagFull()) return { ok: false, error: "tui_day" };
+        take();
+        g.binhAn = { ma: binh!, tier };
+        if (old) {
+          const row = binhBoOf(old.ma);
+          const label = `Binh ấn ${RARITY_LABEL[old.tier]}`;
+          const stack = p.bag.find((x) => x.code === old.ma && x.gradeLabel === label);
+          if (stack) stack.count++;
+          else
+            p.bag.push({
+              uid: p.nextUid++, kind: "ngoc", name: `Binh Ấn ${row.ten}`, grade: RARITY_GRADE[old.tier], gradeLabel: label, count: 1, code: old.ma,
+              rarity: old.tier, art: `binh_an/${row.id}`, detail: "Khảm vào vũ khí, bao tay hoặc ngọc bội: 2 và 3 binh ấn cùng bộ mở mốc của binh bộ.",
+            });
+        } else g.sockets = Math.max(g.sockets, used + 1);
+        return { ok: true, message: old ? `Đã khảm ${it.name} vào ${slotName}, binh ấn cũ về túi` : `Đã khảm ${it.name} vào ${slotName}` };
       }
       case "di_toi": {
         const world = await loadWorld();

@@ -4,6 +4,7 @@
 import { GRADE_NAMES, scrollKind, techniqueName, techniqueOf, VARIANT_NAMES } from "@ktlp/rules";
 import { TICKS_PER_SECOND } from "@ktlp/sim";
 import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
+import { enableDrag, type DragControl, type DropAction } from "../keoTha.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { CongPhapView, ScrollCard, TechniqueCard } from "../source.ts";
 import { term } from "../terms.ts";
@@ -30,9 +31,12 @@ function scrollHtml(s: ScrollCard): string {
 
 export class CongPhapScene extends PageScene<CongPhapView> {
   private section?: CongPhapSection;
+  /** Kéo thả (keoTha.ts): "hoc:<id>" công pháp đã học, "slot:<i>" ô mang vào trận; thả vào ô, hay vùng "bo" để bỏ khỏi trận. */
+  private dnd: DragControl;
 
   constructor(ctx: DashCtx) {
     super("cong-phap", "Công pháp", ctx);
+    this.dnd = enableDrag(this.page, { action: (d, t) => this.dropAction(d, t), drop: (d, t) => this.drop(d, t) });
   }
 
   /** Thẻ Việc nên làm dẫn tới đúng phần của màn (ví dụ ô công pháp còn trống). */
@@ -51,14 +55,16 @@ export class CongPhapScene extends PageScene<CongPhapView> {
         <h2>Mang vào trận <span class="right"><b>${v.loadout.filter(Boolean).length}</b> / ${v.loadout.length}</span></h2>
         <ol class="list loadout">${v.loadout
           .map(
-            (t, i) => `<li><button type="button" class="row${t ? "" : " empty"}" data-act="slot" data-i="${i}">
-              <span class="prio">${i + 1}</span>${t ? techHtml(t) : `<span class="grow">Ô trống · chạm để chọn công pháp đã học</span>`}</button></li>`,
+            (t, i) => `<li><button type="button" class="row${t ? "" : " empty"}" data-act="slot" data-i="${i}" data-drop="slot:${i}"${t ? ` data-drag="slot:${i}"` : ""}>
+              <span class="prio">${i + 1}</span>${t ? techHtml(t) : `<span class="grow">Ô trống · chạm để chọn, hoặc kéo công pháp đã học vào đây</span>`}</button></li>`,
           )
           .join("")}</ol>
-        <p class="note">Thứ tự là thứ tự ưu tiên ra chiêu trong trận.</p>
-        <details class="fold">
+        <div class="drop-zone cp-bo" data-drop="bo">Thả vào đây để bỏ khỏi trận</div>
+        <p class="note">Thứ tự là thứ tự ưu tiên ra chiêu trong trận. Kéo giữa các ô để đổi thứ tự.</p>
+        <details class="fold"${v.loadout.some((t) => !t) && v.learned.length ? " open" : ""}>
           <summary>Đã học <span class="right">${v.learned.length}</span></summary>
-          <ul class="list">${v.learned.map((t) => `<li class="row">${techHtml(t)}</li>`).join("") || `<li class="empty-note">Chưa học công pháp nào.</li>`}</ul>
+          <ul class="list">${v.learned.map((t) => `<li class="row" data-drag="hoc:${t.id}">${techHtml(t)}${v.loadout.some((x) => x?.id === t.id) ? `<span class="pick-tag">Ô ${v.loadout.findIndex((x) => x?.id === t.id) + 1}</span>` : ""}</li>`).join("") || `<li class="empty-note">Chưa học công pháp nào.</li>`}</ul>
+          ${v.learned.length ? `<p class="drag-hint">Kéo công pháp lên một ô để mang vào trận${matchMedia("(pointer: coarse)").matches ? " (giữ tay một chút rồi kéo)" : ""}.</p>` : ""}
         </details>
       </section>`;
     const transmission = `<section class="card" id="cp-truyen-thu">
@@ -101,9 +107,43 @@ export class CongPhapScene extends PageScene<CongPhapView> {
     setTimeout(() => el?.classList.remove("flash"), 1200);
   }
 
+  /** Việc sẽ làm khi thả (nhãn cạnh ngón tay); null là chỗ đó không nhận. */
+  private dropAction(drag: string, drop: string): DropAction {
+    const v = this.data;
+    if (!v) return null;
+    const [k, id] = drag.split(":");
+    const [dk, did] = drop.split(":");
+    if (k === "slot" && dk === "bo") return "Bỏ khỏi trận";
+    if (dk !== "slot") return null;
+    const j = Number(did);
+    const cur = v.loadout[j];
+    if (k === "slot") return Number(id) === j ? null : cur ? "Đổi chỗ hai ô" : `Chuyển sang ô ${j + 1}`;
+    if (k !== "hoc") return null;
+    const was = v.loadout.findIndex((t) => t?.id === Number(id));
+    if (was === j) return null;
+    if (was >= 0) return cur ? `Đổi chỗ với ô ${was + 1}` : `Chuyển sang ô ${j + 1}`;
+    return cur ? `Thay ${cur.name}` : `Mang vào ô ${j + 1}`;
+  }
+
+  private drop(drag: string, drop: string): void {
+    const v = this.data!;
+    const [k, id] = drag.split(":");
+    const [dk, did] = drop.split(":");
+    const next = v.loadout.map((t) => t?.id ?? null);
+    if (k === "slot" && dk === "bo") next[Number(id)] = null;
+    else {
+      const j = Number(did);
+      const tid = k === "slot" ? next[Number(id)] : Number(id);
+      const was = tid === null ? -1 : next.indexOf(tid);
+      if (was >= 0) next[was] = next[j];
+      next[j] = tid;
+    }
+    void this.send({ type: "mang_vao_tran", techniqueIds: next.filter((x): x is number => x !== null) });
+  }
+
   protected override act(name: string, el: HTMLElement): void {
     const v = this.data;
-    if (!v) return;
+    if (!v || this.dnd.justDropped()) return;
     if (name === "slot") this.pickForSlot(v, Number(el.dataset.i));
     else if (name === "learn") void this.send({ type: "hoc_cong_phap", techniqueId: Number(el.dataset.id) });
     else if (name === "deposit") void this.send({ type: "nop_tan_quyen", scrollUid: Number(el.dataset.uid) });

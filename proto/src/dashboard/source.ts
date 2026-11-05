@@ -163,6 +163,8 @@ export interface GearItem {
   forgeLines?: ForgeLineView[];
   /** Điểm trang bị của riêng món (diemTrangBi của @ktlp/rules, không tính set); nguồn điền cho đồ đang mặc và đồ trong túi. */
   score?: number;
+  /** Số dòng khảm tối đa (theo độ hiếm, đồ bí cảnh thêm); ngọc, ấn bộ, binh ấn mỗi viên một dòng. Màn dùng để báo hết dòng khi kéo. */
+  lines?: number;
   plus: number; // nấc cường hóa
   durability: number;
   durabilityMax: number;
@@ -620,6 +622,11 @@ export type DashboardCommand =
   | { type: "di_toi"; region: string; pointId: number }
   /** Chỉ bản thử: tới nơi ngay để chơi thử nhanh (máy chủ thật không có; GDD chỉ có Phù độn thổ về thành chủ). */
   | { type: "toi_ngay" }
+  /**
+   * Khảm một viên trong túi vào món đang mặc ở ô `slot`: ngọc hệ vào dòng trống; ấn bộ, binh ấn (chỉ vũ khí, bao tay, ngọc
+   * bội) mỗi món một viên, đã có thì viên cũ về túi.
+   */
+  | { type: "kham"; uid: number; slot: GearSlot }
   /** Chọn thú cưỡi trong 5 ô thú (GDD mục 6). */
   | { type: "cuoi_thu"; index: number }
   | { type: "chat"; text: string }

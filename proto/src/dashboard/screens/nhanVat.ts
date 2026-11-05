@@ -12,7 +12,7 @@
 // tiết; việc nào cũng trong 2 chạm.
 import type { Element } from "@ktlp/sim";
 import type { Sprites } from "../../assets/sprites.ts";
-import type { BoardPiece, Progress } from "@ktlp/rules";
+import { BINH_AN_O, type BoardPiece, type Progress } from "@ktlp/rules";
 import { hasWebGL, loadSceneFactory, mountBakedScene, mountProgram, type LiveMount, type SceneHandle } from "../../three/index.ts";
 import type { DaoCoBanProgram } from "../art/daoCoBanScene.ts";
 import {
@@ -29,6 +29,7 @@ import { elementWheel } from "../elementWheel.ts";
 import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
 import { LuyenKhiPanel, type LkTab } from "./luyenKhiPanel.ts";
 import { icon, type IconName } from "../icons.ts";
+import { enableDrag, type DragControl, type DropAction } from "../keoTha.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { BagItem, GearItem, GearSlot, ItemGrade, ItemKind, NhanVatView, Rarity, StatLine, TechniqueCard } from "../source.ts";
 import { REALM_TERM, term } from "../terms.ts";
@@ -63,11 +64,14 @@ const SLOT_GLYPH: Record<GearSlot, IconName> = { vu_khi: "sword", mu: "shield", 
 const LOW = 20;
 const WIDE = "(min-width: 1100px)";
 
+/** Binh ấn trong túi (NG-BA-…): khảm vào ô công, không đặt lên Đạo Cơ Bàn. */
+const isBinhAn = (it: BagItem) => !it.boardPiece && !!it.code?.startsWith("NG-BA-");
+
 function statText(s: StatLine, v = s.value): string {
   return s.unit === "‰" ? pctText(v) : fmt(v);
 }
 
-/** Ô kéo thả: "item:<uid>" món trong túi, "gear:<ô>" món đang mặc, "tech:<i>" ô công pháp. */
+/** Món kéo: "item:<uid>" món trong túi, "gear:<ô>" món đang mặc, "tech:<i>" ô công pháp, "cell:<mã ô>" viên trên Đạo Cơ Bàn. */
 type DragRef = string;
 
 /**
@@ -108,8 +112,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   private doll?: HTMLCanvasElement;
   private anim = 0;
   private frame = 0;
-  /** Vừa thả xong một món: bỏ qua cú nhấp đi kèm. */
-  private dropped = false;
+  /** Kéo thả (keoTha.ts): chuột, bút và cảm ứng (giữ tay rồi kéo). */
+  private dnd: DragControl;
   /** Bóng pháp tướng phía sau tu sĩ. */
   private ghost?: HTMLCanvasElement;
   /** Núi sương dưới đáy cột Pháp tướng: ảnh three nướng một lần, giữ qua các lần vẽ lại. */
@@ -145,7 +149,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       else return;
       if (this.data) this.render(this.data);
     });
-    this.page.addEventListener("pointerdown", (e) => this.dragStart(e));
+    this.dnd = enableDrag(this.page, { action: (d, t) => this.dropAction(d, t), drop: (d, t) => this.drop(d, t) });
     this.ltLayer = document.createElement("div");
     this.ltLayer.className = "lt-three";
     this.ltLayer.setAttribute("aria-hidden", "true");
@@ -200,7 +204,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         <div class="seg nv-tabs" role="tablist" aria-label="Phần của màn Nhân vật">${tab("thong-tin", "Thông tin")}${tab("phap-tuong", "Pháp tướng")}${tab("dao-co", "Đạo cơ")}${tab("luyen-khi", "Luyện khí")}${tab("tui", "Túi")}</div>
         <div class="nv-cols" data-tab="${this.tab}">
           <div class="nv-col nv-info">${this.info(v)}</div>
-          <div class="nv-col nv-form">${this.form(v)}</div>
+          <div class="nv-col nv-form">${this.form(v)}${this.center !== "luyen-khi" ? this.tray(v) : ""}</div>
           <div class="nv-col nv-bag">${this.bag(v)}</div>
         </div>
       </section>`;
@@ -383,7 +387,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       const thong = draw.thong.has(c.ma);
       const label = piece ? `${pieceName(piece)}, ${thong ? "thông" : "chưa thông"}` : !open ? `Ô khóa, mở ở ${cellOpensAt(c.ma)}` : c.ma === CENTER ? "Ô tâm trống: đặt ấn chủ" : "Ô trống";
       const body = piece ? this.pieceIcon(piece) : c.ma === CENTER && open ? `<span class="lt-mark">Tâm</span>` : open ? `<span class="lt-mark">+</span>` : "";
-      return `<button type="button" class="lt-cell${open ? "" : " locked"}${piece ? " full" : ""}${piece && !thong ? " off" : ""}${c.ma === CENTER ? " core" : ""}" data-act="lt-cell" data-cell="${c.ma}" data-drop="ban:${c.ma}" aria-label="${esc(label)}">${body}</button>`;
+      return `<button type="button" class="lt-cell${open ? "" : " locked"}${piece ? " full" : ""}${piece && !thong ? " off" : ""}${c.ma === CENTER ? " core" : ""}" data-act="lt-cell" data-cell="${c.ma}" data-drop="ban:${c.ma}"${piece && this.data?.board.cells[c.ma] ? ` data-drag="cell:${c.ma}"` : ""} aria-label="${esc(label)}">${body}</button>`;
     };
     const ordered: GearSlot[] = ["vu_khi", "mu", "ao", "dai", "bao_tay", "giay", "ngoc_boi"];
     const now = v.top.realm;
@@ -589,11 +593,12 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         ${!shown.length && !empty ? `<p class="nv-note bag-none">Không có món nào khớp bộ lọc.</p>` : ""}
       </div>
       ${this.kind === "cong_phap" ? `<p class="nv-note">Công pháp đã học không chiếm ô túi; kéo vào ô công pháp để mang vào trận.</p>` : ""}
-      <div class="bag-detail">${sel ? this.detail(sel, v) : `<p class="nv-note">Chọn một món để xem. Kéo trang bị hay công pháp sang Pháp tướng để dùng, kéo về túi để tháo.</p>`}</div>`;
+      <p class="drag-hint">${matchMedia(WIDE).matches ? `${matchMedia("(pointer: coarse)").matches ? "Giữ tay lên một món rồi kéo" : "Kéo một món"} sang Pháp tướng để mặc, mang vào trận hay khảm ngọc, ấn; sang Đạo Cơ Bàn để đặt viên; kéo về túi để tháo.` : "Ở Pháp tướng và Đạo cơ có khay Kéo từ túi: giữ tay lên món rồi kéo vào ô để mặc, khảm, đặt viên."}</p>
+      <div class="bag-detail">${sel ? this.detail(sel, v) : `<p class="nv-note">Chọn một món để xem.</p>`}</div>`;
   }
 
   private cell(it: BagItem): string {
-    return `<button type="button" class="bag-cell ${tone(it)}${it.uid === this.selected ? " sel" : ""}" data-act="item" data-uid="${it.uid}"${it.gear || it.technique || (it.boardPiece && this.center === "dao-co") ? ` data-drag="item:${it.uid}"` : ""} aria-label="${esc(`${it.name}${it.count > 1 ? ` × ${it.count}` : ""}`)}" title="${esc(it.name)}">
+    return `<button type="button" class="bag-cell ${tone(it)}${it.uid === this.selected ? " sel" : ""}" data-act="item" data-uid="${it.uid}"${it.gear || it.technique || it.boardPiece || isBinhAn(it) ? ` data-drag="item:${it.uid}"` : ""} aria-label="${esc(`${it.name}${it.count > 1 ? ` × ${it.count}` : ""}`)}" title="${esc(it.name)}">
       ${this.itemIcon(it)}${it.count > 1 ? `<span class="n">${it.count}</span>` : ""}${it.kind === "cong_phap" ? `<span class="learned">Đã học</span>` : ""}
     </button>`;
   }
@@ -634,11 +639,11 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       const len = ghepLen(bac);
       const du = it.count >= GHEP_AN_SO;
       body += `<dl class="kv"><dt>Bậc ấn</dt><dd>${bacBadge(bac)}</dd></dl>`;
-      act = len
+      act = (len
         ? `<button type="button" class="seal" data-act="ghep-an" data-uid="${it.uid}"${du ? "" : " disabled"}>Ghép ${GHEP_AN_SO} ấn thành bậc ${BAC_TEN[len]}</button>${du ? "" : `<span class="muted">Cần ${GHEP_AN_SO} ấn cùng bộ cùng bậc.</span>`}`
-        : `<span class="muted">Ấn bậc ${BAC_TEN[bac]} không ghép lên được.</span>`;
+        : `<span class="muted">Ấn bậc ${BAC_TEN[bac]} không ghép lên được.</span>`) + this.khamButtons(it, v);
     } else if (it.kind === "tan_quyen") act = `<button type="button" class="seal" data-act="deposit" data-uid="${it.uid}">Nộp Tàng Kinh Các</button>`;
-    else if (it.kind === "ngoc") act = `<button type="button" class="btn small" data-act="use" data-uid="${it.uid}">Khảm</button><button type="button" class="btn small" data-act="goto-lk" data-lk="ngoc">Hợp, điểm hóa</button>`;
+    else if (it.kind === "ngoc") act = `${this.khamButtons(it, v)}${isBinhAn(it) ? "" : `<button type="button" class="btn small" data-act="goto-lk" data-lk="ngoc">Hợp, điểm hóa</button>`}`;
     else act = `<button type="button" class="btn small" data-act="use" data-uid="${it.uid}">Dùng</button>`;
     return `${head}${body}<div class="actions">${act}</div>`;
   }
@@ -770,7 +775,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
 
   protected override act(name: string, el: HTMLElement): void {
     const v = this.data;
-    if (!v || this.dropped) return;
+    if (!v || this.dnd.justDropped()) return;
     if (this.lk.act(name, el, v)) return;
     const uid = Number(el.dataset.uid);
     if (name === "back") this.ctx.nav.back();
@@ -821,6 +826,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         });
       } else this.render(v);
     } else if (name === "wear") void this.send({ type: "mac_do", uid });
+    else if (name === "kham") void this.send({ type: "kham", uid, slot: el.dataset.slot as GearSlot });
     else if (name === "carry") void this.carry(v, Number(el.dataset.id), v.loadout.findIndex((t) => !t));
     else if (name === "deposit") void this.send({ type: "nop_tan_quyen", scrollUid: uid });
     else if (name === "use") toast("Dùng đan, phù và ấp trứng có ở khối M6; prototype chưa làm.");
@@ -962,91 +968,92 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     });
   }
 
-  // ---- Kéo thả (chuột, bút trên màn rộng) -------------------------------------------------------------------------
+  // ---- Kéo thả (keoTha.ts: chuột, bút, cảm ứng giữ tay rồi kéo) ----------------------------------------------------
 
-  /** Ô thả có nhận món đang kéo không. */
-  private accepts(drag: DragRef, drop: string): boolean {
-    const v = this.data!;
+  /**
+   * Khay "Kéo từ túi" dưới Pháp tướng, Đạo cơ ở khung hẹp (màn rộng thấy túi bên cạnh nên CSS ẩn khay): túi là tab riêng nên
+   * không kéo sang được, khay đưa sẵn món dùng được ở đây. Khay cũng là chỗ thả để tháo đồ, gỡ viên về túi.
+   */
+  private tray(v: NhanVatView): string {
+    const board = this.center === "dao-co";
+    const items = v.bag.items.filter((it) => (board ? !!it.boardPiece : !!(it.gear || it.technique || it.boardPiece || isBinhAn(it))));
+    const coarse = matchMedia("(pointer: coarse)").matches;
+    return `<div class="nv-tray" data-drop="bag">
+      <div class="nv-tray-head"><b>Kéo từ túi</b><span class="muted">${coarse ? "Giữ tay lên món rồi kéo" : "Kéo món"} ${board ? "lên ô của bàn; kéo viên trên bàn xuống đây để gỡ" : "vào ô trang bị, công pháp; kéo đồ đang mặc xuống đây để tháo"}</span></div>
+      <div class="nv-tray-row">${items.map((it) => this.cell(it)).join("") || `<span class="muted">Túi không có món dùng được ở đây.</span>`}</div>
+    </div>`;
+  }
+
+  /** Nút "Khảm vào …" cho ngọc, ấn, binh ấn trong túi: mỗi ô đang mặc một nút (binh ấn chỉ ô công). */
+  private khamButtons(it: BagItem, v: NhanVatView): string {
+    const slots = (Object.keys(SLOT_NAMES) as GearSlot[]).filter((s) => v.gear[s] && (!isBinhAn(it) || BINH_AN_O.includes(s)));
+    if (!slots.length) return `<span class="muted">Mặc đồ trước rồi khảm.</span>`;
+    return `<span class="kham-to"><span class="muted">Khảm vào</span>${slots
+      .map((s) => `<button type="button" class="btn small" data-act="kham" data-uid="${it.uid}" data-slot="${s}">${SLOT_NAMES[s]}</button>`)
+      .join("")}</span>`;
+  }
+
+  /** Việc sẽ làm khi thả món `drag` vào chỗ `drop` (nhãn cạnh ngón tay); null là chỗ đó không nhận. */
+  private dropAction(drag: DragRef, drop: string): DropAction {
+    const v = this.data;
+    if (!v) return null;
     const [k, id] = drag.split(":");
+    const [dk, did] = drop.split(":");
     if (k === "item") {
       const it = v.bag.items.find((x) => x.uid === Number(id));
-      if (it?.gear) return drop === `gear:${it.gear.slot}`;
-      if (it?.technique) return drop.startsWith("tech:");
-      if (it?.boardPiece && drop.startsWith("ban:")) return this.canPlace(v, drop.slice(4), it.boardPiece);
-      return false;
+      if (!it) return null;
+      if (it.gear) {
+        if (drop !== `gear:${it.gear.slot}`) return null;
+        const cur = v.gear[it.gear.slot];
+        return cur ? `Mặc, ${cur.name} về túi` : `Mặc vào ô ${SLOT_NAMES[it.gear.slot]}`;
+      }
+      if (it.technique) {
+        if (dk !== "tech") return null;
+        const cur = v.loadout[Number(did)];
+        return cur ? `Thay ${cur.name}` : `Mang vào ô ${Number(did) + 1}`;
+      }
+      if (dk === "gear" && (it.boardPiece || isBinhAn(it))) {
+        const slot = did as GearSlot;
+        const g = v.gear[slot];
+        if (!g) return { no: `Chưa mặc ${SLOT_NAMES[slot].toLowerCase()}` };
+        if (isBinhAn(it) && !BINH_AN_O.includes(slot)) return { no: "Binh ấn chỉ khảm vào vũ khí, bao tay, ngọc bội" };
+        const swap = (it.boardPiece?.loai === "an" && g.seal) || (isBinhAn(it) && g.binhAn);
+        const used = g.gems.length + (g.seal ? 1 : 0) + (g.binhAn ? 1 : 0);
+        if (!swap && g.lines !== undefined && used >= g.lines) return { no: `${SLOT_NAMES[slot]} hết dòng khảm (${used}/${g.lines})` };
+        return `Khảm vào ${SLOT_NAMES[slot]}${swap ? ", viên cũ về túi" : ""}`;
+      }
+      if (dk === "ban" && it.boardPiece) return this.canPlace(v, did, it.boardPiece) ? (v.board.cells[did] ? "Đặt lên bàn, viên cũ về túi" : "Đặt lên Đạo Cơ Bàn") : null;
+      return null;
     }
-    if (k === "gear") return drop === "bag";
-    if (k === "tech") return drop === "bag" || (drop.startsWith("tech:") && drop !== drag);
-    return false;
+    if (k === "gear") return drop === "bag" ? "Tháo về túi" : null;
+    if (k === "tech") {
+      if (drop === "bag") return "Bỏ khỏi ô";
+      if (dk === "tech" && drop !== drag) return v.loadout[Number(did)] ? "Đổi chỗ hai ô" : `Chuyển sang ô ${Number(did) + 1}`;
+      return null;
+    }
+    if (k === "cell") return drop === "bag" ? "Gỡ về túi" : null;
+    return null;
   }
 
   private drop(drag: DragRef, drop: string): void {
     const v = this.data!;
     const [k, id] = drag.split(":");
-    const target = Number(drop.split(":")[1]);
+    const [dk, did] = drop.split(":");
     if (k === "item") {
       const it = v.bag.items.find((x) => x.uid === Number(id))!;
       if (it.gear) void this.send({ type: "mac_do", uid: it.uid });
-      else if (it.technique) void this.carry(v, it.technique.id, target);
-      else if (it.boardPiece && drop.startsWith("ban:")) void this.send({ type: "dat_vien", cell: drop.slice(4), uid: it.uid });
+      else if (it.technique) void this.carry(v, it.technique.id, Number(did));
+      else if (dk === "gear") void this.send({ type: "kham", uid: it.uid, slot: did as GearSlot });
+      else if (dk === "ban" && it.boardPiece) void this.send({ type: "dat_vien", cell: did, uid: it.uid });
     } else if (k === "gear") void this.send({ type: "thao_do", slot: id as GearSlot });
+    else if (k === "cell") void this.send({ type: "go_vien", cell: id });
     else if (k === "tech") {
       const ids = v.loadout.map((t) => t?.id ?? null);
       const i = Number(id);
       if (drop === "bag") ids[i] = null;
-      else [ids[i], ids[target]] = [ids[target] ?? null, ids[i]];
+      else [ids[i], ids[Number(did)]] = [ids[Number(did)] ?? null, ids[i]];
       void this.send({ type: "mang_vao_tran", techniqueIds: ids.filter((x): x is number => x !== null) });
     }
   }
 
-  private dragStart(e: PointerEvent): void {
-    // Chạm trên điện thoại để cuộn và mở bảng chọn; kéo thả chỉ cho chuột và bút.
-    if (e.pointerType === "touch" || e.button !== 0) return;
-    const src = (e.target as HTMLElement).closest<HTMLElement>("[data-drag]");
-    if (!src || !this.data) return;
-    const ref = src.dataset.drag!;
-    const x0 = e.clientX;
-    const y0 = e.clientY;
-    let ghost: HTMLElement | undefined;
-    let hover: HTMLElement | null = null;
-    const targets = () => [...this.page.querySelectorAll<HTMLElement>("[data-drop]")];
-    const at = (x: number, y: number) => document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-drop]") ?? null;
-    const move = (ev: PointerEvent) => {
-      if (!ghost) {
-        if (Math.hypot(ev.clientX - x0, ev.clientY - y0) < 6) return;
-        const r = src.getBoundingClientRect();
-        ghost = src.cloneNode(true) as HTMLElement;
-        ghost.classList.add("drag-ghost");
-        ghost.style.width = `${r.width}px`;
-        ghost.style.height = `${r.height}px`;
-        document.body.append(ghost);
-        src.classList.add("dragging");
-        for (const t of targets()) if (this.accepts(ref, t.dataset.drop!)) t.classList.add("drop-ok");
-      }
-      ghost.style.transform = `translate(${ev.clientX - ghost.offsetWidth / 2}px, ${ev.clientY - ghost.offsetHeight / 2}px)`;
-      const h = at(ev.clientX, ev.clientY);
-      if (h !== hover) {
-        hover?.classList.remove("drop-hover");
-        hover = h && h.classList.contains("drop-ok") ? h : null;
-        hover?.classList.add("drop-hover");
-      }
-    };
-    const end = (ev: PointerEvent) => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", end);
-      window.removeEventListener("pointercancel", end);
-      if (!ghost) return;
-      ghost.remove();
-      src.classList.remove("dragging");
-      for (const t of targets()) t.classList.remove("drop-ok", "drop-hover");
-      const t = ev.type === "pointerup" ? at(ev.clientX, ev.clientY) : null;
-      // Cú nhấp đi sau lần thả không được mở bảng chọn.
-      this.dropped = true;
-      setTimeout(() => (this.dropped = false));
-      if (t && this.accepts(ref, t.dataset.drop!)) this.drop(ref, t.dataset.drop!);
-    };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", end);
-    window.addEventListener("pointercancel", end);
-  }
 }
