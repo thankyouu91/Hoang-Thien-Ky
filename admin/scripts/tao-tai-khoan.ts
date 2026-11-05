@@ -46,7 +46,16 @@ writeFileSync(file, sql);
 if (ghiVao) {
   writeFileSync(
     ghiVao,
-    `Admin Dashboard Thiên Hoang Ký — https://admin.thienhoangky.fun\nTên đăng nhập: ${ten}\nMật khẩu tạm: ${matKhau}\nLần đăng nhập đầu phải đổi mật khẩu (ít nhất 12 ký tự). Đổi xong thì xóa file này.\n`,
+    [
+      "Admin Dashboard Thiên Hoang Ký — https://admin.thienhoangky.fun",
+      `Tên đăng nhập: ${ten}`,
+      "Mật khẩu tạm (16 ký tự, phân biệt chữ hoa chữ thường; chép đúng dòng dưới):",
+      matKhau,
+      "",
+      `Mật khẩu này chỉ có hiệu lực sau khi chạy: npx.cmd wrangler d1 execute thienhoangky --remote --file ${file}`,
+      "Lần đăng nhập đầu phải đổi mật khẩu (ít nhất 12 ký tự). Đổi xong thì xóa file này.",
+      "",
+    ].join("\n"),
   );
   console.log(`Đã ghi mật khẩu tạm vào ${ghiVao}`);
 } else {

@@ -24,7 +24,7 @@ export function veDangNhap(app: HTMLElement, xong: (t: Toi) => void, bao?: strin
     e.preventDefault();
     const fd = new FormData(f);
     const ten = String(fd.get("ten") ?? "").trim();
-    const mk = String(fd.get("mat_khau") ?? "");
+    const mk = String(fd.get("mat_khau") ?? "").trim();
     if (!ten || !mk) return void ((loiEl.textContent = "Nhập tên đăng nhập và mật khẩu."), (loiEl.hidden = false));
     const nut = f.querySelector<HTMLButtonElement>("button")!;
     nut.disabled = true;
@@ -58,10 +58,10 @@ function ganDoi(f: HTMLFormElement, xong: () => void): void {
   f.addEventListener("submit", async (e) => {
     e.preventDefault();
     const fd = new FormData(f);
-    const cu = String(fd.get("cu") ?? "");
-    const moi = String(fd.get("moi") ?? "");
+    const cu = String(fd.get("cu") ?? "").trim();
+    const moi = String(fd.get("moi") ?? "").trim();
     if (moi.length < 12) return bao("Mật khẩu mới dài ít nhất 12 ký tự.");
-    if (moi !== String(fd.get("lai") ?? "")) return bao("Hai lần nhập mật khẩu mới không giống nhau.");
+    if (moi !== String(fd.get("lai") ?? "").trim()) return bao("Hai lần nhập mật khẩu mới không giống nhau.");
     const nut = f.querySelector<HTMLButtonElement>(".seal")!;
     nut.disabled = true;
     try {

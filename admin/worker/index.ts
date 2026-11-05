@@ -175,8 +175,8 @@ const routes: Record<string, Handler> = {
   },
   "POST /api/doi-mat-khau": async ({ req, env, n }) => {
     const b = await than(req);
-    const cu = typeof b.cu === "string" ? b.cu : "";
-    const moi = typeof b.moi === "string" ? b.moi : "";
+    const cu = typeof b.cu === "string" ? b.cu.trim() : "";
+    const moi = typeof b.moi === "string" ? b.moi.trim() : "";
     const tk = await env.DB.prepare("SELECT mat_khau FROM qt_tai_khoan WHERE ten = ?").bind(n.ten).first<{ mat_khau: string }>();
     if (!tk || !(await kiemMatKhau(cu, tk.mat_khau))) throw new Loi(400, "Mật khẩu hiện tại không đúng.");
     const l = loiMatKhauMoi(n.ten, moi, cu);
@@ -587,7 +587,8 @@ export default {
       if (req.method === "POST" && url.pathname === "/api/dang-nhap") {
         const b = await than(req);
         const ten = typeof b.ten === "string" ? b.ten.slice(0, 64) : "";
-        const mk = typeof b.mat_khau === "string" ? b.mat_khau.slice(0, 200) : "";
+        // Bỏ khoảng trắng hai đầu (hay dính khi dán mật khẩu tạm); đặt mật khẩu mới cũng bỏ như vậy nên luôn khớp.
+        const mk = typeof b.mat_khau === "string" ? b.mat_khau.trim().slice(0, 200) : "";
         if (!ten || !mk) return loi(400, "Nhập tên đăng nhập và mật khẩu.");
         const kq = await dangNhap(env.DB, ten, mk, req.headers.get("CF-Connecting-IP") ?? "khong-ro");
         if (!kq.ok) return loi(kq.status, kq.loi);

@@ -150,6 +150,10 @@ try {
     for (const t of ["HttpOnly", "Secure", "SameSite=Strict", "Path=/"]) assert.ok(sc.includes(t), `thiếu ${t}: ${sc}`);
     ckAdmin = `__Host-qt=${/__Host-qt=([^;]+)/.exec(sc)![1]}`;
   });
+  await kiem("dán mật khẩu dính khoảng trắng, xuống dòng hai đầu vẫn vào được", async () => {
+    assert.equal((await goi("POST", "/api/dang-nhap", { body: { ten: " kiemthu ", mat_khau: ` ${TAM_DAU}
+` } })).status, 200);
+  });
   await kiem("chưa đổi mật khẩu: chỉ được /api/toi, đổi mật khẩu, đăng xuất", async () => {
     assert.equal((await goi("GET", "/api/toi", { cookie: ckAdmin })).status, 200);
     const r = await goi("GET", "/api/tong-quan", { cookie: ckAdmin });
