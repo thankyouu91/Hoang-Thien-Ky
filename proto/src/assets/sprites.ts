@@ -59,8 +59,35 @@ export interface Asset {
  */
 export const SKIP_GROUPS = ["cong_trinh/", "diem_nen/", "diem/", "bang_mau/", "ui/", "chien_truong/"];
 
+/**
+ * Bộ áo nạp ngay lúc mở: áo mặc định hai đội và thân trống. Các bộ áo tài năng (gói 3, khoảng 270 dải, 1,3 MB) nạp sau:
+ * màn cần gọi ensure() để nạp trước bộ của mình (màn Trận: các bộ có trong trận), phần còn lại nạp dần lúc rảnh, nên màn nào
+ * không gọi ensure() cũng có đủ hình sau ít giây. Trong lúc chờ, resolveLook (character.ts) lùi về đạo bào.
+ */
+const EAGER_OUTFITS = ["dao_bao", "vo_phuc", "tron"];
+const LATER_BATCH = 8; // số ảnh nạp cùng lúc trong hàng nạp sau (mỗi dải vài KB), để không tranh mạng với màn đang mở
+
+function later(file: string): boolean {
+  const m = /^nhan_vat\/[^/]+\/([^/.]+)/.exec(file);
+  return !!m && !EAGER_OUTFITS.includes(m[1]);
+}
+
+/** Chờ lúc trình duyệt rảnh (có hạn chờ, vì pane ẩn hay máy bận có thể không bao giờ rảnh). */
+function idle(): Promise<void> {
+  return new Promise((resolve) => {
+    if ("requestIdleCallback" in window) requestIdleCallback(() => resolve(), { timeout: 500 });
+    else setTimeout(resolve, 30);
+  });
+}
+
 export class Sprites {
   private assets = new Map<string, Asset>();
+  private base = "";
+  /** Dòng manifest chưa nạp (bộ áo tài năng), theo file */
+  private pending = new Map<string, ManifestEntry>();
+  /** Tiền tố màn đang cần (ensure) trước khi đọc xong manifest */
+  private urgent = new Set<string>();
+  private draining = false;
 
   get(key: string | undefined): HTMLImageElement | undefined {
     return key === undefined ? undefined : this.assets.get(key)?.img;
@@ -77,7 +104,7 @@ export class Sprites {
 
   /**
    * Không ném lỗi: thiếu manifest hay ảnh hỏng thì chỉ ghi cảnh báo.
-   * Dòng manifest có `file` bắt đầu bằng một tiền tố trong `skip` thì không nạp.
+   * Dòng manifest có `file` bắt đầu bằng một tiền tố trong `skip` thì không nạp. Bộ áo tài năng không chờ: xem `later`.
    */
   async load(base = import.meta.env.BASE_URL + "pixellab/", skip: readonly string[] = SKIP_GROUPS): Promise<void> {
     let manifest: Manifest;
@@ -89,18 +116,51 @@ export class Sprites {
       console.warn("Không đọc được manifest PixelLab, dùng khối màu thay thế:", e);
       return;
     }
+    this.base = base;
     const wanted = (manifest.assets ?? []).filter((meta) => !skip.some((p) => meta.file.startsWith(p)));
-    await Promise.all(
-      wanted.map(async (meta) => {
-        const img = new Image();
-        img.src = base + meta.file;
-        try {
-          await img.decode();
-          this.assets.set(meta.file.replace(/\.[^./]+$/, ""), { img, meta });
-        } catch {
-          console.warn("Không nạp được ảnh PixelLab:", meta.file);
-        }
-      }),
-    );
+    const now: ManifestEntry[] = [];
+    for (const meta of wanted) {
+      if (later(meta.file) && ![...this.urgent].some((p) => meta.file.startsWith(p))) this.pending.set(meta.file, meta);
+      else now.push(meta);
+    }
+    await Promise.all(now.map((meta) => this.loadOne(meta)));
+    void this.drain();
+  }
+
+  /**
+   * Nạp ngay các ảnh còn chờ có `file` bắt đầu bằng `prefix` (ví dụ "nhan_vat/nam_khoe/tu_ren"); gọi trước khi đọc xong
+   * manifest cũng được. Không chờ: hình hiện khi nạp xong, màn vẽ lại mỗi khung.
+   */
+  ensure(prefix: string): void {
+    this.urgent.add(prefix);
+    for (const [file, meta] of this.pending) {
+      if (!file.startsWith(prefix)) continue;
+      this.pending.delete(file);
+      void this.loadOne(meta);
+    }
+  }
+
+  private async loadOne(meta: ManifestEntry): Promise<void> {
+    const img = new Image();
+    img.src = this.base + meta.file;
+    try {
+      await img.decode();
+      this.assets.set(meta.file.replace(/\.[^./]+$/, ""), { img, meta });
+    } catch {
+      console.warn("Không nạp được ảnh PixelLab:", meta.file);
+    }
+  }
+
+  /** Nạp dần các ảnh còn chờ lúc rảnh, mỗi lượt vài ảnh. */
+  private async drain(): Promise<void> {
+    if (this.draining) return;
+    this.draining = true;
+    while (this.pending.size > 0) {
+      await idle();
+      const batch = [...this.pending.values()].slice(0, LATER_BATCH);
+      for (const meta of batch) this.pending.delete(meta.file);
+      await Promise.all(batch.map((meta) => this.loadOne(meta)));
+    }
+    this.draining = false;
   }
 }

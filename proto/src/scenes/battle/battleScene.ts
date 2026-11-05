@@ -178,6 +178,11 @@ export class BattleScene implements Scene {
         this.counterTips = new Set(this.index.hits.filter((h) => h.kind === "hit" && h.counter).slice(0, COUNTER_TIPS));
         this.stackNumbers();
         this.looks = assignLooks(replay.units);
+        // Bộ áo tài năng nạp lười (sprites.ts): nạp trước các bộ có trong trận; lúc chờ resolveLook lùi về đạo bào.
+        for (const l of this.looks.values()) {
+          this.sprites.ensure(`nhan_vat/${l.body}/${l.outfit}/`);
+          this.sprites.ensure(`nhan_vat/${l.body}/${l.outfit}.png`);
+        }
         this.dangs = assignDang(replay.units);
         this.luans = buildPhapLuan(replay.units, replay.events);
         this.than = new ThanNguoi(this.index, this.sprites, (id) => this.looks.get(id));
