@@ -229,7 +229,10 @@ export class BattleScene implements Scene {
     for (const m of this.marks.values()) m.casts.sort((a, b) => a - b);
   }
 
-  /** Hoạt ảnh và khung của một người tại t, ưu tiên: ngã, ra chiêu, trúng đòn nặng, đứng. null nếu chưa có hình. */
+  /**
+   * Hoạt ảnh và khung của một người tại t, ưu tiên: ngã, ra chiêu, trúng đòn nặng, chạy, đứng. `trail` là khung để vẽ
+   * vệt vũ khí. null nếu chưa có hình.
+   */
   private pose(ut: UnitTimeline, t: number, look: Look, life: (s: number) => number): { anim: Anim; frame: number; trail?: number } | null {
     const idle = animInfo(this.sprites, look, "dung");
     if (!idle) return null;
