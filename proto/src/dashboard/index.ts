@@ -1,6 +1,7 @@
 // Ghép dashboard vào khung proto (GDD mục 14): thanh dưới Động phủ · Bản đồ · Tông môn · Công pháp · Liên minh,
 // thanh trên ở mọi màn chính, màn Nhân vật mở từ thanh trên, Trận mở từ chiến báo.
 import "./dashboard.css";
+import "./game.css";
 import "./fonts.css";
 import type { App } from "../app/app.ts";
 import type { Scene } from "../app/scene.ts";
@@ -27,7 +28,7 @@ import { NhanVatScene } from "./screens/nhanVat.ts";
 import { TongMonScene } from "./screens/tongMon.ts";
 import { lazySource, TopBar, type DashCtx } from "./shell.ts";
 import type { Go } from "./source.ts";
-import { closeSheet, ServerClock, tickCountdowns, toast } from "./ui.ts";
+import { artUrl, closeSheet, ServerClock, tickCountdowns, toast } from "./ui.ts";
 
 export interface Dashboard {
   /** Năm màn trên thanh dưới, theo thứ tự GDD. */
@@ -154,10 +155,12 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
     },
     attach(a: App): void {
       app = a;
-      // Icon cho 5 nút của thanh dưới (App chỉ tạo nút chữ).
+      // Icon cho 5 nút của thanh dưới (App chỉ tạo nút chữ): hình vẽ Canva (assets/icon_ve/ui/tab), nút đang mở sáng lên
+      // (game.css); ảnh lỗi thì còn icon nét SVG bên dưới.
       for (const b of document.querySelectorAll<HTMLButtonElement>("#tabbar button")) {
         const name = TAB_ICONS[b.dataset.scene ?? ""];
-        if (name && !b.querySelector("svg")) b.innerHTML = `${icon(name, "tab-ic")}<span>${b.textContent}</span>`;
+        if (name && !b.querySelector(".tab-art"))
+          b.innerHTML = `<span class="tab-art">${icon(name, "tab-ic")}<img class="tab-ve" src="${artUrl(`ui/tab/${name}`)}" alt="" onerror="this.remove()"></span><span>${b.textContent}</span>`;
       }
       if (!auth.session()) showLogin(auth, AGE_LABEL, () => (reloadScene(), ftue?.capNhat()));
     },

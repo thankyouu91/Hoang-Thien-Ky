@@ -151,10 +151,13 @@ export function cropIcons(root: HTMLElement): void {
   }
 }
 
+/** Hình hệ: viên ngọc tròn vẽ Canva (assets/icon_ve/he/<hệ>.webp, 256 px, nền trong). */
+export const heArt = (e: string) => artUrl(`he/${e}`);
+
 /** Chip hệ: icon kèm tên, màu theo GDD mục 15 (không chỉ dựa vào màu). */
 export function elementChip(e: Element, withName = true): string {
   const st = ELEMENT_STYLE[e];
-  return `<span class="chip el" style="--c:${st.color};--ink:${st.ink}"><img src="${assetUrl(`he/${e}`)}" alt="" onerror="this.remove()">${withName ? esc(st.name) : ""}</span>`;
+  return `<span class="chip el" style="--c:${st.color};--ink:${st.ink}"><img src="${heArt(e)}" alt="" onerror="this.remove()">${withName ? esc(st.name) : ""}</span>`;
 }
 
 /**
@@ -164,7 +167,7 @@ export function elementChip(e: Element, withName = true): string {
  */
 export function techCover(t: { art?: string; element: Element; subElements?: Element[] }, size: "s" | "m" | "l" = "m"): string {
   const subs = (t.subElements ?? [])
-    .map((e) => `<i style="--c:${ELEMENT_STYLE[e].color}" title="Hệ phụ ${esc(ELEMENT_STYLE[e].name)}"><img src="${assetUrl(`he/${e}`)}" alt="" onerror="this.remove()"></i>`)
+    .map((e) => `<i style="--c:${ELEMENT_STYLE[e].color}" title="Hệ phụ ${esc(ELEMENT_STYLE[e].name)}"><img src="${heArt(e)}" alt="" onerror="this.remove()"></i>`)
     .join("");
   return `<span class="tech-art ${size}"><img class="ve" src="${artUrl(t.art ?? `cong_phap/${t.element}`)}" alt="" onerror="this.remove()">${subs ? `<span class="tech-sub">${subs}</span>` : ""}</span>`;
 }

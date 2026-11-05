@@ -32,7 +32,7 @@ import { icon, type IconName } from "../icons.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { BagItem, GearItem, GearSlot, ItemGrade, ItemKind, NhanVatView, Rarity, StatLine, TechniqueCard } from "../source.ts";
 import { REALM_TERM, term } from "../terms.ts";
-import { artUrl, assetUrl, cd, closeSheet, cropIcons, elementChip, esc, fmt, openSheet, pctText, ROLE_NAMES, skillChip, techCover, toast } from "../ui.ts";
+import { artUrl, assetUrl, cd, closeSheet, cropIcons, elementChip, esc, fmt, heArt, openSheet, pctText, ROLE_NAMES, skillChip, techCover, toast } from "../ui.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 
 export type NhanVatTab = "thong-tin" | "phap-tuong" | "dao-co" | "luyen-khi" | "tui";
@@ -284,7 +284,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         ${row("Cống hiến", fmt(v.contribution))}
         ${row("Linh thạch", `<span class="stone">${fmt(v.top.linhThach)}</span>`)}`)}
       ${group(`${term("Linh căn", "linh_can")} và tài năng`, `
-        ${v.roots.map((e) => `<div class="nv-row"><span class="nv-el"><img src="${assetUrl(`he/${e}`)}" alt="">${esc(ELEMENT_STYLE[e].name)}</span><b class="tag">Linh căn</b></div>`).join("")}
+        ${v.roots.map((e) => `<div class="nv-row"><span class="nv-el on"><img src="${heArt(e)}" alt="">${esc(ELEMENT_STYLE[e].name)}</span><b class="tag">Linh căn</b></div>`).join("")}
         <div class="nv-row"><span>${term("Tài năng", "tai_nang")}</span><b>${esc(v.talent.name)}</b></div>
         <p class="nv-note">${esc(v.talent.combat)}</p>`)}
       ${group("Chỉ số chiến đấu", `
@@ -297,14 +297,14 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         <div class="bar"><i style="width:${(exp * 100).toFixed(1)}%"></i></div>
         <button type="button" class="nv-row" data-act="cultivation"><span>Tốc độ bế quan</span><b>${fmt(c.perHour)}/giờ</b></button>
         ${row("Mốc đột phá", `cấp ${c.breakAt.level} → ${esc(c.breakAt.realm)}`)}
-        <div class="nv-row nv-dev"><span>Thử hiệu ứng (prototype)</span><span><button type="button" class="btn small" data-act="dev_cap">+1 cấp</button><button type="button" class="btn small" data-act="dev_dot_pha">Tới mốc đột phá</button></span></div>
+        <div class="nv-dev"><span>Thử hiệu ứng (prototype)</span><div class="nv-dev-btns"><button type="button" class="btn small" data-act="dev_cap">+1 cấp</button><button type="button" class="btn small" data-act="dev_dot_pha">Tới mốc đột phá</button></div></div>
         ${c.retreat ? row("Đang bế quan", `<span data-cd="${c.retreat.endsAt}">${cd(c.retreat.endsAt)}</span>`) : ""}`)}
       ${s ? group("Tài khoản", `
         ${row("Số điện thoại", esc(s.phoneMasked))}
         ${row("Nhóm tuổi", age < GUARDIAN_AGE ? "Dưới 16, có giám hộ" : age < ADULT_AGE ? "Dưới 18" : "Từ 18")}
         ${row("Ngôn ngữ", langSwitch())}
         <div class="nv-acc-btns"><button type="button" class="btn small can-may-chu" data-act="gop-y">Góp ý, báo lỗi</button><button type="button" class="btn small nv-choi-lai" data-act="choi-lai">Chơi lại từ đầu</button><button type="button" class="btn small nv-logout" data-act="logout">${icon("logout")} Đăng xuất</button></div>`, false) : ""}
-      <button type="button" class="seal nv-main" data-act="main"${c.retreat && !c.canBreak ? " disabled" : ""}>${c.canBreak ? "Đột phá" : c.retreat ? "Đang bế quan" : "Bế quan"}</button>`;
+      <button type="button" class="seal nv-main${c.canBreak ? " dot-pha" : c.retreat ? " be-quan" : ""}" data-act="main"${c.retreat && !c.canBreak ? " disabled" : ""}>${c.canBreak ? "Đột phá" : c.retreat ? `<span>Đang bế quan</span><small>còn ${cd(c.retreat.endsAt)}</small>` : "Bế quan"}</button>`;
   }
 
   // ---- Cột giữa: Pháp tướng -------------------------------------------------------------------------------------

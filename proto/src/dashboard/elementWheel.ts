@@ -3,7 +3,7 @@
 // (GDD mục 8): tương sinh, tương khắc giữa hệ gốc, biến dị nối về hệ gốc, đối cực nét đứt. Hệ linh căn sáng, hệ khác mờ.
 import { beatsEither, ELEMENTS, generatesEither, isOpposite, parentOf, type Element } from "@ktlp/sim";
 import { ELEMENT_STYLE } from "../theme/elements.ts";
-import { assetUrl } from "./ui.ts";
+import { heArt } from "./ui.ts";
 
 /** Tâm và cỡ vòng theo đơn vị viewBox 200 × 200; cảnh three của Pháp tướng (art/phapTuong.ts) dùng cùng bố cục. */
 export const C = 100;
@@ -42,7 +42,15 @@ function links(): { a: Element; b: Element; kind: LinkKind }[] {
 
 export const LINKS = links();
 
-/** SVG vòng hệ, `roots` là linh căn của nhân vật. */
+/** Cỡ hình ngọc hệ trong vòng (đơn vị viewBox); hệ linh căn to hơn. */
+const ORB = 22;
+const ORB_ON = 28;
+
+/**
+ * SVG vòng hệ, `roots` là linh căn của nhân vật. Mỗi hệ là viên ngọc vẽ Canva (assets/icon_ve/he). Hệ linh căn sáng
+ * và có hiệu ứng: quầng màu hệ thở, vòng chấm xoay, ba đốm linh khí bay quanh (game.css; tắt khi giảm chuyển động).
+ * Hệ khác mờ và nhạt màu.
+ */
 export function elementWheel(roots: Element[]): string {
   const lit = new Set(roots);
   const lines = LINKS.map(({ a, b, kind }) => {
@@ -51,13 +59,19 @@ export function elementWheel(roots: Element[]): string {
     const on = lit.has(a) || lit.has(b);
     return `<line class="wl ${kind}${on ? " on" : ""}" x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${q.x.toFixed(1)}" y2="${q.y.toFixed(1)}"/>`;
   }).join("");
+  const glow = ELEMENTS.filter((e) => lit.has(e))
+    .map((e) => `<radialGradient id="wg-${e}"><stop offset="0.35" stop-color="${ELEMENT_STYLE[e].color}" stop-opacity="0.75"/><stop offset="1" stop-color="${ELEMENT_STYLE[e].color}" stop-opacity="0"/></radialGradient>`)
+    .join("");
   const nodes = ELEMENTS.map((e) => {
     const p = at(e);
     const st = ELEMENT_STYLE[e];
     const on = lit.has(e);
+    const s = on ? ORB_ON : ORB;
+    const fx = on
+      ? `<circle class="w-glow" r="${s * 0.95}" fill="url(#wg-${e})"/><circle class="w-ring" r="${s * 0.66}" style="stroke:${st.color}"/><g class="w-sparks" style="fill:${st.color}"><circle cx="${s * 0.62}" r="1.3"/><circle cx="${-s * 0.62}" r="1"/><circle cy="${s * 0.62}" r="0.8"/><circle cy="${-s * 0.62}" r="0.8" opacity="0"/></g>`
+      : "";
     return `<g class="wn${on ? " on" : ""}" transform="translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})"><title>${st.name}${on ? " · linh căn" : ""}</title>
-      ${on ? `<circle r="15" class="halo"/>` : ""}<circle r="${NODE_R}" style="stroke:${st.color}"/>
-      <image href="${assetUrl(`he/${e}`)}" x="-8" y="-8" width="16" height="16"/></g>`;
+      ${fx}<image class="w-orb" href="${heArt(e)}" x="${-s / 2}" y="${-s / 2}" width="${s}" height="${s}"/></g>`;
   }).join("");
-  return `<svg class="pt-wheel" viewBox="0 0 200 200" aria-hidden="true">${RINGS.map((r) => `<circle class="ring" cx="${C}" cy="${C}" r="${r}"/>`).join("")}${lines}${nodes}</svg>`;
+  return `<svg class="pt-wheel" viewBox="0 0 200 200" aria-hidden="true"><defs>${glow}</defs>${RINGS.map((r) => `<circle class="ring" cx="${C}" cy="${C}" r="${r}"/>`).join("")}${lines}${nodes}</svg>`;
 }
