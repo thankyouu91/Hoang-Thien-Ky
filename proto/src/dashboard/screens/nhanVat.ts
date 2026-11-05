@@ -25,6 +25,7 @@ import { daoDoHtml, daoDoManDotPha, daoDoReduced, daoDoSan, khiManDotPhaDong } f
 import { lang, langSwitch, setLang, type Lang } from "../i18n.ts";
 import { moGopY } from "../mayChuUi.ts";
 import { BAC_TEN, bacBadge, GHEP_AN_SO, ghepLen, binhAnArt, binhBoBlock, binhBoSheet, dongAnHtml, dongRenHtml, gearSet2Rows, setRow, setSheet } from "../set2View.ts";
+import { laBanMau } from "../moi/demo.ts";
 import { elementWheel } from "../elementWheel.ts";
 import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
 import { LuyenKhiPanel, type LkTab } from "./luyenKhiPanel.ts";
@@ -804,6 +805,9 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     else if (name === "cultivation") this.openCultivation(v);
     else if (name === "main") {
       if (v.cultivation.canBreak) void this.send({ type: "dot_pha" });
+      // Bản người mới: bế quan thật ở bảng "Tu luyện tiếp" (moi/, sau chương 0), trong chương 0 thì mở bước nhập môn đang
+      // làm. Bản mẫu (?demo=1) không có thẻ nhập môn nên giữ bảng bế quan của mock.
+      else if (!laBanMau()) this.ctx.nav.go({ screen: "nhiem-vu", id: "be_quan" });
       else this.openRetreat(v);
     } else if (name === "dev_cap") void this.send({ type: "dev_len_cap", levels: 1 });
     // Tới cấp cuối cảnh giới và đầy tu vi của cấp đó (thêm một cấp nữa; tu vi dừng ở mức đủ để Đột phá).

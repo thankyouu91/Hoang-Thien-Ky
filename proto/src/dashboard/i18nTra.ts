@@ -10,12 +10,15 @@ export const VI_CHAR = /[àáảãạăằắẳẵặâầấẩẫậèéẻ�
 const norm = (s: string) => s.replace(/\s+/g, " ").trim();
 const reEsc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-/** Regex của mẫu: phần cố định bắt đầu hay kết thúc bằng chữ cái thì phần biến kề nó không được dính chữ cái. */
+/**
+ * Regex của mẫu: phần cố định bắt đầu hay kết thúc bằng chữ cái thì phần biến kề nó không được dính chữ cái; phần biến
+ * không vượt qua " · " (mẫu chung như "Ghép được {}" không nuốt các phần sau dấu chấm giữa, để chuỗi đó tách từng phần).
+ */
 function mauRe(k: string): RegExp {
   const lits = norm(k).split("{}");
   let src = "^";
   lits.forEach((l, i) => {
-    if (i > 0) src += "(.+?)" + (/^\p{L}/u.test(l) ? "(?<!\\p{L})" : "");
+    if (i > 0) src += "((?:(?! · ).)+?)" + (/^\p{L}/u.test(l) ? "(?<!\\p{L})" : "");
     src += reEsc(l) + (i < lits.length - 1 && /\p{L}$/u.test(l) ? "(?!\\p{L})" : "");
   });
   return new RegExp(src + "$", "su");

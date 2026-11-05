@@ -97,3 +97,9 @@ test("bảng thật: câu người mới không thành chữ lai", () => {
     assert.ok(!lai, `${s} → ${t}`);
   }
 });
+
+test("phần biến không vượt qua dấu ·: mẫu chung không nuốt các phần sau", () => {
+  const b = new BoTra({ "Ghép được {}": "Can merge {}", "{} cấp {}": "{} level {}", "Ngọc": "Gem", "Cấp {}": "Level {}" });
+  assert.equal(b.tr("Ghép được 3 · Cấp 2"), "Can merge 3 · Level 2");
+  assert.equal(b.tr("Ngọc cấp 2 · Cấp 5"), "Gem level 2 · Level 5");
+});
