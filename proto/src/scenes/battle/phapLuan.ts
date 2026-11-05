@@ -423,7 +423,7 @@ function drawLuan(
   else if (realm === 2 && omen > 0) drawRays(ctx, main, R, a0, env, g, 1, base * omen);
   if (spec.leader) {
     ctx.globalAlpha = base;
-    drawFeathers(ctx, R + 3, c * 0.35, env);
+    drawFeathers(ctx, R + 3, c * 0.35, env, base, realm);
   }
 
   // Bóng mờ (smear) lúc bung: hai bản sao vành chính lệch góc về phía sau chiều quay.
@@ -875,16 +875,21 @@ function drawCorona(ctx: CanvasRenderingContext2D, el: ElementId, color: string,
   ctx.restore();
 }
 
-/** Lông vũ vàng của tông chủ quanh vành ngoài. */
-function drawFeathers(ctx: CanvasRenderingContext2D, R: number, a0: number, env: Envelope): void {
+/**
+ * Lông vũ vàng của tông chủ quanh vành ngoài. Cảnh giới càng cao vòng càng dày, nên lông vũ nhạt và ngắn dần (góp ý ui-kem):
+ * Trúc Cơ đậm 0,95, Kết Đan 0,75, từ Nguyên Anh 0,55; theo cả độ đậm chung `alpha` (chế độ quiet của màn Trận).
+ */
+function drawFeathers(ctx: CanvasRenderingContext2D, R: number, a0: number, env: Envelope, alpha = 1, realm = 1): void {
+  const k = realm >= 3 ? 0.55 : realm === 2 ? 0.75 : 0.95;
+  const len = realm >= 3 ? 5.5 : 7;
   ctx.save();
   for (let i = 0; i < 12; i++) {
     const a = a0 + (i * Math.PI) / 6;
     ctx.save();
     ctx.rotate(a);
     ctx.fillStyle = i % 2 ? "#fff1b8" : "#f2c230";
-    ctx.globalAlpha = 0.95;
-    const l = 7 + 1.5 * Math.min(1.5, env.glow);
+    ctx.globalAlpha = alpha * k;
+    const l = len + 1.5 * Math.min(1.5, env.glow);
     ctx.beginPath();
     ctx.moveTo(R, -1.6);
     ctx.quadraticCurveTo(R + l * 0.6, -2.4, R + l, 0);
