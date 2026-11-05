@@ -5,6 +5,7 @@ import type { GameState, LearnedTechnique, OwnedScroll, SectTechnique } from "./
 import { pickUpScroll, depositScroll, composeInLibrary, composeStarter } from "./library.ts";
 import { setTransmission, learnTechnique, setLoadout } from "./transmission.ts";
 import { joinSect, releaseMember, leaveSect } from "./departure.ts";
+import { raiseLayer } from "./layers.ts";
 
 export type Command =
   /** Chỉ hệ thống gửi: tàn quyển rơi trong bí cảnh, thưởng nhiệm vụ. */
@@ -19,7 +20,9 @@ export type Command =
   /** Người chưa có tông vào làm ngoại môn (GDD mục 6; bản chơi một mình: tông NPC nhận ngay, chưa xét đơn, lời mời, vị diện). */
   | { type: "gia_nhap_tong"; actor: string; sectId: string }
   /** Nhiệm vụ 0.4: ghép 1 chủ quyển với 1 phụ quyển trong túi thành công pháp tân thủ riêng; mỗi người một lần. */
-  | { type: "ghep_tan_thu"; actor: string; main: number; subs: number[] };
+  | { type: "ghep_tan_thu"; actor: string; main: number; subs: number[] }
+  /** Lên một tầng công pháp đã học, tiêu điểm luyện và cống hiến (layers.ts). */
+  | { type: "len_tang_cong_phap"; actor: string; techniqueId: number };
 
 export type RuleEvent =
   | { type: "nhat_tan_quyen"; memberId: string; scroll: OwnedScroll }
@@ -30,7 +33,8 @@ export type RuleEvent =
   | { type: "mang_vao_tran"; memberId: string; techniqueIds: number[] }
   | { type: "roi_tong"; memberId: string; sectId: string; betrayed: boolean }
   | { type: "gia_nhap_tong"; memberId: string; sectId: string }
-  | { type: "ghep_tan_thu"; memberId: string; technique: LearnedTechnique };
+  | { type: "ghep_tan_thu"; memberId: string; technique: LearnedTechnique }
+  | { type: "len_tang_cong_phap"; memberId: string; techniqueId: number; layer: number; diemLuyen: number; congHien: number };
 
 export type RuleError =
   | "lenh_khong_hop_le"
@@ -56,7 +60,11 @@ export type RuleError =
   | "tong_chu_khong_roi_duoc"
   | "da_co_tong"
   | "khong_co_tong"
-  | "da_ghep_tan_thu";
+  | "da_ghep_tan_thu"
+  | "cong_phap_dung_tang"
+  | "da_toi_tang"
+  | "thieu_diem_luyen"
+  | "thieu_cong_hien";
 
 export type Result = { ok: true; events: RuleEvent[] } | { ok: false; error: RuleError };
 
@@ -83,6 +91,8 @@ export function apply(state: GameState, cmd: Command, now: number): Result {
       return joinSect(state, cmd.actor, cmd.sectId);
     case "ghep_tan_thu":
       return composeStarter(state, cmd.actor, cmd.main, cmd.subs);
+    case "len_tang_cong_phap":
+      return raiseLayer(state, cmd.actor, cmd.techniqueId);
     default:
       return { ok: false, error: "lenh_khong_hop_le" };
   }
