@@ -5,11 +5,11 @@
 @import "@fontsource-variable/lora/wght.css";
 @import "@fontsource-variable/lora/wght-italic.css";
 /* Chữ kiểu tiên hiệp (người dùng chốt 2026-11-05): Prata cho tiêu đề (nét thanh đậm, chỉ có weight 400);
-   tên game theo mẫu thư pháp August người dùng gửi → Great Vibes (bút sắt nghiêng, nét thanh đậm, chữ nối —
-   cùng kiểu, giấy phép OFL; không dùng font Agustus Việt hóa vì giấy phép không rõ); câu thơ tròn → Itim.
+   tên game theo mẫu thư pháp August + yêu cầu "kiếm hiệp 1 chút" (2026-11-05) → Splash (bút lông chém, mực văng,
+   OFL; không dùng font Agustus Việt hóa vì giấy phép không rõ); câu thơ tròn → Itim.
    Đều đủ dấu tiếng Việt, nạp từ @fontsource. */
 @import "@fontsource/prata/index.css";
-@import "@fontsource/great-vibes/index.css";
+@import "@fontsource/splash/index.css";
 @import "@fontsource/itim/index.css";
 
 :root {
@@ -46,7 +46,7 @@
 
   --font: "Lora Variable", Cambria, "Times New Roman", serif;
   --font-display: "Prata", "Lora Variable", Cambria, serif;
-  --font-but: "Great Vibes", "Segoe Script", cursive;
+  --font-but: "Splash", "Segoe Script", cursive;
   --font-tron: "Itim", "Segoe UI", sans-serif;
   --font-han: "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
 
@@ -288,7 +288,7 @@ html:not(.co-js) .mo-muc { display: none; }
   background: rgba(255, 250, 240, 0.7);
 }
 .an-lon { display: block; width: 128px; height: 128px; margin: 0 auto; transform: rotate(-4deg); }
-.dau-tranh h1 { margin: 6px 0 0; font: 400 clamp(56px, 14.6vw, 126px)/1.2 var(--font-but); letter-spacing: 0; white-space: nowrap; text-wrap: nowrap; }
+.dau-tranh h1 { margin: 8px 0 0; font: 400 clamp(50px, 13vw, 112px)/1.22 var(--font-but); letter-spacing: 0.01em; white-space: nowrap; text-wrap: nowrap; }
 /* Câu thơ lục bát dưới tên game, nét bút lông, mực nâu. */
 .cau-tho {
   margin: 2px 0 26px;
@@ -302,7 +302,7 @@ html:not(.co-js) .mo-muc { display: none; }
 @media (max-width: 819px) {
   .an-lon { width: 104px; height: 104px; }
   /* Great Vibes có nét vung dài: khung hẹp phải hạ cỡ kẻo "Ký" tràn mép. */
-  .dau-tranh h1 { font-size: clamp(38px, 10.6vw, 126px); }
+  .dau-tranh h1 { font-size: clamp(36px, 10.2vw, 112px); }
 }
 @media (min-width: 820px) {
   .an-lon { width: 144px; height: 144px; margin: 0; }
@@ -375,7 +375,7 @@ html:not(.co-js) .mo-muc { display: none; }
   display: inline-block;
   margin: 0;
   color: var(--c-accent-ink);
-  font: 400 clamp(36px, 9vw, 64px)/1.3 var(--font-but);
+  font: 400 clamp(32px, 8vw, 56px)/1.35 var(--font-but);
 }
 @media (min-width: 720px) {
   .cau-lon p::before, .cau-lon p::after { content: ""; display: inline-block; width: 36px; height: 1px; margin: 0 18px; vertical-align: middle; background: var(--c-frame); }
