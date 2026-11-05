@@ -17,6 +17,9 @@ import { startRestReminder } from "./reminder.ts";
 import { startTelemetry } from "./server.ts";
 import { startMayChuUi } from "./mayChuUi.ts";
 import { AGE_LABEL, MockDashboardSource } from "./mock/source.ts";
+import { laBanMau } from "./moi/demo.ts";
+import { moFtue } from "./moi/ftueUi.ts";
+import { NguonTheoTaiKhoan } from "./moi/nguonMoi.ts";
 import { CongPhapScene } from "./screens/congPhap.ts";
 import { DongPhuScene } from "./screens/dongPhu.ts";
 import { LienMinhScene } from "./screens/lienMinh.ts";
@@ -106,8 +109,11 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
   startTelemetry(auth);
   // Màn bảo trì theo cấu hình sống, ẩn nút Góp ý khi không nối được máy chủ (mayChuUi.ts).
   startMayChuUi();
+  // Người chơi mới bắt đầu từ cấp 1, tiến độ lưu theo tài khoản (moi/). Thế giới mẫu cấp 42 chỉ chạy với ?demo=1 trên máy dev.
+  const banMau = laBanMau();
+  const nguonMoi = banMau ? undefined : new NguonTheoTaiKhoan(auth);
   const ctx: DashCtx = {
-    source: lazySource(() => MockDashboardSource.create(Date.now(), auth)),
+    source: nguonMoi ?? lazySource(() => MockDashboardSource.create(Date.now(), auth)),
     auth,
     clock: new ServerClock(),
     topbar,
@@ -120,6 +126,9 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
   const lienMinh = new LienMinhScene(ctx);
   const nhanVat = new NhanVatScene(ctx, sprites);
   const byId: Record<string, Scene> = { "dong-phu": dongPhu, "ban-do": map, "tong-mon": tongMon, "cong-phap": congPhap, "lien-minh": lienMinh };
+  const reloadScene = () => (app?.scene as { reload?: () => void } | undefined)?.reload?.();
+  // Thẻ Nhiệm vụ nhập môn (FTUE bước 2–8) cho người chơi mới.
+  const ftue = nguonMoi && moFtue({ nguon: nguonMoi, auth, nav, reload: reloadScene });
 
   // Lúc rảnh sau khi vào game: tải trước file điểm, ảnh nền và hình đảo của vùng, để mở tab Bản đồ là có ngay.
   const idle = (fn: () => void) => ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 4000 }) : setTimeout(fn, 1500));
@@ -137,6 +146,7 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
     onShow(s: Scene): void {
       closeSheet();
       if (TAB_IDS.includes(s.id)) lastMain = s.id;
+      ftue?.onShow(s.id);
     },
     attach(a: App): void {
       app = a;
@@ -145,7 +155,7 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
         const name = TAB_ICONS[b.dataset.scene ?? ""];
         if (name && !b.querySelector("svg")) b.innerHTML = `${icon(name, "tab-ic")}<span>${b.textContent}</span>`;
       }
-      if (!auth.session()) showLogin(auth, AGE_LABEL, () => (app?.scene as { reload?: () => void } | undefined)?.reload?.());
+      if (!auth.session()) showLogin(auth, AGE_LABEL, () => (reloadScene(), ftue?.capNhat()));
     },
   };
 }

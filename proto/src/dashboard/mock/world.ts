@@ -3,7 +3,7 @@
 // (mỏ, hành trình, trang bị, thú cưỡi, liên minh) là dữ liệu tạm ở đây, số lấy từ data/he_thong/json.
 // Tên người, tên tông môn và số lượng là tự đặt cho bản mẫu.
 import { addMember, addSect, apply, emptyState, type Bac, type BoardPiece, type Command, type GameState, type Role } from "@ktlp/rules";
-import type { Element } from "@ktlp/sim";
+import type { Element, Talent } from "@ktlp/sim";
 import type { SectModel } from "../art/sectScene.ts";
 import type { BagItem, Building, GearItem, GearSlot, LuyenKhiSlot, LuyenKhiView, PointType, Rarity } from "../source.ts";
 import { doPhoCode, hasKhiLinh, rollOffer, syncVan } from "../luyenKhi.ts";
@@ -74,7 +74,7 @@ export interface World {
   player: {
     name: string;
     roots: Element[];
-    talent: "tu_the";
+    talent: Talent;
     exp: number;
     linhThach: number;
     tienNgoc: number;

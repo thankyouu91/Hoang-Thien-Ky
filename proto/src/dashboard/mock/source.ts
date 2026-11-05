@@ -329,10 +329,10 @@ function learnedCard(l: LearnedTechnique): TechniqueCard {
 }
 
 export class MockDashboardSource implements DashboardSource {
-  private w: World;
-  private auth?: AuthSource;
+  protected w: World;
+  protected auth?: AuthSource;
 
-  private constructor(w: World, auth?: AuthSource) {
+  protected constructor(w: World, auth?: AuthSource) {
     this.w = w;
     this.auth = auth;
   }
@@ -342,16 +342,16 @@ export class MockDashboardSource implements DashboardSource {
   }
 
   /** Giờ server giả: cùng đồng hồ máy. */
-  private now(): number {
+  protected now(): number {
     return Date.now();
   }
 
-  private get me() {
+  protected get me() {
     return this.w.rules.members[PLAYER];
   }
 
   /** Thêm tu vi: lên cấp trong cảnh giới; ở cấp cuối cảnh giới thì tu vi dừng ở mức đủ, chờ Đột phá. */
-  private gainExp(amount: number): void {
+  protected gainExp(amount: number): void {
     const p = this.w.player;
     const me = this.me;
     p.exp += amount;
@@ -423,11 +423,11 @@ export class MockDashboardSource implements DashboardSource {
     else p.bag.push(pieceBagItem(p.nextUid++, piece));
   }
 
-  private get sect() {
+  protected get sect() {
     return this.w.rules.sects[SECT];
   }
 
-  private top(): TopBarView {
+  protected top(): TopBarView {
     const p = this.w.player;
     return {
       name: p.name,
@@ -451,7 +451,7 @@ export class MockDashboardSource implements DashboardSource {
     return Math.max(0, MINOR_DAILY_MINUTES - this.auth!.playedMinutesToday());
   }
 
-  private miniMap(focus?: number[]): MiniMapView {
+  protected miniMap(focus?: number[]): MiniMapView {
     const w = this.w;
     const now = this.now();
     const marks: MiniMapView["marks"] = w.held.map((h) => ({ pointId: h.pointId, owner: "minh", attacked: !!h.attacked && h.attacked.endsAt > now }));
@@ -501,7 +501,7 @@ export class MockDashboardSource implements DashboardSource {
     return [12, 20].some((h) => now >= todayAt(now, h) && now < todayAt(now, h) + mins * 60_000);
   }
 
-  private todo(now: number): TodoCard[] {
+  protected todo(now: number): TodoCard[] {
     const w = this.w;
     const cards: TodoCard[] = [];
     const hit = w.held.find((h) => h.attacked && h.attacked.endsAt > now);
@@ -531,7 +531,7 @@ export class MockDashboardSource implements DashboardSource {
     return cards.slice(0, 3);
   }
 
-  private currentQuest(): { id: string; name: string; step: string; go: Go } | undefined {
+  protected currentQuest(): { id: string; name: string; step: string; go: Go } | undefined {
     const level = this.me.level;
     const main = NHIEM_VU.quests.filter((q) => q.kind === "chinh" && q.minLevel <= level);
     const q = main[main.length - 1];

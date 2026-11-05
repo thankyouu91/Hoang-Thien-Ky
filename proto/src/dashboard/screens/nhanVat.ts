@@ -301,7 +301,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         ${row("Số điện thoại", esc(s.phoneMasked))}
         ${row("Nhóm tuổi", age < GUARDIAN_AGE ? "Dưới 16, có giám hộ" : age < ADULT_AGE ? "Dưới 18" : "Từ 18")}
         ${row("Ngôn ngữ", langSwitch())}
-        <div class="nv-acc-btns"><button type="button" class="btn small can-may-chu" data-act="gop-y">Góp ý, báo lỗi</button><button type="button" class="btn small nv-logout" data-act="logout">${icon("logout")} Đăng xuất</button></div>`, false) : ""}
+        <div class="nv-acc-btns"><button type="button" class="btn small can-may-chu" data-act="gop-y">Góp ý, báo lỗi</button><button type="button" class="btn small nv-choi-lai" data-act="choi-lai">Chơi lại từ đầu</button><button type="button" class="btn small nv-logout" data-act="logout">${icon("logout")} Đăng xuất</button></div>`, false) : ""}
       <button type="button" class="seal nv-main" data-act="main"${c.retreat && !c.canBreak ? " disabled" : ""}>${c.canBreak ? "Đột phá" : c.retreat ? "Đang bế quan" : "Bế quan"}</button>`;
   }
 
