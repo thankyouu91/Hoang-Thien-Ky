@@ -22,7 +22,7 @@ import { tr } from "../../dashboard/i18n.ts";
 const CELL = 64; // đơn vị thế giới mỗi ô sân
 const LANE = 60; // khoảng cách ngang giữa hai người cùng hàng
 const SIZE = 40; // cạnh khối nhân vật
-const TEAM_RING = ["#e6d8b8", "#b3261e"]; // đội A giấy dó, đội B ấn son
+const TEAM_RING = ["#f2e6c8", "#d6372a"]; // đội A giấy dó, đội B ấn son (sáng, vì áo theo hệ nên vòng chân là dấu đội chính)
 const HP = "#7bc96f";
 const MANA = "#5aa9e6";
 const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
@@ -507,8 +507,14 @@ export class BattleScene implements Scene {
     const figure = !!(pose || sprite);
     if (figure) {
       // Có hình PixelLab: vòng đội dưới chân, người đứng trên vòng; dấu hệ đặt trước thanh máu (vẽ ở dưới).
-      ctx.lineWidth = 3;
+      // Vòng dày kèm quầng mờ cùng màu (người dùng chọn 2026-11-05: áo theo hệ nên đội nhận bằng vòng chân và viền thanh máu).
+      const alpha = ctx.globalAlpha;
       ctx.strokeStyle = TEAM_RING[u.team];
+      ctx.globalAlpha = alpha * 0.35;
+      ctx.lineWidth = 8.5;
+      ctx.stroke();
+      ctx.globalAlpha = alpha;
+      ctx.lineWidth = 4.5;
       ctx.stroke();
       const s = SIZE * 1.4;
       if (pose && look) {
@@ -605,6 +611,10 @@ export class BattleScene implements Scene {
     }
     ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
     ctx.fillRect(bx - 1, by - 1, bw + 2, 9);
+    // Viền thanh máu màu đội, cùng màu vòng chân.
+    ctx.strokeStyle = TEAM_RING[u.team];
+    ctx.lineWidth = 1;
+    ctx.strokeRect(bx - 1.5, by - 1.5, bw + 3, 10);
     ctx.fillStyle = HP;
     ctx.fillRect(bx, by, (bw * ut.hp.step(t)) / u.hpMax, 4);
     ctx.fillStyle = MANA;
