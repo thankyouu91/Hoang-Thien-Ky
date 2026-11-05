@@ -28,7 +28,7 @@
   ],
   "vars": {
     // Nơi chạy game: link mời là GAME_ORIGIN + "/moi/<ma>". Dời game sang tên miền khác thì chỉ đổi dòng này rồi deploy.
-    "GAME_ORIGIN": "https://choi.thienhoangky.fun"
+    "GAME_ORIGIN": "https://play.thienhoangky.fun"
     // Đăng nhập bằng tên + mật khẩu (worker/taiKhoan.ts). Muốn thêm lớp Cloudflare Access bên ngoài thì thêm cả hai:
     // "ACCESS_TEAM_DOMAIN": "jolly-water-a8bd.cloudflareaccess.com", "ACCESS_AUD": "<AUD của ứng dụng admin>"
   },

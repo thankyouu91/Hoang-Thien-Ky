@@ -3,7 +3,7 @@
 Trang quản trị cho admin và ban vận hành của bản chơi thử (Cửa 1), chạy ở **https://admin.thienhoangky.fun**.
 
 - **Admin và vận hành** đăng nhập bằng **tên đăng nhập và mật khẩu**. Người dùng chốt cách này ngày 2026-11-05, thay cho Cloudflare Access theo email.
-- **Người chơi thử** vào game bằng **link mời** `https://choi.thienhoangky.fun/moi/<mã>`, không có tài khoản.
+- **Người chơi thử** vào game bằng **link mời** `https://play.thienhoangky.fun/moi/<mã>`, không có tài khoản.
 
 | Thư mục, file | Việc |
 |---|---|
@@ -66,7 +66,7 @@ Không ai tự khóa, tự hạ quyền hay tự xóa chính mình được, và
 ## Người chơi thử và link mời
 
 - **Tạo link** (Admin): màn **Người chơi thử** → Tạo link mời. Đặt tên (để biết link phát ở đâu), số người tối đa và hạn dùng; hai mục sau để trống là không giới hạn. Server sinh mã ngẫu nhiên 12 ký tự.
-- **Tên miền của link:** link ghép từ biến `GAME_ORIGIN` trong `wrangler.jsonc` (hiện là `https://choi.thienhoangky.fun`), theo dạng `GAME_ORIGIN/moi/<mã>`. Game dời tên miền thì đổi dòng đó rồi deploy lại admin. Link đã gửi trước đó do trang ở tên miền cũ chuyển hướng sang tên miền mới.
+- **Tên miền của link:** link ghép từ biến `GAME_ORIGIN` trong `wrangler.jsonc` (hiện là `https://play.thienhoangky.fun`; `choi.thienhoangky.fun` chuyển 301 sang đây), theo dạng `GAME_ORIGIN/moi/<mã>`. Game dời tên miền thì đổi dòng đó rồi deploy lại admin. Link đã gửi trước đó do trang ở tên miền cũ chuyển hướng sang tên miền mới.
 - Mỗi trình duyệt mở link khi link còn mở trở thành một người chơi thử, có mã 10 ký tự, và giữ cookie vào game 180 ngày (do Worker game cấp).
 - **Tắt link, hết lượt, hết hạn:** người mới mở link sẽ không vào được. Người đã vào vẫn chơi tiếp.
 - **Khóa người chơi** (Admin): ghi `nguoi_choi_thu.khoa = 1`. Worker game chặn trình duyệt đó ngay ở lần tải trang hoặc lần gọi API kế tiếp. Tiến độ trong trình duyệt của họ không bị xóa.

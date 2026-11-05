@@ -9,7 +9,7 @@ export interface Env {
   ACCESS_AUD?: string;
   /** Chỉ cho test cục bộ: lấy khóa JWKS từ địa chỉ khác (máy chủ khóa giả). Không đặt khi deploy. */
   ACCESS_CERTS_URL?: string;
-  /** Nơi chạy game, ví dụ "https://choi.thienhoangky.fun". Link mời = GAME_ORIGIN/moi/<ma>. */
+  /** Nơi chạy game, ví dụ "https://play.thienhoangky.fun". Link mời = GAME_ORIGIN/moi/<ma>. */
   GAME_ORIGIN?: string;
 }
 
@@ -20,6 +20,6 @@ export function teamDomain(env: Env): string {
 
 /** Gốc link mời, luôn kết thúc bằng "/moi/". Thiếu GAME_ORIGIN thì dùng tên miền game hiện tại. */
 export function linkGoc(env: Env): string {
-  const goc = (env.GAME_ORIGIN ?? "").trim().replace(/\/+$/, "") || "https://choi.thienhoangky.fun";
+  const goc = (env.GAME_ORIGIN ?? "").trim().replace(/\/+$/, "") || "https://play.thienhoangky.fun";
   return `${goc}/moi/`;
 }
