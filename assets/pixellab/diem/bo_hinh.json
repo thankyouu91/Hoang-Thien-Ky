@@ -97,6 +97,51 @@
      "diem/mo_linh_thach/tho_3_1",
      "diem/mo_linh_thach/tho_3_2"
     ]
+   },
+   "loi": {
+    "1": [
+     "diem/mo_linh_thach/loi_1_1",
+     "diem/mo_linh_thach/loi_1_2",
+     "diem/mo_linh_thach/loi_1_3"
+    ],
+    "2": [
+     "diem/mo_linh_thach/loi_2_1",
+     "diem/mo_linh_thach/loi_2_2"
+    ],
+    "3": [
+     "diem/mo_linh_thach/loi_3_1",
+     "diem/mo_linh_thach/loi_3_2"
+    ]
+   },
+   "phong": {
+    "1": [
+     "diem/mo_linh_thach/phong_1_1",
+     "diem/mo_linh_thach/phong_1_2",
+     "diem/mo_linh_thach/phong_1_3"
+    ],
+    "2": [
+     "diem/mo_linh_thach/phong_2_1",
+     "diem/mo_linh_thach/phong_2_2"
+    ],
+    "3": [
+     "diem/mo_linh_thach/phong_3_1",
+     "diem/mo_linh_thach/phong_3_2"
+    ]
+   },
+   "cuc_duong": {
+    "1": [
+     "diem/mo_linh_thach/cuc_duong_1_1",
+     "diem/mo_linh_thach/cuc_duong_1_2",
+     "diem/mo_linh_thach/cuc_duong_1_3"
+    ],
+    "2": [
+     "diem/mo_linh_thach/cuc_duong_2_1",
+     "diem/mo_linh_thach/cuc_duong_2_2"
+    ],
+    "3": [
+     "diem/mo_linh_thach/cuc_duong_3_1",
+     "diem/mo_linh_thach/cuc_duong_3_2"
+    ]
    }
   },
   "mo_quang": {
@@ -180,6 +225,51 @@
     "3": [
      "diem/mo_quang/tho_3_1",
      "diem/mo_quang/tho_3_2"
+    ]
+   },
+   "loi": {
+    "1": [
+     "diem/mo_quang/loi_1_1",
+     "diem/mo_quang/loi_1_2",
+     "diem/mo_quang/loi_1_3"
+    ],
+    "2": [
+     "diem/mo_quang/loi_2_1",
+     "diem/mo_quang/loi_2_2"
+    ],
+    "3": [
+     "diem/mo_quang/loi_3_1",
+     "diem/mo_quang/loi_3_2"
+    ]
+   },
+   "phong": {
+    "1": [
+     "diem/mo_quang/phong_1_1",
+     "diem/mo_quang/phong_1_2",
+     "diem/mo_quang/phong_1_3"
+    ],
+    "2": [
+     "diem/mo_quang/phong_2_1",
+     "diem/mo_quang/phong_2_2"
+    ],
+    "3": [
+     "diem/mo_quang/phong_3_1",
+     "diem/mo_quang/phong_3_2"
+    ]
+   },
+   "cuc_duong": {
+    "1": [
+     "diem/mo_quang/cuc_duong_1_1",
+     "diem/mo_quang/cuc_duong_1_2",
+     "diem/mo_quang/cuc_duong_1_3"
+    ],
+    "2": [
+     "diem/mo_quang/cuc_duong_2_1",
+     "diem/mo_quang/cuc_duong_2_2"
+    ],
+    "3": [
+     "diem/mo_quang/cuc_duong_3_1",
+     "diem/mo_quang/cuc_duong_3_2"
     ]
    }
   },
@@ -265,6 +355,51 @@
      "diem/mo_duoc/tho_3_1",
      "diem/mo_duoc/tho_3_2"
     ]
+   },
+   "loi": {
+    "1": [
+     "diem/mo_duoc/loi_1_1",
+     "diem/mo_duoc/loi_1_2",
+     "diem/mo_duoc/loi_1_3"
+    ],
+    "2": [
+     "diem/mo_duoc/loi_2_1",
+     "diem/mo_duoc/loi_2_2"
+    ],
+    "3": [
+     "diem/mo_duoc/loi_3_1",
+     "diem/mo_duoc/loi_3_2"
+    ]
+   },
+   "phong": {
+    "1": [
+     "diem/mo_duoc/phong_1_1",
+     "diem/mo_duoc/phong_1_2",
+     "diem/mo_duoc/phong_1_3"
+    ],
+    "2": [
+     "diem/mo_duoc/phong_2_1",
+     "diem/mo_duoc/phong_2_2"
+    ],
+    "3": [
+     "diem/mo_duoc/phong_3_1",
+     "diem/mo_duoc/phong_3_2"
+    ]
+   },
+   "cuc_duong": {
+    "1": [
+     "diem/mo_duoc/cuc_duong_1_1",
+     "diem/mo_duoc/cuc_duong_1_2",
+     "diem/mo_duoc/cuc_duong_1_3"
+    ],
+    "2": [
+     "diem/mo_duoc/cuc_duong_2_1",
+     "diem/mo_duoc/cuc_duong_2_2"
+    ],
+    "3": [
+     "diem/mo_duoc/cuc_duong_3_1",
+     "diem/mo_duoc/cuc_duong_3_2"
+    ]
    }
   },
   "linh_tuyen": {
@@ -307,6 +442,27 @@
      "diem/linh_tuyen/tho_0_2",
      "diem/linh_tuyen/tho_0_3"
     ]
+   },
+   "loi": {
+    "0": [
+     "diem/linh_tuyen/loi_0_1",
+     "diem/linh_tuyen/loi_0_2",
+     "diem/linh_tuyen/loi_0_3"
+    ]
+   },
+   "phong": {
+    "0": [
+     "diem/linh_tuyen/phong_0_1",
+     "diem/linh_tuyen/phong_0_2",
+     "diem/linh_tuyen/phong_0_3"
+    ]
+   },
+   "cuc_duong": {
+    "0": [
+     "diem/linh_tuyen/cuc_duong_0_1",
+     "diem/linh_tuyen/cuc_duong_0_2",
+     "diem/linh_tuyen/cuc_duong_0_3"
+    ]
    }
   },
   "hang_di_thu": {
@@ -346,6 +502,24 @@
      "diem/hang_di_thu/tho_0_1",
      "diem/hang_di_thu/tho_0_2"
     ]
+   },
+   "loi": {
+    "0": [
+     "diem/hang_di_thu/loi_0_1",
+     "diem/hang_di_thu/loi_0_2"
+    ]
+   },
+   "phong": {
+    "0": [
+     "diem/hang_di_thu/phong_0_1",
+     "diem/hang_di_thu/phong_0_2"
+    ]
+   },
+   "cuc_duong": {
+    "0": [
+     "diem/hang_di_thu/cuc_duong_0_1",
+     "diem/hang_di_thu/cuc_duong_0_2"
+    ]
    }
   },
   "deo": {
@@ -378,6 +552,21 @@
     "0": [
      "diem/deo/tho_0_1"
     ]
+   },
+   "loi": {
+    "0": [
+     "diem/deo/loi_0_1"
+    ]
+   },
+   "phong": {
+    "0": [
+     "diem/deo/phong_0_1"
+    ]
+   },
+   "cuc_duong": {
+    "0": [
+     "diem/deo/cuc_duong_0_1"
+    ]
    }
   },
   "ben_do": {
@@ -409,6 +598,21 @@
    "tho": {
     "0": [
      "diem/ben_do/tho_0_1"
+    ]
+   },
+   "loi": {
+    "0": [
+     "diem/ben_do/loi_0_1"
+    ]
+   },
+   "phong": {
+    "0": [
+     "diem/ben_do/phong_0_1"
+    ]
+   },
+   "cuc_duong": {
+    "0": [
+     "diem/ben_do/cuc_duong_0_1"
     ]
    }
   },
@@ -477,6 +681,39 @@
     ],
     "cao": [
      "diem/cua_bi_canh/tho_cao_1"
+    ]
+   },
+   "loi": {
+    "thap": [
+     "diem/cua_bi_canh/loi_thap_1"
+    ],
+    "vua": [
+     "diem/cua_bi_canh/loi_vua_1"
+    ],
+    "cao": [
+     "diem/cua_bi_canh/loi_cao_1"
+    ]
+   },
+   "phong": {
+    "thap": [
+     "diem/cua_bi_canh/phong_thap_1"
+    ],
+    "vua": [
+     "diem/cua_bi_canh/phong_vua_1"
+    ],
+    "cao": [
+     "diem/cua_bi_canh/phong_cao_1"
+    ]
+   },
+   "cuc_duong": {
+    "thap": [
+     "diem/cua_bi_canh/cuc_duong_thap_1"
+    ],
+    "vua": [
+     "diem/cua_bi_canh/cuc_duong_vua_1"
+    ],
+    "cao": [
+     "diem/cua_bi_canh/cuc_duong_cao_1"
     ]
    }
   },
