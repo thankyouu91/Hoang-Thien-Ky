@@ -93,8 +93,8 @@ export class BattleScene implements Scene {
   private marks = new Map<number, { casts: number[]; hits: number[] }>();
   /** Mấy đòn khắc hệ đầu trận, hiện kèm nhãn "Khắc ×1,5" */
   private counterTips = new Set<object>();
-  /** Độ nhấc của từng số sát thương (đơn vị thế giới) để các đòn gần nhau vào cùng một người không đè nhau */
-  private numberLift = new Map<object, number>();
+  /** Chồng số sát thương: dòng của từng số (đơn vị thế giới) và tick đòn đầu của chồng (cả chồng bay lên cùng nhịp) */
+  private numberLift = new Map<object, { base: number; start: number }>();
   /** Ngoại hình ghép theo id (tạm theo đội và hàng khi replay chưa có) */
   private looks = new Map<number, Look>();
   /** Dáng đứng theo id: theo tài năng (tu_si/<tài năng>), tông chủ ngự kiếm (dangDung.ts) */
@@ -199,20 +199,23 @@ export class BattleScene implements Scene {
   }
 
   /**
-   * Độ nhấc của từng số sát thương: các đòn vào cùng một người trong STACK_TICKS xếp chồng lên nhau (kể cả nhãn khắc), để
-   * "18" và "243" không dính thành "18243". Tính một lần lúc nạp trận nên tua tới lui vẫn đúng chỗ.
+   * Chồng số sát thương: các đòn vào cùng một người cách nhau dưới STACK_TICKS gom thành một chồng, mỗi số (kèm nhãn khắc) một
+   * dòng, để "18" và "243" không dính thành "18243". Cả chồng bay lên cùng nhịp tính từ đòn đầu (số cũ không lấn lên dòng số
+   * mới). Chồng quá cao hay kéo quá lâu thì mở chồng mới. Tính một lần lúc nạp trận nên tua tới lui vẫn đúng chỗ.
    */
   private stackNumbers(): void {
     this.numberLift.clear();
-    const recent = new Map<number, { tick: number; top: number }[]>();
+    const stacks = new Map<number, { start: number; last: number; top: number }>();
     for (const e of this.index!.hits) {
-      const list = (recent.get(e.unit) ?? []).filter((r) => r.tick > e.tick - STACK_TICKS);
-      let base = list.reduce((m, r) => Math.max(m, r.top), 0);
-      if (base > STACK_MAX) base = 0; // quá cao thì quay về hàng đầu, khỏi bay khỏi màn
-      this.numberLift.set(e, base);
+      let s = stacks.get(e.unit);
+      if (!s || e.tick - s.last > STACK_TICKS || e.tick - s.start > 2 * STACK_TICKS || s.top > STACK_MAX) {
+        s = { start: e.tick, last: e.tick, top: 0 };
+        stacks.set(e.unit, s);
+      }
+      this.numberLift.set(e, { base: s.top, start: s.start });
       const { size, tip } = this.numberStyle(e);
-      list.push({ tick: e.tick, top: base + size + 2 + (tip ? TIP_SIZE + 1 : 0) });
-      recent.set(e.unit, list);
+      s.top += size + 3 + (tip ? TIP_SIZE + 2 : 0);
+      s.last = e.tick;
     }
   }
 
@@ -678,9 +681,12 @@ export class BattleScene implements Scene {
       if (!ut) continue;
       const age = (t - e.tick) / life;
       const p = this.place(ut.pos.step(e.tick), this.lat(e.unit));
-      // Đòn gần nhau vào cùng một người xếp chồng (stackNumbers); lệch ngang nhẹ theo người đánh cho đỡ thẳng hàng.
+      // Đòn gần nhau vào cùng một người xếp chồng (stackNumbers), cả chồng bay lên theo đòn đầu; mờ dần theo tuổi từng số.
+      // Lệch ngang nhẹ theo người đánh cho đỡ thẳng hàng.
+      const lift = this.numberLift.get(e);
+      const rise = ((t - (lift?.start ?? e.tick)) / life) * 34;
       const x = p.x + (((e.src * 37) % 13) - 6);
-      const y = p.y - SIZE / 2 - 18 - age * 34 - (this.numberLift.get(e) ?? 0);
+      const y = p.y - SIZE / 2 - 18 - rise - (lift?.base ?? 0);
       const { text, color, size, tip } = this.numberStyle(e);
       ctx.globalAlpha = 1 - age * age;
       ctx.font = `bold ${size}px ${FONT_TEXT}`;
