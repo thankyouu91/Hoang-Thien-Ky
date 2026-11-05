@@ -64,6 +64,18 @@ npx.cmd wrangler d1 execute thienhoangky --remote --command "UPDATE nguoi_choi_t
 
 Team: `https://jolly-water-a8bd.cloudflareaccess.com`. Chỉ ứng dụng "Thiên Hoang Ký – quản trị" (`admin.thienhoangky.fun`) dùng Access, đăng nhập bằng mã một lần gửi qua email. Người chơi không dùng Access, vì gói Zero Trust Free chỉ cho 50 người đăng nhập.
 
+| Thành phần | Giá trị |
+|---|---|
+| Ứng dụng | "Thiên Hoang Ký – quản trị", self-hosted `admin.thienhoangky.fun`, phiên 24 giờ |
+| Cách đăng nhập | Chỉ One-time PIN, bật instant auth |
+| Policy | "THK quan tri" (Allow), gồm rule group "THK quan tri" (id `524b879b-be5c-48d8-99e7-d158c9a56b03`) |
+| AUD | Đặt trong `admin/wrangler.jsonc` (`ACCESS_AUD`) |
+
+**Thêm Admin hoặc Vận hành** (cần làm cả hai bước):
+
+1. Vào Zero Trust → Access controls → Policies → tab Rule groups → "THK quan tri", thêm email vào Include → Emails. Bước này cho người đó qua Access.
+2. Trong Admin Dashboard, màn Phân quyền, đặt vai trò cho email đó. Bước này cho người đó quyền trong dashboard.
+
 ## Giới hạn của gói miễn phí
 
 - **Static assets:** tối đa 20.000 file mỗi phiên bản, mỗi file tối đa 25 MiB. `proto/dist` hiện có khoảng 1.400 file, tổng 59 MB, file lớn nhất 766 KB. `scripts/chuan-bi.mjs` báo lỗi nếu vượt.
