@@ -93,7 +93,7 @@ export class DongPhuScene extends PageScene<DongPhuView> {
         <ul class="list cal">${v.calendar
           .map((c) => {
             const state = now >= c.endsAt ? "past" : now >= c.startsAt ? "open" : "next";
-            const when = state === "open" ? `đang mở · còn ${cd(c.endsAt)}` : state === "next" ? `còn ${cd(c.startsAt, "đang mở")}` : "đã qua";
+            const when = state === "open" ? `đang mở · còn ${cd(c.endsAt)}` : state === "next" ? `bắt đầu sau ${cd(c.startsAt, "đang mở")}` : "đã qua";
             return `<li class="${state}"><button type="button" class="row" ${this.link(c.go)}>
               <span class="time">${clockText(c.startsAt)}</span><span class="grow">${esc(c.title)}<span class="when block">${when}</span></span>${icon("chevron", "chev")}</button></li>`;
           })

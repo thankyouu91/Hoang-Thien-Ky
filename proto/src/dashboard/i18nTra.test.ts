@@ -76,3 +76,24 @@ test("bảng thật: vài nhãn chính", () => {
   assert.equal(b.tr("Ô 3"), "Slot 3");
   assert.equal(b.tr("Lôi + Hỏa"), "Lightning + Fire");
 });
+
+test("không ra câu lai: mẫu không khớp giữa từ, phần biến là câu thường chưa dịch thì để nguyên tiếng Việt", () => {
+  const b = new BoTra({ "{} đồ{}": "{} gear{}", "{} của {}": "{2}'s {1}", "{} với {}": "{1} with {2}", "Linh thạch": "Spirit Stones", "Thử {}": "Try {}" });
+  // "đồ" nằm trong "đồng": không phải ranh giới từ
+  assert.equal(b.tr("Cùng đồng môn đánh chiếm mỏ"), "Cùng đồng môn đánh chiếm mỏ");
+  // phần biến là câu thường (chữ thường đầu) chưa có trong bảng: giữ nguyên cả câu và ghi thiếu
+  assert.equal(b.tr("rồi tới thành chủ của vùng đó"), "rồi tới thành chủ của vùng đó");
+  assert.ok(b.thieu.has("rồi tới thành chủ của vùng đó"));
+  assert.equal(b.tr("Thử công pháp mới với dị thú"), "Thử công pháp mới với dị thú");
+  // tên riêng (viết hoa đầu mọi chữ) vẫn được giữ trong câu dịch
+  assert.equal(b.tr("Thử Lăng Vân"), "Try Lăng Vân");
+});
+
+test("bảng thật: câu người mới không thành chữ lai", () => {
+  const b = new BoTra(EN, AM_TIET as AmTiet);
+  for (const s of ["Cùng đồng môn đánh chiếm mỏ linh thạch cấp 1 gần sơn môn", "Chọn vùng bắt đầu, rồi tới thành chủ của vùng đó.", "Thử công pháp mới với dị thú ở bãi săn"]) {
+    const t = b.tr(s);
+    const lai = t !== s && /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(t) && /\b(gear|of|with|Spirit Stones)\b/.test(t);
+    assert.ok(!lai, `${s} → ${t}`);
+  }
+});

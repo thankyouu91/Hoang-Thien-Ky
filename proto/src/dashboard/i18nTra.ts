@@ -1,12 +1,31 @@
 // Bộ tra dịch của i18n.ts, không đụng DOM để chạy được bằng node --test.
 // Thứ tự: chữ cố định → mẫu có biến "{}" (mẫu nhiều chữ cố định thử trước; phần biến dịch tiếp nếu có trong bảng, số và
 // tên người giữ nguyên) → chuỗi nối bằng " · " dịch từng phần. Không dịch được thì trả nguyên và ghi vào danh sách thiếu.
+// Chống câu lai: phần cố định của mẫu phải đứng ở ranh giới từ (không khớp "đồ" trong "đồng"), và phần biến còn chữ Việt
+// mà không dịch được chỉ được giữ khi trông như tên riêng (mọi chữ viết hoa đầu); câu thường thì để nguyên tiếng Việt.
 
 /** Có chữ cái tiếng Việt có dấu. */
 export const VI_CHAR = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;
 
 const norm = (s: string) => s.replace(/\s+/g, " ").trim();
 const reEsc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** Regex của mẫu: phần cố định bắt đầu hay kết thúc bằng chữ cái thì phần biến kề nó không được dính chữ cái. */
+function mauRe(k: string): RegExp {
+  const lits = norm(k).split("{}");
+  let src = "^";
+  lits.forEach((l, i) => {
+    if (i > 0) src += "(.+?)" + (/^\p{L}/u.test(l) ? "(?<!\\p{L})" : "");
+    src += reEsc(l) + (i < lits.length - 1 && /\p{L}$/u.test(l) ? "(?!\\p{L})" : "");
+  });
+  return new RegExp(src + "$", "su");
+}
+
+/** Phần biến không dịch được mà vẫn giữ trong câu dịch: tên riêng ngắn, mọi chữ viết hoa đầu ("Lăng Vân", "Lôi Trì Phong"). */
+function laTen(s: string): boolean {
+  const w = s.split(" ");
+  return w.length <= 5 && w.every((x) => !/\p{L}/u.test(x[0] ?? "") || /^\p{Lu}/u.test(x));
+}
 
 interface Mau {
   re: RegExp;
@@ -44,7 +63,7 @@ export class BoTra {
       // Mẫu chỉ có biến và khoảng trắng ("{} {}") bỏ đi.
       const lit = norm(k.replace(/\{\}/g, " "));
       if (!lit) continue;
-      const re = new RegExp("^" + norm(k).split("{}").map(reEsc).join("(.+?)") + "$", "su");
+      const re = mauRe(k);
       this.mau.push({ re, out: v, lit: lit.length, sym: !/\p{L}/u.test(lit) });
     }
     this.mau.sort((a, b) => b.lit - a.lit);
@@ -91,8 +110,12 @@ export class BoTra {
       const m = p.re.exec(core);
       if (!m) continue;
       const raw = m.slice(1);
-      const g = raw.map((x) => this.part(x, depth));
+      const r = raw.map((x) => this.part(x, depth));
+      // Phần biến là câu thường chưa dịch được: bỏ mẫu này, thà để nguyên câu Việt còn hơn câu lai.
+      if (r.some((x) => x.miss !== undefined && !laTen(x.miss))) continue;
+      const g = r.map((x) => x.t);
       if (p.sym && g.every((x, j) => x === raw[j])) continue;
+      for (const x of r) if (x.miss !== undefined) this.thieuPhan.set(x.miss, (this.thieuPhan.get(x.miss) ?? 0) + 1);
       let i = 0;
       return p.out.replace(/\{(\d*)\}/g, (_x, n: string) => g[n ? Number(n) - 1 : i++] ?? "");
     }
@@ -115,12 +138,11 @@ export class BoTra {
     return undefined;
   }
 
-  /** Phần biến trong mẫu: số và chữ không dấu giữ nguyên; chữ có trong bảng thì dịch; tên người không có thì giữ. */
-  private part(x: string, depth: number): string {
+  /** Phần biến trong mẫu: số và chữ không dấu giữ nguyên; chữ có trong bảng thì dịch; không dịch được thì báo `miss`. */
+  private part(x: string, depth: number): { t: string; miss?: string } {
     const c = norm(x);
-    if (!c || !this.can(c)) return x;
+    if (!c || !this.can(c)) return { t: x };
     const t = this.core(c, depth + 1);
-    if (t === undefined) this.thieuPhan.set(c, (this.thieuPhan.get(c) ?? 0) + 1);
-    return t ?? x;
+    return t === undefined ? { t: x, miss: c } : { t };
   }
 }

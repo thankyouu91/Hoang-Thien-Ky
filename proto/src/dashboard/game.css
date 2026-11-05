@@ -107,3 +107,11 @@
 #tabbar button[aria-selected="true"] .tab-art { isolation: isolate; }
 @media (min-width: 1100px) { #tabbar .tab-art, #tabbar .tab-ve { width: 40px; height: 40px; } }
 @media (prefers-reduced-motion: reduce) { #tabbar button[aria-selected="true"] .tab-art::before { animation: none; } #tabbar .tab-ve { transition: none; } }
+
+/* ---- 8. Ô số liệu, đăng nhập ------------------------------------------------------------------------------------ */
+/* Ô số liệu (Lãnh thổ…): nhãn dài xuống dòng thay vì cắt "…", số dồn xuống đáy cho ba ô thẳng hàng */
+.metric { display: flex; flex-direction: column; justify-content: space-between; }
+.metric > span { overflow: visible; white-space: normal; text-overflow: clip; line-height: 1.25; overflow-wrap: break-word; }
+/* Đọc lại ngày sinh đã chọn bằng chữ, dưới ô ngày */
+#login .dob-doc { margin: -4px 0 10px; color: var(--c-ink-2); font-size: 13.5px; }
+#login .dob-doc b { color: var(--c-accent-ink); }

@@ -4,7 +4,7 @@
 import { mountScene } from "../three/index.ts";
 import { inkwashSvg } from "./art/inkwash.ts";
 import { ageOn, GUARDIAN_AGE, maskPhone, normalizePhone, type AuthSource } from "./auth.ts";
-import { bindLangSwitch, langSwitch } from "./i18n.ts";
+import { bindLangSwitch, langSwitch, locale } from "./i18n.ts";
 import { esc } from "./ui.ts";
 
 type Step = { kind: "phone" } | { kind: "otp"; phone: string; resendAfter: number; devCode?: string } | { kind: "profile"; phone: string };
@@ -24,6 +24,20 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
     <footer class="login-foot">Chơi quá 180 phút một ngày sẽ ảnh hưởng xấu đến sức khỏe.</footer>`;
   document.body.append(root);
   bindLangSwitch(root);
+  // Màn đăng nhập phủ cả game: phần phía sau (thanh trên, trang, thanh dưới) không bấm Tab tới được và ra khỏi cây trợ
+  // năng tới khi vào game; phần thêm vào sau cũng khóa. Màn bảo trì (#bao-tri) vẫn dùng được.
+  const khoaNen = new Set<HTMLElement>();
+  const khoa = (el: Element) => {
+    if (el instanceof HTMLElement && el !== root && el.id !== "bao-tri" && !el.inert) {
+      el.inert = true;
+      khoaNen.add(el);
+    }
+  };
+  for (const el of document.body.children) khoa(el);
+  const theoNen = new MutationObserver((ms) => {
+    for (const m of ms) for (const n of m.addedNodes) if (n instanceof Element) khoa(n);
+  });
+  theoNen.observe(document.body, { childList: true });
   const art = root.querySelector<HTMLElement>(".login-art")!;
   const scene = mountScene(art, "son_thuy", { tone: "giay", linhKhi: true });
   void scene.ready.then((ok) => art.classList.toggle("live", ok));
@@ -86,6 +100,7 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
         <h2>Ngày sinh</h2>
         <p class="lead">Dùng để áp giới hạn giờ chơi theo độ tuổi.</p>
         <label class="field"><span>Ngày sinh</span><input name="dob" type="date" max="${max}" min="1926-01-01" required></label>
+        <p class="dob-doc" aria-live="polite" hidden></p>
         <fieldset class="guardian" hidden>
           <legend>Người giám hộ</legend>
           <p class="lead">Dưới ${GUARDIAN_AGE} tuổi cần đăng ký bằng thông tin người giám hộ.</p>
@@ -99,7 +114,17 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
       const box = form.querySelector<HTMLFieldSetElement>(".guardian")!;
       const btn = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
       const ok = form.querySelector<HTMLInputElement>("[name=gok]")!;
+      const doc = form.querySelector<HTMLElement>(".dob-doc")!;
+      let docDa = "";
       const check = () => {
+        // Ô ngày theo ngôn ngữ của máy (có thể là tháng/ngày/năm): đọc lại ngày đã chọn bằng chữ và tuổi để người chơi soát.
+        if (dob.value !== docDa) {
+          docDa = dob.value;
+          const d = dob.value ? new Date(`${dob.value}T00:00:00`) : undefined;
+          doc.hidden = !d || Number.isNaN(d.getTime());
+          if (d && !doc.hidden)
+            doc.innerHTML = `<span>Ngày sinh đã chọn:</span> <b data-no-tr>${d.toLocaleDateString(locale(), { day: "numeric", month: "long", year: "numeric" })}</b> · <span>${ageOn(dob.value)} tuổi</span>`;
+        }
         const minor = !!dob.value && ageOn(dob.value) < GUARDIAN_AGE;
         box.hidden = !minor;
         btn.disabled = !dob.value || (minor && !ok.checked);
@@ -158,6 +183,8 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
 
   const finish = () => {
     clearInterval(timer);
+    theoNen.disconnect();
+    for (const el of khoaNen) el.inert = false;
     root.classList.add("leaving");
     setTimeout(() => {
       scene.dispose();
