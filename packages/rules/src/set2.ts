@@ -167,7 +167,7 @@ export function binhBoOf(ma: string): BinhBoRow {
 // ---- trang_bi.json: dòng rèn, dòng ẩn, điểm ----
 interface TbData {
   dong_ren?: { so: number; nac: number }[];
-  dong_an?: { ma: string; loai: "dieu_kien" | "hieu_ung"; nhom?: string; tham_so: Record<string, number | string | boolean> }[];
+  dong_an?: { ma: string; loai: "dieu_kien" | "hieu_ung"; nhom?: string; he_so?: number; tham_so: Record<string, number | string | boolean> }[];
   diem?: { stat: string; diem: number; moi: number }[];
   luat?: {
     dongAn?: { soDong: Record<string, number>; songAnHeSo: number; heSoNhom?: Record<string, number>; toiDaHieuLuc?: number };
@@ -195,12 +195,15 @@ const DU_PHONG_NHOM: Record<string, string> = {
   "DN-DK-006": "trong_tran", "DN-DK-007": "trong_tran", "DN-DK-008": "trong_tran",
 };
 const NHOM: Record<string, string> = { ...DU_PHONG_NHOM };
+const HE_SO_DK: Record<string, number> = {}; // hệ số ghi thẳng ở từng điều kiện (dong_an[].he_so) đứng trước hệ số nhóm
 for (const r of TB.dong_an ?? []) {
   const n = r.nhom ?? (typeof r.tham_so.nhom === "string" ? r.tham_so.nhom : undefined);
   if (r.loai === "dieu_kien" && n) NHOM[r.ma] = n;
+  if (r.loai === "dieu_kien" && typeof r.he_so === "number") HE_SO_DK[r.ma] = r.he_so;
 }
 /** Hệ số nhân hiệu ứng theo nhóm của điều kiện, phần nghìn. */
 export function dongAnHeSo(dk: string): number {
+  if (has(HE_SO_DK, dk)) return HE_SO_DK[dk];
   const n = NHOM[dk];
   if (!n || !has(HE_SO_NHOM, n)) throw new Error(`Điều kiện dòng ẩn ${dk} chưa có nhóm`);
   return HE_SO_NHOM[n];
