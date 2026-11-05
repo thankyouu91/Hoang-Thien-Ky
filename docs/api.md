@@ -6,7 +6,9 @@ Hợp đồng giữa game (`proto/`), Worker game (`cloudflare/`) và Admin Dash
 
 | Hostname | Worker | Cách vào | Nội dung |
 |---|---|---|---|
-| `thienhoangky.fun` | `thienhoangky` (`cloudflare/wrangler.jsonc`) | Link mời `https://thienhoangky.fun/moi/<ma>` cấp cookie | Bản build `proto/dist`, `/api/*` bên dưới |
+| `choi.thienhoangky.fun` | `thienhoangky` (`cloudflare/wrangler.jsonc`) | Link mời `https://choi.thienhoangky.fun/moi/<ma>` cấp cookie | Bản build `proto/dist`, `/api/*` bên dưới |
+| `thienhoangky.fun` | `thienhoangky-web` (`web/`) | Cùng cookie link mời (đọc `nguoi_choi_thu`); `/moi/*` chuyển 302 sang `choi.` | Website (trang chủ) |
+| `wiki.thienhoangky.fun` | `thienhoangky-wiki` (`wiki/`) | Cùng cookie link mời | Wiki |
 | `admin.thienhoangky.fun` | `thienhoangky-admin` (`admin/wrangler.jsonc`) | Cloudflare Access, mã một lần gửi qua email | Admin Dashboard, `/api/*` của admin (`admin/shared/hopDong.ts`) |
 | `www.thienhoangky.fun` | `thienhoangky-www` (`cloudflare/wrangler.www.jsonc`) | — | 301 về `https://thienhoangky.fun` |
 
@@ -17,17 +19,18 @@ Hợp đồng giữa game (`proto/`), Worker game (`cloudflare/`) và Admin Dash
 
 ## Link mời và cookie
 
-1. Người chơi mở `https://thienhoangky.fun/moi/<ma>`. Mã gồm 6–40 ký tự `[a-z0-9-]`, không phân biệt hoa thường.
+1. Người chơi mở `https://choi.thienhoangky.fun/moi/<ma>`. Mã gồm 6–40 ký tự `[a-z0-9-]`, không phân biệt hoa thường.
 2. Worker kiểm dòng `loi_moi`: chưa tắt (`tat = 0`), chưa hết hạn (`het_han`), còn lượt (`da_dung < toi_da`). Nếu hợp lệ, Worker:
    - tăng `da_dung`;
    - tạo một dòng `nguoi_choi_thu` (mã `id` 10 ký tự);
-   - đặt cookie `thk_moi` (thẻ ngẫu nhiên 256 bit, `HttpOnly; Secure; SameSite=Lax; Max-Age=180 ngày`);
+   - đặt cookie `thk_moi` (thẻ ngẫu nhiên 256 bit, `Domain=thienhoangky.fun; HttpOnly; Secure; SameSite=Lax; Max-Age=180 ngày`), dùng chung cho website, game và wiki;
    - chuyển 302 về `/`.
    Link không hợp lệ thì trả trang báo, mã 410.
 3. Trình duyệt đã có cookie hợp lệ mà mở lại link thì về thẳng `/`, không tốn lượt. Người đã bị khoá mở lại link thì vẫn thấy trang "bị khóa".
 4. Mọi trang HTML và `/api/*` đều cần cookie hợp lệ. Thiếu cookie: trang HTML trả 403 kèm trang "cần link mời", còn API trả 401 `chua_co_loi_moi`. Bị khoá (`nguoi_choi_thu.khoa = 1`): trang HTML trả 403 kèm trang báo, còn API trả 403 `bi_khoa`.
 5. `/assets/*` (JS, CSS, font có mã băm), `/pixellab/*` và `/icon_ve/*` được phục vụ thẳng, không qua Worker, để khỏi tốn lượt request của gói free. Tên file JS chỉ biết được qua HTML, mà HTML đã bị chặn.
 6. D1 chỉ lưu SHA-256 của thẻ (`the_hash`). Lộ bảng cũng không giả được cookie.
+7. Website và wiki dùng chung cổng: đọc cookie `thk_moi` (43 ký tự `[A-Za-z0-9_-]`), băm SHA-256 thành hex, rồi `SELECT khoa FROM nguoi_choi_thu WHERE the_hash = ?`. Không có dòng thì trả trang "cần link mời", `khoa = 1` thì trả trang "bị khóa". Mã tham khảo: `cloudflare/src/moi.ts` (`docThe`, `bamThe`). Website và wiki chỉ đọc, không tạo người chơi.
 
 Trình duyệt tự gửi cookie, nên game chỉ cần gọi `fetch("/api/...")` cùng tên miền. Cookie gắn với một trình duyệt: mở link trong Zalo hay Facebook (trình duyệt trong app) rồi chuyển sang Chrome thì phải mở link lại, và lần đó tốn thêm một lượt. Tiến độ game cũng nằm theo từng trình duyệt.
 
@@ -48,7 +51,7 @@ Trình duyệt tự gửi cookie, nên game chỉ cần gọi `fetch("/api/...")
 
 Mọi phản hồi API có `Cache-Control: no-store`.
 
-## API game (`https://thienhoangky.fun`)
+## API game (`https://choi.thienhoangky.fun`)
 
 ### `GET /api/toi`
 

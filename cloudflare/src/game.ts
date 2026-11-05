@@ -1,4 +1,5 @@
-// Worker `thienhoangky` ở thienhoangky.fun: bản chơi thử mở bằng link mời (không qua Cloudflare Access).
+// Worker `thienhoangky` ở choi.thienhoangky.fun: bản chơi thử mở bằng link mời (không qua Cloudflare Access).
+// Cookie thk_moi gắn Domain=thienhoangky.fun, nên website (tên gốc) và wiki dùng chung cổng: chỉ cần tra the_hash.
 //   /moi/<ma>  — kiểm link mời (bảng loi_moi), tạo người chơi thử, cấp cookie thk_moi rồi chuyển về /.
 //   HTML, /api/* — chỉ cho trình duyệt có cookie thk_moi hợp lệ và chưa bị khóa.
 //   /assets/*, /pixellab/*, /icon_ve/* — Cloudflare phục vụ thẳng, không qua Worker (khỏi tốn lượt request của gói free);
@@ -51,7 +52,7 @@ async function nhanLoiMoi(req: Request, env: EnvGame, raw: string): Promise<Resp
   await env.DB.prepare("INSERT INTO nguoi_choi_thu (id, the_hash, ma_moi, lan_dau, lan_cuoi) VALUES (?1, ?2, ?3, ?4, ?4)")
     .bind(maDoc(10), await bamThe(the), ma, now)
     .run();
-  return new Response(null, { status: 302, headers: { Location: "/", "Set-Cookie": datCookie(the), "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" } });
+  return new Response(null, { status: 302, headers: { Location: "/", "Set-Cookie": datCookie(the, new URL(req.url).hostname), "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" } });
 }
 
 async function ghiLanCuoi(db: D1Database, id: string, now: number, phienMoi = 0): Promise<void> {

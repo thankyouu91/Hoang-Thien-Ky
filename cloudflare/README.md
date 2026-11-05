@@ -1,10 +1,10 @@
-# cloudflare/ — bản chơi thử trên thienhoangky.fun
+# cloudflare/ — bản chơi thử trên choi.thienhoangky.fun
 
 Thư mục này có hai Worker và một D1. Admin Dashboard ở `admin.thienhoangky.fun` là Worker riêng, mã ở `admin/`. Hợp đồng API nằm trong `docs/api.md`.
 
 | File | Việc |
 |---|---|
-| `wrangler.jsonc` | Worker `thienhoangky`: cổng link mời, phục vụ `proto/dist` (static assets, SPA) và `/api/*`, gắn tên miền `thienhoangky.fun` |
+| `wrangler.jsonc` | Worker `thienhoangky`: cổng link mời, phục vụ `proto/dist` (static assets, SPA) và `/api/*`, gắn tên miền `choi.thienhoangky.fun` |
 | `wrangler.www.jsonc` | Worker `thienhoangky-www`: chuyển `www.thienhoangky.fun` về tên miền gốc (301) |
 | `src/game.ts` | Worker game: `/moi/<ma>`, chặn HTML và API khi không có cookie hợp lệ, các API |
 | `src/moi.ts` | Thẻ cookie `thk_moi`, băm SHA-256, đọc cookie, kiểm mã link |
@@ -57,7 +57,7 @@ npx.cmd wrangler d1 execute thienhoangky --remote --command "UPDATE loi_moi SET 
 npx.cmd wrangler d1 execute thienhoangky --remote --command "UPDATE nguoi_choi_thu SET khoa = 1, ly_do_khoa = '<lý do>' WHERE id = '<id>'"
 ```
 
-- Link có dạng `https://thienhoangky.fun/moi/<mã>`. Mỗi trình duyệt mở link lần đầu tốn một lượt. Đặt `toi_da` để giới hạn số người khi link bị chuyển tiếp.
+- Link có dạng `https://choi.thienhoangky.fun/moi/<mã>` (website ở tên gốc chuyển `/moi/*` sang đây). Mỗi trình duyệt mở link lần đầu tốn một lượt. Đặt `toi_da` để giới hạn số người khi link bị chuyển tiếp.
 - Tắt link (`tat = 1`) chỉ chặn người mới. Người đã vào vẫn chơi tiếp; muốn chặn ai thì khoá đúng người đó.
 
 ## Admin: Cloudflare Access

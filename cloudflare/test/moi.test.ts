@@ -34,3 +34,10 @@ test("mã link mời", () => {
   assert.equal(chuanMa("x".repeat(41)), null);
   assert.match(maDoc(12), /^[a-hj-km-np-z2-9]{12}$/);
 });
+
+test("cookie dùng chung tên miền con, trừ khi chạy local", () => {
+  assert.ok(datCookie("t", "choi.thienhoangky.fun").includes("; Domain=thienhoangky.fun;"));
+  assert.ok(datCookie("t", "thienhoangky.fun").includes("; Domain=thienhoangky.fun;"));
+  assert.ok(!datCookie("t", "127.0.0.1").includes("Domain="));
+  assert.ok(!datCookie("t", "evilthienhoangky.fun").includes("Domain="));
+});

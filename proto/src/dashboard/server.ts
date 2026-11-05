@@ -1,4 +1,4 @@
-// Nối bản chơi thử với API trên thienhoangky.fun (Worker `thienhoangky`, hợp đồng ở docs/api.md):
+// Nối bản chơi thử với API trên choi.thienhoangky.fun (Worker `thienhoangky`, hợp đồng ở docs/api.md):
 //   - gửi sự kiện analytics GDD mục 19 lên POST /api/su-kien, gom 20 giây một lần, phần còn lại gửi bằng sendBeacon khi đóng trang;
 //   - gửi phản hồi POST /api/phan-hoi; đọc thông báo GET /api/thong-bao và cấu hình sống GET /api/cau-hinh.
 // Sự kiện ẩn danh: chỉ kèm mã ngẫu nhiên của trình duyệt (ktlp.an_danh) và của phiên. Server biết người chơi thử qua cookie
@@ -58,7 +58,7 @@ function datTrangThai(t: TrangThaiMayChu): void {
   for (const f of nghe) f(t);
 }
 
-/** Trạng thái nối API: "co" là đang chạy trên thienhoangky.fun và đã qua Access; "bi_khoa" là admin đã khóa email này. */
+/** Trạng thái nối API: "co" là đang chạy trên choi.thienhoangky.fun và đã qua cổng link mời; "bi_khoa" là admin đã khóa người chơi này. */
 export function trangThaiMayChu(): TrangThaiMayChu {
   return trangThai;
 }
