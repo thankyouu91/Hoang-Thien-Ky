@@ -1,0 +1,25 @@
+{
+  "name": "@ktlp/cloudflare",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Thiên Hoang Ký — Worker cho bản chơi thử trên thienhoangky.fun (game và chuyển www) và D1",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "dev": "wrangler dev --local-upstream localhost:8787",
+    "db:migrate:local": "wrangler d1 migrations apply thienhoangky --local",
+    "db:migrate": "wrangler d1 migrations apply thienhoangky --remote",
+    "deploy": "wrangler deploy",
+    "deploy:www": "wrangler deploy -c wrangler.www.jsonc"
+  },
+  "dependencies": {
+    "jose": "6.2.15"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20261104.1",
+    "@types/node": "^24.19.2",
+    "typescript": "7.0.2",
+    "wrangler": "4.157.0"
+  }
+}
