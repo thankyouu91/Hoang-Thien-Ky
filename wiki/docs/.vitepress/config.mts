@@ -20,14 +20,16 @@ export default defineConfig({
   head: [
     ["meta", { name: "robots", content: "noindex, nofollow" }],
     ["meta", { name: "theme-color", content: "#f6efdf" }],
-    ["link", { rel: "icon", type: "image/svg+xml", href: "/logo.svg" }],
+    // Dấu ấn và favicon dùng chung với game (assets/brand), chép vào /hinh/brand khi build; /hinh/* không qua cổng.
+    ["link", { rel: "icon", href: "/hinh/brand/favicon.ico", sizes: "any" }],
+    ["link", { rel: "icon", type: "image/png", sizes: "32x32", href: "/hinh/brand/favicon-32.png" }],
   ],
   markdown: {
     // Bảng to (480 tàn quyển) không cần mục lục tự động trong khối mã.
     lineNumbers: false,
   },
   themeConfig: {
-    logo: { src: "/logo.svg", alt: "" },
+    logo: { src: "/hinh/brand/dau_an_128.png", alt: "" },
     siteTitle: "Thiên Hoang Ký",
     nav: [
       { text: "Người mới", link: "/nhap-mon/nguoi-moi", activeMatch: "^/nhap-mon/" },

@@ -52,7 +52,7 @@ npm.cmd test           # test cổng vào của Worker
 
 ## Deploy
 
-Cổng vào: `CONG = "loi_moi"` dùng chung cookie `thk_moi` (`Domain=thienhoangky.fun`) mà game đặt khi mở link mời; Worker chỉ đọc `nguoi_choi_thu` trong D1 `thienhoangky`. Trang HTML đi qua Worker; `/assets/*` (JS, CSS, font, chỉ mục tìm kiếm có mã băm trong tên) và `/hinh/*` phục vụ thẳng như game. `workers_dev` và `preview_urls` tắt.
+Cổng vào: `CONG = "loi_moi"` dùng chung cookie `thk_moi` (`Domain=thienhoangky.fun`) mà game đặt khi mở link mời; Worker chỉ đọc `nguoi_choi_thu` trong D1 `thienhoangky`. `wiki.thienhoangky.fun/moi/<mã>` chuyển 302 sang link mời của game (`LINK_GAME`, hiện là play.thienhoangky.fun). Dấu ấn và favicon lấy từ `assets/brand` (chép vào `/hinh/brand`, phục vụ thẳng để trang cổng cũng hiện). Trang HTML đi qua Worker; `/assets/*` (JS, CSS, font, chỉ mục tìm kiếm có mã băm trong tên) và `/hinh/*` phục vụ thẳng như game. `workers_dev` và `preview_urls` tắt.
 
 Build từ mã đã commit, trong worktree riêng (thư mục chung hay có file phiên khác đang sửa dở):
 

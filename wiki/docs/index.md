@@ -9,8 +9,8 @@ hero:
   text: Wiki cho đạo hữu chơi thử
   tagline: Lập tông, ghép công pháp từ tàn quyển, mở sương mù trên bản đồ tranh, tranh mỏ và bí cảnh, rồi cả môn phi thăng.
   image:
-    src: /logo.svg
-    alt: Dấu triện Thiên Hoang Ký
+    src: /hinh/brand/dau_an_256.png
+    alt: Dấu ấn Thiên Hoang Ký
   actions:
     - theme: brand
       text: Hướng dẫn người mới

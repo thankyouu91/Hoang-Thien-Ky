@@ -1449,6 +1449,8 @@ async function chay(): Promise<void> {
     writeFileSync(join(TRA, `${x.duong}.md`), TRANG[x.duong]());
   }
 
+  // Dấu ấn và favicon của game (assets/brand, thay ô đỏ chữ Hán cũ): logo, trang chủ, trang cổng của Worker.
+  for (const f of ["dau_an_128.png", "dau_an_256.png", "favicon.ico", "favicon-16.png", "favicon-32.png"]) hinhDung.add(`brand/${f}`);
   // Hình người viết chèn tay trong trang nội dung (/hinh/icon_ve/..., /hinh/pixellab/...).
   for (const f of cacFileMd(DOCS)) {
     const s = readFileSync(f, "utf8");

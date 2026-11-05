@@ -36,13 +36,14 @@ function esc(s: string): string {
 export function trangBao(status: number, tieuDe: string, loi: string, linkGame: string): Response {
   const html = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>${esc(tieuDe)} · Wiki Thiên Hoang Ký</title>
+<link rel="icon" href="/hinh/brand/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/hinh/brand/favicon-32.png">
 <style>
 body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f6efdf;color:#2a2018;font:16px/1.6 Cambria,"Times New Roman",serif}
 main{box-sizing:border-box;width:min(440px,calc(100% - 32px));padding:28px 24px;background:#fffaf0;box-shadow:inset 0 0 0 1px rgba(138,31,22,.55),0 0 0 4px #fffaf0,0 0 0 5px rgba(138,31,22,.18)}
 h1{margin:0 0 10px;color:#8a1f16;font-size:26px;line-height:1.2}p{margin:0 0 14px}
 a.nut{display:inline-block;padding:10px 18px;border-radius:3px;background:#b3261e;color:#fff8ef;text-decoration:none;font-weight:600}
-.an{display:inline-grid;place-items:center;width:44px;height:44px;margin-bottom:12px;border-radius:4px;background:#b3261e;color:#fff8ef;font-weight:700;transform:rotate(-4deg)}
-</style></head><body><main><div class="an" aria-hidden="true">記</div><h1>${esc(tieuDe)}</h1><p>${loi}</p>
+.an{display:block;width:112px;height:112px;margin:0 0 10px}
+</style></head><body><main><img class="an" src="/hinh/brand/dau_an_256.png" width="112" height="112" alt=""><h1>${esc(tieuDe)}</h1><p>${loi}</p>
 <p><a class="nut" href="${esc(linkGame)}">Vào game</a></p></main></body></html>`;
   return new Response(html, {
     status,
@@ -88,6 +89,14 @@ export async function xuLy(req: Request, env: EnvWiki): Promise<Response> {
   }
   if (url.pathname === "/robots.txt") {
     return new Response(ROBOTS, { headers: { "Content-Type": "text/plain; charset=utf-8", ...HEADER_CHUNG } });
+  }
+  // Lỡ dán link mời sang tên miền wiki: chuyển về link mời của game (game cấp cookie dùng chung cho cả wiki).
+  if (url.pathname.startsWith("/moi/")) {
+    return new Response(null, {
+      status: 302,
+      // Không gửi Referer: mã mời nằm trong đường dẫn.
+      headers: { ...HEADER_CHUNG, Location: new URL(url.pathname, linkGame).toString(), "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" },
+    });
   }
 
   const cong = env.CONG ?? "loi_moi";

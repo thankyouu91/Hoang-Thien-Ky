@@ -89,6 +89,22 @@ test("robots.txt không qua cổng và chặn mọi bot", async () => {
   assert.equal(await r.text(), "User-agent: *\nDisallow: /\n");
 });
 
+test("/moi/<ma> trên wiki chuyển 302 sang link mời của game, không cần cookie", async () => {
+  const g = gia(null);
+  const r = await xuLy(yc("/moi/dot-1-abc"), env(g));
+  assert.equal(r.status, 302);
+  assert.equal(r.headers.get("Location"), "https://play.thienhoangky.fun/moi/dot-1-abc");
+  assert.equal(r.headers.get("Referrer-Policy"), "no-referrer");
+  assert.equal(g.goi.length, 0);
+});
+
+test("trang cổng dùng dấu ấn mới (assets/brand), không còn ô chữ Hán", async () => {
+  const g = gia(null);
+  const html = await (await xuLy(yc("/"), env(g))).text();
+  assert.match(html, /\/hinh\/brand\/dau_an_256\.png/);
+  assert.doesNotMatch(html, /記/);
+});
+
 test("chỉ đọc: POST trả 405", async () => {
   const g = gia({ khoa: 0 });
   const r = await xuLy(yc("/", { method: "POST", headers: { Cookie: `thk_moi=${THE}` } }), env(g));
