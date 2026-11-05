@@ -10,7 +10,7 @@
     "Giao dịch theo bậc ấn (bac_an[].giao_dich): lục không bán lại trên chợ, lam và tím bán được, vàng và đỏ khóa vào nhân vật. 3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn) chỉ có ấn từ bậc luat.boThanTuBac. Món đã khảm bán kèm ấn nếu món đó và ấn đều bán được.",
     "Gỡ ấn bằng Thoát Khảm Phù (PH-CH-008) thì ấn còn nguyên; gỡ không phù thì ấn vỡ.",
     "bo[].lo: lộ sức mạnh của bộ (ngoai_cong, noi_cong, thu_ngoai, thu_noi, hap_thu, phan_chan, khong_toc, kinh_te, khac_che), dùng cho binh bộ đồng lộ và bản đồ khắc lộ (GDD tab Trang bị phần 14).",
-    "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, damageTakenCutOuter, damageTakenCutInner (giảm sát thương ngoại, nội nhận; mỗi loại đòn tổng tối đa trang_bi.json luat.giamSatThuongNhanToiDa), reflect; buaGiamMana, hoiManaPhapBao, huyVanCong và dotMana (Băng Phách 4), khienMau và khienTicks (Bàn Thạch 7) là hành vi mới.",
+    "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, damageTakenCutOuter, damageTakenCutInner (giảm sát thương ngoại, nội nhận; mỗi loại đòn tổng tối đa trang_bi.json luat.giamSatThuongNhanToiDa), reflect, controlTakenCut (giảm thời gian bị khống chế), reflectTakenCut (giảm sát thương phản đòn nhận vào); buaGiamMana, hoiManaPhapBao, huyVanCong và dotMana (Băng Phách 4), khienMau và khienTicks (Bàn Thạch 7) là hành vi mới.",
     "bac_an: mốc 7 chỉ mở khi cả 7 ấn có tinh_moc_7; ghép luat.ghepAnSo ấn cùng bộ cùng bậc thành 1 ấn bậc trên, chỉ ở bậc có ghep_len (lục lên lam, lam lên tím); vàng, đỏ chỉ rơi. Bậc là thuộc tính từng viên, mã giữ NG-AN-001…020.",
     "hop_bo: mặc cùng lúc từ 2 bộ đang kích (đủ mốc 2), mỗi cặp xét quan hệ hệ ấn (quan_he_to_hop.json). Mỗi bộ lấy he_so tốt nhất của nó (cộng hưởng Đạo Cơ Bàn thay nếu cao hơn), rồi nhân he_so của tuong_khac nếu có bất kỳ bộ đang kích nào khắc nó. Chỉ nhân mốc 2; mana_max cộng một lần cho mỗi cặp đối cực.",
     "binh_bo: binh ấn (ngoc.json binh_an) khảm vào vũ khí, bao tay, ngọc bội và chiếm dòng khảm. Mốc luat.binhBoMoc (2 và 3 món), mỗi người luat.binhBoMoiNguoi binh bộ; cùng lộ với một ấn bộ đang kích thì mốc 3 nhân luat.binhBoDongLoHeSo. Bậc binh ấn như ấn bộ (bac_an); số ở bậc tím.",
@@ -132,7 +132,12 @@
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Hồi máu nhận +6%","tham_so":{"healTaken":60}},
+        {
+          "so": 2,
+          "loai": "chi_so",
+          "mo_ta": "Hồi máu nhận +6%; thời gian bị khống chế −20%",
+          "tham_so": {"healTaken":60,"controlTakenCut":200}
+        },
         {
           "so": 4,
           "loai": "kinh_te",
@@ -162,8 +167,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Giảm sát thương ngoại nhận 6%; hồi 0,1% máu mỗi giây",
-          "tham_so": {"damageTakenCutOuter":60,"hpRegen":1}
+          "mo_ta": "Giảm sát thương ngoại nhận 9%; hồi 0,1% máu mỗi giây",
+          "tham_so": {"damageTakenCutOuter":90,"hpRegen":1}
         },
         {
           "so": 7,
@@ -214,8 +219,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Phản 15% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%",
-          "tham_so": {"reflect":150,"damageTakenCut":10}
+          "mo_ta": "Phản 22% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%",
+          "tham_so": {"reflect":220,"damageTakenCut":10}
         },
         {
           "so": 7,
@@ -266,8 +271,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Mana tối đa +3%; giảm mana thi triển 5%; giảm sát thương nội nhận 10%; công lực −3%",
-          "tham_so": {"manaMax":30,"manaCostCut":50,"damageTakenCutInner":100,"atk":-30}
+          "mo_ta": "Mana tối đa +3%; giảm mana thi triển 5%; giảm sát thương nội nhận 15%; công lực −3%",
+          "tham_so": {"manaMax":30,"manaCostCut":50,"damageTakenCutInner":150,"atk":-30}
         },
         {
           "so": 7,
@@ -318,8 +323,8 @@
         {
           "so": 4,
           "loai": "hanh_vi",
-          "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; khống chế trúng mục tiêu đang vận công hoặc bày trận thì hủy chiêu đó (vào hồi chiêu như đã dùng) và đốt 10% mana tối đa của mục tiêu; thủ nội +2%",
-          "tham_so": {"giamDanKhongChe":750,"huyVanCong":1,"dotMana":100,"defInner":20}
+          "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; khống chế trúng mục tiêu đang vận công hoặc bày trận thì hủy chiêu đó (vào hồi chiêu như đã dùng) và đốt 20% mana tối đa của mục tiêu; thủ nội +2%",
+          "tham_so": {"giamDanKhongChe":750,"huyVanCong":1,"dotMana":200,"defInner":20}
         },
         {
           "so": 7,
@@ -460,7 +465,7 @@
       "than": false,
       "rang_buoc": "Bộ tà: mặc từ 4 món thì sát nghiệp nhận +50%",
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Hút máu +2,5%","tham_so":{"lifesteal":25}},
+        {"so":2,"loai":"chi_so","mo_ta":"Hút máu +3,5%","tham_so":{"lifesteal":35}},
         {
           "so": 4,
           "loai": "hanh_vi",
@@ -538,7 +543,12 @@
       "than": true,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Bày trận nhanh hơn 0,5 s","tham_so":{"bayTranTicks":-10}},
+        {
+          "so": 2,
+          "loai": "chi_so",
+          "mo_ta": "Bày trận nhanh hơn 0,5 s; giảm sát thương nội nhận 4%",
+          "tham_so": {"bayTranTicks":-10,"damageTakenCutInner":40}
+        },
         {
           "so": 4,
           "loai": "hanh_vi",
@@ -646,7 +656,10 @@
       "lo": ["hap_thu"],
       "an": "NG-BA-005",
       "moc_2": {"mo_ta":"Hút máu +1,5%","tham_so":{"lifesteal":15}},
-      "moc_3": {"mo_ta":"Hút mana 0,5% mỗi đòn","tham_so":{"manaDrain":5}}
+      "moc_3": {
+        "mo_ta": "Hút mana 0,5% mỗi đòn; sát thương phản đòn nhận vào −50%",
+        "tham_so": {"manaDrain":5,"reflectTakenCut":500}
+      }
     },
     {
       "id": "tran_thu",

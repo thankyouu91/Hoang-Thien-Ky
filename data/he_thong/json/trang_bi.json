@@ -4575,7 +4575,9 @@
     {"stat":"controlTime","ten":"Thời gian khống chế","diem":3,"moi":10},
     {"stat":"innerDamage","ten":"Sát thương chiêu nội","diem":8,"moi":10},
     {"stat":"damageTakenCutOuter","ten":"Giảm sát thương ngoại nhận","diem":6,"moi":10},
-    {"stat":"damageTakenCutInner","ten":"Giảm sát thương nội nhận","diem":6,"moi":10}
+    {"stat":"damageTakenCutInner","ten":"Giảm sát thương nội nhận","diem":6,"moi":10},
+    {"stat":"controlTakenCut","ten":"Giảm thời gian bị khống chế","diem":3,"moi":10},
+    {"stat":"reflectTakenCut","ten":"Giảm sát thương phản đòn nhận vào","diem":1,"moi":10}
   ],
   "luat": {
     "dongAn": {
