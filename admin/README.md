@@ -53,7 +53,7 @@ Zero Trust Free cho tối đa 50 người dùng. Vì người chơi thử không
 ## Người chơi thử và link mời
 
 - **Tạo link** (Admin): màn **Người chơi thử** → Tạo link mời. Đặt tên (để biết link phát ở đâu), số người tối đa và hạn dùng; hai mục sau để trống là không giới hạn. Server sinh mã ngẫu nhiên 12 ký tự.
-- **Tên miền của link:** link ghép từ biến `GAME_ORIGIN` trong `wrangler.jsonc` (hiện là `https://thienhoangky.fun`), theo dạng `GAME_ORIGIN/moi/<mã>`. Nếu dời game sang tên miền khác (ví dụ `https://choi.thienhoangky.fun`), đổi dòng đó rồi deploy lại admin. Mã link nằm trong D1 nên không đổi; chỉ phần tên miền hiện và chép trong admin đổi theo. Link cũ đã gửi đi vẫn trỏ tên miền cũ, nên Worker game cần chuyển hướng từ tên miền cũ.
+- **Tên miền của link:** link ghép từ biến `GAME_ORIGIN` trong `wrangler.jsonc` (hiện là `https://choi.thienhoangky.fun`, chốt 2026-11-05), theo dạng `GAME_ORIGIN/moi/<mã>`. Nếu dời game sang tên miền khác (ví dụ `https://choi.thienhoangky.fun`), đổi dòng đó rồi deploy lại admin. Mã link nằm trong D1 nên không đổi; chỉ phần tên miền hiện và chép trong admin đổi theo. Link cũ đã gửi đi vẫn trỏ tên miền cũ, nên Worker game cần chuyển hướng từ tên miền cũ.
 - Gửi link cho nhóm chơi thử. Mỗi trình duyệt mở link khi link còn mở trở thành một người chơi thử, có mã 10 ký tự, và giữ cookie vào game 180 ngày (do Worker game cấp).
 - **Tắt link, hết lượt, hết hạn:** người mới mở link sẽ không vào được. Người đã vào vẫn chơi tiếp.
 - **Khóa người chơi** (Admin): ghi `nguoi_choi_thu.khoa = 1`. Worker game chặn trình duyệt đó ngay ở lần tải trang hoặc lần gọi API kế tiếp. Tiến độ trong trình duyệt của họ không bị xóa.
