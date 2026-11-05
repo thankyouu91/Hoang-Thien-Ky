@@ -1,0 +1,26 @@
+{
+  "name": "@ktlp/wiki",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Thiên Hoang Ký — wiki người chơi ở wiki.thienhoangky.fun (VitePress, trang danh mục sinh từ data/he_thong/json)",
+  "type": "module",
+  "scripts": {
+    "sinh": "node --no-warnings scripts/sinh.ts",
+    "dev": "node --no-warnings scripts/sinh.ts && vitepress dev docs --host 127.0.0.1 --port 5195 --strictPort",
+    "build": "node --no-warnings scripts/sinh.ts && vitepress build docs && node --no-warnings scripts/kiem.ts",
+    "preview": "vitepress preview docs --host 127.0.0.1 --port 5196 --strictPort",
+    "test": "node --test test/*.test.ts",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@fontsource-variable/lora": "5.3.0",
+    "@fontsource/cormorant-garamond": "5.3.0",
+    "sharp": "0.35.5",
+    "vitepress": "1.6.4",
+    "vue": "3.5.13",
+    "wrangler": "4.157.0"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}
