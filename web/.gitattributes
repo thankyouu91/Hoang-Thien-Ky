@@ -1,0 +1,2 @@
+# File do scripts/hinh.mjs ghi (LF); giữ LF khi checkout để build không làm file thành "đã sửa".
+src/hinh.json text eol=lf
