@@ -373,5 +373,6 @@ export async function chuVietConSot(page: Page, vung: Locator = page.locator("bo
     return out;
   });
   // Dấu riêng của tiếng Việt (không có trong tiếng Anh). Tên riêng ghép âm tiết đã dịch thì không còn dấu.
-  return [...new Set(text.filter((t) => /[ăâđêôơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]/i.test(t)))];
+  // Thêm vài cụm tiếng Việt không dấu hay sót trong lời báo ("+114 tu vi khi xong").
+  return [...new Set(text.filter((t) => /[ăâđêôơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]/i.test(t) || /\b(tu vi|khi xong|linh thach)\b/i.test(t)))];
 }

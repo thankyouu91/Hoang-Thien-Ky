@@ -3,7 +3,9 @@
 import { expect, test } from "@playwright/test";
 import { buocHienTai, capHienTai, chuVietConSot, dangNhap, lamTheoHuongDan, MayAnh, moGame, ngaySinhTuoi, soThu } from "./nguoi-choi.ts";
 
-const TEN_RIENG = [/Thiên Hoang Ký/];
+// Tên riêng giữ tiếng Việt ở bản EN: tên game và tên công pháp ("Lôi Kim Châm Quyết"…).
+const TEN_RIENG = [/Thiên Hoang Ký/g, /(p{Lu}p{Ll}*s){1,4}Quyết/gu];
+const VIET = /[ăâđêôơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]|(tu vi|khi xong|linh thach)/i;
 
 test("đi hết nhập môn bằng tiếng Anh", async ({ page }, info) => {
   const anh = new MayAnh(page, info, "tieng-anh");
@@ -12,7 +14,7 @@ test("đi hết nhập môn bằng tiếng Anh", async ({ page }, info) => {
   await expect(login.locator("h2")).toHaveText("Sign in");
   const sot: Record<string, string[]> = {};
   const soat = async (man: string) => {
-    const con = (await chuVietConSot(page)).filter((t) => !TEN_RIENG.some((r) => r.test(t) && t.replace(r, "").trim() === ""));
+    const con = (await chuVietConSot(page)).filter((t) => VIET.test(TEN_RIENG.reduce((x, r) => x.replace(r, ""), t)));
     if (con.length) sot[man] = con;
   };
   await soat("dang-nhap");
@@ -22,6 +24,14 @@ test("đi hết nhập môn bằng tiếng Anh", async ({ page }, info) => {
   await expect.poll(() => buocHienTai(page), { timeout: 15_000 }).toBe(2);
   await lamTheoHuongDan(page, anh, { truocMoiBuoc: (b) => soat(`buoc-${b}`) });
   await soat("het-nhap-mon");
+  // Chơi tiếp bằng tiếng Anh: bế quan 1 giờ, soát thẻ và dòng Đang chạy ("In progress").
+  const beQuan = page.locator('#ftue:not([hidden]) [data-f="be_quan"]').first();
+  if (await beQuan.isVisible()) {
+    await beQuan.click();
+    await page.waitForTimeout(1500);
+    await anh.chup("be-quan-tieng-anh");
+    await soat("dang-be-quan");
+  }
   await info.attach("chu-viet-con-sot.json", { body: JSON.stringify(sot, null, 2), contentType: "application/json" });
   expect.soft(sot, "không còn chữ tiếng Việt khi chọn tiếng Anh").toEqual({});
   expect(await capHienTai(page)).toBeGreaterThanOrEqual(5);
