@@ -880,7 +880,8 @@ export class MapScene implements Scene {
     const inRange = home && d.inRange.includes(p.id);
     const canTake = home && d.can.chiem && HOLDABLE.includes(p.type) && own?.owner !== "minh" && own?.owner !== "dong_minh";
     const canWar = home && d.can.tuyenChien && own?.owner === "dich";
-    const art = pointArt(c.region.code, p.type);
+    // Biến thể theo hệ vùng, bậc (cấp mỏ, bậc cửa) và dáng theo id điểm, như đảo nổi.
+    const art = pointArt(c.region.code, p.type, { id: p.id, tier: p.tier, level: own?.level });
     const body = openSheet(
       c.name,
       `${art ? `<div class="loc-hero pix" style="background-image:url('${art}')" role="img" aria-label="${POINT_NAMES[p.type]}"></div>` : ""}
@@ -910,9 +911,11 @@ export class MapScene implements Scene {
     const p = c.p!;
     const rows: [string, string][] = [["Loại", w.types[p.type].label], ["Khu", esc(zone.name)]];
     if (p.neighbour) rows.push(["Nối với", esc(w.regions.find((r) => r.code === p.neighbour)?.name ?? p.neighbour)]);
+    const art = pointArt(zone.code, p.type, { id: p.id, tier: p.tier });
     const body = openSheet(
       c.name,
-      `<p class="map-warn">${esc(zone.warning)}</p>
+      `${art ? `<div class="loc-hero pix" style="background-image:url('${art}')" role="img" aria-label="${POINT_NAMES[p.type]}"></div>` : ""}
+       <p class="map-warn">${esc(zone.warning)}</p>
        <dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
        <div class="actions"><button type="button" class="seal" data-a="di">Đi tới</button></div>`,
     );

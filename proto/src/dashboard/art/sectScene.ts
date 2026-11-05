@@ -500,13 +500,24 @@ export function sectModels(): Promise<SectModel[]> {
 let pixelArt = new Set<string>();
 let pointPixelArt = new Set<string>();
 let pixelArtOn = true;
+/** Biến thể nền thẻ điểm (assets/pixellab/diem_nen/bo_hinh.json): loại → hệ → bậc → đường dẫn theo dáng. */
+let pointIndex: Record<string, Record<string, Record<string, string[]>>> = {};
+/** Hệ của vùng và khu đặc biệt (mục lục bản đồ), để chọn biến thể theo hệ. */
+let regionElement = new Map<string, string>();
 
-/** Đọc manifest một lần để biết công trình nào có hình PixelLab; gọi trước khi vẽ màn. */
+/** Đọc manifest, chỉ mục biến thể điểm và hệ các vùng một lần; gọi trước khi vẽ màn. */
 export function loadLocationArt(): Promise<void> {
-  return loadManifest().then((m) => {
-    pixelArt = new Set(m.assets.filter((a) => a.file.startsWith("cong_trinh/")).map((a) => a.file.slice("cong_trinh/".length).replace(/\.png$/, "")));
-    pointPixelArt = new Set(m.assets.filter((a) => a.file.startsWith("diem_nen/")).map((a) => a.file.slice("diem_nen/".length).replace(/\.png$/, "")));
-  });
+  return Promise.all([
+    loadManifest().then((m) => {
+      pixelArt = new Set(m.assets.filter((a) => a.file.startsWith("cong_trinh/")).map((a) => a.file.slice("cong_trinh/".length).replace(/\.png$/, "")));
+      pointPixelArt = new Set(m.assets.filter((a) => a.file.startsWith("diem_nen/")).map((a) => a.file.slice("diem_nen/".length).replace(/\.png$/, "")));
+    }),
+    fetch(`${import.meta.env.BASE_URL}pixellab/diem_nen/bo_hinh.json`)
+      .then((r) => r.json())
+      .then((j: { loai?: typeof pointIndex }) => (pointIndex = j.loai ?? {}))
+      .catch(() => undefined),
+    loadWorld().then((w) => (regionElement = new Map([...w.regions, ...(w.zones ?? [])].map((r) => [r.code, r.element])))),
+  ]).then(() => undefined);
 }
 
 /** Công cụ thử: bật tắt hình PixelLab để so với bản vẽ code. */
@@ -538,8 +549,32 @@ function bake(key: string, render: () => Promise<string | null>, placeholder?: s
   });
 }
 
-/** Hình nền của một loại điểm bản đồ trong vùng: PixelLab (assets/pixellab/diem_nen/<vùng>/<loại>.png), không thì Three.js. */
-export function pointArt(region: string, type: string): string | undefined {
+/** Một điểm cụ thể để chọn biến thể: id (dáng), bậc cửa bí cảnh, cấp mỏ. */
+export interface PointPick {
+  id: number;
+  tier?: string;
+  level?: number;
+}
+
+/** Bậc như đảo nổi (phiên pixellab-diem): mỏ cấp 1–2 → "1", 3–4 → "2", từ 5 → "3"; cửa bí cảnh theo tier; loại khác "0". */
+function pointBac(type: string, p: PointPick): string {
+  if (type.startsWith("mo_")) return !p.level || p.level <= 2 ? "1" : p.level <= 4 ? "2" : "3";
+  if (type === "cua_bi_canh") return p.tier ?? "thap";
+  return "0";
+}
+const bam = (id: number) => Math.imul(id + 1, 2654435761) >>> 0;
+
+/**
+ * Hình nền của một điểm bản đồ: có điểm thì chọn biến thể theo hệ vùng, bậc và dáng (diem_nen/bo_hinh.json; cùng một điểm
+ * luôn ra cùng hình, lên cấp chỉ đổi bậc), thiếu bậc thì lùi bậc "1"; không thì hình của loại trong vùng
+ * (diem_nen/<vùng>/<loại>.png); không có nữa thì Three.js.
+ */
+export function pointArt(region: string, type: string, p?: PointPick): string | undefined {
+  if (pixelArtOn && p) {
+    const byBac = pointIndex[type]?.[regionElement.get(region) ?? ""];
+    const ds = byBac?.[pointBac(type, p)] ?? byBac?.["1"];
+    if (ds?.length) return `${import.meta.env.BASE_URL}pixellab/${ds[bam(p.id) % ds.length]}.png`;
+  }
   const key = `${region}/${type}`;
   if (pixelArtOn && pointPixelArt.has(key)) return `${import.meta.env.BASE_URL}pixellab/diem_nen/${key}.png`;
   const url = baked.get(`diem/${key}`);
