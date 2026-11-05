@@ -2160,903 +2160,1153 @@
     },
     {
       "file": "tong_mon/kim_van_kiem_tong.png",
-      "description": "Vạn Kiếm Tông (kim_van_kiem_tong, hệ Kim): điện tông môn giữa rừng kiếm khổng lồ cắm đất, đá trắng và thép bạc. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Vạn Kiếm Tông (kim_van_kiem_tong, hệ Kim): điện tông môn giữa rừng kiếm khổng lồ cắm đất, đá trắng và thép bạc. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a sect hall and several huge gleaming steel swords planted upright in the ground around it",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
-        "frame": 4
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a small sect hall surrounded by five giant gleaming steel swords as tall as the hall, planted blade-down in the ground with their hilts up; grassy top paved with white stone, grey granite underside tapering to a point with shiny metal ore veins, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "d6e8e50a-9eaf-4ffc-92d8-bc284bcd5a8b"
+      "created": "2026-11-05",
+      "pixellab_id": "9707ecf6-0eab-4049-b521-6787a1e8acf1"
     },
     {
       "file": "tong_mon/kim_bach_ngan_dien.png",
-      "description": "Bạch Ngân Điện (kim_bach_ngan_dien, hệ Kim): cung điện đá trắng mái bạc, trang trí kim loại. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Bạch Ngân Điện (kim_bach_ngan_dien, hệ Kim): cung điện đá trắng mái bạc, trang trí kim loại. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a white marble palace with silver roofs and metal ornaments",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 1
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a white marble palace with silver roofs and metal ornaments; grassy top paved with white stone, grey granite underside tapering to a point with shiny metal ore veins, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "85e68a6b-fc32-47b9-a968-5767e586b897"
+      "created": "2026-11-05",
+      "pixellab_id": "a1e5d100-4e5b-49fa-a263-1d173ad78864"
     },
     {
       "file": "tong_mon/kim_kim_chung_tu.png",
-      "description": "Kim Chung Tự (kim_kim_chung_tu, hệ Kim): chùa có lầu chuông đồng vàng lớn. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Kim Chung Tự (kim_kim_chung_tu, hệ Kim): chùa có lầu chuông đồng vàng lớn. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a temple and a huge golden bronze bell pavilion",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 2
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a temple and a huge golden bronze bell pavilion; grassy top paved with white stone, grey granite underside tapering to a point with shiny metal ore veins, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "32a944c7-06e4-42e6-ae2d-2658c85988f5"
+      "created": "2026-11-05",
+      "pixellab_id": "6a281ded-c552-48cc-95ad-1689857c4fb2"
     },
     {
       "file": "tong_mon/kim_bach_luyen_phong.png",
-      "description": "Bách Luyện Phong (kim_bach_luyen_phong, hệ Kim): lò rèn, đe, giá binh khí. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Bách Luyện Phong (kim_bach_luyen_phong, hệ Kim): lò rèn, đe, giá binh khí. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a forge workshop, anvils, glowing furnace and racks of weapons",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 3
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a forge workshop, anvils, glowing furnace and racks of weapons; grassy top paved with white stone, grey granite underside tapering to a point with shiny metal ore veins, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "e1c6bb12-c17c-4c30-8a82-f1e9ee4669e3"
+      "created": "2026-11-05",
+      "pixellab_id": "9c734c63-635c-4ddf-a303-17553747b31f"
     },
     {
       "file": "tong_mon/moc_thanh_truc_coc.png",
-      "description": "Thanh Trúc Cốc (moc_thanh_truc_coc, hệ Mộc): rừng trúc, nhà trúc, cầu trúc nhỏ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Thanh Trúc Cốc (moc_thanh_truc_coc, hệ Mộc): rừng trúc, nhà trúc, cầu trúc nhỏ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a bamboo grove, bamboo huts and a little bamboo bridge",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 4
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a bamboo grove, bamboo huts and a little bamboo bridge; lush mossy green top, brown earth underside tapering to a point with thick dangling tree roots and vines, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "1c2bfd2d-f3ae-4a22-89b6-25c8a1c54e27"
+      "created": "2026-11-05",
+      "pixellab_id": "dbb11737-9710-4b99-85da-61926ca254e7"
     },
     {
       "file": "tong_mon/moc_co_thu_duong.png",
-      "description": "Cổ Thụ Đường (moc_co_thu_duong, hệ Mộc): điện dựng trong thân và tán cây cổ thụ khổng lồ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Cổ Thụ Đường (moc_co_thu_duong, hệ Mộc): điện dựng trong thân và tán cây cổ thụ khổng lồ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a giant ancient tree with a hall built into its trunk and branches",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 5
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a giant ancient tree with a hall built into its trunk and branches; lush mossy green top, brown earth underside tapering to a point with thick dangling tree roots and vines, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "9cb3e651-dc68-45e3-af34-9ee97251a2b7"
+      "created": "2026-11-05",
+      "pixellab_id": "03850b92-00d6-44d9-8066-3ea19e0c3ea4"
     },
     {
       "file": "tong_mon/moc_bach_hoa_vien.png",
-      "description": "Bách Hoa Viên (moc_bach_hoa_vien, hệ Mộc): vườn cung điện đầy hoa nở, đình nhỏ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Bách Hoa Viên (moc_bach_hoa_vien, hệ Mộc): vườn cung điện đầy hoa nở, đình nhỏ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a palace garden full of colorful blooming flowers and small pavilions",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 6
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a palace garden full of colorful blooming flowers and small pavilions; lush mossy green top, brown earth underside tapering to a point with thick dangling tree roots and vines, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "4a2a8c6e-5247-4fc9-a4a7-719aa2f7a1ad"
+      "created": "2026-11-05",
+      "pixellab_id": "ece762ad-798a-41b4-b593-f9c270aa2250"
     },
     {
       "file": "tong_mon/moc_linh_moc_dai.png",
-      "description": "Linh Mộc Đài (moc_linh_moc_dai, hệ Mộc): sàn nhà cây nối bằng cầu dây giữa tán xanh. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Linh Mộc Đài (moc_linh_moc_dai, hệ Mộc): sàn nhà cây nối bằng cầu dây giữa tán xanh. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with wooden treehouse platforms connected by rope bridges among green trees",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 7
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top wooden treehouse platforms connected by rope bridges among green trees; lush mossy green top, brown earth underside tapering to a point with thick dangling tree roots and vines, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "6f7a7772-b16f-4ca4-a47a-e0d31a503019"
+      "created": "2026-11-05",
+      "pixellab_id": "c6ca8579-d379-4803-afa8-e712f828f6fc"
     },
     {
       "file": "tong_mon/thuy_thuy_ta_cung.png",
-      "description": "Thủy Tạ Cung (thuy_thuy_ta_cung, hệ Thủy): cung điện trên cọc giữa hồ nước trong. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Thủy Tạ Cung (thuy_thuy_ta_cung, hệ Thủy): cung điện trên cọc giữa hồ nước trong. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a palace on stilts over a clear blue lake",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 8
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a palace on stilts over a clear blue lake; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "8e50aff3-3778-4deb-af2a-f12eb66c889f"
+      "created": "2026-11-05",
+      "pixellab_id": "d4669ac6-cb94-4b85-b40c-1dd63d5b7b28"
     },
     {
       "file": "tong_mon/thuy_bich_ba_cac.png",
-      "description": "Bích Ba Các (thuy_bich_ba_cac, hệ Thủy): lầu các bên thác nước đổ qua mép đảo. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Bích Ba Các (thuy_bich_ba_cac, hệ Thủy): lầu các bên thác nước đổ qua mép đảo. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a pavilion beside a tall waterfall pouring off the island edge",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 9
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a pavilion beside a tall waterfall pouring off the island edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "315cf8ea-eb5f-473f-b41c-589c819b59af"
+      "created": "2026-11-05",
+      "pixellab_id": "f5814735-9b10-4585-85db-9de44cc10925"
     },
     {
       "file": "tong_mon/thuy_long_cung.png",
-      "description": "Long Cung (thuy_long_cung, hệ Thủy): cung san hô ngọc trai, tượng rồng xanh, đài phun nước. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Long Cung (thuy_long_cung, hệ Thủy): cung san hô ngọc trai, tượng rồng xanh, đài phun nước. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a coral and pearl palace, a blue dragon statue and water fountains",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 10
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a coral and pearl palace with a coiled blue dragon statue in front and water fountains; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "4bce7788-225b-4f29-8214-08c056e6fc01"
+      "created": "2026-11-05",
+      "pixellab_id": "d357b5b4-84a7-4adf-a07e-7ab1ee388d00"
     },
     {
       "file": "tong_mon/thuy_lien_hoa_dinh.png",
-      "description": "Liên Hoa Đình (thuy_lien_hoa_dinh, hệ Thủy): đình giữa hồ sen, đá bước qua nước. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Liên Hoa Đình (thuy_lien_hoa_dinh, hệ Thủy): đình giữa hồ sen, đá bước qua nước. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a pavilion in the middle of a lotus pond with stepping stones",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 11
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a pavilion in the middle of a lotus pond with stepping stones; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "71e1c3e6-88a5-4c83-90d1-a2d154d64d4a"
+      "created": "2026-11-05",
+      "pixellab_id": "af0086be-d216-4e2e-acea-ebb10ea381c3"
     },
     {
       "file": "tong_mon/hoa_hoa_son_thanh.png",
-      "description": "Hỏa Sơn Thành (hoa_hoa_son_thanh, hệ Hỏa): thành trì quanh núi lửa bốc khói, sông dung nham. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Hỏa Sơn Thành (hoa_hoa_son_thanh, hệ Hỏa): thành trì quanh núi lửa bốc khói, sông dung nham. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a fortress city built around a smoking volcano with lava rivers",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 12
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a fortress city built around a smoking volcano with lava rivers; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "fed7f073-4d12-4523-af65-37e0a37d7bf0"
+      "created": "2026-11-05",
+      "pixellab_id": "3b24d7a9-bc2e-46e5-aa5d-39e808637ff0"
     },
     {
       "file": "tong_mon/hoa_xich_viem_dien.png",
-      "description": "Xích Viêm Điện (hoa_xich_viem_dien, hệ Hỏa): cung sơn son đỏ, chậu lửa, cờ lửa. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Xích Viêm Điện (hoa_xich_viem_dien, hệ Hỏa): cung sơn son đỏ, chậu lửa, cờ lửa. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a red lacquered palace, flaming braziers and fire banners",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 13
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a palace with bright red lacquered walls and pillars and black curved roofs standing on the rock, flaming bronze braziers beside the stairs and red fire banners, no clouds; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "b36fe77c-3611-48f3-9659-fad469fc50bd"
+      "created": "2026-11-05",
+      "pixellab_id": "61f6748f-734b-4eba-9a22-f6332528610b"
     },
     {
       "file": "tong_mon/hoa_dan_lo_phong.png",
-      "description": "Đan Lô Phong (hoa_dan_lo_phong, hệ Hỏa): lò luyện đan đồng khổng lồ có lửa dưới đáy, hồ lô. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Đan Lô Phong (hoa_dan_lo_phong, hệ Hỏa): lò luyện đan đồng khổng lồ có lửa dưới đáy, hồ lô. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a giant bronze alchemy cauldron with fire beneath it and gourds",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 14
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a giant bronze alchemy cauldron with fire beneath it and gourds; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "76c48977-85fe-4f02-ba42-ce8ee37c777b"
+      "created": "2026-11-05",
+      "pixellab_id": "63ea7006-bc43-4a1a-837c-89e26e3e6903"
     },
     {
       "file": "tong_mon/hoa_phuong_hoang_dai.png",
-      "description": "Phượng Hoàng Đài (hoa_phuong_hoang_dai, hệ Hỏa): đài cao có tượng phượng hoàng rực lửa. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Phượng Hoàng Đài (hoa_phuong_hoang_dai, hệ Hỏa): đài cao có tượng phượng hoàng rực lửa. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a tall altar topped by a flaming phoenix statue",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "35dbc932-8477-46ae-b8fc-2d4de879061d",
-        "frame": 15
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a tall altar topped by a flaming phoenix statue; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "94b094a3-2d31-4678-b31a-e9d56fafe5a7"
+      "created": "2026-11-05",
+      "pixellab_id": "e708781f-fb92-4e5f-b18b-ab8b5684094b"
     },
     {
       "file": "tong_mon/tho_hoang_thach_bao.png",
-      "description": "Hoàng Thạch Bảo (tho_hoang_thach_bao, hệ Thổ): pháo đài đá vàng tường dày. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Hoàng Thạch Bảo (tho_hoang_thach_bao, hệ Thổ): pháo đài đá vàng tường dày. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a massive yellow stone fortress with thick walls",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 0
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a massive yellow stone fortress with thick walls; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "9c7bc335-b95f-4905-b00a-03286e79b4ae"
+      "created": "2026-11-05",
+      "pixellab_id": "18e699e0-3450-4992-a56e-10065bdf786a"
     },
     {
       "file": "tong_mon/tho_son_nhac_tu.png",
-      "description": "Sơn Nhạc Tự (tho_son_nhac_tu, hệ Thổ): chùa tạc vào vách núi, bậc đá. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Sơn Nhạc Tự (tho_son_nhac_tu, hệ Thổ): chùa tạc vào vách núi, bậc đá. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a temple carved into a rocky cliff face with stone stairs",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 1
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a temple carved into a rocky cliff face with stone stairs; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "7e35a599-d185-4005-8c21-7be53e4fa79f"
+      "created": "2026-11-05",
+      "pixellab_id": "401108aa-63fe-4626-b092-99fca90f3c65"
     },
     {
       "file": "tong_mon/tho_tho_lau.png",
-      "description": "Thổ Lâu (tho_tho_lau, hệ Thổ): nhà đất tròn kiểu thổ lâu, vòng mái ngói. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Thổ Lâu (tho_tho_lau, hệ Thổ): nhà đất tròn kiểu thổ lâu, vòng mái ngói. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a round earthen tulou fortress building with a ring of tiled roofs",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 2
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a big round ring-shaped Hakka tulou: one circular rammed-earth wall building with a continuous ring of dark tiled roof and an open round courtyard in the middle; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "c6270690-6048-4354-b0a0-ff80c88a7e5d"
+      "created": "2026-11-05",
+      "pixellab_id": "2807cad5-5a5b-4bd5-990c-d4be264e3621"
     },
     {
       "file": "tong_mon/tho_thach_phat_quat.png",
-      "description": "Thạch Phật Quật (tho_thach_phat_quat, hệ Thổ): tượng phật đá khổng lồ trong hang đá. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Thạch Phật Quật (tho_thach_phat_quat, hệ Thổ): tượng phật đá khổng lồ trong hang đá. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a giant stone buddha statue carved in a rock grotto",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 3
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a giant stone buddha statue carved in a rock grotto; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "20ab1ae7-be2f-4365-a092-615a7e29e13b"
+      "created": "2026-11-05",
+      "pixellab_id": "e81bfec4-66b5-42cd-88e3-6875283ce558"
     },
     {
       "file": "tong_mon/loi_loi_dinh_dien.png",
-      "description": "Lôi Đình Điện (loi_loi_dinh_dien, hệ Lôi): cung điện tối, cột thu lôi, sét tím đánh xuống. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Lôi Đình Điện (loi_loi_dinh_dien, hệ Lôi): cung điện tối, cột thu lôi, sét tím đánh xuống. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a dark palace with metal lightning rods and purple lightning striking",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 4
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a dark palace with metal lightning rods and purple lightning striking; dark green grass top, jagged dark slate underside with faint purple electric sparks, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "1abe3697-b79d-43ff-81c0-e85cb8e6a56a"
+      "created": "2026-11-05",
+      "pixellab_id": "93242c61-2d7a-47ca-b315-1f06decbdabe"
     },
     {
       "file": "tong_mon/loi_thien_loi_dai.png",
-      "description": "Thiên Lôi Đài (loi_thien_loi_dai, hệ Lôi): đài đá dưới đám mây giông nhỏ có sét. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Thiên Lôi Đài (loi_thien_loi_dai, hệ Lôi): đài đá dưới đám mây giông nhỏ có sét. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a stone altar platform under a small storm cloud with lightning bolts",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 5
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a stone altar platform under a small storm cloud with lightning bolts; dark green grass top, jagged dark slate underside with faint purple electric sparks, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "c1d3eeba-4d9d-4415-83a3-dcae5a1f5a22"
+      "created": "2026-11-05",
+      "pixellab_id": "9734ad81-80be-42db-b813-3aec0305e6a3"
     },
     {
       "file": "tong_mon/loi_tu_dien_cac.png",
-      "description": "Tử Điện Các (loi_tu_dien_cac, hệ Lôi): tháp mái tím lóe tia điện. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Tử Điện Các (loi_tu_dien_cac, hệ Lôi): tháp mái tím lóe tia điện. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a purple roofed pagoda crackling with electric sparks",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 6
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a purple roofed pagoda crackling with electric sparks; dark green grass top, jagged dark slate underside with faint purple electric sparks, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "64e88724-f914-4fef-832a-c7b2f541c65d"
+      "created": "2026-11-05",
+      "pixellab_id": "13de921c-fdcc-4841-8cf5-1688fcdbecc8"
     },
     {
       "file": "tong_mon/loi_loi_tri_phong.png",
-      "description": "Lôi Trì Phong (loi_loi_tri_phong, hệ Lôi): đỉnh đá có hồ sấm phát sáng tím. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Lôi Trì Phong (loi_loi_tri_phong, hệ Lôi): đỉnh đá có hồ sấm phát sáng tím. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a rocky peak with a glowing purple thunder pool",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 7
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a rocky peak with a glowing purple thunder pool; dark green grass top, jagged dark slate underside with faint purple electric sparks, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "aed730fe-80fd-42b4-90df-52ea635bf948"
+      "created": "2026-11-05",
+      "pixellab_id": "141c7589-926f-4493-8d40-800f98a7e019"
     },
     {
       "file": "tong_mon/phong_thanh_phong_lau.png",
-      "description": "Thanh Phong Lâu (phong_thanh_phong_lau, hệ Phong): tháp gỗ cao, cờ dài bay, chuông gió. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Thanh Phong Lâu (phong_thanh_phong_lau, hệ Phong): tháp gỗ cao, cờ dài bay, chuông gió. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a tall wooden tower with long fluttering banners and wind chimes",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 8
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a tall wooden tower with long fluttering banners and wind chimes; windswept green grass top, light grey rock underside tapering to a point with wisps of white cloud around it, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "5de4bdf3-083d-410f-bc04-4a77ff08acf8"
+      "created": "2026-11-05",
+      "pixellab_id": "e8ee8ce1-8169-42e5-81c1-e7e7d4f44fae"
     },
     {
       "file": "tong_mon/phong_phi_van_dinh.png",
-      "description": "Phi Vân Đỉnh (phong_phi_van_dinh, hệ Phong): điện trên đỉnh quấn mây trắng xoáy. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Phi Vân Đỉnh (phong_phi_van_dinh, hệ Phong): điện trên đỉnh quấn mây trắng xoáy. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a hall on a peak wrapped in swirling white clouds",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 9
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a hall on a peak wrapped in swirling white clouds; windswept green grass top, light grey rock underside tapering to a point with wisps of white cloud around it, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "9d6e4800-29ef-41c1-bc4a-d32ebd877890"
+      "created": "2026-11-05",
+      "pixellab_id": "756ad21e-d9c2-488f-9b6d-7b0a55c5f155"
     },
     {
       "file": "tong_mon/phong_phong_xa_coc.png",
-      "description": "Phong Xa Cốc (phong_phong_xa_coc, hệ Phong): cối xay gió, chong chóng quanh điện gỗ nhỏ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Phong Xa Cốc (phong_phong_xa_coc, hệ Phong): cối xay gió, chong chóng quanh điện gỗ nhỏ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with windmills and pinwheels around a small wooden hall",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 10
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top windmills and pinwheels around a small wooden hall; windswept green grass top, light grey rock underside tapering to a point with wisps of white cloud around it, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "1626637d-46cc-49b8-a22c-244d1a802f65"
+      "created": "2026-11-05",
+      "pixellab_id": "1bd317d4-0838-4844-9da8-1b25da9a7244"
     },
     {
       "file": "tong_mon/phong_vu_hac_dai.png",
-      "description": "Vũ Hạc Đài (phong_vu_hac_dai, hệ Phong): sân đài có hạc trắng bay, thông xanh. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Vũ Hạc Đài (phong_vu_hac_dai, hệ Phong): sân đài có hạc trắng bay, thông xanh. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a terrace and pine trees and three large white red-crowned cranes standing and flying",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
-        "frame": 6
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a terrace with pine trees and three large white red-crowned cranes standing and flying; windswept green grass top, light grey rock underside tapering to a point with wisps of white cloud around it, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "c524dcb6-3ca6-4d86-a110-34ec72f728c0"
+      "created": "2026-11-05",
+      "pixellab_id": "6a8c67f6-a07f-44d3-aa2c-83cbca9dee4d"
     },
     {
       "file": "tong_mon/cuc_duong_thai_duong_cung.png",
-      "description": "Thái Dương Cung (cuc_duong_thai_duong_cung, hệ Cực dương): cung mái vòm vàng, huy hiệu mặt trời. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Thái Dương Cung (cuc_duong_thai_duong_cung, hệ Cực dương): cung mái vòm vàng, huy hiệu mặt trời. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a golden domed palace with a radiant sun emblem",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 12
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a golden domed palace with a radiant sun emblem; golden grass top, warm red-orange sandstone underside tapering to a point, faintly glowing, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "dc02df0d-f80c-4d93-836f-ffd5bc4d4fef"
+      "created": "2026-11-05",
+      "pixellab_id": "4dd1f53b-397d-4434-9961-511cad1231ae"
     },
     {
       "file": "tong_mon/cuc_duong_kim_o_thap.png",
-      "description": "Kim Ô Tháp (cuc_duong_kim_o_thap, hệ Cực dương): tháp vàng cao, đỉnh có tượng Kim Ô ba chân. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Kim Ô Tháp (cuc_duong_kim_o_thap, hệ Cực dương): tháp vàng cao, đỉnh có tượng Kim Ô ba chân. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a tall golden tower topped by a three-legged golden crow statue",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 13
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a tall golden tower topped by a three-legged golden crow statue; golden grass top, warm red-orange sandstone underside tapering to a point, faintly glowing, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "afaa6add-c7bf-4b97-822f-5d27f74745fa"
+      "created": "2026-11-05",
+      "pixellab_id": "22f92a29-d7cd-4c30-9856-8b126e2603f4"
     },
     {
       "file": "tong_mon/cuc_duong_liet_duong_dan.png",
-      "description": "Liệt Dương Đàn (cuc_duong_liet_duong_dan, hệ Cực dương): đàn tế mặt trời tròn, ánh vàng rực. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Liệt Dương Đàn (cuc_duong_liet_duong_dan, hệ Cực dương): đàn tế mặt trời tròn, ánh vàng rực. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a round sun altar blazing with golden light and orange stones",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 14
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a round sun altar blazing with golden light and orange stones; golden grass top, warm red-orange sandstone underside tapering to a point, faintly glowing, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "220514f5-80bc-4a88-8b66-85038ffe2414"
+      "created": "2026-11-05",
+      "pixellab_id": "ae4f0090-2f88-4dcf-86c6-cb4c3ec68cf8"
     },
     {
       "file": "tong_mon/cuc_duong_dieu_nhat_dien.png",
-      "description": "Diệu Nhật Điện (cuc_duong_dieu_nhat_dien, hệ Cực dương): điện cam vàng, mái trang trí hình tia nắng. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Diệu Nhật Điện (cuc_duong_dieu_nhat_dien, hệ Cực dương): điện cam vàng, mái trang trí hình tia nắng. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with an orange and gold temple with sunburst roof ornaments",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "06f17794-5354-4ab1-801a-701688e2b97c",
-        "frame": 15
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top an orange and gold temple with sunburst roof ornaments; golden grass top, warm red-orange sandstone underside tapering to a point, faintly glowing, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "272bc7e7-559f-40af-92d2-aa0e09c1adf2"
+      "created": "2026-11-05",
+      "pixellab_id": "13952a2e-6b89-4b52-9ea4-5c93c78386a5"
     },
     {
       "file": "tong_mon/cuc_am_huyen_am_dong.png",
-      "description": "Huyền Âm Động (cuc_am_huyen_am_dong, hệ Cực âm): điện trong hang tối, cột đá đen, sương tím. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Huyền Âm Động (cuc_am_huyen_am_dong, hệ Cực âm): điện trong hang tối, cột đá đen, sương tím. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a dark cave temple with black stone pillars and purple mist",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 0
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a dark cave temple with black stone pillars and purple mist; dark purple-grey moss top, black basalt underside tapering to a point wrapped in faint purple mist, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "2cc10b8c-8d31-476e-a701-dfecf9b7091e"
+      "created": "2026-11-05",
+      "pixellab_id": "bee4eef4-6bbb-4fee-a01a-bf824694fa24"
     },
     {
       "file": "tong_mon/cuc_am_hac_thach_thanh.png",
-      "description": "Hắc Thạch Thành (cuc_am_hac_thach_thanh, hệ Cực âm): thành đá đen, tháp tối. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Hắc Thạch Thành (cuc_am_hac_thach_thanh, hệ Cực âm): thành đá đen, tháp tối. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a black basalt stone citadel with dark towers",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 1
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a black basalt stone citadel with dark towers and glowing purple crystals set in its walls; dark purple-grey moss top, black basalt underside tapering to a point wrapped in faint purple mist, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "2bd1efb0-5732-49ba-ad22-1b70f06a9674"
+      "created": "2026-11-05",
+      "pixellab_id": "81be72dd-e3f2-44ce-8672-07cd6f0cd35b"
     },
     {
       "file": "tong_mon/cuc_am_am_duong_dai.png",
-      "description": "Âm Dương Đài (cuc_am_am_duong_dai, hệ Cực âm): đài tròn có hình thái cực đen trắng lớn. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Âm Dương Đài (cuc_am_am_duong_dai, hệ Cực âm): đài tròn có hình thái cực đen trắng lớn. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a round platform with a large black and white taiji symbol",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 2
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a round platform with a large black and white taiji symbol; dark purple-grey moss top, black basalt underside tapering to a point wrapped in faint purple mist, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "62123a5e-76bf-4fb7-8403-bb09dd9c90a7"
+      "created": "2026-11-05",
+      "pixellab_id": "5e0074e9-fbd9-48ca-8755-3f4d9ee0c8d9"
     },
     {
       "file": "tong_mon/cuc_am_u_tuyen_cung.png",
-      "description": "U Tuyền Cung (cuc_am_u_tuyen_cung, hệ Cực âm): cung tối bên suối ngầm đen. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "U Tuyền Cung (cuc_am_u_tuyen_cung, hệ Cực âm): cung tối bên suối ngầm đen. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a shadowy palace beside a dark spring",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 3
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a shadowy palace beside a dark spring; dark purple-grey moss top, black basalt underside tapering to a point wrapped in faint purple mist, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "16aaaebd-f932-439b-b9ec-533bb0306bdf"
+      "created": "2026-11-05",
+      "pixellab_id": "3695db2e-0ce2-4767-ad77-822a7a77c5f2"
     },
     {
       "file": "tong_mon/cuc_han_bang_cung.png",
-      "description": "Băng Cung (cuc_han_bang_cung, hệ Cực hàn): cung điện bằng pha lê băng xanh và tuyết. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Băng Cung (cuc_han_bang_cung, hệ Cực hàn): cung điện bằng pha lê băng xanh và tuyết. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a palace made of blue ice crystals and snow",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 4
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a palace made of blue ice crystals and snow; snow-covered top, pale blue ice and rock underside with long hanging icicles, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "a5000f3d-703f-47d4-ae0e-ba2ba3cfda39"
+      "created": "2026-11-05",
+      "pixellab_id": "784fa0f2-7996-4273-b2df-288f7e0690cf"
     },
     {
       "file": "tong_mon/cuc_han_tuyet_son_tu.png",
-      "description": "Tuyết Sơn Tự (cuc_han_tuyet_son_tu, hệ Cực hàn): chùa trên núi tuyết, thông phủ tuyết. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Tuyết Sơn Tự (cuc_han_tuyet_son_tu, hệ Cực hàn): chùa trên núi tuyết, thông phủ tuyết. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a snow-covered mountain temple with snowy pine trees",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 5
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a snow-covered mountain temple with snowy pine trees; snow-covered top, pale blue ice and rock underside with long hanging icicles, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "605fa71d-8970-468f-b4a2-86c1d526dda2"
+      "created": "2026-11-05",
+      "pixellab_id": "b4388132-4506-48cc-8623-4491b8fadcd3"
     },
     {
       "file": "tong_mon/cuc_han_han_bang_thap.png",
-      "description": "Hàn Băng Tháp (cuc_han_han_bang_thap, hệ Cực hàn): tháp băng nhọn cao phủ sương giá. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Hàn Băng Tháp (cuc_han_han_bang_thap, hệ Cực hàn): tháp băng nhọn cao phủ sương giá. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a tall spire of ice covered in frost",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 6
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a tall spire of ice covered in frost; snow-covered top, pale blue ice and rock underside with long hanging icicles, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "2951b8db-f65b-4084-8314-6444395f9b67"
+      "created": "2026-11-05",
+      "pixellab_id": "85c93b8e-bd38-45de-9bfd-e612eff633e3"
     },
     {
       "file": "tong_mon/cuc_han_suong_hoa_dinh.png",
-      "description": "Sương Hoa Đình (cuc_han_suong_hoa_dinh, hệ Cực hàn): đình phủ sương, mai trắng nở. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Sương Hoa Đình (cuc_han_suong_hoa_dinh, hệ Cực hàn): đình phủ sương, mai trắng nở. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a frosted pavilion with white winter plum blossoms",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 7
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a frosted pavilion with white winter plum blossoms; snow-covered top, pale blue ice and rock underside with long hanging icicles, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "38c867b8-a07a-4535-8258-1508be32bb84"
+      "created": "2026-11-05",
+      "pixellab_id": "8c98b6ec-bfc0-44a5-a1f6-db2a96d15653"
     },
     {
       "file": "tong_mon/quang_quang_minh_dien.png",
-      "description": "Quang Minh Điện (quang_quang_minh_dien, hệ Quang): đền đá trắng tỏa ánh thánh quang. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Quang Minh Điện (quang_quang_minh_dien, hệ Quang): đền đá trắng tỏa ánh thánh quang. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a white marble temple glowing with holy light",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 8
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a white marble temple glowing with holy light; bright green top paved with white marble, pale stone underside tapering to a point with a faint golden glow, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "a1e9af2b-8d09-4c6b-8a9b-50ba7e36d266"
+      "created": "2026-11-05",
+      "pixellab_id": "43e619b6-4467-484f-a10c-5a15b368bb22"
     },
     {
       "file": "tong_mon/quang_thanh_quang_thap.png",
-      "description": "Thánh Quang Tháp (quang_thanh_quang_thap, hệ Quang): tháp trắng, đỉnh có ngọn đèn tỏa sáng. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Thánh Quang Tháp (quang_thanh_quang_thap, hệ Quang): tháp trắng, đỉnh có ngọn đèn tỏa sáng. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a white tower with a shining light beacon on top",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 9
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a white tower with a shining light beacon on top; bright green top paved with white marble, pale stone underside tapering to a point with a faint golden glow, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "31d8e4d2-3875-4a4c-96d8-016ab856f631"
+      "created": "2026-11-05",
+      "pixellab_id": "28c773ed-ec29-4286-a105-9fa52b22d21c"
     },
     {
       "file": "tong_mon/quang_ngoc_hu_cung.png",
-      "description": "Ngọc Hư Cung (quang_ngoc_hu_cung, hệ Quang): cung ngọc bích trắng xanh, trang trí ngọc. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Ngọc Hư Cung (quang_ngoc_hu_cung, hệ Quang): cung ngọc bích trắng xanh, trang trí ngọc. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a jade green and white palace with jade ornaments",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 10
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a jade green and white palace with jade ornaments; bright green top paved with white marble, pale stone underside tapering to a point with a faint golden glow, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "ca2a871d-0a89-47bb-a78d-e021fc653ace"
+      "created": "2026-11-05",
+      "pixellab_id": "6f4b0d99-9df6-4896-8911-05d9167b2f89"
     },
     {
       "file": "tong_mon/quang_luu_ly_cac.png",
-      "description": "Lưu Ly Các (quang_luu_ly_cac, hệ Quang): lầu các bằng lưu ly, pha lê nhiều màu phát sáng. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Lưu Ly Các (quang_luu_ly_cac, hệ Quang): lầu các bằng lưu ly, pha lê nhiều màu phát sáng. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a pavilion made of colorful stained glass panels in red, blue and green",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
-        "frame": 8
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a pavilion made of colorful stained glass panels in red, blue and green, glowing softly; bright green top paved with white marble, pale stone underside tapering to a point with a faint golden glow, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "802f88e1-d3f3-442a-b5cc-7790618f1548"
+      "created": "2026-11-05",
+      "pixellab_id": "3fb4ba05-9925-4732-a990-1b949d76e0a2"
     },
     {
       "file": "tong_mon/am_lanh_u_hon_dien.png",
-      "description": "U Hồn Điện (am_lanh_u_hon_dien, hệ Âm lãnh): điện tối có đèn hồn lơ lửng, đốm lửa xanh lục. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "U Hồn Điện (am_lanh_u_hon_dien, hệ Âm lãnh): điện tối có đèn hồn lơ lửng, đốm lửa xanh lục. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a dark hall with floating ghost lanterns and green wisps",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 12
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a dark hall with floating ghost lanterns and green wisps; withered dark grass top, black rock underside with dead roots and ghostly green mist, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "3d9e1435-d65d-4cbe-90b0-16b8d9973f4f"
+      "created": "2026-11-05",
+      "pixellab_id": "e771d963-9f84-43d4-a340-95aa40e10f4b"
     },
     {
       "file": "tong_mon/am_lanh_huyet_nguyet_thanh.png",
-      "description": "Huyết Nguyệt Thành (am_lanh_huyet_nguyet_thanh, hệ Âm lãnh): thành đen dưới trăng máu, cờ đỏ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Huyết Nguyệt Thành (am_lanh_huyet_nguyet_thanh, hệ Âm lãnh): thành đen dưới trăng máu, cờ đỏ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a black citadel under a blood red moon with red banners",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 13
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a black citadel under a blood red moon with red banners; withered dark grass top, black rock underside with dead roots and ghostly green mist, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "c88f51ac-a044-4766-b999-663dc19e6188"
+      "created": "2026-11-05",
+      "pixellab_id": "0c3484e8-1c96-4d32-a81f-d2129631dc1f"
     },
     {
       "file": "tong_mon/am_lanh_cot_ma_thap.png",
-      "description": "Cốt Ma Tháp (am_lanh_cot_ma_thap, hệ Âm lãnh): tháp dựng bằng xương và sọ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Cốt Ma Tháp (am_lanh_cot_ma_thap, hệ Âm lãnh): tháp dựng bằng xương và sọ. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a tower built of bones and skulls",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 14
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a tower built of bones and skulls; withered dark grass top, black rock underside with dead roots and ghostly green mist, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "89b8dbe8-1fa3-4847-82b5-bdff2cd7d460"
+      "created": "2026-11-05",
+      "pixellab_id": "a76447c8-4739-4e71-b29e-8656ab662acf"
     },
     {
       "file": "tong_mon/am_lanh_doc_vu_coc.png",
-      "description": "Độc Vụ Cốc (am_lanh_doc_vu_coc, hệ Âm lãnh): làng nhà sàn giữa đầm sương độc xanh. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Độc Vụ Cốc (am_lanh_doc_vu_coc, hệ Âm lãnh): làng nhà sàn giữa đầm sương độc xanh. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a swamp hut village in green poison mist",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "cf84ac93-068b-4382-8dee-a006cd1b105f",
-        "frame": 15
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a swamp hut village in green poison mist; withered dark grass top, black rock underside with dead roots and ghostly green mist, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "f9d2b80b-d711-4cb8-9268-9e27c161d588"
+      "created": "2026-11-05",
+      "pixellab_id": "f5b10103-d280-4a2c-a72f-b778171070a6"
     },
     {
       "file": "tong_mon/le_dao_hoa_dao.png",
-      "description": "Đào Hoa Đảo (le_dao_hoa_dao, lễ hội): cây đào hồng quanh đình đỏ, đèn lồng Tết. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Đào Hoa Đảo (le_dao_hoa_dao, lễ hội): cây đào hồng quanh đình đỏ, đèn lồng Tết. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with pink peach blossom trees around a red pavilion with Lunar New Year red lanterns",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
-        "frame": 0
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top pink peach blossom trees around a red pavilion with Lunar New Year red lanterns; mossy green grass top, brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "b7d2a17b-2d54-4730-bdce-9102873ed0f6"
+      "created": "2026-11-05",
+      "pixellab_id": "ec9a9d0f-2ab7-4a12-8325-7f902a973229"
     },
     {
       "file": "tong_mon/le_nguyet_cung.png",
-      "description": "Nguyệt Cung (le_nguyet_cung, lễ hội): cung điện dưới trăng tròn, nhiều đèn lồng Trung Thu. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới.",
-      "tool": "create_1_direction_object",
+      "description": "Nguyệt Cung (le_nguyet_cung, lễ hội): cung điện dưới trăng tròn, nhiều đèn lồng Trung Thu. Đảo nổi tông môn chọn được (skin tông môn, GDD mục 13), 64×64 cùng cỡ hình điểm; nền trong suốt, neo giữa cạnh dưới. Vẽ bằng Pro Flash 2026-11-05: mặt và đáy đảo theo hệ, mẫu nét diem/son_mon.",
+      "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air, home base of a xianxia cultivation sect, mossy green grass top, jagged brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy architecture, 3/4 top-down view, whole island visible, transparent background",
-        "item_description": "floating island with a palace under a full moon with many glowing mid-autumn lanterns",
-        "size": 64,
-        "view": "top-down",
-        "style_images": [
-          "diem/son_mon.png"
-        ],
-        "lo": "36b1fd57-797f-4fb9-bb73-ac3a66d6dfa8",
-        "frame": 2
+        "description": "small floating sky island hovering in the air, home of a xianxia cultivation sect: on top a palace under a full moon with many glowing mid-autumn lanterns; mossy green grass top, brown rock underside tapering to a point with dangling roots, ancient Chinese fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
       },
-      "created": "2026-11-02",
-      "pixellab_id": "39e901ab-9f43-4900-ac7a-2c08ecd37974"
+      "created": "2026-11-05",
+      "pixellab_id": "d9d09459-cd78-4d74-a38c-530bf3e30898"
     },
     {
       "file": "thu/dieu_nhat_su.png",
@@ -27132,12 +27382,12 @@
       "description": "Bến đò hệ Hỏa, dáng 1 (diem/ben_do/hoa_0_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
       "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a small wooden sampan rowboat with a pointed curved hull and a little straw canopy moored alongside, a lantern post with a fiery red-orange lantern at the pier end; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a long narrow wooden rowboat with a clearly pointed bow and stern floating beside the end of the pier, a tall lantern post with a pointed curved hull and a little straw canopy moored alongside, a lantern at the pier end; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
         "view": "low top-down",
         "width": 64,
         "height": 64,
         "n_directions": 1,
-        "seed": 0,
+        "seed": 100,
         "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
         "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
         "style_options": {
@@ -27148,7 +27398,7 @@
         }
       },
       "created": "2026-11-05",
-      "pixellab_id": "7db6cbdb-9622-4c72-8ecb-1adc25074d5f"
+      "pixellab_id": "642786a2-38e5-4f3f-8fa2-fee5ec8d4702"
     },
     {
       "file": "diem/mo_linh_thach/tho_1_1.png",
@@ -30697,12 +30947,12 @@
       "description": "Bến đò hệ Cực âm, dáng 1 (diem/ben_do/cuc_am_0_1): đảo nổi cho điểm bản đồ vùng hệ Cực âm, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
       "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a small wooden sampan rowboat with a pointed curved hull and a little straw canopy moored alongside, a lantern post with a dark violet lantern at the pier end; dark purple-grey moss top, black basalt underside tapering to a point wrapped in faint purple mist, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a long narrow wooden rowboat with a clearly pointed bow and stern floating beside the end of the pier, a tall lantern post with a pointed curved hull and a little straw canopy moored alongside, a lantern at the pier end; dark purple-grey moss top, black basalt underside tapering to a point wrapped in faint purple mist, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
         "view": "low top-down",
         "width": 64,
         "height": 64,
         "n_directions": 1,
-        "seed": 0,
+        "seed": 100,
         "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
         "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
         "style_options": {
@@ -30713,7 +30963,7 @@
         }
       },
       "created": "2026-11-05",
-      "pixellab_id": "19ea45c9-683b-48a8-8724-01b036d935b6"
+      "pixellab_id": "f63fc951-0cde-49dd-b5e6-50d989289eda"
     },
     {
       "file": "diem/mo_linh_thach/cuc_han_1_1.png",
@@ -32836,12 +33086,12 @@
       "description": "Bến đò hệ Âm lãnh, dáng 1 (diem/ben_do/am_lanh_0_1): đảo nổi cho điểm bản đồ vùng hệ Âm lãnh, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
       "tool": "create_object_pro_flash",
       "params": {
-        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a small wooden sampan rowboat with a pointed curved hull and a little straw canopy moored alongside, a lantern post with a ghostly pale green lantern at the pier end; withered dark grass top, black rock underside with dead roots and ghostly green mist, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a long narrow wooden rowboat with a clearly pointed bow and stern floating beside the end of the pier, a tall lantern post with a pointed curved hull and a little straw canopy moored alongside, a lantern at the pier end; withered dark grass top, black rock underside with dead roots and ghostly green mist, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
         "view": "low top-down",
         "width": 64,
         "height": 64,
         "n_directions": 1,
-        "seed": 0,
+        "seed": 100,
         "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
         "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
         "style_options": {
@@ -32852,7 +33102,7 @@
         }
       },
       "created": "2026-11-05",
-      "pixellab_id": "a9b618a8-8e20-4e98-b471-e75a66c37825"
+      "pixellab_id": "f1f3fc81-8e2a-4433-af18-ad76bbcaf6c2"
     },
     {
       "file": "diem/mo_linh_thach/hon_don_1_1.png",
