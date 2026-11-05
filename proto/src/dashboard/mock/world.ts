@@ -29,6 +29,9 @@ const MIN = 60_000;
  */
 export interface DongAnRaw { dk: string; hu: string; lo: "an" | "dk" | "het" }
 
+/** Một đoạn hành trình trong một vùng (hay khu đặc biệt): điểm đi, điểm tới theo id điểm của vùng đó, giờ đi và giờ tới. */
+export interface TravelLeg { region: string; from: number; to: number; startsAt: number; endsAt: number }
+
 /** Món trong trạng thái mẫu: món của màn kèm phần chỉ server giữ (dòng ẩn thật, loại phụ chọn ở mỗi mốc rèn). */
 export interface WorldGear extends GearItem {
   dongAn?: DongAnRaw[];
@@ -100,7 +103,13 @@ export interface World {
   tides: { title: string; startsAt: number; endsAt: number; maxRing: number }[];
   jobs: Job[];
   buildings: Building[];
-  travel: { from: number; to: number; startsAt: number; endsAt: number };
+  /**
+   * Hành trình (GDD mục 7, "Hành trình thay cho đi bộ thời gian thực"): from, to, startsAt, endsAt là chặng đường trong vùng
+   * nhà. Đi sang vùng khác hay vào khu đặc biệt thì có `legs`, mỗi đoạn nằm trong một vùng (qua đèo, cửa ải); khi đó from, to,
+   * startsAt, endsAt chép đoạn đầu và đoạn cuối để code cũ đọc giờ tới vẫn đúng. Không có `legs` thì cả chuyến ở vùng nhà.
+   * `name`, `stages`: tên điểm tới và tổng số chặng, ghi lúc lên đường.
+   */
+  travel: { from: number; to: number; startsAt: number; endsAt: number; legs?: TravelLeg[]; name?: string; stages?: number };
   /**
    * arena: bản đồ chiến trường "<vùng>/<bối cảnh>" (chien_truong/) hay sân san_dau/<tên> của màn Trận; bỏ trống là võ trường.
    * vs: tên bên kia (tông môn, "Dị thú"); tông mình luôn là đội A của trận mẫu. Bỏ trống thì màn Trận hiện Ta/Địch.

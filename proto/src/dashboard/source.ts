@@ -49,8 +49,20 @@ export interface MiniMapView {
   region: string; // mã vùng, ví dụ loi_dinh_coc
   marks: MiniMapMark[];
   sonMon: number; // id điểm sơn môn của tông mình
-  /** Vị trí của mình hoặc đoàn đang đi: điểm đi, điểm tới và tỉ lệ đã đi (0–1). */
-  self: { from: number; to: number; progress: number };
+  /**
+   * Vị trí của mình hoặc đoàn đang đi: điểm đi, điểm tới và tỉ lệ đã đi (0–1) của đoạn hiện tại; đã tới nơi thì from = to.
+   * `region`: vùng (hay khu đặc biệt) của đoạn đó khi khác `region` của bản đồ. `startsAt`, `endsAt`: giờ đi và giờ tới của
+   * đoạn, để màn tự chạy dấu theo đồng hồ; hết đoạn thì đọc lại. `dest`: điểm tới cuối chuyến khi đang đi.
+   */
+  self: {
+    from: number;
+    to: number;
+    progress: number;
+    region?: string;
+    startsAt?: number;
+    endsAt?: number;
+    dest?: { region: string; pointId: number; name: string; endsAt: number; stages: number };
+  };
   /** Cửa bí cảnh đang mở. */
   openGates: number[];
   /** Id các điểm đã mở sương; ngoài tập này là sương mù. */
@@ -601,6 +613,13 @@ export type DashboardCommand =
   | { type: "giam_dinh"; slot: GearSlot; i?: number }
   /** Tẩy ẩn: quay lại hiệu ứng dòng ẩn `i` đã lộ, giữ điều kiện (3 Linh Văn Thạch); hiệu ứng mới hiện ngay. */
   | { type: "tay_an"; slot: GearSlot; i: number }
+  /**
+   * Đi tới một điểm theo đường chặng (GDD mục 7): `region` là mã vùng hay khu đặc biệt của điểm. Sang vùng khác thì qua đèo,
+   * vào khu qua cửa ải. Đang đi thì đổi đích, đi tiếp từ điểm gần chỗ đang đứng nhất trên đường.
+   */
+  | { type: "di_toi"; region: string; pointId: number }
+  /** Chỉ bản thử: tới nơi ngay để chơi thử nhanh (máy chủ thật không có; GDD chỉ có Phù độn thổ về thành chủ). */
+  | { type: "toi_ngay" }
   /** Chọn thú cưỡi trong 5 ô thú (GDD mục 6). */
   | { type: "cuoi_thu"; index: number }
   | { type: "chat"; text: string }

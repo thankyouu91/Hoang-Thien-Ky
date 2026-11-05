@@ -173,17 +173,14 @@ export function stagesFrom(m: RegionMap, start: number): Map<number, number> {
 }
 
 const routes = new WeakMap<RegionMap, Map<string, [number, number][]>>();
+const shortest = new WeakMap<RegionMap, Map<string, { ids: number[]; edges: RegionEdge[] } | null>>();
 
-/**
- * Đường đi theo chặng từ điểm `from` tới `to`: ngắn nhất theo số ô (e.cells), nối path của từng chặng thành một đường
- * (path luôn đi từ a tới b; đi chiều b → a thì đảo). Không có đường thì nối thẳng. Nhớ theo cặp điểm.
- */
-export function route(m: RegionMap, from: number, to: number): [number, number][] {
-  let memo = routes.get(m);
-  if (!memo) routes.set(m, (memo = new Map()));
+/** Đường ngắn nhất theo số ô (e.cells) từ `from` tới `to`: các điểm (gồm hai đầu) và các chặng; không có đường thì null. */
+function shortestPath(m: RegionMap, from: number, to: number): { ids: number[]; edges: RegionEdge[] } | null {
+  let memo = shortest.get(m);
+  if (!memo) shortest.set(m, (memo = new Map()));
   const key = `${from}>${to}`;
-  const got = memo.get(key);
-  if (got) return got;
+  if (memo.has(key)) return memo.get(key)!;
   const near = new Map<number, RegionEdge[]>();
   for (const e of m.edges) for (const id of [e.a, e.b]) (near.get(id) ?? near.set(id, []).get(id)!).push(e);
   // Dijkstra trên vài trăm điểm: chọn đỉnh nhỏ nhất bằng vòng lặp là đủ nhanh.
@@ -205,16 +202,44 @@ export function route(m: RegionMap, from: number, to: number): [number, number][
       }
     }
   }
-  const a = m.points[from];
-  const out: [number, number][] = [[a.x, a.y]];
-  if (from !== to && via.has(to)) {
-    const legs: [number, number][][] = [];
+  let out: { ids: number[]; edges: RegionEdge[] } | null = null;
+  if (from === to) out = { ids: [from], edges: [] };
+  else if (via.has(to)) {
+    out = { ids: [to], edges: [] };
     for (let n = to; n !== from; ) {
       const e = via.get(n)!;
-      legs.unshift(e.b === n ? e.path : [...e.path].reverse());
+      out.edges.unshift(e);
       n = e.a === n ? e.b : e.a;
+      out.ids.unshift(n);
     }
-    for (const leg of legs) out.push(...leg.slice(1));
+  }
+  memo.set(key, out);
+  return out;
+}
+
+/** Các điểm trên đường đi theo chặng (như `route`), gồm hai đầu; số chặng là độ dài trừ 1. Không có đường thì null. */
+export function routeIds(m: RegionMap, from: number, to: number): number[] | null {
+  return shortestPath(m, from, to)?.ids ?? null;
+}
+
+/**
+ * Đường đi theo chặng từ điểm `from` tới `to`: ngắn nhất theo số ô (e.cells), nối path của từng chặng thành một đường
+ * (path luôn đi từ a tới b; đi chiều b → a thì đảo). Không có đường thì nối thẳng. Nhớ theo cặp điểm.
+ */
+export function route(m: RegionMap, from: number, to: number): [number, number][] {
+  let memo = routes.get(m);
+  if (!memo) routes.set(m, (memo = new Map()));
+  const key = `${from}>${to}`;
+  const got = memo.get(key);
+  if (got) return got;
+  const sp = shortestPath(m, from, to);
+  const a = m.points[from];
+  const out: [number, number][] = [[a.x, a.y]];
+  if (sp && sp.edges.length) {
+    sp.edges.forEach((e, i) => {
+      const leg = e.a === sp.ids[i] ? e.path : [...e.path].reverse();
+      out.push(...leg.slice(1));
+    });
   } else if (from !== to) out.push([m.points[to].x, m.points[to].y]);
   memo.set(key, out);
   return out;

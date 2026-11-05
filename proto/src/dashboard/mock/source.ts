@@ -20,7 +20,8 @@ import THU_CANH_GIOI from "../../../../data/he_thong/json/thu_canh_gioi.json";
 import THU_KICH_PHAT from "../../../../data/he_thong/json/thu_kich_phat.json";
 import NHIEM_VU from "../../../../data/nhiem_vu/ha_nhiem_vu.json";
 import { sampleBattle } from "../../mock/sampleBattle.ts";
-import { loadRegion, loadWorld, POINT_NAMES, stagesFrom } from "../../scenes/map/region.ts";
+import { loadRegion, loadWorld, POINT_NAMES, routeIds, stagesFrom } from "../../scenes/map/region.ts";
+import { destOf, legsOf, minutesPerStage, planTrip, startFrom, whereAt } from "./hanhTrinh.ts";
 import type {
   BagItem, BanDoView, BinhBoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, ForgeLineView, GearItem, GearSlot, Go,
   HiddenLineView, LienMinhView, LuyenKhiView, MiniMapView, MountView, NhanVatView, ScrollCard, SetMilestone, SetView, StatLine, StatSource, TechniqueCard,
@@ -475,8 +476,6 @@ export class MockDashboardSource implements DashboardSource {
       for (const id of frontier) for (const n of near.get(id) ?? []) if (!revealed.has(n)) (revealed.add(n), next.push(n));
       frontier = next;
     }
-    const t = w.travel;
-    const progress = Math.max(0, Math.min(1, (now - t.startsAt) / (t.endsAt - t.startsAt)));
     const openGates = this.calendarOpen(now) ? w.region.points.filter((p) => p.type === "cua_bi_canh" && revealed.has(p.id)).map((p) => p.id) : [];
     // Sự kiện đang diễn ra: chiến tranh 21:00–22:00 (điểm của mình và của tông địch), Yêu Triều (hang dị thú sát rìa ngoài).
     const alerts: MiniMapView["alerts"] = [];
@@ -492,7 +491,37 @@ export class MockDashboardSource implements DashboardSource {
       if (now < tide.startsAt || now >= tide.endsAt) continue;
       alerts.push({ kind: "yeu_trieu", title: tide.title, endsAt: tide.endsAt, points: w.region.points.filter((p) => p.type === "hang_di_thu" && p.ring < tide.maxRing).map((p) => p.id) });
     }
-    return { region: REGION, marks, sonMon: w.sonMon, self: { from: t.from, to: t.to, progress }, openGates, revealed: [...revealed], focus, alerts };
+    return { region: REGION, marks, sonMon: w.sonMon, self: this.selfView(now), openGates, revealed: [...revealed], focus, alerts };
+  }
+
+  /** Chỗ của mình cho bản đồ: đoạn đang đi (kèm giờ để màn tự chạy dấu) và điểm tới cuối chuyến. */
+  protected selfView(now: number): MiniMapView["self"] {
+    const w = this.w;
+    const at = whereAt(w, now);
+    const self: MiniMapView["self"] = { from: at.from, to: at.to, progress: at.progress };
+    if (at.region !== w.region.region.code) self.region = at.region;
+    if (!at.moving || !at.leg) return self;
+    self.startsAt = at.leg.startsAt;
+    self.endsAt = at.leg.endsAt;
+    const legs = legsOf(w);
+    const d = destOf(w);
+    // Chuyến có sẵn của bản mẫu (không qua di_toi) không ghi tên và số chặng: tính từ vùng nhà.
+    const stages = w.travel.stages ?? legs.reduce((s, l) => s + Math.max(0, (routeIds(w.region, l.from, l.to)?.length ?? 1) - 1), 0);
+    const name = w.travel.name ?? (d.region === w.region.region.code ? this.pointLabel(d.pointId) : "");
+    self.dest = { ...d, name, endsAt: legs[legs.length - 1].endsAt, stages };
+    return self;
+  }
+
+  /** Tên một điểm vùng nhà cho lời báo: sơn môn của mình là tên tông, còn lại tên điểm hay tên loại. */
+  protected pointLabel(id: number): string {
+    const p = this.w.region.points[id];
+    return id === this.w.sonMon ? this.w.sect.name : (p.name ?? POINT_NAMES[p.type]);
+  }
+
+  /** Đang cưỡi thú (ô thú đang chọn có thú): đi nhanh hơn. */
+  protected riding(): boolean {
+    const p = this.w.player;
+    return !!p.mounts[p.riding];
   }
 
   /** Bí cảnh mở 12:00 và 20:00, mỗi lần 30 phút (sheet Tham số: opensPerDay, openMinutes). */
@@ -547,15 +576,19 @@ export class MockDashboardSource implements DashboardSource {
     const w = this.w;
     const now = this.now();
     const thanhChu = w.region.points.find((p) => p.type === "thanh_chu")!;
-    const t = w.travel;
+    // Hành trình đang đi: số chặng còn lại theo tỉ lệ thời gian của cả chuyến; điểm tới ở vùng khác thì bản đồ bay tới toạ độ.
+    const dest = this.selfView(now).dest;
+    const legs = legsOf(w);
+    const span = legs[legs.length - 1].endsAt - legs[0].startsAt;
+    const destAt = dest && dest.region !== w.region.region.code ? (await loadRegion(dest.region)).points[dest.pointId] : undefined;
     const running = [
-      ...(t.endsAt > now - 30 * 60_000
+      ...(dest
         ? [{
             kind: "hanh_trinh" as const,
-            title: "Hành trình về sơn môn",
-            detail: `Từ thành chủ, ${Math.max(0, 3 - Math.floor(((now - t.startsAt) / (t.endsAt - t.startsAt)) * 3))}/3 chặng còn lại`,
-            endsAt: t.endsAt,
-            go: { screen: "ban-do", pointId: t.to } as Go,
+            title: `Hành trình tới ${dest.name}`,
+            detail: `${Math.max(0, Math.ceil((dest.stages * (dest.endsAt - now)) / Math.max(1, span)))}/${dest.stages} chặng còn lại`,
+            endsAt: dest.endsAt,
+            go: (destAt ? { screen: "ban-do", at: { x: destAt.x, y: destAt.y } } : { screen: "ban-do", pointId: dest.pointId }) as Go,
           }]
         : []),
       ...w.jobs.map((j) => ({
@@ -1219,6 +1252,38 @@ export class MockDashboardSource implements DashboardSource {
         lk.doPho.splice(lk.doPho.indexOf(doPhoCode(i)), 1);
         if (!lk.owned.includes(d.ma)) lk.owned.push(d.ma);
         return { ok: true, message: `Luyện thành ${d.ten}` };
+      }
+      case "di_toi": {
+        const world = await loadWorld();
+        const zones = world.zones ?? [];
+        const codes = world.regions.map((r) => r.code);
+        if (!codes.includes(cmd.region) && !zones.some((z) => z.code === cmd.region)) return { ok: false, error: "khong_thay_diem" };
+        const p = (await loadRegion(cmd.region)).points[cmd.pointId];
+        if (!p) return { ok: false, error: "khong_thay_diem" };
+        const per = minutesPerStage(this.riding());
+        const plan = await planTrip(await startFrom(w, now), { region: cmd.region, pointId: cmd.pointId }, zones, codes, now, per);
+        if (typeof plan === "string") return { ok: false, error: plan };
+        const home = w.region.region.code;
+        const name = cmd.region === home ? this.pointLabel(cmd.pointId) : (p.name ?? POINT_NAMES[p.type]);
+        const first = plan.legs[0];
+        const last = plan.legs[plan.legs.length - 1];
+        // Chuyến chỉ trong vùng nhà giữ dạng cũ (from, to, giờ); có đoạn ở vùng khác thì ghi legs để biết đang ở vùng nào.
+        const homeOnly = plan.legs.length === 1 && first.region === home && whereAt(w, now).region === home;
+        w.travel = { from: first.from, to: last.to, startsAt: first.startsAt, endsAt: last.endsAt, name, stages: plan.stages, ...(homeOnly ? {} : { legs: plan.legs }) };
+        const mins = Math.round((last.endsAt - now) / 60_000);
+        return { ok: true, message: `Lên đường tới ${name}: ${plan.stages} chặng, khoảng ${mins} phút` };
+      }
+      case "toi_ngay": {
+        // Bản thử: dời cả chuyến về trước cho đoạn cuối xong đúng lúc này.
+        if (!whereAt(w, now).moving) return { ok: false, error: "khong_dang_di" };
+        const t = w.travel;
+        const shift = legsOf(w)[legsOf(w).length - 1].endsAt - now;
+        w.travel = {
+          ...t, startsAt: t.startsAt - shift, endsAt: t.endsAt - shift,
+          ...(t.legs ? { legs: t.legs.map((l) => ({ ...l, startsAt: l.startsAt - shift, endsAt: l.endsAt - shift })) } : {}),
+        };
+        const name = t.name ?? (destOf(w).region === w.region.region.code ? this.pointLabel(destOf(w).pointId) : "nơi đến");
+        return { ok: true, message: `Đã tới ${name}` };
       }
       case "ghep_an": {
         const p = w.player;

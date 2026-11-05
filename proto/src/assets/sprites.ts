@@ -54,9 +54,10 @@ export interface Asset {
 
 /**
  * Hình của các màn DOM (dashboard nạp qua CSS khi cần: hình nền, khung cuộn giấy) và bản đồ chiến trường theo vùng (màn Trận
- * nạp đúng tấm của trận): bộ nạp này bỏ qua để khỏi tải thừa.
+ * nạp đúng tấm của trận): bộ nạp này bỏ qua để khỏi tải thừa. Đảo nổi diem/ (439 hình) đã bỏ khỏi bản đồ (người dùng 2026-11-05:
+ * không cần đảo), không màn nào dùng nữa nên cũng bỏ qua, đỡ hàng trăm lượt tải lúc mở game.
  */
-export const SKIP_GROUPS = ["cong_trinh/", "diem_nen/", "bang_mau/", "ui/", "chien_truong/"];
+export const SKIP_GROUPS = ["cong_trinh/", "diem_nen/", "diem/", "bang_mau/", "ui/", "chien_truong/"];
 
 export class Sprites {
   private assets = new Map<string, Asset>();

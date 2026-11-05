@@ -15,7 +15,7 @@ import type { DashCtx } from "../../dashboard/shell.ts";
 import type { BanDoView, Go, PointOwner, PointType } from "../../dashboard/source.ts";
 import { loadLocationArt, pointArt } from "../../dashboard/art/sectScene.ts";
 import { tr } from "../../dashboard/i18n.ts";
-import { cd, closeSheet, esc, fmt, openSheet, toast } from "../../dashboard/ui.ts";
+import { cd, closeSheet, ERROR_TEXT, esc, fmt, openSheet, tickCountdowns, toast } from "../../dashboard/ui.ts";
 import { FONT_DISPLAY, FONT_TEXT, loadCanvasFonts } from "../../theme/fonts.ts";
 import { drawFeatureNames, drawRiverNames } from "./labels.ts";
 import { WorldLayers } from "./layers.ts";
@@ -47,6 +47,25 @@ const FONT = FONT_TEXT;
 const INK = "#2a1d14";
 const HALO = "rgba(243, 231, 201, 0.92)";
 const TYPE_ORDER: PointType[] = ["thanh_chu", "son_mon", "cua_bi_canh", "deo", "ben_do", "linh_tuyen", "mo_linh_thach", "mo_quang", "mo_duoc", "hang_di_thu"];
+/** Lời các mã lỗi của lệnh đi (chưa có trong ERROR_TEXT của ui.ts). */
+const TRAVEL_ERROR: Record<string, string> = {
+  da_o_day: "Bạn đang ở đây rồi.",
+  khong_co_duong: "Không có đường tới điểm này.",
+  khong_thay_diem: "Không tìm thấy điểm này.",
+  khong_dang_di: "Không có hành trình nào đang đi.",
+};
+/** Ô hình của thẻ điểm: hình không tải được thì bỏ ô, không để khung nền kem trống. */
+function dropBrokenHero(body: HTMLElement): void {
+  const h = body.querySelector<HTMLElement>(".loc-hero");
+  const url = h?.style.backgroundImage.match(/^url\(["']?(.*?)["']?\)$/)?.[1];
+  if (!h || !url) return;
+  const img = new Image();
+  img.onerror = () => h.remove();
+  img.src = url;
+}
+
+/** Chiếm điểm (trận tranh điểm, Sprint 6) và tuyên chiến (khối M5) chưa có ở bản thử: nút tắt kèm dòng này. */
+const NOT_YET = "Chiếm điểm và tuyên chiến chưa mở ở bản chơi thử.";
 
 type Layer = "names" | "terrain" | "borders" | "fog";
 const LAYER_NAMES: Record<Layer, string> = { names: "Tên địa danh", terrain: "Tên sông và địa hình", borders: "Ranh giới vùng", fog: "Sương mù" };
@@ -165,10 +184,11 @@ export class MapScene implements Scene {
       this.rebuild();
     });
     this.hud.addEventListener("click", (e) => {
-      const el = (e.target as HTMLElement).closest<HTMLElement>("[data-nav], [data-here], [data-show-all]");
+      const el = (e.target as HTMLElement).closest<HTMLElement>("[data-nav], [data-here], [data-toi-ngay], [data-show-all]");
       if (el?.dataset.nav === "world") this.showWorld();
       if (el?.dataset.nav === "home") this.showHome();
       if (el?.dataset.here !== undefined) this.enterHere();
+      if (el?.dataset.toiNgay !== undefined) void this.arriveNow();
       if (el?.dataset.showAll !== undefined) {
         this.hidden.clear();
         try {
@@ -238,8 +258,60 @@ export class MapScene implements Scene {
     }
     void this.reload();
     clearInterval(this.miniTimer);
-    this.miniTimer = window.setInterval(() => this.syncMini(), 500);
+    this.miniTimer = window.setInterval(() => this.onTick(), 500);
     this.mini.start();
+  }
+
+  /** Mỗi nửa giây: khung bản đồ mini, đồng hồ đếm ngược ở thanh "Đang đi tới"; hết đoạn đang đi thì đọc lại (tới nơi, sang đoạn kế). */
+  private onTick(): void {
+    this.syncMini();
+    const d = this.data;
+    if (!d) return;
+    const now = this.ctx.clock.now();
+    tickCountdowns(this.here, now);
+    const end = d.map.self.endsAt;
+    if (end !== undefined && now >= end && !this.reloading) {
+      this.reloading = true;
+      void this.reload().finally(() => (this.reloading = false));
+    }
+  }
+
+  private reloading = false;
+
+  /** Bản thử: tới nơi ngay (lệnh toi_ngay), rồi đọc lại để "Đang ở" đổi sang điểm mới. */
+  private async arriveNow(): Promise<void> {
+    const r = await this.ctx.source.send({ type: "toi_ngay" });
+    if (!r.ok) return toast(ERROR_TEXT[r.error] ?? TRAVEL_ERROR[r.error] ?? `Lỗi: ${r.error}`, true);
+    if (r.message) toast(r.message);
+    await this.reload();
+    this.followSelf();
+  }
+
+  /** Bay tới dấu của mình. */
+  private followSelf(): void {
+    const d = this.data;
+    const m = d && this.regions.get(this.selfRegion(d));
+    if (!d || !m) return;
+    const at = this.selfAt(m, d);
+    this.flyTo(at.x, at.y, Math.max(this.camera.zoom, 1.4));
+  }
+
+  /** Đi tới một điểm; đang đi thì hỏi đổi đích trước (`force` là đã hỏi rồi). */
+  private async travelTo(region: string, pointId: number, name: string, body: HTMLElement, force = false): Promise<void> {
+    const d = this.data;
+    if (!d) return;
+    const dest = d.map.self.dest;
+    if (!force && dest && this.selfNow(d).moving) {
+      body.querySelector(".actions")!.outerHTML = `<div class="actions confirm"><p class="map-warn">Đang đi tới ${esc(tr(dest.name))}. Đổi đích sang ${esc(name)}?</p>
+        <button type="button" class="seal" data-a="doi">Đổi đích</button><button type="button" data-a="thoi">Thôi</button></div>`;
+      return;
+    }
+    const r = await this.ctx.source.send({ type: "di_toi", region, pointId });
+    if (!r.ok) return toast(ERROR_TEXT[r.error] ?? TRAVEL_ERROR[r.error] ?? `Lỗi: ${r.error}`, true);
+    if (r.message) toast(r.message);
+    closeSheet();
+    await this.reload();
+    this.followSelf();
   }
 
   leave(): void {
@@ -305,6 +377,8 @@ export class MapScene implements Scene {
     layers.prefetch();
     void loadCanvasFonts();
     const home = await this.ensureRegion(d.map.region);
+    // Đang ở vùng khác hay trong khu đặc biệt: cần file điểm của nơi đó để đặt dấu và thanh "Đang ở".
+    if (this.selfRegion(d) !== d.map.region) await this.ensureRegion(this.selfRegion(d));
     for (const z of this.world?.zones ?? []) void this.ensureRegion(z.code);
     layers.setRevealed(d.map.revealed.map((id) => home.points[id]));
     this.rebuild();
@@ -324,6 +398,8 @@ export class MapScene implements Scene {
     const revealed = new Set(d.map.revealed);
     const gates = new Set(d.map.openGates);
     const hereId = this.hereId(d);
+    const selfCode = this.selfRegion(d);
+    const isHere = (code: string, id: number) => code === selfCode && id === hereId;
     const alerts = new Map(d.map.alerts.flatMap((a) => a.points.map((id) => [id, { title: a.title, endsAt: a.endsAt }] as const)));
     const hidden = (p: RegionPoint) => this.hidden.has(p.type) || (p.type === "cua_bi_canh" && !!p.tier && this.hidden.has(`cua_bi_canh:${p.tier}`));
     const out: Cand[] = [];
@@ -343,7 +419,12 @@ export class MapScene implements Scene {
           const p = m?.points[r.capital.id];
           out.push(this.cand(w, r, p, "thanh_chu", r.capital.name, r.capital.x, r.capital.y, { z: zt?.z[r.capital.id], t: zt?.t[r.capital.id] }));
         }
-        for (const p of m?.points ?? []) if (p.id !== r.capital.id) ghost(p, zt?.z[p.id], !!sites[p.id]);
+        for (const p of m?.points ?? []) {
+          if (p.id === r.capital.id) continue;
+          // Chỗ mình đứng ở vùng khác vẫn hiện dù vùng đó phủ sương.
+          if (isHere(r.code, p.id)) out.push(this.cand(w, r, p, p.type, p.name ?? tr(POINT_NAMES[p.type]), p.x, p.y, { here: true, z: zt?.z[p.id], t: zt?.t[p.id] }));
+          else ghost(p, zt?.z[p.id], !!sites[p.id]);
+        }
         continue;
       }
       for (const p of m.points) {
@@ -358,10 +439,10 @@ export class MapScene implements Scene {
           continue;
         }
         // Sơn môn của mình, điểm đang bị đánh, điểm của sự kiện và chỗ mình đứng không bị lọc mất.
-        if (hidden(p) && !mine && !own?.attacked && !alert && !(home && p.id === hereId)) continue;
+        if (hidden(p) && !mine && !own?.attacked && !alert && !isHere(r.code, p.id)) continue;
         const name = p.type === "son_mon" && own ? tr(own.name) : (p.name ?? tr(POINT_NAMES[p.type]));
         const zz = w.types[p.type].hidden ? SECT_ZOOM : undefined;
-        out.push(this.cand(w, r, p, p.type, name, p.x, p.y, { own, gate: home && gates.has(p.id), mine, here: home && p.id === hereId, alert, z: zz ?? zt?.z[p.id], t: zz ?? zt?.t[p.id] }));
+        out.push(this.cand(w, r, p, p.type, name, p.x, p.y, { own, gate: home && gates.has(p.id), mine, here: isHere(r.code, p.id), alert, z: zz ?? zt?.z[p.id], t: zz ?? zt?.t[p.id] }));
       }
     }
     // Khu đặc biệt: bật sương thì chỉ thấy các cửa ải (luôn hiện, như mốc đã biết); khu phủ sương tới khi vào tận nơi.
@@ -373,12 +454,13 @@ export class MapScene implements Scene {
       const zt = L.points[zn.code];
       for (const p of m.points) {
         if (w.types[p.type].hidden) continue;
-        if (this.prefs.fog && !gates.has(p.id)) {
+        const here = isHere(zn.code, p.id);
+        if (this.prefs.fog && !gates.has(p.id) && !here) {
           ghost(p, zt?.z[p.id], false);
           continue;
         }
-        if (hidden(p)) continue;
-        const c = this.cand(w, zr, p, p.type, p.name ?? tr(POINT_NAMES[p.type]), p.x, p.y, { z: zt?.z[p.id], t: zt?.t[p.id] });
+        if (hidden(p) && !here) continue;
+        const c = this.cand(w, zr, p, p.type, p.name ?? tr(POINT_NAMES[p.type]), p.x, p.y, { here, z: zt?.z[p.id], t: zt?.t[p.id] });
         if (gates.has(p.id)) c.dyn = true;
         out.push({ ...c, zone: zn });
       }
@@ -418,39 +500,74 @@ export class MapScene implements Scene {
     return { region: r, p, type, name, x, y, prio, order, color, big: type === "thanh_chu" || mine, own, gate, form, z, t: o.t ?? z, dyn, alert: o.alert };
   }
 
-  /** Điểm mình đứng; đang trên đường thì điểm đang đi tới. */
-  private hereId(d: BanDoView): number {
-    const s = d.map.self;
-    return s.progress > 0 && s.progress < 1 ? s.to : s.from;
+  /** Mã vùng (hay khu đặc biệt) của chỗ mình: đoạn đang đi, hay nơi đã tới. */
+  private selfRegion(d: BanDoView): string {
+    return d.map.self.region ?? d.map.region;
   }
 
-  /** Thanh "Đang ở": tên và loại điểm mình đứng (hay đang đi tới), nút Vào mở màn của điểm đó. */
+  /** Chỗ mình lúc này: có giờ đi, giờ tới của đoạn thì tính tỉ lệ theo đồng hồ, nên dấu chạy liên tục giữa hai lần đọc. */
+  private selfNow(d: BanDoView): { from: number; to: number; progress: number; moving: boolean } {
+    const s = d.map.self;
+    if (s.startsAt === undefined || s.endsAt === undefined) return { ...s, moving: s.progress > 0 && s.progress < 1 };
+    const now = this.ctx.clock.now();
+    return { from: s.from, to: s.to, progress: Math.max(0, Math.min(1, (now - s.startsAt) / Math.max(1, s.endsAt - s.startsAt))), moving: now < s.endsAt };
+  }
+
+  /** Điểm mình đứng; đang trên đường thì điểm cuối của đoạn đang đi. */
+  private hereId(d: BanDoView): number {
+    const s = this.selfNow(d);
+    return s.moving && s.progress > 0 ? s.to : s.from;
+  }
+
+  /** Vùng (hay khu đặc biệt dưới dạng vùng) theo mã, kèm khu nếu là khu. */
+  private regionByCode(code: string): { r: WorldRegion; zone?: WorldZone } | undefined {
+    const w = this.world;
+    const r = w?.regions.find((k) => k.code === code);
+    if (r) return { r };
+    const zone = w?.zones?.find((z) => z.code === code);
+    return zone && { r: this.zoneRegion(zone), zone };
+  }
+
+  /**
+   * Thanh dưới trái. Đang đi: "Đang đi tới" điểm cuối chuyến, số chặng, giờ tới đếm ngược, nút Xem (bay theo dấu) và Tới ngay
+   * (bản thử). Đã tới: "Đang ở" loại và tên điểm, nút Vào mở màn của điểm đó.
+   */
   private updateHere(): void {
     const d = this.data;
     const w = this.world;
-    const m = d && this.regions.get(d.map.region);
-    if (!d || !w || !m) return;
-    const s = d.map.self;
-    const moving = s.progress > 0 && s.progress < 1;
-    const p = m.points[this.hereId(d)];
-    const r = w.regions.find((k) => k.code === m.region.code)!;
-    const own = d.owners[p.id];
-    const name = p.type === "son_mon" && own ? tr(own.name) : (p.name ?? tr(POINT_NAMES[p.type]));
-    this.herePoint = this.cand(w, r, p, p.type, name, p.x, p.y, { own, mine: p.id === d.map.sonMon });
+    const code = d && this.selfRegion(d);
+    const m = code && this.regions.get(code);
+    const reg = code && this.regionByCode(code);
+    if (!d || !w || !m || !reg) return;
+    const s = this.selfNow(d);
+    const dest = d.map.self.dest;
     this.here.hidden = false;
-    this.here.innerHTML = `<span class="txt"><small>${moving ? "Đang đi tới" : "Đang ở"} · ${esc(w.types[p.type].label)}</small><b>${esc(name)}</b></span>
-      <button type="button" class="seal small" data-here>${moving ? "Xem" : "Vào"}</button>`;
+    if (s.moving && dest) {
+      this.herePoint = undefined;
+      this.here.innerHTML = `<span class="txt"><small>Đang đi tới · ${dest.stages} chặng · tới sau ${cd(dest.endsAt, "đã tới")}</small><b>${esc(tr(dest.name))}</b></span>
+        <button type="button" class="small" data-here>Xem</button>
+        <button type="button" class="seal small" data-toi-ngay title="Bản chơi thử: tới nơi ngay">Tới ngay</button>`;
+      return;
+    }
+    const p = m.points[this.hereId(d)];
+    const home = code === d.map.region;
+    const own = home ? d.owners[p.id] : undefined;
+    const name = p.type === "son_mon" && own ? tr(own.name) : (p.name ?? tr(POINT_NAMES[p.type]));
+    this.herePoint = { ...this.cand(w, reg.r, p, p.type, name, p.x, p.y, { own, mine: home && p.id === d.map.sonMon }), zone: reg.zone };
+    this.here.innerHTML = `<span class="txt"><small>Đang ở · ${esc(w.types[p.type].label)}</small><b>${esc(name)}</b></span>
+      <button type="button" class="seal small" data-here>Vào</button>`;
   }
 
-  /** Vào điểm đang đứng: thành chủ, sơn môn của mình có màn riêng; điểm khác mở thẻ điểm. Đang đi thì bay tới chỗ đó. */
+  /** Vào điểm đang đứng: thành chủ, sơn môn của mình ở vùng nhà có màn riêng; điểm khác mở thẻ điểm. Đang đi thì bay theo dấu. */
   private enterHere(): void {
-    const c = this.herePoint;
     const d = this.data;
-    if (!c?.p || !d) return;
-    const s = d.map.self;
-    if (s.progress > 0 && s.progress < 1) this.flyTo(c.x, c.y, Math.max(this.camera.zoom, 2));
-    else if (c.type === "thanh_chu") this.ctx.nav.go({ screen: "thanh-chu" });
-    else if (c.p.id === d.map.sonMon) this.ctx.nav.go({ screen: "tong-mon" });
+    if (!d) return;
+    if (this.selfNow(d).moving) return this.followSelf();
+    const c = this.herePoint;
+    if (!c?.p) return;
+    const home = c.region.code === d.map.region;
+    if (home && c.type === "thanh_chu") this.ctx.nav.go({ screen: "thanh-chu" });
+    else if (home && c.p.id === d.map.sonMon) this.ctx.nav.go({ screen: "tong-mon" });
     else this.openPoint(c);
   }
 
@@ -522,7 +639,7 @@ export class MapScene implements Scene {
 
   /** Vị trí của mình: bám đường theo chặng từ điểm đi tới điểm tới, theo tỉ lệ đã đi. */
   private selfAt(m: RegionMap, d: BanDoView): { x: number; y: number } {
-    const s = d.map.self;
+    const s = this.selfNow(d);
     return along(route(m, s.from, s.to), s.progress);
   }
 
@@ -612,8 +729,8 @@ export class MapScene implements Scene {
     };
     // Bậc xếp chỗ: 0 thành chủ và sơn môn mình, 1 điểm động, 2 điểm khác (theo z/t tính sẵn). Dấu của mình (ghim và tên
     // phía trên) giữ chỗ ngay sau bậc 0, nên điểm động và điểm khác né tên mình, còn thành chủ không bị ghim che mất.
-    const home = this.regions.get(d.map.region);
-    const at = home && this.selfAt(home, d);
+    const selfMap = this.regions.get(this.selfRegion(d));
+    const at = selfMap && this.selfAt(selfMap, d);
     const me = at && cam.toScreen(at.x, at.y, v);
     const meTip = me ? me.y - NODE_BIG / 2 - 2 : 0;
     ctx.font = `700 12px ${FONT}`;
@@ -872,7 +989,7 @@ export class MapScene implements Scene {
     rows.push(["Vùng", esc(c.region.name)]);
     if (home || own) rows.push(["Chủ", own ? esc(own.name) : p.type === "hang_di_thu" ? "Dị thú" : HOLDABLE.includes(p.type) ? "Chưa ai giữ" : "—"]);
     rows.push(["Cấp nguy hiểm", String(p.danger)]);
-    rows.push(["Tới thành chủ", `${p.stages} chặng · ${p.distance} ô`]);
+    if (p.type !== "thanh_chu") rows.push(["Tới thành chủ", `${p.stages} chặng · ${p.distance} ô`]);
     if (own?.level) rows.push(["Cấp mỏ", `${own.level} · ${fmt(own.perHour ?? 0)}/giờ`]);
     if (p.tier) rows.push(["Bậc cửa", w.tiers[p.tier].label]);
     if (p.terrain) rows.push(["Địa thế", w.terrains[p.terrain] ?? p.terrain]);
@@ -884,23 +1001,36 @@ export class MapScene implements Scene {
     const canWar = home && d.can.tuyenChien && own?.owner === "dich";
     // Biến thể theo hệ vùng, bậc (cấp mỏ, bậc cửa) và dáng theo id điểm, như đảo nổi.
     const art = pointArt(c.region.code, p.type, { id: p.id, tier: p.tier, level: own?.level });
+    // Đang đứng ở đây: không có Đi tới; thành chủ, sơn môn của mình ở vùng nhà thì có Vào.
+    const s = this.selfNow(d);
+    const here = !s.moving && this.selfRegion(d) === c.region.code && s.from === p.id;
+    const enter = here && home && (p.type === "thanh_chu" || p.id === d.map.sonMon);
+    const go = here
+      ? `${enter ? `<button type="button" class="seal" data-a="vao">Vào</button>` : ""}<span class="muted">Bạn đang ở đây.</span>`
+      : `<button type="button" class="seal" data-a="di">Đi tới</button>`;
     const body = openSheet(
       c.name,
       `${art ? `<div class="loc-hero pix" style="background-image:url('${art}')" role="img" aria-label="${POINT_NAMES[p.type]}"></div>` : ""}
        <dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
        <div class="actions">
-         <button type="button" class="seal" data-a="di">Đi tới</button>
-         ${canTake ? `<button type="button" data-a="chiem" ${inRange && d.held < d.maxHeld ? "" : "disabled"}>Chiếm</button>` : ""}
-         ${canWar ? `<button type="button" data-a="chien">Tuyên chiến</button>` : ""}
+         ${go}
+         ${canTake ? `<button type="button" disabled>Chiếm</button>` : ""}
+         ${canWar ? `<button type="button" disabled>Tuyên chiến</button>` : ""}
        </div>
-       ${canTake && !inRange ? `<p class="muted">Ngoài tầm Truyền Tống Trận, chưa chiếm được.</p>` : ""}
+       ${canTake || canWar ? `<p class="muted">${NOT_YET}</p>` : ""}
+       ${canTake && !inRange ? `<p class="muted">Ngoài tầm Truyền Tống Trận.</p>` : ""}
        ${canTake && inRange && d.held >= d.maxHeld ? `<p class="muted">Đã giữ đủ ${d.maxHeld} điểm theo cấp tông môn.</p>` : ""}`,
     );
+    dropBrokenHero(body);
     body.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLElement>("[data-a]")?.dataset.a;
-      if (a === "di") toast("Hành trình theo chặng có ở khối M3; prototype chưa đi được.");
-      if (a === "chiem") toast("Chiếm điểm bằng trận tranh điểm có ở Sprint 6.");
-      if (a === "chien") toast("Tuyên chiến có ở khối M5.");
+      if (a === "di") void this.travelTo(c.region.code, p.id, c.name, body);
+      if (a === "doi") void this.travelTo(c.region.code, p.id, c.name, body, true);
+      if (a === "thoi") closeSheet();
+      if (a === "vao") {
+        closeSheet();
+        this.ctx.nav.go({ screen: p.type === "thanh_chu" ? "thanh-chu" : "tong-mon" });
+      }
     });
   }
 
@@ -914,19 +1044,26 @@ export class MapScene implements Scene {
     const rows: [string, string][] = [["Loại", w.types[p.type].label], ["Khu", esc(zone.name)]];
     if (p.neighbour) rows.push(["Nối với", esc(w.regions.find((r) => r.code === p.neighbour)?.name ?? p.neighbour)]);
     const art = pointArt(zone.code, p.type, { id: p.id, tier: p.tier });
+    const d = this.data!;
+    const s = this.selfNow(d);
+    const inZone = !s.moving && this.selfRegion(d) === zone.code;
+    const here = inZone && s.from === p.id;
     const body = openSheet(
       c.name,
       `${art ? `<div class="loc-hero pix" style="background-image:url('${art}')" role="img" aria-label="${POINT_NAMES[p.type]}"></div>` : ""}
        <p class="map-warn">${esc(zone.warning)}</p>
        <dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
-       <div class="actions"><button type="button" class="seal" data-a="di">Đi tới</button></div>`,
+       <div class="actions">${here ? `<span class="muted">Bạn đang ở đây.</span>` : `<button type="button" class="seal" data-a="di">Đi tới</button>`}</div>`,
     );
+    dropBrokenHero(body);
     body.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLElement>("[data-a]")?.dataset.a;
-      if (a === "di")
+      // Đã ở trong khu thì đi tiếp như thường; từ ngoài vào thì hỏi thêm một lần (câu hỏi này thay cho hỏi đổi đích).
+      if (a === "di" && inZone) void this.travelTo(zone.code, p.id, c.name, body);
+      else if (a === "di")
         body.querySelector(".actions")!.outerHTML = `<div class="actions confirm"><p class="map-warn">Vào ${esc(zone.name)} là tự chịu mọi rủi ro. Vẫn đi?</p>
           <button type="button" class="seal" data-a="vao">Vẫn đi</button><button type="button" data-a="thoi">Thôi</button></div>`;
-      if (a === "vao") toast("Hành trình theo chặng có ở khối M3; prototype chưa đi được.");
+      if (a === "vao" || a === "doi") void this.travelTo(zone.code, p.id, c.name, body, true);
       if (a === "thoi") closeSheet();
     });
   }

@@ -84,12 +84,14 @@ export class MiniMap {
     this.draw();
   }
 
-  /** Nhấp nháy điểm đang bị đánh khi khung đang hiện. */
+  /** Nhấp nháy điểm đang bị đánh khi khung đang hiện; đang đi thì vẽ lại cho dấu mình chạy. */
   start(): void {
     this.stop();
     this.timer = window.setInterval(() => {
       this.blink = !this.blink;
-      if (this.data?.marks.some((m) => m.attacked) || this.data?.alerts.length) this.draw();
+      const s = this.data?.self;
+      const moving = s?.endsAt !== undefined && Date.now() < s.endsAt + 1000;
+      if (moving || this.data?.marks.some((m) => m.attacked) || this.data?.alerts.length) this.draw();
     }, 500);
   }
 
@@ -219,19 +221,24 @@ export class MiniMap {
     ctx.fillRect(X(home.x) - 3.5, Y(home.y) - 3.5, 7, 7);
     ctx.strokeRect(X(home.x) - 3.5, Y(home.y) - 3.5, 7, 7);
 
-    // Vị trí của mình hoặc đoàn đang đi, bám đường theo chặng như trên bản đồ tranh.
-    const at = along(route(m, d.self.from, d.self.to), d.self.progress);
-    const sx = X(at.x);
-    const sy = Y(at.y);
-    ctx.beginPath();
-    ctx.moveTo(sx, sy - 5);
-    ctx.lineTo(sx + 4, sy + 2.5);
-    ctx.lineTo(sx - 4, sy + 2.5);
-    ctx.closePath();
-    ctx.fillStyle = "#fffaf0";
-    ctx.fill();
-    ctx.strokeStyle = INK;
-    ctx.stroke();
+    // Vị trí của mình hoặc đoàn đang đi, bám đường theo chặng như trên bản đồ tranh; có giờ đi, giờ tới thì tính lại tỉ lệ
+    // theo đồng hồ (bản đồ mini vẽ lại vài lần mỗi giây). Đang ở vùng khác hay khu đặc biệt thì bản đồ mini không có dấu.
+    const s = d.self;
+    if (!s.region || s.region === d.region) {
+      const t = s.startsAt !== undefined && s.endsAt !== undefined ? Math.max(0, Math.min(1, (Date.now() - s.startsAt) / Math.max(1, s.endsAt - s.startsAt))) : s.progress;
+      const at = along(route(m, s.from, s.to), t);
+      const sx = X(at.x);
+      const sy = Y(at.y);
+      ctx.beginPath();
+      ctx.moveTo(sx, sy - 5);
+      ctx.lineTo(sx + 4, sy + 2.5);
+      ctx.lineTo(sx - 4, sy + 2.5);
+      ctx.closePath();
+      ctx.fillStyle = "#fffaf0";
+      ctx.fill();
+      ctx.strokeStyle = INK;
+      ctx.stroke();
+    }
 
     // Có sự kiện: viền khung đỏ nhấp nháy để nhìn từ dashboard là biết.
     if (d.alerts.length && this.blink) {
