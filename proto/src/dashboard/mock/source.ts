@@ -1357,7 +1357,7 @@ export class MockDashboardSource implements DashboardSource {
         if (!RETREAT_HOURS.includes(cmd.gio)) return { ok: false, error: "lenh_khong_hop_le" };
         if (w.jobs.some((j) => j.kind === "be_quan" && j.endsAt > now)) return { ok: false, error: "dang_be_quan" };
         const exp = this.retreatPerHour() * cmd.gio;
-        w.jobs.push({ kind: "be_quan", title: "Bế quan", detail: `+${exp} tu vi khi xong`, startsAt: now, endsAt: now + cmd.gio * H, exp });
+        w.jobs.push({ kind: "be_quan", title: "Bế quan", detail: `Xong được +${exp} tu vi`, startsAt: now, endsAt: now + cmd.gio * H, exp });
         return { ok: true, message: `Bắt đầu bế quan ${cmd.gio} giờ, xong được ${exp} tu vi` };
       }
       case "toi_ngay": {
