@@ -163,7 +163,7 @@
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Máu +2%","tham_so":{"hp":20}},
+        {"so":2,"loai":"chi_so","mo_ta":"Máu +1,5%","tham_so":{"hp":15}},
         {
           "so": 4,
           "loai": "chi_so",
@@ -546,8 +546,8 @@
         {
           "so": 2,
           "loai": "chi_so",
-          "mo_ta": "Bày trận nhanh hơn 0,5 s; giảm sát thương nội nhận 4%",
-          "tham_so": {"bayTranTicks":-10,"damageTakenCutInner":40}
+          "mo_ta": "Bày trận nhanh 0,5 s; giảm sát thương nội nhận 2%",
+          "tham_so": {"bayTranTicks":-10,"damageTakenCutInner":20}
         },
         {
           "so": 4,
