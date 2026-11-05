@@ -21,10 +21,16 @@ export interface SectTechnique {
   createdAt: number;
 }
 
+/**
+ * Mã tông giả của công pháp tân thủ (nhiệm vụ 0.4 "Hai mảnh một quyển"): người chơi tự ghép từ tàn quyển trong túi, không thuộc
+ * tông nào, nên không bị đóng băng khi rời tông và không tính vào giới hạn học của ngoại môn. Không tông thật nào được dùng mã này.
+ */
+export const TAN_THU_SECT = "tan_thu";
+
 /** Công pháp một người đã học; giữ bản sao công thức nên vẫn dùng được sau khi rời tông. */
 export interface LearnedTechnique {
   techniqueId: number;
-  sectId: string; // tông đã truyền thụ
+  sectId: string; // tông đã truyền thụ; TAN_THU_SECT nếu là công pháp tân thủ tự ghép
   name: string;
   main: { kind: string; grade: number };
   subs: { kind: string; grade: number }[];
@@ -65,6 +71,7 @@ export function emptyState(): GameState {
 
 /** Tạm cho test và prototype; Sprint 5 thay bằng lệnh lập tông và gia nhập. */
 export function addSect(state: GameState, id: string, level: number): Sect {
+  if (id === TAN_THU_SECT) throw new Error(`Mã tông ${TAN_THU_SECT} dành cho công pháp tân thủ`);
   const sect: Sect = { id, level, library: [], techniques: [], transmission: [] };
   state.sects[id] = sect;
   return sect;

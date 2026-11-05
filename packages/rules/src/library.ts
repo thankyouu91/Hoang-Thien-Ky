@@ -1,8 +1,8 @@
 // Tàng Kinh Các: nhặt và nộp tàn quyển, ghép công pháp (GDD mục 6 và 9).
-import { composeTechnique, type Element, type Technique } from "@ktlp/sim";
+import { composeTechnique, maxGradeAtLevel, type Element, type Technique } from "@ktlp/sim";
 import { findScrollKind, scrollKind, toScroll, TYPE_SUFFIX } from "./catalog.ts";
 import { RULES } from "./config.ts";
-import type { GameState, OwnedScroll, SectTechnique } from "./state.ts";
+import { TAN_THU_SECT, type GameState, type LearnedTechnique, type OwnedScroll, type SectTechnique } from "./state.ts";
 import type { Result } from "./apply.ts";
 
 /** Chữ đại diện cho hệ trong tên công pháp; Âm lãnh là "Âm" như ví dụ "Lôi Âm Châm Quyết" trong GDD. */
@@ -85,6 +85,34 @@ export function composeInLibrary(state: GameState, memberId: string, mainUid: nu
   if (RULES.consumeScrollsOnCompose) sect.library = sect.library.filter((s) => uids.indexOf(s.uid) < 0);
   sect.techniques.push(technique);
   return { ok: true, events: [{ type: "ghep_cong_phap", sectId: sect.id, technique }] };
+}
+
+/**
+ * Công pháp tân thủ (nhiệm vụ 0.4 "Hai mảnh một quyển"): ghép 1 chủ quyển với 1 phụ quyển ngay trong túi, không cần tông hay chức vị.
+ * Học thẳng ở tầng 1, không vào Tàng Kinh Các hay bộ truyền thụ; tàn quyển bị tiêu. Mỗi người một lần.
+ */
+export function composeStarter(state: GameState, memberId: string, mainUid: number, subUids: number[]): Result {
+  const member = state.members[memberId];
+  if (!member) return { ok: false, error: "khong_co_thanh_vien" };
+  if (member.learned.some((l) => l.sectId === TAN_THU_SECT)) return { ok: false, error: "da_ghep_tan_thu" };
+  if (subUids.length !== 1) return { ok: false, error: "sai_so_phu_quyen" };
+  const uids = [mainUid, ...subUids];
+  if (uids[0] === uids[1]) return { ok: false, error: "tan_quyen_trung" };
+  for (const uid of uids) if (indexOfUid(member.bag, uid) < 0) return { ok: false, error: "khong_co_tan_quyen" };
+  const [main, ...subs] = uids.map((uid) => member.bag[indexOfUid(member.bag, uid)]);
+  const grade = Math.min(main.grade, ...subs.map((s) => s.grade));
+  if (grade > maxGradeAtLevel(member.level)) return { ok: false, error: "chua_du_cap" };
+  const technique: LearnedTechnique = {
+    techniqueId: state.nextId++,
+    sectId: TAN_THU_SECT,
+    name: techniqueName(main.kind, subs.map((s) => s.kind)),
+    main: { kind: main.kind, grade: main.grade },
+    subs: subs.map((s) => ({ kind: s.kind, grade: s.grade })),
+    grade, layer: 1, frozen: false, betrayed: false,
+  };
+  member.bag = member.bag.filter((s) => uids.indexOf(s.uid) < 0);
+  member.learned.push(technique);
+  return { ok: true, events: [{ type: "ghep_tan_thu", memberId, technique }] };
 }
 
 function indexOfUid(list: OwnedScroll[], uid: number): number {

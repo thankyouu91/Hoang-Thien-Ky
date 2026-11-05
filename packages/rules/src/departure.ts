@@ -1,8 +1,22 @@
-// Rời tông môn: xuất sư hợp lệ hoặc phản bội (GDD mục 6).
+// Vào và rời tông môn (GDD mục 6). Rời: xuất sư hợp lệ hoặc phản bội.
 // Cả hai đều dừng tầng mọi công pháp của tông cũ (vẫn dùng được); phản bội thêm giảm 50% sát thương lên người tông cũ.
 import { RULES } from "./config.ts";
 import type { GameState, Member } from "./state.ts";
 import type { Result } from "./apply.ts";
+
+/**
+ * Người chưa có tông vào một tông làm ngoại môn. Bản chơi một mình: tông NPC nhận ngay; đơn, lời mời và điều kiện cùng vị diện
+ * (GDD mục 6) làm khi có máy chủ. Công pháp đã đóng băng của tông cũ vẫn đóng băng.
+ */
+export function joinSect(state: GameState, memberId: string, sectId: string): Result {
+  const member = state.members[memberId];
+  if (!member) return { ok: false, error: "khong_co_thanh_vien" };
+  if (member.sectId) return { ok: false, error: "da_co_tong" };
+  if (!Object.prototype.hasOwnProperty.call(state.sects, sectId)) return { ok: false, error: "khong_co_tong" };
+  member.sectId = sectId;
+  member.role = "ngoai_mon";
+  return { ok: true, events: [{ type: "gia_nhap_tong", memberId, sectId }] };
+}
 
 /** Tông chủ hoặc phó tông chủ cho một thành viên xuất sư. */
 export function releaseMember(state: GameState, actorId: string, memberId: string): Result {
