@@ -671,7 +671,7 @@ html:not(.co-js) .mo-muc { display: none; }
 @media (min-width: 640px) { .luoi { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 960px) { .luoi { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
 @media (min-width: 640px) { .luoi-cong_trinh, .luoi-canh, .luoi-anh_chup { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 960px) { .luoi-cong_trinh { grid-template-columns: repeat(3, 1fr); } .luoi-thu, .luoi-dao { grid-template-columns: repeat(6, 1fr); } .luoi-vat_pham { grid-template-columns: repeat(6, 1fr); } }
+@media (min-width: 960px) { .luoi-cong_trinh, .luoi-anh_chup { grid-template-columns: repeat(3, 1fr); } .luoi-thu, .luoi-dao { grid-template-columns: repeat(6, 1fr); } .luoi-vat_pham { grid-template-columns: repeat(6, 1fr); } }
 .luoi-thu, .luoi-dao { grid-template-columns: repeat(3, 1fr); }
 
 .anh { display: grid; grid-template-rows: auto auto; margin: 0; background: var(--c-surface); box-shadow: var(--khung); }
