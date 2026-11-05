@@ -194,6 +194,21 @@ export const CONG_PHAP: TableDef = {
   ],
 };
 
+/**
+ * Tầng công pháp (GDD mục 6: mỗi công pháp 10 tầng, lên tầng bằng tu luyện và cống hiến). Mỗi dòng là tầng đích; uy lực, hồi chiêu,
+ * mana cộng dồn so với tầng 1. Số của phiên Bảng Điểm hệ thống, 2026-11-05 (đề xuất). Proto đọc thẳng tang_cong_phap.json.
+ */
+export const TANG_CONG_PHAP: TableDef = {
+  kind: "table", sheet: "Tầng công pháp", file: "tang_cong_phap.json", id: "tang", shape: "list", cols: [
+    c("tang", "Tầng", "int", "gdd", { json: "tang", width: 6 }),
+    c("uy_luc", "Uy lực cộng dồn so với tầng 1 (nhân sát thương, lượng hồi, khiên)", "pct", "de_xuat", { json: "uyLuc", width: 16 }),
+    c("hoi_chieu", "Giảm hồi chiêu cộng dồn", "pct", "de_xuat", { json: "hoiChieu", width: 11 }),
+    c("mana", "Giảm mana cộng dồn", "pct", "de_xuat", { json: "mana", width: 11 }),
+    c("diem_luyen", "Điểm luyện để lên tầng này (phẩm Phàm; phẩm khác × hệ số sát thương của phẩm)", "int", "de_xuat", { json: "diemLuyen", width: 18 }),
+    c("cong_hien", "Cống hiến: số tàn quyển cùng phẩm (× cống hiến khi nộp 1 tàn quyển của phẩm)", "int", "de_xuat", { json: "congHien", width: 18 }),
+  ],
+};
+
 export const VI_DIEN: TableDef = {
   kind: "table", sheet: "Vị diện", file: "vi_dien.json", id: "ma", shape: "map", cols: [
     c("ma", "Mã", "text", "code", { json: "id", width: 7 }),
@@ -337,7 +352,7 @@ export const LINH_DON: TableDef = {
 
 /** Thứ tự sheet trong file (sau sheet Ghi chú). */
 export const SHEETS: SheetDef[] = [
-  PARAMS, HE, KHAC_CHE, QUAN_HE, TO_HOP, LOAI_CHIEU, BIEN_THE, PHAM, TAI_NANG, TAN_QUYEN, CONG_PHAP,
+  PARAMS, HE, KHAC_CHE, QUAN_HE, TO_HOP, LOAI_CHIEU, BIEN_THE, PHAM, TAI_NANG, TAN_QUYEN, CONG_PHAP, TANG_CONG_PHAP,
   VI_DIEN, VUNG, CAP_TONG_MON, MO, BI_CANH, THU, THU_PHAM, THU_CANH_GIOI, THU_KICH_PHAT, LINH_DON,
 ];
 export const NOTE_SHEET = "Ghi chú";

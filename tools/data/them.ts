@@ -34,6 +34,8 @@
 //   set_2m          set đồ 2.0 bước 6: Thiết Kỵ 2 giảm sát thương ngoại 7%, Bách Thảo 2 bị khống chế −50%
 //   set_2_chot      set đồ 2.0 đã chốt (duyệt 2026-11-05): ô vàng của set đồ 2.0 sang xanh lá, giữ giá trị
 //   set_2_ghi_chu   3 ghi chú set đồ 2.0 (set.json bậc ấn, trang_bi.json áo giày +2,6%, ngoc.json binh_an) theo bản đã duyệt
+//   tang_cong_phap  sheet Tầng công pháp (10 tầng: uy lực, giảm hồi chiêu, giảm mana, điểm luyện, cống hiến) → tang_cong_phap.json;
+//                   tham_so cong_phap.diemLuyenMoiCap; luật lên tầng ở sheet Ghi chú (phiên Bảng Điểm hệ thống, đề xuất)
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -1657,10 +1659,46 @@ const set2GhiChu: Step = (wb, log) => {
   log.push(`Ghi chú trang bị: ${n} câu set đồ 2.0 theo bản đã duyệt`);
 };
 
+// ---------- tầng công pháp (GDD mục 6: 10 tầng, lên bằng tu luyện và cống hiến; phiên Bảng Điểm hệ thống 2026-11-05; đề xuất) ----------
+
+/** [tầng, uy lực ‰, giảm hồi chiêu ‰, giảm mana ‰ (cộng dồn so với tầng 1), điểm luyện lên tầng này (Phàm), số tàn quyển cùng phẩm]. */
+const TANG_CP: [number, number, number, number, number, number][] = [
+  [1, 0, 0, 0, 0, 0], [2, 25, 0, 0, 10, 0], [3, 50, 0, 0, 20, 0], [4, 75, 0, 50, 30, 1], [5, 100, 0, 50, 40, 1],
+  [6, 125, 0, 50, 50, 2], [7, 150, 0, 100, 60, 2], [8, 175, 0, 100, 70, 3], [9, 200, 0, 100, 80, 4], [10, 250, 50, 100, 90, 5],
+];
+const GHI_CHU_TANG_CP = "tang_cong_phap.json (GDD mục 6: mỗi công pháp 10 tầng, lên tầng bằng tu luyện và cống hiến; số của phiên Bảng Điểm hệ thống 2026-11-05, đề xuất). "
+  + "Mỗi dòng là tầng đích. uyLuc, hoiChieu, mana: phần nghìn cộng dồn so với tầng 1; uyLuc nhân vào sát thương, lượng hồi và khiên, hoiChieu và mana là mức giảm. "
+  + "Lên tầng k tốn diemLuyen[k] × pham.json power / 1000 điểm luyện (làm tròn tới số nguyên gần nhất) cộng congHien[k] × pham.json contribution cống hiến "
+  + "(congHien đọc là giá bằng N tàn quyển cùng phẩm). Điểm luyện là quỹ chung của nhân vật, mọi công pháp đã học cùng tiêu; mỗi lần lên cấp được "
+  + "tham_so.json cong_phap.diemLuyenMoiCap. Công pháp đang dừng tầng (frozen) không lên tầng được.";
+
+const tangCongPhap: Step = (wb, log) => {
+  const def = B.TANG_CONG_PHAP;
+  if (wb.names().includes(def.sheet)) log.push(`${def.sheet}: sheet đã có, bỏ qua`);
+  else {
+    wb.addSheet(table(def, TANG_CP.map(([tang, u, h, m, diem_luyen, cong_hien]) => ({ tang, uy_luc: u / 1000, hoi_chieu: h / 1000, mana: m / 1000, diem_luyen, cong_hien }))), B.CONG_PHAP.sheet);
+    log.push(`${def.sheet}: thêm sheet ${TANG_CP.length} tầng sau ${B.CONG_PHAP.sheet}`);
+  }
+  // diemLuyenMoiCap ở nhóm cong_phap của Tham số, ngay sau dòng cong_phap cuối (dòng đầy đủ ở noi_dung.ts PARAMS_EXTRA)
+  const ts = B.PARAMS.sheet, s = wb.sheet(ts), h = (s.cells[0] ?? []).map(norm), gAt = h.indexOf("Nhóm"), kAt = h.indexOf("Khóa");
+  if (s.cells.some((r) => norm(r?.[kAt]) === "diemLuyenMoiCap")) log.push("Tham số: đã có diemLuyenMoiCap, bỏ qua");
+  else {
+    const last = s.cells.reduce((a, r, i) => (norm(r?.[gAt]) === "cong_phap" ? i : a), -1);
+    if (last < 0) throw new Error("Tham số: không có nhóm cong_phap");
+    const p = N.PARAMS_EXTRA.find((x) => x[0] === "cong_phap" && x[1] === "diemLuyenMoiCap")!;
+    wb.insertRows(ts, last + 1, [paramCells(...p)]);
+    log.push(`Tham số: chèn diemLuyenMoiCap ${p[3]} sau dòng ${last + 1}`);
+  }
+  // Luật lên tầng ở sheet Ghi chú
+  if (wb.sheet(B.NOTE_SHEET).cells.some((r) => norm(r?.[0]) === def.sheet)) log.push("Ghi chú: đã có dòng Tầng công pháp, bỏ qua");
+  else { wb.appendRows(B.NOTE_SHEET, [[{ v: def.sheet, bold: true }, { v: GHI_CHU_TANG_CP }]]); log.push("Ghi chú: thêm luật lên tầng công pháp"); }
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
   thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j, set_2k: set2k, set_2l: set2l, set_2m: set2m, set_2_chot: set2Chot, set_2_ghi_chu: set2GhiChu,
+  tang_cong_phap: tangCongPhap,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

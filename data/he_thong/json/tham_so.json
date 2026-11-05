@@ -57,7 +57,8 @@
     "outerDays": 7,
     "baseCrit": 50,
     "resistCap": 200,
-    "counterFloor": 1200
+    "counterFloor": 1200,
+    "diemLuyenMoiCap": 20
   },
   "roi_do": {
     "mainElementShare": 500,

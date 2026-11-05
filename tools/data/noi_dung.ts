@@ -298,6 +298,7 @@ export const PARAMS_EXTRA: [string, string, string, number | string, string, str
   ["cong_phap", "outerMaxLearned", "Ngoại môn: học tối đa số công pháp", 2, "số", "6", "gdd"],
   ["cong_phap", "outerMaxGrade", "Ngoại môn: phẩm cao nhất học được", 2, "số", "6", "gdd"],
   ["cong_phap", "outerDays", "Số ngày ở ngoại môn", 7, "số", "6", "gdd"],
+  ["cong_phap", "diemLuyenMoiCap", "Điểm luyện công pháp cộng mỗi lần nhân vật lên cấp (quỹ chung, tiêu để lên tầng)", 20, "số", "6", "de_xuat"],
   ["roi_do", "mainElementShare", "Tàn quyển rơi thuộc hệ chủ đạo của vùng Hạ vị", 0.5, "%", "3, 11", "gdd"],
   ["roi_do", "luckTopGradesBonus", "Luck +10 của Tu kim tiền: cộng cho 2 phẩm cao nhất", 0.02, "%", "11", "gdd"],
   ["roi_do", "dropRateMin", "Tỷ lệ rơi gốc thấp nhất của bí cảnh", 0.04, "%", "11", "gdd"],

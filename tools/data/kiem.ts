@@ -463,6 +463,28 @@ export function kiem(d: Any, raw: Raw): Report {
     for (const w of warn) warnings.push(`Thú tăng trưởng: ${w}`);
   }
 
+  // Tầng công pháp: đủ số tầng, tầng 1 không cộng, mức cộng dồn không giảm, có điểm luyện mỗi cấp
+  {
+    const tg = (d["tang_cong_phap.json"] ?? []) as Any[], cp = d["tham_so.json"].cong_phap, bad: string[] = [];
+    const keys = ["uyLuc", "hoiChieu", "mana", "diemLuyen", "congHien"], cumul = ["uyLuc", "hoiChieu", "mana"];
+    if (tg.length !== cp.techniqueLayers) bad.push(`${tg.length} tầng, tham_so cong_phap.techniqueLayers = ${cp.techniqueLayers}`);
+    for (const [i, x] of tg.entries()) {
+      if (x.tang !== i + 1) bad.push(`dòng ${i + 1} ghi tầng ${x.tang}`);
+      for (const k of keys) {
+        if (!Number.isInteger(x[k]) || x[k] < 0) bad.push(`tầng ${x.tang}: ${k} phải là số nguyên không âm`);
+        else if (i === 0 && x[k] !== 0) bad.push(`tầng 1: ${k} phải là 0`);
+        else if (i > 0 && cumul.includes(k) && x[k] < tg[i - 1][k]) bad.push(`tầng ${x.tang}: ${k} cộng dồn không được giảm`);
+      }
+    }
+    if (!(cp.diemLuyenMoiCap > 0)) bad.push("tham_so cong_phap.diemLuyenMoiCap phải lớn hơn 0");
+    if (bad.length) errors.push(`Tầng công pháp: ${bad.join("; ")}`);
+    else {
+      const pham = d["pham.json"][0], top = tg[tg.length - 1];
+      const diem = tg.reduce((a, x) => a + Math.round(x.diemLuyen * pham.power / 1000), 0), quyen = tg.reduce((a, x) => a + x.congHien, 0);
+      notes.push(`Tầng công pháp: ${tg.length} tầng, tầng cuối uy lực +${top.uyLuc / 10}%; lên hết 1 công pháp ${pham.name} tốn ${diem} điểm luyện (${Math.ceil(diem / cp.diemLuyenMoiCap)} cấp) và ${quyen} tàn quyển (${quyen * pham.contribution} cống hiến)`);
+    }
+  }
+
   // Chỗ khác code đang chạy (code chưa đọc JSON thì phải sửa tay theo file)
   const diff: string[] = [];
   const cmp = (label: string, file: number | boolean | undefined, code: number | boolean | undefined) => {
