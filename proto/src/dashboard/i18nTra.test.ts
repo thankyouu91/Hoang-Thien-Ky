@@ -2,6 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import EN_JSON from "./i18n/en.json" with { type: "json" };
+import EN_BD from "./i18n/en_ban_do.json" with { type: "json" };
 import { BoTra } from "./i18nTra.ts";
 
 const EN = EN_JSON as Record<string, string>;
@@ -44,6 +45,16 @@ test("chuỗi nối bằng · dịch từng phần, cả khi bắt đầu bằng
 test("mẫu nhiều chữ cố định thắng mẫu chung", () => {
   const b = new BoTra({ "{} phá trận, còn": "{} broke the formation, ends in", "{}, còn": "{}, ends in" });
   assert.equal(b.tr("Huyết Sát Môn phá trận, còn"), "Huyết Sát Môn broke the formation, ends in");
+});
+
+test("tên bản đồ: đủ nghĩa, không còn chữ Việt, bảng chính thắng khi trùng", () => {
+  const bd = EN_BD as Record<string, string>;
+  assert.ok(Object.keys(bd).length > 4000);
+  for (const [k, v] of Object.entries(bd)) assert.ok(v && !/[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(v), `${k} → ${v}`);
+  const b = new BoTra({ ...bd, ...EN });
+  assert.equal(b.tr("Hạc Huyền Thiết Sơn"), "Crane Profound Iron Mountain");
+  assert.equal(b.tr("Lôi Đình Cốc"), "Thunderclap Valley");
+  assert.equal(b.tr("Thần vực 3"), "Divine Domain 3");
 });
 
 test("bảng thật: vài nhãn chính", () => {

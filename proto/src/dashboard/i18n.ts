@@ -111,6 +111,38 @@ declare global {
 const sorted = (m?: Map<string, number>) => [...(m ?? new Map<string, number>()).entries()].sort((a, b) => b[1] - a[1]);
 window.__i18n = { lang, thieu: () => sorted(bo?.thieu), thieuPhan: () => sorted(bo?.thieuPhan) };
 
-/** Nạp xong bảng tiếng Anh và dịch trang (hoặc ngay nếu đang tiếng Việt). */
+/**
+ * Dữ liệu chữ vẽ trên canvas (bản đồ): chờ bảng nạp xong rồi dịch tại chỗ mọi trường `name`, `label`, `text` trong `p`
+ * (đi sâu vào mảng và object). Tiếng Việt thì trả nguyên. Dùng ở chỗ nạp dữ liệu: `dichTen(loadJson())`.
+ */
+export function dichTen<T>(p: Promise<T>): Promise<T> {
+  if (cur === "vi") return p;
+  const KEYS = new Set(["name", "label", "text"]);
+  const walk = (o: unknown): void => {
+    if (Array.isArray(o)) for (const x of o) walk(x);
+    else if (o && typeof o === "object") {
+      const r = o as Record<string, unknown>;
+      for (const [k, v] of Object.entries(r)) {
+        if (typeof v === "string") {
+          if (KEYS.has(k)) r[k] = tr(v);
+        } else walk(v);
+      }
+    }
+  };
+  return Promise.all([p, i18nReady]).then(([d]) => {
+    walk(d);
+    return d;
+  });
+}
+
+/**
+ * Nạp xong bảng tiếng Anh và dịch trang (hoặc ngay nếu đang tiếng Việt). Hai bảng: en.json (giao diện, nội dung) và
+ * en_ban_do.json (tên trên bản đồ, sinh bằng tools/i18n/ten_ban_do.cjs); bảng chính thắng khi trùng khóa.
+ */
 export const i18nReady: Promise<void> =
-  cur === "en" ? import("./i18n/en.json").then((m) => start(m.default as Record<string, string>), () => undefined) : Promise.resolve();
+  cur === "en"
+    ? Promise.all([import("./i18n/en_ban_do.json"), import("./i18n/en.json")]).then(
+        ([bd, en]) => start({ ...(bd.default as Record<string, string>), ...(en.default as Record<string, string>) }),
+        () => undefined,
+      )
+    : Promise.resolve();
