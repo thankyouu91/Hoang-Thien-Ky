@@ -13,7 +13,7 @@ import { b64u, sha256hex } from "./taiKhoan.ts";
 
 export const DAT_LAI_MS = 30 * 60 * 1000;
 const TOI_DA_MOI_GIO = 3;
-const GUI_TU = { email: "khong-tra-loi@thienhoangky.fun", name: "Thiên Hoang Ký" };
+const GUI_TU = { email: "no-reply@thienhoangky.fun", name: "Thiên Hoang Ký" };
 
 export const CAU_QUEN = "Nếu có tài khoản khớp và đã gắn email, link đặt lại mật khẩu đã được gửi tới email đó (xem cả thư mục spam). Link dùng một lần trong 30 phút.";
 
