@@ -167,10 +167,10 @@ export function binhBoOf(ma: string): BinhBoRow {
 // ---- trang_bi.json: dòng rèn, dòng ẩn, điểm ----
 interface TbData {
   dong_ren?: { so: number; nac: number }[];
-  dong_an?: { ma: string; loai: "dieu_kien" | "hieu_ung"; tham_so: Record<string, number | string | boolean> }[];
+  dong_an?: { ma: string; loai: "dieu_kien" | "hieu_ung"; nhom?: string; tham_so: Record<string, number | string | boolean> }[];
   diem?: { stat: string; diem: number; moi: number }[];
   luat?: {
-    dongAn?: { soDong: Record<string, number>; songAnHeSo: number };
+    dongAn?: { soDong: Record<string, number>; songAnHeSo: number; heSoNhom?: Record<string, number>; toiDaHieuLuc?: number };
     dongRen?: { heSoLoaiPhu: number };
   };
 }
@@ -186,7 +186,27 @@ export const DONG_REN = {
 /** Số dòng ẩn theo độ hiếm (ngọc bội, đai). */
 export const DONG_AN_SO: Record<string, number> = { luc: 0, ...(TB.luat?.dongAn?.soDong ?? { lam: 1, tim: 2, vang: 3, do: 3 }) };
 export const DONG_AN_O = ["ngoc_boi", "dai"];
-export const SONG_AN = TB.luat?.dongAn?.songAnHeSo ?? 1500;
+export const SONG_AN = TB.luat?.dongAn?.songAnHeSo ?? 1250;
+/** Hệ số theo nhóm điều kiện: tĩnh (xét trước trận, gần như luôn đúng ở cuối game), theo loại trận, trong trận. */
+const HE_SO_NHOM: Record<string, number> = { tinh: 200, loai_tran: 500, trong_tran: 1000, ...(TB.luat?.dongAn?.heSoNhom ?? {}) };
+const DU_PHONG_NHOM: Record<string, string> = {
+  "DN-DK-001": "tinh", "DN-DK-002": "tinh", "DN-DK-003": "tinh", "DN-DK-009": "tinh", "DN-DK-010": "tinh", "DN-DK-011": "tinh",
+  "DN-DK-004": "loai_tran", "DN-DK-005": "loai_tran", "DN-DK-012": "loai_tran",
+  "DN-DK-006": "trong_tran", "DN-DK-007": "trong_tran", "DN-DK-008": "trong_tran",
+};
+const NHOM: Record<string, string> = { ...DU_PHONG_NHOM };
+for (const r of TB.dong_an ?? []) {
+  const n = r.nhom ?? (typeof r.tham_so.nhom === "string" ? r.tham_so.nhom : undefined);
+  if (r.loai === "dieu_kien" && n) NHOM[r.ma] = n;
+}
+/** Hệ số nhân hiệu ứng theo nhóm của điều kiện, phần nghìn. */
+export function dongAnHeSo(dk: string): number {
+  const n = NHOM[dk];
+  if (!n || !has(HE_SO_NHOM, n)) throw new Error(`Điều kiện dòng ẩn ${dk} chưa có nhóm`);
+  return HE_SO_NHOM[n];
+}
+/** Số dòng ẩn hiệu lực cùng lúc mỗi người (sim HIDDEN_RULES.maxActive phải khớp). */
+export const DONG_AN_TOI_DA = TB.luat?.dongAn?.toiDaHieuLuc ?? 3;
 /** Điều kiện tĩnh rules xét trước trận; điều kiện còn lại là HiddenCond sim xét trong trận. */
 export type DongAnTinh = { loai: "bo"; mon: number } | { loai: "ngocSinh" } | { loai: "linhCanNgoc" } | { loai: "khiLinh"; cap: number };
 export type DongAnDk = { loai: "tran"; cond: HiddenCond } | DongAnTinh;
@@ -257,11 +277,18 @@ const DU_PHONG_DIEM: [string, number][] = [
   ["atk", 10], ["hp", 8], ["defOuter", 5], ["defInner", 5], ["critBonus", 12], ["critDamage", 3], ["attackSpeed", 10], ["cooldownCut", 12],
   ["armorPen", 6], ["resistPen", 6], ["elementDamage", 4], ["resist", 3], ["lifesteal", 15], ["manaDrain", 8], ["manaCostCut", 4],
   ["manaMax", 2], ["healTaken", 4], ["healPower", 4], ["shieldTaken", 3], ["damageTakenCut", 12], ["reflect", 6], ["controlTime", 3],
-  ["innerDamage", 8],
+  ["innerDamage", 8], ["damageTakenCutOuter", 6], ["damageTakenCutInner", 6],
 ];
 for (const [stat, diem] of DU_PHONG_DIEM) DIEM[stat] = { diem, moi: 10 };
 DIEM.hpRegen = { diem: 10, moi: 1 };
 for (const r of TB.diem ?? []) DIEM[r.stat] = { diem: r.diem, moi: r.moi };
+
+/** Điểm của một chỉ số trận (phần nghìn) theo bảng điểm; hút máu theo sát thương là khóa lifesteal, kháng hệ khắc mình là kháng. */
+export function diemChiSo(stat: string, perMille: number): number {
+  const key = stat === "lifestealFlat" ? "lifesteal" : stat === "counterResist" ? "resist" : stat;
+  const w = DIEM[key];
+  return w ? (perMille / w.moi) * w.diem : 0;
+}
 
 /** Phần chỉ số của bộ đồ cần để tính điểm (GearStats thỏa). */
 export interface DiemInput {

@@ -177,13 +177,18 @@ export const COUNTER_FLOOR = 1200;
  * manaCostCut: chiêu tốn ít mana hơn; manaDrain: mỗi đòn rút chừng này mana tối đa của mục tiêu về mình;
  * reflect: phản sát thương cận chiến nhận được; damageTakenCut: giảm sát thương đòn đánh nhận vào, sau phòng thủ;
  * hpRegen: hồi chừng này máu tối đa mỗi giây; innerDamage: sát thương chiêu nội; lifestealFlat: hút máu theo sát thương
- * gây ra (khác lifesteal là tăng hút máu của công pháp Cực âm).
+ * gây ra (khác lifesteal là tăng hút máu của công pháp Cực âm); damageTakenCutOuter, damageTakenCutInner: giảm sát thương nhận chỉ
+ * với đòn ngoại, đòn nội (cộng với damageTakenCut, mỗi loại đòn không quá DAMAGE_CUT_CAP).
  */
 export type BuffStat =
   | "hp" | "atk" | "def" | "manaMax" | "damage" | "critBonus" | "critDamage" | "attackSpeed" | "cooldownCut"
   | "healPower" | "healTaken" | "lifesteal" | "resistPen" | "dot" | "controlTime"
   | "shieldTaken" | "monsterDamage" | "armorPen" | "paralyzeTicks" | "formationTicks" | "channelTicks"
-  | "defOuter" | "defInner" | "manaCostCut" | "manaDrain" | "reflect" | "damageTakenCut" | "hpRegen" | "innerDamage" | "lifestealFlat";
+  | "defOuter" | "defInner" | "manaCostCut" | "manaDrain" | "reflect" | "damageTakenCut" | "hpRegen" | "innerDamage" | "lifestealFlat"
+  | "damageTakenCutOuter" | "damageTakenCutInner";
+
+/** Tổng giảm sát thương nhận của một loại đòn (chung + theo loại) không quá chừng này phần nghìn (tab Trang bị, phần 14; đề xuất). */
+export const DAMAGE_CUT_CAP = 250;
 
 /**
  * Loại sát thương theo loại chiêu (GDD mục 8, người dùng duyệt 2026-11-05; khớp loai_chieu.json loai_sat_thuong): đòn ngoại giảm
@@ -200,6 +205,7 @@ export const HIDDEN_RULES = {
   lowHpBelow: 500, // máu dưới 50%
   openingTicks: 10 * SEC, // 10 giây đầu trận
   lateTicks: 30 * SEC, // sau giây thứ 30
+  maxActive: 3, // mỗi người tối đa 3 dòng ẩn hiệu lực cùng lúc; rules xếp dòng theo thứ tự ưu tiên
 };
 
 /**

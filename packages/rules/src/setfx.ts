@@ -47,7 +47,10 @@ const HANDLERS: Record<string, (key: string, p: Params, a: SetFxAcc) => void> = 
     a.setFx.resetHealOnFall = num(k, p, "lamMoiHoiPhuc");
     outside(a, "beQuan", num(k, p, "beQuan"));
   },
-  "bang_phach:4": (k, p, a) => { a.setFx.controlDr = num(k, p, "giamDanKhongChe"); },
+  "bang_phach:4": (k, p, a) => {
+    a.setFx.controlDr = num(k, p, "giamDanKhongChe");
+    a.setFx.controlChannelTicks = num(k, p, "khongCheDangVanCongTicks"); // khống chế trúng kẻ đang vận công, bày trận: dài thêm
+  },
   "bang_phach:7": (k, p, a) => { a.setFx.chilledBonus = num(k, p, "satThuongMucTieuCham"); },
   "loi_tri:7": (k, p, a) => {
     a.setFx.bounceCrit = num(k, p, "thuTuChiMang");

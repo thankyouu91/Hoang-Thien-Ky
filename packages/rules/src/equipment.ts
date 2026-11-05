@@ -21,7 +21,7 @@ import {
 } from "./luyen_khi.ts";
 import {
   BAC_BO_THAN, BINH_AN_O, DONG_AN_O, DONG_AN_SO, DONG_LO, DONG_REN, SONG_AN,
-  bacHeSo, bacMoc7, bacTu, binhBoOf, dongAnDk, dongAnHu, heSoMoc2, setFactors, setLo, setThan, tuongSinh, type Bac, type SetFactor,
+  bacHeSo, bacMoc7, bacTu, binhBoOf, diemChiSo, dongAnDk, dongAnHeSo, dongAnHu, heSoMoc2, setFactors, setLo, setThan, tuongSinh, type Bac, type SetFactor,
 } from "./set2.ts";
 import type { HiddenLine } from "@ktlp/sim";
 
@@ -154,6 +154,7 @@ const SET_STAT: Record<string, BuffStat> = {
   damageTakenCut: "damageTakenCut", hpRegen: "hpRegen", innerDamage: "innerDamage", lifestealFlat: "lifestealFlat",
   attackSpeed: "attackSpeed", cooldownCut: "cooldownCut", resistPen: "resistPen", armorPen: "armorPen", shieldTaken: "shieldTaken",
   monsterDamage: "monsterDamage",
+  damageTakenCutOuter: "damageTakenCutOuter", damageTakenCutInner: "damageTakenCutInner",
   // "Hút máu +x%" của set, binh bộ (Huyết Ảnh, Hấp Hồn): hút theo sát thương gây ra; khác lifesteal của sim (tăng hút máu Cực âm).
   lifesteal: "lifestealFlat",
 };
@@ -338,14 +339,16 @@ export function gearStats(
     const slot = SLOTS[info.o];
     const factor = itemFactor(item);
     // Dòng rèn: mỗi mốc rèn đã đạt cộng thêm loại phụ đã chọn, giá trị DONG_REN.tyLe của loại đó.
-    const parts = [slot.chinh, phuRow(info.o, item.phu ?? 1)];
+    // Dòng rèn nhân tỷ lệ sau khi đã nhân hệ số món, để số nhỏ của bảng tẩy luyện không mất phần lẻ.
+    const parts: { stat: string; gia_tri: number; tyLe?: number }[] = [slot.chinh, phuRow(info.o, item.phu ?? 1)];
     (item.ren ?? []).forEach((loai, i) => {
       if (item.nac < DONG_REN.moc[i]) return;
       const r = phuRow(info.o, loai);
-      parts.push({ stat: r.stat, gia_tri: mul(r.gia_tri, DONG_REN.tyLe) });
+      parts.push({ stat: r.stat, gia_tri: r.gia_tri, tyLe: DONG_REN.tyLe });
     });
     for (const part of parts) {
-      const v = statAmount(part.stat, part.gia_tri, factor, level);
+      let v = statAmount(part.stat, part.gia_tri, factor, level);
+      if (part.tyLe !== undefined) v = mul(v, part.tyLe);
       // "Hút máu" của chỉ số phụ là hút theo sát thương (như set), không phải tăng hút máu Cực âm của sim.
       const stat = (part.stat === "lifesteal" ? "lifestealFlat" : part.stat) as BuffStat;
       if (FLAT.indexOf(stat) >= 0) out[stat as "hp" | "atk" | "def" | "manaMax"] += v;
@@ -454,9 +457,11 @@ export function gearStats(
     }
     out.binhBo = { bo: id, mon: bacs.length, moc, bac, dongLo };
   }
-  // Dòng ẩn: điều kiện tĩnh xét ở đây (đúng thì "always", sai thì không vào trận); song ẩn ×1,5.
+  // Dòng ẩn: điều kiện tĩnh xét ở đây (đúng thì "always", sai thì không vào trận); hệ số theo nhóm điều kiện; song ẩn.
+  // Xếp theo điểm sau hệ số (cao trước), hòa thì ngọc bội trước đai, rồi theo thứ tự dòng: sim chỉ bật tối đa 3 dòng đầu đang đúng.
   const dkOf = (o: string) => trangSuc.filter((x) => kieuInfo(x.kieu).o === o).flatMap((x) => (x.dongAn ?? []).map((d) => d.dk));
   const nb = dkOf("ngoc_boi"), dai = dkOf("dai");
+  const cands: { line: HiddenLine; src: { kieu: string; dong: number }; diem: number; o: number }[] = [];
   for (const item of trangSuc) {
     (item.dongAn ?? []).forEach((d, dong) => {
       const c = dongAnDk(d.dk);
@@ -474,9 +479,16 @@ export function gearStats(
       const cond: HiddenLine["cond"] = c.loai === "tran" ? c.cond : "always";
       const hu = dongAnHu(d.hu);
       const song = nb.indexOf(d.dk) >= 0 && dai.indexOf(d.dk) >= 0;
-      out.hidden.push({ cond, stat: hu.stat, value: song ? mul(hu.giaTri, SONG_AN) : hu.giaTri });
-      out.hiddenSource.push({ kieu: item.kieu, dong });
+      let value = mul(hu.giaTri, dongAnHeSo(d.dk));
+      if (song) value = mul(value, SONG_AN);
+      const o = kieuInfo(item.kieu).o === "ngoc_boi" ? 0 : 1;
+      cands.push({ line: { cond, stat: hu.stat, value }, src: { kieu: item.kieu, dong }, diem: diemChiSo(hu.stat, value), o });
     });
+  }
+  cands.sort((a, b) => b.diem - a.diem || a.o - b.o || a.src.dong - b.src.dong);
+  for (const c of cands) {
+    out.hidden.push(c.line);
+    out.hiddenSource.push(c.src);
   }
   // Ý châu (và Ý của danh khí) đứng trước set nếu cùng loại chiêu có cùng khóa.
   for (const t of Object.keys(acc.mods) as SkillType[]) out.skillMods[t] = { ...acc.mods[t], ...out.skillMods[t] };

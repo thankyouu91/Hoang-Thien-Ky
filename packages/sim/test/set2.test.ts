@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  Battle, composeTechnique, hitDamage, mul, simulate, HIDDEN_RULES,
+  Battle, composeTechnique, hitDamage, mul, simulate, HIDDEN_RULES, DAMAGE_CUT_CAP,
   type BattleInput, type Element, type SkillType, type Technique, type Unit, type UnitSpec,
 } from "../src/index.ts";
 
@@ -147,10 +147,52 @@ test("dòng ẩn: giảm hồi chiêu, giảm mana, thủ, kháng hệ khắc m�
   u.curHp = 1000;
   b.step();
   assert.deepEqual([u.slots[0].cooldown, u.slots[0].cost, u.defOuter, u.defInner], [mul(cd0, 900), mul(cost0, 900), 1040, 1000]);
-  assert.equal(u.resist.kim, 30); // Kim khắc Mộc
+  assert.equal(u.resist.kim, undefined); // dòng thứ 4: quá HIDDEN_RULES.maxActive
   u.curHp = u.hp;
   b.step();
-  assert.deepEqual([u.slots[0].cooldown, u.slots[0].cost, u.defOuter, u.resist.kim], [cd0, cost0, 1000, 0]);
+  assert.deepEqual([u.slots[0].cooldown, u.slots[0].cost, u.defOuter], [cd0, cost0, 1000]);
+  const kr = new Battle({ seed: 1, teamA: [inert(1, 0, { hidden: [{ cond: "always", stat: "counterResist", value: 30 }] })], teamB: [inert(101)] });
+  assert.equal(get(kr, 1).resist.kim, 30); // Kim khắc Mộc
+});
+
+test("dòng ẩn: tối đa 3 dòng hiệu lực, theo thứ tự ưu tiên; dòng trước đúng điều kiện thì đẩy dòng sau ra", () => {
+  const lines = [
+    { cond: "lowHp" as const, stat: "atk" as const, value: 100 },
+    { cond: "always" as const, stat: "atk" as const, value: 30 },
+    { cond: "always" as const, stat: "atk" as const, value: 20 },
+    { cond: "always" as const, stat: "atk" as const, value: 10 },
+  ];
+  const b = new Battle({ seed: 1, teamA: [inert(1, 0, { hidden: lines })], teamB: [inert(101)] });
+  place(b, { 1: 1000, 101: 11000 });
+  const u = get(b, 1);
+  assert.equal(u.atk, 1060);
+  u.curHp = 400_000;
+  b.step();
+  assert.equal(u.atk, 1150); // 100 + 30 + 20; dòng 10 tắt
+  u.curHp = u.hp;
+  b.step();
+  assert.equal(u.atk, 1060);
+});
+
+test("giảm sát thương nhận theo loại đòn: chỉ đúng loại, cộng với phần chung, trần DAMAGE_CUT_CAP", () => {
+  const base = hit();
+  const outer = hit({}, { bonuses: { damageTakenCutOuter: 100 } });
+  const inner = hit({}, { bonuses: { damageTakenCutInner: 100 } });
+  assert.equal(loss(outer, 101), loss(base, 101) - mul(loss(base, 101), 100));
+  assert.equal(loss(inner, 101), loss(base, 101)); // cận chiến là đòn ngoại
+  const capped = hit({}, { bonuses: { damageTakenCut: 200, damageTakenCutOuter: 200 } });
+  assert.equal(loss(capped, 101), loss(base, 101) - mul(loss(base, 101), DAMAGE_CUT_CAP));
+});
+
+test("Băng Phách: khống chế trúng kẻ đang vận công thì dài thêm", () => {
+  const b = new Battle({ seed: 1, teamA: [inert(1, 0, { setFx: { controlChannelTicks: 10 } })], teamB: [inert(101)] });
+  const t = get(b, 101);
+  b.control(t, 20, get(b, 1));
+  const plain = t.stunUntil;
+  t.stunUntil = -1_000_000;
+  t.channel = { slot: 0, startTick: 0, resolveTick: 100, center: 0, ult: false, interruptible: false, guarded: [], guardCut: 0, group: 101 };
+  b.control(t, 20, get(b, 1));
+  assert.equal(t.stunUntil, plain + 10);
 });
 
 test("trận có war: dòng ẩn chiến tranh chỉ bật khi cờ war", () => {

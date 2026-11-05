@@ -5,7 +5,7 @@ import { Hasher } from "./hash.ts";
 import { ELEMENTS, elementMultiplier, type Element } from "./elements.ts";
 import {
   BATTLE, SKILL_SPECS, ALLY_SKILLS, SKILL_RULES as R, CAST_FLOOR, ARTIFACT_RULES as A, RESIST_CAP, COUNTER_FLOOR, MAX_RANGE_BONUS,
-  DAMAGE_KIND, HIDDEN_RULES, type SkillType, type Talent, type BuffStat,
+  DAMAGE_KIND, DAMAGE_CUT_CAP, HIDDEN_RULES, type SkillType, type Talent, type BuffStat,
 } from "./config.ts";
 import { techniqueFx, type Technique, type TechniqueFx } from "./technique.ts";
 import { unitBonuses, type UnitBonuses } from "./stats.ts";
@@ -82,6 +82,7 @@ export interface SetFx {
   decoyTicks?: number; // Hỗn Độn: bao nhiêu tick đầu trận bị đánh tính theo `UnitSpec.decoyElement`
   artifactCooldownCut?: number; // Cổ Tông: hồi chiêu pháp bảo giảm chừng này
   artifactMana?: number; // Cổ Tông: mỗi lần pháp bảo của người mặc kích hoạt thì hồi chừng này mana tối đa
+  controlChannelTicks?: number; // Băng Phách: khống chế trúng kẻ đang vận công hoặc đang bày trận thì dài thêm chừng này tick
   artifactExtraUses?: number; // Cổ Tông: pháp bảo thêm lần mỗi trận, không quá `artifactMaxUses`
   artifactMaxUses?: number;
   // Khí văn (luyện khí, tab Trang bị phần 13); rules đã nhân theo số lần tính (tối đa 2):
@@ -130,7 +131,10 @@ export interface UnitSpec {
   setFx?: SetFx;
   /** Hệ ngụy linh căn người chơi chọn trước trận (set Hỗn Độn); không chọn thì không có tác dụng. */
   decoyElement?: Element;
-  /** Dòng ẩn của trang sức (ngọc bội, đai): điều kiện tĩnh rules đã xét thành "always", song ẩn đã nhân sẵn. */
+  /**
+   * Dòng ẩn của trang sức (ngọc bội, đai): điều kiện tĩnh rules đã xét thành "always", hệ số nhóm và song ẩn đã nhân sẵn.
+   * Thứ tự là thứ tự ưu tiên: lúc nào cũng chỉ HIDDEN_RULES.maxActive dòng đầu tiên đang đúng điều kiện có hiệu lực.
+   */
   hidden?: HiddenLine[];
 }
 
@@ -145,7 +149,7 @@ export type HiddenStat =
   | "atk" | "defOuter" | "defInner" | "critBonus" | "lifestealFlat" | "manaCostCut" | "hpRegen" | "reflect" | "damageTakenCut"
   | "attackSpeed" | "cooldownCut" | "counterResist";
 export interface HiddenLine { cond: HiddenCond; stat: HiddenStat; value: number }
-interface HiddenState { line: HiddenLine; on: boolean; first: number }
+interface HiddenState { line: HiddenLine; ok: boolean; on: boolean; first: number }
 
 /** 10 loại pháp bảo, mỗi loại khắc một loại chiêu của địch (tab Trang bị, phần 9). */
 export type ArtifactKind = "thuan" | "luan" | "chau" | "thap" | "ho_lo" | "kinh" | "phien_co" | "dinh" | "chuong" | "an";
@@ -466,7 +470,7 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
     defBuff: 0,
     defBuffUntil: NEVER,
     regenNext: sfx.regenPulse ? sfx.regenPulseTicks ?? NEVER : NEVER,
-    hidden: (spec.hidden ?? []).map((line) => ({ line, on: false, first: NEVER })),
+    hidden: (spec.hidden ?? []).map((line) => ({ line, ok: false, on: false, first: NEVER })),
     hidDyn: false,
   };
 }
@@ -505,23 +509,33 @@ export class Battle {
     const countered = foes.some((e) => elementMultiplier(e.element, u.element) >= COUNTER);
     for (const h of u.hidden) {
       const c = h.line.cond;
-      let on = false;
-      if (c === "always") on = true;
-      else if (c === "pve") on = pve;
-      else if (c === "war") on = war;
-      else if (c === "front") on = u.row === 0;
-      else if (c === "back") on = u.row === 1;
-      else if (c === "countered") on = countered;
+      if (c === "always") h.ok = true;
+      else if (c === "pve") h.ok = pve;
+      else if (c === "war") h.ok = war;
+      else if (c === "front") h.ok = u.row === 0;
+      else if (c === "back") h.ok = u.row === 1;
+      else if (c === "countered") h.ok = countered;
       else {
         u.hidDyn = true;
-        on = c === "opening" && HIDDEN_RULES.openingTicks > 0;
+        h.ok = c === "opening" && HIDDEN_RULES.openingTicks > 0;
       }
-      if (on) this.setHidden(u, h, true, true);
+    }
+    this.pickHidden(u, true);
+  }
+
+  /** Bật các dòng đầu tiên (theo thứ tự ưu tiên) đang đúng điều kiện, tối đa HIDDEN_RULES.maxActive; tắt các dòng còn lại. */
+  private pickHidden(u: Unit, atStart: boolean): void {
+    let n = 0;
+    for (const h of u.hidden) {
+      const want = h.ok && n < HIDDEN_RULES.maxActive;
+      if (want) n++;
+      if (want !== h.on) this.setHidden(u, h, want, atStart);
     }
   }
 
   private updateHidden(u: Unit): void {
     const tick = this.tick;
+    let changed = false;
     for (const h of u.hidden) {
       const c = h.line.cond;
       let on: boolean;
@@ -529,8 +543,12 @@ export class Battle {
       else if (c === "opening") on = tick < HIDDEN_RULES.openingTicks;
       else if (c === "late") on = tick >= HIDDEN_RULES.lateTicks;
       else continue;
-      if (on !== h.on) this.setHidden(u, h, on, false);
+      if (on !== h.ok) {
+        h.ok = on;
+        changed = true;
+      }
     }
+    if (changed) this.pickHidden(u, false);
   }
 
   /** Bật hoặc tắt một dòng ẩn: cộng, trừ chỉ số rồi tính lại phần suy ra từ nó. `atStart` = đầu trận, hồi chiêu ban đầu tính lại. */
@@ -651,6 +669,7 @@ export class Battle {
       t.controlBlocks--; // Bất Động Côn: khiên hộ thể đỡ một lần khống chế
       return;
     }
+    if (src?.fx.controlChannelTicks && t.channel) ticks += src.fx.controlChannelTicks; // Băng Phách: trúng kẻ đang vận công, bày trận
     const dur = this.tick < t.stunUntil + R.controlDrWindow ? mul(ticks, src?.fx.controlDr ?? ONE / 2) : ticks;
     t.stunUntil = Math.max(t.stunUntil, this.tick + dur);
     if (t.channel && t.channel.interruptible) {
@@ -1023,7 +1042,10 @@ export class Battle {
       if (ramp !== ONE) dmg = mul(dmg, ramp);
       if (opts.scale !== undefined) dmg = Math.max(1, mul(dmg, opts.scale));
       if (opts.guarded && opts.guardCut && opts.guarded.indexOf(t.id) >= 0) dmg = Math.max(1, dmg - mul(dmg, opts.guardCut));
-      if (t.b.damageTakenCut > 0) dmg = Math.max(1, dmg - mul(dmg, t.b.damageTakenCut)); // giảm sát thương nhận, sau phòng thủ
+      // Giảm sát thương nhận, sau phòng thủ: chung cộng theo loại đòn, mỗi loại đòn không quá DAMAGE_CUT_CAP.
+      const dk = DAMAGE_KIND[type];
+      const cut = t.b.damageTakenCut + (dk === "ngoai" ? t.b.damageTakenCutOuter : dk === "noi" ? t.b.damageTakenCutInner : 0);
+      if (cut > 0) dmg = Math.max(1, dmg - mul(dmg, Math.min(DAMAGE_CUT_CAP, cut)));
       if (foeArtifacts) dmg = this.blockHit(type, t, dmg, crit);
       // Thiết Kỵ: hàng trước, sau lưng còn từ 2 đồng đội hàng sau, nhận ít sát thương diện rộng hơn.
       if (type === "dien_rong" && t.fx.frontAoeCut && t.row === 0 && this.backRowAlive(t.team) >= 2) dmg = Math.max(1, dmg - mul(dmg, t.fx.frontAoeCut));

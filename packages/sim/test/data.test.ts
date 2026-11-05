@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, ALLY_SKILLS, VARIANT_STATS, LINH_EFFECT_POWER, ELEMENT_STATS, ELEMENT_EFFECTS,
-  ROOT_BUFFS, SKILL_RULES, CAST_FLOOR, ARTIFACT_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, GRADE_POW, BASE_CRIT_PER_MILLE, RESIST_CAP, COUNTER_FLOOR, COMBO, DAMAGE_KIND, HIDDEN_RULES,
+  ROOT_BUFFS, SKILL_RULES, CAST_FLOOR, ARTIFACT_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, GRADE_POW, BASE_CRIT_PER_MILLE, RESIST_CAP, COUNTER_FLOOR, COMBO, DAMAGE_KIND, DAMAGE_CUT_CAP, HIDDEN_RULES,
   elementMultiplier, comboRelation,
 } from "../src/index.ts";
 
@@ -64,6 +64,9 @@ test("loại sát thương theo loại chiêu khớp loai_chieu.json; ngưỡng 
     for (const k of ["mauDuoi", "truocTicks", "sauTicks"]) if (typeof r.tham_so[k] === "number") dk[k] = r.tham_so[k] as number;
   }
   assert.deepEqual([dk.mauDuoi, dk.truocTicks, dk.sauTicks], [HIDDEN_RULES.lowHpBelow, HIDDEN_RULES.openingTicks, HIDDEN_RULES.lateTicks]);
+  const luat = data("trang_bi.json").luat;
+  assert.equal(HIDDEN_RULES.maxActive, luat.dongAn.toiDaHieuLuc);
+  assert.equal(DAMAGE_CUT_CAP, luat.giamSatThuongNhanToiDa);
 });
 
 test("phẩm: hệ số 1,25^(phẩm − 1) khớp pham.json", () => {

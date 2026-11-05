@@ -69,7 +69,9 @@ test("Linh Tuyền, Bàn Thạch vào setFx; phần bế quan, khai khoáng đ�
   const m7 = SET.bo.find((b) => b.id === "ban_thach")!.moc.find((m) => m.so === 7)!.tham_so as Record<string, number>;
   const m4 = SET.bo.find((b) => b.id === "ban_thach")!.moc[1].tham_so as Record<string, number>;
   const bare = gearStats(sealed(Array(7).fill("NG-AN-003")).map((it) => ({ ...it, kham: [] })), LV, []);
-  assert.deepEqual([bt.bonuses.defOuter! - (bare.bonuses.defOuter ?? 0), bt.bonuses.hpRegen], [m4.defOuter, m4.hpRegen]); // áo cũng có thủ ngoại
+  // Mốc 4 là chỉ số (đồ cũng có thủ ngoại nên so với đồ không ấn).
+  const b4 = bt.bonuses as Record<string, number>, r4 = bare.bonuses as Record<string, number>;
+  for (const k of Object.keys(m4)) assert.equal((b4[k] ?? 0) - (r4[k] ?? 0), m4[k], k);
   assert.deepEqual([bt.setFx.petrifyBelow, bt.setFx.petrifyTicks, bt.outside.khaiKhoang], [m7.nguongMau, m7.hoaDaTicks, m7.khaiKhoang]);
 });
 
@@ -79,4 +81,9 @@ test("Cổ Tông 7 món: pháp bảo thêm 1 lần (tối đa 3, không quá lin
   const armed = withArtifacts(geared, [{ ma: "PB-TH-001", linhLuc: 20, teLuyen: true, tuRen: false }], false);
   const a = new Battle({ seed: 1, teamA: [armed], teamB: [{ ...spec("kim"), id: 101 }] }).units.find((u) => u.id === 1)!.artifacts[0];
   assert.deepEqual([a.uses, a.cooldownTicks], [3, 136]);
+});
+
+test("Băng Phách mốc 4: khống chế trúng kẻ đang vận công thì dài thêm (setFx.controlChannelTicks)", () => {
+  const m4 = SET.bo.find((b) => b.id === "bang_phach")!.moc[1].tham_so as Record<string, number>;
+  assert.equal(gearStats(sealed(Array(4).fill("NG-AN-009")), LV, []).setFx.controlChannelTicks, m4.khongCheDangVanCongTicks);
 });

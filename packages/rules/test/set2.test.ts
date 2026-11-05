@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { HIDDEN_RULES, baseStats, composeTechnique, type UnitSpec } from "@ktlp/sim";
 import {
-  diemTrangBi, dongAnNguong, gearStats, ghepAn, isKnownSetStat, phuRow, withGear,
+  DONG_REN, SONG_AN, diemChiSo, diemTrangBi, dongAnHeSo, dongAnNguong, gearStats, ghepAn, isKnownSetStat, phuRow, withGear,
   type Bac, type EquipItem, type InlayLine,
 } from "../src/index.ts";
 import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
@@ -63,7 +63,7 @@ test("binh bộ: binh ấn chỉ ở 3 ô công; mốc 2, mốc 3; đồng lộ 
   assert.throws(() => gearStats([red("TB-KI-058", { kham: [{ loai: "binh_an", ma: "NG-BA-001" }, { loai: "binh_an", ma: "NG-BA-002" }] })], LV, []));
 });
 
-test("dòng rèn: mỗi mốc +10 mở một dòng, nửa giá trị loại phụ đã chọn; tụt nấc dưới mốc thì dòng tắt", () => {
+test("dòng rèn: mỗi mốc +10 mở một dòng, DONG_REN.tyLe giá trị loại phụ đã chọn; tụt nấc dưới mốc thì dòng tắt", () => {
   const stat = (n: number) => phuRow("vu_khi", n).stat as "critDamage";
   const at = (nac: number, ren?: number[]) => gearStats([item("TB-KI-058", { nac, ren })], LV, []).bonuses;
   const full = at(30, [2, 2, 2]);
@@ -71,23 +71,28 @@ test("dòng rèn: mỗi mốc +10 mở một dòng, nửa giá trị loại ph�
   const one = at(15, [2, 2, 2]);
   const phu2 = gearStats([item("TB-KI-058", { nac: 30, phu: 2 })], LV, []).bonuses[stat(2)]!;
   const line = full[stat(2)]! - (none[stat(2)] ?? 0);
-  assert.ok(Math.abs(line - 3 * Math.trunc(phu2 / 2)) <= 3, `${line} / ${phu2}`);
+  assert.ok(Math.abs(line - (3 * phu2 * DONG_REN.tyLe) / 1000) <= 3, `${line} / ${phu2}`);
   assert.ok((one[stat(2)] ?? 0) > 0 && (one[stat(2)] ?? 0) < line);
   assert.throws(() => gearStats([item("TB-KI-058", { nac: 30, ren: [1, 1, 1, 1, 1, 1] })], LV, []));
   assert.throws(() => gearStats([item("TB-KI-058", { nac: 30, ren: [9] })], LV, []));
 });
 
-test("dòng ẩn: chỉ ngọc bội và đai, số dòng theo độ hiếm; điều kiện tĩnh xét trước trận; song ẩn ×1,5", () => {
+test("dòng ẩn: chỉ ngọc bội và đai, số dòng theo độ hiếm; điều kiện tĩnh xét trước trận; hệ số nhóm; song ẩn", () => {
   const nb = (dongAn: EquipItem["dongAn"], extra: Partial<EquipItem> = {}) => red("TB-NB-058", { dongAn, ...extra });
-  const front = { dk: "DN-DK-009", hu: "DN-HU-001" };
-  assert.deepEqual(gearStats([nb([front])], LV, []).hidden, [{ cond: "front", stat: "atk", value: 30 }]);
+  const front = { dk: "DN-DK-009", hu: "DN-HU-001" }; // đứng hàng trước (nhóm tĩnh), công lực +3%
+  const v = (giaTri: number, dk: string, song = false) => {
+    const x = Math.trunc((giaTri * dongAnHeSo(dk)) / 1000);
+    return song ? Math.trunc((x * SONG_AN) / 1000) : x;
+  };
+  assert.deepEqual(gearStats([nb([front])], LV, []).hidden, [{ cond: "front", stat: "atk", value: v(30, "DN-DK-009") }]);
+  assert.deepEqual([dongAnHeSo("DN-DK-009"), dongAnHeSo("DN-DK-004"), dongAnHeSo("DN-DK-006")], [200, 500, 1000]);
   const song = gearStats([nb([front]), red("TB-DA-058", { dongAn: [{ dk: "DN-DK-009", hu: "DN-HU-004" }] })], LV, []);
-  assert.deepEqual(song.hidden, [{ cond: "front", stat: "atk", value: 45 }, { cond: "front", stat: "critBonus", value: 30 }]);
-  assert.deepEqual(song.hiddenSource, [{ kieu: "TB-NB-058", dong: 0 }, { kieu: "TB-DA-058", dong: 0 }]);
+  const byStat = (h: { stat: string }[]) => h.slice().sort((a, b) => a.stat.localeCompare(b.stat));
+  assert.deepEqual(byStat(song.hidden), [{ cond: "front", stat: "atk", value: v(30, "DN-DK-009", true) }, { cond: "front", stat: "critBonus", value: v(20, "DN-DK-009", true) }]);
   // Khí linh dưới cấp 3: dòng không vào trận. Linh căn trùng hệ ngọc trên món: luôn bật.
   assert.deepEqual(gearStats([nb([{ dk: "DN-DK-011", hu: "DN-HU-001" }])], LV, []).hidden, []);
   const gemLine = nb([{ dk: "DN-DK-003", hu: "DN-HU-012" }], { kham: [{ loai: "ngoc", he: "kim", cap: 3 }] });
-  assert.deepEqual(gearStats([gemLine], LV, ["kim"]).hidden, [{ cond: "always", stat: "counterResist", value: 30 }]);
+  assert.deepEqual(gearStats([gemLine], LV, ["kim"]).hidden, [{ cond: "always", stat: "counterResist", value: v(30, "DN-DK-003") }]);
   assert.deepEqual(gearStats([gemLine], LV, ["moc"]).hidden, []);
   assert.throws(() => gearStats([red("TB-KI-058", { dongAn: [front] })], LV, []));
   assert.throws(() => gearStats([item("TB-NB-001", { dongAn: [front] })], LV, [])); // lục không có dòng ẩn
@@ -95,8 +100,17 @@ test("dòng ẩn: chỉ ngọc bội và đai, số dòng theo độ hiếm; đi
   // Vào trận: withGear nối dòng ẩn vào UnitSpec.hidden.
   const tech = composeTechnique({ element: "kim", type: "can_don", variant: "bao", grade: 1 }, [{ element: "kim", type: "can_don", variant: "ben", grade: 1 }]);
   const spec: UnitSpec = { id: 1, level: LV, element: "kim", row: 0, ...baseStats(LV), techniques: [tech] };
-  assert.deepEqual(withGear(spec, [nb([front])]).hidden, [{ cond: "front", stat: "atk", value: 30 }]);
+  assert.deepEqual(withGear(spec, [nb([front])]).hidden, [{ cond: "front", stat: "atk", value: v(30, "DN-DK-009") }]);
   assert.equal(withGear(spec, [red("TB-NB-058")]).hidden, undefined);
+});
+
+test("dòng ẩn xếp theo điểm sau hệ số (cao trước), hòa thì ngọc bội trước đai rồi theo thứ tự dòng", () => {
+  const lines = [{ dk: "DN-DK-009", hu: "DN-HU-001" }, { dk: "DN-DK-006", hu: "DN-HU-001" }, { dk: "DN-DK-004", hu: "DN-HU-004" }];
+  const g = gearStats([red("TB-NB-058", { dongAn: lines }), red("TB-DA-058", { dongAn: [{ dk: "DN-DK-006", hu: "DN-HU-002" }] })], LV, []);
+  const d = g.hidden.map((h) => diemChiSo(h.stat, h.value));
+  for (let i = 1; i < d.length; i++) assert.ok(d[i - 1] >= d[i], `${d}`);
+  assert.equal(g.hidden[0].cond, "lowHp"); // trong trận ×1,0 đứng đầu
+  assert.equal(g.hidden.length, 4); // rules giữ cả; sim bật tối đa HIDDEN_RULES.maxActive dòng đang đúng
 });
 
 test("điểm trang bị: chỉ số theo % nhân điểm; hồi máu mỗi giây tính mỗi 0,1%; đồ tốt hơn điểm cao hơn", () => {

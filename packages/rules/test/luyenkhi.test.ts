@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  artifactSpecs, danhKhiOf, gearStats, khiLinhLevel, khiTinhPhanGiai, khiVanSlots, phapBaoLinhLucToiDa, scaleSkillMod, tayLuyen,
+  artifactSpecs, danhKhiOf, gearStats, phuRow, khiLinhLevel, khiTinhPhanGiai, khiVanSlots, phapBaoLinhLucToiDa, scaleSkillMod, tayLuyen,
   type EquipItem, type InlayLine, type PhapBaoItem,
 } from "../src/index.ts";
 import LK from "../../../data/he_thong/json/luyen_khi.json" with { type: "json" };
@@ -77,7 +77,7 @@ test("tẩy luyện: đổi loại chỉ số phụ trong 4 loại của ô; Tu 
   assert.equal(tayLuyen(3, 1, 1), 1);
   assert.throws(() => tayLuyen(2, 0, 2));
   const g = gearStats([item("TB-KI-001", { phu: 2 })], LV, []);
-  assert.deepEqual([g.bonuses.critDamage, g.bonuses.armorPen], [undefined, 10]);
+  assert.deepEqual([g.bonuses.critDamage, g.bonuses.armorPen], [undefined, phuRow("vu_khi", 2).gia_tri]);
   assert.throws(() => gearStats([item("TB-KI-001", { phu: 5 })], LV, []));
 });
 

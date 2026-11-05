@@ -4,6 +4,13 @@ import { Battle, baseStats, composeTechnique, type UnitSpec } from "@ktlp/sim";
 import { gearStats, withGear, kieuInfo, maxInlayLines, setTier, isKnownSetStat, yChauMod, toSkillMod, softCap, type EquipItem, type InlayLine } from "../src/index.ts";
 import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
 import NGOC from "../../../data/he_thong/json/ngoc.json" with { type: "json" };
+import TRANG_BI from "../../../data/he_thong/json/trang_bi.json" with { type: "json" };
+
+/** Chỉ số chính, phụ (phần nghìn) của một ô và hệ số độ hiếm, theo trang_bi.json. */
+const O = (id: string) => TRANG_BI.o.find((o) => o.id === id)!;
+const HE_SO = (r: string) => TRANG_BI.do_hiem.find((d) => d.id === r)!.he_so;
+/** Hệ số món như equipment.ts: độ hiếm × (1 + 3% mỗi nấc) × (1 + thưởng bí cảnh). */
+const factor = (r: string, nac: number, biCanh: number) => Math.trunc((Math.trunc((HE_SO(r) * (1000 + 30 * nac)) / 1000) * (1000 + biCanh)) / 1000);
 
 const item = (kieu: string, extra: Partial<EquipItem> = {}): EquipItem => ({ kieu, nac: 0, doBen: 100, biCanh: 0, dongThem: 0, kham: [], ...extra });
 const gem = (he: "kim" | "hoa" | "loi", cap: number): InlayLine => ({ loai: "ngoc", he, cap });
@@ -31,22 +38,24 @@ test("kiểu trang bị cho ô và độ hiếm", () => {
   assert.throws(() => kieuInfo("TB-XX-999"));
 });
 
-test("vũ khí lục +0: công lực 4% chỉ số chuẩn, sát thương chí mạng +2%", () => {
+test("vũ khí lục +0: công lực theo chỉ số chuẩn, sát thương chí mạng là chỉ số phụ", () => {
   const g = gearStats([item("TB-KI-001")], LV, []);
-  assert.equal(g.atk, 20);
-  assert.equal(g.bonuses.critDamage, 20);
+  assert.equal(g.atk, Math.trunc((500 * O("vu_khi").chinh.gia_tri) / 1000));
+  assert.equal(g.bonuses.critDamage, O("vu_khi").phu.gia_tri);
 });
 
 test("vũ khí đỏ +30 rơi bí cảnh (+8%): × 1,55 × 1,9 × 1,08", () => {
   const g = gearStats([item("TB-KI-058", { nac: 30, biCanh: 80, dongThem: 2 })], LV, []);
-  assert.equal(g.atk, 63); // 500 × 4% × 3,18
-  assert.equal(g.bonuses.critDamage, 63);
+  const f = factor("do", 30, 80);
+  assert.equal(f, 3180);
+  assert.equal(g.atk, Math.trunc((500 * O("vu_khi").chinh.gia_tri * f) / 1_000_000));
+  assert.equal(g.bonuses.critDamage, Math.trunc((O("vu_khi").phu.gia_tri * f) / 1000));
 });
 
 test("mũ: máu theo chỉ số chuẩn, mana theo mana tối đa chuẩn", () => {
   const g = gearStats([item("TB-MU-001")], LV, []);
-  assert.equal(g.hp, 142); // 7.140 × 2%
-  assert.equal(g.manaMax, 6); // 300 × 2%
+  assert.equal(g.hp, Math.trunc((7140 * O("mu").chinh.gia_tri) / 1000));
+  assert.equal(g.manaMax, Math.trunc((300 * O("mu").phu.gia_tri) / 1000));
 });
 
 test("độ bền 0 thì món không cộng gì, kể cả ngọc", () => {
@@ -94,30 +103,30 @@ test("món sai thì báo lỗi: trùng ô, nấc, thưởng bí cảnh, cấp ng
   assert.throws(() => gearStats([item("TB-KI-001", { kham: [gem("kim", 11)] })], LV, []));
 });
 
-test("bộ đỏ +30 rơi bí cảnh đủ 7 ô: công lực, máu mỗi thứ cộng khoảng 18–20%; áo thủ ngoại, giày thủ nội bằng nhau", () => {
+test("bộ đỏ +30 rơi bí cảnh đủ 7 ô: công lực, máu mỗi thứ cộng khoảng 15–17%; áo thủ ngoại, giày thủ nội bằng nhau", () => {
   const full = ["TB-KI-058", "TB-MU-058", "TB-AO-058", "TB-DA-058", "TB-BT-058", "TB-GI-058", "TB-NB-058"].map((k) => item(k, { nac: 30, biCanh: 80, dongThem: 2 }));
   const g = gearStats(full, LV, []);
   const s = baseStats(LV);
   for (const [name, add, base] of [["công lực", g.atk, s.atk], ["máu", g.hp, s.hp]] as const) {
     const pct = Math.round((add * 1000) / base);
-    assert.ok(pct >= 180 && pct <= 200, `${name} +${pct / 10}%`);
+    assert.ok(pct >= 150 && pct <= 175, `${name} +${pct / 10}%`); // chỉ số gốc ×0,85 (set đồ 2.0)
   }
   // Set đồ 2.0: chỉ số chính áo là thủ ngoại, giày là thủ nội (phần nghìn trên phòng thủ, nhân hệ số món).
   assert.equal(g.bonuses.defOuter, g.bonuses.defInner);
-  assert.ok(g.bonuses.defOuter! >= 90 && g.bonuses.defOuter! <= 100, `thủ ngoại +${g.bonuses.defOuter! / 10}%`);
+  assert.equal(g.bonuses.defOuter, Math.trunc((O("ao").chinh.gia_tri * factor("do", 30, 80)) / 1000));
 });
 
 test("áp bộ đồ vào đơn vị trong trận", () => {
   const tech = composeTechnique({ element: "kim", type: "can_don", variant: "bao", grade: 1 }, [{ element: "kim", type: "can_don", variant: "ben", grade: 1 }]);
   const spec: UnitSpec = { id: 1, level: LV, element: "kim", row: 0, ...baseStats(LV), techniques: [tech] };
   const geared = withGear(spec, [item("TB-KI-001", { kham: [gem("kim", 5)] }), item("TB-MU-001")]);
-  assert.equal(geared.atk, 520);
-  assert.equal(geared.hp, baseStats(LV).hp + 142);
-  assert.equal(geared.manaMax, 306);
+  assert.equal(geared.atk, 500 + Math.trunc((500 * O("vu_khi").chinh.gia_tri) / 1000));
+  assert.equal(geared.hp, baseStats(LV).hp + Math.trunc((7140 * O("mu").chinh.gia_tri) / 1000));
+  assert.equal(geared.manaMax, 300 + Math.trunc((300 * O("mu").phu.gia_tri) / 1000));
   const b = new Battle({ seed: 1, teamA: [geared], teamB: [{ ...spec, id: 101 }] });
   const u = b.units.find((x) => x.id === 1)!;
   assert.equal(u.slots[0].bonus, 36); // ngọc Kim cấp 5 trùng linh căn Kim
-  assert.equal(u.b.critDamage, 120 + 20); // buff Kim (luyện đúng hệ) + sát thương chí mạng của vũ khí
+  assert.equal(u.b.critDamage, 120 + O("vu_khi").phu.gia_tri); // buff Kim (luyện đúng hệ) + sát thương chí mạng của vũ khí
 });
 
 // Set đồ: ấn bộ trên dòng khảm, mốc 2/4/7 (set.json; mọi số là đề xuất)
