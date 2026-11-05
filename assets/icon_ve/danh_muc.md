@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 789 món, đã vẽ 285, cần vẽ lại 0.
+Tổng 789 món, đã vẽ 307, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -768,18 +768,18 @@ Tổng 789 món, đã vẽ 285, cần vẽ lại 0.
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
-| CP-HE-001 | Công pháp hệ Kim | cong_phap/kim.webp |  |
-| CP-HE-002 | Công pháp hệ Mộc | cong_phap/moc.webp |  |
-| CP-HE-003 | Công pháp hệ Thủy | cong_phap/thuy.webp |  |
-| CP-HE-004 | Công pháp hệ Hỏa | cong_phap/hoa.webp |  |
-| CP-HE-005 | Công pháp hệ Thổ | cong_phap/tho.webp |  |
-| CP-HE-006 | Công pháp hệ Lôi | cong_phap/loi.webp |  |
-| CP-HE-007 | Công pháp hệ Phong | cong_phap/phong.webp |  |
-| CP-HE-008 | Công pháp hệ Quang | cong_phap/quang.webp |  |
-| CP-HE-009 | Công pháp hệ Âm lãnh | cong_phap/am_lanh.webp |  |
-| CP-HE-010 | Công pháp hệ Cực dương | cong_phap/cuc_duong.webp |  |
-| CP-HE-011 | Công pháp hệ Cực âm | cong_phap/cuc_am.webp |  |
-| CP-HE-012 | Công pháp hệ Cực hàn | cong_phap/cuc_han.webp |  |
+| CP-HE-001 | Công pháp hệ Kim | cong_phap/kim.webp | ✓ |
+| CP-HE-002 | Công pháp hệ Mộc | cong_phap/moc.webp | ✓ |
+| CP-HE-003 | Công pháp hệ Thủy | cong_phap/thuy.webp | ✓ |
+| CP-HE-004 | Công pháp hệ Hỏa | cong_phap/hoa.webp | ✓ |
+| CP-HE-005 | Công pháp hệ Thổ | cong_phap/tho.webp | ✓ |
+| CP-HE-006 | Công pháp hệ Lôi | cong_phap/loi.webp | ✓ |
+| CP-HE-007 | Công pháp hệ Phong | cong_phap/phong.webp | ✓ |
+| CP-HE-008 | Công pháp hệ Quang | cong_phap/quang.webp | ✓ |
+| CP-HE-009 | Công pháp hệ Âm lãnh | cong_phap/am_lanh.webp | ✓ |
+| CP-HE-010 | Công pháp hệ Cực dương | cong_phap/cuc_duong.webp | ✓ |
+| CP-HE-011 | Công pháp hệ Cực âm | cong_phap/cuc_am.webp | ✓ |
+| CP-HE-012 | Công pháp hệ Cực hàn | cong_phap/cuc_han.webp | ✓ |
 
 ## Vũ khí theo tài năng (8)
 
@@ -798,16 +798,16 @@ Tổng 789 món, đã vẽ 285, cần vẽ lại 0.
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
-| CT-LO-001 | Cận chiến đơn | chieu/can_don.webp |  |
-| CT-LO-002 | Cận chiến quét | chieu/can_quet.webp |  |
-| CT-LO-003 | Tầm xa | chieu/tam_xa.webp |  |
-| CT-LO-004 | Diện rộng | chieu/dien_rong.webp |  |
-| CT-LO-005 | Hộ thể | chieu/ho_the.webp |  |
-| CT-LO-006 | Bùa chú | chieu/bua_chu.webp |  |
-| CT-LO-007 | Trận pháp | chieu/tran_phap.webp |  |
-| CT-LO-008 | Hồi phục | chieu/hoi_phuc.webp |  |
-| CT-LO-009 | Khống chế | chieu/khong_che.webp |  |
-| CT-LO-010 | Thân pháp | chieu/than_phap.webp |  |
+| CT-LO-001 | Cận chiến đơn | chieu/can_don.webp | ✓ |
+| CT-LO-002 | Cận chiến quét | chieu/can_quet.webp | ✓ |
+| CT-LO-003 | Tầm xa | chieu/tam_xa.webp | ✓ |
+| CT-LO-004 | Diện rộng | chieu/dien_rong.webp | ✓ |
+| CT-LO-005 | Hộ thể | chieu/ho_the.webp | ✓ |
+| CT-LO-006 | Bùa chú | chieu/bua_chu.webp | ✓ |
+| CT-LO-007 | Trận pháp | chieu/tran_phap.webp | ✓ |
+| CT-LO-008 | Hồi phục | chieu/hoi_phuc.webp | ✓ |
+| CT-LO-009 | Khống chế | chieu/khong_che.webp | ✓ |
+| CT-LO-010 | Thân pháp | chieu/than_phap.webp | ✓ |
 
 ## Nguyên liệu (16)
 
