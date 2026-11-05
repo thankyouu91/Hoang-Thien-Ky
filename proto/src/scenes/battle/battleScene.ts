@@ -10,6 +10,7 @@ import type { Look, ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 import { animInfo, assignLooks, drawCharacter, resolveLook, type Anim } from "./character.ts";
 import { assignDang, dangLift, drawDang, type DangId } from "./dangDung.ts";
+import { buildPhapLuan, phapLuanBeat, type PhapLuanUnit } from "./phapLuan.ts";
 import { ReplayControls } from "./controls.ts";
 import { FxLayer, type Point } from "../../hieu_ung/fx2d.ts";
 import { createSkillFx, type SkillFx } from "../../hieu_ung/index.ts";
@@ -68,6 +69,8 @@ export class BattleScene implements Scene {
   private looks = new Map<number, Look>();
   /** Dáng đứng theo id: theo tài năng (tu_si/<tài năng>), tông chủ ngự kiếm (dangDung.ts) */
   private dangs = new Map<number, DangId>();
+  /** Pháp luân theo id (phapLuan.ts): công pháp chủ tu, cấp (ReplayUnit.level) và các lần ra chiêu */
+  private luans = new Map<number, PhapLuanUnit>();
   /** Trục sân dọc khi màn hình đứng, ngang khi màn hình nằm */
   private vertical: boolean | null = null;
   /** Vùng nhìn và camera lúc căn sân lần cuối */
@@ -126,6 +129,7 @@ export class BattleScene implements Scene {
         this.buildMarks();
         this.looks = assignLooks(replay.units);
         this.dangs = assignDang(replay.units);
+        this.luans = buildPhapLuan(replay.units, replay.events);
         this.vertical = null;
       },
       (e: unknown) => {
@@ -420,7 +424,10 @@ export class BattleScene implements Scene {
       if (pose && look) {
         // Nhân vật ghép có hoạt ảnh: ngã xong thì mờ dần; trúng đòn nháy nhẹ. Lúc đứng thì vẽ theo dáng (dangDung.ts).
         ctx.globalAlpha = dead ? Math.max(0.35, 1 - (t - ut.death) / (1.5 * tps)) : flash ? 0.7 : 1;
-        const drawn = drawDang(ctx, this.sprites, look, dang, pose.anim, pose.frame, t / tps, x, y + h, s / 64, u.team === 1, style.color, u.id * 0.37);
+        // Pháp luân từ Trúc Cơ: nhịp tụ lực, bung, khung chạm theo các lần ra chiêu, chỉ tính từ t (không giữ trạng thái).
+        const pl = this.luans.get(u.id);
+        const luan = pl ? { spec: pl.spec, beat: phapLuanBeat(pl.casts, t, tps) } : undefined;
+        const drawn = drawDang(ctx, this.sprites, look, dang, pose.anim, pose.frame, t / tps, x, y + h, s / 64, u.team === 1, style.color, u.id * 0.37, luan);
         if (!drawn) drawCharacter(ctx, this.sprites, look, pose.anim, pose.frame, x, y + h, s / 64, u.team === 1);
       } else if (u.team === 1) {
         if (flash && !dead) ctx.globalAlpha = 0.5;

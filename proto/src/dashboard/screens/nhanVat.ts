@@ -19,6 +19,7 @@ import {
   axialToXY, bonusOf, CELLS, CENTER, cellOpen, cellOpensAt, drawOf, hexSize, LINK_NAMES, onOpenCells, pieceName, REALMS, RESONANCE, sealSet, setLines, setName, type BanDraw,
 } from "../daoCoBan.ts";
 import { dangFor, dangHeadroom, dangLift, drawDang } from "../../scenes/battle/dangDung.ts";
+import { phapLuanExtent, trackLevel, type PhapLuanSpec } from "../../scenes/battle/phapLuan.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { elementWheel } from "../elementWheel.ts";
 import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
@@ -570,14 +571,26 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     // Dáng đứng theo tài năng (tông chủ ngự kiếm); dáng bay chừa chỗ phía trên, bóng nhỏ và nhạt đi theo độ nhấc.
     const dang = dangFor(v.talent.id, v.sect.role === "tong_chu");
     const t = performance.now() / 1000;
-    const scale = Math.min(2.6, (h - 14) / (72 + dangHeadroom(dang)));
+    // Pháp luân (phapLuan.ts) theo công pháp mang vào trận đầu tiên và cấp: từ Trúc Cơ; lên cấp thì vòng lớn dần, đột phá
+    // thì diễn thiên kiếp. Người thu lại để vòng nằm gọn trong canvas (tâm vòng cao khoảng 43 px ảnh trên chân).
+    const tech = v.loadout.find((x) => !!x);
+    const spec: PhapLuanSpec | undefined = tech
+      ? { element: tech.element, sub: tech.subElements[0], type: tech.type, grade: tech.grade, level: v.level, leader: v.sect.role === "tong_chu" }
+      : undefined;
+    const luan = spec ? { spec, beat: { clock: t, ...trackLevel(this, v.level, t) } } : undefined;
+    const ext = spec ? phapLuanExtent(spec) : 0;
+    // Thu người cho vừa vòng nhưng không nhỏ hơn 78% cỡ cũ; vòng Nguyên Anh, Hóa Thần (nhất là có lông vũ tông chủ) được
+    // chạm mép canvas ở chóp lông vũ và quầng ngoài, người vẫn nằm gọn.
+    const base = Math.min(2.6, (h - 14) / (72 + dangHeadroom(dang)));
+    const fit = ext ? Math.min((w / 2 - 3) / ext, (h - 12) / (43 + ext)) : base;
+    const scale = Math.min(base, Math.max(fit, base * 0.78));
     const k = 1 - Math.min(0.45, (dangLift(dang, "dung", t) * scale) / 60);
     ctx.fillStyle = `rgba(42, 29, 20, ${0.25 * k})`;
     ctx.beginPath();
     ctx.ellipse(w / 2, h - 10, w * 0.28 * k, 5 * k, 0, 0, Math.PI * 2);
     ctx.fill();
     const tint = ELEMENT_STYLE[v.roots[0]]?.color;
-    if (!drawDang(ctx, this.sprites, look, dang, "dung", 0, t, w / 2, h - 10, scale, false, tint)) {
+    if (!drawDang(ctx, this.sprites, look, dang, "dung", 0, t, w / 2, h - 10, scale, false, tint, 0, luan)) {
       // Chưa có dải hoạt ảnh: vẽ ảnh tĩnh của thân mặc áo.
       const img = this.sprites.get(`nhan_vat/${v.look.body}/${v.look.outfit}`);
       if (img) ctx.drawImage(img, w / 2 - 32 * scale, h - 10 - 56 * scale, 64 * scale, 64 * scale);

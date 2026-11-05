@@ -8,6 +8,7 @@
 import type { Sprites } from "../../assets/sprites.ts";
 import type { Look, ReplayUnit } from "../../replay/types.ts";
 import { animInfo, drawCharacter, type Anim } from "./character.ts";
+import { drawPhapLuan, growth, type PhapLuanBeat, type PhapLuanSpec } from "./phapLuan.ts";
 
 export type DangId =
   | "thuong"
@@ -211,11 +212,14 @@ function idleStrip(sprites: Sprites, look: Look, d: DangDef): Anim {
  * Vẽ một người theo dáng: `anim` "dung" thì vẽ dáng đứng (khung chọn theo `time`, giây); hoạt ảnh khác thì vẽ khung
  * `frame` như drawCharacter, chỉ thêm độ nhấc và phi kiếm/khí dưới chân với dáng bay. Chân đặt tại (x, footY) trên mặt
  * đất (người bay tự nhấc lên), `scale` đơn vị mỗi px ảnh, `mirror` lật ngang (đội B), `tint` màu hệ cho hiệu ứng.
+ * `luan`: pháp luân sau lưng (phapLuan.ts) theo công pháp chủ tu, cấp và nhịp ra chiêu / lên cấp / đột phá; từ Trúc Cơ
+ * thì thay vòng hào quang của dáng (bắt ấn, ngự kiếm), tông chủ thêm lông vũ vàng. Không vẽ lúc ngã.
  * Trả về false nếu thân và áo này chưa có dải hoạt ảnh nào, để nơi gọi vẽ hình thay thế.
  */
 export function drawDang(
   ctx: CanvasRenderingContext2D, sprites: Sprites, look: Look, dang: DangId, anim: Anim, frame: number, time: number,
   x: number, footY: number, scale: number, mirror: boolean, tint = "#9fd8ff", phase = 0,
+  luan?: { spec: PhapLuanSpec; beat: PhapLuanBeat },
 ): boolean {
   const d = DANG[dang];
   const idle = anim === "dung";
@@ -226,7 +230,11 @@ export function drawDang(
   const lift = dangLift(dang, anim, time, phase);
   const fx = anim === "nga" ? [] : d.fx ?? [];
   // Hiệu ứng chỉ của lúc đứng (trận đồ, đồng tiền…) tắt khi ra chiêu; phi kiếm, khí nâng thì theo người bay.
-  const shown = fx.filter((k) => idle || k === "phi_kiem" || k === "khi_lo_lung");
+  // Pháp luân từ Trúc Cơ (cuối Luyện Khí có khí tụ, lúc đột phá có thiên kiếp); có pháp luân thì bỏ vòng hào quang của dáng.
+  const gr = luan ? growth(luan.spec.level) : undefined;
+  const withLuan = !!luan && !!gr && anim !== "nga" && (gr.realm >= 1 || gr.progress >= 0.8 || !!luan.beat.breakthrough);
+  const fullLuan = withLuan && gr!.realm >= 1;
+  const shown = fx.filter((k) => (idle || k === "phi_kiem" || k === "khi_lo_lung") && !(fullLuan && (k === "hao_quang" || k === "hao_quang_vang")));
   const neo = sprites.asset(`nhan_vat/${look.body}/${look.outfit}/${body}`)?.meta.neo;
   const anchor = Array.isArray(neo) ? neo[Math.max(0, Math.min(neo.length - 1, f))] : undefined;
   const weapon = idle ? d.weapon : "tay";
@@ -238,6 +246,12 @@ export function drawDang(
 
   const feet = lift + (body === d.strip ? d.footUp ?? 0 : 0);
   for (const k of shown) drawFx(ctx, k, "ground", time, lift, feet, tint, phase);
+  if (withLuan) {
+    // Tâm pháp luân sau lưng, hơi dưới đầu và lệch về phía lưng; theo neo đầu nên ngồi thiền hay cúi vẫn đúng chỗ.
+    const cx = anchor ? anchor.dau[0] - FRAME_X - 2 : 0;
+    const cy = anchor ? anchor.dau[1] - FRAME_FOOT - lift + 10 : -38 - lift;
+    drawPhapLuan(ctx, luan!.spec, luan!.beat, cx, cy, 17);
+  }
   for (const k of shown) drawFx(ctx, k, "back", time, lift, feet, tint, phase);
   if (look.weapon && weapon === "lung" && anchor) drawWeapon(ctx, sprites, look.weapon, "lung", anchor, lift);
 
