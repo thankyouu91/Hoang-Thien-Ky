@@ -18,7 +18,7 @@ import { createSkillFx, type SkillFx } from "../../hieu_ung/index.ts";
 import { drawMotif } from "../../hieu_ung/motifs.ts";
 import { VfxLib } from "../../hieu_ung/vfx.ts";
 import { tr } from "../../dashboard/i18n.ts";
-import { installChunkGuard, setReturnHash } from "../../chunkGuard.ts";
+import { installChunkGuard, isChunkError, onChunkError, setReturnHash } from "../../chunkGuard.ts";
 
 const CELL = 64; // đơn vị thế giới mỗi ô sân
 const LANE = 60; // khoảng cách ngang giữa hai người cùng hàng
@@ -29,6 +29,9 @@ const MANA = "#5aa9e6";
 const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
 const COUNTER_COLOR = "#ff8a3d"; // số sát thương của đòn khắc hệ
 const COUNTER_TIPS = 4; // mấy đòn khắc đầu trận có nhãn "Khắc ×1,5" (GDD mục 14, FTUE: thấy khắc chế hoạt động)
+const TIP_SIZE = 13; // cỡ chữ nhãn "Khắc ×1,5", đơn vị thế giới (khoảng 11 px trên màn 375 px)
+const STACK_TICKS = 8; // đòn vào cùng một người cách nhau dưới chừng này tick thì số xếp chồng thay vì đè nhau
+const STACK_MAX = 60; // chồng cao quá chừng này (đơn vị thế giới) thì quay lại hàng đầu
 const BEAST_SCALE = 1.6; // cạnh hình dị thú so với SIZE (người là 1,4): thú to hơn người một chút
 const SCORE_SIDE = 104; // px CSS mỗi bên mép trên dành cho nút của thanh trên (Quay lại), dòng tỉ số nằm giữa
 const HEAVY_HIT = 0.05; // đòn từ 5% máu tối đa trở lên mới diễn hoạt ảnh trúng đòn
@@ -90,6 +93,8 @@ export class BattleScene implements Scene {
   private marks = new Map<number, { casts: number[]; hits: number[] }>();
   /** Mấy đòn khắc hệ đầu trận, hiện kèm nhãn "Khắc ×1,5" */
   private counterTips = new Set<object>();
+  /** Độ nhấc của từng số sát thương (đơn vị thế giới) để các đòn gần nhau vào cùng một người không đè nhau */
+  private numberLift = new Map<object, number>();
   /** Ngoại hình ghép theo id (tạm theo đội và hàng khi replay chưa có) */
   private looks = new Map<number, Look>();
   /** Dáng đứng theo id: theo tài năng (tu_si/<tài năng>), tông chủ ngự kiếm (dangDung.ts) */
@@ -171,6 +176,7 @@ export class BattleScene implements Scene {
         this.layoutLanes();
         this.buildMarks();
         this.counterTips = new Set(this.index.hits.filter((h) => h.kind === "hit" && h.counter).slice(0, COUNTER_TIPS));
+        this.stackNumbers();
         this.looks = assignLooks(replay.units);
         this.dangs = assignDang(replay.units);
         this.luans = buildPhapLuan(replay.units, replay.events);
@@ -178,9 +184,31 @@ export class BattleScene implements Scene {
         this.vertical = null;
       },
       (e: unknown) => {
-        if (n === this.loads) this.error = String(e);
+        if (n !== this.loads) return;
+        // Không để màn đứng "Đang tải…": báo rõ; lỗi tải chunk sau deploy thì bộ chặn tải lại trang hoặc hiện nút Tải lại.
+        console.warn("Không tải được trận", e);
+        this.error = tr("Không tải được trận. Tải lại trang để thử lại.");
+        if (isChunkError(e)) onChunkError();
       },
     );
+  }
+
+  /**
+   * Độ nhấc của từng số sát thương: các đòn vào cùng một người trong STACK_TICKS xếp chồng lên nhau (kể cả nhãn khắc), để
+   * "18" và "243" không dính thành "18243". Tính một lần lúc nạp trận nên tua tới lui vẫn đúng chỗ.
+   */
+  private stackNumbers(): void {
+    this.numberLift.clear();
+    const recent = new Map<number, { tick: number; top: number }[]>();
+    for (const e of this.index!.hits) {
+      const list = (recent.get(e.unit) ?? []).filter((r) => r.tick > e.tick - STACK_TICKS);
+      let base = list.reduce((m, r) => Math.max(m, r.top), 0);
+      if (base > STACK_MAX) base = 0; // quá cao thì quay về hàng đầu, khỏi bay khỏi màn
+      this.numberLift.set(e, base);
+      const { size, tip } = this.numberStyle(e);
+      list.push({ tick: e.tick, top: base + size + 2 + (tip ? TIP_SIZE + 1 : 0) });
+      recent.set(e.unit, list);
+    }
   }
 
   update(dt: number): void {
@@ -645,38 +673,32 @@ export class BattleScene implements Scene {
       if (!ut) continue;
       const age = (t - e.tick) / life;
       const p = this.place(ut.pos.step(e.tick), this.lat(e.unit));
-      // Nhiều đòn cùng lúc vào một người thì lệch ngang theo người đánh để khỏi đè nhau.
-      const x = p.x + (((e.src * 37) % 25) - 12);
-      const y = p.y - SIZE / 2 - 18 - age * 34;
-      let text = String(e.amount);
-      let color = "#fbf6ec";
-      let size = 13;
-      let tip = "";
-      if (e.kind === "heal") {
-        text = "+" + e.amount;
-        color = HP;
-      } else if (e.crit) {
-        text = e.amount + "!";
-        color = "#ffd34d";
-        size = 17;
-      } else if (e.counter) {
-        // Đòn khắc hệ: số cam, to hơn; vài đòn đầu trận kèm nhãn để người mới thấy khắc chế hoạt động.
-        color = COUNTER_COLOR;
-        size = 16;
-        if (this.counterTips.has(e)) tip = tr("Khắc ×1,5");
-      }
+      // Đòn gần nhau vào cùng một người xếp chồng (stackNumbers); lệch ngang nhẹ theo người đánh cho đỡ thẳng hàng.
+      const x = p.x + (((e.src * 37) % 13) - 6);
+      const y = p.y - SIZE / 2 - 18 - age * 34 - (this.numberLift.get(e) ?? 0);
+      const { text, color, size, tip } = this.numberStyle(e);
       ctx.globalAlpha = 1 - age * age;
       ctx.font = `bold ${size}px ${FONT_TEXT}`;
       ctx.strokeText(text, x, y);
       ctx.fillStyle = color;
       ctx.fillText(text, x, y);
       if (tip) {
-        ctx.font = `bold 10px ${FONT_TEXT}`;
-        ctx.strokeText(tip, x, y - size + 2);
-        ctx.fillText(tip, x, y - size + 2);
+        ctx.font = `bold ${TIP_SIZE}px ${FONT_TEXT}`;
+        const ty = y - size / 2 - TIP_SIZE / 2 - 1;
+        ctx.strokeText(tip, x, ty);
+        ctx.fillText(tip, x, ty);
       }
     }
     ctx.globalAlpha = 1;
+  }
+
+  /** Chữ, màu, cỡ của một số sát thương hay hồi máu, và nhãn "Khắc ×1,5" nếu là một trong vài đòn khắc đầu trận. */
+  private numberStyle(e: ReplayIndex["hits"][number]): { text: string; color: string; size: number; tip: string } {
+    if (e.kind === "heal") return { text: "+" + e.amount, color: HP, size: 13, tip: "" };
+    if (e.crit) return { text: e.amount + "!", color: "#ffd34d", size: 17, tip: "" };
+    // Đòn khắc hệ: số cam, to hơn; vài đòn đầu trận kèm nhãn để người mới thấy khắc chế hoạt động.
+    if (e.counter) return { text: String(e.amount), color: COUNTER_COLOR, size: 16, tip: this.counterTips.has(e) ? tr("Khắc ×1,5") : "" };
+    return { text: String(e.amount), color: "#fbf6ec", size: 13, tip: "" };
   }
 
   /**
