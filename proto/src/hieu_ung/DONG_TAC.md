@@ -61,7 +61,9 @@ Nhịp pha 1–2 theo thời lượng gốc của loại chiêu (`castTimeline`)
 
 ## Còn mở
 
-- Khựng của người (thân người giật, nảy khi trúng, rung màn theo khựng) thuộc màn Trận (`scenes/battle`, phiên vỏ
-  proto-shell); hiệu ứng chỉ khựng phần của mình.
+- Khựng của người (thân người giật, nảy khi trúng) do phiên dáng đứng làm ở `scenes/battle/chuyenDong.ts` (2026-11-05),
+  đọc từ đây: `nhip.ts` (`ease`, `hitStop`, `squash`, `IMPACT_FRAMES`, `FPS`), `chung.ts` (`holdOf`, `NO_CONTACT`,
+  `ink`), `recipe.ts` (`recipeOf`). Đổi tên hay chữ ký mấy hàm này thì báo phiên đó trước. Rung màn theo khựng vẫn là
+  phần màn Trận (proto-shell).
 - Vật cảnh (cây, cờ, bụi, nước trên sân) thuộc lớp nền `proto/src/three/` (phiên three-nen): có thể áp cùng luật (lay
   theo cung, trễ nhịp giữa gốc và ngọn, co giãn khi bị sóng xung kích quét qua).
