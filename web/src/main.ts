@@ -71,6 +71,26 @@ function xemLon(): void {
   }
 }
 
+/** Trang Thế giới: chạm một thẻ vị diện (hoặc một tầng trong hình) thì tầng tương ứng sáng lên. */
+function tangViDien(): void {
+  const the = [...document.querySelectorAll<HTMLElement>("[data-dong-tang] [data-tang]")];
+  const tang = [...document.querySelectorAll<SVGGElement>(".tang-vi-dien [data-tang]")];
+  if (!the.length || !tang.length) return;
+  const tatCa = [...the, ...tang];
+  const dat = (k: string | null) => {
+    for (const e of tatCa) e.classList.toggle("sang", !!k && e.dataset.tang === k);
+  };
+  for (const e of tatCa) {
+    e.addEventListener("mouseenter", () => dat(e.dataset.tang ?? null));
+    e.addEventListener("mouseleave", () => dat(null));
+    e.addEventListener("click", () => dat(e.dataset.tang ?? null));
+  }
+  for (const e of the) {
+    e.addEventListener("focus", () => dat(e.dataset.tang ?? null));
+    e.addEventListener("blur", () => dat(null));
+  }
+}
+
 /** Thư viện: sáng nút nhóm đang xem trên thanh chọn nhóm. */
 function nhomDangXem(): void {
   const chon = document.querySelectorAll<HTMLAnchorElement>(".chon-nhom a[href^='#']");
@@ -99,6 +119,7 @@ function nhomDangXem(): void {
 }
 
 mucLuc();
+tangViDien();
 xemLon();
 nhomDangXem();
 thiSaiHero();

@@ -375,16 +375,16 @@ html:not(.co-js) .mo-muc { display: none; }
 @media (min-width: 640px) { .luoi-tinh-nang { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1000px) { .luoi-tinh-nang { grid-template-columns: repeat(4, 1fr); gap: 16px; } .luoi-tinh-nang li { grid-template-columns: 1fr; justify-items: start; padding: 18px; } .luoi-tinh-nang img { grid-row: auto; margin-bottom: 8px; } }
 
-/* Vòng vị diện. */
-.vong-vi-dien { margin: 0; justify-self: center; width: min(100%, 360px); }
-.vong-vi-dien svg { display: block; width: 100%; height: auto; overflow: visible; }
-.vong-vi-dien circle { fill: none; stroke: var(--c-accent-ink); stroke-width: 1; }
-.vong-vi-dien .v1 { fill: rgba(255, 250, 240, 0.8); stroke-opacity: 0.45; }
-.vong-vi-dien .v2 { fill: rgba(239, 229, 207, 0.55); stroke-opacity: 0.5; }
-.vong-vi-dien .v3 { fill: rgba(239, 229, 207, 0.85); stroke-opacity: 0.6; }
-.vong-vi-dien .v4 { fill: var(--c-accent-soft); stroke: var(--c-accent); stroke-opacity: 0.9; }
-.vong-vi-dien .nhan { fill: var(--c-ink-2); font: 600 13px/1 var(--font); text-anchor: middle; }
-.vong-vi-dien .nhan-tam { fill: var(--c-accent-ink); font-size: 12px; }
+/* Bốn vị diện chồng tầng (trang Thế giới): bốn đảo đá nổi, chạm thẻ hay tầng thì tầng ấy sáng lên. */
+.tang-vi-dien { margin: 0; justify-self: center; width: min(100%, 440px); }
+.tang-vi-dien svg { display: block; width: 100%; height: auto; overflow: visible; }
+.tang-vi-dien .nh { fill: var(--c-ink-2); font: 600 14.5px/1 var(--font); }
+.tang-vi-dien .nh.phi { fill: var(--c-accent); font: italic 600 13px/1 var(--font); }
+.tang-vi-dien .tang { cursor: pointer; transform-box: fill-box; transform-origin: center; transition: transform 0.35s, opacity 0.35s, filter 0.35s; }
+.tang-vi-dien .tang.sang { transform: translateY(-7px); filter: drop-shadow(0 8px 14px rgba(179, 38, 30, 0.22)); }
+.tang-vi-dien svg:has(.tang.sang) .tang:not(.sang) { opacity: 0.45; }
+.bang-vi-dien [data-tang] { cursor: pointer; }
+.bang-vi-dien [data-tang].sang { box-shadow: inset 0 0 0 1.5px var(--c-accent); background: linear-gradient(90deg, var(--c-accent-soft), var(--c-surface) 65%); }
 
 /* Bốn điểm. */
 .bon-diem { display: grid; gap: 14px; margin: 26px 0 8px; padding: 0; list-style: none; counter-reset: diem; }
