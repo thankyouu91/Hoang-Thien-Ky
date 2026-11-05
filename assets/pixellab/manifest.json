@@ -38608,6 +38608,825 @@
       "created": "2026-11-05",
       "pixellab_id": "f65c1e62-238b-4c68-8bb7-1ffc62824d8b",
       "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/cuc_am_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ cuc_am (vùng Cửu U Uyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night in Nine Netherworld Abyss, a land of dark chasms and black stone pillars, drifting violet mist, a thin crescent moon. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "48f97968-2b43-4792-b3f7-d0fa5c3dcd76",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/cuc_am_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ cuc_am (vùng Cửu U Uyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night in Nine Netherworld Abyss, a land of dark chasms and black stone pillars, drifting violet mist, a thin crescent moon. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a88c2c27-b8d6-4133-b75a-f9bef2cc8d88",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/cuc_am_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ cuc_am (vùng Cửu U Uyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night in Nine Netherworld Abyss, a land of dark chasms and black stone pillars, drifting violet mist, a thin crescent moon. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2cf00236-526c-429d-83b3-54b257139823",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/cuc_am_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ cuc_am (vùng Cửu U Uyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a deep indigo night in Nine Netherworld Abyss, a land of dark chasms and black stone pillars, drifting violet mist, a thin crescent moon. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "87909786-8bee-4688-bf9b-59795d2653d6",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_han_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "efc52861-70d8-4720-b084-41f98cb5dff8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_han_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fbced21b-e10d-4254-a4a4-b99c385fbf0f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_han_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "89dc0b2e-809e-40e6-8914-710a4e2d48fc",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_han_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c72e218c-aae1-4dfd-9aa4-63405b6b89d0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_han_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6a44b836-33c4-48c2-9b07-f76bb9082dba",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/cuc_han_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1003922c-294a-4359-b22a-247daf598f5c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/cuc_han_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b1bb90ab-ba32-469e-96c9-052b9da1cc6c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/cuc_han_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b6ee5620-d43f-4fe1-b1b0-d85b085fdaee",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/cuc_han_3_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 1, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "95573240-4a61-491a-ae1d-15f8e80b60fe",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/cuc_han_3_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "09384ed9-73bd-450f-98b7-82397134b4d0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/cuc_han_1_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "be840fbd-c2ed-476b-a056-1a3f1854353a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/cuc_han_3_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 1, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c2a4b154-0c00-4d70-b44d-1322db4ad27a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/cuc_han_2_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 1, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0aa33489-5a4c-4c9b-8e82-aa56f0f5ad9a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/cuc_han_2_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "9d5d1237-e940-45bc-8a0d-ddc2e0b993f8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/cuc_han_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "75cc4b7d-e843-40e3-8d87-5f370f04a6f2",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/cuc_han_3_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "01e79094-06db-4ae6-a66c-d16c7386ccaf",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/cuc_han_0_2.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "54e0a2eb-236a-45dd-987f-a6057c46d5c6",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/cuc_han_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2b01c64a-72a1-4a18-a1c0-48dca55ccd72",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/cuc_han_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "614371fc-27c4-444e-8303-c6df09bcad5b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hon_don_1_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 21
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7a8485fb-0a5e-411d-b7be-e917d10904c7",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/cuc_han_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ cuc_han (vùng Vạn Niên Băng Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at icy blue dusk with a faint aurora in Eternal Ice Plains, frozen tundra of blue ice and deep snow, frost-covered pines and glittering ice cliffs. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5facde37-8690-46b4-8e06-4f249d3c46ae",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hon_don_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f7d7de42-29c3-4d1c-b25b-be624581cefb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hon_don_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "99e661a7-ade5-4d78-b884-c28e18308fe9",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hon_don_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "8906c9e0-b4bb-4f88-9b1e-d9cd0b910d1b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hon_don_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4a9db6df-b3a0-4815-a552-00ac30f8f55d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hon_don_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3cb45207-dff2-4763-b188-0938d6761afb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hon_don_1_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 21
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "9a72cbed-79a2-440b-be6e-e49fc9e5833a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hon_don_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f2d0c68a-bf6b-4973-9584-392e65dd75fb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hon_don_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "908cbb59-ff1f-4f8a-8fe2-4cb83d00324a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hon_don_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d85f12e4-3338-4f7c-8e73-f8858ad0adef",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hon_don_3_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "23bb428d-4923-4763-8ce6-189742a2de24",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hon_don_3_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4d63bc41-a9ed-45e3-a18f-06c5f14f7c20",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hon_don_1_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 21
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "85634510-e079-4cd5-b020-c0704837626a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hon_don_1_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "282847af-b725-4071-a281-1a78bf82de4f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hon_don_2_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "aa54d127-5e66-4354-95a1-759bf12966ea",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hon_don_3_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b09c69fb-002f-4ffe-a3ab-42e2d4fca126",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hon_don_3_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b06dbfe7-4d8e-4e7c-a74e-c2e05953e454",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hon_don_2_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e1d3f636-b5d5-4970-b7fe-8cd3ad2a341f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/hon_don_0_1.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 21
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "feede09b-e913-4f17-9467-cd25d1f0b4fd",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/hon_don_0_1.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 21
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "36f8e993-405c-4bec-b7d7-dd6da8b611b0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/hon_don_0_2.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e22b517f-0f4c-4890-b2ac-a5a3c9eb63a2",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/hon_don_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ea47ae45-be64-4b65-a972-a17d0b96d9dd",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/hon_don_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4fa171bf-56c3-4b79-852a-f151d5547a46",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/hon_don_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "aef4ff53-0c9f-4d1c-a3b0-a5ff13db6560",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/deo/hon_don_0_1.png",
+      "description": "Hình nền điểm Đèo (deo), bậc 0, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a narrow mountain pass between towering cliffs, a winding stone road leading to a small fortified gatehouse with a watchtower and banners.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 21
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ac4fd557-e822-4ed8-bb62-e8207dc4a543",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/hon_don_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "58660082-a8ea-4422-a016-b3c307d4b168",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/ben_do/hon_don_0_1.png",
+      "description": "Hình nền điểm Bến đò (ben_do), bậc 0, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: a river ferry crossing, a wooden dock on a wide calm river, a small ferry boat with a hanging lantern, a ferryman's wooden hut on the bank.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 21
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b51ac794-163c-4ced-8b86-e71b4df30d8a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_thu_hoang/hon_don_0_1.png",
+      "description": "Hình nền điểm hang_thu_hoang (hang_thu_hoang), bậc 0, dáng 1, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: the lair of a beast king, a colossal cave in a shattered floating mountain, a gigantic horned skull over the entrance, huge glowing eyes in the dark, scattered bones and claw-torn rocks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 21
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f48d27b3-f870-4a25-b0a9-b5c89ca715fa",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_thu_hoang/hon_don_0_2.png",
+      "description": "Hình nền điểm hang_thu_hoang (hang_thu_hoang), bậc 0, dáng 2, hệ hon_don (vùng Linh Hải Cấm Khu), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a swirling chaotic sky of mixed colors in the Forbidden Zone of the Spirit Sea, a dangerous primordial wasteland of shattered floating rocks and cracked earth, swirling multicolored chaotic mist, strange glowing spirit lights and broken ancient ruins. No people, no text, no UI. Main subject in the center foreground: the lair of a beast king, a colossal cave in a shattered floating mountain, a gigantic horned skull over the entrance, huge glowing eyes in the dark, scattered bones and claw-torn rocks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6318ba08-ee7e-41df-90e3-449b0229c5db",
+      "api": "REST v2 generate-image-v2"
     }
   ]
 }
