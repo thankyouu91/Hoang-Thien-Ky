@@ -62,7 +62,10 @@ export function bindLangSwitch(root: HTMLElement): void {
 // ---- Dịch trang -------------------------------------------------------------------------------------------------
 
 const ATTRS = ["aria-label", "title", "placeholder", "alt", "data-done"];
-const SKIP = new Set(["SCRIPT", "STYLE", "TEXTAREA", "CODE", "PRE"]);
+/** Không dịch gì bên trong. */
+const SKIP = new Set(["SCRIPT", "STYLE"]);
+/** Dịch thuộc tính (placeholder…) nhưng không đụng chữ bên trong (người chơi đang gõ, mã). */
+const NO_TEXT = new Set(["TEXTAREA", "CODE", "PRE"]);
 
 /** Dịch cây DOM tại chỗ; phần tử có `data-no-tr` (chữ người chơi nhập…) và con của nó bỏ qua. */
 export function translateTree(n: Node): void {
@@ -86,6 +89,7 @@ export function translateTree(n: Node): void {
       if (t !== v) el.setAttribute(a, t);
     }
   }
+  if (NO_TEXT.has(el.tagName)) return;
   for (let c = el.firstChild; c; c = c.nextSibling) translateTree(c);
 }
 

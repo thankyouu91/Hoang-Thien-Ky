@@ -724,6 +724,41 @@ button.nv-row:hover { background: var(--c-sunken); }
 .nv-group .bar { margin: 2px 0 6px 4px; height: 5px; border-radius: 0; }
 .nv-group .bar > i { border-radius: 0; background: var(--c-accent-ink); }
 .nv-logout { margin: 8px 0 2px 4px; }
+.nv-acc-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 2px 4px; }
+.nv-acc-btns .nv-logout { margin: 0; }
+
+/* ---- Nối máy chủ (mayChuUi.ts): dải thông báo, bảng Góp ý, màn bảo trì ---- */
+/* Không nối được máy chủ (chạy dev, offline): ẩn chỗ cần máy chủ */
+body[data-may-chu="khong_co"] .can-may-chu { display: none; }
+.dp-tb:empty { display: none; }
+.dp-tb { margin: 0 0 var(--sp-4); }
+.tb-dai { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid var(--c-line-2); border-radius: var(--r-sm); background: var(--c-surface); text-align: left; }
+.tb-dai.quan-trong { border-color: var(--c-accent); box-shadow: inset 3px 0 0 var(--c-accent); }
+.tb-dai b { flex: 1; min-width: 0; overflow: hidden; color: var(--c-ink); font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.tb-dai .go { color: var(--c-ink-3); }
+.tb-nhan { flex: none; padding: 1px 6px; border: 1px solid var(--c-line-2); border-radius: 3px; color: var(--c-ink-2); font-size: 12px; font-weight: 700; }
+.quan-trong .tb-nhan { border-color: var(--c-accent); background: var(--c-accent); color: var(--c-on-accent); }
+.tb-them { flex: none; color: var(--c-ink-3); font-size: 12px; }
+#sheet .tb-list { display: grid; gap: var(--sp-3); }
+#sheet .tb-list li { padding: var(--sp-3); border: 1px solid var(--c-line); border-radius: var(--r-sm); background: var(--c-surface); }
+#sheet .tb-list li.quan-trong { border-color: var(--c-accent); }
+#sheet .tb-list li.da-an { opacity: 0.65; }
+#sheet .tb-dau { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; }
+#sheet .tb-list h3 { margin: 8px 0 4px; font-size: var(--fs-md); }
+#sheet .tb-list p { margin: 0 0 var(--sp-3); color: var(--c-ink-2); white-space: pre-line; }
+#sheet .gop-y { display: grid; gap: var(--sp-3); }
+#sheet .gop-y .seg { display: flex; }
+#sheet .gop-y .seg button[aria-checked="true"] { background: var(--c-accent); color: var(--c-on-accent); }
+#sheet .gop-y textarea { width: 100%; min-height: 140px; padding: 10px; border: 1px solid var(--c-line-2); border-radius: var(--r-sm); background: var(--c-surface); color: var(--c-ink); font: inherit; resize: vertical; }
+#sheet .gop-y textarea:focus-visible { outline: none; box-shadow: var(--focus); }
+#sheet .gop-y .gop-y-loi { margin: 0; }
+#sheet .gop-y .actions { display: flex; justify-content: space-between; align-items: center; }
+#bao-tri { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px; background: rgba(246, 239, 223, 0.97); }
+#bao-tri .box { display: grid; justify-items: center; gap: 10px; max-width: 420px; padding: 28px 24px; border-radius: 2px; background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-frame, #a83a2c), 0 0 0 3px var(--c-surface), 0 0 0 4px rgba(138, 31, 22, 0.25), 0 10px 30px rgba(74, 52, 30, 0.2); text-align: center; }
+#bao-tri h2 { margin: 0; color: var(--c-accent-ink); font: 700 26px/1.2 var(--font-display); }
+#bao-tri p { margin: 0 0 6px; color: var(--c-ink-2); }
+#bao-tri button { min-height: 44px; padding: 0 22px; font: inherit; cursor: pointer; }
+.bao-tri-an { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 6px; background: var(--c-accent); color: var(--c-on-accent); font: 600 30px/1 "Noto Serif SC", "Songti SC", "SimSun", serif; transform: rotate(-3deg); }
 .page .nv-main { width: 100%; min-height: 46px; margin-top: var(--sp-2); font-family: var(--font-serif); font-size: 16px; letter-spacing: 0.04em; }
 
 /* Cột giữa: Pháp tướng */

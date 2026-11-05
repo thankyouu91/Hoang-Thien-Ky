@@ -2,6 +2,7 @@
 import { mountBakedScene, type SceneHandle } from "../../three/index.ts";
 import { loadLocationArt, pointArt } from "../art/sectScene.ts";
 import { icon, type IconName } from "../icons.ts";
+import { ganDaiThongBao } from "../mayChuUi.ts";
 import { MiniMap } from "../minimap.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { DongPhuView, Go } from "../source.ts";
@@ -142,10 +143,12 @@ export class DongPhuScene extends PageScene<DongPhuView> {
         </button>
       </div>`;
     // Điện thoại: một cột theo order trong CSS. Máy tính: cột trái việc cần làm và tin, cột phải lịch và quanh mình.
-    this.page.innerHTML = `<div class="panel"><div class="cols">
+    // Dải thông báo của người quản trị (mayChuUi.ts) đứng trên cùng; không có tin thì trống.
+    this.page.innerHTML = `<div class="panel"><div class="dp-tb"></div><div class="cols">
         <div class="col">${todo}${running}${news}</div>
         <div class="col">${calendar}${around}</div>
       </div></div>`;
+    ganDaiThongBao(this.page.querySelector<HTMLElement>(".dp-tb")!);
     this.page.querySelector(".mini-slot")!.append(this.mini.el);
     this.page.prepend(this.backdropEl);
   }

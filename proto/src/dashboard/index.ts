@@ -15,6 +15,7 @@ import { showLogin } from "./login.ts";
 import { attachTerms } from "./terms.ts";
 import { startRestReminder } from "./reminder.ts";
 import { startTelemetry } from "./server.ts";
+import { startMayChuUi } from "./mayChuUi.ts";
 import { AGE_LABEL, MockDashboardSource } from "./mock/source.ts";
 import { CongPhapScene } from "./screens/congPhap.ts";
 import { DongPhuScene } from "./screens/dongPhu.ts";
@@ -103,6 +104,8 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
   startRestReminder(auth);
   // Sự kiện ẩn danh lên thienhoangky.fun/api (docs/api.md); chạy dev không có API thì tự tắt.
   startTelemetry(auth);
+  // Màn bảo trì theo cấu hình sống, ẩn nút Góp ý khi không nối được máy chủ (mayChuUi.ts).
+  startMayChuUi();
   const ctx: DashCtx = {
     source: lazySource(() => MockDashboardSource.create(Date.now(), auth)),
     auth,
