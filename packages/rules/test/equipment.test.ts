@@ -31,6 +31,11 @@ const setBonuses = (items: EquipItem[], level = LV): Record<string, number> => {
   return out;
 };
 const LV = 100; // chỉ số chuẩn cấp 100: máu 7.140, công lực 500, phòng thủ 500
+/** Số ở mốc `so` của bộ `bo` trong set.json. */
+const MOC = (bo: string, so: number) => (SET.bo.find((b) => b.id === bo)!.moc.find((m) => m.so === so)!.tham_so as Record<string, number>);
+/** Công lực cộng thẳng của set: phần nghìn `giaTri` (đã nhân hệ số `heSo`) của công lực chuẩn `chuan`. */
+const atkSet = (giaTri: number, heSo = 1000, chuan = 500) => Math.trunc((chuan * Math.trunc((giaTri * heSo) / 1000)) / 1000);
+
 
 test("kiểu trang bị cho ô và độ hiếm", () => {
   assert.deepEqual([kieuInfo("TB-KI-001").o, kieuInfo("TB-KI-001").doHiem], ["vu_khi", "luc"]);
@@ -143,11 +148,12 @@ test("dữ liệu set: mỗi bộ một ấn khớp ngoc.json, mọi khóa chỉ
   }
 });
 
-test("Vạn Kiếm 2 món: công lực +2% chỉ số chuẩn theo cấp, không tăng theo đồ; 1 món hoặc món hết độ bền thì không mở", () => {
-  assert.deepEqual(setBonuses(sealed("NG-AN-017", "NG-AN-017")), { atk: 10 }); // 2% của 500
-  assert.deepEqual(setBonuses(sealed("NG-AN-017", "NG-AN-017"), 1), { atk: 2 }); // 2% của 104
+test("Vạn Kiếm 2 món: công lực theo chỉ số chuẩn cùng cấp, không tăng theo đồ; 1 món hoặc món hết độ bền thì không mở", () => {
+  const vk = MOC("van_kiem", 2).atk;
+  assert.deepEqual(setBonuses(sealed("NG-AN-017", "NG-AN-017")), { atk: atkSet(vk) });
+  assert.deepEqual(setBonuses(sealed("NG-AN-017", "NG-AN-017"), 1), { atk: atkSet(vk, 1000, baseStats(1).atk) });
   const red = ["TB-KI-058", "TB-MU-058"].map((k) => item(k, { nac: 30, biCanh: 80, dongThem: 2, kham: [seal("NG-AN-017")] }));
-  assert.deepEqual(setBonuses(red), { atk: 10 });
+  assert.deepEqual(setBonuses(red), { atk: atkSet(vk) });
   assert.deepEqual(gearStats(sealed("NG-AN-017"), LV, []).sets, []);
   const broken = sealed("NG-AN-017", "NG-AN-017");
   broken[1].doBen = 0;
@@ -185,7 +191,12 @@ test("ba bộ cùng mở 2+2+3; mỗi món tối đa 1 ấn, ấn phải có tro
   const items = sealed("NG-AN-017", "NG-AN-017", "NG-AN-005", "NG-AN-005", "NG-AN-008", "NG-AN-008", "NG-AN-008");
   assert.deepEqual(gearStats(items, LV, []).sets.map((s) => [s.bo, s.moc]), [["linh_tuyen", 2], ["thiet_ky", 2], ["van_kiem", 2]]);
   // Hợp bộ: Vạn Kiếm (Kim) và Linh Tuyền (Thủy) tương sinh ×1,2; Thiết Kỵ (Phong) cũng ×1,2 nhưng bị Kim khắc ×0,8.
-  assert.deepEqual(setBonuses(items), { atk: 12, healPower: 48, damageTakenCut: 19 });
+  const tk = Math.trunc((1200 * 800) / 1000); // Thiết Kỵ: hợp bộ ×1,2 rồi bị khắc ×0,8
+  assert.deepEqual(setBonuses(items), {
+    atk: atkSet(MOC("van_kiem", 2).atk, 1200),
+    healPower: Math.trunc((MOC("linh_tuyen", 2).healPower * 1200) / 1000),
+    damageTakenCut: Math.trunc((MOC("thiet_ky", 2).damageTakenCut * tk) / 1000),
+  });
   const twoSeals = item("TB-KI-058", { kham: [seal("NG-AN-017"), seal("NG-AN-005")] });
   assert.throws(() => gearStats([twoSeals], LV, []));
   assert.throws(() => gearStats([item("TB-KI-001", { kham: [seal("NG-AN-999")] })], LV, []));

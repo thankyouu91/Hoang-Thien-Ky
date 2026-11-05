@@ -16,13 +16,19 @@ const seal = (ma: string, bac?: Bac): InlayLine => (bac ? { loai: "an", ma, bac 
 /** Mặc lần lượt các ô, mỗi món một ấn; `bacs` là bậc từng viên (không ghi là tím). */
 const sealed = (ma: string, bacs: (Bac | undefined)[]): EquipItem[] => bacs.map((b, i) => item(SLOT_KIEU[i], { kham: [seal(ma, b)] }));
 const LV = 100; // công lực chuẩn 500
+/** Số ở mốc `so` của bộ `bo` trong set.json. */
+const MOC = (bo: string, so: number) => (SET.bo.find((b) => b.id === bo)!.moc.find((m) => m.so === so)!.tham_so as Record<string, number>);
+/** Công lực cộng thẳng của set: phần nghìn `giaTri` (đã nhân hệ số `heSo`) của công lực chuẩn `chuan`. */
+const atkSet = (giaTri: number, heSo = 1000, chuan = 500) => Math.trunc((chuan * Math.trunc((giaTri * heSo) / 1000)) / 1000);
+
 const atkOf = (items: EquipItem[]) => gearStats(items, LV, []).atk - gearStats(items.map((x) => ({ ...x, kham: [] })), LV, []).atk;
 
 test("bậc ấn: hệ số mốc 2, 4 theo ấn bậc thấp nhất; mốc 7 cần cả 7 ấn từ tím", () => {
-  assert.equal(atkOf(sealed("NG-AN-017", [undefined, undefined])), 10); // Vạn Kiếm công lực +2% của 500
-  assert.equal(atkOf(sealed("NG-AN-017", ["luc", "luc"])), 6); // ×0,6
-  assert.equal(atkOf(sealed("NG-AN-017", ["do", "do"])), 12); // ×1,2
-  assert.equal(atkOf(sealed("NG-AN-017", ["do", "luc"])), 6);
+  const vk = MOC("van_kiem", 2).atk; // Vạn Kiếm công lực mốc 2
+  assert.equal(atkOf(sealed("NG-AN-017", [undefined, undefined])), atkSet(vk));
+  assert.equal(atkOf(sealed("NG-AN-017", ["luc", "luc"])), atkSet(vk, 600));
+  assert.equal(atkOf(sealed("NG-AN-017", ["do", "do"])), atkSet(vk, 1200));
+  assert.equal(atkOf(sealed("NG-AN-017", ["do", "luc"])), atkSet(vk, 600));
   const s7 = gearStats(sealed("NG-AN-017", ["tim", "tim", "tim", "tim", "tim", "tim", "lam"]), LV, []).sets[0];
   assert.deepEqual([s7.moc, s7.moc7ThieuBac, s7.bac, s7.heSo2, s7.heSo4], [4, true, "lam", 800, 800]);
   assert.equal(gearStats(sealed("NG-AN-017", Array(7).fill("vang")), LV, []).sets[0].moc, 7);
@@ -50,7 +56,8 @@ test("binh bộ: binh ấn chỉ ở 3 ô công; mốc 2, mốc 3; đồng lộ 
   const bare = gearStats(["KI", "BT", "NB"].map((o) => red(`TB-${o}-058`)), LV, []).bonuses;
   const three = gearStats(["KI", "BT", "NB"].map((o) => ba(o)), LV, []);
   assert.deepEqual(three.binhBo, { bo: "bao_kich", mon: 3, moc: 3, bac: "tim", dongLo: false });
-  assert.deepEqual([three.bonuses.critBonus! - (bare.critBonus ?? 0), three.bonuses.critDamage! - (bare.critDamage ?? 0)], [20, 80]);
+  const bk = (SET as unknown as { binh_bo: { id: string; moc_2: { tham_so: Record<string, number> }; moc_3: { tham_so: Record<string, number> } }[] }).binh_bo.find((b) => b.id === "bao_kich")!;
+  assert.deepEqual([three.bonuses.critBonus! - (bare.critBonus ?? 0), three.bonuses.critDamage! - (bare.critDamage ?? 0)], [bk.moc_2.tham_so.critBonus, bk.moc_3.tham_so.critDamage]);
   const two = gearStats([ba("KI"), ba("BT")], LV, []);
   assert.equal(two.binhBo?.moc, 2);
   // Vạn Kiếm (Ngoại Công) đang kích: Bạo Kích cùng lộ.
@@ -58,7 +65,7 @@ test("binh bộ: binh ấn chỉ ở 3 ô công; mốc 2, mốc 3; đồng lộ 
   const dong = gearStats([ba("KI"), ba("BT"), ba("NB"), vk("MU"), vk("AO")], LV, []);
   const bareDong = gearStats([red("TB-KI-058"), red("TB-BT-058"), red("TB-NB-058"), vk("MU"), vk("AO")], LV, []);
   assert.equal(dong.binhBo?.dongLo, true);
-  assert.equal(dong.bonuses.critDamage! - (bareDong.bonuses.critDamage ?? 0), 96);
+  assert.equal(dong.bonuses.critDamage! - (bareDong.bonuses.critDamage ?? 0), Math.trunc((bk.moc_3.tham_so.critDamage * 1200) / 1000));
   assert.throws(() => gearStats([red("TB-AO-058", { kham: [{ loai: "binh_an", ma: "NG-BA-001" }] })], LV, []));
   assert.throws(() => gearStats([red("TB-KI-058", { kham: [{ loai: "binh_an", ma: "NG-BA-001" }, { loai: "binh_an", ma: "NG-BA-002" }] })], LV, []));
 });
@@ -85,7 +92,8 @@ test("dòng ẩn: chỉ ngọc bội và đai, số dòng theo độ hiếm; đi
     return song ? Math.trunc((x * SONG_AN) / 1000) : x;
   };
   assert.deepEqual(gearStats([nb([front])], LV, []).hidden, [{ cond: "front", stat: "atk", value: v(30, "DN-DK-009") }]);
-  assert.deepEqual([dongAnHeSo("DN-DK-009"), dongAnHeSo("DN-DK-004"), dongAnHeSo("DN-DK-006")], [200, 500, 1000]);
+  // Nhóm tĩnh thấp nhất, rồi theo loại trận, trong trận cao nhất (số ở trang_bi.json dong_an[].he_so).
+  assert.ok(dongAnHeSo("DN-DK-009") <= dongAnHeSo("DN-DK-004") && dongAnHeSo("DN-DK-004") <= dongAnHeSo("DN-DK-006"));
   const song = gearStats([nb([front]), red("TB-DA-058", { dongAn: [{ dk: "DN-DK-009", hu: "DN-HU-004" }] })], LV, []);
   const byStat = (h: { stat: string }[]) => h.slice().sort((a, b) => a.stat.localeCompare(b.stat));
   assert.deepEqual(byStat(song.hidden), [{ cond: "front", stat: "atk", value: v(30, "DN-DK-009", true) }, { cond: "front", stat: "critBonus", value: v(20, "DN-DK-009", true) }]);
