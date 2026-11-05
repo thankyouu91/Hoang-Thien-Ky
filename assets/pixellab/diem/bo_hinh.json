@@ -1,0 +1,254 @@
+{
+ "quy_tac": [
+  "khoá = đường dẫn trong assets/pixellab bỏ .png; ảnh 64×64 nền trong, neo giữa cạnh dưới",
+  "hệ = region.element của file điểm (Cấm Khu là hon_don); chưa có bộ riêng thì dùng hệ \"*\"",
+  "bậc: mỏ (mo_linh_thach, mo_quang, mo_duoc) cấp 1–2 → \"1\", 3–4 → \"2\", 5 → \"3\", chưa ai chiếm → \"1\"; cua_bi_canh theo tier (thap, vua, cao); loại khác \"0\"",
+  "thiếu bậc thì lùi về bậc \"1\" (mỏ) rồi hệ \"*\"",
+  "dáng = ds[bam(id) % ds.length], bam(id) = Math.imul(id + 1, 2654435761) >>> 0: cùng điểm luôn cùng hình, lên cấp chỉ đổi bậc",
+  "son_mon không nằm ở đây: điểm có tông môn dùng tong_mon/<mô hình>"
+ ],
+ "loai": {
+  "thanh_chu": {
+   "*": {
+    "0": [
+     "diem/thanh_chu"
+    ]
+   }
+  },
+  "mo_linh_thach": {
+   "*": {
+    "1": [
+     "diem/mo_linh_thach",
+     "diem/mo_linh_thach_2",
+     "diem/mo_linh_thach_3"
+    ]
+   },
+   "kim": {
+    "1": [
+     "diem/mo_linh_thach/kim_1_1",
+     "diem/mo_linh_thach/kim_1_2",
+     "diem/mo_linh_thach/kim_1_3"
+    ],
+    "2": [
+     "diem/mo_linh_thach/kim_2_1",
+     "diem/mo_linh_thach/kim_2_2"
+    ],
+    "3": [
+     "diem/mo_linh_thach/kim_3_1",
+     "diem/mo_linh_thach/kim_3_2"
+    ]
+   },
+   "moc": {
+    "1": [
+     "diem/mo_linh_thach/moc_1_1",
+     "diem/mo_linh_thach/moc_1_2",
+     "diem/mo_linh_thach/moc_1_3"
+    ],
+    "2": [
+     "diem/mo_linh_thach/moc_2_1",
+     "diem/mo_linh_thach/moc_2_2"
+    ],
+    "3": [
+     "diem/mo_linh_thach/moc_3_1",
+     "diem/mo_linh_thach/moc_3_2"
+    ]
+   }
+  },
+  "mo_quang": {
+   "*": {
+    "1": [
+     "diem/mo_quang",
+     "diem/mo_quang_2",
+     "diem/mo_quang_3"
+    ]
+   },
+   "kim": {
+    "1": [
+     "diem/mo_quang/kim_1_1",
+     "diem/mo_quang/kim_1_2",
+     "diem/mo_quang/kim_1_3"
+    ],
+    "2": [
+     "diem/mo_quang/kim_2_1",
+     "diem/mo_quang/kim_2_2"
+    ],
+    "3": [
+     "diem/mo_quang/kim_3_1",
+     "diem/mo_quang/kim_3_2"
+    ]
+   },
+   "moc": {
+    "1": [
+     "diem/mo_quang/moc_1_1",
+     "diem/mo_quang/moc_1_2",
+     "diem/mo_quang/moc_1_3"
+    ],
+    "2": [
+     "diem/mo_quang/moc_2_1",
+     "diem/mo_quang/moc_2_2"
+    ],
+    "3": [
+     "diem/mo_quang/moc_3_1",
+     "diem/mo_quang/moc_3_2"
+    ]
+   }
+  },
+  "mo_duoc": {
+   "*": {
+    "1": [
+     "diem/mo_duoc",
+     "diem/mo_duoc_2",
+     "diem/mo_duoc_3"
+    ]
+   },
+   "kim": {
+    "1": [
+     "diem/mo_duoc/kim_1_1",
+     "diem/mo_duoc/kim_1_2",
+     "diem/mo_duoc/kim_1_3"
+    ],
+    "2": [
+     "diem/mo_duoc/kim_2_1",
+     "diem/mo_duoc/kim_2_2"
+    ],
+    "3": [
+     "diem/mo_duoc/kim_3_1",
+     "diem/mo_duoc/kim_3_2"
+    ]
+   },
+   "moc": {
+    "1": [
+     "diem/mo_duoc/moc_1_1",
+     "diem/mo_duoc/moc_1_2",
+     "diem/mo_duoc/moc_1_3"
+    ],
+    "2": [
+     "diem/mo_duoc/moc_2_1",
+     "diem/mo_duoc/moc_2_2"
+    ],
+    "3": [
+     "diem/mo_duoc/moc_3_1",
+     "diem/mo_duoc/moc_3_2"
+    ]
+   }
+  },
+  "linh_tuyen": {
+   "*": {
+    "0": [
+     "diem/linh_tuyen"
+    ]
+   },
+   "kim": {
+    "0": [
+     "diem/linh_tuyen/kim_0_1",
+     "diem/linh_tuyen/kim_0_2",
+     "diem/linh_tuyen/kim_0_3"
+    ]
+   },
+   "moc": {
+    "0": [
+     "diem/linh_tuyen/moc_0_1",
+     "diem/linh_tuyen/moc_0_2",
+     "diem/linh_tuyen/moc_0_3"
+    ]
+   }
+  },
+  "hang_di_thu": {
+   "*": {
+    "0": [
+     "diem/hang_di_thu",
+     "diem/hang_di_thu_2",
+     "diem/hang_di_thu_3"
+    ]
+   },
+   "kim": {
+    "0": [
+     "diem/hang_di_thu/kim_0_1",
+     "diem/hang_di_thu/kim_0_2"
+    ]
+   },
+   "moc": {
+    "0": [
+     "diem/hang_di_thu/moc_0_1",
+     "diem/hang_di_thu/moc_0_2"
+    ]
+   }
+  },
+  "deo": {
+   "*": {
+    "0": [
+     "diem/deo"
+    ]
+   },
+   "kim": {
+    "0": [
+     "diem/deo/kim_0_1"
+    ]
+   },
+   "moc": {
+    "0": [
+     "diem/deo/moc_0_1"
+    ]
+   }
+  },
+  "ben_do": {
+   "*": {
+    "0": [
+     "diem/ben_do"
+    ]
+   },
+   "kim": {
+    "0": [
+     "diem/ben_do/kim_0_1"
+    ]
+   },
+   "moc": {
+    "0": [
+     "diem/ben_do/moc_0_1"
+    ]
+   }
+  },
+  "cua_bi_canh": {
+   "*": {
+    "thap": [
+     "diem/cua_bi_canh_thap"
+    ],
+    "vua": [
+     "diem/cua_bi_canh_vua"
+    ],
+    "cao": [
+     "diem/cua_bi_canh_cao"
+    ]
+   },
+   "kim": {
+    "thap": [
+     "diem/cua_bi_canh/kim_thap_1"
+    ],
+    "vua": [
+     "diem/cua_bi_canh/kim_vua_1"
+    ],
+    "cao": [
+     "diem/cua_bi_canh/kim_cao_1"
+    ]
+   },
+   "moc": {
+    "thap": [
+     "diem/cua_bi_canh/moc_thap_1"
+    ],
+    "vua": [
+     "diem/cua_bi_canh/moc_vua_1"
+    ],
+    "cao": [
+     "diem/cua_bi_canh/moc_cao_1"
+    ]
+   }
+  },
+  "hang_thu_hoang": {
+   "hon_don": {
+    "0": [
+     "diem/hang_thu_hoang"
+    ]
+   }
+  }
+ }
+}

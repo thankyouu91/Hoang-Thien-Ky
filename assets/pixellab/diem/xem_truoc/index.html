@@ -45,26 +45,47 @@ function choGiu(ten) {
   return c;
 }
 
-const [duLieu, nen, manifest] = await Promise.all([fetch(DIEM).then((r) => r.json()), taiAnh(NEN), fetch(MANIFEST).then((r) => r.json())]);
+const [duLieu, nen, manifest, boHinh] = await Promise.all([
+  fetch(DIEM).then((r) => r.json()), taiAnh(NEN), fetch(MANIFEST).then((r) => r.json()),
+  fetch("/assets/pixellab/diem/bo_hinh.json").then((r) => (r.ok ? r.json() : null)).catch(() => null),
+]);
+const HE = duLieu.region?.element ?? "*";
 // Khoá hình = đường dẫn trong assets/pixellab bỏ đuôi; tên hiển thị là phần mô tả trước dấu " (".
-const muc = manifest.assets.filter((a) => /^(diem|tong_mon)\//.test(a.file)).map((a) => ({ khoa: a.file.replace(/\.png$/, ""), ten: a.description.split(" (")[0].replace(/^Đảo nổi cho điểm /, "") }));
+// Bộ theo hệ chỉ tải hình của hệ vùng đang xem (diem/<loại>/<hệ>_…).
+const cuaVung = (k) => k.split("/").length < 3 || k.split("/")[2].startsWith(`${HE}_`);
+const muc = manifest.assets.filter((a) => /^(diem|tong_mon)\//.test(a.file)).map((a) => ({ khoa: a.file.replace(/\.png$/, ""), ten: a.description.split(" (")[0].replace(/^Đảo nổi cho điểm /, "") })).filter((m) => !m.khoa.startsWith("diem/") || cuaVung(m.khoa));
 const anh = await Promise.all(muc.map((m) => taiAnh(`/assets/pixellab/${m.khoa}.png`)));
 const hinh = Object.fromEntries(muc.map((m, i) => [m.khoa, anh[i] ?? choGiu(m.khoa.split("/")[1])]));
 const tenCua = Object.fromEntries(muc.map((m) => [m.khoa, m.ten]));
 const khoaDiem = muc.map((m) => m.khoa).filter((k) => k.startsWith("diem/"));
 const khoaTongMon = muc.map((m) => m.khoa).filter((k) => k.startsWith("tong_mon/"));
 
-// Biến thể của một loại: diem/<loại> và diem/<loại>_<số>.
+// Biến thể chung cũ của một loại: diem/<loại> và diem/<loại>_<số>.
 const bienThe = Object.fromEntries(LOAI.map((l) => [l, khoaDiem.filter((k) => k === `diem/${l}` || new RegExp(`^diem/${l}_\\d+$`).test(k))]));
 const bam = (id) => (Math.imul(id + 1, 2654435761) >>> 0);
 // Bậc bí cảnh lấy từ trường tier (thap/vua/cao); file cũ chưa có thì tạm chia theo danger.
 const bacBiCanh = (p) => p.tier ?? (p.danger < 60 ? "thap" : p.danger < 120 ? "vua" : "cao");
+// Trang thử không có chủ mỏ: giả cấp 1–5 theo id để thấy đủ bậc; ?cap=<số> cho mọi mỏ cùng cấp.
+const capMo = (p) => (params.get("cap") ? Number(params.get("cap")) : 1 + (bam(p.id * 13) % 5));
+const bacCua = (p) => (/^mo_/.test(p.type) ? (capMo(p) >= 5 ? "3" : capMo(p) >= 3 ? "2" : "1") : p.type === "cua_bi_canh" ? bacBiCanh(p) : "0");
+// Quy tắc trong diem/bo_hinh.json: hệ vùng rồi hệ "*", thiếu bậc thì lùi về bậc "1" (mỏ), dáng chọn theo id.
+function khoaTuBo(p) {
+  const theoHe = boHinh?.loai?.[p.type];
+  for (const he of [HE, "*"]) {
+    const h = theoHe?.[he];
+    const ds = h?.[bacCua(p)] ?? (/^mo_/.test(p.type) ? h?.["1"] : null);
+    if (ds?.length) return ds[bam(p.id) % ds.length];
+  }
+  return null;
+}
 function khoaCho(p) {
-  if (p.type === "cua_bi_canh" && hinh[`diem/cua_bi_canh_${bacBiCanh(p)}`]) return `diem/cua_bi_canh_${bacBiCanh(p)}`;
   // Vị trí sơn môn: 1/3 để trống, còn lại vẽ như đã có tông môn chiếm, chọn đảo tông môn theo id.
   if (p.type === "son_mon" && khoaTongMon.length && bam(p.id) % 3) return khoaTongMon[bam(p.id * 7) % khoaTongMon.length];
+  const k = khoaTuBo(p);
+  if (k && hinh[k]) return k;
+  if (p.type === "cua_bi_canh" && hinh[`diem/cua_bi_canh_${bacBiCanh(p)}`]) return `diem/cua_bi_canh_${bacBiCanh(p)}`;
   const ds = bienThe[p.type];
-  return ds.length ? ds[bam(p.id) % ds.length] : null;
+  return ds?.length ? ds[bam(p.id) % ds.length] : null;
 }
 
 const [fx0, fy0, fx1] = duLieu.map.frame;
