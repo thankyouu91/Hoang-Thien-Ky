@@ -1,10 +1,14 @@
 // Cấp độ người chơi trên thanh trên (người dùng yêu cầu 2026-11-04 "thêm hiệu ứng level và cấp độ người chơi"): vòng tu
-// vi quanh chân dung theo kinh nghiệm, số cấp chữ tiêu đề. Khi cấp tăng giữa hai lần đọc: lên cấp thì ấn son "升", bụi
+// vi quanh chân dung theo kinh nghiệm, số cấp chữ tiêu đề. Khi cấp tăng giữa hai lần đọc: lên cấp thì dấu ấn đóng xuống, bụi
 // vàng bung từ chân dung và băng giấy "Thăng cấp"; sang cảnh giới mới thì màn đột phá (tia sáng, chớp thiên kiếp, tên
-// cảnh giới lớn, ấn "破"). Chỉ dùng DOM và Web Animations, không cần WebGL; người chọn giảm chuyển động thì chỉ hiện băng.
+// cảnh giới lớn, dấu ấn). Dấu ấn là hình assets/brand/dau_an (không chữ Hán, người dùng chê ô đỏ có chữ). Chỉ dùng DOM và
+// Web Animations, không cần WebGL; người chọn giảm chuyển động thì chỉ hiện băng.
 import "./capDo.css";
 import type { TopBarView } from "./source.ts";
 import { esc } from "./ui.ts";
+
+/** Dấu ấn đóng xuống ở băng lên cấp và màn đột phá. */
+const SEAL = `<img class="cap-seal" src="${import.meta.env.BASE_URL}brand/dau_an_128.png" alt="" aria-hidden="true">`;
 
 const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -74,7 +78,7 @@ function levelBanner(level: number): void {
   const b = document.createElement("div");
   b.className = "cap-banner";
   b.setAttribute("role", "status");
-  b.innerHTML = `<span class="t"><small>Thăng cấp</small><b>Cấp <em>${level}</em></b></span><span class="cap-seal" aria-hidden="true">升</span>`;
+  b.innerHTML = `<span class="t"><small>Thăng cấp</small><b>Cấp <em>${level}</em></b></span>${SEAL}`;
   layer().append(b);
   const still = reduced();
   b.animate(
@@ -90,7 +94,7 @@ function levelBanner(level: number): void {
 }
 
 /**
- * Màn đột phá cảnh giới: cả màn, chớp thiên kiếp hai lần, tên cảnh giới mới, ấn "破"; chạm để đóng, tự đóng sau 5 giây.
+ * Màn đột phá cảnh giới: cả màn, chớp thiên kiếp hai lần, tên cảnh giới mới, dấu ấn; chạm để đóng, tự đóng sau 5 giây.
  * daoDoFx.ts (ui-kem) chèn đạo đồ vào `#cap-fx .cap-break` ngay trước `.flash` và coi màn đã đóng khi `.cap-break` bị gỡ;
  * nhịp của nó khóa vào đỉnh chớp đầu (≈ 238 ms). Đổi tên lớp, thứ tự con hay nhịp chớp thì báo ui-kem.
  */
@@ -100,7 +104,7 @@ function breakthrough(realm: string, level: number): void {
   o.setAttribute("role", "dialog");
   o.setAttribute("aria-label", `Đột phá ${realm}`);
   o.innerHTML = `<i class="rays"></i><i class="flash"></i>
-    <div class="cap-panel"><small>Đột phá cảnh giới</small><h2>${esc(realm)}</h2><p>Cấp ${level} · Hạ vị</p><span class="cap-seal" aria-hidden="true">破</span></div>
+    <div class="cap-panel"><small>Đột phá cảnh giới</small><h2>${esc(realm)}</h2><p>Cấp ${level} · Hạ vị</p>${SEAL}</div>
     <span class="hint">Chạm để tiếp tục</span>`;
   layer().append(o);
   let closed = false;
