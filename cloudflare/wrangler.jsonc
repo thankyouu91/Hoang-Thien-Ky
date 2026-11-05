@@ -15,8 +15,8 @@
     "directory": "../proto/dist",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
-    // Mọi đường dẫn qua cổng link mời của Worker, trừ file tĩnh có mã băm và hình (phục vụ thẳng, không tốn lượt request).
-    "run_worker_first": ["/*", "!/assets/*", "!/pixellab/*", "!/icon_ve/*"]
+    // Mọi đường dẫn qua cổng link mời của Worker, trừ file tĩnh có mã băm, hình và dấu ấn/favicon (phục vụ thẳng, không tốn lượt request).
+    "run_worker_first": ["/*", "!/assets/*", "!/pixellab/*", "!/icon_ve/*", "!/brand/*"]
   },
   "d1_databases": [
     {

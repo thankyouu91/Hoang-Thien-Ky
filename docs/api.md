@@ -29,7 +29,7 @@ Hợp đồng giữa game (`proto/`), Worker game (`cloudflare/`) và Admin Dash
    Link không hợp lệ thì trả trang báo, mã 410.
 3. Trình duyệt đã có cookie hợp lệ mà mở lại link thì về thẳng `/`, không tốn lượt. Người đã bị khoá mở lại link thì vẫn thấy trang "bị khóa".
 4. Mọi trang HTML và `/api/*` đều cần cookie hợp lệ. Thiếu cookie: trang HTML trả 403 kèm trang "cần link mời", còn API trả 401 `chua_co_loi_moi`. Bị khoá (`nguoi_choi_thu.khoa = 1`): trang HTML trả 403 kèm trang báo, còn API trả 403 `bi_khoa`.
-5. `/assets/*` (JS, CSS, font có mã băm), `/pixellab/*` và `/icon_ve/*` được phục vụ thẳng, không qua Worker, để khỏi tốn lượt request của gói free. Tên file JS chỉ biết được qua HTML, mà HTML đã bị chặn.
+5. `/assets/*` (JS, CSS, font có mã băm), `/pixellab/*`, `/icon_ve/*` và `/brand/*` (dấu ấn, favicon) được phục vụ thẳng, không qua Worker, để khỏi tốn lượt request của gói free. Tên file JS chỉ biết được qua HTML, mà HTML đã bị chặn.
 6. D1 chỉ lưu SHA-256 của thẻ (`the_hash`). Lộ bảng cũng không giả được cookie.
 7. Website và wiki dùng chung cổng: đọc cookie `thk_moi` (43 ký tự `[A-Za-z0-9_-]`), băm SHA-256 thành hex, rồi `SELECT khoa FROM nguoi_choi_thu WHERE the_hash = ?`. Không có dòng thì trả trang "cần link mời", `khoa = 1` thì trả trang "bị khóa". Mã tham khảo: `cloudflare/src/moi.ts` (`docThe`, `bamThe`). Website và wiki chỉ đọc, không tạo người chơi.
 

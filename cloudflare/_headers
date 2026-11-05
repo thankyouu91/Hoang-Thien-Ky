@@ -11,6 +11,10 @@
 /icon_ve/*
   Cache-Control: private, max-age=600, stale-while-revalidate=86400
 
+# Dấu ấn và favicon: công khai (trang cổng link mời cần), đổi ít.
+/brand/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY

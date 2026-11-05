@@ -154,6 +154,8 @@ export default {
     const laApi = path === "/api" || path.startsWith("/api/");
     try {
       if (path === "/robots.txt") return new Response(ROBOTS, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
+      // Trình duyệt tự xin /favicon.ico (cả ở trang cổng lẫn trong game): trả favicon dấu ấn, không qua cổng.
+      if (path === "/favicon.ico") return env.ASSETS.fetch(new Request(new URL("/brand/favicon.ico", req.url), req));
       if (path.startsWith("/moi/")) return await nhanLoiMoi(req, env, path.slice(5).replace(/\/+$/, ""));
 
       const nguoi = await nguoiCuaCookie(req, env.DB);
