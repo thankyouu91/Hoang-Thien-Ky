@@ -24,18 +24,6 @@ function mucLuc(): void {
   });
 }
 
-/** Thị sai nhẹ cho nền hero khi cuộn (ảnh và canvas cao hơn khung 8% nên không hở mép); tôn trọng giảm chuyển động. */
-function thiSaiHero(): void {
-  const anh = document.querySelector<HTMLElement>(".dau-tranh .tranh-nen");
-  if (!anh || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  let hen = 0;
-  const cap = () => {
-    hen = 0;
-    anh.style.transform = `translateY(${Math.min(window.scrollY, window.innerHeight) * 0.12}px)`;
-  };
-  window.addEventListener("scroll", () => (hen ||= requestAnimationFrame(cap)), { passive: true });
-}
-
 /** Hộp xem lớn cho mọi nút `.phong` (thư viện, dải hình, trang Điểm riêng). */
 function xemLon(): void {
   const nut = document.querySelectorAll<HTMLButtonElement>(".phong[data-src]");
@@ -122,6 +110,6 @@ mucLuc();
 tangViDien();
 xemLon();
 nhomDangXem();
-thiSaiHero();
+// Linh khí bay chậm trên tranh hero; tranh giữ tĩnh theo ý người dùng (2026-11-05 tối).
 if (document.querySelector(".hero-anh")) void import("./heroCanh.ts").then((x) => x.ganHeroCanh());
 if (document.querySelector("form[data-gop-y]")) void import("./gopY.ts").then((m) => m.ganGopY());

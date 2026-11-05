@@ -209,8 +209,6 @@ ketQua.push({ id: "rieng", ten: "Riêng", mo_ta: "Không hiện trong thư việ
 // Favicon vẽ sẵn ở assets/brand (16 và 32 px): chép nguyên.
 mkdirSync(join(OUT, "brand"), { recursive: true });
 for (const f of ["favicon.ico", "favicon-32.png", "favicon-16.png"]) copyFileSync(join(BRAND, f), join(OUT, "brand", f));
-// Sprite tu sĩ tách từ tranh hero (giữ alpha, chép nguyên) cho lớp động src/heroCanh.ts.
-copyFileSync(join(WEB, "anh-chup", "hero_nguoi.png"), join(OUT, "rieng", "hero_nguoi.png"));
 
 writeFileSync(camPath, JSON.stringify({ ghi_chu: "Sinh bởi scripts/hinh.mjs, đừng sửa tay.", nhom: ketQua }, null, 1) + "\n");
 console.log(`hinh: ${so} ảnh, ${(tong / 1024).toFixed(0)} KB trong public/hinh`);
