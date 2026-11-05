@@ -1,0 +1,6 @@
+# Sinh lại bằng npm run types (wrangler types) và npm run build
+worker/worker-configuration.d.ts
+dist/
+.wrangler/
+.dev.vars
+test/.tmp/

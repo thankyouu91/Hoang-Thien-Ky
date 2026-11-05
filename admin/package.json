@@ -1,0 +1,29 @@
+{
+  "name": "@ktlp/admin",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Admin Dashboard Thiên Hoang Ký (admin.thienhoangky.fun): giao diện Vite + API trong Worker thienhoangky-admin, sau Cloudflare Access",
+  "type": "module",
+  "scripts": {
+    "dev": "node test/dev.ts",
+    "types": "wrangler types worker/worker-configuration.d.ts",
+    "check": "npm run types && tsc --noEmit -p tsconfig.json && tsc --noEmit -p worker/tsconfig.json",
+    "build": "npm run check && vite build",
+    "test": "node --test test/jwt.test.ts && npm run build && node test/e2e.ts",
+    "db:local": "wrangler d1 migrations apply thienhoangky --local",
+    "db:remote": "wrangler d1 migrations apply thienhoangky --remote",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "@fontsource-variable/lora": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "wrangler": "4.157.0"
+  },
+  "engines": {
+    "node": ">=22.6"
+  }
+}

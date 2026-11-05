@@ -1,0 +1,36 @@
+// Worker thienhoangky-admin: giao diện admin + API, sau Cloudflare Access ở admin.thienhoangky.fun.
+// Dùng chung D1 `thienhoangky` với Worker game (tab deploy). Bảng admin có tiền tố qt_, migration ở ./migrations
+// với bảng theo dõi riêng d1_migrations_qt để không đụng migration của Worker game (cloudflare/migrations/).
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "thienhoangky-admin",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  "routes": [{ "pattern": "admin.thienhoangky.fun", "custom_domain": true }],
+  // Chỉ vào được qua tên miền có Access; không mở *.workers.dev hay URL xem trước.
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // Cả file tĩnh cũng qua Worker để kiểm JWT; Access sai cấu hình thì giao diện cũng không lộ.
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "thienhoangky",
+      "database_id": "aa2c1b16-661a-4df8-94a3-37ee20cc0f5e",
+      "migrations_dir": "migrations",
+      "migrations_table": "d1_migrations_qt"
+    }
+  ],
+  "vars": {
+    "ACCESS_TEAM_DOMAIN": "",
+    "ACCESS_AUD": "",
+    "ADMIN_GOC": ""
+  },
+  // Log do Worker tự ghi (không có email). Tắt invocation log để header JWT và đường dẫn không vào Workers Logs.
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+}
