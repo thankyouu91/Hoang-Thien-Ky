@@ -61,7 +61,8 @@ test("đối cực hợp nhất: sát thương ×1,12, mana ×1,5", () => {
     [scroll({ element: "cuc_am" })],
   );
   assert.equal(t.combo, 1120);
-  assert.equal(t.damage, 80640); // 100 × 0,6 × (1 + 0,15 + 0,05) × 1,12
+  // 100 × k của diện rộng × (1 + 0,15 + 0,05) × 1,12
+  assert.equal(t.damage, Math.trunc((Math.trunc((100 * SKILL_SPECS.dien_rong.k * 1200) / 1000) * 1120) / 1000));
   assert.equal(t.manaCost, mul(mul(SKILL_SPECS.dien_rong.mana, 1050), 1500)); // mana gốc × 1,05 (Cực dương) × 1,5
 });
 

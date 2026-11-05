@@ -39,18 +39,20 @@ export interface SkillSpec {
  * k, số mục tiêu, hồi chiêu, chí mạng: GDD mục 8. Mana, tầm, bán kính: đề xuất.
  * Mana duyệt 2026-11-02: dò bằng tools/balance để không loại chiêu nào ở vị trí ưu tiên đầu thắng quá 65% trước đội ngẫu nhiên.
  * Chiêu ra nhanh và gây nhiều sát thương tốn mana nhiều hơn mức hồi. Hồi phục "tốn mana gấp 3" (GDD): 3 × mức gốc 60.
+ * Đề xuất 2026-11-05, cân nhóm nội (người dùng duyệt): diện rộng k 0,5 mana 70; bùa chú hồi chiêu 4 s mana 200;
+ * trận pháp ×4,3 hồi chiêu 12 s mana 280; khống chế k 0,65 hồi chiêu 3 s mana 60.
  */
 export const SKILL_SPECS: Record<SkillType, SkillSpec> = {
   can_don: { k: 1300, targets: 1, cooldownTicks: 1 * SEC, critPerMille: 0, mana: 120, range: 1000, radius: 0 },
   can_quet: { k: 1000, targets: 5, cooldownTicks: 2 * SEC, critPerMille: 0, mana: 140, range: 1000, radius: 0 },
   tam_xa: { k: 950, targets: 2, cooldownTicks: 1 * SEC, critPerMille: 40, mana: 140, range: 4000, radius: 0 },
-  dien_rong: { k: 600, targets: 10, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 35, range: 4000, radius: 2000 },
+  dien_rong: { k: 500, targets: 10, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 70, range: 4000, radius: 2000 },
   ho_the: { k: 200, targets: 3, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 25, range: 4000, radius: 0 },
-  bua_chu: { k: 3000, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 160, range: 4000, radius: 0 },
-  // Trận pháp ×6,0 (đã chốt 2026-11-04, trước ×5,0): bù 5 s bày trận.
-  tran_phap: { k: 6000, targets: 6, cooldownTicks: 20 * SEC, critPerMille: 0, mana: 240, range: 4000, radius: 2000 },
+  bua_chu: { k: 3000, targets: 1, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 200, range: 4000, radius: 0 },
+  // Trận pháp ×4,3, hồi chiêu 12 s (cân nhóm nội 2026-11-05; trước ×6,0, 20 s): bù 5 s bày trận.
+  tran_phap: { k: 4300, targets: 6, cooldownTicks: 12 * SEC, critPerMille: 0, mana: 280, range: 4000, radius: 2000 },
   hoi_phuc: { k: 900, targets: 3, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 180, range: 4000, radius: 0 },
-  khong_che: { k: 500, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 10, range: 3000, radius: 0 },
+  khong_che: { k: 650, targets: 1, cooldownTicks: 3 * SEC, critPerMille: 0, mana: 60, range: 3000, radius: 0 },
   than_phap: { k: 1600, targets: 1, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 25, range: 6000, radius: 0 },
 };
 
@@ -279,7 +281,7 @@ export const MAX_RANGE_BONUS = 1000;
 export const ELEMENT_STATS: Record<Element, ScrollStats> = {
   kim: { ...NONE, crit: 20 },
   moc: NONE,
-  thuy: { ...NONE, mana: -100 },
+  thuy: { ...NONE, mana: -50 }, // cân nhóm nội 2026-11-05 (trước −100)
   hoa: { ...NONE, dmg: 50, mana: 50 },
   tho: { ...NONE, dmg: -50 },
   loi: { ...NONE, crit: 30 },

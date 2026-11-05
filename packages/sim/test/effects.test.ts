@@ -62,6 +62,7 @@ test("Thủy làm chậm 20% trong 2 s", () => {
 test("Hỏa thiêu đốt 10% sát thương mỗi giây trong 3 s", () => {
   const { b } = firstHit({ seed: 1, teamA: [unit(1, 1, [tech("bua_chu", "hoa")])], teamB: [inert(101)] });
   const t = get(b, 101);
+  get(b, 1).slots[0].cd = 1_000_000; // chỉ xét đòn đầu, không để bùa ra lần nữa
   const dmg = t.hp - t.curHp;
   const burn = mul(dmg, 100);
   assert.equal(t.burn, burn);
