@@ -6,10 +6,22 @@
 // - Không biết đòn nào chí mạng, và phần sát thương khiên hút không hiện thành số.
 // - Đòn khắc hệ suy từ hệ chiêu của người đánh và linh căn người trúng (elementMultiplier), không tính phép thế thân.
 import { Battle, BATTLE, elementMultiplier, TICKS_PER_SECOND, type BattleInput, type Element } from "@ktlp/sim";
+import THU_CUOI from "../../../data/he_thong/json/thu_cuoi.json" with { type: "json" };
 import type { Replay, ReplayEvent, ReplaySource, ReplayUnit, StatusKind } from "./types.ts";
 
 const ONE = 1000; // mana trong sim tính theo phần nghìn
 const COUNTER = 1500; // hệ số khắc hệ trong sim (phần nghìn), từ mức này là đòn khắc
+
+/**
+ * Hình cho dị thú (UnitSpec.monster) khi chưa có hình thú riêng cho trận: thú cưỡi PixelLab cùng hệ, ưu tiên tẩu thú
+ * (đứng trên sân), mỗi con một hình theo id. undefined khi hệ đó chưa có thú nào.
+ */
+function beastSprite(element: Element, id: number): string | undefined {
+  const same = THU_CUOI.filter((t) => t.element === element);
+  const walkers = same.filter((t) => t.form === "Tẩu thú");
+  const list = walkers.length > 0 ? walkers : same;
+  return list.length > 0 ? list[id % list.length].asset : undefined;
+}
 
 /** Trạng thái có thời hạn trên Unit của sim (khiên xét riêng vì còn có thể vỡ sớm). */
 const UNTIL = [
@@ -23,6 +35,7 @@ export function replayFromSim(input: BattleInput): Replay {
   const units: ReplayUnit[] = battle.units.map((u) => {
     const spec = specs.get(u.id)!;
     const talent = spec.talents?.[0];
+    const monster = !!spec.monster;
     return {
       id: u.id,
       team: u.team,
@@ -32,8 +45,9 @@ export function replayFromSim(input: BattleInput): Replay {
       hpMax: u.hp,
       manaMax: u.manaMax / ONE,
       pos: u.pos,
-      sprite: talent ? "tu_si/" + talent : undefined,
+      sprite: monster ? beastSprite(u.element, u.id) : talent ? "tu_si/" + talent : undefined,
       level: spec.level,
+      ...(monster ? { monster } : {}),
     };
   });
 

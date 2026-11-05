@@ -35,6 +35,8 @@ export interface ReplayUnit {
   look?: Look;
   /** Cấp nhân vật (GDD mục 6–7), để vẽ theo cảnh giới; replay giả có thể bỏ trống. */
   level?: number;
+  /** Dị thú hay boss PvE (UnitSpec.monster): màn Trận vẽ bằng hình thú `sprite`, không ghép người. */
+  monster?: boolean;
 }
 
 /** Ngoại hình nhân vật ghép từ thân và từng món đồ (ghi chú chung pixellab-tu-si.md). */

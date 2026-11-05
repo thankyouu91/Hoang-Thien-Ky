@@ -28,6 +28,7 @@ const MANA = "#5aa9e6";
 const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
 const COUNTER_COLOR = "#ff8a3d"; // số sát thương của đòn khắc hệ
 const COUNTER_TIPS = 4; // mấy đòn khắc đầu trận có nhãn "Khắc ×1,5" (GDD mục 14, FTUE: thấy khắc chế hoạt động)
+const BEAST_SCALE = 1.6; // cạnh hình dị thú so với SIZE (người là 1,4): thú to hơn người một chút
 const SCORE_SIDE = 104; // px CSS mỗi bên mép trên dành cho nút của thanh trên (Quay lại), dòng tỉ số nằm giữa
 const HEAVY_HIT = 0.05; // đòn từ 5% máu tối đa trở lên mới diễn hoạt ảnh trúng đòn
 const BADGE = 12; // cạnh dấu hệ đặt trước thanh máu, đơn vị thế giới
@@ -475,7 +476,9 @@ export class BattleScene implements Scene {
     // Thân người (chuyenDong.ts): khựng khi trúng đòn nặng (tPose), dời vì bị đẩy và nhún bước; vòng đội, thanh máu, dấu
     // hệ vẫn ở chỗ cũ (x, y) cho dễ đọc.
     const mo = this.than?.motion(ut, t, life, (id, tick) => at(id, tick), (pos) => this.place(pos, lat));
-    const wanted = this.looks.get(u.id);
+    // Dị thú có hình thú riêng (sprite thu/<loài>) thì vẽ hình đó, không ghép người.
+    const beast = !!u.monster && !!this.sprites.get(u.sprite);
+    const wanted = beast ? undefined : this.looks.get(u.id);
     const look = wanted && resolveLook(this.sprites, wanted);
     const pose = look ? this.pose(ut, mo?.tPose ?? t, look, life) : null;
     // Dải ra chiêu theo loại (gói 2) tự có bước nhún tới: bỏ cú nhích của hiệu ứng để không nhích đôi.
@@ -517,7 +520,7 @@ export class BattleScene implements Scene {
       ctx.globalAlpha = alpha;
       ctx.lineWidth = 4.5;
       ctx.stroke();
-      const s = SIZE * 1.4;
+      const s = SIZE * (beast ? BEAST_SCALE : 1.4);
       if (pose && look) {
         // Pháp luân từ Trúc Cơ: nhịp tụ lực, bung, khung chạm theo các lần ra chiêu, chỉ tính từ t (không giữ trạng thái).
         const pl = this.luans.get(u.id);
@@ -595,7 +598,7 @@ export class BattleScene implements Scene {
     const bw = SIZE + 4;
     const badge = figure ? BADGE + 2 : 0;
     const bx = x - (bw + badge) / 2 + badge;
-    const by = (figure ? y + h - SIZE * 1.4 - lift : y - h) - 12;
+    const by = (figure ? y + h - SIZE * (beast ? BEAST_SCALE : 1.4) - lift : y - h) - 12;
     if (figure) {
       const cx = bx - 2 - BADGE / 2;
       const cy = by + 3.5;
