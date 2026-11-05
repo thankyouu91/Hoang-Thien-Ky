@@ -89,7 +89,11 @@ function levelBanner(level: number): void {
   if (!still) stamp(b.querySelector<HTMLElement>(".cap-seal")!, b, 320);
 }
 
-/** Màn đột phá cảnh giới: cả màn, chớp thiên kiếp hai lần, tên cảnh giới mới, ấn "破"; chạm để đóng, tự đóng sau 5 giây. */
+/**
+ * Màn đột phá cảnh giới: cả màn, chớp thiên kiếp hai lần, tên cảnh giới mới, ấn "破"; chạm để đóng, tự đóng sau 5 giây.
+ * daoDoFx.ts (ui-kem) chèn đạo đồ vào `#cap-fx .cap-break` ngay trước `.flash` và coi màn đã đóng khi `.cap-break` bị gỡ;
+ * nhịp của nó khóa vào đỉnh chớp đầu (≈ 238 ms). Đổi tên lớp, thứ tự con hay nhịp chớp thì báo ui-kem.
+ */
 function breakthrough(realm: string, level: number): void {
   const o = document.createElement("div");
   o.className = "cap-break";
