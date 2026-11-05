@@ -188,6 +188,19 @@ add("dac_biet/thien_tai_lenh", "Thiên Tài Lệnh", 3, "GDD mục 13 (Thiên Đ
 for (const [id, ten, mau, kh, tt] of HE)
   add(`cong_phap/${id}`, `Công pháp hệ ${ten}`, 2, "GDD mục 9 (Ghép công pháp)",
     `a complete bound cultivation manual, thread-bound ancient book with a ${mau} silk cover and ${kh} emblem glowing ${tt} on the cover, slightly open`);
+// 13b. Công pháp ghép (người dùng 2026-11-05: công pháp ghép phải có hình kết hợp). Luật ghép: chủ quyển + 1–2 phụ quyển
+// (docs/KE_HOACH.md Sprint 2, mẫu ở data/he_thong/json/cong_phap_mau.json). Hệ của công pháp là tập hệ các quyển.
+// Ghép 2 hệ: mỗi cặp hệ một hình riêng (66). Bộ 3 quyển (3 hệ, 220 tổ hợp): một hình theo chủ hệ (12), hai phụ hệ hiện bằng huy hiệu hệ trên UI.
+const CAP_HE = [];
+for (let i = 0; i < HE.length; i++) for (let j = i + 1; j < HE.length; j++) CAP_HE.push([HE[i], HE[j]]);
+for (const [[ia, ta, ma, ka, sa], [ib, tb, mb, kb, sb]] of CAP_HE)
+  add(`cong_phap/ghep/${ia}_${ib}`, `Công pháp ghép ${ta}–${tb}`, 2, "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+    `a complete bound cultivation manual whose silk cover is split diagonally into two halves, one ${ma} and one ${mb}, ${ka} and ${kb} emblems intertwined at the center glowing ${sa} and ${sb}, two silk tassels in both colors, slightly open`,
+    "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển");
+for (const [id, ten, mau, kh, tt] of HE)
+  add(`cong_phap/bo_ba/${id}`, `Bộ ba quyển chủ hệ ${ten}`, 2, "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+    `a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a ${mau} silk cover and ${kh} emblem glowing ${tt}, the two lower volumes in plain pale cream silk, a soft mystical glow around the set`,
+    "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI");
 
 // 14. Vũ khí theo tài năng: hình khi cầm trên người (GDD mục 6), không phải hình trong túi.
 const VK = [
@@ -227,6 +240,8 @@ function tienTo(ma) {
   if (nhom === "trang_bi") return { tt: `TB-${LOAI_TB[a]}`, so: +b };
   if (nhom === "ngoc") return { tt: "NG-KH", so: HE_SO[a] };
   if (nhom === "tan_quyen") return { tt: "TQ-HE", so: HE_SO[a] };
+  if (nhom === "cong_phap" && a === "ghep") { const [x, y] = b.split(/_(?=(?:kim|moc|thuy|hoa|tho|loi|phong|quang|am_lanh|cuc_duong|cuc_am|cuc_han)$)/); return { tt: "CP-GH", so: CAP_HE.findIndex(([p, q]) => p[0] === x && q[0] === y) + 1 }; }
+  if (nhom === "cong_phap" && a === "bo_ba") return { tt: "CP-BO", so: HE_SO[b] };
   if (nhom === "cong_phap") return { tt: "CP-HE", so: HE_SO[a] };
   if (nhom === "linh_thach") return { tt: "LT-PH" };
   if (nhom === "quang") return { tt: "QU-BA" };
@@ -290,7 +305,7 @@ const out = {
   duoi_loi_mo_ta: "Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
   ty_le: "SQUARE_1_1",
   mau_he: Object.fromEntries(HE.map(([id, ten, mau]) => [id, { ten, mau }])),
-  tien_to_ma: { TB: "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu; KI 061–070 là danh khí)", NG: "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ)", TQ: "Tàn quyển (HE; số = thứ tự hệ)", CP: "Công pháp (HE; số = thứ tự hệ)", LT: "Linh thạch (PH: phẩm)", QU: "Quặng (BA: bậc)", DL: "Dược liệu (TH: 4 bậc thường, HI: hiếm)", DA: "Đan (DD đan dược, LD linh đan, TD thần đan, DB đặc biệt)", LD: "Linh đơn cho thú (TH)", PH: "Phù chú (CH)", TT: "Trứng thú (TH)", LO: "Lô đỉnh (LD), lò rèn (LR)", MA: "Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo)", DB: "Vật phẩm đặc biệt (DB)", VK: "Vũ khí theo tài năng, hình khi cầm (TN)", CT: "Chiêu thức (LO: loại chiêu, số theo thứ tự SKILL_NAME)", NL: "Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh, KT khí tinh và linh văn thạch, DP danh khí đồ phổ)", PB: "Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo)", PK: "Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính)" },
+  tien_to_ma: { TB: "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu; KI 061–070 là danh khí)", NG: "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ)", TQ: "Tàn quyển (HE; số = thứ tự hệ)", CP: "Công pháp (HE thuần hệ, số = thứ tự hệ; GH ghép 2 hệ, số = thứ tự cặp hệ; BO bộ 3 quyển, số = thứ tự chủ hệ)", LT: "Linh thạch (PH: phẩm)", QU: "Quặng (BA: bậc)", DL: "Dược liệu (TH: 4 bậc thường, HI: hiếm)", DA: "Đan (DD đan dược, LD linh đan, TD thần đan, DB đặc biệt)", LD: "Linh đơn cho thú (TH)", PH: "Phù chú (CH)", TT: "Trứng thú (TH)", LO: "Lô đỉnh (LD), lò rèn (LR)", MA: "Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo)", DB: "Vật phẩm đặc biệt (DB)", VK: "Vũ khí theo tài năng, hình khi cầm (TN)", CT: "Chiêu thức (LO: loại chiêu, số theo thứ tự SKILL_NAME)", NL: "Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh, KT khí tinh và linh văn thạch, DP danh khí đồ phổ)", PB: "Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo)", PK: "Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính)" },
   do_hiem: Object.entries(TEN_DO_HIEM).map(([id, ten], i) => ({ id, ten, bac: i + 1 })),
   so_luong: { tong: ds.length, uu_tien_1: ds.filter(x => x.uu_tien === 1).length, uu_tien_2: ds.filter(x => x.uu_tien === 2).length, uu_tien_3: ds.filter(x => x.uu_tien === 3).length },
   icon: ds,

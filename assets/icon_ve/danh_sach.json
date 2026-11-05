@@ -67,7 +67,7 @@
     "TB": "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu; KI 061–070 là danh khí)",
     "NG": "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ)",
     "TQ": "Tàn quyển (HE; số = thứ tự hệ)",
-    "CP": "Công pháp (HE; số = thứ tự hệ)",
+    "CP": "Công pháp (HE thuần hệ, số = thứ tự hệ; GH ghép 2 hệ, số = thứ tự cặp hệ; BO bộ 3 quyển, số = thứ tự chủ hệ)",
     "LT": "Linh thạch (PH: phẩm)",
     "QU": "Quặng (BA: bậc)",
     "DL": "Dược liệu (TH: 4 bậc thường, HI: hiếm)",
@@ -112,9 +112,9 @@
     }
   ],
   "so_luong": {
-    "tong": 789,
+    "tong": 867,
     "uu_tien_1": 126,
-    "uu_tien_2": 662,
+    "uu_tien_2": 740,
     "uu_tien_3": 1
   },
   "icon": [
@@ -5659,6 +5659,786 @@
       "uu_tien": 2,
       "nguon": "GDD mục 9 (Ghép công pháp)",
       "mo_ta": "a complete bound cultivation manual, thread-bound ancient book with a icy pale blue silk cover and a snowflake emblem glowing frosty ice-blue on the cover, slightly open"
+    },
+    {
+      "ma_vp": "CP-GH-001",
+      "ma": "cong_phap/ghep/kim_moc",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Mộc",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one verdant green, a perfect circle and a sprouting leaf emblems intertwined at the center glowing gleaming silver and living green, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-002",
+      "ma": "cong_phap/ghep/kim_thuy",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Thủy",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one deep blue, a perfect circle and flowing wave ripples emblems intertwined at the center glowing gleaming silver and deep sapphire blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-003",
+      "ma": "cong_phap/ghep/kim_hoa",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Hỏa",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one vermilion red, a perfect circle and a blazing flame emblems intertwined at the center glowing gleaming silver and fiery vermilion, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-004",
+      "ma": "cong_phap/ghep/kim_tho",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Thổ",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one earthy ochre yellow, a perfect circle and a solid square emblems intertwined at the center glowing gleaming silver and earthy ochre, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-005",
+      "ma": "cong_phap/ghep/kim_loi",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Lôi",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one electric violet, a perfect circle and a lightning bolt emblems intertwined at the center glowing gleaming silver and crackling violet, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-006",
+      "ma": "cong_phap/ghep/kim_phong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Phong",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one pale jade teal, a perfect circle and a spiral whirlwind emblems intertwined at the center glowing gleaming silver and pale jade-teal, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-007",
+      "ma": "cong_phap/ghep/kim_quang",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Quang",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one radiant gold, a perfect circle and radiating light rays emblems intertwined at the center glowing gleaming silver and radiant golden, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-008",
+      "ma": "cong_phap/ghep/kim_am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one cold grey-blue, a perfect circle and a ghostly will-o'-wisp flame emblems intertwined at the center glowing gleaming silver and eerie grey-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-009",
+      "ma": "cong_phap/ghep/kim_cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one blazing orange, a perfect circle and a blazing sun disc emblems intertwined at the center glowing gleaming silver and blazing orange, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-010",
+      "ma": "cong_phap/ghep/kim_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one dark charcoal purple, a perfect circle and a crescent moon emblems intertwined at the center glowing gleaming silver and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-011",
+      "ma": "cong_phap/ghep/kim_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Kim–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one silver-white and one icy pale blue, a perfect circle and a snowflake emblems intertwined at the center glowing gleaming silver and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-012",
+      "ma": "cong_phap/ghep/moc_thuy",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Thủy",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one deep blue, a sprouting leaf and flowing wave ripples emblems intertwined at the center glowing living green and deep sapphire blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-013",
+      "ma": "cong_phap/ghep/moc_hoa",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Hỏa",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one vermilion red, a sprouting leaf and a blazing flame emblems intertwined at the center glowing living green and fiery vermilion, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-014",
+      "ma": "cong_phap/ghep/moc_tho",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Thổ",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one earthy ochre yellow, a sprouting leaf and a solid square emblems intertwined at the center glowing living green and earthy ochre, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-015",
+      "ma": "cong_phap/ghep/moc_loi",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Lôi",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one electric violet, a sprouting leaf and a lightning bolt emblems intertwined at the center glowing living green and crackling violet, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-016",
+      "ma": "cong_phap/ghep/moc_phong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Phong",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one pale jade teal, a sprouting leaf and a spiral whirlwind emblems intertwined at the center glowing living green and pale jade-teal, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-017",
+      "ma": "cong_phap/ghep/moc_quang",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Quang",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one radiant gold, a sprouting leaf and radiating light rays emblems intertwined at the center glowing living green and radiant golden, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-018",
+      "ma": "cong_phap/ghep/moc_am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one cold grey-blue, a sprouting leaf and a ghostly will-o'-wisp flame emblems intertwined at the center glowing living green and eerie grey-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-019",
+      "ma": "cong_phap/ghep/moc_cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one blazing orange, a sprouting leaf and a blazing sun disc emblems intertwined at the center glowing living green and blazing orange, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-020",
+      "ma": "cong_phap/ghep/moc_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one dark charcoal purple, a sprouting leaf and a crescent moon emblems intertwined at the center glowing living green and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-021",
+      "ma": "cong_phap/ghep/moc_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Mộc–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one verdant green and one icy pale blue, a sprouting leaf and a snowflake emblems intertwined at the center glowing living green and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-022",
+      "ma": "cong_phap/ghep/thuy_hoa",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thủy–Hỏa",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one deep blue and one vermilion red, flowing wave ripples and a blazing flame emblems intertwined at the center glowing deep sapphire blue and fiery vermilion, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-023",
+      "ma": "cong_phap/ghep/thuy_tho",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thủy–Thổ",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one deep blue and one earthy ochre yellow, flowing wave ripples and a solid square emblems intertwined at the center glowing deep sapphire blue and earthy ochre, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-024",
+      "ma": "cong_phap/ghep/thuy_loi",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thủy–Lôi",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one deep blue and one electric violet, flowing wave ripples and a lightning bolt emblems intertwined at the center glowing deep sapphire blue and crackling violet, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-025",
+      "ma": "cong_phap/ghep/thuy_phong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thủy–Phong",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one deep blue and one pale jade teal, flowing wave ripples and a spiral whirlwind emblems intertwined at the center glowing deep sapphire blue and pale jade-teal, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-026",
+      "ma": "cong_phap/ghep/thuy_quang",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thủy–Quang",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one deep blue and one radiant gold, flowing wave ripples and radiating light rays emblems intertwined at the center glowing deep sapphire blue and radiant golden, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-027",
+      "ma": "cong_phap/ghep/thuy_am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thủy–Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one deep blue and one cold grey-blue, flowing wave ripples and a ghostly will-o'-wisp flame emblems intertwined at the center glowing deep sapphire blue and eerie grey-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-028",
+      "ma": "cong_phap/ghep/thuy_cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thủy–Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one deep blue and one blazing orange, flowing wave ripples and a blazing sun disc emblems intertwined at the center glowing deep sapphire blue and blazing orange, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-029",
+      "ma": "cong_phap/ghep/thuy_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thủy–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one deep blue and one dark charcoal purple, flowing wave ripples and a crescent moon emblems intertwined at the center glowing deep sapphire blue and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-030",
+      "ma": "cong_phap/ghep/thuy_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thủy–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one deep blue and one icy pale blue, flowing wave ripples and a snowflake emblems intertwined at the center glowing deep sapphire blue and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-031",
+      "ma": "cong_phap/ghep/hoa_tho",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Hỏa–Thổ",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one vermilion red and one earthy ochre yellow, a blazing flame and a solid square emblems intertwined at the center glowing fiery vermilion and earthy ochre, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-032",
+      "ma": "cong_phap/ghep/hoa_loi",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Hỏa–Lôi",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one vermilion red and one electric violet, a blazing flame and a lightning bolt emblems intertwined at the center glowing fiery vermilion and crackling violet, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-033",
+      "ma": "cong_phap/ghep/hoa_phong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Hỏa–Phong",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one vermilion red and one pale jade teal, a blazing flame and a spiral whirlwind emblems intertwined at the center glowing fiery vermilion and pale jade-teal, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-034",
+      "ma": "cong_phap/ghep/hoa_quang",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Hỏa–Quang",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one vermilion red and one radiant gold, a blazing flame and radiating light rays emblems intertwined at the center glowing fiery vermilion and radiant golden, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-035",
+      "ma": "cong_phap/ghep/hoa_am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Hỏa–Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one vermilion red and one cold grey-blue, a blazing flame and a ghostly will-o'-wisp flame emblems intertwined at the center glowing fiery vermilion and eerie grey-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-036",
+      "ma": "cong_phap/ghep/hoa_cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Hỏa–Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one vermilion red and one blazing orange, a blazing flame and a blazing sun disc emblems intertwined at the center glowing fiery vermilion and blazing orange, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-037",
+      "ma": "cong_phap/ghep/hoa_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Hỏa–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one vermilion red and one dark charcoal purple, a blazing flame and a crescent moon emblems intertwined at the center glowing fiery vermilion and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-038",
+      "ma": "cong_phap/ghep/hoa_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Hỏa–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one vermilion red and one icy pale blue, a blazing flame and a snowflake emblems intertwined at the center glowing fiery vermilion and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-039",
+      "ma": "cong_phap/ghep/tho_loi",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thổ–Lôi",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one earthy ochre yellow and one electric violet, a solid square and a lightning bolt emblems intertwined at the center glowing earthy ochre and crackling violet, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-040",
+      "ma": "cong_phap/ghep/tho_phong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thổ–Phong",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one earthy ochre yellow and one pale jade teal, a solid square and a spiral whirlwind emblems intertwined at the center glowing earthy ochre and pale jade-teal, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-041",
+      "ma": "cong_phap/ghep/tho_quang",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thổ–Quang",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one earthy ochre yellow and one radiant gold, a solid square and radiating light rays emblems intertwined at the center glowing earthy ochre and radiant golden, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-042",
+      "ma": "cong_phap/ghep/tho_am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thổ–Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one earthy ochre yellow and one cold grey-blue, a solid square and a ghostly will-o'-wisp flame emblems intertwined at the center glowing earthy ochre and eerie grey-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-043",
+      "ma": "cong_phap/ghep/tho_cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thổ–Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one earthy ochre yellow and one blazing orange, a solid square and a blazing sun disc emblems intertwined at the center glowing earthy ochre and blazing orange, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-044",
+      "ma": "cong_phap/ghep/tho_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thổ–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one earthy ochre yellow and one dark charcoal purple, a solid square and a crescent moon emblems intertwined at the center glowing earthy ochre and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-045",
+      "ma": "cong_phap/ghep/tho_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Thổ–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one earthy ochre yellow and one icy pale blue, a solid square and a snowflake emblems intertwined at the center glowing earthy ochre and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-046",
+      "ma": "cong_phap/ghep/loi_phong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Lôi–Phong",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one electric violet and one pale jade teal, a lightning bolt and a spiral whirlwind emblems intertwined at the center glowing crackling violet and pale jade-teal, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-047",
+      "ma": "cong_phap/ghep/loi_quang",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Lôi–Quang",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one electric violet and one radiant gold, a lightning bolt and radiating light rays emblems intertwined at the center glowing crackling violet and radiant golden, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-048",
+      "ma": "cong_phap/ghep/loi_am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Lôi–Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one electric violet and one cold grey-blue, a lightning bolt and a ghostly will-o'-wisp flame emblems intertwined at the center glowing crackling violet and eerie grey-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-049",
+      "ma": "cong_phap/ghep/loi_cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Lôi–Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one electric violet and one blazing orange, a lightning bolt and a blazing sun disc emblems intertwined at the center glowing crackling violet and blazing orange, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-050",
+      "ma": "cong_phap/ghep/loi_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Lôi–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one electric violet and one dark charcoal purple, a lightning bolt and a crescent moon emblems intertwined at the center glowing crackling violet and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-051",
+      "ma": "cong_phap/ghep/loi_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Lôi–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one electric violet and one icy pale blue, a lightning bolt and a snowflake emblems intertwined at the center glowing crackling violet and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-052",
+      "ma": "cong_phap/ghep/phong_quang",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Phong–Quang",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one pale jade teal and one radiant gold, a spiral whirlwind and radiating light rays emblems intertwined at the center glowing pale jade-teal and radiant golden, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-053",
+      "ma": "cong_phap/ghep/phong_am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Phong–Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one pale jade teal and one cold grey-blue, a spiral whirlwind and a ghostly will-o'-wisp flame emblems intertwined at the center glowing pale jade-teal and eerie grey-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-054",
+      "ma": "cong_phap/ghep/phong_cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Phong–Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one pale jade teal and one blazing orange, a spiral whirlwind and a blazing sun disc emblems intertwined at the center glowing pale jade-teal and blazing orange, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-055",
+      "ma": "cong_phap/ghep/phong_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Phong–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one pale jade teal and one dark charcoal purple, a spiral whirlwind and a crescent moon emblems intertwined at the center glowing pale jade-teal and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-056",
+      "ma": "cong_phap/ghep/phong_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Phong–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one pale jade teal and one icy pale blue, a spiral whirlwind and a snowflake emblems intertwined at the center glowing pale jade-teal and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-057",
+      "ma": "cong_phap/ghep/quang_am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Quang–Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one radiant gold and one cold grey-blue, radiating light rays and a ghostly will-o'-wisp flame emblems intertwined at the center glowing radiant golden and eerie grey-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-058",
+      "ma": "cong_phap/ghep/quang_cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Quang–Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one radiant gold and one blazing orange, radiating light rays and a blazing sun disc emblems intertwined at the center glowing radiant golden and blazing orange, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-059",
+      "ma": "cong_phap/ghep/quang_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Quang–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one radiant gold and one dark charcoal purple, radiating light rays and a crescent moon emblems intertwined at the center glowing radiant golden and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-060",
+      "ma": "cong_phap/ghep/quang_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Quang–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one radiant gold and one icy pale blue, radiating light rays and a snowflake emblems intertwined at the center glowing radiant golden and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-061",
+      "ma": "cong_phap/ghep/am_lanh_cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Âm lãnh–Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one cold grey-blue and one blazing orange, a ghostly will-o'-wisp flame and a blazing sun disc emblems intertwined at the center glowing eerie grey-blue and blazing orange, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-062",
+      "ma": "cong_phap/ghep/am_lanh_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Âm lãnh–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one cold grey-blue and one dark charcoal purple, a ghostly will-o'-wisp flame and a crescent moon emblems intertwined at the center glowing eerie grey-blue and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-063",
+      "ma": "cong_phap/ghep/am_lanh_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Âm lãnh–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one cold grey-blue and one icy pale blue, a ghostly will-o'-wisp flame and a snowflake emblems intertwined at the center glowing eerie grey-blue and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-064",
+      "ma": "cong_phap/ghep/cuc_duong_cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Cực dương–Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one blazing orange and one dark charcoal purple, a blazing sun disc and a crescent moon emblems intertwined at the center glowing blazing orange and shadowy charcoal-purple, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-065",
+      "ma": "cong_phap/ghep/cuc_duong_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Cực dương–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one blazing orange and one icy pale blue, a blazing sun disc and a snowflake emblems intertwined at the center glowing blazing orange and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-GH-066",
+      "ma": "cong_phap/ghep/cuc_am_cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Công pháp ghép Cực âm–Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 2 hệ (docs/KE_HOACH.md Sprint 2; GDD mục 9)",
+      "mo_ta": "a complete bound cultivation manual whose silk cover is split diagonally into two halves, one dark charcoal purple and one icy pale blue, a crescent moon and a snowflake emblems intertwined at the center glowing shadowy charcoal-purple and frosty ice-blue, two silk tassels in both colors, slightly open",
+      "ghi_chu": "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển"
+    },
+    {
+      "ma_vp": "CP-BO-001",
+      "ma": "cong_phap/bo_ba/kim",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Kim",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a silver-white silk cover and a perfect circle emblem glowing gleaming silver, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-002",
+      "ma": "cong_phap/bo_ba/moc",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Mộc",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a verdant green silk cover and a sprouting leaf emblem glowing living green, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-003",
+      "ma": "cong_phap/bo_ba/thuy",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Thủy",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a deep blue silk cover and flowing wave ripples emblem glowing deep sapphire blue, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-004",
+      "ma": "cong_phap/bo_ba/hoa",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Hỏa",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a vermilion red silk cover and a blazing flame emblem glowing fiery vermilion, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-005",
+      "ma": "cong_phap/bo_ba/tho",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Thổ",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a earthy ochre yellow silk cover and a solid square emblem glowing earthy ochre, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-006",
+      "ma": "cong_phap/bo_ba/loi",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Lôi",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a electric violet silk cover and a lightning bolt emblem glowing crackling violet, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-007",
+      "ma": "cong_phap/bo_ba/phong",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Phong",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a pale jade teal silk cover and a spiral whirlwind emblem glowing pale jade-teal, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-008",
+      "ma": "cong_phap/bo_ba/quang",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Quang",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a radiant gold silk cover and radiating light rays emblem glowing radiant golden, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-009",
+      "ma": "cong_phap/bo_ba/am_lanh",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Âm lãnh",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a cold grey-blue silk cover and a ghostly will-o'-wisp flame emblem glowing eerie grey-blue, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-010",
+      "ma": "cong_phap/bo_ba/cuc_duong",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Cực dương",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a blazing orange silk cover and a blazing sun disc emblem glowing blazing orange, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-011",
+      "ma": "cong_phap/bo_ba/cuc_am",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Cực âm",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a dark charcoal purple silk cover and a crescent moon emblem glowing shadowy charcoal-purple, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
+    },
+    {
+      "ma_vp": "CP-BO-012",
+      "ma": "cong_phap/bo_ba/cuc_han",
+      "nhom": "cong_phap",
+      "ten": "Bộ ba quyển chủ hệ Cực hàn",
+      "uu_tien": 2,
+      "nguon": "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
+      "mo_ta": "a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a icy pale blue silk cover and a snowflake emblem glowing frosty ice-blue, the two lower volumes in plain pale cream silk, a soft mystical glow around the set",
+      "ghi_chu": "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI"
     },
     {
       "ma_vp": "VK-TN-001",
