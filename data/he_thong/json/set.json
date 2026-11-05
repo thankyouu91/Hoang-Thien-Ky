@@ -135,14 +135,14 @@
         {
           "so": 2,
           "loai": "chi_so",
-          "mo_ta": "Hồi máu nhận +6%; thời gian bị khống chế −20%",
-          "tham_so": {"healTaken":60,"controlTakenCut":200}
+          "mo_ta": "Hồi máu nhận +6%; thời gian bị khống chế −30%; hồi 0,2% máu mỗi giây",
+          "tham_so": {"healTaken":60,"controlTakenCut":300,"hpRegen":2}
         },
         {
           "so": 4,
           "loai": "kinh_te",
-          "mo_ta": "Hồi 0,3% máu mỗi giây; mỏ dược trấn giữ +5%",
-          "tham_so": {"sanLuongMoDuoc":50,"hpRegen":3}
+          "mo_ta": "Hồi thêm 0,1% máu mỗi giây (cả bộ 0,3%); mỏ dược +5%",
+          "tham_so": {"sanLuongMoDuoc":50,"hpRegen":1}
         },
         {
           "so": 7,
@@ -163,12 +163,12 @@
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Máu +3%","tham_so":{"hp":30}},
+        {"so":2,"loai":"chi_so","mo_ta":"Máu +2%","tham_so":{"hp":20}},
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Giảm sát thương ngoại nhận 9%; hồi 0,1% máu mỗi giây",
-          "tham_so": {"damageTakenCutOuter":90,"hpRegen":1}
+          "mo_ta": "Giảm sát thương ngoại nhận 12%; hồi 0,1% máu mỗi giây",
+          "tham_so": {"damageTakenCutOuter":120,"hpRegen":1}
         },
         {
           "so": 7,
@@ -219,8 +219,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Phản 22% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%",
-          "tham_so": {"reflect":220,"damageTakenCut":10}
+          "mo_ta": "Phản 30% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%",
+          "tham_so": {"reflect":300,"damageTakenCut":10}
         },
         {
           "so": 7,
@@ -267,12 +267,12 @@
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Thủ nội +4%","tham_so":{"defInner":40}},
+        {"so":2,"loai":"chi_so","mo_ta":"Thủ nội +2%","tham_so":{"defInner":20}},
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Mana tối đa +3%; giảm mana thi triển 5%; giảm sát thương nội nhận 15%; công lực −3%",
-          "tham_so": {"manaMax":30,"manaCostCut":50,"damageTakenCutInner":150,"atk":-30}
+          "mo_ta": "Giảm mana thi triển 5%; giảm sát thương nội nhận 18%; công lực −3%",
+          "tham_so": {"manaCostCut":50,"damageTakenCutInner":180,"atk":-30}
         },
         {
           "so": 7,
@@ -657,8 +657,8 @@
       "an": "NG-BA-005",
       "moc_2": {"mo_ta":"Hút máu +1,5%","tham_so":{"lifesteal":15}},
       "moc_3": {
-        "mo_ta": "Hút mana 0,5% mỗi đòn; sát thương phản đòn nhận vào −50%",
-        "tham_so": {"manaDrain":5,"reflectTakenCut":500}
+        "mo_ta": "Hút mana 0,5% mỗi đòn; sát thương phản đòn nhận vào −60%",
+        "tham_so": {"manaDrain":5,"reflectTakenCut":600}
       }
     },
     {
