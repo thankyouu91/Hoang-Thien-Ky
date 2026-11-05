@@ -14,8 +14,8 @@ export interface Toi {
   vai_tro: VaiTro;
   vai_tro_that: VaiTro;
   admin_goc: boolean;
-  /** Ứng dụng Access và đồng bộ nhóm đã nối chưa (để màn hiện hướng dẫn làm tay). */
-  access: { team: string; dong_bo_nguoi_choi: boolean; dong_bo_quan_tri: boolean };
+  /** Team Access và việc đồng bộ group quản trị đã nối chưa (để màn Phân quyền hiện hướng dẫn làm tay). */
+  access: { team: string; dong_bo_quan_tri: boolean };
 }
 
 // ---- Tổng quan --------------------------------------------------------------------------------------------------
@@ -37,8 +37,8 @@ export const MUC_TIEU = { ftue: 0.8, d1: 0.35, d7: 0.12, phien_ngay: 3 } as cons
 
 export interface TongQuan {
   nguon: Nguon;
-  /** Số email được mời (qt_nguoi_choi), số đang khóa, số đã chơi ít nhất một lần. */
-  nguoi_choi: { moi: number; khoa: number; da_choi: number; hom_nay: number };
+  /** Người chơi thử (nguoi_choi_thu: mỗi trình duyệt đã mở link mời), số đang khóa, số chơi hôm nay; số link mời còn dùng được. */
+  nguoi_choi: { tong: number; khoa: number; hom_nay: number; link_mo: number };
   /** Mỗi ngày (giờ Việt Nam): số phiên, số người chơi. */
   theo_ngay: { ngay: string; phien: number; nguoi: number }[];
   /** Số người đã qua từng bước FTUE (chỉ số 0 là bước 1). */
@@ -97,41 +97,58 @@ export interface DsSuKien {
   con: boolean;
 }
 
-// ---- Người chơi thử --------------------------------------------------------------------------------------------
+// ---- Người chơi thử và link mời ---------------------------------------------------------------------------------
+// Người chơi thử vào bằng link mời https://thienhoangky.fun/moi/<ma>, không qua Access và không có email
+// (cloudflare/migrations/0002_link_moi.sql, docs/api.md).
+
+export const LINK_MOI_GOC = "https://thienhoangky.fun/moi/";
+
+/** mo: còn dùng được; tat: Admin tắt; het_luot: đủ toi_da; het_han: quá het_han. */
+export type TrangThaiLink = "mo" | "tat" | "het_luot" | "het_han";
+
+export interface LoiMoi {
+  ma: string;
+  ten: string;
+  toi_da: number | null;
+  da_dung: number;
+  het_han: number | null;
+  tat: boolean;
+  trang_thai: TrangThaiLink;
+  tao_boi: string;
+  tao_luc: number;
+  sua_boi: string | null;
+  sua_luc: number | null;
+}
 
 export interface NguoiChoi {
-  email: string;
-  /** false: email đã vào game (nguoi_choi_thu) nhưng không có trong danh sách mời của admin, thường là admin, vận hành
-   *  hoặc người được thêm thẳng vào Access. */
-  da_moi: boolean;
-  ten_goi: string | null;
-  ghi_chu: string | null;
+  /** Mã công khai 10 ký tự của Worker game. Không phải tên hay email. */
+  id: string;
+  ma_moi: string;
+  lan_dau: number;
+  lan_cuoi: number;
+  so_phien: number;
   khoa: boolean;
   ly_do_khoa: string | null;
-  moi_luc: number | null;
-  moi_boi: string | null;
-  /** Từ nguoi_choi_thu của Worker game: null khi chưa vào game lần nào. */
-  lan_dau: number | null;
-  lan_cuoi: number | null;
-  so_phien: number;
+  sua_boi: string | null;
+  sua_luc: number | null;
+  ghi_chu: string | null;
+  so_phan_hoi: number;
+}
+
+export interface DsNguoiChoi {
+  nguon: Nguon;
+  link: LoiMoi[];
+  dong: NguoiChoi[];
 }
 
 export interface DongBo {
-  nhom: "nguoi_choi" | "quan_tri";
+  nhom: "quan_tri";
   /** false: chưa có API token và group id, admin cập nhật Access bằng tay. */
   da_noi: boolean;
   luc: number | null;
   ok: boolean | null;
   so_email: number | null;
   loi: string | null;
-}
-
-export interface DsNguoiChoi {
-  nguon: Nguon;
-  dong: NguoiChoi[];
-  dong_bo: DongBo;
-  /** Email đang được phép chơi (đã mời, không khóa), để dán vào Access khi chưa đồng bộ tự động. */
-  danh_sach_access: string[];
 }
 
 // ---- Phản hồi ----------------------------------------------------------------------------------------------------
@@ -142,7 +159,10 @@ export const TEN_TRANG_THAI_PH: Record<TrangThaiPhanHoi, string> = { moi: "Mới
 export interface PhanHoi {
   id: string;
   luc: number;
-  email: string | null;
+  /** nguoi_choi_thu.id của người gửi. */
+  nguoi_choi: string | null;
+  /** Cách liên lạc người chơi tự để lại (có thể trống). */
+  lien_he: string | null;
   loai: string | null;
   noi_dung: string;
   /** Màn hoặc ngữ cảnh người chơi đang ở khi gửi. */
@@ -246,11 +266,13 @@ export interface NhatKy {
 
 /** Nhãn tiếng Việt cho mã hành động trong nhật ký. */
 export const TEN_HANH_DONG: Record<string, string> = {
-  "nguoi_choi.moi": "Mời người chơi",
-  "nguoi_choi.sua": "Sửa ghi chú người chơi",
+  "loi_moi.tao": "Tạo link mời",
+  "loi_moi.sua": "Sửa link mời",
+  "loi_moi.tat": "Tắt link mời",
+  "loi_moi.mo": "Mở lại link mời",
+  "nguoi_choi.ghi_chu": "Ghi chú người chơi",
   "nguoi_choi.khoa": "Khóa người chơi",
   "nguoi_choi.mo_khoa": "Mở khóa người chơi",
-  "nguoi_choi.bo": "Bỏ mời người chơi",
   "phan_hoi.trang_thai": "Đổi trạng thái phản hồi",
   "phan_hoi.ghi_chu": "Ghi chú phản hồi",
   "thong_bao.tao": "Soạn thông báo",

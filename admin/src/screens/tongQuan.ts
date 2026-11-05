@@ -28,9 +28,9 @@ export const manTongQuan: Man = {
 
         <section class="card"><h2>Người chơi thử</h2>
           <div class="metrics">
-            ${metric("Được mời", so.format(nc.moi), nc.khoa ? `${nc.khoa} đang khóa` : "danh sách ở màn Người chơi thử")}
-            ${metric("Đã chơi", so.format(nc.da_choi), tq.nguon === "that" && nc.moi ? `email đã vào game · ${pct(nc.da_choi, nc.moi)} số được mời` : "email đã vào game")}
-            ${metric("Chơi hôm nay", so.format(nc.hom_nay), "email, theo giờ Việt Nam")}
+            ${metric("Người chơi thử", so.format(nc.tong), nc.khoa ? `đã vào bằng link mời · ${nc.khoa} đang khóa` : "đã vào bằng link mời")}
+            ${metric("Chơi hôm nay", so.format(nc.hom_nay), "giờ Việt Nam")}
+            ${metric("Link mời đang mở", so.format(nc.link_mo), "còn lượt, còn hạn, chưa tắt")}
             ${metricMucTieu("Phiên mỗi người mỗi ngày", tq.phien_moi_nguoi.toLocaleString("vi-VN"), tq.phien_moi_nguoi >= MUC_TIEU.phien_ngay, `mốc ≥ ${MUC_TIEU.phien_ngay}`)}
           </div>
         </section>

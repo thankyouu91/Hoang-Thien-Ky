@@ -27,7 +27,7 @@
     }
   ],
   "vars": {
-    "ACCESS_TEAM_DOMAIN": "",
+    "ACCESS_TEAM_DOMAIN": "jolly-water-a8bd.cloudflareaccess.com",
     "ACCESS_AUD": "",
     "ADMIN_GOC": ""
   },

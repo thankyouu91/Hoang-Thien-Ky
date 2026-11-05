@@ -1,16 +1,17 @@
 // Worker thienhoangky-admin: phục vụ giao diện admin (Static Assets) và API /api/* ở admin.thienhoangky.fun.
 // Mọi yêu cầu, kể cả file tĩnh, qua Worker trước (run_worker_first) và phải mang JWT Access hợp lệ của ứng dụng admin.
 // Vai trò tra trong D1 (qt_vai_tro) hoặc ADMIN_GOC; quyền chặn ở đây, giao diện chỉ ẩn nút cho gọn.
-// Email là dữ liệu cá nhân: không console.log email, không để email trong URL (thao tác theo email gửi qua thân POST).
+// Email (của admin, vận hành) là dữ liệu cá nhân: không console.log email, không để email trong URL (thao tác theo email gửi qua thân POST).
+// Người chơi thử không có email: họ vào bằng link mời, nhận diện bằng mã nguoi_choi_thu.id.
 
-import type { DongVaiTro, LichSuCauHinh, MucThongBao, NguoiChoi, NhatKy, ThamSo, ThongBao, Toi, TrangThaiPhanHoi, VaiTro } from "../shared/hopDong.ts";
+import type { DongVaiTro, LichSuCauHinh, MucThongBao, NhatKy, ThamSo, ThongBao, Toi, TrangThaiPhanHoi, VaiTro } from "../shared/hopDong.ts";
+import { LINK_MOI_GOC } from "../shared/hopDong.ts";
 import { THAM_SO, kiemGiaTri } from "./cauHinh.ts";
-import { dongBo, emailCuaNhom, trangThai } from "./dongBoAccess.ts";
-import type { Nhom } from "./dongBoAccess.ts";
+import { dongBo, emailQuanTri, trangThai } from "./dongBoAccess.ts";
 import type { Env } from "./env.ts";
-import { dsAdminGoc } from "./env.ts";
+import { dsAdminGoc, teamDomain } from "./env.ts";
 import { defaultKeyLoader, certsUrl, isEmail, normalizeEmail, verifyAccessJwt } from "./jwt.ts";
-import { coPhanHoi, dsPhanHoi, dsSuKien, thongKeNguoiChoi, tongQuan } from "./nguonGame.ts";
+import { coPhanHoi, dsNguoiChoi, dsPhanHoi, dsSuKien, thieuBang, tongQuan } from "./nguonGame.ts";
 
 interface Nguoi {
   email: string;
@@ -59,13 +60,14 @@ function voiBaoMat(res: Response): Response {
 // ---- Xác thực và vai trò ---------------------------------------------------------------------------------------
 
 async function xacThuc(req: Request, env: Env): Promise<{ ok: true; email: string } | { ok: false; status: number; message: string }> {
-  if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return { ok: false, status: 503, message: "Admin chưa cấu hình Access (ACCESS_TEAM_DOMAIN, ACCESS_AUD)." };
+  const team = teamDomain(env);
+  if (!team || !env.ACCESS_AUD) return { ok: false, status: 503, message: "Admin chưa cấu hình Access (ACCESS_TEAM_DOMAIN, ACCESS_AUD)." };
   const token = req.headers.get("Cf-Access-Jwt-Assertion");
   if (!token) return { ok: false, status: 401, message: "Chưa đăng nhập qua Cloudflare Access." };
   const v = await verifyAccessJwt(token, {
-    teamDomain: env.ACCESS_TEAM_DOMAIN,
+    teamDomain: team,
     aud: env.ACCESS_AUD,
-    loadKeys: defaultKeyLoader(env.ACCESS_CERTS_URL || certsUrl(env.ACCESS_TEAM_DOMAIN)),
+    loadKeys: defaultKeyLoader(env.ACCESS_CERTS_URL || certsUrl(team)),
   });
   if (!v.ok) {
     // Ghi lý do (không có email) để dò cấu hình Access.
@@ -121,6 +123,44 @@ function emailTu(v: unknown): string {
   return e;
 }
 
+/** Mã link mời: 6–40 ký tự [a-z0-9-] (CHECK của loi_moi). */
+function maTu(v: unknown): string {
+  const m = chuoi(v, "mã link", 40) ?? "";
+  if (!/^[a-z0-9-]{6,40}$/.test(m)) throw new Loi(400, "Mã link không hợp lệ.");
+  return m;
+}
+
+/** Mã người chơi thử (nguoi_choi_thu.id). */
+function idTu(v: unknown): string {
+  const id = chuoi(v, "mã người chơi", 40) ?? "";
+  if (!/^[A-Za-z0-9_-]{4,40}$/.test(id)) throw new Loi(400, "Mã người chơi không hợp lệ.");
+  return id;
+}
+
+function maNgauNhien(n: number): string {
+  const chu = "abcdefghijkmnpqrstuvwxyz23456789"; // bỏ l, o, 0, 1 cho dễ đọc khi đọc qua điện thoại
+  const b = crypto.getRandomValues(new Uint8Array(n));
+  return [...b].map((x) => chu[x % chu.length]).join("");
+}
+
+function docLink(b: Record<string, unknown>): { ten: string; toi_da: number | null; het_han: number | null } {
+  const ten = chuoi(b.ten, "tên link", 80)!;
+  const toi_da = b.toi_da === null || b.toi_da === undefined || b.toi_da === "" ? null : soNguyen(b.toi_da, "số người tối đa");
+  if (toi_da !== null && (toi_da < 1 || toi_da > 10000)) throw new Loi(400, "Số người tối đa từ 1 tới 10.000.");
+  const het_han = b.het_han === null || b.het_han === undefined || b.het_han === "" ? null : soNguyen(b.het_han, "hết hạn");
+  return { ten, toi_da, het_han };
+}
+
+/** Ghi vào bảng của Worker game; bảng chưa có (migration game chưa chạy) thì báo 503 thay vì lỗi lạ. */
+async function ghiBangGame<T>(f: () => Promise<T>): Promise<T> {
+  try {
+    return await f();
+  } catch (e) {
+    if (thieuBang(e)) throw new Loi(503, "Bảng game (loi_moi, nguoi_choi_thu) chưa có trong D1: chờ migration 0002 của Worker game.");
+    throw e;
+  }
+}
+
 function soNguyen(v: unknown, ten: string): number {
   const n = typeof v === "string" ? Number(v) : v;
   if (typeof n !== "number" || !Number.isInteger(n)) throw new Loi(400, `${ten} phải là số nguyên.`);
@@ -138,11 +178,7 @@ const routes: Record<string, Handler> = {
       vai_tro: n.vaiTro,
       vai_tro_that: n.vaiTroThat,
       admin_goc: n.goc,
-      access: {
-        team: env.ACCESS_TEAM_DOMAIN,
-        dong_bo_nguoi_choi: (await trangThai(env, "nguoi_choi")).da_noi,
-        dong_bo_quan_tri: (await trangThai(env, "quan_tri")).da_noi,
-      },
+      access: { team: teamDomain(env), dong_bo_quan_tri: (await trangThai(env)).da_noi },
     };
     return json(toi);
   },
@@ -160,99 +196,82 @@ const routes: Record<string, Handler> = {
     return json(await dsSuKien(env.DB, { loai, truoc, gioiHan: 100 }));
   },
 
-  // -- Người chơi thử --
-  "GET /api/nguoi-choi": async ({ env }) => {
-    const [ds, tk, db] = await Promise.all([
-      env.DB.prepare("SELECT * FROM qt_nguoi_choi ORDER BY moi_luc DESC").all<Record<string, unknown>>(),
-      thongKeNguoiChoi(env.DB),
-      trangThai(env, "nguoi_choi"),
-    ]);
-    const dong: NguoiChoi[] = ds.results.map((r) => {
-      const t = tk.theoEmail.get(String(r.email));
-      return {
-        email: String(r.email),
-        da_moi: true,
-        ten_goi: (r.ten_goi as string | null) ?? null,
-        ghi_chu: (r.ghi_chu as string | null) ?? null,
-        khoa: r.khoa === 1,
-        ly_do_khoa: (r.ly_do_khoa as string | null) ?? null,
-        moi_luc: Number(r.moi_luc),
-        moi_boi: String(r.moi_boi),
-        lan_dau: t?.lan_dau ?? null,
-        lan_cuoi: t?.lan_cuoi ?? null,
-        so_phien: t?.so_phien ?? 0,
-      };
-    });
-    // Email đã vào game mà không có trong danh sách mời (admin, vận hành, hoặc được thêm thẳng vào Access).
-    const daCo = new Set(dong.map((x) => x.email));
-    for (const [email, t] of tk.theoEmail) {
-      if (daCo.has(email)) continue;
-      dong.push({ email, da_moi: false, ten_goi: null, ghi_chu: null, khoa: false, ly_do_khoa: null, moi_luc: null, moi_boi: null, lan_dau: t.lan_dau, lan_cuoi: t.lan_cuoi, so_phien: t.so_phien });
-    }
-    return json({ nguon: tk.nguon, dong, dong_bo: db, danh_sach_access: await emailCuaNhom(env, "nguoi_choi") });
-  },
-  "POST /api/nguoi-choi/moi": async ({ req, env, n }) => {
+  // -- Người chơi thử và link mời --
+  // Xem: cả hai vai trò. Tạo, sửa, tắt link và khóa người chơi: chỉ Admin (đổi ai được vào game). Ghi chú: cả hai.
+  "GET /api/nguoi-choi": async ({ env }) => json(await dsNguoiChoi(env.DB)),
+  "POST /api/loi-moi": async ({ req, env, n }) => {
     canAdmin(n);
     const b = await than(req);
-    const raw = Array.isArray(b.emails) ? b.emails.join("\n") : String(b.emails ?? "");
-    const parts = raw.split(/[\s,;]+/).map(normalizeEmail).filter(Boolean);
-    if (parts.length === 0) throw new Loi(400, "Chưa có email nào.");
-    if (parts.length > 200) throw new Loi(400, "Mỗi lần mời tối đa 200 email.");
-    const sai = parts.filter((e) => !isEmail(e));
-    if (sai.length) throw new Loi(400, `Email không hợp lệ: ${sai.slice(0, 5).join(", ")}${sai.length > 5 ? "…" : ""}`);
-    const ghiChu = chuoi(b.ghi_chu, "ghi chú", 500, false);
+    const l = docLink(b);
     const now = Date.now();
-    const emails = [...new Set(parts)];
-    const res = await env.DB.batch(
-      emails.map((e) =>
-        env.DB.prepare("INSERT INTO qt_nguoi_choi (email, ghi_chu, moi_boi, moi_luc) VALUES (?, ?, ?, ?) ON CONFLICT(email) DO NOTHING").bind(e, ghiChu, n.email, now),
-      ),
+    // Mã ngẫu nhiên 12 ký tự [a-z0-9] (~62 bit), theo CHECK 6–40 ký tự của loi_moi.
+    const ma = maNgauNhien(12);
+    await ghiBangGame(() =>
+      env.DB.prepare("INSERT INTO loi_moi (ma, ten, toi_da, da_dung, het_han, tat, tao_boi, tao_luc) VALUES (?, ?, ?, 0, ?, 0, ?, ?)")
+        .bind(ma, l.ten, l.toi_da, l.het_han, n.email, now)
+        .run(),
     );
-    const moi = emails.filter((_, i) => (res[i].meta.changes ?? 0) > 0);
-    if (moi.length) await ghiNhatKy(env, n, "nguoi_choi.moi", moi.length === 1 ? moi[0] : `${moi.length} email`, { emails: moi });
-    return json({ moi: moi.length, da_co: emails.length - moi.length, dong_bo: await dongBo(env, "nguoi_choi") });
+    await ghiNhatKy(env, n, "loi_moi.tao", ma, { ten: l.ten, toi_da: l.toi_da, het_han: l.het_han });
+    return json({ ma, link: LINK_MOI_GOC + ma });
   },
-  "POST /api/nguoi-choi/sua": async ({ req, env, n }) => {
+  "POST /api/loi-moi/sua": async ({ req, env, n }) => {
+    canAdmin(n);
     const b = await than(req);
-    const email = emailTu(b.email);
-    const tenGoi = chuoi(b.ten_goi, "tên gọi", 80, false);
-    const ghiChu = chuoi(b.ghi_chu, "ghi chú", 1000, false);
-    const r = await env.DB.prepare("UPDATE qt_nguoi_choi SET ten_goi = ?, ghi_chu = ?, sua_boi = ?, sua_luc = ? WHERE email = ?")
-      .bind(tenGoi, ghiChu, n.email, Date.now(), email)
-      .run();
-    if (!r.meta.changes) throw new Loi(404, "Email này chưa có trong danh sách mời.");
-    await ghiNhatKy(env, n, "nguoi_choi.sua", email, { ten_goi: tenGoi, ghi_chu: ghiChu });
+    const ma = maTu(b.ma);
+    const l = docLink(b);
+    const r = await ghiBangGame(() =>
+      env.DB.prepare("UPDATE loi_moi SET ten = ?, toi_da = ?, het_han = ?, sua_boi = ?, sua_luc = ? WHERE ma = ?").bind(l.ten, l.toi_da, l.het_han, n.email, Date.now(), ma).run(),
+    );
+    if (!r.meta.changes) throw new Loi(404, "Không có link mời này.");
+    await ghiNhatKy(env, n, "loi_moi.sua", ma, { ten: l.ten, toi_da: l.toi_da, het_han: l.het_han });
+    return json({ ok: true });
+  },
+  "POST /api/loi-moi/tat": async ({ req, env, n }) => {
+    canAdmin(n);
+    const b = await than(req);
+    const ma = maTu(b.ma);
+    if (typeof b.tat !== "boolean") throw new Loi(400, "tat phải là true hoặc false.");
+    const r = await ghiBangGame(() =>
+      env.DB.prepare("UPDATE loi_moi SET tat = ?, sua_boi = ?, sua_luc = ? WHERE ma = ?").bind(b.tat ? 1 : 0, n.email, Date.now(), ma).run(),
+    );
+    if (!r.meta.changes) throw new Loi(404, "Không có link mời này.");
+    await ghiNhatKy(env, n, b.tat ? "loi_moi.tat" : "loi_moi.mo", ma);
     return json({ ok: true });
   },
   "POST /api/nguoi-choi/khoa": async ({ req, env, n }) => {
     canAdmin(n);
     const b = await than(req);
-    const email = emailTu(b.email);
+    const id = idTu(b.id);
     if (typeof b.khoa !== "boolean") throw new Loi(400, "khoa phải là true hoặc false.");
     const lyDo = b.khoa ? chuoi(b.ly_do, "lý do khóa", 300, false) : null;
-    const r = await env.DB.prepare("UPDATE qt_nguoi_choi SET khoa = ?, ly_do_khoa = ?, sua_boi = ?, sua_luc = ? WHERE email = ?")
-      .bind(b.khoa ? 1 : 0, lyDo, n.email, Date.now(), email)
-      .run();
-    if (!r.meta.changes) throw new Loi(404, "Email này chưa có trong danh sách mời.");
-    await ghiNhatKy(env, n, b.khoa ? "nguoi_choi.khoa" : "nguoi_choi.mo_khoa", email, lyDo ? { ly_do: lyDo } : undefined);
-    return json({ ok: true, dong_bo: await dongBo(env, "nguoi_choi") });
+    // Worker game đọc cột khoa mỗi yêu cầu: khóa có hiệu lực ngay ở yêu cầu kế tiếp (cả HTML lẫn API).
+    const r = await ghiBangGame(() =>
+      env.DB.prepare("UPDATE nguoi_choi_thu SET khoa = ?, ly_do_khoa = ?, sua_boi = ?, sua_luc = ? WHERE id = ?").bind(b.khoa ? 1 : 0, lyDo, n.email, Date.now(), id).run(),
+    );
+    if (!r.meta.changes) throw new Loi(404, "Không có người chơi này.");
+    await ghiNhatKy(env, n, b.khoa ? "nguoi_choi.khoa" : "nguoi_choi.mo_khoa", id, lyDo ? { ly_do: lyDo } : undefined);
+    return json({ ok: true });
   },
-  "POST /api/nguoi-choi/bo": async ({ req, env, n }) => {
-    canAdmin(n);
+  "POST /api/nguoi-choi/ghi-chu": async ({ req, env, n }) => {
     const b = await than(req);
-    const email = emailTu(b.email);
-    const r = await env.DB.prepare("DELETE FROM qt_nguoi_choi WHERE email = ?").bind(email).run();
-    if (!r.meta.changes) throw new Loi(404, "Email này chưa có trong danh sách mời.");
-    await ghiNhatKy(env, n, "nguoi_choi.bo", email);
-    return json({ ok: true, dong_bo: await dongBo(env, "nguoi_choi") });
+    const id = idTu(b.id);
+    const ghiChu = chuoi(b.ghi_chu, "ghi chú", 1000, false);
+    if (ghiChu) {
+      await env.DB.prepare(
+        "INSERT INTO qt_ghi_chu_nguoi_choi (nguoi_choi_id, ghi_chu, sua_boi, sua_luc) VALUES (?, ?, ?, ?) ON CONFLICT(nguoi_choi_id) DO UPDATE SET ghi_chu = excluded.ghi_chu, sua_boi = excluded.sua_boi, sua_luc = excluded.sua_luc",
+      )
+        .bind(id, ghiChu, n.email, Date.now())
+        .run();
+    } else {
+      await env.DB.prepare("DELETE FROM qt_ghi_chu_nguoi_choi WHERE nguoi_choi_id = ?").bind(id).run();
+    }
+    await ghiNhatKy(env, n, "nguoi_choi.ghi_chu", id, { ghi_chu: ghiChu });
+    return json({ ok: true });
   },
-  "POST /api/access/dong-bo": async ({ req, env, n }) => {
+  "POST /api/access/dong-bo": async ({ env, n }) => {
     canAdmin(n);
-    const b = await than(req);
-    const nhom = b.nhom === "quan_tri" ? "quan_tri" : b.nhom === "nguoi_choi" ? "nguoi_choi" : null;
-    if (!nhom) throw new Loi(400, "nhom là nguoi_choi hoặc quan_tri.");
-    const kq = await dongBo(env, nhom as Nhom);
-    await ghiNhatKy(env, n, "access.dong_bo", nhom, { ok: kq.ok, so_email: kq.so_email, loi: kq.loi });
+    const kq = await dongBo(env);
+    await ghiNhatKy(env, n, "access.dong_bo", "quan_tri", { ok: kq.ok, so_email: kq.so_email, loi: kq.loi });
     return json(kq);
   },
 
@@ -394,7 +413,7 @@ const routes: Record<string, Handler> = {
           }),
         ),
     ];
-    return json({ dong, dong_bo: await trangThai(env, "quan_tri"), danh_sach_access: await emailCuaNhom(env, "quan_tri") });
+    return json({ dong, dong_bo: await trangThai(env), danh_sach_access: await emailQuanTri(env) });
   },
   "POST /api/vai-tro": async ({ req, env, n }) => {
     canAdmin(n);
@@ -413,7 +432,7 @@ const routes: Record<string, Handler> = {
       .bind(email, vt, ghiChu, n.email, now, n.email, now)
       .run();
     await ghiNhatKy(env, n, "vai_tro.dat", email, { cu: cu?.vai_tro ?? null, moi: vt });
-    return json({ ok: true, dong_bo: await dongBo(env, "quan_tri") });
+    return json({ ok: true, dong_bo: await dongBo(env) });
   },
   "POST /api/vai-tro/xoa": async ({ req, env, n }) => {
     canAdmin(n);
@@ -425,7 +444,7 @@ const routes: Record<string, Handler> = {
     if (!cu) throw new Loi(404, "Email này chưa có quyền.");
     await env.DB.prepare("DELETE FROM qt_vai_tro WHERE email = ?").bind(email).run();
     await ghiNhatKy(env, n, "vai_tro.xoa", email, { cu: cu.vai_tro });
-    return json({ ok: true, dong_bo: await dongBo(env, "quan_tri") });
+    return json({ ok: true, dong_bo: await dongBo(env) });
   },
 
   // -- Nhật ký (cả hai vai trò) --

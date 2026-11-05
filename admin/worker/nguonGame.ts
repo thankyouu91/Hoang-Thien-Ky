@@ -1,11 +1,14 @@
-// Đọc số liệu game từ bảng của Worker game trong D1 chung (cloudflare/migrations/0001_khoi_tao.sql, docs/api.md):
-//   nguoi_choi_thu (email, lan_dau, lan_cuoi, so_phien) — bảng duy nhất có email;
-//   su_kien (id, loai, an_danh, phien, luc, nhan_luc, du_lieu, phien_ban) — ẩn danh, không có email;
-//   phan_hoi (id, email, loai, noi_dung, man, thiet_bi, phien_ban, luc).
-// FTUE, giữ chân và người mỗi ngày tính theo an_danh (theo máy). Không nối email với an_danh.
-// Bảng game chưa có (D1 báo "no such table", ví dụ khi chạy cục bộ) thì trả dữ liệu giả cùng dạng, nguon = "mau".
+// Đọc số liệu game từ bảng của Worker game trong D1 chung (cloudflare/migrations/, docs/api.md):
+//   loi_moi (ma, ten, toi_da, da_dung, het_han, tat, …) — link mời https://thienhoangky.fun/moi/<ma>;
+//   nguoi_choi_thu (id, the_hash, ma_moi, lan_dau, lan_cuoi, so_phien, khoa, ly_do_khoa, …) — mỗi trình duyệt đã mở link;
+//   su_kien (id, loai, an_danh, phien, luc, nhan_luc, du_lieu, phien_ban) — ẩn danh;
+//   phan_hoi (id, nguoi_choi, loai, noi_dung, man, lien_he, thiet_bi, phien_ban, luc).
+// Không có email người chơi. the_hash là băm của thẻ vào: không bao giờ SELECT.
+// FTUE, giữ chân và người mỗi ngày tính theo an_danh (theo máy).
+// Bảng game chưa có hoặc còn dạng cũ (D1 báo "no such table/column", ví dụ khi chạy cục bộ) thì trả dữ liệu giả cùng dạng,
+// nguon = "mau"; các thao tác ghi bảng game thì báo lỗi 503.
 
-import type { DsPhanHoi, DsSuKien, Nguon, PhanHoi, SuKien, TongQuan, TrangThaiPhanHoi } from "../shared/hopDong.ts";
+import type { DsNguoiChoi, DsPhanHoi, DsSuKien, LoiMoi, Nguon, PhanHoi, SuKien, TongQuan, TrangThaiLink, TrangThaiPhanHoi } from "../shared/hopDong.ts";
 import { BUOC_FTUE } from "../shared/hopDong.ts";
 
 /** Lệch giờ Việt Nam (UTC+7) để chia ngày theo giờ người chơi. */
@@ -20,30 +23,29 @@ export function tenNgay(d: number): string {
   return new Date(d * NGAY_MS).toISOString().slice(0, 10);
 }
 
-function thieuBang(e: unknown): boolean {
-  return /no such table/i.test(String((e as Error)?.message ?? e));
+export function thieuBang(e: unknown): boolean {
+  return /no such (table|column)/i.test(String((e as Error)?.message ?? e));
 }
 
 // ---- Tổng quan ------------------------------------------------------------------------------------------------
 
 export async function tongQuan(db: D1Database, soNgay: number, now = Date.now()): Promise<TongQuan> {
-  const moi = await db.prepare("SELECT COUNT(*) AS moi, COALESCE(SUM(khoa), 0) AS khoa FROM qt_nguoi_choi").first<{ moi: number; khoa: number }>();
-  const invited = { moi: moi?.moi ?? 0, khoa: moi?.khoa ?? 0 };
   try {
-    return await tongQuanThat(db, soNgay, now, invited);
+    return await tongQuanThat(db, soNgay, now);
   } catch (e) {
     if (!thieuBang(e)) throw e;
-    return tongQuanMau(soNgay, now, invited);
+    return tongQuanMau(soNgay, now);
   }
 }
 
-async function tongQuanThat(db: D1Database, soNgay: number, now: number, invited: { moi: number; khoa: number }): Promise<TongQuan> {
+async function tongQuanThat(db: D1Database, soNgay: number, now: number): Promise<TongQuan> {
   const homNay = ngayVN(now);
   const tu = (homNay - soNgay + 1) * NGAY_MS - VN_MS;
   const dauHomNay = homNay * NGAY_MS - VN_MS;
 
-  const [nguoi, theoNgay, ftue, ngayMay, phienTb] = await db.batch([
-    db.prepare("SELECT COUNT(*) AS da_choi, COALESCE(SUM(lan_cuoi >= ?), 0) AS hom_nay FROM nguoi_choi_thu").bind(dauHomNay),
+  const [nguoi, link, theoNgay, ftue, ngayMay, phienTb] = await db.batch([
+    db.prepare("SELECT COUNT(*) AS tong, COALESCE(SUM(khoa), 0) AS khoa, COALESCE(SUM(lan_cuoi >= ?), 0) AS hom_nay FROM nguoi_choi_thu").bind(dauHomNay),
+    db.prepare("SELECT COUNT(*) AS mo FROM loi_moi WHERE tat = 0 AND (het_han IS NULL OR het_han > ?) AND (toi_da IS NULL OR da_dung < toi_da)").bind(now),
     db.prepare(`SELECT ${NGAY_SQL} AS d, COUNT(DISTINCT phien) AS phien, COUNT(DISTINCT an_danh) AS nguoi FROM su_kien WHERE luc >= ? GROUP BY d ORDER BY d`).bind(tu),
     db.prepare("SELECT CAST(json_extract(du_lieu, '$.buoc') AS INTEGER) AS b, COUNT(DISTINCT an_danh) AS so FROM su_kien WHERE loai = 'ftue_buoc' GROUP BY b"),
     db.prepare(`SELECT an_danh, ${NGAY_SQL} AS d FROM su_kien GROUP BY an_danh, d`),
@@ -68,11 +70,11 @@ async function tongQuanThat(db: D1Database, soNgay: number, now: number, invited
     if (!s) ngayTheoMay.set(r.an_danh, (s = new Set()));
     s.add(r.d);
   }
-  const n = nguoi.results[0] as { da_choi: number; hom_nay: number } | undefined;
+  const n = nguoi.results[0] as { tong: number; khoa: number; hom_nay: number } | undefined;
 
   return {
     nguon: "that",
-    nguoi_choi: { ...invited, da_choi: n?.da_choi ?? 0, hom_nay: n?.hom_nay ?? 0 },
+    nguoi_choi: { tong: n?.tong ?? 0, khoa: n?.khoa ?? 0, hom_nay: n?.hom_nay ?? 0, link_mo: (link.results[0] as { mo: number } | undefined)?.mo ?? 0 },
     theo_ngay,
     ftue: f,
     giu_chan: giuChan(ngayTheoMay, homNay),
@@ -129,14 +131,63 @@ export async function dsSuKien(db: D1Database, q: { loai?: string; truoc?: strin
   }
 }
 
-/** Lần đầu, lần cuối và số phiên theo email (nguoi_choi_thu). Bảng chưa có thì rỗng, nguon = "mau". */
-export async function thongKeNguoiChoi(db: D1Database): Promise<{ nguon: Nguon; theoEmail: Map<string, { lan_dau: number; lan_cuoi: number; so_phien: number }> }> {
+export function trangThaiLink(l: { tat: boolean; toi_da: number | null; da_dung: number; het_han: number | null }, now = Date.now()): TrangThaiLink {
+  if (l.tat) return "tat";
+  if (l.het_han !== null && l.het_han <= now) return "het_han";
+  if (l.toi_da !== null && l.da_dung >= l.toi_da) return "het_luot";
+  return "mo";
+}
+
+function linkTu(r: Record<string, unknown>, now: number): LoiMoi {
+  const l = {
+    ma: String(r.ma),
+    ten: String(r.ten),
+    toi_da: r.toi_da === null ? null : Number(r.toi_da),
+    da_dung: Number(r.da_dung ?? 0),
+    het_han: r.het_han === null ? null : Number(r.het_han),
+    tat: r.tat === 1,
+    tao_boi: String(r.tao_boi),
+    tao_luc: Number(r.tao_luc),
+    sua_boi: (r.sua_boi as string | null) ?? null,
+    sua_luc: (r.sua_luc as number | null) ?? null,
+  };
+  return { ...l, trang_thai: trangThaiLink(l, now) };
+}
+
+/** Link mời và người chơi thử (kèm ghi chú nội bộ và số phản hồi). Bảng game chưa có thì trả mẫu, nguon = "mau". */
+export async function dsNguoiChoi(db: D1Database, now = Date.now()): Promise<DsNguoiChoi> {
   try {
-    const r = await db.prepare("SELECT email, lan_dau, lan_cuoi, so_phien FROM nguoi_choi_thu").all<{ email: string; lan_dau: number; lan_cuoi: number; so_phien: number }>();
-    return { nguon: "that", theoEmail: new Map(r.results.map((x) => [x.email.toLowerCase(), x])) };
+    const [link, nguoi, gc, ph] = await db.batch([
+      db.prepare("SELECT ma, ten, toi_da, da_dung, het_han, tat, tao_boi, tao_luc, sua_boi, sua_luc FROM loi_moi ORDER BY tao_luc DESC"),
+      db.prepare("SELECT id, ma_moi, lan_dau, lan_cuoi, so_phien, khoa, ly_do_khoa, sua_boi, sua_luc FROM nguoi_choi_thu ORDER BY lan_cuoi DESC LIMIT 2000"),
+      db.prepare("SELECT nguoi_choi_id, ghi_chu FROM qt_ghi_chu_nguoi_choi"),
+      db.prepare("SELECT nguoi_choi, COUNT(*) AS so FROM phan_hoi GROUP BY nguoi_choi"),
+    ]);
+    const ghiChu = new Map((gc.results as { nguoi_choi_id: string; ghi_chu: string }[]).map((r) => [r.nguoi_choi_id, r.ghi_chu]));
+    const soPh = new Map((ph.results as { nguoi_choi: string; so: number }[]).map((r) => [r.nguoi_choi, r.so]));
+    return {
+      nguon: "that",
+      link: (link.results as Record<string, unknown>[]).map((r) => linkTu(r, now)),
+      dong: (nguoi.results as Record<string, unknown>[]).map((r) => {
+        const id = String(r.id);
+        return {
+          id,
+          ma_moi: String(r.ma_moi),
+          lan_dau: Number(r.lan_dau),
+          lan_cuoi: Number(r.lan_cuoi),
+          so_phien: Number(r.so_phien ?? 0),
+          khoa: r.khoa === 1,
+          ly_do_khoa: (r.ly_do_khoa as string | null) ?? null,
+          sua_boi: (r.sua_boi as string | null) ?? null,
+          sua_luc: (r.sua_luc as number | null) ?? null,
+          ghi_chu: ghiChu.get(id) ?? null,
+          so_phan_hoi: soPh.get(id) ?? 0,
+        };
+      }),
+    };
   } catch (e) {
     if (!thieuBang(e)) throw e;
-    return { nguon: "mau", theoEmail: new Map() };
+    return nguoiChoiMau(db, now);
   }
 }
 
@@ -148,11 +199,12 @@ export async function dsPhanHoi(db: D1Database, q: { trangThai?: TrangThaiPhanHo
   let nguon: Nguon = "that";
   let goc: PhanHoiGoc[];
   try {
-    const r = await db.prepare("SELECT id, luc, email, loai, noi_dung, man, thiet_bi, phien_ban FROM phan_hoi ORDER BY luc DESC LIMIT 500").all<Record<string, unknown>>();
+    const r = await db.prepare("SELECT id, luc, nguoi_choi, loai, noi_dung, man, lien_he, thiet_bi, phien_ban FROM phan_hoi ORDER BY luc DESC LIMIT 500").all<Record<string, unknown>>();
     goc = r.results.map((x) => ({
       id: String(x.id),
       luc: Number(x.luc),
-      email: (x.email as string | null) ?? null,
+      nguoi_choi: (x.nguoi_choi as string | null) ?? null,
+      lien_he: (x.lien_he as string | null) ?? null,
       loai: (x.loai as string | null) ?? null,
       noi_dung: String(x.noi_dung ?? ""),
       man: (x.man as string | null) ?? null,
@@ -221,7 +273,7 @@ function rng(seed: number): () => number {
   };
 }
 
-function tongQuanMau(soNgay: number, now: number, invited: { moi: number; khoa: number }): TongQuan {
+function tongQuanMau(soNgay: number, now: number): TongQuan {
   const r = rng(19);
   const homNay = ngayVN(now);
   const theo_ngay = [];
@@ -232,8 +284,7 @@ function tongQuanMau(soNgay: number, now: number, invited: { moi: number; khoa: 
   }
   return {
     nguon: "mau",
-    // Số mời và khóa luôn là thật (bảng qt_nguoi_choi); chỉ phần đo từ sự kiện là mẫu.
-    nguoi_choi: { moi: invited.moi, khoa: invited.khoa, da_choi: 24, hom_nay: theo_ngay[theo_ngay.length - 1].nguoi },
+    nguoi_choi: { tong: 24, khoa: 1, hom_nay: theo_ngay[theo_ngay.length - 1].nguoi, link_mo: 2 },
     theo_ngay,
     ftue: [24, 23, 22, 19, 18, 17, 13, 12],
     giu_chan: { d1: { tu: 9, mau: 22 }, d7: { tu: 2, mau: 14 } },
@@ -295,11 +346,50 @@ function phanHoiMau(): PhanHoiGoc[] {
   return mau.map(([loai, noi_dung, man], i) => ({
     id: `mau-${i + 1}`,
     luc: now - (i * 5 + 2) * h,
-    email: `nguoichoi${String(i * 3 + 2).padStart(2, "0")}@example.com`,
+    nguoi_choi: ID_MAU[(i * 3 + 2) % ID_MAU.length],
+    lien_he: i === 0 ? "zalo 09xx (mẫu)" : null,
     loai,
     noi_dung,
     man,
     thiet_bi: i % 2 ? "Android Chrome" : "iPhone Safari",
     phien_ban: "mau",
   }));
+}
+
+const ID_MAU = Array.from({ length: 24 }, (_, i) => "mau" + ((i + 1) * 2654435761).toString(36).slice(-7).padStart(7, "0"));
+
+/** Link và người chơi mẫu (chỉ đọc). Ghi chú nội bộ vẫn đọc từ bảng thật qt_ghi_chu_nguoi_choi. */
+async function nguoiChoiMau(db: D1Database, now: number): Promise<DsNguoiChoi> {
+  const r = rng(11);
+  const ngay = 86400 * 1000;
+  const link: LoiMoi[] = [
+    { ma: "maumoi-discord1", ten: "Discord đợt 1 (mẫu)", toi_da: 30, da_dung: 18, het_han: now + 9 * ngay, tat: false, tao_boi: "admin@example.com", tao_luc: now - 6 * ngay, sua_boi: null, sua_luc: null },
+    { ma: "maumoi-banbe00", ten: "Bạn bè (mẫu)", toi_da: null, da_dung: 6, het_han: null, tat: false, tao_boi: "admin@example.com", tao_luc: now - 5 * ngay, sua_boi: null, sua_luc: null },
+    { ma: "maumoi-cu00000", ten: "Link cũ đã tắt (mẫu)", toi_da: 10, da_dung: 10, het_han: null, tat: true, tao_boi: "admin@example.com", tao_luc: now - 12 * ngay, sua_boi: "admin@example.com", sua_luc: now - 6 * ngay },
+  ].map((l) => ({ ...l, trang_thai: trangThaiLink(l, now) }));
+  let ghiChu = new Map<string, string>();
+  try {
+    const gc = await db.prepare("SELECT nguoi_choi_id, ghi_chu FROM qt_ghi_chu_nguoi_choi").all<{ nguoi_choi_id: string; ghi_chu: string }>();
+    ghiChu = new Map(gc.results.map((x) => [x.nguoi_choi_id, x.ghi_chu]));
+  } catch {
+    // bảng qt_ chưa có: bỏ qua
+  }
+  const dong = ID_MAU.map((id, i) => {
+    const dau = now - Math.floor(r() * 6 * ngay);
+    return {
+      id,
+      ma_moi: i < 18 ? link[0].ma : link[1].ma,
+      lan_dau: dau,
+      lan_cuoi: Math.min(now, dau + Math.floor(r() * 3 * ngay)),
+      so_phien: 1 + Math.floor(r() * 14),
+      khoa: i === 7,
+      ly_do_khoa: i === 7 ? "spam phản hồi (mẫu)" : null,
+      sua_boi: i === 7 ? "admin@example.com" : null,
+      sua_luc: i === 7 ? now - ngay : null,
+      ghi_chu: ghiChu.get(id) ?? null,
+      so_phan_hoi: i % 5 === 2 ? 1 : 0,
+    };
+  });
+  dong.sort((a, b) => b.lan_cuoi - a.lan_cuoi);
+  return { nguon: "mau", link, dong };
 }

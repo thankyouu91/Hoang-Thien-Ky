@@ -6,7 +6,7 @@ import { TEN_VAI_TRO } from "../../shared/hopDong.ts";
 import { api } from "../api.ts";
 import { esc, gio, toast, voiNut, xacNhan } from "../ui.ts";
 import type { Man } from "./man.ts";
-import { baoDongBo, chep, khoiAccess } from "./nguoiChoi.ts";
+import { chep } from "./nguoiChoi.ts";
 
 export const manPhanQuyen: Man = {
   id: "phan-quyen",
@@ -57,7 +57,7 @@ export const manPhanQuyen: Man = {
             </tbody></table></div>
           </section>
         </div>
-        <div class="col"><section class="card">${khoiAccess(ds.dong_bo, ds.danh_sach_access, true, "admin")}</section></div>
+        <div class="col"><section class="card">${khoiAccess(ds.dong_bo, ds.danh_sach_access)}</section></div>
       </div></div>`;
     };
 
@@ -78,7 +78,7 @@ export const manPhanQuyen: Man = {
     el.addEventListener("click", async (e) => {
       const b = (e.target as HTMLElement).closest<HTMLButtonElement>("button");
       if (!b) return;
-      if (b.matches("[data-chep]")) return chep(ds.danh_sach_access);
+      if (b.matches("[data-chep]")) return chep(ds.danh_sach_access.join("\n"), `Đã chép ${ds.danh_sach_access.length} email, mỗi dòng một email.`);
       if (b.matches("[data-dong-bo]")) {
         await voiNut(b, async () => {
           const r = await api.post<DongBo>("/api/access/dong-bo", { nhom: "quan_tri" });
@@ -95,7 +95,7 @@ export const manPhanQuyen: Man = {
         if (ok) await luu(b, email, vt);
       }
       if (b.matches("[data-xoa]")) {
-        const ok = await xacNhan("Thu quyền", `Thu quyền của <b>${esc(email)}</b>. Admin chặn email này ngay từ yêu cầu kế tiếp${ds.dong_bo.da_noi ? " và bỏ khỏi Access group" : "; nhớ bỏ email khỏi policy Access của admin"}.`, "Thu quyền");
+        const ok = await xacNhan("Thu quyền", `Thu quyền của <b>${esc(email)}</b>. Admin chặn email này ngay từ yêu cầu kế tiếp${ds.dong_bo.da_noi ? " và bỏ khỏi Access group" : "; nhớ bỏ email khỏi policy Access của admin (và của game nếu có)"}.`, "Thu quyền");
         if (!ok) return;
         await voiNut(b, async () => {
           const r = await api.post<{ dong_bo: DongBo }>("/api/vai-tro/xoa", { email });
@@ -108,3 +108,27 @@ export const manPhanQuyen: Man = {
     ve();
   },
 };
+
+export function baoDongBo(db: DongBo): string {
+  if (!db.da_noi) return "Nhớ cập nhật Access bằng tay.";
+  return db.ok ? `Access đã cập nhật (${db.so_email} email).` : `Access CHƯA cập nhật: ${db.loi ?? "lỗi lạ"}.`;
+}
+
+/** Khối trạng thái Access của admin: tự đồng bộ group "THK quan tri" hay hướng dẫn dán tay. */
+function khoiAccess(db: DongBo, emails: string[]): string {
+  if (db.da_noi) {
+    return `<h2>Access · admin.thienhoangky.fun</h2>
+      <p style="margin:0">Tự đồng bộ: mỗi lần phân quyền hay thu quyền, server ghi lại Access Group "THK quan tri".</p>
+      <p class="note">Lần cuối: ${db.luc ? gio(db.luc) : "chưa chạy"} ${db.ok === true ? `<span class="chip ok">Đã khớp · ${db.so_email} email</span>` : db.ok === false ? `<span class="chip son">Lỗi</span> ${esc(db.loi ?? "")}` : ""}</p>
+      <div class="btns"><button class="btn small" type="button" data-dong-bo>Đồng bộ lại</button></div>`;
+  }
+  return `<h2>Access · admin.thienhoangky.fun <span class="right"><span class="chip warn">Cập nhật tay</span></span></h2>
+    <p style="margin:0">Cổng vào trang quản trị là Cloudflare Access. Chưa nối API token nên danh sách trong Access phải sửa tay sau mỗi lần phân quyền:</p>
+    <ol class="steps" style="margin-top:var(--sp-2)">
+      <li>Mở <b>one.dash.cloudflare.com</b> → Access controls → Applications → <b>Thiên Hoang Ký – quản trị</b> → Policies (hoặc Access groups → <b>THK quan tri</b> nếu policy dùng group).</li>
+      <li>Ở Include → Emails: dán danh sách dưới đây, thay toàn bộ danh sách cũ.</li>
+      <li>Lưu. Người bị bỏ ra mất quyền vào khi phiên Access hết hạn; vai trò trong admin đổi ngay.</li>
+    </ol>
+    <div class="btns" style="margin-top:var(--sp-3)"><button class="btn small" type="button" data-chep>Chép ${emails.length} email</button></div>
+    <p class="note">Muốn tự động: làm theo mục "Đồng bộ Access" trong admin/README.md.</p>`;
+}

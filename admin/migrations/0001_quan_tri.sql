@@ -65,21 +65,16 @@ CREATE TABLE IF NOT EXISTS qt_thong_bao (
 );
 CREATE INDEX IF NOT EXISTS qt_thong_bao_hien ON qt_thong_bao (trang_thai, bat_dau);
 
--- Người chơi thử được mời. Danh sách cổng thật là Access (ứng dụng game); bảng này là bản quản trị: ghi chú, khóa.
--- Worker game chặn email có khoa = 1 (403) kể cả khi Access còn cho qua.
-CREATE TABLE IF NOT EXISTS qt_nguoi_choi (
-  email       TEXT PRIMARY KEY,
-  ten_goi     TEXT,
-  ghi_chu     TEXT,
-  khoa        INTEGER NOT NULL DEFAULT 0 CHECK (khoa IN (0, 1)),
-  ly_do_khoa  TEXT,
-  moi_boi     TEXT NOT NULL,
-  moi_luc     INTEGER NOT NULL,
-  sua_boi     TEXT,
-  sua_luc     INTEGER
+-- Ghi chú nội bộ về người chơi thử. Người chơi thử (nguoi_choi_thu, link mời loi_moi) là bảng của Worker game
+-- (cloudflare/migrations/0002_link_moi.sql); admin chỉ ghi loi_moi và cột khoa của nguoi_choi_thu, còn ghi chú để ở đây.
+CREATE TABLE IF NOT EXISTS qt_ghi_chu_nguoi_choi (
+  nguoi_choi_id TEXT PRIMARY KEY,
+  ghi_chu       TEXT NOT NULL,
+  sua_boi       TEXT NOT NULL,
+  sua_luc       INTEGER NOT NULL
 );
 
--- Xử lý phản hồi: phản hồi gốc do Worker game ghi (bảng của tab deploy); ở đây chỉ có trạng thái và ghi chú nội bộ.
+-- Xử lý phản hồi: phản hồi gốc do Worker game ghi (bảng phan_hoi); ở đây chỉ có trạng thái và ghi chú nội bộ.
 CREATE TABLE IF NOT EXISTS qt_phan_hoi_xu_ly (
   phan_hoi_id TEXT PRIMARY KEY,
   trang_thai  TEXT NOT NULL CHECK (trang_thai IN ('moi', 'dang_xem', 'da_xu_ly')),
@@ -95,9 +90,9 @@ CREATE TABLE IF NOT EXISTS qt_phan_hoi_ghi_chu (
 );
 CREATE INDEX IF NOT EXISTS qt_phan_hoi_ghi_chu_ph ON qt_phan_hoi_ghi_chu (phan_hoi_id, luc);
 
--- Trạng thái đồng bộ Access (lần cuối, kết quả) để màn Người chơi và Phân quyền báo admin còn phải làm tay hay không.
+-- Trạng thái đồng bộ Access Group của admin (lần cuối, kết quả), để màn Phân quyền báo còn phải làm tay hay không.
 CREATE TABLE IF NOT EXISTS qt_dong_bo (
-  nhom     TEXT PRIMARY KEY CHECK (nhom IN ('nguoi_choi', 'quan_tri')),
+  nhom     TEXT PRIMARY KEY CHECK (nhom IN ('quan_tri')),
   luc      INTEGER NOT NULL,
   ok       INTEGER NOT NULL,
   so_email INTEGER NOT NULL,

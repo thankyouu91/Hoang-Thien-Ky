@@ -29,7 +29,7 @@ export const manPhanHoi: Man = {
       <div class="filters" style="margin-bottom:var(--sp-3)">
         <div class="seg" role="group" aria-label="Trạng thái" id="loc-tt"></div>
         <select data-loai aria-label="Loại"><option value="">Mọi loại</option></select>
-        <input type="search" placeholder="Tìm nội dung, email, màn" data-tim aria-label="Tìm">
+        <input type="search" placeholder="Tìm nội dung, mã người chơi, màn" data-tim aria-label="Tìm">
         ${chipNguon(ds.nguon, "bảng phản hồi")}
       </div>
       <div class="items" id="ds"></div>
@@ -48,7 +48,7 @@ export const manPhanHoi: Man = {
         (p) =>
           (!tt || p.trang_thai === tt) &&
           (!loai || (p.loai ?? "khac") === loai) &&
-          (!q || [p.noi_dung, p.email, p.man, ...p.ghi_chu.map((g) => g.noi_dung)].some((v) => (v ?? "").toLowerCase().includes(q))),
+          (!q || [p.noi_dung, p.nguoi_choi, p.lien_he, p.man, ...p.ghi_chu.map((g) => g.noi_dung)].some((v) => (v ?? "").toLowerCase().includes(q))),
       );
       el.querySelector("#ds")!.innerHTML = rows.map(the).join("") || `<div class="empty">Không có phản hồi nào${tt ? ` ở trạng thái "${TEN_TRANG_THAI_PH[tt]}"` : ""}.</div>`;
     };
@@ -94,10 +94,11 @@ function the(p: PhanHoi): string {
   return `<article class="item ${p.trang_thai === "moi" ? "moi" : ""}" data-id="${esc(p.id)}">
     <header><span class="chip ${CHIP_TT[p.trang_thai]}">${TEN_TRANG_THAI_PH[p.trang_thai]}</span>
       <span class="chip plain">${esc(TEN_LOAI[p.loai ?? "khac"] ?? p.loai)}</span>
-      <span class="email">${esc(p.email ?? "ẩn danh")}</span>
+      <span title="Mã người chơi thử">${p.nguoi_choi ? `<code>${esc(p.nguoi_choi)}</code>` : "ẩn danh"}</span>
       ${p.man ? `<span>màn ${esc(p.man)}</span>` : ""}${p.thiet_bi ? `<span>${esc(p.thiet_bi)}</span>` : ""}${p.phien_ban ? `<span>bản ${esc(p.phien_ban)}</span>` : ""}
       <span class="right" title="${gio(p.luc)}">${esc(truoc(p.luc))}</span></header>
     <div class="body">${esc(p.noi_dung)}</div>
+    ${p.lien_he ? `<p class="note" style="margin-top:4px">Liên hệ người chơi để lại: <b>${esc(p.lien_he)}</b></p>` : ""}
     ${
       p.ghi_chu.length || p.sua_boi
         ? `<div class="notes">${p.ghi_chu.map((g) => `<p><b>${esc(g.email)}</b> <small>${gio(g.luc)}</small><br>${esc(g.noi_dung)}</p>`).join("")}

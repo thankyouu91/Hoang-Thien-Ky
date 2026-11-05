@@ -3,10 +3,13 @@
 // ở đây JWT là thật về chữ ký, chỉ có khóa là của máy chủ giả.
 //   node test/dev.ts               → vào với quyền Admin gốc (admin@example.com)
 //   node test/dev.ts --van-hanh    → vào với quyền Vận hành (vanhanh@example.com)
+//   node test/dev.ts --bang-game   → chạy thêm migration game (../cloudflare/migrations) để thử tạo link mời, khóa thật;
+//                                    không có cờ này thì phần số liệu game là dữ liệu mẫu
 // Mở http://127.0.0.1:5180
 
 import { spawn, spawnSync } from "node:child_process";
 import type { ChildProcess } from "node:child_process";
+import { readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { AUD, TEAM, kyJwt, phucVuKhoa, taoKhoa } from "./khoaGia.ts";
 
@@ -17,6 +20,7 @@ const API = "http://127.0.0.1:8788";
 const ADMIN = "admin@example.com";
 const VAN = "vanhanh@example.com";
 const laVanHanh = process.argv.includes("--van-hanh");
+const bangGame = process.argv.includes("--bang-game");
 
 const k = await taoKhoa("k-dev");
 const { url: certs } = await phucVuKhoa([k.jwk], 8799);
@@ -38,6 +42,11 @@ process.on("SIGINT", dung);
 process.on("SIGTERM", dung);
 
 spawnSync(bin("wrangler"), ["d1", "migrations", "apply", "thienhoangky", "--local"], { shell: true, stdio: "inherit", env: { ...process.env, CI: "1" } });
+if (bangGame) {
+  // Migration game không ghi vào bảng theo dõi của admin: chạy lại file đã chạy thì báo "already exists", bỏ qua được.
+  for (const f of readdirSync("../cloudflare/migrations").filter((x) => x.endsWith(".sql")).sort())
+    spawnSync(bin("wrangler"), ["d1", "execute", "thienhoangky", "--local", "--file", `../cloudflare/migrations/${f}`], { shell: true, stdio: "inherit", env: { ...process.env, CI: "1" } });
+}
 const vars = { ACCESS_TEAM_DOMAIN: TEAM, ACCESS_AUD: AUD, ADMIN_GOC: ADMIN, ACCESS_CERTS_URL: certs };
 chay(bin("wrangler"), ["dev", "--port", "8788", "--ip", "127.0.0.1", ...Object.entries(vars).flatMap(([a, b]) => ["--var", `${a}:${b}`])]);
 
@@ -46,15 +55,14 @@ for (let i = 0; i < 120; i++) {
   if (await fetch(`${API}/api/toi`).then(() => true, () => false)) break;
 }
 
-// Dữ liệu thử lần đầu: một Vận hành, vài người chơi, một thông báo.
+// Dữ liệu thử lần đầu: một Vận hành, một thông báo, và một link mời khi có bảng game.
 const post = (path: string, body: unknown) =>
   fetch(API + path, { method: "POST", headers: { "Cf-Access-Jwt-Assertion": jwtAdmin, "Content-Type": "application/json", Origin: API }, body: JSON.stringify(body) });
-const ds = (await fetch(`${API}/api/nguoi-choi`, { headers: { "Cf-Access-Jwt-Assertion": jwtAdmin } }).then((r) => r.json())) as { dong: unknown[] };
-if (ds.dong.length === 0) {
+const vt = (await fetch(`${API}/api/vai-tro`, { headers: { "Cf-Access-Jwt-Assertion": jwtAdmin } }).then((r) => r.json())) as { dong: unknown[] };
+if (vt.dong.length <= 1) {
   await post("/api/vai-tro", { email: VAN, vai_tro: "van_hanh", ghi_chu: "trực phản hồi" });
-  await post("/api/nguoi-choi/moi", { emails: "nguoichoi02@example.com\nnguoichoi05@example.com\nnguoichoi08@example.com\nnguoichoi11@example.com", ghi_chu: "đợt 1" });
-  await post("/api/nguoi-choi/khoa", { email: "nguoichoi11@example.com", khoa: true, ly_do: "dùng chung tài khoản" });
   await post("/api/thong-bao", { tieu_de: "Chào mừng đạo hữu", noi_dung: "Bản chơi thử kín đợt 1. Gặp lỗi thì bấm Phản hồi ở Động phủ.", dang: true });
+  if (bangGame) await post("/api/loi-moi", { ten: "Discord đợt 1", toi_da: 30 });
 }
 
 chay(bin("vite"), ["--port", "5180", "--strictPort", "--host", "127.0.0.1"], { THK_DEV_JWT: laVanHanh ? jwtVan : jwtAdmin });
