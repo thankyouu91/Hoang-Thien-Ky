@@ -305,26 +305,11 @@ export function themMon(w: World, items: { item: string; count: number }[]): str
   return out;
 }
 
-// ---- Sau chương 0: bế quan rút gọn ----------------------------------------------------------------------------------
+// ---- Bế quan ---------------------------------------------------------------------------------------------------------
+// Bế quan giờ là lệnh be_quan của mock (912e1ec): việc kind "be_quan" có `exp`, chốt ở settleRetreats. Bản 4fe2fcb–1bf3db1
+// từng bế quan riêng qua MoiState.beQuan; chotBeQuan chỉ còn để chốt những lượt bế quan dở trong bản lưu cũ.
 
-/** Số giờ bế quan chọn được ở thẻ nhập môn (đề xuất). */
-export const GIO_BE_QUAN = [1, 8];
-
-/**
- * Bắt đầu bế quan `gio` giờ (sau chương 0, để người mới lên cấp tiếp): tu vi mỗi giờ tính sẵn lúc bắt đầu (`moiGio`), cộng
- * khi hết giờ (chotBeQuan), kể cả lúc tắt game. Hiện ở Động phủ › Đang chạy và màn Nhân vật như việc bế quan của mock.
- */
-export function lamBeQuan(w: World, moi: MoiState, gio: number, moiGio: number, now: number): KetQua {
-  if (buocHienTai(moi)) return { ok: false, error: "khong_dung_buoc" };
-  if (moi.beQuan) return { ok: false, error: "dang_be_quan" };
-  if (!GIO_BE_QUAN.includes(gio)) return { ok: false, error: "lenh_khong_hop_le" };
-  const ketThuc = now + gio * 3600_000;
-  moi.beQuan = { batDau: now, ketThuc, moiGio };
-  w.jobs.push({ kind: "be_quan", title: "Bế quan", detail: `+${moiGio * gio} tu vi khi xong`, startsAt: now, endsAt: ketThuc });
-  return { ok: true, message: `Bắt đầu bế quan ${gio} giờ` };
-}
-
-/** Hết giờ bế quan: bỏ việc khỏi danh sách và trả số tu vi được cộng (0 nếu chưa xong). */
+/** Bế quan dở trong bản lưu cũ (MoiState.beQuan) đã hết giờ: bỏ việc khỏi danh sách, trả số tu vi được cộng (0 nếu chưa xong). */
 export function chotBeQuan(w: World, moi: MoiState, now: number): number {
   const b = moi.beQuan;
   if (!b || now < b.ketThuc) return 0;

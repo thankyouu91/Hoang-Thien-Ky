@@ -7,10 +7,11 @@ import type { Element, SkillType } from "@ktlp/sim";
 import TAI_NANG from "../../../../data/he_thong/json/tai_nang.json";
 import type { AuthSource } from "../auth.ts";
 import type { Nav } from "../shell.ts";
-import { artUrl, assetUrl, clockText, heArt, closeSheet, durationText, elementChip, esc, openSheet, skillChip, toast } from "../ui.ts";
+import { artUrl, assetUrl, clockText, closeSheet, durationText, elementChip, ERROR_TEXT, esc, heArt, openSheet, skillChip, toast } from "../ui.ts";
 import type { FtueChiTiet, NguonTheoTaiKhoan } from "./nguonMoi.ts";
 import { AO, tenNgauNhien, THAN, type Ao, type Than } from "./theGioiMoi.ts";
-import { GIO_BE_QUAN, TEN_HE } from "./ftue.ts";
+import { TEN_HE } from "./ftue.ts";
+import { RETREAT_HOURS } from "../source.ts";
 
 export interface FtueHost {
   nguon: NguonTheoTaiKhoan;
@@ -102,6 +103,11 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
   };
 
   const lam = async (viec: string, arg?: Record<string, unknown>) => sau((await host.nguon.get()).lam(viec, arg));
+  /** Bế quan bằng lệnh be_quan (cùng lệnh nút lớn ở Nhân vật dùng, mock tự chốt khi hết giờ). */
+  const beQuan = async (gio: number) => {
+    const r = await (await host.nguon.get()).send({ type: "be_quan", gio });
+    sau(r.ok ? { ok: true, message: r.message } : { ok: false, error: r.error });
+  };
 
   const moViec = async (viec: string) => {
     const src = await host.nguon.get();
@@ -137,7 +143,7 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
     if (!t) return;
     const f = t.dataset.f;
     if (f === "lam") void moViec(t.dataset.viec!);
-    else if (f === "be_quan") void lam("be_quan", { gio: Number(t.dataset.gio) });
+    else if (f === "be_quan") void beQuan(Number(t.dataset.gio));
     else if (f === "gon" || f === "mo") void host.nguon.get().then((s) => (s.lam("thu_gon", { on: f === "gon" }), capNhat()));
     else if (f === "an") void host.nguon.get().then((s) => (s.lam("an_the"), capNhat()));
   });
@@ -190,7 +196,7 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
       body.addEventListener("click", (e) => {
         const t = (e.target as HTMLElement).closest<HTMLElement>("[data-f='be_quan'], [data-cong-phap]");
         if (!t) return;
-        if (t.dataset.f === "be_quan") void lam("be_quan", { gio: Number(t.dataset.gio) });
+        if (t.dataset.f === "be_quan") void beQuan(Number(t.dataset.gio));
         else host.nav.go({ screen: "cong-phap", section: "truyen-thu" });
       });
     },
@@ -204,10 +210,10 @@ function beQuanLoi(moiGio: number, xong?: number): string {
     : `Lên cấp tiếp bằng bế quan: mỗi giờ +${moiGio} tu vi, cộng khi hết giờ kể cả lúc tắt game.`;
 }
 
-/** Nút bế quan 1 giờ, 8 giờ (GIO_BE_QUAN); đang bế quan thì không có nút. */
+/** Nút bế quan 1 giờ, 8 giờ (RETREAT_HOURS của source.ts); đang bế quan thì không có nút. */
 function beQuanNut(xong?: number, co: "small" | "wide" = "small"): string {
   if (xong) return "";
-  return GIO_BE_QUAN.map((g, i) => `<button type="button" class="${i === 0 ? "seal" : "btn"} ${co}" data-f="be_quan" data-gio="${g}">Bế quan ${g} giờ</button>`).join("");
+  return RETREAT_HOURS.map((g, i) => `<button type="button" class="${i === 0 ? "seal" : "btn"} ${co}" data-f="be_quan" data-gio="${g}">Bế quan ${g} giờ</button>`).join("");
 }
 
 const LOI: Record<string, string> = {
@@ -220,7 +226,7 @@ const LOI: Record<string, string> = {
   khong_co_tan_quyen: "Không còn tàn quyển tặng trong túi.",
 };
 function baoLoi(e?: string): string {
-  return (e && LOI[e]) ?? `Chưa làm được (${e ?? "lỗi"})`;
+  return (e && (LOI[e] ?? ERROR_TEXT[e])) ?? `Chưa làm được (${e ?? "lỗi"})`;
 }
 
 // ---- Bảng từng bước -----------------------------------------------------------------------------------------------

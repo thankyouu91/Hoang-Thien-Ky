@@ -3,7 +3,7 @@
 // NguonTheoTaiKhoan là nguồn index.ts đưa cho các màn: đổi tài khoản (đăng nhập, đăng xuất) thì nạp tiến độ của tài khoản đó.
 import { simulate, type BattleInput, type Element } from "@ktlp/sim";
 import type { AuthSource } from "../auth.ts";
-import { expToNext, minePerHour, MockDashboardSource, realmOf } from "../mock/source.ts";
+import { minePerHour, MockDashboardSource, realmOf } from "../mock/source.ts";
 import { PLAYER as MOCK_PLAYER, REGION as MOCK_REGION, SECT as MOCK_SECT, type World } from "../mock/world.ts";
 import { loadRegion, loadWorld, type WorldRegion } from "../../scenes/map/region.ts";
 import { ghi } from "../server.ts";
@@ -14,7 +14,7 @@ import type {
 import { ERROR_TEXT } from "../ui.ts";
 import { tr } from "../i18n.ts";
 import {
-  biCanhKe, BUOC_FTUE, buocHienTai, chotBeQuan, danhDauXong, lamBeQuan, lamChiemMo, lamChonVung, lamDatNhac, lamGhepTanThu, lamGiaNhap, lamGieoQue, lamTaoHinh, lamThuChieu,
+  biCanhKe, BUOC_FTUE, buocHienTai, chotBeQuan, danhDauXong, lamChiemMo, lamChonVung, lamDatNhac, lamGhepTanThu, lamGiaNhap, lamGieoQue, lamTaoHinh, lamThuChieu,
   nhiemVuKe, TEN_HE, themMon, thuongCua, xemTruocTanThu, type BuocView, type KetQua,
 } from "./ftue.ts";
 import { docTienDo, donBanCu, ghiTienDo, xoaTienDo } from "./luu.ts";
@@ -104,7 +104,7 @@ export class NguonMoi extends MockDashboardSource {
     const b = buocHienTai(this.moi);
     if (b) return { id: b.id, name: `Nhập Thế ${b.so}/7: ${b.ten}`, step: b.loi, go: { screen: "nhiem-vu", id: b.id } };
     // Sau chương 0: nhiệm vụ chính kế chưa có trong bản thử, nên chỉ việc lên cấp có thật là bế quan.
-    const step = this.moi.beQuan ? "Đang bế quan" : `Bế quan: mỗi giờ +${this.moiGio()} tu vi`;
+    const step = this.beQuanXong() ? "Đang bế quan" : `Bế quan: mỗi giờ +${this.retreatPerHour()} tu vi`;
     return { id: "be_quan", name: "Tu luyện tiếp", step, go: { screen: "nhiem-vu", id: "be_quan" } };
   }
 
@@ -246,24 +246,31 @@ export class NguonMoi extends MockDashboardSource {
     return {
       buoc: b, tong: 7, xong: this.moi.xong.length, ke: b ? undefined : nhiemVuKe(this.me.level),
       anThe: !!this.moi.anThe, thuGon: !!this.moi.thuGon, level: this.me.level,
-      moiGio: this.moiGio(), beQuanXong: this.moi.beQuan?.ketThuc,
+      moiGio: this.retreatPerHour(), beQuanXong: this.beQuanXong(),
     };
   }
 
-  /** Tu vi bế quan mỗi giờ, như màn Nhân vật của mock: 1/8 tu vi cấp đang tu, linh tuyền của tông +20% (đề xuất). */
-  moiGio(): number {
-    const goc = Math.round(expToNext(this.me.level) / 8);
-    return goc + (this.w.held.some((h) => h.type === "linh_tuyen") ? Math.round(goc * 0.2) : 0);
+  /** Mốc xong của lượt bế quan đang chạy: việc be_quan của mock (lệnh be_quan, nút ở Nhân vật hay thẻ nhập môn), hoặc lượt dở của bản lưu cũ. */
+  private beQuanXong(): number | undefined {
+    const now = this.now();
+    return this.w.jobs.find((j) => j.kind === "be_quan" && j.endsAt > now)?.endsAt ?? this.moi.beQuan?.ketThuc;
   }
 
-  /** Hết giờ bế quan thì cộng tu vi và gửi thư báo; gọi trước mỗi lệnh đọc (NguonTheoTaiKhoan). */
+  /**
+   * Chốt bế quan đã hết giờ trước mỗi lệnh đọc (NguonTheoTaiKhoan) rồi lưu: việc be_quan của mock (settleRetreats; mock tự
+   * chốt ở top(), nhưng sau khi đã dựng thẻ Đang chạy và không lưu), và lượt dở qua MoiState.beQuan của bản lưu cũ (4fe2fcb–1bf3db1).
+   */
   chotBeQuan(): void {
-    const exp = chotBeQuan(this.w, this.moi, this.now());
-    if (!exp) return;
-    this.gainExp(exp);
-    const id = Math.max(0, ...this.w.mail.map((m) => m.id)) + 1;
-    this.w.mail.unshift({ id, from: "Động phủ", title: "Bế quan xong", body: `Bế quan xong, +${exp} tu vi`, unread: true });
-    this.luu();
+    const now = this.now();
+    const truoc = this.w.jobs.length;
+    this.settleRetreats(now);
+    const exp = chotBeQuan(this.w, this.moi, now);
+    if (exp) {
+      this.gainExp(exp);
+      const id = Math.max(0, ...this.w.mail.map((m) => m.id)) + 1;
+      this.w.mail.unshift({ id, from: "Động phủ", title: "Bế quan xong", body: `Bế quan xong, +${exp} tu vi`, unread: true });
+    }
+    if (exp || this.w.jobs.length !== truoc) this.luu();
   }
 
   async chiTiet(): Promise<FtueChiTiet> {
@@ -357,11 +364,6 @@ export class NguonMoi extends MockDashboardSource {
       case "dat_nhac": {
         const r = lamDatNhac(moi, now);
         return done("chinh.0.7", r.ok ? { ...r, message: "Đã đặt nhắc. Nhận túi tân thủ" } : r);
-      }
-      case "be_quan": {
-        const r = lamBeQuan(w, moi, Number(arg.gio), this.moiGio(), now);
-        if (r.ok) this.luu();
-        return r;
       }
       case "an_the":
         moi.anThe = true;
