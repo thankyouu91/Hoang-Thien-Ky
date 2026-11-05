@@ -151,6 +151,7 @@ async function xuat(a, camCu) {
   else if (a.kieu === "ve") img = img.resize({ width: 320, withoutEnlargement: true }).webp({ quality: 80, effort: 6 });
   else if (a.kieu === "chup") img = img.resize({ width: 600, withoutEnlargement: true }).webp({ quality: 80, effort: 6 });
   else if (a.kieu === "brand") img = img.resize({ width: a.rong, withoutEnlargement: true }).webp({ quality: 88, alphaQuality: 92, effort: 6 });
+  else if (a.kieu === "hero") img = img.resize({ width: a.rong, withoutEnlargement: true }).webp({ quality: 80, effort: 6 });
   else img = img.resize({ width: 360, withoutEnlargement: true }).webp({ quality: 78, effort: 6 });
   const info = await img.toFile(dich);
   return { bam: h, w: info.width, h: info.height, kb: Math.round(info.size / 102.4) / 10 };
@@ -192,6 +193,9 @@ const RIENG = [
   { src: join(BRAND, "dau_an.png"), out: "brand/dau_an_256.webp", kieu: "brand", rong: 256, ten: "Dấu ấn" },
   // Toàn cảnh Hạ vị diện (chụp bằng scripts/chup.mjs --chi=dai_luc --w=1440 --h=900) cho phần Thiên Hoang đại lục ở trang chủ.
   { src: join(WEB, "anh-chup", "dai_luc.webp"), out: "rieng/dai_luc.webp", kieu: "brand", rong: 1600, ten: "Hạ vị diện" },
+  // Tranh thủy mặc người dùng gửi làm hero trang chủ (2026-11-05 tối; bản đã cắt logo, tab deploy cắt).
+  { src: join(WEB, "anh-chup", "hero_thuy_mac.webp"), out: "rieng/hero_1880.webp", kieu: "hero", rong: 1880, ten: "Hero thủy mặc" },
+  { src: join(WEB, "anh-chup", "hero_thuy_mac.webp"), out: "rieng/hero_960.webp", kieu: "hero", rong: 960, ten: "Hero thủy mặc nhỏ" },
 ];
 const rieng = [];
 for (const a of RIENG) {
@@ -205,6 +209,8 @@ ketQua.push({ id: "rieng", ten: "Riêng", mo_ta: "Không hiện trong thư việ
 // Favicon vẽ sẵn ở assets/brand (16 và 32 px): chép nguyên.
 mkdirSync(join(OUT, "brand"), { recursive: true });
 for (const f of ["favicon.ico", "favicon-32.png", "favicon-16.png"]) copyFileSync(join(BRAND, f), join(OUT, "brand", f));
+// Sprite tu sĩ tách từ tranh hero (giữ alpha, chép nguyên) cho lớp động src/heroCanh.ts.
+copyFileSync(join(WEB, "anh-chup", "hero_nguoi.png"), join(OUT, "rieng", "hero_nguoi.png"));
 
 writeFileSync(camPath, JSON.stringify({ ghi_chu: "Sinh bởi scripts/hinh.mjs, đừng sửa tay.", nhom: ketQua }, null, 1) + "\n");
 console.log(`hinh: ${so} ảnh, ${(tong / 1024).toFixed(0)} KB trong public/hinh`);

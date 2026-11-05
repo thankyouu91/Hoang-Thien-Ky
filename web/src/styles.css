@@ -261,17 +261,51 @@ html:not(.co-js) .mo-muc { display: none; }
   text-align: center;
 }
 .tranh-nen { position: absolute; inset: 0; z-index: -1; }
-.truc-tinh { position: absolute; inset: 0; width: 100%; height: 100%; }
-.tranh-song { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; }
-.tranh-song.song { opacity: 1; }
-.tranh-song canvas { display: block; }
+/* Ảnh hero thủy mặc: cao hơn khung 8% để thị sai cuộn không hở mép; tâm nhìn đặt vào cổng đá và tu sĩ. */
+.hero-anh {
+  position: absolute;
+  left: 0;
+  top: -4%;
+  width: 100%;
+  height: 108%;
+  object-fit: cover;
+  object-position: 53% 42%;
+  transition: opacity 0.6s;
+}
+/* Lớp động (src/heroCanh.ts) vẽ lại tranh + tu sĩ bước đi + linh khí, nằm đúng chỗ ảnh. */
+.hero-canvas {
+  position: absolute;
+  left: 0;
+  top: -4%;
+  width: 100%;
+  height: 108%;
+}
+.tranh-nen { will-change: transform; }
+/* Hai dải sương trôi chậm trên biển mây. */
+.suong {
+  position: absolute;
+  left: -30%;
+  bottom: 2%;
+  width: 160%;
+  height: 38%;
+  background: radial-gradient(ellipse 50% 58% at 50% 55%, rgba(255, 252, 243, 0.5), rgba(255, 252, 243, 0) 70%);
+  animation: suong-troi 90s ease-in-out infinite alternate;
+}
+.suong.s2 { bottom: 20%; height: 30%; opacity: 0.7; animation-duration: 130s; animation-delay: -45s; }
+@keyframes suong-troi {
+  from { transform: translateX(-4%); }
+  to { transform: translateX(5%); }
+}
+@media (prefers-reduced-motion: reduce) { .suong { animation: none; } }
 /* Mờ nhẹ giữa khung cho chữ đọc rõ trên cảnh động. */
 .dau-tranh::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(ellipse 60% 46% at 50% 30%, rgba(246, 239, 223, 0.9) 0%, rgba(246, 239, 223, 0.7) 55%, rgba(246, 239, 223, 0) 100%);
+  background:
+    linear-gradient(180deg, rgba(246, 239, 223, 0.95) 0%, rgba(246, 239, 223, 0.78) 26%, rgba(246, 239, 223, 0.3) 52%, rgba(246, 239, 223, 0) 70%),
+    linear-gradient(0deg, rgba(246, 239, 223, 0.9) 0%, rgba(246, 239, 223, 0) 12%);
   pointer-events: none;
 }
 .dau-tranh-chu { position: relative; max-width: 640px; margin: 0 auto; }
@@ -310,7 +344,11 @@ html:not(.co-js) .mo-muc { display: none; }
   .dau-tranh-chu { max-width: 620px; margin: 2vh auto 0 max(6vw, calc(50vw - 560px)); }
   .dau-tranh .the-kin { margin-left: 0; }
   .dau-tranh .hang-nut { justify-content: flex-start; }
-  .dau-tranh::after { background: radial-gradient(ellipse 46% 60% at 26% 42%, rgba(246, 239, 223, 0.92) 0%, rgba(246, 239, 223, 0.6) 55%, rgba(246, 239, 223, 0) 100%); }
+  .dau-tranh::after {
+    background:
+      linear-gradient(90deg, rgba(246, 239, 223, 0.95) 0%, rgba(246, 239, 223, 0.86) 30%, rgba(246, 239, 223, 0.45) 50%, rgba(246, 239, 223, 0) 70%),
+      linear-gradient(0deg, rgba(246, 239, 223, 0.9) 0%, rgba(246, 239, 223, 0) 12%);
+  }
 }
 
 /* Ảnh đại lục (trang chủ). */

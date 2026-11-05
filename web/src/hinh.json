@@ -1520,6 +1520,26 @@
      "h": 1043,
      "bam": "057c573515d9",
      "kb": 133.3
+    },
+    {
+     "file": "rieng/hero_1880.webp",
+     "ten": "Hero thủy mặc",
+     "phu": "",
+     "kieu": "hero",
+     "w": 1880,
+     "h": 848,
+     "bam": "5f96e76207cb",
+     "kb": 129
+    },
+    {
+     "file": "rieng/hero_960.webp",
+     "ten": "Hero thủy mặc nhỏ",
+     "phu": "",
+     "kieu": "hero",
+     "w": 960,
+     "h": 433,
+     "bam": "568e20c0bff0",
+     "kb": 45.1
     }
    ]
   }

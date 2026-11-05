@@ -8,56 +8,13 @@
   <body class="trang-chu">
     <!--#dau-->
     <main id="noi-dung">
-      <!-- Phần 1: vườn trúc lắc lư trong gió, giữa là đình uống trà (Three.js, src/canhTruc.ts). Không WebGL: SVG tĩnh này. -->
-      <section class="dau-tranh" data-vuon-truc aria-labelledby="ten-game">
+      <!-- Phần 1: tranh thủy mặc người dùng gửi (2026-11-05): núi thiêng với cột sáng, cổng đá giữa biển mây,
+           tu sĩ đi về phía cổng. Ảnh tĩnh + hai dải sương CSS trôi + thị sai nhẹ khi cuộn (main.ts); không còn cảnh Three. -->
+      <section class="dau-tranh" aria-labelledby="ten-game">
         <div class="tranh-nen" aria-hidden="true">
-          <svg class="truc-tinh" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" focusable="false">
-            <defs>
-              <linearGradient id="tt-troi" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#fbf6ea" />
-                <stop offset="1" stop-color="#efe6d0" />
-              </linearGradient>
-              <g id="tt-cay">
-                <rect x="-5" y="-520" width="10" height="520" rx="5" fill="#5b7355" />
-                <rect x="-6" y="-390" width="12" height="7" fill="#46593f" />
-                <rect x="-6" y="-260" width="12" height="7" fill="#46593f" />
-                <rect x="-6" y="-130" width="12" height="7" fill="#46593f" />
-                <path d="M0 -470 q 44 -26 96 -20 q -48 30 -96 20 M0 -430 q -40 -30 -92 -26 q 44 34 92 26 M0 -350 q 42 -20 90 -16 q -44 28 -90 16" fill="#4e6447" />
-              </g>
-            </defs>
-            <rect width="1600" height="900" fill="url(#tt-troi)" />
-            <circle cx="1150" cy="240" r="68" fill="#c25446" opacity=".35" />
-            <!-- Đình trà giữa vườn -->
-            <g transform="translate(800 690)" fill="#5d564a">
-              <path d="M-190 -170 Q 0 -260 190 -170 L 150 -150 Q 0 -215 -150 -150 Z" />
-              <path d="M-120 -235 Q 0 -295 120 -235 L 92 -218 Q 0 -262 -92 -218 Z" />
-              <circle cx="0" cy="-295" r="12" fill="#b3261e" />
-              <rect x="-150" y="-150" width="12" height="130" fill="#7a4336" />
-              <rect x="138" y="-150" width="12" height="130" fill="#7a4336" />
-              <rect x="-80" y="-152" width="10" height="132" fill="#7a4336" />
-              <rect x="70" y="-152" width="10" height="132" fill="#7a4336" />
-              <rect x="-210" y="-24" width="420" height="16" fill="#c4b696" />
-              <rect x="-240" y="-8" width="480" height="16" fill="#d8ccb2" />
-              <rect x="-46" y="-78" width="92" height="12" rx="4" fill="#7a4336" />
-            </g>
-            <!-- Trúc hai cánh -->
-            <g opacity=".92">
-              <use href="#tt-cay" transform="translate(130 900) scale(1.1) rotate(4)" />
-              <use href="#tt-cay" transform="translate(240 905) rotate(-5)" />
-              <use href="#tt-cay" transform="translate(340 910) scale(.86) rotate(7)" />
-              <use href="#tt-cay" transform="translate(455 915) scale(1.04) rotate(-2)" />
-              <use href="#tt-cay" transform="translate(1160 912) scale(.9) rotate(-6)" />
-              <use href="#tt-cay" transform="translate(1270 905) scale(1.12) rotate(3)" />
-              <use href="#tt-cay" transform="translate(1385 908) rotate(-3)" />
-              <use href="#tt-cay" transform="translate(1490 902) scale(.95) rotate(6)" />
-            </g>
-            <g opacity=".4">
-              <use href="#tt-cay" transform="translate(560 880) scale(.7) rotate(-4)" />
-              <use href="#tt-cay" transform="translate(1065 884) scale(.66) rotate(5)" />
-            </g>
-            <rect y="520" width="1600" height="150" fill="#f6efdf" opacity=".55" />
-          </svg>
-          <div class="tranh-song" data-canh></div>
+          <img class="hero-anh" src="/hinh/rieng/hero_1880.webp" srcset="/hinh/rieng/hero_960.webp 960w, /hinh/rieng/hero_1880.webp 1880w" sizes="100vw" alt="" fetchpriority="high" decoding="async">
+          <div class="suong s1"></div>
+          <div class="suong s2"></div>
         </div>
         <div class="dau-tranh-chu">
           <p class="the-kin">Đang phát triển · Open test</p>

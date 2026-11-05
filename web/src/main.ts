@@ -24,28 +24,16 @@ function mucLuc(): void {
   });
 }
 
-/**
- * Đầu trang chủ: vườn trúc lắc lư trong gió, giữa là đình uống trà (src/canhTruc.ts), vẽ bằng renderer dùng chung
- * của lớp Three.js (proto/src/three, phiên Three.js giữ). Máy không có WebGL2 (hoặc ?nowebgl) thì giữ tranh SVG tĩnh.
- * Ra khỏi màn hình thì ẩn canvas để renderer dừng vẽ (nó bỏ qua chỗ gắn bị ẩn), đỡ tốn pin.
- */
-async function vuonTruc(): Promise<void> {
-  const khung = document.querySelector<HTMLElement>("[data-vuon-truc]");
-  const song = khung?.querySelector<HTMLElement>("[data-canh]");
-  if (!khung || !song) return;
-  const three = await import("../../proto/src/three/index.ts");
-  if (!three.hasWebGL()) return;
-  const { canhTruc } = await import("./canhTruc.ts");
-  const live = await three.mountProgram(song, () => canhTruc(), { layer: "back" });
-  if (!live) return;
-  song.classList.add("song");
+/** Thị sai nhẹ cho nền hero khi cuộn (ảnh và canvas cao hơn khung 8% nên không hở mép); tôn trọng giảm chuyển động. */
+function thiSaiHero(): void {
+  const anh = document.querySelector<HTMLElement>(".dau-tranh .tranh-nen");
+  if (!anh || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   let hen = 0;
-  const cuon = () => {
+  const cap = () => {
     hen = 0;
-    live.setScroll(Math.min(1.5, window.scrollY / Math.max(1, window.innerHeight)));
+    anh.style.transform = `translateY(${Math.min(window.scrollY, window.innerHeight) * 0.12}px)`;
   };
-  window.addEventListener("scroll", () => (hen ||= requestAnimationFrame(cuon)), { passive: true });
-  new IntersectionObserver(([e]) => (song.hidden = !e.isIntersecting), { rootMargin: "40px" }).observe(khung);
+  window.addEventListener("scroll", () => (hen ||= requestAnimationFrame(cap)), { passive: true });
 }
 
 /** Hộp xem lớn cho mọi nút `.phong` (thư viện, dải hình, trang Điểm riêng). */
@@ -113,5 +101,6 @@ function nhomDangXem(): void {
 mucLuc();
 xemLon();
 nhomDangXem();
-void vuonTruc();
+thiSaiHero();
+if (document.querySelector(".hero-anh")) void import("./heroCanh.ts").then((x) => x.ganHeroCanh());
 if (document.querySelector("form[data-gop-y]")) void import("./gopY.ts").then((m) => m.ganGopY());
