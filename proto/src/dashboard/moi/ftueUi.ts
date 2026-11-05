@@ -10,7 +10,7 @@ import type { Nav } from "../shell.ts";
 import { artUrl, assetUrl, clockText, closeSheet, durationText, elementChip, esc, openSheet, skillChip, toast } from "../ui.ts";
 import type { FtueChiTiet, NguonTheoTaiKhoan } from "./nguonMoi.ts";
 import { AO, tenNgauNhien, THAN, type Ao, type Than } from "./theGioiMoi.ts";
-import { TEN_HE } from "./ftue.ts";
+import { GIO_BE_QUAN, TEN_HE } from "./ftue.ts";
 
 export interface FtueHost {
   nguon: NguonTheoTaiKhoan;
@@ -37,6 +37,8 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
   document.body.classList.add("nguoi-moi");
   let scene = "";
   let cu = "";
+  /** Lời thưởng của trận nhập môn, báo khi rời màn Trận. */
+  let choBao: string | undefined;
   /** Chỉ ghi lại thẻ khi nội dung đổi, để nút không bị thay giữa lúc đang chạm. */
   const ve = (html: string) => {
     if (html !== cu) el.innerHTML = cu = html;
@@ -64,11 +66,11 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
       return;
     }
     if (!f.buoc) {
-      const ke = f.ke ? `Nhiệm vụ kế: ${esc(f.ke.ten)} (${f.ke.mo ? "chưa có trong bản chơi thử" : `mở ở cấp ${f.ke.minLevel}`}).` : "";
+      // Hết chương 0: chỉ đường tới việc lên cấp có thật trong bản thử (bế quan), không để người mới vào ngõ cụt.
       ve(`
         <div class="ftue-dau"><span class="ftue-so">Nhập Thế · ${f.tong}/${f.tong}</span><b>Đã xong 15 phút đầu</b></div>
-        <p>Bạn đã có tông môn, công pháp và mỏ đầu tiên. ${ke}</p>
-        <div class="ftue-hang"><span></span><button type="button" class="btn small" data-f="an">Đóng thẻ</button></div>
+        <p>${beQuanLoi(f.moiGio, f.beQuanXong)}</p>
+        <div class="ftue-hang">${beQuanNut(f.beQuanXong)}<button type="button" class="btn small" data-f="an">Đóng thẻ</button></div>
         <div class="ftue-tien"><i style="width:100%"></i></div>`);
       return;
     }
@@ -87,11 +89,16 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
       toast(baoLoi(r.error), true);
       return;
     }
-    if (r.message) toast(r.message);
     closeSheet();
     void capNhat();
-    if (r.battleId) host.nav.go({ screen: "tran", battleId: r.battleId });
-    else host.reload();
+    if (r.battleId) {
+      // Trận vừa mở: báo thưởng khi người chơi rời màn Trận (onShow), không báo lúc trận mới bắt đầu.
+      choBao = r.message;
+      host.nav.go({ screen: "tran", battleId: r.battleId });
+    } else {
+      if (r.message) toast(r.message);
+      host.reload();
+    }
   };
 
   const lam = async (viec: string, arg?: Record<string, unknown>) => sau((await host.nguon.get()).lam(viec, arg));
@@ -130,6 +137,7 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
     if (!t) return;
     const f = t.dataset.f;
     if (f === "lam") void moViec(t.dataset.viec!);
+    else if (f === "be_quan") void lam("be_quan", { gio: Number(t.dataset.gio) });
     else if (f === "gon" || f === "mo") void host.nguon.get().then((s) => (s.lam("thu_gon", { on: f === "gon" }), capNhat()));
     else if (f === "an") void host.nguon.get().then((s) => (s.lam("an_the"), capNhat()));
   });
@@ -163,6 +171,10 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
     capNhat: () => void capNhat(),
     onShow(id: string) {
       scene = id;
+      if (id !== "tran" && choBao) {
+        toast(choBao);
+        choBao = undefined;
+      }
       void capNhat();
     },
     // Dòng nhiệm vụ ở Việc nên làm hay Tin báo (Go "nhiem-vu"): mở đúng việc của bước đang làm, như nút trên thẻ nổi.
@@ -170,14 +182,36 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
       const f = (await host.nguon.get()).ftue();
       if (f.buoc) return void moViec(f.buoc.viec);
       const ke = f.ke;
-      openSheet("Nhiệm vụ chính", `
-        <p>${ke ? `Nhiệm vụ kế: ${esc(ke.ten)} (${ke.mo ? "chưa có trong bản chơi thử" : `mở ở cấp ${ke.minLevel}`}).` : "Bạn đã xong các nhiệm vụ có trong bản chơi thử."}</p>
-        <p class="moi-nho">Trong lúc chờ: học công pháp truyền thụ ở Công pháp, thu mỏ ở Tông môn, bế quan ở Nhân vật.</p>`);
+      const body = openSheet("Tu luyện tiếp", `
+        <p>${beQuanLoi(f.moiGio, f.beQuanXong)}</p>
+        <p class="moi-nho">${ke ? `Nhiệm vụ kế: ${esc(ke.ten)} (${ke.mo ? "chưa có trong bản chơi thử" : `mở ở cấp ${ke.minLevel}`}).` : "Bạn đã xong các nhiệm vụ có trong bản chơi thử."}</p>
+        <p class="moi-nho">Trong lúc chờ: ngoại môn học được 2 công pháp truyền thụ phẩm Phàm ở Công pháp.</p>
+        <div class="actions moi-actions">${beQuanNut(f.beQuanXong, "wide")}<button type="button" class="btn wide" data-cong-phap>Mở Công pháp</button></div>`);
+      body.addEventListener("click", (e) => {
+        const t = (e.target as HTMLElement).closest<HTMLElement>("[data-f='be_quan'], [data-cong-phap]");
+        if (!t) return;
+        if (t.dataset.f === "be_quan") void lam("be_quan", { gio: Number(t.dataset.gio) });
+        else host.nav.go({ screen: "cong-phap", section: "truyen-thu" });
+      });
     },
   };
 }
 
+/** Lời về bế quan sau chương 0: đang chạy thì giờ xong, chưa thì tu vi mỗi giờ. */
+function beQuanLoi(moiGio: number, xong?: number): string {
+  return xong
+    ? `Đang bế quan, xong lúc ${clockText(xong)}. Tu vi được cộng khi hết giờ, kể cả lúc tắt game.`
+    : `Lên cấp tiếp bằng bế quan: mỗi giờ +${moiGio} tu vi, cộng khi hết giờ kể cả lúc tắt game.`;
+}
+
+/** Nút bế quan 1 giờ, 8 giờ (GIO_BE_QUAN); đang bế quan thì không có nút. */
+function beQuanNut(xong?: number, co: "small" | "wide" = "small"): string {
+  if (xong) return "";
+  return GIO_BE_QUAN.map((g, i) => `<button type="button" class="${i === 0 ? "seal" : "btn"} ${co}" data-f="be_quan" data-gio="${g}">Bế quan ${g} giờ</button>`).join("");
+}
+
 const LOI: Record<string, string> = {
+  dang_be_quan: "Đang bế quan rồi.",
   khong_dung_buoc: "Chưa tới bước này của nhiệm vụ.",
   vung_chua_mo: "Vùng này chưa mở ở bản chơi thử.",
   ten_khong_hop_le: "Đạo hiệu cần 2–16 ký tự.",
@@ -261,7 +295,7 @@ function bangGhep(ct: FtueChiTiet, ok: () => void): void {
     <section class="card moi-kq">
       <h3>${esc(g.ten)}</h3>
       <p>${skillChip(g.type as SkillType)} <span>Phẩm Phàm</span></p>
-      <p class="moi-nho">D ${g.damage} · ${g.targets} mục tiêu · hồi ${g.cd.toLocaleString("vi-VN")} s · ${g.mana} mana</p>
+      <p class="moi-nho">Sát thương ${g.damage} · ${g.targets} mục tiêu · hồi ${g.cd.toLocaleString("vi-VN")} s · ${g.mana} mana</p>
       <p class="moi-nho">${root}</p>
     </section>
     <div class="actions moi-actions"><button type="button" class="seal wide" data-ok>Ghép và mang vào trận</button></div>`);

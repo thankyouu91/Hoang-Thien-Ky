@@ -145,3 +145,9 @@ body[data-scene="tran"] #ftue { display: none; }
 /* Lỗi đạo hiệu ngay dưới ô nhập (màn gieo quẻ phủ trên toast). */
 .th-loi { min-height: 1.2em; margin: 2px 0 0; color: var(--c-accent); font-size: var(--fs-xs); }
 #gieo-que .seal:disabled { opacity: 0.45; cursor: not-allowed; }
+/* Toast nằm trên thẻ nhập môn, không che lời và nút của bước kế (trên điện thoại thẻ nằm ngay trên thanh dưới). */
+@media (max-width: 959px) {
+  body.co-ftue:not([data-scene="tran"]) #toast { bottom: calc(var(--bar-h) + env(safe-area-inset-bottom) + 172px); }
+  body.co-ftue:not([data-scene="tran"]):has(#ftue.gon) #toast { bottom: calc(var(--bar-h) + env(safe-area-inset-bottom) + 64px); }
+}
+#ftue .ftue-hang { flex-wrap: wrap; }

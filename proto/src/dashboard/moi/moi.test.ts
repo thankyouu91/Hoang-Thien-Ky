@@ -6,7 +6,7 @@ import type { RegionMap } from "../../scenes/map/region.ts";
 import REGION_JSON from "../../../../data/maps/ha_diem_loi_dinh_coc.json" with { type: "json" };
 import {
   biCanhKe, buocHienTai, CHUOI, danhDauXong, lamChiemMo, lamChonVung, lamDatNhac, lamGhepTanThu, lamGiaNhap, lamGieoQue, lamTaoHinh,
-  lamThuChieu, TAN_THU, themMon, xemTruocTanThu,
+  lamThuChieu, TAN_THU, themMon, xemTruocTanThu, lamBeQuan, chotBeQuan,
 } from "./ftue.ts";
 import { donBanCu, docTienDo, ghiTienDo, khoaLuu, PHIEN_BAN_LUU, TIEN_TO, xoaTienDo } from "./luu.ts";
 import { chang, PLAYER, SECT, taoTheGioiMoi, VUNG_MO } from "./theGioiMoi.ts";
@@ -158,4 +158,26 @@ test("lưu tiến độ theo tài khoản, có phiên bản; bản cũ bị bỏ
   assert.equal(docTienDo(kho, "acc3"), null);
   xoaTienDo(kho, "acc1");
   assert.equal(docTienDo(kho, "acc1"), null);
+});
+
+test("sơn môn tông gợi ý có cấp nguy hiểm thấp (40 hạt giống)", () => {
+  for (let s = 1; s <= 40; s++) {
+    const { world: w } = taoTheGioiMoi(s * 7919, REGION, NOW);
+    assert.ok(REGION.points[w.sonMon].danger <= 40, `hạt giống ${s * 7919}: ${REGION.points[w.sonMon].danger}`);
+  }
+});
+
+test("bế quan sau chương 0: cộng tu vi khi hết giờ, chỉ một lượt một lúc", () => {
+  const { w } = diHetChuoi(4242);
+  const { moi } = taoTheGioiMoi(4242, REGION, NOW);
+  assert.equal(lamBeQuan(w, moi, 1, 114, NOW).ok, false, "chưa xong chương 0 thì chưa bế quan");
+  moi.xong = CHUOI.map((q) => q.id);
+  assert.equal(lamBeQuan(w, moi, 3, 114, NOW).ok, false);
+  assert.ok(lamBeQuan(w, moi, 8, 114, NOW).ok);
+  assert.equal(lamBeQuan(w, moi, 1, 114, NOW).ok, false);
+  assert.ok(w.jobs.some((j) => j.kind === "be_quan"));
+  assert.equal(chotBeQuan(w, moi, NOW + 3600_000), 0);
+  assert.equal(chotBeQuan(w, moi, NOW + 8 * 3600_000), 912);
+  assert.ok(!w.jobs.some((j) => j.kind === "be_quan"));
+  assert.equal(moi.beQuan, undefined);
 });

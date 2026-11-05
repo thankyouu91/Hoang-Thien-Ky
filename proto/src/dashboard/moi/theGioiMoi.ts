@@ -27,6 +27,8 @@ export const PHAN_LINH_CAN_KEP = 300;
 export const KHOI_DAU = { linhThach: 100, tienNgoc: 0, danHoiMau: 3 };
 /** Cấp mở tự lập tông (GDD mục 6, đề xuất). */
 export const CAP_LAP_TONG = 20;
+/** Cấp nguy hiểm tối đa của chỗ sơn môn tông gợi ý cho người mới (đề xuất). */
+export const NGUY_SON_MON = 40;
 
 const H = 3600_000;
 
@@ -78,6 +80,8 @@ export interface MoiState {
   /** Ẩn thẻ chỉ dẫn sau khi xong chương 0. */
   anThe?: boolean;
   thuGon?: boolean;
+  /** Bế quan đang chạy (sau chương 0): mốc bắt đầu, kết thúc, tu vi mỗi giờ tính lúc bắt đầu. */
+  beQuan?: { batDau: number; ketThuc: number; moiGio: number };
 }
 
 /** Số ngẫu nhiên có hạt giống (mulberry32), cùng thuật toán với mock/world.ts. */
@@ -222,7 +226,9 @@ function chonSonMon(m: RegionMap, rand: () => number): { sonMon: number; mo: num
   }
   if (!ok.length) throw new Error(`Thế giới mới: vùng ${m.region.code} không có chỗ sơn môn hợp`);
   ok.sort((a, b) => a.danger - b.danger || a.sonMon - b.sonMon);
-  return pick(rand, ok.slice(0, 4));
+  // Người mới cấp 1: chỉ bốc chỗ có cấp nguy hiểm thấp (sơn môn và mỏ quanh đó không quá xa thành chủ).
+  const gan = ok.filter((c) => c.danger <= NGUY_SON_MON);
+  return pick(rand, gan.length ? gan : ok.slice(0, 1));
 }
 
 function lkSlot(): LuyenKhiSlot {

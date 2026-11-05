@@ -3,7 +3,7 @@
 // NguonTheoTaiKhoan là nguồn index.ts đưa cho các màn: đổi tài khoản (đăng nhập, đăng xuất) thì nạp tiến độ của tài khoản đó.
 import { simulate, type BattleInput, type Element } from "@ktlp/sim";
 import type { AuthSource } from "../auth.ts";
-import { MockDashboardSource, realmOf } from "../mock/source.ts";
+import { expToNext, minePerHour, MockDashboardSource, realmOf } from "../mock/source.ts";
 import { PLAYER as MOCK_PLAYER, REGION as MOCK_REGION, SECT as MOCK_SECT, type World } from "../mock/world.ts";
 import { loadRegion, loadWorld, type WorldRegion } from "../../scenes/map/region.ts";
 import { ghi } from "../server.ts";
@@ -13,7 +13,7 @@ import type {
 } from "../source.ts";
 import { ERROR_TEXT } from "../ui.ts";
 import {
-  biCanhKe, BUOC_FTUE, buocHienTai, danhDauXong, lamChiemMo, lamChonVung, lamDatNhac, lamGhepTanThu, lamGiaNhap, lamGieoQue, lamTaoHinh, lamThuChieu,
+  biCanhKe, BUOC_FTUE, buocHienTai, chotBeQuan, danhDauXong, lamBeQuan, lamChiemMo, lamChonVung, lamDatNhac, lamGhepTanThu, lamGiaNhap, lamGieoQue, lamTaoHinh, lamThuChieu,
   nhiemVuKe, TEN_HE, themMon, thuongCua, xemTruocTanThu, type BuocView, type KetQua,
 } from "./ftue.ts";
 import { docTienDo, donBanCu, ghiTienDo, xoaTienDo } from "./luu.ts";
@@ -45,6 +45,9 @@ export interface FtueView {
   anThe: boolean;
   thuGon: boolean;
   level: number;
+  /** Sau chương 0: tu vi bế quan mỗi giờ, và bế quan đang chạy (mốc kết thúc). */
+  moiGio: number;
+  beQuanXong?: number;
 }
 
 /** Thông tin cho các bảng của từng bước (FTUE UI). */
@@ -93,8 +96,9 @@ export class NguonMoi extends MockDashboardSource {
   protected override currentQuest(): { id: string; name: string; step: string; go: Go } | undefined {
     const b = buocHienTai(this.moi);
     if (b) return { id: b.id, name: `Nhập Thế ${b.so}/7: ${b.ten}`, step: b.loi, go: { screen: "nhiem-vu", id: b.id } };
-    const ke = nhiemVuKe(this.me.level);
-    return ke && { id: "ke", name: `Nhiệm vụ chính: ${ke.ten}`, step: ke.mo ? "Chưa có trong bản chơi thử" : `Mở ở cấp ${ke.minLevel}`, go: { screen: "nhiem-vu", id: "ke" } };
+    // Sau chương 0: nhiệm vụ chính kế chưa có trong bản thử, nên chỉ việc lên cấp có thật là bế quan.
+    const step = this.moi.beQuan ? "Đang bế quan" : `Bế quan: mỗi giờ +${this.moiGio()} tu vi`;
+    return { id: "be_quan", name: "Tu luyện tiếp", step, go: { screen: "nhiem-vu", id: "be_quan" } };
   }
 
   protected override todo(now: number): TodoCard[] {
@@ -148,7 +152,11 @@ export class NguonMoi extends MockDashboardSource {
   override async battle(id: number): Promise<{ label: string; input: BattleInput; arena?: string } | undefined> {
     const input = this.moi.tran[id];
     const r = this.w.reports.find((x) => x.id === id);
-    if (input && r) return { label: `Chiến báo · ${r.title}`, input, arena: r.arena };
+    if (input && r) {
+      // Người chơi là đội A: màn Trận hiện tên hai bên và Thắng/Thua (teams, viewer; tab Dashboard thêm vào DashboardSource).
+      const out = { label: `Chiến báo · ${r.title}`, input, arena: r.arena, teams: [this.w.sect.name, "Dị thú"] as [string, string], viewer: 0 as const };
+      return out;
+    }
     return super.battle(id);
   }
 
@@ -175,7 +183,7 @@ export class NguonMoi extends MockDashboardSource {
 
   override async banDo(): Promise<BanDoView> {
     const v = await super.banDo();
-    for (const m of this.moi.moNpc) v.owners[m.pointId] = { owner: "npc", name: m.by, level: m.level, perHour: undefined };
+    for (const m of this.moi.moNpc) v.owners[m.pointId] = { owner: "npc", name: m.by, level: m.level, perHour: minePerHour(m.level) };
     if (!this.daVaoTong) {
       for (const [id, o] of Object.entries(v.owners)) if (o.owner === "minh") v.owners[Number(id)] = { ...o, owner: "npc", attacked: undefined };
       v.inRange = [];
@@ -231,7 +239,26 @@ export class NguonMoi extends MockDashboardSource {
     return {
       buoc: b, tong: 7, xong: this.moi.xong.length, ke: b ? undefined : nhiemVuKe(this.me.level),
       anThe: !!this.moi.anThe, thuGon: !!this.moi.thuGon, level: this.me.level,
+      moiGio: this.moiGio(), beQuanXong: this.moi.beQuan?.ketThuc,
     };
+  }
+
+  /** Tu vi bế quan mỗi giờ, như màn Nhân vật của mock: 1/8 tu vi cấp đang tu, linh tuyền của tông +20% (đề xuất). */
+  moiGio(): number {
+    const goc = Math.round(expToNext(this.me.level) / 8);
+    return goc + (this.w.held.some((h) => h.type === "linh_tuyen") ? Math.round(goc * 0.2) : 0);
+  }
+
+  /** Hết giờ bế quan thì cộng tu vi và gửi thư báo; gọi trước mỗi lệnh đọc (NguonTheoTaiKhoan). */
+  chotBeQuan(): void {
+    const lv = this.me.level;
+    const exp = chotBeQuan(this.w, this.moi, this.now());
+    if (!exp) return;
+    this.gainExp(exp);
+    const id = Math.max(0, ...this.w.mail.map((m) => m.id)) + 1;
+    const len = this.me.level > lv ? ` · lên cấp ${this.me.level}` : "";
+    this.w.mail.unshift({ id, from: "Động phủ", title: "Bế quan xong", body: `Bế quan xong, +${exp} tu vi${len}`, unread: true });
+    this.luu();
   }
 
   async chiTiet(): Promise<FtueChiTiet> {
@@ -326,6 +353,11 @@ export class NguonMoi extends MockDashboardSource {
         const r = lamDatNhac(moi, now);
         return done("chinh.0.7", r.ok ? { ...r, message: "Đã đặt nhắc. Nhận túi tân thủ" } : r);
       }
+      case "be_quan": {
+        const r = lamBeQuan(w, moi, Number(arg.gio), this.moiGio(), now);
+        if (r.ok) this.luu();
+        return r;
+      }
       case "an_the":
         moi.anThe = true;
         this.luu();
@@ -414,13 +446,20 @@ export class NguonTheoTaiKhoan implements DashboardSource {
     this.cur = undefined;
   }
 
-  dongPhu = async () => (await this.get()).dongPhu();
-  nhanVat = async () => (await this.get()).nhanVat();
-  tongMon = async () => (await this.get()).tongMon();
-  congPhap = async () => (await this.get()).congPhap();
-  lienMinh = async () => (await this.get()).lienMinh();
-  banDo = async () => (await this.get()).banDo();
-  mail = async (id: number) => (await this.get()).mail(id);
-  battle = async (id: number) => (await this.get()).battle(id);
-  send = async (cmd: DashboardCommand) => (await this.get()).send(cmd);
+  /** Nguồn của tài khoản đang chơi, đã chốt bế quan nếu vừa hết giờ. */
+  private async s(): Promise<NguonMoi> {
+    const s = await this.get();
+    s.chotBeQuan();
+    return s;
+  }
+
+  dongPhu = async () => (await this.s()).dongPhu();
+  nhanVat = async () => (await this.s()).nhanVat();
+  tongMon = async () => (await this.s()).tongMon();
+  congPhap = async () => (await this.s()).congPhap();
+  lienMinh = async () => (await this.s()).lienMinh();
+  banDo = async () => (await this.s()).banDo();
+  mail = async (id: number) => (await this.s()).mail(id);
+  battle = async (id: number) => (await this.s()).battle(id);
+  send = async (cmd: DashboardCommand) => (await this.s()).send(cmd);
 }

@@ -36,7 +36,7 @@ const LOI: Record<string, { loi: string; nut: string; viec: ViecFtue }> = {
   "chinh.0.1": { loi: "Linh mạch vừa sống lại khắp Hạ vị. Chọn vùng bắt đầu, rồi tới thành chủ của vùng đó.", nut: "Chọn vùng", viec: "chon_vung" },
   "chinh.0.2": { loi: "Đặt tay lên bia Tầm Đạo ở thành chủ để gieo quẻ. Quẻ cho bạn linh căn và một tài năng.", nut: "Gieo quẻ", viec: "gieo_que" },
   "chinh.0.3": { loi: "Một mình khó tu. Gia nhập tông môn được gợi ý trong vùng rồi truyền tống về sơn môn.", nut: "Xem tông gợi ý", viec: "gia_nhap" },
-  "chinh.0.4": { loi: "Bạn có 2 tàn quyển tặng sẵn trong túi. Ghép chúng ở Tàng Kinh Các thành công pháp đầu tiên.", nut: "Ghép công pháp", viec: "ghep" },
+  "chinh.0.4": { loi: "Bạn có 2 tàn quyển tặng sẵn trong túi. Ghép chúng thành công pháp đầu tiên, không cần nộp vào Tàng Kinh Các.", nut: "Ghép công pháp", viec: "ghep" },
   "chinh.0.5": { loi: "Thử công pháp mới với dị thú gần sơn môn. Dị thú ở đây thuộc hệ bị hệ của vùng khắc, nên đòn trúng mạnh hơn.", nut: "Ra trận", viec: "thu_chieu" },
   "chinh.0.6": { loi: "Cùng đồng môn đánh chiếm mỏ linh thạch cấp 1 đang có dị thú canh. Chiếm xong thì thu mỏ lần đầu.", nut: "Đánh chiếm mỏ", viec: "chiem_mo" },
   "chinh.0.7": { loi: "Bí cảnh mở lúc 12:00 và 20:00, mỗi lần 30 phút. Đặt lời nhắc cho khung gần nhất.", nut: "Đặt nhắc", viec: "dat_nhac" },
@@ -303,4 +303,32 @@ export function themMon(w: World, items: { item: string; count: number }[]): str
     out.push(`${count} ${m.name}`);
   }
   return out;
+}
+
+// ---- Sau chương 0: bế quan rút gọn ----------------------------------------------------------------------------------
+
+/** Số giờ bế quan chọn được ở thẻ nhập môn (đề xuất). */
+export const GIO_BE_QUAN = [1, 8];
+
+/**
+ * Bắt đầu bế quan `gio` giờ (sau chương 0, để người mới lên cấp tiếp): tu vi mỗi giờ tính sẵn lúc bắt đầu (`moiGio`), cộng
+ * khi hết giờ (chotBeQuan), kể cả lúc tắt game. Hiện ở Động phủ › Đang chạy và màn Nhân vật như việc bế quan của mock.
+ */
+export function lamBeQuan(w: World, moi: MoiState, gio: number, moiGio: number, now: number): KetQua {
+  if (buocHienTai(moi)) return { ok: false, error: "khong_dung_buoc" };
+  if (moi.beQuan) return { ok: false, error: "dang_be_quan" };
+  if (!GIO_BE_QUAN.includes(gio)) return { ok: false, error: "lenh_khong_hop_le" };
+  const ketThuc = now + gio * 3600_000;
+  moi.beQuan = { batDau: now, ketThuc, moiGio };
+  w.jobs.push({ kind: "be_quan", title: "Bế quan", detail: `+${moiGio * gio} tu vi khi xong`, startsAt: now, endsAt: ketThuc });
+  return { ok: true, message: `Bắt đầu bế quan ${gio} giờ` };
+}
+
+/** Hết giờ bế quan: bỏ việc khỏi danh sách và trả số tu vi được cộng (0 nếu chưa xong). */
+export function chotBeQuan(w: World, moi: MoiState, now: number): number {
+  const b = moi.beQuan;
+  if (!b || now < b.ketThuc) return 0;
+  moi.beQuan = undefined;
+  w.jobs = w.jobs.filter((j) => !(j.kind === "be_quan" && j.endsAt === b.ketThuc));
+  return Math.round((b.moiGio * (b.ketThuc - b.batDau)) / 3600_000);
 }
