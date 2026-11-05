@@ -4,7 +4,7 @@ import type { Sprites } from "../../assets/sprites.ts";
 import type { Look, ReplayUnit } from "../../replay/types.ts";
 
 /** `dung_<dáng>`: dải dáng đứng riêng (khoanh tay, lơ lửng…), chọn trong dangDung.ts; thiếu thì dùng `dung`. */
-export type Anim = "dung" | "ra_chieu" | "trung_don" | "nga" | `dung_${string}`;
+export type Anim = "dung" | "ra_chieu" | "trung_don" | "nga" | "chay" | `dung_${string}` | `ra_chieu_${string}`;
 
 /** Người trong khung 96 px đứng ở vị trí như ảnh 64 px lệch (+16, +16): chân ở y = 80. */
 const FOOT = 80;

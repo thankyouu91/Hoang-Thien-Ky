@@ -9,11 +9,10 @@
 // Neo đầu: tâm các điểm đầu (mũi, mắt, tai) cộng độ lệch chỉnh theo dải dung.png có sẵn của cùng thân và áo, để mũ ngồi
 // đúng chỗ như ở hoạt ảnh cũ. Neo tay theo DANG[x].tay: "phai" cổ tay có x lớn hơn (như các dải cũ), "cao" cổ tay cao
 // hơn (tay giơ cầm vũ khí), "khong" tay không cầm gì (vũ khí đeo lưng hay cất, proto tự vẽ).
-import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { homedir } from "node:os";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { blank, blit, decodePng, encodePng, type Rgba } from "./png.ts";
+import { blank, blit, decodePng, encodePng } from "./png.ts";
+import { api, ASSETS, combosOf, download, FW, headCenter, headOffset, idleOf, px, readManifest, round, skeleton } from "./pixellab.ts";
 
 interface PoseSpec {
   /** Khung giữ lại (chỉ số từ 0, gồm hai đầu); khung trước đó là đoạn chuyển từ tư thế nghỉ sang dáng. */
@@ -35,128 +34,25 @@ const DANG: Record<string, PoseSpec> = {
   bat_an: { keep: [3, 9], fps: 5, tay: "khong", moTa: "một tay dựng trước mặt bắt ấn, tay kia buông" },
 };
 
-interface Kp {
-  label: string;
-  x: number;
-  y: number;
-}
-
-const ROOT = join(import.meta.dirname, "..", "..");
-const ASSETS = join(ROOT, "assets", "pixellab");
-const FW = 96;
-const HEAD = ["NOSE", "RIGHT EYE", "LEFT EYE", "RIGHT EAR", "LEFT EAR"];
-
 const [poseArg, comboArg, tmp, outPath] = process.argv.slice(2);
 if (!poseArg || !comboArg || !tmp || !outPath) {
   throw new Error("node tools/dang_dung/lam.ts <dáng,…|all> <thân/áo,…|all> <thư mục tạm> <ra.json>");
 }
 mkdirSync(tmp, { recursive: true });
 
-function token(): string {
-  const cfg = JSON.parse(readFileSync(join(homedir(), ".claude.json"), "utf8"));
-  const auth: string | undefined = cfg?.mcpServers?.pixellab?.headers?.Authorization;
-  if (!auth) throw new Error("không thấy token PixelLab trong ~/.claude.json");
-  return auth.replace(/^Bearer\s+/i, "");
-}
-const TOKEN = token();
-const sleep = (ms: number) => new Promise((ok) => setTimeout(ok, ms));
-
-/** Tải về file đệm; fetch của Node đôi khi nhận 500 từ kho ảnh PixelLab nên lùi về curl. */
-async function download(url: string, cache: string): Promise<Uint8Array> {
-  if (existsSync(cache)) return readFileSync(cache);
-  for (let attempt = 0; attempt < 4; attempt++) {
-    try {
-      execFileSync("curl", ["-sfL", "-o", cache, url]);
-      if (existsSync(cache)) return readFileSync(cache);
-    } catch {
-      await sleep(2000);
-    }
-  }
-  throw new Error(`tải ${url} không được`);
-}
-
-async function api(path: string, body?: unknown): Promise<any> {
-  for (let attempt = 0; ; attempt++) {
-    const r = await fetch(`https://api.pixellab.ai/v2/${path}`, {
-      method: body ? "POST" : "GET",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${TOKEN}` },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-    if (r.ok) return r.json();
-    if (attempt >= 3) throw new Error(`${path}: ${r.status} ${await r.text()}`);
-    await sleep(3000);
-  }
-}
-
-async function skeleton(png: Uint8Array, cache: string): Promise<Kp[]> {
-  if (existsSync(cache)) return JSON.parse(readFileSync(cache, "utf8"));
-  const j = await api("estimate-skeleton", { image: { type: "base64", base64: Buffer.from(png).toString("base64") } });
-  writeFileSync(cache, JSON.stringify(j.keypoints));
-  return j.keypoints;
-}
-
-function frameOf(strip: Rgba, i: number): Rgba {
-  const f = blank(FW, FW);
-  blit(f, strip, 0, 0, i * FW, 0, FW, FW);
-  return f;
-}
-
-const px = (k: Kp, w: number, h: number) => [k.x * w, k.y * h] as const;
-const round = (v: number) => Math.round(v * 10) / 10;
-
-function headCenter(kps: Kp[], w: number, h: number): [number, number] | null {
-  const hs = kps.filter((k) => HEAD.includes(k.label));
-  if (hs.length === 0) return null;
-  let x = 0;
-  let y = 0;
-  for (const k of hs) {
-    const [a, b] = px(k, w, h);
-    x += a;
-    y += b;
-  }
-  return [x / hs.length, y / hs.length];
-}
-
-const manifest = JSON.parse(readFileSync(join(ASSETS, "manifest.json"), "utf8")).assets as any[];
-const idleOf = (body: string, outfit: string) => manifest.find((a) => a.file === `nhan_vat/${body}/${outfit}/dung.png`);
-
-/** Độ lệch từ tâm điểm đầu tới neo `dau` đã chốt của dải dung.png, trung bình trên các khung. */
-async function headOffset(body: string, outfit: string): Promise<[number, number]> {
-  const meta = idleOf(body, outfit);
-  if (!meta?.neo) return [0, 0];
-  const strip = decodePng(readFileSync(join(ASSETS, meta.file)));
-  let dx = 0;
-  let dy = 0;
-  let n = 0;
-  for (let i = 0; i < meta.frames; i++) {
-    const kps = await skeleton(encodePng(frameOf(strip, i)), join(tmp, `cal_${body}_${outfit}_${i}.json`));
-    const c = headCenter(kps, FW, FW);
-    if (!c) continue;
-    dx += meta.neo[i].dau[0] - c[0];
-    dy += meta.neo[i].dau[1] - c[1];
-    n++;
-  }
-  return n ? [dx / n, dy / n] : [0, 0];
-}
-
-const combos: [string, string][] =
-  comboArg === "all"
-    ? manifest
-        .map((a) => /^nhan_vat\/(\w+)\/(\w+)\/dung\.png$/.exec(a.file))
-        .filter((m): m is RegExpExecArray => !!m)
-        .map((m) => [m[1], m[2]])
-    : comboArg.split(",").map((c) => c.split("/") as [string, string]);
+const manifest = readManifest();
+const combos = combosOf(manifest, comboArg);
 const poses = poseArg === "all" ? Object.keys(DANG) : poseArg.split(",");
 
 const out: unknown[] = [];
 for (const [body, outfit] of combos) {
-  const stateId: string | undefined = idleOf(body, outfit)?.pixellab_id;
+  const stateId: string | undefined = idleOf(manifest, body, outfit)?.pixellab_id;
   if (!stateId) {
     console.log(`${body}/${outfit}: không có pixellab_id`);
     continue;
   }
   const character = await api(`characters/${stateId}`);
-  const [ox, oy] = await headOffset(body, outfit);
+  const [ox, oy] = await headOffset(manifest, body, outfit, tmp);
   for (const pose of poses) {
     const spec = DANG[pose];
     if (!spec) throw new Error(`dáng lạ: ${pose}`);

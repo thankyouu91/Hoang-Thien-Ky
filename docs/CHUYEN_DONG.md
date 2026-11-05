@@ -68,3 +68,57 @@ Cú đẩy chỉ là độ lệch hình quanh vị trí replay rồi lắng về
    Cả ba đã sửa.
 2. Xem ảnh từng nhịp trong màn Trận ở 375×812, rồi mới gửi người dùng.
 3. Đo hiệu năng phần thêm vào (seed 11, 20 người, ×4, quanh giây 7 và 25, canvas 375×812 ở dpr 2): 0,13 ms và 0,04 ms mỗi khung, gồm bụi, bóng lướt, vệt vũ khí, hạt tan; mức cho phép là 2 ms. Bộ lọc khung va chạm tốn khoảng 0,02 ms mỗi người.
+
+# Gói 2: chạy và ra chiêu theo loại chiêu
+
+Người dùng duyệt ngày 2026-11-05. Mỗi thân và áo có thêm 5 dải PixelLab (`animate_character`, mode `skeleton-v3`, dùng `move` có sẵn, hướng south-east, 3 lượt mỗi dải):
+
+| Dải | Move | Dùng cho | Khung chạm |
+|---|---|---|---|
+| `chay` (8 khung, lặp) | `run` | đi tới phía địch | không có |
+| `ra_chieu_chem` (10) | `slash`, tay trước | cận đơn, cận quét | 4: tay chém xuống trước mặt |
+| `ra_chieu_dam` (10) | `stab`, tay trước | thân pháp | 5: tay vươn xa nhất |
+| `ra_chieu_dap` (8 trong 12) | `arms_overhead` rồi `cast_down` | diện rộng, trận pháp | 5: khuỵu, hai tay đập xuống; khung giữ 3 là hai tay giơ cao |
+| `ra_chieu_phong` (10) | `throw`, tay trước | tầm xa, bùa chú, khống chế | 5: tay buông ra trước |
+
+- Hộ thể và hồi phục vẫn dùng dải `ra_chieu` chung. Thân chưa có dải riêng cũng lùi về dải này.
+- Mô tả gửi PixelLab không được nhắc tới vũ khí. Lần đầu mô tả có chữ "sword", PixelLab vẽ luôn thanh kiếm vào tay, trùng với vũ khí ghép. Nhóm hỏng đó bị loại trong `BO_NHOM` của `tools/dang_dung/dong_tac.ts`.
+- Dải đập: move `arms_overhead` cho tay giơ lên hạ xuống hai lần, nên chỉ giữ khung 0–3 và 8–11.
+
+## Nhịp (`ThanNguoi.act`, `gait` trong `chuyenDong.ts`)
+
+Replay biết trước mọi sự kiện, nên động tác vung tay bắt đầu trước lúc trúng đòn.
+
+| Nhóm | Mốc |
+|---|---|
+| Chém, đâm | Khung chạm trùng tick trúng đòn; các khung trước đó diễn ngay trước tick ấy. |
+| Đập | Giơ tay từ lúc vận công (`start`), giữ ở khung giữ, đập xuống đúng tick nổ. |
+| Phóng | Khung buông tay trùng lúc đạn rời tay: tick trúng trừ thời gian bay, cùng công thức với `fx2d.ts`. |
+| Chung | Có đòn nặng chạm trúng thì người đánh đứng ở khung chạm đúng số khung khựng như người trúng đòn (IMPACT_FRAMES + holdOf), đếm theo giây thực. Sau đó diễn nốt phần theo đà. |
+
+- Khung dải chạy theo thời gian trận như dải cũ, nên tua ×4 thì diễn nhanh gấp 4. Riêng lúc khựng tính theo giây thực, nên khung chạm vẫn hiện đủ lâu.
+- Hai lần ra chiêu sát nhau: lần sau không vung trước khi lần trước chạm và khựng xong. Lần sau mà chạm trước lúc đó thì gộp vào lần trước, không vung lại từ đầu. Hay gặp ở thân pháp nối cận đơn, cận quét nối cận đơn.
+- Chạy: chỉ khi tiến về phía địch nhanh hơn 3 và không quá 120 milli-ô mỗi tick. Khung theo quãng đã đi, một vòng hai bước mỗi ô. Lùi, bị đẩy và lướt vẫn như gói 1. Khi chạy, độ nhún của gói 1 giảm còn 25% và bỏ bè ra, vì dải đã tự nhún.
+
+## Vũ khí theo tay
+
+Neo tay của các dải mới là `[x, y, góc cẳng tay, vươn]`:
+- `góc` là hướng từ khuỷu tới cổ tay;
+- `vươn` từ 0 tới 1, cho biết cổ tay đã rời chỗ nghỉ bao xa (đủ 1 ở 14 px). Với dải không lặp, tính từ chỗ nghỉ của `dung.png` hoặc từ khung đầu của dải, lấy giá trị nhỏ hơn.
+
+Khi vẽ, lưỡi vũ khí quay từ hướng gốc của ảnh đồ về hướng cẳng tay theo độ vươn (`heldRotation` trong `dangDung.ts`):
+- tay ở chỗ nghỉ thì vũ khí giữ như lúc đứng, nên lúc chuyển động tác không giật;
+- tay vươn hết thì lưỡi nối dài cẳng tay: đâm chĩa thẳng tới, chém theo cung tay.
+
+Vệt vũ khí cũng xoay mũi theo góc này. Lúc chạy, vũ khí chỉ đung đưa 40%. Dáng đeo lưng hay cất vũ khí thì khi chạy vẫn đeo lưng hay cất. Neo cũ chỉ có `[x, y]` thì vẫn vẽ như trước.
+
+## Làm lại hay thêm áo
+
+1. Trên PixelLab: `animate_character` với state thân + áo, `mode: "skeleton-v3"`, `directions: ["south-east"]`, đúng `animation_name`, `frame_count` và `move` như bảng trên. Các mô tả đã dùng:
+   - chạy: "running forward";
+   - chém: "raises one empty fist high, then chops it down diagonally across the body, bare hands";
+   - đâm: "pulls back and thrusts forward in a lunging stab";
+   - đập: "raises both arms high overhead, then slams both hands down toward the ground";
+   - phóng: "winds back and throws forward with one hand".
+2. `node tools/dang_dung/dong_tac.ts <dải,…|all> <thân/áo,…|all> <thư mục tạm> <ra.json>`: tải khung, ghép dải, ước neo (0,1 lượt mỗi khung).
+3. `node tools/dang_dung/ghep.ts <ra.json> assets/pixellab/manifest.json`.

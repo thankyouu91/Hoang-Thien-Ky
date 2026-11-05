@@ -17479,6 +17479,5758 @@
           ]
         }
       ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/chay.png",
+      "description": "Nhân vật nam khoe mặc dao bao: chạy tới (move run), một vòng hai bước, lặp được; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-running forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "c0f01315-fda9-49d2-8792-1bcc743275c0"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "loop": true,
+      "neo": [
+        {
+          "dau": [
+            52.1,
+            29.7,
+            0
+          ],
+          "tay": [
+            63.8,
+            39.8,
+            -88,
+            0.89
+          ]
+        },
+        {
+          "dau": [
+            52.9,
+            28.6,
+            0
+          ],
+          "tay": [
+            63.8,
+            39.4,
+            -83,
+            0.92
+          ]
+        },
+        {
+          "dau": [
+            53.2,
+            25.6,
+            0
+          ],
+          "tay": [
+            62.5,
+            40.6,
+            -55,
+            0.81
+          ]
+        },
+        {
+          "dau": [
+            53.2,
+            26.4,
+            0
+          ],
+          "tay": [
+            60.2,
+            44.6,
+            23,
+            0.51
+          ]
+        },
+        {
+          "dau": [
+            53.4,
+            29.5,
+            0
+          ],
+          "tay": [
+            56.5,
+            49,
+            61,
+            0.34
+          ]
+        },
+        {
+          "dau": [
+            53.3,
+            28.6,
+            0
+          ],
+          "tay": [
+            59.2,
+            48,
+            57,
+            0.28
+          ]
+        },
+        {
+          "dau": [
+            53.3,
+            25.8,
+            0
+          ],
+          "tay": [
+            60,
+            42.9,
+            40,
+            0.63
+          ]
+        },
+        {
+          "dau": [
+            53.2,
+            26,
+            0
+          ],
+          "tay": [
+            63.2,
+            42.1,
+            -61,
+            0.72
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/ra_chieu_chem.png",
+      "description": "Nhân vật nam khoe mặc dao bao: vung tay trước chém ngang (move slash), cho cận đơn và cận quét; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one empty fist high, th",
+        "directions": [
+          "south-east"
+        ],
+        "group": "de29c120-d8d3-472d-ad72-bfa0bf1d1725"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            48.2,
+            26.7,
+            0
+          ],
+          "tay": [
+            52.9,
+            51.6,
+            81,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.6,
+            26.4,
+            0
+          ],
+          "tay": [
+            48.5,
+            18,
+            -115,
+            1
+          ]
+        },
+        {
+          "dau": [
+            45.5,
+            26.4,
+            0
+          ],
+          "tay": [
+            45.9,
+            17.4,
+            -107,
+            1
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            26.4,
+            0
+          ],
+          "tay": [
+            54.7,
+            18.7,
+            -103,
+            1
+          ]
+        },
+        {
+          "dau": [
+            58.1,
+            34.8,
+            0
+          ],
+          "tay": [
+            70.2,
+            47,
+            19,
+            0.78
+          ]
+        },
+        {
+          "dau": [
+            57.6,
+            38.4,
+            0
+          ],
+          "tay": [
+            58.4,
+            55.1,
+            142,
+            0.28
+          ]
+        },
+        {
+          "dau": [
+            57.5,
+            38.5,
+            0
+          ],
+          "tay": [
+            53.9,
+            54.5,
+            150,
+            0.22
+          ]
+        },
+        {
+          "dau": [
+            54.6,
+            33.6,
+            0
+          ],
+          "tay": [
+            58,
+            54.1,
+            114,
+            0.24
+          ]
+        },
+        {
+          "dau": [
+            50.6,
+            28.5,
+            0
+          ],
+          "tay": [
+            61.2,
+            52.4,
+            73,
+            0.08
+          ]
+        },
+        {
+          "dau": [
+            49.6,
+            26.7,
+            0
+          ],
+          "tay": [
+            60.4,
+            51.6,
+            65,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/ra_chieu_dam.png",
+      "description": "Nhân vật nam khoe mặc dao bao: thu tay rồi đâm tới (move stab), cho thân pháp; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-pulls back and thrusts forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "f9c9cabe-9459-45bd-b74c-4c9844248c88"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.3,
+            26.8,
+            0
+          ],
+          "tay": [
+            54.2,
+            51.6,
+            76,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.7,
+            27.3,
+            0
+          ],
+          "tay": [
+            51.8,
+            50.8,
+            67,
+            0.18
+          ]
+        },
+        {
+          "dau": [
+            45.2,
+            26.9,
+            0
+          ],
+          "tay": [
+            51.1,
+            51,
+            69,
+            0.22
+          ]
+        },
+        {
+          "dau": [
+            49.5,
+            28,
+            0
+          ],
+          "tay": [
+            54.1,
+            52.9,
+            72,
+            0.09
+          ]
+        },
+        {
+          "dau": [
+            58.3,
+            35,
+            0
+          ],
+          "tay": [
+            73.2,
+            41.1,
+            -30,
+            1
+          ]
+        },
+        {
+          "dau": [
+            61.2,
+            37.6,
+            0
+          ],
+          "tay": [
+            74.6,
+            45.7,
+            -25,
+            1
+          ]
+        },
+        {
+          "dau": [
+            61.4,
+            38.7,
+            0
+          ],
+          "tay": [
+            74.4,
+            46.9,
+            -12,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.5,
+            34.8,
+            0
+          ],
+          "tay": [
+            70.9,
+            49.5,
+            17,
+            0.77
+          ]
+        },
+        {
+          "dau": [
+            50.5,
+            27.7,
+            0
+          ],
+          "tay": [
+            60.6,
+            52.3,
+            63,
+            0.05
+          ]
+        },
+        {
+          "dau": [
+            49.6,
+            26.6,
+            0
+          ],
+          "tay": [
+            60.2,
+            51.7,
+            66,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/ra_chieu_dap.png",
+      "description": "Nhân vật nam khoe mặc dao bao: hai tay giơ cao rồi đập xuống (arms_overhead rồi cast_down), cho diện rộng và trận pháp; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises both arms high overhead",
+        "directions": [
+          "south-east"
+        ],
+        "group": "dbcc4005-1331-4fea-a6f3-1bc76759eff8",
+        "frames_kept": [
+          0,
+          1,
+          2,
+          3,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 14,
+      "giu": 3,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.5,
+            27.3,
+            0
+          ],
+          "tay": [
+            66.3,
+            39.4,
+            0,
+            0
+          ]
+        },
+        {
+          "dau": [
+            47.9,
+            26.9,
+            0
+          ],
+          "tay": [
+            66.1,
+            27.4,
+            -59,
+            0.86
+          ]
+        },
+        {
+          "dau": [
+            46.9,
+            26.6,
+            0
+          ],
+          "tay": [
+            56.5,
+            19.3,
+            -108,
+            1
+          ]
+        },
+        {
+          "dau": [
+            46.9,
+            26.2,
+            0
+          ],
+          "tay": [
+            55.6,
+            19,
+            -110,
+            1
+          ]
+        },
+        {
+          "dau": [
+            52.3,
+            31.9,
+            0
+          ],
+          "tay": [
+            66.2,
+            31.2,
+            -51,
+            0.59
+          ]
+        },
+        {
+          "dau": [
+            59.5,
+            39.5,
+            0
+          ],
+          "tay": [
+            72.4,
+            49.4,
+            20,
+            0.84
+          ]
+        },
+        {
+          "dau": [
+            54.3,
+            33,
+            0
+          ],
+          "tay": [
+            66.2,
+            50.7,
+            46,
+            0.42
+          ]
+        },
+        {
+          "dau": [
+            49.7,
+            26.9,
+            0
+          ],
+          "tay": [
+            60.4,
+            51.7,
+            66,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/dao_bao/ra_chieu_phong.png",
+      "description": "Nhân vật nam khoe mặc dao bao: vung tay ra sau rồi phóng tới (move throw), cho tầm xa, bùa chú, khống chế; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-winds back and throws forward ",
+        "directions": [
+          "south-east"
+        ],
+        "group": "f4091c17-6f67-4f96-8187-e0f574c42c27"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2f7c003b-b4eb-4740-b1ab-6ea435d9be87",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.2,
+            27.2,
+            0
+          ],
+          "tay": [
+            48.8,
+            44.4,
+            165,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.3,
+            26.6,
+            0
+          ],
+          "tay": [
+            51.3,
+            54.1,
+            95,
+            0.67
+          ]
+        },
+        {
+          "dau": [
+            43.4,
+            27,
+            0
+          ],
+          "tay": [
+            44.3,
+            23.7,
+            -139,
+            1
+          ]
+        },
+        {
+          "dau": [
+            47.9,
+            27.6,
+            0
+          ],
+          "tay": [
+            55.4,
+            25.5,
+            -82,
+            1
+          ]
+        },
+        {
+          "dau": [
+            55.9,
+            31.7,
+            0
+          ],
+          "tay": [
+            68.1,
+            31.3,
+            -58,
+            1
+          ]
+        },
+        {
+          "dau": [
+            58,
+            34.9,
+            0
+          ],
+          "tay": [
+            72.7,
+            42,
+            -25,
+            1
+          ]
+        },
+        {
+          "dau": [
+            58,
+            34.5,
+            0
+          ],
+          "tay": [
+            55.2,
+            52.2,
+            165,
+            0.37
+          ]
+        },
+        {
+          "dau": [
+            53.3,
+            30.7,
+            0
+          ],
+          "tay": [
+            58,
+            51.2,
+            106,
+            0.17
+          ]
+        },
+        {
+          "dau": [
+            51.3,
+            28.7,
+            0
+          ],
+          "tay": [
+            58.4,
+            51.1,
+            94,
+            0.14
+          ]
+        },
+        {
+          "dau": [
+            49.6,
+            26.7,
+            0
+          ],
+          "tay": [
+            60.4,
+            51.6,
+            64,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/chay.png",
+      "description": "Nhân vật nam manh mặc dao bao: chạy tới (move run), một vòng hai bước, lặp được; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-running forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "c6916dc5-dd32-45ad-83c9-5a8865e715ea"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "loop": true,
+      "neo": [
+        {
+          "dau": [
+            52.1,
+            28.9,
+            0
+          ],
+          "tay": [
+            62.8,
+            41,
+            -79,
+            0.91
+          ]
+        },
+        {
+          "dau": [
+            52.9,
+            27.9,
+            0
+          ],
+          "tay": [
+            62.4,
+            39.9,
+            -75,
+            0.97
+          ]
+        },
+        {
+          "dau": [
+            52.9,
+            24.9,
+            0
+          ],
+          "tay": [
+            60.9,
+            41.6,
+            9,
+            0.82
+          ]
+        },
+        {
+          "dau": [
+            52.9,
+            25.8,
+            0
+          ],
+          "tay": [
+            58,
+            43.7,
+            37,
+            0.64
+          ]
+        },
+        {
+          "dau": [
+            52.8,
+            29.4,
+            0
+          ],
+          "tay": [
+            54.5,
+            49.5,
+            74,
+            0.32
+          ]
+        },
+        {
+          "dau": [
+            52.7,
+            27.9,
+            0
+          ],
+          "tay": [
+            56.2,
+            47.9,
+            72,
+            0.36
+          ]
+        },
+        {
+          "dau": [
+            52.5,
+            24.9,
+            0
+          ],
+          "tay": [
+            58.2,
+            43,
+            43,
+            0.69
+          ]
+        },
+        {
+          "dau": [
+            52.7,
+            26.1,
+            0
+          ],
+          "tay": [
+            60.2,
+            41.3,
+            -21,
+            0.83
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/ra_chieu_chem.png",
+      "description": "Nhân vật nam manh mặc dao bao: vung tay trước chém ngang (move slash), cho cận đơn và cận quét; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one empty fist high, th",
+        "directions": [
+          "south-east"
+        ],
+        "group": "0d631e61-4fd4-41bb-b5fe-5fc1e58abe53"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            48.2,
+            26.7,
+            0
+          ],
+          "tay": [
+            51.6,
+            50.3,
+            77,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.2,
+            26.2,
+            0
+          ],
+          "tay": [
+            47.5,
+            20.1,
+            -121,
+            1
+          ]
+        },
+        {
+          "dau": [
+            45,
+            26.3,
+            0
+          ],
+          "tay": [
+            45.7,
+            20.3,
+            -116,
+            1
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            27,
+            0
+          ],
+          "tay": [
+            54.3,
+            20.2,
+            -107,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.7,
+            34,
+            0
+          ],
+          "tay": [
+            68.7,
+            46.9,
+            101,
+            0.89
+          ]
+        },
+        {
+          "dau": [
+            57,
+            36.6,
+            0
+          ],
+          "tay": [
+            57.9,
+            55,
+            120,
+            0.17
+          ]
+        },
+        {
+          "dau": [
+            56.8,
+            37.5,
+            0
+          ],
+          "tay": [
+            56.2,
+            56,
+            118,
+            0.26
+          ]
+        },
+        {
+          "dau": [
+            53.8,
+            33,
+            0
+          ],
+          "tay": [
+            56.5,
+            54.5,
+            103,
+            0.16
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            27.7,
+            0
+          ],
+          "tay": [
+            58.8,
+            54.1,
+            73,
+            0.13
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            26.6,
+            0
+          ],
+          "tay": [
+            57.7,
+            52.5,
+            72,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/ra_chieu_dam.png",
+      "description": "Nhân vật nam manh mặc dao bao: thu tay rồi đâm tới (move stab), cho thân pháp; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-pulls back and thrusts forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "69c54660-7193-4cdc-bdbc-e0bf762fb805"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 6,
+      "neo": [
+        {
+          "dau": [
+            47.6,
+            26.4,
+            0
+          ],
+          "tay": [
+            52.6,
+            54.2,
+            85,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46,
+            26.1,
+            0
+          ],
+          "tay": [
+            52,
+            53.1,
+            79,
+            0.09
+          ]
+        },
+        {
+          "dau": [
+            44.8,
+            26,
+            0
+          ],
+          "tay": [
+            50.8,
+            52.2,
+            77,
+            0.19
+          ]
+        },
+        {
+          "dau": [
+            49.8,
+            27.8,
+            0
+          ],
+          "tay": [
+            55.7,
+            40.7,
+            -24,
+            0.86
+          ]
+        },
+        {
+          "dau": [
+            57.7,
+            33.2,
+            0
+          ],
+          "tay": [
+            71.4,
+            41,
+            -46,
+            1
+          ]
+        },
+        {
+          "dau": [
+            60.6,
+            37.1,
+            0
+          ],
+          "tay": [
+            72,
+            44.2,
+            -29,
+            1
+          ]
+        },
+        {
+          "dau": [
+            61.3,
+            37.3,
+            0
+          ],
+          "tay": [
+            72.5,
+            45.1,
+            -32,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.5,
+            34.1,
+            0
+          ],
+          "tay": [
+            68.5,
+            47.9,
+            0,
+            0.84
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            27.6,
+            0
+          ],
+          "tay": [
+            57.7,
+            53.8,
+            76,
+            0.09
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.5,
+            0
+          ],
+          "tay": [
+            57.6,
+            52.2,
+            73,
+            0.03
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/ra_chieu_dap.png",
+      "description": "Nhân vật nam manh mặc dao bao: hai tay giơ cao rồi đập xuống (arms_overhead rồi cast_down), cho diện rộng và trận pháp; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises both arms high overhead",
+        "directions": [
+          "south-east"
+        ],
+        "group": "28b2c45c-ce59-4e5a-8f51-0b4e9cbe5621",
+        "frames_kept": [
+          0,
+          1,
+          2,
+          3,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 14,
+      "giu": 3,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            47.6,
+            26.6,
+            0
+          ],
+          "tay": [
+            65.2,
+            39.3,
+            5,
+            0
+          ]
+        },
+        {
+          "dau": [
+            47.1,
+            26.3,
+            0
+          ],
+          "tay": [
+            64.7,
+            31.9,
+            -45,
+            0.53
+          ]
+        },
+        {
+          "dau": [
+            46.9,
+            26.1,
+            0
+          ],
+          "tay": [
+            55.5,
+            20.3,
+            -100,
+            1
+          ]
+        },
+        {
+          "dau": [
+            47,
+            26.4,
+            0
+          ],
+          "tay": [
+            53.2,
+            19.1,
+            -110,
+            1
+          ]
+        },
+        {
+          "dau": [
+            54.7,
+            33.9,
+            0
+          ],
+          "tay": [
+            67.9,
+            30,
+            -71,
+            0.69
+          ]
+        },
+        {
+          "dau": [
+            58.7,
+            38.5,
+            0
+          ],
+          "tay": [
+            71.6,
+            49.5,
+            13,
+            0.86
+          ]
+        },
+        {
+          "dau": [
+            54.9,
+            32.8,
+            0
+          ],
+          "tay": [
+            64.6,
+            50.4,
+            46,
+            0.52
+          ]
+        },
+        {
+          "dau": [
+            49.1,
+            26.6,
+            0
+          ],
+          "tay": [
+            57.7,
+            52.3,
+            73,
+            0.02
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/dao_bao/ra_chieu_phong.png",
+      "description": "Nhân vật nam manh mặc dao bao: vung tay ra sau rồi phóng tới (move throw), cho tầm xa, bùa chú, khống chế; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-winds back and throws forward ",
+        "directions": [
+          "south-east"
+        ],
+        "group": "9235efe4-6191-4c75-bd69-938619f5cb85"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "39370098-5f49-43a5-8f49-89274720bfe8",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            47.7,
+            26.3,
+            0
+          ],
+          "tay": [
+            47.6,
+            45,
+            143,
+            0
+          ]
+        },
+        {
+          "dau": [
+            45.6,
+            37.1,
+            0
+          ],
+          "tay": [
+            40,
+            25.4,
+            -83,
+            1
+          ]
+        },
+        {
+          "dau": [
+            45.4,
+            28.2,
+            0
+          ],
+          "tay": [
+            41,
+            24.3,
+            -153,
+            1
+          ]
+        },
+        {
+          "dau": [
+            47.8,
+            37.4,
+            0
+          ],
+          "tay": [
+            53.1,
+            26,
+            -98,
+            1
+          ]
+        },
+        {
+          "dau": [
+            55.6,
+            30.7,
+            0
+          ],
+          "tay": [
+            67.2,
+            30.9,
+            -39,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.7,
+            34.7,
+            0
+          ],
+          "tay": [
+            69.6,
+            43.9,
+            32,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.1,
+            33.7,
+            0
+          ],
+          "tay": [
+            61.8,
+            53.1,
+            87,
+            0.29
+          ]
+        },
+        {
+          "dau": [
+            53.9,
+            29.8,
+            0
+          ],
+          "tay": [
+            58.3,
+            54.8,
+            94,
+            0.16
+          ]
+        },
+        {
+          "dau": [
+            50.7,
+            27.7,
+            0
+          ],
+          "tay": [
+            57.6,
+            54,
+            90,
+            0.1
+          ]
+        },
+        {
+          "dau": [
+            49,
+            26.7,
+            0
+          ],
+          "tay": [
+            57.6,
+            52.3,
+            74,
+            0.02
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/chay.png",
+      "description": "Nhân vật nu khoe mặc dao bao: chạy tới (move run), một vòng hai bước, lặp được; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-running forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "e526fc29-7c6d-4f18-96ca-98a8e8e053aa"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "loop": true,
+      "neo": [
+        {
+          "dau": [
+            52.6,
+            30.9,
+            0
+          ],
+          "tay": [
+            62,
+            43,
+            -52,
+            0.64
+          ]
+        },
+        {
+          "dau": [
+            53,
+            29.5,
+            0
+          ],
+          "tay": [
+            61.8,
+            41.7,
+            -59,
+            0.73
+          ]
+        },
+        {
+          "dau": [
+            52.8,
+            26.4,
+            0
+          ],
+          "tay": [
+            60.9,
+            41.5,
+            -38,
+            0.73
+          ]
+        },
+        {
+          "dau": [
+            52.8,
+            27.3,
+            0
+          ],
+          "tay": [
+            59.1,
+            44.2,
+            31,
+            0.54
+          ]
+        },
+        {
+          "dau": [
+            51.9,
+            29.9,
+            0
+          ],
+          "tay": [
+            55.5,
+            49.9,
+            60,
+            0.32
+          ]
+        },
+        {
+          "dau": [
+            52.6,
+            29.4,
+            0
+          ],
+          "tay": [
+            58.7,
+            47.2,
+            49,
+            0.32
+          ]
+        },
+        {
+          "dau": [
+            52.5,
+            26.9,
+            0
+          ],
+          "tay": [
+            59.5,
+            42.7,
+            28,
+            0.64
+          ]
+        },
+        {
+          "dau": [
+            52.9,
+            27.7,
+            0
+          ],
+          "tay": [
+            61.2,
+            41.9,
+            -40,
+            0.7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/ra_chieu_chem.png",
+      "description": "Nhân vật nu khoe mặc dao bao: vung tay trước chém ngang (move slash), cho cận đơn và cận quét; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one empty fist high, th",
+        "directions": [
+          "south-east"
+        ],
+        "group": "c514248f-cc10-43aa-92d1-d39c954ccb0b"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            48.6,
+            28.1,
+            0
+          ],
+          "tay": [
+            52.1,
+            26.3,
+            -103,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.1,
+            27.5,
+            0
+          ],
+          "tay": [
+            47.5,
+            21.4,
+            -145,
+            0.48
+          ]
+        },
+        {
+          "dau": [
+            44.7,
+            26.9,
+            0
+          ],
+          "tay": [
+            51,
+            50.8,
+            66,
+            0.62
+          ]
+        },
+        {
+          "dau": [
+            48.9,
+            27.9,
+            0
+          ],
+          "tay": [
+            54.1,
+            22,
+            -110,
+            0.34
+          ]
+        },
+        {
+          "dau": [
+            57.4,
+            35,
+            0
+          ],
+          "tay": [
+            70.6,
+            41.8,
+            -42,
+            1
+          ]
+        },
+        {
+          "dau": [
+            56.9,
+            37.8,
+            0
+          ],
+          "tay": [
+            59.9,
+            56.3,
+            81,
+            0.33
+          ]
+        },
+        {
+          "dau": [
+            56.8,
+            38.4,
+            0
+          ],
+          "tay": [
+            55.4,
+            55.5,
+            114,
+            0.42
+          ]
+        },
+        {
+          "dau": [
+            54.5,
+            33.7,
+            0
+          ],
+          "tay": [
+            56,
+            54.6,
+            110,
+            0.34
+          ]
+        },
+        {
+          "dau": [
+            51,
+            29.2,
+            0
+          ],
+          "tay": [
+            60.8,
+            53.5,
+            71,
+            0.16
+          ]
+        },
+        {
+          "dau": [
+            50,
+            27.9,
+            0
+          ],
+          "tay": [
+            59.6,
+            51.6,
+            65,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/ra_chieu_dam.png",
+      "description": "Nhân vật nu khoe mặc dao bao: thu tay rồi đâm tới (move stab), cho thân pháp; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-pulls back and thrusts forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "b0e7be98-efc6-4ab4-a5a9-e1e72f842378"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            48.2,
+            27.7,
+            0
+          ],
+          "tay": [
+            52.8,
+            52.4,
+            70,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.8,
+            28.2,
+            0
+          ],
+          "tay": [
+            52.4,
+            50.6,
+            58,
+            0.13
+          ]
+        },
+        {
+          "dau": [
+            45.6,
+            28.2,
+            0
+          ],
+          "tay": [
+            52.1,
+            50.1,
+            55,
+            0.17
+          ]
+        },
+        {
+          "dau": [
+            49.5,
+            29.4,
+            0
+          ],
+          "tay": [
+            53.8,
+            49.9,
+            61,
+            0.19
+          ]
+        },
+        {
+          "dau": [
+            57.5,
+            35.5,
+            0
+          ],
+          "tay": [
+            71,
+            42.1,
+            -17,
+            1
+          ]
+        },
+        {
+          "dau": [
+            60.3,
+            38.8,
+            0
+          ],
+          "tay": [
+            71,
+            46.3,
+            -47,
+            0.89
+          ]
+        },
+        {
+          "dau": [
+            60.6,
+            39.1,
+            0
+          ],
+          "tay": [
+            70.4,
+            46.8,
+            -29,
+            0.84
+          ]
+        },
+        {
+          "dau": [
+            57.1,
+            35.5,
+            0
+          ],
+          "tay": [
+            67.3,
+            49.2,
+            6,
+            0.57
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            30,
+            0
+          ],
+          "tay": [
+            60,
+            52.1,
+            62,
+            0.04
+          ]
+        },
+        {
+          "dau": [
+            49.8,
+            27.8,
+            0
+          ],
+          "tay": [
+            59.6,
+            51.6,
+            63,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/ra_chieu_dap.png",
+      "description": "Nhân vật nu khoe mặc dao bao: hai tay giơ cao rồi đập xuống (arms_overhead rồi cast_down), cho diện rộng và trận pháp; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises both arms high overhead",
+        "directions": [
+          "south-east"
+        ],
+        "group": "0a3fccd5-6050-42d4-855c-379d1862943a",
+        "frames_kept": [
+          0,
+          1,
+          2,
+          3,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 14,
+      "neo": [
+        {
+          "dau": [
+            49,
+            28.4,
+            0
+          ],
+          "tay": [
+            64.4,
+            39.6,
+            4,
+            0
+          ]
+        },
+        {
+          "dau": [
+            47,
+            28,
+            0
+          ],
+          "tay": [
+            64.2,
+            27.9,
+            -32,
+            0.83
+          ]
+        },
+        {
+          "dau": [
+            47.1,
+            26.6,
+            0
+          ],
+          "tay": [
+            56.5,
+            20.5,
+            -71,
+            1
+          ]
+        },
+        {
+          "dau": [
+            45.7,
+            26.2,
+            0
+          ],
+          "tay": [
+            55.4,
+            20,
+            -76,
+            1
+          ]
+        },
+        {
+          "dau": [
+            53.6,
+            33.4,
+            0
+          ],
+          "tay": [
+            66.2,
+            38.3,
+            -24,
+            0.16
+          ]
+        },
+        {
+          "dau": [
+            58.3,
+            40.4,
+            0
+          ],
+          "tay": [
+            70.1,
+            48.8,
+            8,
+            0.77
+          ]
+        },
+        {
+          "dau": [
+            54.8,
+            34.7,
+            0
+          ],
+          "tay": [
+            63.6,
+            49,
+            25,
+            0.36
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            27.9,
+            0
+          ],
+          "tay": [
+            59.1,
+            51.6,
+            62,
+            0.02
+          ]
+        }
+      ],
+      "giu": 3,
+      "cham": 5
+    },
+    {
+      "file": "nhan_vat/nu_khoe/dao_bao/ra_chieu_phong.png",
+      "description": "Nhân vật nu khoe mặc dao bao: vung tay ra sau rồi phóng tới (move throw), cho tầm xa, bùa chú, khống chế; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-winds back and throws forward ",
+        "directions": [
+          "south-east"
+        ],
+        "group": "fef55ea3-4b47-47cf-8946-6bf76aef8e6a"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "597b5b65-53bf-4d4c-a864-74c99e4c73e2",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.2,
+            28.2,
+            0
+          ],
+          "tay": [
+            48,
+            41.8,
+            -177,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46,
+            27.9,
+            0
+          ],
+          "tay": [
+            52.6,
+            49.8,
+            88,
+            0.53
+          ]
+        },
+        {
+          "dau": [
+            43.8,
+            28.3,
+            0
+          ],
+          "tay": [
+            52.2,
+            40.2,
+            -174,
+            0.32
+          ]
+        },
+        {
+          "dau": [
+            46.3,
+            28.4,
+            0
+          ],
+          "tay": [
+            52.8,
+            27.6,
+            -131,
+            1
+          ]
+        },
+        {
+          "dau": [
+            55.8,
+            32.3,
+            0
+          ],
+          "tay": [
+            63.4,
+            29.3,
+            -139,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.9,
+            35.6,
+            0
+          ],
+          "tay": [
+            68.8,
+            38.4,
+            -81,
+            1
+          ]
+        },
+        {
+          "dau": [
+            58,
+            35.1,
+            0
+          ],
+          "tay": [
+            68.3,
+            47.5,
+            -26,
+            0.68
+          ]
+        },
+        {
+          "dau": [
+            54,
+            31,
+            0
+          ],
+          "tay": [
+            61.8,
+            52.4,
+            59,
+            0.16
+          ]
+        },
+        {
+          "dau": [
+            51.8,
+            29.2,
+            0
+          ],
+          "tay": [
+            58,
+            52.7,
+            84,
+            0.15
+          ]
+        },
+        {
+          "dau": [
+            49.7,
+            27.8,
+            0
+          ],
+          "tay": [
+            59.6,
+            51.8,
+            65,
+            0.02
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/chay.png",
+      "description": "Nhân vật nu manh mặc dao bao: chạy tới (move run), một vòng hai bước, lặp được; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-running forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "3badf9ea-46c5-4f0f-bec4-dd342bbcf49c"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "loop": true,
+      "neo": [
+        {
+          "dau": [
+            51.9,
+            30.6,
+            0
+          ],
+          "tay": [
+            60.3,
+            39.1,
+            -78,
+            0.99
+          ]
+        },
+        {
+          "dau": [
+            52.1,
+            28.5,
+            0
+          ],
+          "tay": [
+            60.8,
+            38.7,
+            -67,
+            1
+          ]
+        },
+        {
+          "dau": [
+            52.2,
+            25.4,
+            0
+          ],
+          "tay": [
+            59.5,
+            40.8,
+            -5,
+            0.86
+          ]
+        },
+        {
+          "dau": [
+            52.1,
+            26.4,
+            0
+          ],
+          "tay": [
+            57.3,
+            43.9,
+            36,
+            0.62
+          ]
+        },
+        {
+          "dau": [
+            52.2,
+            30.1,
+            0
+          ],
+          "tay": [
+            54.3,
+            50.1,
+            75,
+            0.24
+          ]
+        },
+        {
+          "dau": [
+            52.1,
+            28.6,
+            0
+          ],
+          "tay": [
+            56.3,
+            48.1,
+            56,
+            0.31
+          ]
+        },
+        {
+          "dau": [
+            52.3,
+            26,
+            0
+          ],
+          "tay": [
+            58.9,
+            42.6,
+            20,
+            0.72
+          ]
+        },
+        {
+          "dau": [
+            52,
+            26.8,
+            0
+          ],
+          "tay": [
+            59.8,
+            41.7,
+            -45,
+            0.8
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/ra_chieu_chem.png",
+      "description": "Nhân vật nu manh mặc dao bao: vung tay trước chém ngang (move slash), cho cận đơn và cận quét; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one empty fist high, th",
+        "directions": [
+          "south-east"
+        ],
+        "group": "ea0cb5ad-9389-4d11-aea4-22b1b330fe63"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            47.8,
+            27.2,
+            0
+          ],
+          "tay": [
+            52,
+            51.3,
+            80,
+            0
+          ]
+        },
+        {
+          "dau": [
+            45.3,
+            27.3,
+            0
+          ],
+          "tay": [
+            47.2,
+            21.1,
+            -114,
+            1
+          ]
+        },
+        {
+          "dau": [
+            44.8,
+            27.1,
+            0
+          ],
+          "tay": [
+            45.4,
+            20.2,
+            -110,
+            1
+          ]
+        },
+        {
+          "dau": [
+            48,
+            27.6,
+            0
+          ],
+          "tay": [
+            52.2,
+            21.2,
+            -106,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.1,
+            34.6,
+            0
+          ],
+          "tay": [
+            67.6,
+            44.7,
+            15,
+            0.97
+          ]
+        },
+        {
+          "dau": [
+            56.9,
+            36.8,
+            0
+          ],
+          "tay": [
+            55.5,
+            55.2,
+            143,
+            0.21
+          ]
+        },
+        {
+          "dau": [
+            56.9,
+            38,
+            0
+          ],
+          "tay": [
+            51,
+            56.7,
+            130,
+            0.39
+          ]
+        },
+        {
+          "dau": [
+            54.1,
+            33.2,
+            0
+          ],
+          "tay": [
+            54.5,
+            55.7,
+            104,
+            0.28
+          ]
+        },
+        {
+          "dau": [
+            50.4,
+            29.3,
+            0
+          ],
+          "tay": [
+            57.7,
+            53.5,
+            73,
+            0.1
+          ]
+        },
+        {
+          "dau": [
+            49.4,
+            27.4,
+            0
+          ],
+          "tay": [
+            56.5,
+            52.5,
+            73,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/ra_chieu_dam.png",
+      "description": "Nhân vật nu manh mặc dao bao: thu tay rồi đâm tới (move stab), cho thân pháp; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-pulls back and thrusts forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "ad0eed78-2098-4f7c-a502-2cefb3447d18"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.1,
+            27.5,
+            0
+          ],
+          "tay": [
+            52,
+            52.9,
+            79,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.1,
+            27.5,
+            0
+          ],
+          "tay": [
+            49.9,
+            49.6,
+            70,
+            0.28
+          ]
+        },
+        {
+          "dau": [
+            44.9,
+            27.5,
+            0
+          ],
+          "tay": [
+            49.1,
+            48.6,
+            64,
+            0.37
+          ]
+        },
+        {
+          "dau": [
+            48.5,
+            28.9,
+            0
+          ],
+          "tay": [
+            51.3,
+            51.4,
+            75,
+            0.12
+          ]
+        },
+        {
+          "dau": [
+            57.8,
+            35.2,
+            0
+          ],
+          "tay": [
+            70.7,
+            40.3,
+            -31,
+            1
+          ]
+        },
+        {
+          "dau": [
+            60.1,
+            37.8,
+            0
+          ],
+          "tay": [
+            71.2,
+            44.5,
+            -32,
+            1
+          ]
+        },
+        {
+          "dau": [
+            60.3,
+            37.8,
+            0
+          ],
+          "tay": [
+            71.2,
+            44,
+            -46,
+            1
+          ]
+        },
+        {
+          "dau": [
+            55.9,
+            34.5,
+            0
+          ],
+          "tay": [
+            65.2,
+            49.3,
+            18,
+            0.66
+          ]
+        },
+        {
+          "dau": [
+            50.2,
+            29.3,
+            0
+          ],
+          "tay": [
+            56.4,
+            54.2,
+            80,
+            0.13
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27.5,
+            0
+          ],
+          "tay": [
+            56.6,
+            52.6,
+            73,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/ra_chieu_dap.png",
+      "description": "Nhân vật nu manh mặc dao bao: hai tay giơ cao rồi đập xuống (arms_overhead rồi cast_down), cho diện rộng và trận pháp; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises both arms high overhead",
+        "directions": [
+          "south-east"
+        ],
+        "group": "b3a7cd8d-6d8b-4493-b251-7730e5ddbd8e",
+        "frames_kept": [
+          0,
+          1,
+          2,
+          3,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 14,
+      "giu": 3,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48,
+            27.6,
+            0
+          ],
+          "tay": [
+            62.9,
+            39.1,
+            -6,
+            0
+          ]
+        },
+        {
+          "dau": [
+            48.1,
+            27.1,
+            0
+          ],
+          "tay": [
+            63.5,
+            28.4,
+            -45,
+            0.77
+          ]
+        },
+        {
+          "dau": [
+            47.2,
+            28.5,
+            0
+          ],
+          "tay": [
+            54.7,
+            20.8,
+            -82,
+            1
+          ]
+        },
+        {
+          "dau": [
+            47.3,
+            28.4,
+            0
+          ],
+          "tay": [
+            53.7,
+            19.6,
+            -86,
+            1
+          ]
+        },
+        {
+          "dau": [
+            52.6,
+            32.4,
+            0
+          ],
+          "tay": [
+            64.4,
+            32.4,
+            -103,
+            0.49
+          ]
+        },
+        {
+          "dau": [
+            57.9,
+            40.1,
+            0
+          ],
+          "tay": [
+            69.3,
+            48.5,
+            4,
+            0.82
+          ]
+        },
+        {
+          "dau": [
+            54.7,
+            34.1,
+            0
+          ],
+          "tay": [
+            61.6,
+            50.2,
+            19,
+            0.39
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27.4,
+            0
+          ],
+          "tay": [
+            56.6,
+            52.5,
+            73,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/dao_bao/ra_chieu_phong.png",
+      "description": "Nhân vật nu manh mặc dao bao: vung tay ra sau rồi phóng tới (move throw), cho tầm xa, bùa chú, khống chế; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-winds back and throws forward ",
+        "directions": [
+          "south-east"
+        ],
+        "group": "0830cff7-43b6-468e-b6dc-c93ccbc5e764"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2d664ee4-8ec3-4c50-ab86-f9f86ac978ec",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            47,
+            27.5,
+            0
+          ],
+          "tay": [
+            39.3,
+            48.4,
+            150,
+            0
+          ]
+        },
+        {
+          "dau": [
+            44.5,
+            27.7,
+            0
+          ],
+          "tay": [
+            41,
+            41.8,
+            171,
+            0.49
+          ]
+        },
+        {
+          "dau": [
+            43.3,
+            27.5,
+            0
+          ],
+          "tay": [
+            48.9,
+            29,
+            -141,
+            1
+          ]
+        },
+        {
+          "dau": [
+            47.8,
+            28.6,
+            0
+          ],
+          "tay": [
+            48.3,
+            43.7,
+            144,
+            0.73
+          ]
+        },
+        {
+          "dau": [
+            53.4,
+            31.1,
+            0
+          ],
+          "tay": [
+            46.6,
+            50.3,
+            116,
+            0.54
+          ]
+        },
+        {
+          "dau": [
+            57.2,
+            35.3,
+            0
+          ],
+          "tay": [
+            68.7,
+            39.6,
+            -41,
+            1
+          ]
+        },
+        {
+          "dau": [
+            56.7,
+            34.9,
+            0
+          ],
+          "tay": [
+            52.4,
+            52,
+            147,
+            0.3
+          ]
+        },
+        {
+          "dau": [
+            53.3,
+            30.8,
+            0
+          ],
+          "tay": [
+            53.5,
+            51.9,
+            122,
+            0.23
+          ]
+        },
+        {
+          "dau": [
+            51,
+            28.9,
+            0
+          ],
+          "tay": [
+            55.3,
+            52.7,
+            96,
+            0.1
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27.5,
+            0
+          ],
+          "tay": [
+            56.6,
+            52.5,
+            72,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/chay.png",
+      "description": "Nhân vật nam khoe mặc vo phuc: chạy tới (move run), một vòng hai bước, lặp được; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-running forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "d5500781-8a8f-49a0-b964-1d7eff34ddc5"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "loop": true,
+      "neo": [
+        {
+          "dau": [
+            52.6,
+            30,
+            0
+          ],
+          "tay": [
+            63.6,
+            40.6,
+            -76,
+            0.8
+          ]
+        },
+        {
+          "dau": [
+            53.1,
+            28.5,
+            0
+          ],
+          "tay": [
+            63.9,
+            40,
+            -50,
+            0.85
+          ]
+        },
+        {
+          "dau": [
+            53.7,
+            25.5,
+            0
+          ],
+          "tay": [
+            62.8,
+            40.7,
+            -7,
+            0.78
+          ]
+        },
+        {
+          "dau": [
+            53.8,
+            26.3,
+            0
+          ],
+          "tay": [
+            60.2,
+            42.8,
+            20,
+            0.62
+          ]
+        },
+        {
+          "dau": [
+            53.7,
+            29.4,
+            0
+          ],
+          "tay": [
+            56.1,
+            49.1,
+            70,
+            0.37
+          ]
+        },
+        {
+          "dau": [
+            53.7,
+            27.8,
+            0
+          ],
+          "tay": [
+            59.9,
+            48.3,
+            50,
+            0.23
+          ]
+        },
+        {
+          "dau": [
+            53.7,
+            25.9,
+            0
+          ],
+          "tay": [
+            62.3,
+            42.6,
+            21,
+            0.64
+          ]
+        },
+        {
+          "dau": [
+            52.7,
+            26.8,
+            0
+          ],
+          "tay": [
+            62.8,
+            41,
+            -13,
+            0.76
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/ra_chieu_chem.png",
+      "description": "Nhân vật nam khoe mặc vo phuc: vung tay trước chém ngang (move slash), cho cận đơn và cận quét; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one empty fist high, th",
+        "directions": [
+          "south-east"
+        ],
+        "group": "28caefe4-7532-41d7-ab49-5be5c3523f5e"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            48.6,
+            26.1,
+            0
+          ],
+          "tay": [
+            54.3,
+            22.9,
+            -98,
+            0
+          ]
+        },
+        {
+          "dau": [
+            47.1,
+            25.9,
+            0
+          ],
+          "tay": [
+            48,
+            18.4,
+            -91,
+            0.55
+          ]
+        },
+        {
+          "dau": [
+            45.6,
+            25.7,
+            0
+          ],
+          "tay": [
+            52.4,
+            50.3,
+            49,
+            0.6
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            26.9,
+            0
+          ],
+          "tay": [
+            54,
+            18.5,
+            -104,
+            0.32
+          ]
+        },
+        {
+          "dau": [
+            58.6,
+            34.3,
+            0
+          ],
+          "tay": [
+            69.9,
+            47.3,
+            88,
+            0.72
+          ]
+        },
+        {
+          "dau": [
+            58.1,
+            37.5,
+            0
+          ],
+          "tay": [
+            55.7,
+            56.6,
+            141,
+            0.51
+          ]
+        },
+        {
+          "dau": [
+            58.2,
+            38.5,
+            0
+          ],
+          "tay": [
+            53.4,
+            56.1,
+            134,
+            0.62
+          ]
+        },
+        {
+          "dau": [
+            55,
+            33.4,
+            0
+          ],
+          "tay": [
+            57.7,
+            55.7,
+            107,
+            0.37
+          ]
+        },
+        {
+          "dau": [
+            50.7,
+            27.5,
+            0
+          ],
+          "tay": [
+            61.9,
+            52.3,
+            63,
+            0.1
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            26.4,
+            0
+          ],
+          "tay": [
+            60.7,
+            51.4,
+            61,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/ra_chieu_dam.png",
+      "description": "Nhân vật nam khoe mặc vo phuc: thu tay rồi đâm tới (move stab), cho thân pháp; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-pulls back and thrusts forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "ba8c7871-279a-405c-9e27-57e5e55e6e10"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 6,
+      "neo": [
+        {
+          "dau": [
+            48.4,
+            26.7,
+            0
+          ],
+          "tay": [
+            53.9,
+            52.2,
+            73,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.7,
+            26.5,
+            0
+          ],
+          "tay": [
+            52.5,
+            51.7,
+            69,
+            0.11
+          ]
+        },
+        {
+          "dau": [
+            45.6,
+            26.4,
+            0
+          ],
+          "tay": [
+            51.6,
+            51.9,
+            63,
+            0.17
+          ]
+        },
+        {
+          "dau": [
+            48.7,
+            27.4,
+            0
+          ],
+          "tay": [
+            53.7,
+            42.2,
+            -7,
+            0.71
+          ]
+        },
+        {
+          "dau": [
+            58.7,
+            35,
+            0
+          ],
+          "tay": [
+            72.1,
+            40.7,
+            -27,
+            1
+          ]
+        },
+        {
+          "dau": [
+            61.1,
+            37.7,
+            0
+          ],
+          "tay": [
+            73.2,
+            45.1,
+            -23,
+            1
+          ]
+        },
+        {
+          "dau": [
+            61.4,
+            38.6,
+            0
+          ],
+          "tay": [
+            73.3,
+            46.3,
+            -21,
+            0.97
+          ]
+        },
+        {
+          "dau": [
+            56.9,
+            33.2,
+            0
+          ],
+          "tay": [
+            68.8,
+            49.2,
+            25,
+            0.6
+          ]
+        },
+        {
+          "dau": [
+            50.8,
+            28.3,
+            0
+          ],
+          "tay": [
+            60.5,
+            51.6,
+            60,
+            0.02
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            26.4,
+            0
+          ],
+          "tay": [
+            60.7,
+            51.3,
+            60,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/ra_chieu_dap.png",
+      "description": "Nhân vật nam khoe mặc vo phuc: hai tay giơ cao rồi đập xuống (arms_overhead rồi cast_down), cho diện rộng và trận pháp; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises both arms high overhead",
+        "directions": [
+          "south-east"
+        ],
+        "group": "ff535873-d261-41b8-aac2-33739ed32d54",
+        "frames_kept": [
+          0,
+          1,
+          2,
+          3,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 14,
+      "giu": 2,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.8,
+            26.9,
+            0
+          ],
+          "tay": [
+            67.2,
+            38.3,
+            4,
+            0
+          ]
+        },
+        {
+          "dau": [
+            47.2,
+            26.5,
+            0
+          ],
+          "tay": [
+            66.4,
+            26.3,
+            -34,
+            0.86
+          ]
+        },
+        {
+          "dau": [
+            46.9,
+            26.4,
+            0
+          ],
+          "tay": [
+            57,
+            18.8,
+            -74,
+            1
+          ]
+        },
+        {
+          "dau": [
+            47,
+            26.3,
+            0
+          ],
+          "tay": [
+            56.6,
+            18.8,
+            -78,
+            1
+          ]
+        },
+        {
+          "dau": [
+            54.7,
+            32.6,
+            0
+          ],
+          "tay": [
+            68.2,
+            33.9,
+            -31,
+            0.33
+          ]
+        },
+        {
+          "dau": [
+            58.9,
+            40.4,
+            0
+          ],
+          "tay": [
+            72.6,
+            48.6,
+            19,
+            0.83
+          ]
+        },
+        {
+          "dau": [
+            54.4,
+            32.5,
+            0
+          ],
+          "tay": [
+            65.8,
+            49,
+            44,
+            0.4
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            26.5,
+            0
+          ],
+          "tay": [
+            60.7,
+            51.3,
+            60,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_khoe/vo_phuc/ra_chieu_phong.png",
+      "description": "Nhân vật nam khoe mặc vo phuc: vung tay ra sau rồi phóng tới (move throw), cho tầm xa, bùa chú, khống chế; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-winds back and throws forward ",
+        "directions": [
+          "south-east"
+        ],
+        "group": "85233a0b-057c-414d-97e5-96ef20240210"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "45ec345c-fa60-427c-8bc8-f70cedd66c8f",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            48.9,
+            27,
+            0
+          ],
+          "tay": [
+            49,
+            44.3,
+            143,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.1,
+            26.7,
+            0
+          ],
+          "tay": [
+            48.6,
+            25.8,
+            -133,
+            1
+          ]
+        },
+        {
+          "dau": [
+            43.9,
+            27.1,
+            0
+          ],
+          "tay": [
+            46.9,
+            25.1,
+            -134,
+            1
+          ]
+        },
+        {
+          "dau": [
+            49,
+            27.4,
+            0
+          ],
+          "tay": [
+            56.3,
+            26.7,
+            -76,
+            1
+          ]
+        },
+        {
+          "dau": [
+            56.2,
+            32,
+            0
+          ],
+          "tay": [
+            67.8,
+            32.6,
+            -51,
+            1
+          ]
+        },
+        {
+          "dau": [
+            58.4,
+            34.8,
+            0
+          ],
+          "tay": [
+            64.7,
+            42.3,
+            166,
+            0.71
+          ]
+        },
+        {
+          "dau": [
+            58.1,
+            34.8,
+            0
+          ],
+          "tay": [
+            50.7,
+            53.3,
+            150,
+            0.66
+          ]
+        },
+        {
+          "dau": [
+            53.9,
+            29.3,
+            0
+          ],
+          "tay": [
+            54.1,
+            52.9,
+            129,
+            0.48
+          ]
+        },
+        {
+          "dau": [
+            51.8,
+            27.6,
+            0
+          ],
+          "tay": [
+            58.2,
+            51.4,
+            95,
+            0.18
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            26.5,
+            0
+          ],
+          "tay": [
+            60.7,
+            51.3,
+            60,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/chay.png",
+      "description": "Nhân vật nam manh mặc vo phuc: chạy tới (move run), một vòng hai bước, lặp được; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-running forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "54600455-faeb-4b46-a5b1-6a74d59aa1aa"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "loop": true,
+      "neo": [
+        {
+          "dau": [
+            53.2,
+            30.1,
+            0
+          ],
+          "tay": [
+            62.5,
+            39.9,
+            -67,
+            0.94
+          ]
+        },
+        {
+          "dau": [
+            53.3,
+            27.9,
+            0
+          ],
+          "tay": [
+            62,
+            39.6,
+            -46,
+            0.95
+          ]
+        },
+        {
+          "dau": [
+            53,
+            24.8,
+            0
+          ],
+          "tay": [
+            60.8,
+            40.1,
+            2,
+            0.88
+          ]
+        },
+        {
+          "dau": [
+            53.1,
+            25.9,
+            0
+          ],
+          "tay": [
+            57.6,
+            43.4,
+            37,
+            0.62
+          ]
+        },
+        {
+          "dau": [
+            53,
+            30.2,
+            0
+          ],
+          "tay": [
+            54.6,
+            50.5,
+            74,
+            0.22
+          ]
+        },
+        {
+          "dau": [
+            53,
+            28.1,
+            0
+          ],
+          "tay": [
+            56.4,
+            47.4,
+            56,
+            0.34
+          ]
+        },
+        {
+          "dau": [
+            53.2,
+            25,
+            0
+          ],
+          "tay": [
+            59.2,
+            41.6,
+            19,
+            0.76
+          ]
+        },
+        {
+          "dau": [
+            53,
+            25.9,
+            0
+          ],
+          "tay": [
+            61.4,
+            40.3,
+            -10,
+            0.88
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/ra_chieu_chem.png",
+      "description": "Nhân vật nam manh mặc vo phuc: vung tay trước chém ngang (move slash), cho cận đơn và cận quét; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one empty fist high, th",
+        "directions": [
+          "south-east"
+        ],
+        "group": "3d8167c2-3fac-4f75-bbb6-de1f83f465c3"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            48.1,
+            26.3,
+            0
+          ],
+          "tay": [
+            52.2,
+            52.2,
+            78,
+            0
+          ]
+        },
+        {
+          "dau": [
+            47,
+            26.2,
+            0
+          ],
+          "tay": [
+            47.5,
+            19.1,
+            -92,
+            1
+          ]
+        },
+        {
+          "dau": [
+            45.5,
+            25.3,
+            0
+          ],
+          "tay": [
+            45.3,
+            17.3,
+            -100,
+            1
+          ]
+        },
+        {
+          "dau": [
+            48.6,
+            27,
+            0
+          ],
+          "tay": [
+            52.2,
+            18.8,
+            -101,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.9,
+            34.5,
+            0
+          ],
+          "tay": [
+            68.8,
+            46.2,
+            88,
+            0.92
+          ]
+        },
+        {
+          "dau": [
+            57.3,
+            37.6,
+            0
+          ],
+          "tay": [
+            56.5,
+            55.8,
+            121,
+            0.27
+          ]
+        },
+        {
+          "dau": [
+            57.2,
+            37.5,
+            0
+          ],
+          "tay": [
+            52.7,
+            55.5,
+            133,
+            0.24
+          ]
+        },
+        {
+          "dau": [
+            54.7,
+            32.7,
+            0
+          ],
+          "tay": [
+            55.9,
+            55.3,
+            109,
+            0.25
+          ]
+        },
+        {
+          "dau": [
+            50,
+            28,
+            0
+          ],
+          "tay": [
+            58.5,
+            52.9,
+            73,
+            0.1
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            26.4,
+            0
+          ],
+          "tay": [
+            57.4,
+            51.9,
+            74,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/ra_chieu_dam.png",
+      "description": "Nhân vật nam manh mặc vo phuc: thu tay rồi đâm tới (move stab), cho thân pháp; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-pulls back and thrusts forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "0c05a4f9-3a80-450c-bb06-b65dce538493"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.1,
+            26.3,
+            0
+          ],
+          "tay": [
+            53.1,
+            52,
+            76,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.5,
+            26.1,
+            0
+          ],
+          "tay": [
+            51.7,
+            51.6,
+            72,
+            0.1
+          ]
+        },
+        {
+          "dau": [
+            45.7,
+            26.1,
+            0
+          ],
+          "tay": [
+            50.9,
+            51,
+            66,
+            0.17
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27,
+            0
+          ],
+          "tay": [
+            52.9,
+            51.9,
+            74,
+            0.01
+          ]
+        },
+        {
+          "dau": [
+            57.8,
+            33.5,
+            0
+          ],
+          "tay": [
+            70.8,
+            39.5,
+            -12,
+            1
+          ]
+        },
+        {
+          "dau": [
+            60.7,
+            37.3,
+            0
+          ],
+          "tay": [
+            72.2,
+            44.3,
+            -9,
+            1
+          ]
+        },
+        {
+          "dau": [
+            61.3,
+            37.5,
+            0
+          ],
+          "tay": [
+            72.1,
+            45.1,
+            -12,
+            1
+          ]
+        },
+        {
+          "dau": [
+            58,
+            33.8,
+            0
+          ],
+          "tay": [
+            68.7,
+            47.8,
+            7,
+            0.87
+          ]
+        },
+        {
+          "dau": [
+            49.5,
+            27.6,
+            0
+          ],
+          "tay": [
+            57.4,
+            52.5,
+            68,
+            0.03
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            26.5,
+            0
+          ],
+          "tay": [
+            57.4,
+            52,
+            74,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/ra_chieu_dap.png",
+      "description": "Nhân vật nam manh mặc vo phuc: hai tay giơ cao rồi đập xuống (arms_overhead rồi cast_down), cho diện rộng và trận pháp; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises both arms high overhead",
+        "directions": [
+          "south-east"
+        ],
+        "group": "677c07e6-7631-49b9-aaf5-9e247913152a",
+        "frames_kept": [
+          0,
+          1,
+          2,
+          3,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 14,
+      "giu": 2,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.1,
+            26.9,
+            0
+          ],
+          "tay": [
+            65.3,
+            39.1,
+            17,
+            0
+          ]
+        },
+        {
+          "dau": [
+            47.1,
+            27,
+            0
+          ],
+          "tay": [
+            65.1,
+            29.4,
+            -28,
+            0.69
+          ]
+        },
+        {
+          "dau": [
+            46.8,
+            26.9,
+            0
+          ],
+          "tay": [
+            54.6,
+            18.5,
+            -81,
+            1
+          ]
+        },
+        {
+          "dau": [
+            46.8,
+            27,
+            0
+          ],
+          "tay": [
+            54,
+            18.5,
+            -82,
+            1
+          ]
+        },
+        {
+          "dau": [
+            55.1,
+            34,
+            0
+          ],
+          "tay": [
+            67.8,
+            35.2,
+            -15,
+            0.33
+          ]
+        },
+        {
+          "dau": [
+            59,
+            38.9,
+            0
+          ],
+          "tay": [
+            71.1,
+            48.1,
+            25,
+            0.76
+          ]
+        },
+        {
+          "dau": [
+            54.5,
+            32.1,
+            0
+          ],
+          "tay": [
+            63.2,
+            49.2,
+            47,
+            0.47
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            26.4,
+            0
+          ],
+          "tay": [
+            57.2,
+            51.9,
+            75,
+            0.02
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nam_manh/vo_phuc/ra_chieu_phong.png",
+      "description": "Nhân vật nam manh mặc vo phuc: vung tay ra sau rồi phóng tới (move throw), cho tầm xa, bùa chú, khống chế; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-winds back and throws forward ",
+        "directions": [
+          "south-east"
+        ],
+        "group": "103e2e03-71ce-4c04-ad27-59608e8bcac4"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0c8594c7-bb0b-4553-9c11-0b9458df717d",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            48.1,
+            26.9,
+            0
+          ],
+          "tay": [
+            51.5,
+            46.7,
+            85,
+            0
+          ]
+        },
+        {
+          "dau": [
+            45.6,
+            27.9,
+            0
+          ],
+          "tay": [
+            48.5,
+            25.5,
+            -119,
+            1
+          ]
+        },
+        {
+          "dau": [
+            43.4,
+            27.5,
+            0
+          ],
+          "tay": [
+            47.5,
+            24.3,
+            -120,
+            1
+          ]
+        },
+        {
+          "dau": [
+            46.7,
+            27.7,
+            0
+          ],
+          "tay": [
+            53.6,
+            25.1,
+            -79,
+            1
+          ]
+        },
+        {
+          "dau": [
+            55.4,
+            30.9,
+            0
+          ],
+          "tay": [
+            67.1,
+            31.1,
+            -47,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.9,
+            34.1,
+            0
+          ],
+          "tay": [
+            65.3,
+            40.9,
+            173,
+            0.97
+          ]
+        },
+        {
+          "dau": [
+            57.5,
+            33.5,
+            0
+          ],
+          "tay": [
+            52.8,
+            51.8,
+            148,
+            0.33
+          ]
+        },
+        {
+          "dau": [
+            53.6,
+            30.1,
+            0
+          ],
+          "tay": [
+            54.4,
+            51.6,
+            125,
+            0.21
+          ]
+        },
+        {
+          "dau": [
+            51,
+            28.4,
+            0
+          ],
+          "tay": [
+            55.2,
+            51.7,
+            112,
+            0.16
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            26.5,
+            0
+          ],
+          "tay": [
+            57.4,
+            52,
+            74,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/chay.png",
+      "description": "Nhân vật nu khoe mặc vo phuc: chạy tới (move run), một vòng hai bước, lặp được; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-running forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "c07eb61d-66ce-4840-a378-27dc0d561373"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "loop": true,
+      "neo": [
+        {
+          "dau": [
+            52.4,
+            31,
+            0
+          ],
+          "tay": [
+            61.2,
+            40.6,
+            -76,
+            0.78
+          ]
+        },
+        {
+          "dau": [
+            52.8,
+            29.2,
+            0
+          ],
+          "tay": [
+            60.9,
+            40.8,
+            -38,
+            0.76
+          ]
+        },
+        {
+          "dau": [
+            52.9,
+            25.9,
+            0
+          ],
+          "tay": [
+            60.3,
+            40.9,
+            2,
+            0.75
+          ]
+        },
+        {
+          "dau": [
+            53.1,
+            27,
+            0
+          ],
+          "tay": [
+            58.9,
+            43.5,
+            27,
+            0.56
+          ]
+        },
+        {
+          "dau": [
+            52.8,
+            31.1,
+            0
+          ],
+          "tay": [
+            55,
+            48.7,
+            71,
+            0.35
+          ]
+        },
+        {
+          "dau": [
+            52.7,
+            29.5,
+            0
+          ],
+          "tay": [
+            58.6,
+            47.5,
+            46,
+            0.28
+          ]
+        },
+        {
+          "dau": [
+            53,
+            26.7,
+            0
+          ],
+          "tay": [
+            60.3,
+            42.3,
+            16,
+            0.65
+          ]
+        },
+        {
+          "dau": [
+            53.1,
+            27.5,
+            0
+          ],
+          "tay": [
+            60.5,
+            41.1,
+            -9,
+            0.73
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/ra_chieu_chem.png",
+      "description": "Nhân vật nu khoe mặc vo phuc: vung tay trước chém ngang (move slash), cho cận đơn và cận quét; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one empty fist high, th",
+        "directions": [
+          "south-east"
+        ],
+        "group": "4547dbf7-c9ca-454d-b949-c72aa5d8ddf5"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "neo": [
+        {
+          "dau": [
+            48.6,
+            27.5,
+            0
+          ],
+          "tay": [
+            52.1,
+            26.3,
+            -103,
+            0
+          ]
+        },
+        {
+          "dau": [
+            47.3,
+            27.8,
+            0
+          ],
+          "tay": [
+            47.5,
+            21.4,
+            -145,
+            0.48
+          ]
+        },
+        {
+          "dau": [
+            46.2,
+            27.9,
+            0
+          ],
+          "tay": [
+            51,
+            50.8,
+            66,
+            0.62
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            28,
+            0
+          ],
+          "tay": [
+            54.1,
+            22,
+            -110,
+            0.34
+          ]
+        },
+        {
+          "dau": [
+            58,
+            35.4,
+            0
+          ],
+          "tay": [
+            70.6,
+            41.8,
+            -42,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.3,
+            37.8,
+            0
+          ],
+          "tay": [
+            59.9,
+            56.3,
+            81,
+            0.33
+          ]
+        },
+        {
+          "dau": [
+            57.3,
+            38.7,
+            0
+          ],
+          "tay": [
+            55.4,
+            55.5,
+            114,
+            0.42
+          ]
+        },
+        {
+          "dau": [
+            54.1,
+            33.8,
+            0
+          ],
+          "tay": [
+            56,
+            54.6,
+            110,
+            0.34
+          ]
+        },
+        {
+          "dau": [
+            51,
+            29.1,
+            0
+          ],
+          "tay": [
+            60.8,
+            53.5,
+            71,
+            0.16
+          ]
+        },
+        {
+          "dau": [
+            50.2,
+            27.4,
+            0
+          ],
+          "tay": [
+            59.6,
+            51.6,
+            65,
+            0.01
+          ]
+        }
+      ],
+      "cham": 4
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/ra_chieu_dam.png",
+      "description": "Nhân vật nu khoe mặc vo phuc: thu tay rồi đâm tới (move stab), cho thân pháp; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-pulls back and thrusts forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "b3bddcf2-d2b0-424c-8e78-4cad352e1176"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.6,
+            28.1,
+            0
+          ],
+          "tay": [
+            54.7,
+            53.6,
+            73,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.7,
+            28.1,
+            0
+          ],
+          "tay": [
+            53.6,
+            53.1,
+            69,
+            0.09
+          ]
+        },
+        {
+          "dau": [
+            45.9,
+            27.8,
+            0
+          ],
+          "tay": [
+            52.9,
+            52.1,
+            63,
+            0.17
+          ]
+        },
+        {
+          "dau": [
+            49.9,
+            29,
+            0
+          ],
+          "tay": [
+            54.6,
+            51.6,
+            64,
+            0.14
+          ]
+        },
+        {
+          "dau": [
+            58.1,
+            35.3,
+            0
+          ],
+          "tay": [
+            69.1,
+            41.3,
+            -15,
+            1
+          ]
+        },
+        {
+          "dau": [
+            60.4,
+            38.3,
+            0
+          ],
+          "tay": [
+            70.2,
+            45.5,
+            -19,
+            0.89
+          ]
+        },
+        {
+          "dau": [
+            60.7,
+            38.6,
+            0
+          ],
+          "tay": [
+            70.1,
+            46,
+            -24,
+            0.87
+          ]
+        },
+        {
+          "dau": [
+            57,
+            35.1,
+            0
+          ],
+          "tay": [
+            66.1,
+            48.4,
+            12,
+            0.54
+          ]
+        },
+        {
+          "dau": [
+            50.2,
+            29,
+            0
+          ],
+          "tay": [
+            59.3,
+            52.5,
+            62,
+            0.09
+          ]
+        },
+        {
+          "dau": [
+            50.1,
+            27.7,
+            0
+          ],
+          "tay": [
+            59,
+            51.5,
+            62,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/ra_chieu_dap.png",
+      "description": "Nhân vật nu khoe mặc vo phuc: hai tay giơ cao rồi đập xuống (arms_overhead rồi cast_down), cho diện rộng và trận pháp; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises both arms high overhead",
+        "directions": [
+          "south-east"
+        ],
+        "group": "b1a0e59a-ae20-4a5a-967f-3b34b93ff0d5",
+        "frames_kept": [
+          0,
+          1,
+          2,
+          3,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 14,
+      "giu": 3,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            49,
+            27.8,
+            0
+          ],
+          "tay": [
+            64.4,
+            39.6,
+            4,
+            0
+          ]
+        },
+        {
+          "dau": [
+            48,
+            27.9,
+            0
+          ],
+          "tay": [
+            64.2,
+            27.9,
+            -32,
+            0.83
+          ]
+        },
+        {
+          "dau": [
+            47.2,
+            27.3,
+            0
+          ],
+          "tay": [
+            56.5,
+            20.5,
+            -71,
+            1
+          ]
+        },
+        {
+          "dau": [
+            47.4,
+            27.6,
+            0
+          ],
+          "tay": [
+            55.4,
+            20,
+            -76,
+            1
+          ]
+        },
+        {
+          "dau": [
+            55.8,
+            35.8,
+            0
+          ],
+          "tay": [
+            66.2,
+            38.3,
+            -24,
+            0.16
+          ]
+        },
+        {
+          "dau": [
+            58.9,
+            40,
+            0
+          ],
+          "tay": [
+            70.1,
+            48.8,
+            8,
+            0.77
+          ]
+        },
+        {
+          "dau": [
+            54.7,
+            33.6,
+            0
+          ],
+          "tay": [
+            63.6,
+            49,
+            25,
+            0.36
+          ]
+        },
+        {
+          "dau": [
+            50,
+            27.8,
+            0
+          ],
+          "tay": [
+            59.1,
+            51.6,
+            62,
+            0.02
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_khoe/vo_phuc/ra_chieu_phong.png",
+      "description": "Nhân vật nu khoe mặc vo phuc: vung tay ra sau rồi phóng tới (move throw), cho tầm xa, bùa chú, khống chế; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-winds back and throws forward ",
+        "directions": [
+          "south-east"
+        ],
+        "group": "eb237bf1-fbb4-4f2b-aab2-d392ad7e296a"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "22ff8d51-46dd-4a13-aa53-e34ff09e489e",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            48.6,
+            27.7,
+            0
+          ],
+          "tay": [
+            54.4,
+            52.1,
+            77,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.4,
+            28.2,
+            0
+          ],
+          "tay": [
+            52.8,
+            51.2,
+            78,
+            0.13
+          ]
+        },
+        {
+          "dau": [
+            44.7,
+            27.7,
+            0
+          ],
+          "tay": [
+            51.6,
+            46.9,
+            67,
+            0.42
+          ]
+        },
+        {
+          "dau": [
+            48.3,
+            28.6,
+            0
+          ],
+          "tay": [
+            53.3,
+            45.9,
+            52,
+            0.45
+          ]
+        },
+        {
+          "dau": [
+            55.8,
+            32.4,
+            0
+          ],
+          "tay": [
+            65.3,
+            33.4,
+            -40,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.9,
+            35.7,
+            0
+          ],
+          "tay": [
+            59.7,
+            45.1,
+            162,
+            0.45
+          ]
+        },
+        {
+          "dau": [
+            58.3,
+            35.8,
+            0
+          ],
+          "tay": [
+            54.7,
+            51,
+            155,
+            0.08
+          ]
+        },
+        {
+          "dau": [
+            54.1,
+            31.5,
+            0
+          ],
+          "tay": [
+            55.9,
+            53.5,
+            104,
+            0.15
+          ]
+        },
+        {
+          "dau": [
+            51.9,
+            29.8,
+            0
+          ],
+          "tay": [
+            57.2,
+            53,
+            85,
+            0.18
+          ]
+        },
+        {
+          "dau": [
+            50.1,
+            28,
+            0
+          ],
+          "tay": [
+            59,
+            51.5,
+            63,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/chay.png",
+      "description": "Nhân vật nu manh mặc vo phuc: chạy tới (move run), một vòng hai bước, lặp được; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-running forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "36a5ec47-c401-494c-97dd-4c616507ffb6"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "loop": true,
+      "neo": [
+        {
+          "dau": [
+            52.1,
+            30.8,
+            0
+          ],
+          "tay": [
+            60.3,
+            39.5,
+            -70,
+            0.97
+          ]
+        },
+        {
+          "dau": [
+            52.6,
+            28.8,
+            0
+          ],
+          "tay": [
+            60.4,
+            38.7,
+            -56,
+            1
+          ]
+        },
+        {
+          "dau": [
+            52.3,
+            25.7,
+            0
+          ],
+          "tay": [
+            59.2,
+            40.2,
+            1,
+            0.9
+          ]
+        },
+        {
+          "dau": [
+            52.4,
+            26.7,
+            0
+          ],
+          "tay": [
+            55.5,
+            42.9,
+            31,
+            0.69
+          ]
+        },
+        {
+          "dau": [
+            52.1,
+            30.8,
+            0
+          ],
+          "tay": [
+            54.4,
+            50.4,
+            67,
+            0.2
+          ]
+        },
+        {
+          "dau": [
+            52.4,
+            28.8,
+            0
+          ],
+          "tay": [
+            57.3,
+            47.2,
+            50,
+            0.38
+          ]
+        },
+        {
+          "dau": [
+            52.7,
+            25.9,
+            0
+          ],
+          "tay": [
+            58.5,
+            41.7,
+            18,
+            0.78
+          ]
+        },
+        {
+          "dau": [
+            52.3,
+            26.9,
+            0
+          ],
+          "tay": [
+            59.8,
+            40.4,
+            -8,
+            0.9
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/ra_chieu_chem.png",
+      "description": "Nhân vật nu manh mặc vo phuc: vung tay trước chém ngang (move slash), cho cận đơn và cận quét; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises one empty fist high, th",
+        "directions": [
+          "south-east"
+        ],
+        "group": "3db43cba-e160-4591-809e-cbc1c1193fe8"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 4,
+      "neo": [
+        {
+          "dau": [
+            47.9,
+            27.6,
+            0
+          ],
+          "tay": [
+            51.9,
+            51.6,
+            77,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.5,
+            28.1,
+            0
+          ],
+          "tay": [
+            47.4,
+            19.9,
+            -100,
+            1
+          ]
+        },
+        {
+          "dau": [
+            45,
+            28.1,
+            0
+          ],
+          "tay": [
+            45.4,
+            19,
+            -106,
+            1
+          ]
+        },
+        {
+          "dau": [
+            49.1,
+            28.3,
+            0
+          ],
+          "tay": [
+            52.7,
+            19.7,
+            -99,
+            1
+          ]
+        },
+        {
+          "dau": [
+            57.1,
+            34.6,
+            0
+          ],
+          "tay": [
+            65.4,
+            47.5,
+            90,
+            0.74
+          ]
+        },
+        {
+          "dau": [
+            57.1,
+            37.8,
+            0
+          ],
+          "tay": [
+            53.9,
+            57.2,
+            116,
+            0.38
+          ]
+        },
+        {
+          "dau": [
+            56.7,
+            38.2,
+            0
+          ],
+          "tay": [
+            50.1,
+            56.8,
+            129,
+            0.39
+          ]
+        },
+        {
+          "dau": [
+            53.9,
+            33.8,
+            0
+          ],
+          "tay": [
+            54,
+            57.5,
+            100,
+            0.39
+          ]
+        },
+        {
+          "dau": [
+            50.2,
+            29.2,
+            0
+          ],
+          "tay": [
+            56.8,
+            53.5,
+            80,
+            0.08
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            27.5,
+            0
+          ],
+          "tay": [
+            56.4,
+            52.5,
+            73,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/ra_chieu_dam.png",
+      "description": "Nhân vật nu manh mặc vo phuc: thu tay rồi đâm tới (move stab), cho thân pháp; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-pulls back and thrusts forward",
+        "directions": [
+          "south-east"
+        ],
+        "group": "befb107f-3002-434d-9daa-f2362e762717"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            47.6,
+            27.4,
+            0
+          ],
+          "tay": [
+            52.2,
+            53.1,
+            76,
+            0
+          ]
+        },
+        {
+          "dau": [
+            46.4,
+            27.9,
+            0
+          ],
+          "tay": [
+            50.7,
+            52.3,
+            69,
+            0.11
+          ]
+        },
+        {
+          "dau": [
+            45.4,
+            27.8,
+            0
+          ],
+          "tay": [
+            33.8,
+            39.1,
+            -164,
+            1
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            28.8,
+            0
+          ],
+          "tay": [
+            53.3,
+            54.1,
+            75,
+            0.11
+          ]
+        },
+        {
+          "dau": [
+            57.3,
+            34.8,
+            0
+          ],
+          "tay": [
+            68.7,
+            40.3,
+            -20,
+            1
+          ]
+        },
+        {
+          "dau": [
+            60.1,
+            37.9,
+            0
+          ],
+          "tay": [
+            69.4,
+            44.7,
+            -14,
+            1
+          ]
+        },
+        {
+          "dau": [
+            60.3,
+            38,
+            0
+          ],
+          "tay": [
+            69.1,
+            45.2,
+            -14,
+            1
+          ]
+        },
+        {
+          "dau": [
+            56.4,
+            33.6,
+            0
+          ],
+          "tay": [
+            65.7,
+            48.9,
+            12,
+            0.72
+          ]
+        },
+        {
+          "dau": [
+            50.3,
+            28.6,
+            0
+          ],
+          "tay": [
+            56.5,
+            53.2,
+            66,
+            0.05
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            27.6,
+            0
+          ],
+          "tay": [
+            56.4,
+            52.7,
+            68,
+            0.02
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/ra_chieu_dap.png",
+      "description": "Nhân vật nu manh mặc vo phuc: hai tay giơ cao rồi đập xuống (arms_overhead rồi cast_down), cho diện rộng và trận pháp; dải ngang 8 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-raises both arms high overhead",
+        "directions": [
+          "south-east"
+        ],
+        "group": "0e2a2980-7fce-4a6a-aa7c-a237ad85bf44",
+        "frames_kept": [
+          0,
+          1,
+          2,
+          3,
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 8,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 14,
+      "giu": 2,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48.6,
+            27.7,
+            0
+          ],
+          "tay": [
+            63.4,
+            39.2,
+            3,
+            0
+          ]
+        },
+        {
+          "dau": [
+            47.6,
+            27.2,
+            0
+          ],
+          "tay": [
+            62.9,
+            26,
+            -28,
+            0.95
+          ]
+        },
+        {
+          "dau": [
+            48.1,
+            29.8,
+            0
+          ],
+          "tay": [
+            53.8,
+            19.7,
+            -73,
+            1
+          ]
+        },
+        {
+          "dau": [
+            48.1,
+            29.5,
+            0
+          ],
+          "tay": [
+            53.5,
+            20,
+            -75,
+            1
+          ]
+        },
+        {
+          "dau": [
+            54.2,
+            34.1,
+            0
+          ],
+          "tay": [
+            65.2,
+            34.9,
+            6,
+            0.33
+          ]
+        },
+        {
+          "dau": [
+            58.1,
+            40.2,
+            0
+          ],
+          "tay": [
+            69.1,
+            48.6,
+            14,
+            0.79
+          ]
+        },
+        {
+          "dau": [
+            53.8,
+            32.1,
+            0
+          ],
+          "tay": [
+            61.2,
+            50.1,
+            24,
+            0.39
+          ]
+        },
+        {
+          "dau": [
+            49.2,
+            27.6,
+            0
+          ],
+          "tay": [
+            56.3,
+            52.5,
+            67,
+            0.01
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nhan_vat/nu_manh/vo_phuc/ra_chieu_phong.png",
+      "description": "Nhân vật nu manh mặc vo phuc: vung tay ra sau rồi phóng tới (move throw), cho tầm xa, bùa chú, khống chế; dải ngang 10 khung 96×96, hướng south-east. Mũ và vũ khí ghép lúc chạy theo trường neo (tay có góc xoay theo cẳng tay).",
+      "tool": "animate_character",
+      "params": {
+        "mode": "skeleton-v3",
+        "action": "custom-winds back and throws forward ",
+        "directions": [
+          "south-east"
+        ],
+        "group": "4fc13bc2-7db5-460c-b0e2-220ed23a3e9c"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "96c414eb-44aa-4a80-90b9-e00f83bac16a",
+      "frames": 10,
+      "frame_w": 96,
+      "frame_h": 96,
+      "fps": 16,
+      "cham": 5,
+      "neo": [
+        {
+          "dau": [
+            48,
+            27.9,
+            0
+          ],
+          "tay": [
+            52,
+            51.7,
+            78,
+            0
+          ]
+        },
+        {
+          "dau": [
+            45.7,
+            28.4,
+            0
+          ],
+          "tay": [
+            42.8,
+            50.9,
+            128,
+            0.66
+          ]
+        },
+        {
+          "dau": [
+            44.1,
+            27.8,
+            0
+          ],
+          "tay": [
+            44.9,
+            26.1,
+            -116,
+            1
+          ]
+        },
+        {
+          "dau": [
+            47.1,
+            28.8,
+            0
+          ],
+          "tay": [
+            54.9,
+            25.9,
+            -79,
+            1
+          ]
+        },
+        {
+          "dau": [
+            54.9,
+            31.8,
+            0
+          ],
+          "tay": [
+            48.5,
+            50.8,
+            142,
+            0.26
+          ]
+        },
+        {
+          "dau": [
+            57,
+            35.1,
+            0
+          ],
+          "tay": [
+            60.6,
+            41.3,
+            -175,
+            0.86
+          ]
+        },
+        {
+          "dau": [
+            57.1,
+            34.1,
+            0
+          ],
+          "tay": [
+            51.7,
+            54.9,
+            131,
+            0.23
+          ]
+        },
+        {
+          "dau": [
+            53.3,
+            30.7,
+            0
+          ],
+          "tay": [
+            55.5,
+            54.1,
+            97,
+            0.13
+          ]
+        },
+        {
+          "dau": [
+            51.3,
+            29.2,
+            0
+          ],
+          "tay": [
+            55.1,
+            52.7,
+            97,
+            0.08
+          ]
+        },
+        {
+          "dau": [
+            49.3,
+            27.5,
+            0
+          ],
+          "tay": [
+            56.4,
+            52.3,
+            75,
+            0.02
+          ]
+        }
+      ]
     }
   ]
 }

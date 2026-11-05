@@ -2,13 +2,18 @@
 // rồi lắng, nhún theo bước khi đi, bụi dưới chân, bóng mờ khi lướt nhanh, tan thành hạt hệ khi ngã. Theo công thức
 // đạo diễn chuyển động (docs/CHUYEN_DONG.md) và dùng chung nhịp với hiệu ứng chiêu (hieu_ung/nhip.ts, DONG_TAC.md):
 // người trúng đòn khựng đúng IMPACT_FRAMES + holdOf của chiêu gây đòn, đếm theo giây thực.
+// Gói 2 (2026-11-05): chạy và ra chiêu theo loại chiêu bằng dải PixelLab riêng (act, gait): khung chạm trùng tick trúng
+// đòn (đạn: lúc rời tay), vung tay bắt đầu trước đó vì replay biết trước, người đánh khựng ở khung chạm cùng nhịp với
+// người trúng đòn.
 // Chỉ mục dựng một lần lúc nạp trận; mỗi khung là hàm thuần của t, không giữ trạng thái, nên tua và đổi tốc độ vẫn đúng.
+import type { ManifestEntry, Sprites } from "../../assets/sprites.ts";
 import { holdOf, NO_CONTACT } from "../../hieu_ung/chung.ts";
 import { burst, seed } from "../../hieu_ung/motifs.ts";
 import { ease, HIT_STOP_FRAMES, IMPACT_FRAMES } from "../../hieu_ung/nhip.ts";
 import { recipeOf } from "../../hieu_ung/recipe.ts";
 import type { ReplayIndex, UnitTimeline } from "../../replay/timeline.ts";
-import type { ElementId, ReplayEvent, SkillId } from "../../replay/types.ts";
+import type { ElementId, Look, ReplayEvent, SkillId } from "../../replay/types.ts";
+import { resolveLook, type Anim } from "./character.ts";
 
 type Cast = Extract<ReplayEvent, { kind: "cast" }>;
 
@@ -23,6 +28,39 @@ const WALK = 3;
 const LUOT = 120;
 /** Cận chiến: có vệt vũ khí khi ra chiêu. */
 export const MELEE: ReadonlySet<SkillId> = new Set<SkillId>(["can_don", "can_quet", "than_phap"]);
+
+/**
+ * Động tác ra chiêu theo loại chiêu (gói 2): dải ra_chieu_<nhóm>. Hộ thể, hồi phục và thân chưa có dải nhóm thì dùng
+ * dải ra_chieu chung như trước.
+ */
+export const NHOM_CHIEU: Partial<Record<SkillId, "chem" | "dam" | "dap" | "phong">> = {
+  can_don: "chem", can_quet: "chem", than_phap: "dam",
+  dien_rong: "dap", tran_phap: "dap",
+  tam_xa: "phong", bua_chu: "phong", khong_che: "phong",
+};
+/** Xét lùi tối đa ngần này lần ra chiêu khi tìm động tác đang diễn; cách nhau từ RESET tick thì không ảnh hưởng nhau. */
+const BACK = 6;
+const RESET = 40;
+
+/** Khung hoạt ảnh do ThanNguoi chọn: `trail` là chỉ số khung (số thực) cho vệt vũ khí khi ra chiêu cận chiến. */
+export interface ActPose {
+  anim: Anim;
+  frame: number;
+  trail?: number;
+}
+
+/** Dải ra chiêu theo nhóm: `cham` khung chạm (đòn trúng, đạn rời tay), `giu` khung tay giơ cao giữ lúc vận công. */
+type ActMeta = ManifestEntry & { cham?: number; giu?: number };
+
+/** Một lần diễn động tác: các mốc (tick, chỉ số khung) tăng dần, nội suy tuyến tính giữa hai mốc; hết mốc cuối là xong. */
+interface Win {
+  anim: Anim;
+  keys: [number, number][];
+  frames: number;
+  /** Lần ra chiêu sau không được bắt đầu vung trước lúc này (hết khung chạm và khựng). */
+  free: number;
+  trail: boolean;
+}
 
 /** Một đòn nặng vào một người: tick trúng, người đánh, trọng số 0–1, số khung đứng (khung va chạm + khựng). */
 interface Blow {
@@ -57,17 +95,28 @@ export interface BodyMotion {
   ghosts: { x: number; y: number; alpha: number }[];
   /** Tan thành hạt khi ngã: tiến độ 0 → 1 và seed. */
   dissolve?: { q: number; seed: number };
-  /** Đang vung chiêu cận chiến: giây (thời gian trận) từ lúc bắt đầu động tác ra chiêu. */
-  swing?: number;
 }
 
 /** Chỉ mục thân người của một trận: đòn nặng theo người trúng, các lần ra chiêu theo người ra. */
 export class ThanNguoi {
   private blows = new Map<number, Blow[]>();
   private castsBy = new Map<number, Cast[]>();
+  /** Số khung khựng của người đánh theo "người đánh:tick" (có đòn nặng chạm trúng ở tick đó). */
+  private strikes = new Map<string, number>();
+  private looks = new Map<number, Look>();
   private tps: number;
+  private index: ReplayIndex;
+  private sprites?: Sprites;
+  private lookOf?: (id: number) => Look | undefined;
 
-  constructor(index: ReplayIndex) {
+  /**
+   * `sprites` và `lookOf` (ngoại hình đã gán của từng người) để biết thân và áo nào có dải chạy, ra chiêu theo loại;
+   * thiếu thì act() và gait() trả null, nơi gọi dùng cách chọn khung cũ.
+   */
+  constructor(index: ReplayIndex, sprites?: Sprites, lookOf?: (id: number) => Look | undefined) {
+    this.index = index;
+    this.sprites = sprites;
+    this.lookOf = lookOf;
     this.tps = index.replay.tps;
     for (const c of index.casts) {
       let list = this.castsBy.get(c.unit);
@@ -92,6 +141,8 @@ export class ThanNguoi {
       if (prev && prev.tick === h.tick) {
         if (w > prev.w) list[list.length - 1] = { tick: h.tick, src: h.src, w, stop };
       } else list.push({ tick: h.tick, src: h.src, w, stop });
+      const key = `${h.src}:${h.tick}`;
+      this.strikes.set(key, Math.max(this.strikes.get(key) ?? 0, stop));
     }
   }
 
@@ -175,9 +226,11 @@ export class ThanNguoi {
       const dirSign = p1 >= p0 ? 1 : -1;
       const phase = (p1 / 1000) * Math.PI * 2; // một bước mỗi nửa ô
       const s = Math.abs(Math.sin(phase));
-      const amp = Math.min(1, speed / 40);
+      // Có dải chạy thì dải tự nhún theo bước: chỉ giữ chút nhún và bỏ bè ra, để không nhún hai lần.
+      const running = this.runPhase(ut, t) !== null && !!this.meta(id, "chay");
+      const amp = Math.min(1, speed / 40) * (running ? 0.25 : 1);
       m.dy -= s * 2.4 * amp;
-      const land = 1 - s;
+      const land = running ? 0 : 1 - s;
       if (land > 0.8) {
         const f = ((land - 0.8) / 0.2) * 0.05 * amp;
         m.sx *= 1 + f;
@@ -207,26 +260,139 @@ export class ThanNguoi {
       }
     }
 
-    // ---- vung chiêu cận chiến: tuổi của động tác ra chiêu đang diễn (theo thời điểm đã khựng) ----
-    if (!dead) {
-      const c = this.castAt(id, m.tPose);
-      if (c && MELEE.has(c.skill)) m.swing = (m.tPose - (c.start ?? c.tick)) / this.tps;
-    }
     return m;
   }
 
-  /** Lần ra chiêu có động tác đang diễn tại t: bắt đầu (lúc vận công nếu có) trong 0,6 giây trước t. */
-  private castAt(unit: number, t: number): Cast | undefined {
-    const list = this.castsBy.get(unit);
-    if (!list) return undefined;
-    let found: Cast | undefined;
-    for (const c of list) {
-      const from = c.start ?? c.tick;
-      if (from > t) break;
-      if (t - from < 0.6 * this.tps) found = c;
+  // ---- gói 2: chạy, ra chiêu theo loại chiêu ----
+
+  /** Dòng manifest của dải `anim` theo ngoại hình người `id` (đã lùi về đạo bào nếu thiếu áo), hay undefined. */
+  private meta(id: number, anim: string): ActMeta | undefined {
+    if (!this.sprites || !this.lookOf) return undefined;
+    let look = this.looks.get(id);
+    if (!look) {
+      const wanted = this.lookOf(id);
+      look = wanted && resolveLook(this.sprites, wanted);
+      if (!look) return undefined; // hình chưa nạp xong: chưa ghi nhớ
+      this.looks.set(id, look);
     }
-    return found;
+    const meta = this.sprites.asset(`nhan_vat/${look.body}/${look.outfit}/${anim}`)?.meta;
+    return meta?.frames ? meta : undefined;
   }
+
+  /**
+   * Động tác ra chiêu đang diễn tại t, hay null. Theo thời gian trận như dải ra_chieu cũ (tua nhanh thì diễn nhanh),
+   * riêng khựng ở khung chạm tính theo giây thực như người trúng đòn. `life` như motion().
+   */
+  act(ut: UnitTimeline, t: number, life: (s: number) => number): ActPose | null {
+    if (t >= ut.death) return null;
+    const list = this.castsBy.get(ut.unit.id);
+    if (!list) return null;
+    // Lần ra chiêu cuối có thể đã bắt đầu vung: chạm trong vòng 2 giây sau t.
+    let k = -1;
+    for (let lo = 0, hi = list.length - 1; lo <= hi; ) {
+      const mid = (lo + hi) >> 1;
+      if (list[mid].tick <= t + 2 * this.tps) {
+        k = mid;
+        lo = mid + 1;
+      } else hi = mid - 1;
+    }
+    if (k < 0) return null;
+    // Lùi về các lần còn có thể đang diễn (chạm trong 3 giây trước t) và các lần sát nhau ảnh hưởng lần sau.
+    let a = k;
+    while (a > 0 && k - a < BACK && (list[a - 1].tick > t - 3 * this.tps || list[a].tick - list[a - 1].tick < RESET)) a--;
+    // Lần sau không vung trước khi lần trước chạm và khựng xong; chạm trước lúc đó thì gộp vào lần trước.
+    let free = -Infinity;
+    let best: Win | null = null;
+    for (let i = a; i <= k; i++) {
+      const w = this.plan(list[i], life, free);
+      if (!w) continue;
+      free = w.free;
+      if (w.keys[0][0] <= t) best = w;
+    }
+    if (!best) return null;
+    const f = along(best.keys, t);
+    if (f === undefined) return null;
+    return { anim: best.anim, frame: Math.min(best.frames - 1, Math.floor(f)), trail: best.trail ? f : undefined };
+  }
+
+  private plan(c: Cast, life: (s: number) => number, free: number): Win | null {
+    const g = NHOM_CHIEU[c.skill];
+    const meta = g ? this.meta(c.unit, `ra_chieu_${g}`) : undefined;
+    if (!g || !meta || meta.cham === undefined) {
+      // Dải ra_chieu chung: diễn từ lúc vận công (hay lúc ra chiêu) theo fps của dải, như trước gói 2.
+      const gen = this.meta(c.unit, "ra_chieu");
+      if (!gen || c.tick < free) return null;
+      const d = this.tps / (gen.fps ?? 10);
+      const n = gen.frames!;
+      const begin = Math.max(c.start ?? c.tick, free);
+      return { anim: "ra_chieu", keys: [[begin, 0], [begin + n * d, n]], frames: n, free: begin + 2 * d, trail: MELEE.has(c.skill) };
+    }
+    const d = this.tps / (meta.fps ?? 16); // tick mỗi khung
+    const n = meta.frames!;
+    const C = meta.cham;
+    const T = g === "phong" ? c.tick - this.flight(c) : c.tick; // khung chạm: đòn trúng, hay đạn rời tay
+    if (T <= free) return null;
+    const stop = g === "phong" ? 0 : this.strikes.get(`${c.unit}:${c.tick}`) ?? 0;
+    const H = stop > 0 ? life(stop / FPS) : 0;
+    let begin = T - C * d;
+    if (g === "dap" && c.start !== undefined) begin = Math.min(begin, c.start); // giơ tay từ lúc vận công
+    begin = Math.max(begin, free); // lần trước chưa xong: vung nhanh hơn cho kịp chạm
+    const keys: [number, number][] = [[begin, 0]];
+    if (g === "dap" && meta.giu !== undefined && meta.giu < C) {
+      // Giơ tay lên khung giữ, giữ tới lúc đập, rồi đập xuống đúng tick nổ.
+      const slam = T - (C - meta.giu) * d;
+      if (slam > begin) {
+        const up = Math.min(begin + meta.giu * d, slam);
+        keys.push([up, meta.giu]);
+        if (slam > up) keys.push([slam, meta.giu]);
+      }
+    }
+    keys.push([T, C]);
+    if (H > 0) keys.push([T + H, C]);
+    keys.push([T + H + (n - C) * d, n]);
+    return { anim: `ra_chieu_${g}`, keys, frames: n, free: T + H, trail: g === "chem" || g === "dam" };
+  }
+
+  /** Thời gian bay của đạn tới mục tiêu đầu, tick; cùng công thức với đạn trong hiệu ứng (fx2d.ts flight). */
+  private flight(c: Cast): number {
+    const from = this.index.byId.get(c.unit);
+    const to = this.index.byId.get(c.targets[0]);
+    if (!from || !to) return 0;
+    const cells = Math.abs(from.pos.moving(c.tick) - to.pos.moving(c.tick)) / 1000;
+    const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+    return c.skill === "bua_chu" ? clamp(Math.round(cells * 2.2), 4, 12) : clamp(Math.round(cells * 1.5), 2, 8);
+  }
+
+  /** Dải chạy khi đang tiến về phía địch, hay null. Khung theo quãng đã đi (một vòng hai bước mỗi ô), không theo giờ. */
+  gait(ut: UnitTimeline, t: number): ActPose | null {
+    if (t >= ut.death) return null;
+    const meta = this.meta(ut.unit.id, "chay");
+    const phase = this.runPhase(ut, t);
+    if (!meta || phase === null) return null;
+    return { anim: "chay", frame: Math.floor(phase * meta.frames!) % meta.frames! };
+  }
+
+  /** Pha bước chạy 0–1 khi đang tiến (đội A tiến theo chiều tăng của trục) nhanh hơn WALK và chưa tới mức lướt. */
+  private runPhase(ut: UnitTimeline, t: number): number | null {
+    const sign = ut.unit.team === 0 ? 1 : -1;
+    const p1 = ut.pos.moving(t);
+    const fwd = sign * (p1 - ut.pos.moving(t - 1));
+    if (fwd <= WALK || fwd > LUOT) return null;
+    const s = ((sign * p1) / 1000) % 1;
+    return s < 0 ? s + 1 : s;
+  }
+}
+
+/** Nội suy chỉ số khung theo các mốc (tick, khung); ngoài khoảng mốc thì undefined. */
+function along(keys: [number, number][], t: number): number | undefined {
+  if (t < keys[0][0] || t >= keys[keys.length - 1][0]) return undefined;
+  for (let i = 1; i < keys.length; i++) {
+    const [t1, f1] = keys[i];
+    if (t >= t1) continue;
+    const [t0, f0] = keys[i - 1];
+    return t1 > t0 ? f0 + ((f1 - f0) * (t - t0)) / (t1 - t0) : f1;
+  }
+  return undefined;
 }
 
 function lastBefore(list: Blow[] | undefined, t: number): Blow | undefined {

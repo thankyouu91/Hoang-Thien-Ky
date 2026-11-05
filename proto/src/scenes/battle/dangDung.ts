@@ -237,7 +237,10 @@ export function drawDang(
   const shown = fx.filter((k) => (idle || k === "phi_kiem" || k === "khi_lo_lung") && !(fullLuan && (k === "hao_quang" || k === "hao_quang_vang")));
   const neo = sprites.asset(`nhan_vat/${look.body}/${look.outfit}/${body}`)?.meta.neo;
   const anchor = Array.isArray(neo) ? neo[Math.max(0, Math.min(neo.length - 1, f))] : undefined;
-  const weapon = idle ? d.weapon : "tay";
+  // Chạy: dáng đeo lưng hay cất vũ khí thì giữ nguyên, dáng khác cầm tay. Ra chiêu, trúng đòn: cầm tay.
+  const weapon = idle ? d.weapon : anim === "chay" && (d.weapon === "lung" || d.weapon === "cat") ? d.weapon : "tay";
+  // Dải chạy và ra chiêu theo loại (gói 2) có góc cẳng tay trong neo tay: vũ khí xoay theo, proto tự vẽ.
+  const held = weapon === "tay" && !!anchor?.tay && (anchor.tay as readonly number[]).length >= 4;
 
   ctx.save();
   ctx.translate(x, footY);
@@ -255,8 +258,10 @@ export function drawDang(
   for (const k of shown) drawFx(ctx, k, "back", time, lift, feet, tint, phase);
   if (look.weapon && weapon === "lung" && anchor) drawWeapon(ctx, sprites, look.weapon, "lung", anchor, lift);
 
-  const carry = weapon === "tay" ? look : { ...look, weapon: undefined };
+  const carry = weapon === "tay" && !held ? look : { ...look, weapon: undefined };
   drawCharacter(ctx, sprites, carry, body, f, 0, -lift, 1, false);
+  // Lúc chạy vũ khí chỉ đung đưa nhẹ theo tay (40%), khỏi múa lưỡi theo từng bước.
+  if (look.weapon && held) drawWeapon(ctx, sprites, look.weapon, "cam", anchor!, lift, anim === "chay" ? 0.4 : 1);
 
   if (look.weapon && (weapon === "vai" || weapon === "chuc") && anchor?.tay) drawWeapon(ctx, sprites, look.weapon, weapon, anchor, lift);
   for (const k of shown) drawFx(ctx, k, "front", time, lift, feet, tint, phase);
@@ -269,21 +274,33 @@ export function drawDang(
 /** Mũi vũ khí so với chỗ cầm (pivot) trong ảnh đồ gốc, px; tay không thì vệt theo nắm tay. */
 const TIP: Record<string, [number, number]> = { kiem: [15.3, -27.4], dao: [16.3, -27.4], truong: [-2.7, -35.4] };
 
+const wrapDeg = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180;
+
+/**
+ * Góc xoay (độ, chiều kim đồng hồ) của vũ khí cầm tay so với ảnh đồ gốc, theo neo tay [x, y, góc cẳng tay, vươn] của
+ * dải chạy và ra chiêu theo loại: lưỡi quay từ hướng gốc của ảnh (mũi so với chỗ cầm) về hướng cẳng tay theo độ vươn,
+ * nhân thêm `k`. Neo cũ chỉ có [x, y] thì 0 (vẽ như trước).
+ */
+export function heldRotation(key: string | undefined, tay: readonly number[] | null | undefined, k = 1): number {
+  if (!tay || tay.length < 4) return 0;
+  const tip = (key && TIP[key]) || TIP.kiem;
+  const base = (Math.atan2(tip[1], tip[0]) * 180) / Math.PI;
+  return tay[3] * k * wrapDeg(tay[2] - base);
+}
+
 /**
  * Vệt vũ khí khi ra chiêu cận chiến: đuôi lấy từ chính đường đi của mũi vũ khí qua các khung ra chiêu trước đó (nội suy
- * neo cổ tay giữa hai khung), thon và nhạt dần về đuôi, lõi trắng viền màu hệ. `age` giây (thời gian trận) từ lúc bắt
- * đầu động tác ra chiêu; cùng phép đặt chân, co giãn và lật như drawCharacter.
+ * neo cổ tay và góc vũ khí giữa hai khung), thon và nhạt dần về đuôi, lõi trắng viền màu hệ. `head` là chỉ số khung
+ * (số thực) đang diễn của dải `anim`, đứng yên trong lúc khựng; cùng phép đặt chân, co giãn và lật như drawCharacter.
  */
 export function drawSwingTrail(
-  ctx: CanvasRenderingContext2D, sprites: Sprites, look: Look, age: number,
+  ctx: CanvasRenderingContext2D, sprites: Sprites, look: Look, anim: Anim, head: number,
   x: number, footY: number, scale: number, mirror: boolean, color: string,
 ): void {
-  const meta = sprites.asset(`nhan_vat/${look.body}/${look.outfit}/ra_chieu`)?.meta;
+  const meta = sprites.asset(`nhan_vat/${look.body}/${look.outfit}/${anim}`)?.meta;
   const neo = meta && Array.isArray(meta.neo) ? meta.neo : undefined;
   const frames = meta?.frames;
   if (!frames || !neo) return;
-  const fps = meta.fps ?? 10;
-  const head = age * fps;
   if (head < 0 || head >= frames) return;
   const tip = look.weapon ? TIP[look.weapon] ?? [0, 0] : [0, 0];
   const at = (ff: number): [number, number] | null => {
@@ -293,7 +310,11 @@ export function drawSwingTrail(
     const b = neo[j]?.tay ?? a;
     if (!a || !b) return null;
     const f = ff - Math.floor(ff);
-    return [a[0] + (b[0] - a[0]) * f + tip[0], a[1] + (b[1] - a[1]) * f + tip[1]];
+    const ra = heldRotation(look.weapon, a);
+    const r = ((ra + wrapDeg(heldRotation(look.weapon, b) - ra) * f) * Math.PI) / 180;
+    const tx = tip[0] * Math.cos(r) - tip[1] * Math.sin(r);
+    const ty = tip[0] * Math.sin(r) + tip[1] * Math.cos(r);
+    return [a[0] + (b[0] - a[0]) * f + tx, a[1] + (b[1] - a[1]) * f + ty];
   };
   const pts: [number, number][] = [];
   for (let k = 0; k <= 6; k++) {
@@ -380,11 +401,11 @@ function bareWeapon(sprites: Sprites, key: string): { img: CanvasImageSource; pi
 }
 
 function drawWeapon(
-  ctx: CanvasRenderingContext2D, sprites: Sprites, key: string, mode: "lung" | "vai" | "chuc",
-  anchor: { dau: [number, number, number]; tay: [number, number] | null }, lift: number,
+  ctx: CanvasRenderingContext2D, sprites: Sprites, key: string, mode: "lung" | "vai" | "chuc" | "cam",
+  anchor: { dau: [number, number, number]; tay: [number, number] | null }, lift: number, k = 1,
 ): void {
-  // Đeo lưng và chúc kiếm dùng ảnh đã xoá nắm tay (tay của thân tự nắm chuôi); vác vai giữ nắm tay của ảnh đồ.
-  const w = mode !== "vai" ? bareWeapon(sprites, key) : sprites.asset(`do/vu_khi/${key}`) && {
+  // Đeo lưng và chúc kiếm dùng ảnh đã xoá nắm tay (tay của thân tự nắm chuôi); vác vai và cầm tay giữ nắm tay của ảnh đồ.
+  const w = mode === "lung" || mode === "chuc" ? bareWeapon(sprites, key) : sprites.asset(`do/vu_khi/${key}`) && {
     img: sprites.asset(`do/vu_khi/${key}`)!.img,
     pivot: (sprites.asset(`do/vu_khi/${key}`)!.meta.pivot ?? [32, 32]) as [number, number],
   };
@@ -400,7 +421,7 @@ function drawWeapon(
   } else {
     px = anchor.tay![0];
     py = anchor.tay![1];
-    rot = mode === "vai" ? c.vai : c.chuc;
+    rot = mode === "cam" ? heldRotation(key, anchor.tay, k) : mode === "vai" ? c.vai : c.chuc;
   }
   ctx.save();
   ctx.translate(px - FRAME_X, py - FRAME_FOOT - lift);

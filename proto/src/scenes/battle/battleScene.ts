@@ -133,7 +133,7 @@ export class BattleScene implements Scene {
         this.looks = assignLooks(replay.units);
         this.dangs = assignDang(replay.units);
         this.luans = buildPhapLuan(replay.units, replay.events);
-        this.than = new ThanNguoi(this.index);
+        this.than = new ThanNguoi(this.index, this.sprites, (id) => this.looks.get(id));
         this.vertical = null;
       },
       (e: unknown) => {
@@ -230,7 +230,7 @@ export class BattleScene implements Scene {
   }
 
   /** Hoạt ảnh và khung của một người tại t, ưu tiên: ngã, ra chiêu, trúng đòn nặng, đứng. null nếu chưa có hình. */
-  private pose(ut: UnitTimeline, t: number, look: Look): { anim: Anim; frame: number } | null {
+  private pose(ut: UnitTimeline, t: number, look: Look, life: (s: number) => number): { anim: Anim; frame: number; trail?: number } | null {
     const idle = animInfo(this.sprites, look, "dung");
     if (!idle) return null;
     const tps = this.index!.replay.tps;
@@ -244,10 +244,18 @@ export class BattleScene implements Scene {
       if (p) return { anim: "nga", frame: Math.min(p.frame, p.frames - 1) };
     } else {
       const m = this.marks.get(ut.unit.id);
-      const cast = play("ra_chieu", since(m?.casts, t));
-      if (cast && cast.frame < cast.frames) return cast;
+      // Ra chiêu theo loại chiêu (chuyenDong.ts): vung trước, khựng ở khung chạm; thân chưa có dải riêng thì ra_chieu chung.
+      if (this.than) {
+        const act = this.than.act(ut, t, life);
+        if (act) return act;
+      } else {
+        const cast = play("ra_chieu", since(m?.casts, t));
+        if (cast && cast.frame < cast.frames) return cast;
+      }
       const hit = play("trung_don", since(m?.hits, t));
       if (hit && hit.frame < hit.frames) return hit;
+      const run = this.than?.gait(ut, t);
+      if (run) return run;
     }
     // Đứng thở lệch nhịp theo id để cả đội không nhấp nhô cùng lúc.
     return { anim: "dung", frame: (Math.floor((t / tps) * idle.fps) + ut.unit.id) % idle.frames };
@@ -396,19 +404,21 @@ export class BattleScene implements Scene {
     const u = ut.unit;
     const lat = this.lat(u.id);
     const p = this.place(ut.pos.moving(t), lat);
-    const x = p.x + (lunge?.x ?? 0);
-    const y = p.y + (lunge?.y ?? 0);
     // Thân người (chuyenDong.ts): khựng khi trúng đòn nặng (tPose), dời vì bị đẩy và nhún bước; vòng đội, thanh máu, dấu
     // hệ vẫn ở chỗ cũ (x, y) cho dễ đọc.
     const mo = this.than?.motion(ut, t, life, (id, tick) => at(id, tick), (pos) => this.place(pos, lat));
+    const wanted = this.looks.get(u.id);
+    const look = wanted && resolveLook(this.sprites, wanted);
+    const pose = look ? this.pose(ut, mo?.tPose ?? t, look, life) : null;
+    // Dải ra chiêu theo loại (gói 2) tự có bước nhún tới: bỏ cú nhích của hiệu ứng để không nhích đôi.
+    const nudge = pose?.anim.startsWith("ra_chieu_") ? undefined : lunge;
+    const x = p.x + (nudge?.x ?? 0);
+    const y = p.y + (nudge?.y ?? 0);
     const bodyX = x + (mo?.dx ?? 0);
     const bodyY = y + (mo?.dy ?? 0);
     const dead = t >= ut.death;
     const style = ELEMENT_STYLE[u.element];
     const h = SIZE / 2;
-    const wanted = this.looks.get(u.id);
-    const look = wanted && resolveLook(this.sprites, wanted);
-    const pose = look ? this.pose(ut, mo?.tPose ?? t, look) : null;
     const sprite = pose ? undefined : this.sprites.get(u.sprite);
     const icon = this.sprites.get("he/" + u.element);
     const tps = this.index!.replay.tps;
@@ -468,7 +478,7 @@ export class BattleScene implements Scene {
         if (struck) ctx.filter = "none";
         ctx.restore();
         // Vệt mũi vũ khí khi ra chiêu cận chiến; hạt hệ khi tan.
-        if (mo?.swing !== undefined && pose.anim === "ra_chieu") drawSwingTrail(ctx, this.sprites, look, mo.swing, bodyX, bodyY + h, s / 64, mirror, style.color);
+        if (pose.trail !== undefined) drawSwingTrail(ctx, this.sprites, look, pose.anim, pose.trail, bodyX, bodyY + h, s / 64, mirror, style.color);
         if (mo?.dissolve) drawDissolve(ctx, u.element, bodyX, bodyY - h * 0.2, mo.dissolve);
       } else if (u.team === 1) {
         if (flash && !dead) ctx.globalAlpha = 0.5;
