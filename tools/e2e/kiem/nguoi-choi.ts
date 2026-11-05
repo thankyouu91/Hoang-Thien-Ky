@@ -1,7 +1,7 @@
 // Thao tác của một người chơi mới: chỉ chạm nút và gõ chữ như người thật, đọc chữ trên màn để quyết bước sau.
 // Bộ chọn ưu tiên thứ ổn định khi đổi ngôn ngữ (id, name của ô nhập, data-act, data-ftue-*), chữ chỉ dùng để kiểm.
 import { expect, type Locator, type Page, type TestInfo } from "@playwright/test";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 
 export type NgonNgu = "vi" | "en";
@@ -22,17 +22,21 @@ export function soThu(hau: number): string {
 /** Ảnh một bước: gắn vào báo cáo HTML và lưu ở ket-qua/anh/<khung>/<số>-<tên>.png để gửi kèm báo lỗi. */
 export class MayAnh {
   private n = 0;
+  private readonly dir: string;
   constructor(
     private readonly page: Page,
     private readonly info: TestInfo,
-    private readonly nhom: string,
-  ) {}
+    nhom: string,
+  ) {
+    // Mỗi lần chạy bắt đầu thư mục ảnh sạch, để ảnh hai lần chạy không lẫn số thứ tự.
+    this.dir = join("ket-qua", "anh", info.project.name, nhom);
+    rmSync(this.dir, { recursive: true, force: true });
+    mkdirSync(this.dir, { recursive: true });
+  }
 
   async chup(ten: string): Promise<string> {
     this.n++;
-    const dir = join("ket-qua", "anh", this.info.project.name, this.nhom);
-    mkdirSync(dir, { recursive: true });
-    const file = join(dir, `${String(this.n).padStart(2, "0")}-${ten}.png`);
+    const file = join(this.dir, `${String(this.n).padStart(2, "0")}-${ten}.png`);
     await this.page.screenshot({ path: file, fullPage: false });
     await this.info.attach(`${this.n}. ${ten}`, { path: file, contentType: "image/png" });
     return file;
@@ -129,11 +133,12 @@ export async function linhThach(page: Page): Promise<number> {
   return Number(t.replace(/\D/g, ""));
 }
 
-// ---- FTUE: người chơi làm theo khung hướng dẫn ----
-// Móc đã hẹn với tab Khởi đầu mới: khung hướng dẫn đang hiện có data-ftue-buoc="<1..8>" (BUOC_FTUE), thứ người chơi
-// phải chạm có data-ftue-dich. Đổi móc thì chỉ sửa hai hằng dưới đây.
-export const HUONG_DAN = "[data-ftue-buoc]";
-export const DICH = "[data-ftue-dich]";
+// ---- FTUE: người chơi làm theo thẻ Nhiệm vụ ----
+// Thẻ nhập môn của tab Khởi đầu mới (proto/src/dashboard/moi/ftueUi.ts): #ftue, ".ftue-so" ghi "… n/7", nút
+// [data-f=lam] mở việc của bước; bảng trượt #sheet có nút chính [data-ok]; màn gieo quẻ #gieo-que có nút .seal
+// ([data-gieo] → [data-tiep] → [data-xong]); trận mở ở #tran, về bằng #topbar .back. Bước nhiệm vụ n/7 (chinh.0.n)
+// là FTUE bước n+1 (GDD mục 14; bước 1 là đăng nhập). Thẻ "đã xong" có nút [data-f=an].
+export const THE_FTUE = "#ftue:not([hidden])";
 
 export interface BuocDaQua {
   buoc: number;
@@ -143,19 +148,33 @@ export interface BuocDaQua {
   giay: number;
   cham: number;
   anh: string;
+  baoLoi: string[];
 }
 
-/** Bước FTUE đang hiện (đọc khung hướng dẫn đang thấy), hoặc null khi không có khung nào. */
+export interface TrangThaiFtue {
+  /** FTUE bước 2–8 đang làm, null khi không đọc được (thẻ ẩn, đang trong trận, hoặc đã xong). */
+  buoc: number | null;
+  xong: boolean;
+  tran: boolean;
+  loi: string;
+}
+
+export async function trangThaiFtue(page: Page): Promise<TrangThaiFtue> {
+  return page.evaluate(() => {
+    const the = document.getElementById("ftue");
+    const tran = location.hash === "#tran";
+    const hien = !!the && !the.hidden && the.getBoundingClientRect().height > 0;
+    const loi = (the?.querySelector("p")?.textContent ?? "").replace(/\s+/g, " ").trim();
+    if (!hien) return { buoc: null, xong: false, tran, loi };
+    const xong = !!the.querySelector('[data-f="an"]') || (!!the.querySelector(".ftue-pill") && !/\d+\s*\/\s*\d+/.test(the.textContent ?? ""));
+    const m = /(\d+)\s*\/\s*(\d+)/.exec(the.querySelector(".ftue-so, .ftue-pill")?.textContent ?? "");
+    return { buoc: !xong && m ? Number(m[1]) + 1 : null, xong, tran, loi };
+  });
+}
+
+/** Bước FTUE đang làm (2–8), hoặc null. */
 export async function buocHienTai(page: Page): Promise<number | null> {
-  const k = page.locator(`${HUONG_DAN}:visible`).first();
-  if ((await k.count()) === 0) return null;
-  const v = Number(await k.getAttribute("data-ftue-buoc"));
-  return Number.isFinite(v) ? v : null;
-}
-
-async function loiHuongDan(page: Page): Promise<string> {
-  const k = page.locator(`${HUONG_DAN}:visible`).first();
-  return (await k.count()) ? ((await k.innerText()).replace(/\s+/g, " ").trim()) : "";
+  return (await trangThaiFtue(page)).buoc;
 }
 
 /** Số câu của lời hướng dẫn (GDD mục 14: tối đa 2 câu mỗi bước). */
@@ -163,98 +182,178 @@ export function soCau(s: string): number {
   return s.split(/(?<=[.!?…])\s+/).filter((c) => /\p{L}/u.test(c)).length;
 }
 
+/** Chữ báo lỗi đang hiện (toast đỏ), để ghi vào báo cáo khi bấm mà không qua bước. */
+async function baoLoiDangHien(page: Page): Promise<string | null> {
+  const t = page.locator("#toast.show.bad");
+  return (await t.count()) ? ((await t.textContent()) ?? "").trim() : null;
+}
+
 /**
- * Làm theo hướng dẫn cho tới khi qua bước `den` (hoặc hết FTUE). Mỗi lần: đợi thứ có data-ftue-dich hiện ra, chạm nó,
- * đợi màn đổi. Kẹt quá `kẹtGiay` giây không có gì để chạm và bước không đổi thì báo trượt kèm ảnh, ghi rõ bước nào.
+ * Cấp và linh thạch trên thanh trên sau khi hiệu ứng thăng cấp chạy xong: số trên thanh đổi sau dấu "Thăng cấp", nên
+ * đọc tới khi hai lần liền nhau (cách 800 ms) như nhau, tối đa 8 giây.
+ */
+export async function thanhTrenOnDinh(page: Page): Promise<{ cap: number; lt: number }> {
+  let truoc = { cap: await capHienTai(page), lt: await linhThach(page) };
+  const het = Date.now() + 8000;
+  while (Date.now() < het) {
+    await page.waitForTimeout(800);
+    const nay = { cap: await capHienTai(page), lt: await linhThach(page) };
+    if (nay.cap === truoc.cap && nay.lt === truoc.lt) return nay;
+    truoc = nay;
+  }
+  return truoc;
+}
+
+/** Trong màn Trận: chọn tốc độ nhanh nhất, chờ phát hết (thanh tua tới cuối), rồi Quay lại như người chơi. */
+async function xemHetTran(page: Page, anh: MayAnh, toiDaGiay = 120): Promise<void> {
+  const nhanh = page.locator("[data-speed]").last();
+  if (await nhanh.isVisible()) await nhanh.click();
+  const het = Date.now() + toiDaGiay * 1000;
+  let daChup = false;
+  while (Date.now() < het) {
+    const xong = await page.evaluate(() => {
+      const s = document.querySelector<HTMLInputElement>("input.seek");
+      return !!s && !s.disabled && Number(s.max) > 1 && Number(s.value) >= Number(s.max) - 1;
+    });
+    if (!daChup && Date.now() > het - toiDaGiay * 1000 + 3000) {
+      await anh.chup("dang-xem-tran");
+      daChup = true;
+    }
+    if (xong) break;
+    await page.waitForTimeout(500);
+  }
+  await anh.chup("het-tran");
+  await page.locator("#topbar .back").click();
+  await expect(page, "Quay lại từ màn Trận").not.toHaveURL(/#tran$/);
+}
+
+/**
+ * Làm theo thẻ Nhiệm vụ cho tới khi qua bước `den` (hoặc hết FTUE). Mỗi vòng chạm đúng một thứ người mới sẽ chạm: nút
+ * chính của màn gieo quẻ hoặc bảng trượt đang mở, nút của thẻ, hoặc xem hết trận rồi Quay lại. Không có gì để chạm quá
+ * `ketGiay` giây, hay chạm `toiDaMoiBuoc` lần mà bước không đổi, thì trượt kèm ảnh và lời báo lỗi đang hiện.
  */
 export async function lamTheoHuongDan(
   page: Page,
   anh: MayAnh,
-  opts: { den?: number; ketGiay?: number; toiDaCham?: number; truocMoiBuoc?: (buoc: number) => Promise<void> } = {},
+  opts: { den?: number; ketGiay?: number; toiDaMoiBuoc?: number; truocMoiBuoc?: (buoc: number) => Promise<void> } = {},
 ): Promise<BuocDaQua[]> {
   const den = opts.den ?? 8;
-  const ketGiay = opts.ketGiay ?? 45;
-  const toiDa = opts.toiDaCham ?? 80;
+  const ketGiay = opts.ketGiay ?? 30;
+  const toiDaMoiBuoc = opts.toiDaMoiBuoc ?? 12;
   const qua: BuocDaQua[] = [];
-  let buoc = await buocHienTai(page);
+  let st = await trangThaiFtue(page);
+  let buoc = st.buoc;
+  let loi = st.loi;
   let batDau = Date.now();
   let cham = 0;
-  let loi = await loiHuongDan(page);
-  const ghiBuoc = async (b: number) => {
-    const file = await anh.chup(`xong-buoc-${b}`);
-    qua.push({ buoc: b, loi, cap: await capHienTai(page), linhThach: await linhThach(page), giay: Math.round((Date.now() - batDau) / 1000), cham, anh: file });
+  let baoLoi: string[] = [];
+  let ranhTu = Date.now();
+  const sangBuoc = async (moi: number | null) => {
+    if (buoc !== null) {
+      const file = await anh.chup(`xong-buoc-${buoc}`);
+      const { cap, lt } = await thanhTrenOnDinh(page);
+      qua.push({ buoc, loi, cap, linhThach: lt, giay: Math.round((Date.now() - batDau) / 1000), cham, anh: file, baoLoi });
+    }
+    buoc = moi;
+    batDau = Date.now();
+    cham = 0;
+    baoLoi = [];
+    loi = (await trangThaiFtue(page)).loi;
+    if (buoc !== null && buoc <= den) {
+      await anh.chup(`buoc-${buoc}`);
+      await opts.truocMoiBuoc?.(buoc);
+    }
   };
   if (buoc !== null) {
     await anh.chup(`buoc-${buoc}`);
     await opts.truocMoiBuoc?.(buoc);
   }
-  for (let n = 0; n < toiDa; n++) {
-    if (buoc === null || buoc > den) break;
-    // Đợi tới khi có thứ để chạm, hoặc bước tự đổi (ví dụ trận tự phát xong).
-    const dich = page.locator(`${DICH}:visible`).first();
-    const het = Date.now() + ketGiay * 1000;
-    let coDich = false;
-    while (Date.now() < het) {
-      if ((await dich.count()) > 0) {
-        coDich = true;
-        break;
-      }
-      if ((await buocHienTai(page)) !== buoc) break;
-      await page.waitForTimeout(250);
+  const ket = async (vi: string) => {
+    await anh.chup(`ket-buoc-${buoc ?? "?"}`);
+    const sheet = page.locator("#sheet .sheet");
+    const trongBang = (await sheet.count()) ? ` Bảng đang mở: "${(await sheet.innerText()).replace(/\s+/g, " ").slice(0, 200)}".` : "";
+    throw new Error(`Kẹt ở FTUE bước ${buoc}: ${vi}. Lời hướng dẫn: "${loi}".${baoLoi.length ? ` Báo lỗi trên màn: ${baoLoi.join(" | ")}.` : ""}${trongBang}`);
+  };
+
+  for (;;) {
+    st = await trangThaiFtue(page);
+    if (st.buoc !== null && st.buoc !== buoc) await sangBuoc(st.buoc);
+    if (st.xong) {
+      await sangBuoc(null);
+      break;
     }
-    const moi = await buocHienTai(page);
-    if (moi !== buoc) {
-      await ghiBuoc(buoc);
-      buoc = moi;
-      batDau = Date.now();
-      cham = 0;
-      loi = await loiHuongDan(page);
-      if (buoc !== null) {
-        await anh.chup(`buoc-${buoc}`);
-        await opts.truocMoiBuoc?.(buoc);
-      }
-      continue;
-    }
-    if (!coDich) {
-      await anh.chup(`ket-buoc-${buoc}`);
-      throw new Error(`Kẹt ở FTUE bước ${buoc}: ${ketGiay} giây không có gì để chạm (${DICH}) và bước không đổi. Lời hướng dẫn: "${loi}"`);
-    }
-    await dich.scrollIntoViewIfNeeded();
-    await dich.click();
-    cham++;
-    await page.waitForTimeout(400);
-    const sau = await buocHienTai(page);
-    if (sau !== buoc) {
-      await ghiBuoc(buoc);
-      buoc = sau;
-      batDau = Date.now();
-      cham = 0;
-      loi = await loiHuongDan(page);
-      if (buoc !== null) {
-        await anh.chup(`buoc-${buoc}`);
-        await opts.truocMoiBuoc?.(buoc);
-      }
+    if (buoc !== null && buoc > den) break;
+    if (cham >= toiDaMoiBuoc) await ket(`chạm ${cham} lần mà bước không đổi`);
+
+    const gieo = page.locator("#gieo-que .seal:visible:enabled").first();
+    const okBang = page.locator("#sheet [data-ok]:visible:enabled").first();
+    const lam = page.locator(`${THE_FTUE} [data-f="lam"]:visible`).first();
+    const pill = page.locator(`${THE_FTUE} .ftue-pill:visible`).first();
+    let daCham = true;
+    if (await page.locator("#gieo-que").isVisible()) {
+      if (await gieo.count()) await gieo.click();
+      else daCham = false; // đang quay quẻ
+    } else if (await page.locator("#sheet").isVisible()) {
+      if (await okBang.count()) await okBang.click();
+      else await ket("bảng trượt đang mở nhưng không có nút để làm tiếp");
+    } else if (st.tran) {
+      await xemHetTran(page, anh);
+    } else if (await lam.count()) {
+      await lam.click();
+    } else if (await pill.count()) {
+      await pill.click();
+    } else daCham = false;
+
+    if (daCham) {
+      cham++;
+      ranhTu = Date.now();
+      await page.waitForTimeout(500);
+      const bl = await baoLoiDangHien(page);
+      if (bl && !baoLoi.includes(bl)) baoLoi.push(bl);
+    } else {
+      if (Date.now() - ranhTu > ketGiay * 1000) await ket(`${ketGiay} giây không có gì để chạm và bước không đổi`);
+      await page.waitForTimeout(300);
     }
   }
-  if (buoc !== null && buoc <= den) throw new Error(`Chạm ${toiDa} lần vẫn chưa qua FTUE bước ${buoc}.`);
   return qua;
 }
 
-/** Màn Nhân vật → Chơi lại từ đầu → đồng ý. Hộp hỏi lại có thể là confirm() của trình duyệt hoặc nút trong trang. */
+/**
+ * Mở mục Tài khoản ở màn Nhân vật như người chơi: chạm hình nhân vật trên thanh trên; điện thoại chia màn thành thẻ con
+ * nên chạm thẻ "Thông tin"; mục Tài khoản thu gọn thì chạm tiêu đề. Trả nút data-act cần bấm.
+ */
+export async function moTaiKhoan(page: Page, act: "choi-lai" | "logout"): Promise<Locator> {
+  const nut = page.locator(`[data-act=${act}]:visible`).first();
+  if (await nut.count()) return nut;
+  if (!/#nhan-vat/.test(page.url())) await page.locator("#topbar .portrait").click();
+  const the = page.locator('[role=tab][data-tab="thong-tin"]:visible');
+  await page.waitForTimeout(400);
+  if (await the.count()) await the.click();
+  if (!(await nut.count())) {
+    const tieuDe = page.getByText(/^(Tài khoản|Account)$/).first();
+    if (await tieuDe.isVisible()) await tieuDe.click();
+  }
+  await expect(nut, `màn Nhân vật phải có nút data-act=${act} ở mục Tài khoản`).toBeVisible();
+  await nut.scrollIntoViewIfNeeded();
+  return nut;
+}
+
+/** Màn Nhân vật → Tài khoản → Chơi lại từ đầu → đồng ý (bảng trượt [data-ok], hoặc confirm() của trình duyệt). */
 export async function choiLai(page: Page): Promise<void> {
   page.once("dialog", (d) => void d.accept());
-  const nut = page.locator("[data-act=choi-lai]");
-  if (!(await nut.isVisible())) {
-    await page.locator("#topbar .portrait").click();
-    if (!(await nut.isVisible())) {
-      const taiKhoan = page.getByText(/^(Tài khoản|Account)$/).first();
-      if (await taiKhoan.isVisible()) await taiKhoan.click();
-    }
-  }
-  await expect(nut, "phải có nút Chơi lại từ đầu (data-act=choi-lai)").toBeVisible();
-  await nut.click();
-  const ok = page.locator("[data-act=choi-lai-ok]");
-  if (await ok.waitFor({ state: "visible", timeout: 2000 }).then(() => true, () => false)) await ok.click();
+  await (await moTaiKhoan(page, "choi-lai")).click();
+  const ok = page.locator("#sheet [data-ok]");
+  if (await ok.waitFor({ state: "visible", timeout: 3000 }).then(() => true, () => false)) await ok.click();
+  await page.waitForLoadState("load");
+}
+
+/** Màn Nhân vật → Tài khoản → Đăng xuất (đồng ý nếu có hỏi lại), chờ màn đăng nhập. */
+export async function dangXuat(page: Page): Promise<void> {
+  page.once("dialog", (d) => void d.accept());
+  await (await moTaiKhoan(page, "logout")).click();
+  const ok = page.locator("#sheet [data-ok]");
+  if (await ok.waitFor({ state: "visible", timeout: 1500 }).then(() => true, () => false)) await ok.click();
+  await expect(page.locator("#login")).toBeVisible();
 }
 
 /** Chữ tiếng Việt có dấu còn sót khi đang chọn tiếng Anh (trên màn đang thấy). */

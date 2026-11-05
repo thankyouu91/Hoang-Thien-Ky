@@ -8,13 +8,18 @@ test.describe("Đăng nhập người mới", () => {
     const anh = new MayAnh(page, info, "dang-nhap");
     const t0 = Date.now();
     await moGame(page);
+    const tai = (Date.now() - t0) / 1000;
     const login = page.locator("#login");
     await expect(login.locator(".age-badge"), "nhãn tuổi G1 ở màn đăng nhập").toBeVisible();
     await expect(login.locator(".login-foot"), "lời nhắc sức khỏe ở chân màn").toContainText("180");
     await anh.chup("man-dang-nhap");
-    await dangNhap(page, { sdt: soThu(1), ngaySinh: ngaySinhTuoi(25) }, anh);
-    const giay = (Date.now() - t0) / 1000;
-    expect.soft(giay, "GDD: đăng nhập dưới 1 phút").toBeLessThan(60);
+    // GDD: đăng nhập dưới 1 phút, tính phần người chơi thao tác (không chụp ảnh giữa chừng để khỏi cộng thời gian chụp).
+    const t1 = Date.now();
+    await dangNhap(page, { sdt: soThu(1), ngaySinh: ngaySinhTuoi(25) });
+    const nhap = (Date.now() - t1) / 1000;
+    await info.attach("thoi-gian.json", { body: JSON.stringify({ taiTrangGiay: tai, thaoTacGiay: nhap }), contentType: "application/json" });
+    expect.soft(tai, "tải trang tới màn đăng nhập dưới 15 giây").toBeLessThan(15);
+    expect.soft(nhap, "GDD: đăng nhập dưới 1 phút").toBeLessThan(60);
     await anh.chup("vao-game");
     expect(await capHienTai(page), "người mới phải bắt đầu ở cấp 1").toBe(1);
     expect(loi, "không có lỗi JS").toEqual([]);
