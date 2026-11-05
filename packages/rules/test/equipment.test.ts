@@ -195,7 +195,8 @@ test("ba bộ cùng mở 2+2+3; mỗi món tối đa 1 ấn, ấn phải có tro
   assert.deepEqual(setBonuses(items), {
     atk: atkSet(MOC("van_kiem", 2).atk, 1200),
     healPower: Math.trunc((MOC("linh_tuyen", 2).healPower * 1200) / 1000),
-    damageTakenCut: Math.trunc((MOC("thiet_ky", 2).damageTakenCut * tk) / 1000),
+    // Khóa chỉ số của Thiết Kỵ mốc 2 lấy theo dữ liệu (giảm sát thương nhận chung hoặc theo loại đòn).
+    ...Object.fromEntries(Object.entries(MOC("thiet_ky", 2)).map(([k, v]) => [k, Math.trunc((v * tk) / 1000)])),
   });
   const twoSeals = item("TB-KI-058", { kham: [seal("NG-AN-017"), seal("NG-AN-005")] });
   assert.throws(() => gearStats([twoSeals], LV, []));
