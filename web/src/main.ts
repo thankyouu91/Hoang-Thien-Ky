@@ -25,23 +25,24 @@ function mucLuc(): void {
 }
 
 /**
- * Đầu trang chủ: cảnh sơn thủy động tông giấy của lớp Three.js dùng chung (proto/src/three, phiên Three.js giữ).
- * Máy không có WebGL2 (hoặc ?nowebgl) thì giữ tranh SVG tĩnh đã có trong HTML. Ra khỏi màn hình thì ẩn canvas để
- * renderer dùng chung dừng vẽ (nó bỏ qua chỗ gắn bị ẩn), đỡ tốn pin.
+ * Đầu trang chủ: vườn trúc lắc lư trong gió, giữa là đình uống trà (src/canhTruc.ts), vẽ bằng renderer dùng chung
+ * của lớp Three.js (proto/src/three, phiên Three.js giữ). Máy không có WebGL2 (hoặc ?nowebgl) thì giữ tranh SVG tĩnh.
+ * Ra khỏi màn hình thì ẩn canvas để renderer dừng vẽ (nó bỏ qua chỗ gắn bị ẩn), đỡ tốn pin.
  */
-async function sonThuy(): Promise<void> {
-  const khung = document.querySelector<HTMLElement>("[data-son-thuy]");
+async function vuonTruc(): Promise<void> {
+  const khung = document.querySelector<HTMLElement>("[data-vuon-truc]");
   const song = khung?.querySelector<HTMLElement>("[data-canh]");
   if (!khung || !song) return;
   const three = await import("../../proto/src/three/index.ts");
   if (!three.hasWebGL()) return;
-  const canh = three.mountScene(song, "son_thuy", { tone: "giay", linhKhi: true, seed: 11 }, { layer: "back" });
-  if (!(await canh.ready)) return;
+  const { canhTruc } = await import("./canhTruc.ts");
+  const live = await three.mountProgram(song, () => canhTruc(), { layer: "back" });
+  if (!live) return;
   song.classList.add("song");
   let hen = 0;
   const cuon = () => {
     hen = 0;
-    canh.setScroll(Math.min(1.5, window.scrollY / Math.max(1, window.innerHeight)));
+    live.setScroll(Math.min(1.5, window.scrollY / Math.max(1, window.innerHeight)));
   };
   window.addEventListener("scroll", () => (hen ||= requestAnimationFrame(cuon)), { passive: true });
   new IntersectionObserver(([e]) => (song.hidden = !e.isIntersecting), { rootMargin: "40px" }).observe(khung);
@@ -112,5 +113,5 @@ function nhomDangXem(): void {
 mucLuc();
 xemLon();
 nhomDangXem();
-void sonThuy();
+void vuonTruc();
 if (document.querySelector("form[data-gop-y]")) void import("./gopY.ts").then((m) => m.ganGopY());

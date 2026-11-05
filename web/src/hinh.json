@@ -656,8 +656,8 @@
      "kieu": "pix",
      "w": 64,
      "h": 64,
-     "bam": "e5d7dc6f249b",
-     "kb": 1.2
+     "bam": "871b1c4a4a9a",
+     "kb": 1.4
     },
     {
      "file": "tong_mon/moc_thanh_truc_coc.webp",
@@ -666,8 +666,8 @@
      "kieu": "pix",
      "w": 64,
      "h": 64,
-     "bam": "e64afb1a1922",
-     "kb": 1.4
+     "bam": "1816a0f2dd84",
+     "kb": 1.3
     },
     {
      "file": "tong_mon/thuy_thuy_ta_cung.webp",
@@ -676,8 +676,8 @@
      "kieu": "pix",
      "w": 64,
      "h": 64,
-     "bam": "f211f984d1cc",
-     "kb": 1
+     "bam": "5a7e1b712a04",
+     "kb": 1.6
     },
     {
      "file": "tong_mon/hoa_hoa_son_thanh.webp",
@@ -686,8 +686,8 @@
      "kieu": "pix",
      "w": 64,
      "h": 64,
-     "bam": "714b32ce7409",
-     "kb": 1.2
+     "bam": "cbafd7b38876",
+     "kb": 1.4
     },
     {
      "file": "tong_mon/tho_son_nhac_tu.webp",
@@ -696,8 +696,8 @@
      "kieu": "pix",
      "w": 64,
      "h": 64,
-     "bam": "a91506c4aa01",
-     "kb": 1.1
+     "bam": "02869bb9d13e",
+     "kb": 1.5
     },
     {
      "file": "tong_mon/loi_loi_tri_phong.webp",
@@ -706,8 +706,8 @@
      "kieu": "pix",
      "w": 64,
      "h": 64,
-     "bam": "719a70fc9557",
-     "kb": 1.1
+     "bam": "80ff80e67bfa",
+     "kb": 1.4
     },
     {
      "file": "tong_mon/phong_phi_van_dinh.webp",
@@ -716,8 +716,8 @@
      "kieu": "pix",
      "w": 64,
      "h": 64,
-     "bam": "3c2de4fb76e3",
-     "kb": 1.1
+     "bam": "a1ab1ae33a9e",
+     "kb": 1.8
     },
     {
      "file": "tong_mon/quang_quang_minh_dien.webp",
@@ -726,8 +726,8 @@
      "kieu": "pix",
      "w": 64,
      "h": 64,
-     "bam": "eec7a7c4e014",
-     "kb": 1
+     "bam": "09cc35f071d7",
+     "kb": 1.5
     },
     {
      "file": "tong_mon/am_lanh_u_hon_dien.webp",
@@ -736,8 +736,8 @@
      "kieu": "pix",
      "w": 64,
      "h": 64,
-     "bam": "1968a2333da6",
-     "kb": 1.1
+     "bam": "6bf0b6097485",
+     "kb": 1.4
     },
     {
      "file": "diem/mo_linh_thach.webp",
@@ -1510,6 +1510,16 @@
      "h": 256,
      "bam": "17cf13353ab6",
      "kb": 53.2
+    },
+    {
+     "file": "rieng/dai_luc.webp",
+     "ten": "Hạ vị diện",
+     "phu": "",
+     "kieu": "brand",
+     "w": 1600,
+     "h": 1043,
+     "bam": "057c573515d9",
+     "kb": 133.3
     }
    ]
   }

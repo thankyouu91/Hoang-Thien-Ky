@@ -15,13 +15,15 @@ Website giới thiệu Thiên Hoang Ký. Kín như game: chỉ trình duyệt đ
 
 | Đường dẫn | File | Nội dung |
 |---|---|---|
-| `/` | `index.html` | Cảnh sơn thủy Three.js, tên game, nút Vào chơi thử, tóm tắt các trang |
+| `/` | `index.html` | Vườn trúc thủy mặc Three.js (đình uống trà), câu thơ, đại lục, tính năng, góc tranh, wiki, chính sách |
 | `/the-gioi/` | `the-gioi/index.html` | 4 vị diện, 12 vùng và 12 hệ, thành chủ, sơn môn, bốn phe |
 | `/diem-rieng/` | `diem-rieng/index.html` | Lập tông, bản đồ tranh, ghép tàn quyển, phi thăng, "tu tiên bằng trí, không bằng ví" (GDD mục 1–2) |
 | `/thu-vien/` | `thu-vien/index.html` | Ảnh chụp prototype, tu sĩ, thú cưỡi, công trình, đảo nổi, sân đấu, vật phẩm, đạo đồ |
 | `/lo-trinh/` | `lo-trinh/index.html` | Prototype, Cửa 1 chơi thử kín, MVP (không ghi ngày) |
 | `/nhat-ky/` | `nhat-ky/index.html` | Devlog theo ngày, tóm từ tab Coding của GDD và lịch sử commit |
 | `/gop-y/` | `gop-y/index.html` | Form góp ý, ghi vào bảng `phan_hoi` (Admin xem ở màn Phản hồi, `man` bắt đầu bằng `website`) |
+| `/chinh-sach-bao-mat/` | `chinh-sach-bao-mat/index.html` | Bản chơi thử giữ gì, không giữ gì (theo docs/api.md) |
+| `/chinh-sach-game/` | `chinh-sach-game/index.html` | Nhãn tuổi, giờ chơi, ứng xử, tiền trong game, sở hữu trí tuệ |
 | (không có) | `404.html` | Trang lạc |
 
 Không có: nạp tiền, tải app, thu email hay số điện thoại. Không đưa lên: số đề xuất chi tiết, kế hoạch kinh doanh, pháp lý, câu hỏi mở.
@@ -32,9 +34,9 @@ Không có: nạp tiền, tải app, thu email hay số điện thoại. Không 
 - Phần dùng chung chèn lúc build bằng plugin `thk-manh` trong `vite.config.ts`: `<!--#mo-->` (thẻ head), `<!--#dau-->` (đầu trang, đánh dấu mục đang mở), `<!--#chan-->` (chân trang: nhãn tuổi 16+, lời nhắc sức khỏe, ghi bản thử nghiệm kín), `<!--#hinh:nhom/file.webp-->` (một hình), `<!--#nhom:id-->` (cả nhóm thư viện). Trang ra HTML đầy đủ, đọc được khi tắt JavaScript.
 - **Hình:** `scripts/hinh.mjs` chọn hình trong `assets/pixellab`, `assets/icon_ve` và `web/anh-chup/`, xuất WebP vào `public/hinh/` (không commit) và ghi `src/hinh.json` (cỡ, chú thích, mã băm). Hình pixel giữ cỡ gốc, nén không mất, phóng bằng `image-rendering: pixelated`; tranh vẽ thu còn 320 px. Mọi `<img>` có `width`/`height` và `loading="lazy"`. Hiện 142 hình, khoảng 2 MB tổng, trang nào cũng chỉ tải hình đang thấy.
 - **Ảnh chụp prototype:** `node scripts/chup.mjs` (cần `npm.cmd run dev:proto` ở gốc repo, cổng 5173, và Chrome hoặc Edge) chụp 6 màn ở khung 390 × 844 vào `web/anh-chup/*.webp` (có commit).
-- **Cảnh đầu trang chủ:** `mountScene(..., "son_thuy", { tone: "giay", linhKhi: true })` của `proto/src/three/` (phiên Three.js giữ, web không sửa thư mục đó). Chunk three khoảng 176 kB gzip, chỉ nạp ở trang chủ khi máy có WebGL2. Không có WebGL (thử bằng `?nowebgl`) thì giữ tranh SVG tĩnh trong HTML. Ra khỏi màn hình thì canvas ẩn để renderer ngừng vẽ.
+- **Cảnh đầu trang chủ:** vườn trúc thủy mặc lắc lư trong gió, giữa là đình uống trà (`src/canhTruc.ts`, theo tranh mẫu người dùng gửi 2026-11-05: trúc mực xám nâu, lá đậm rủ từ mép trên, sương trắng, không thấy chân trời). Là một `Program` gắn qua `mountProgram` của `proto/src/three/` (phiên Three.js giữ, web không sửa thư mục đó): host lo vòng vẽ, thị sai, prefers-reduced-motion, hạ độ phân giải. Mọi cây trúc gộp MỘT mesh, gió trong vertex shader. Chỉ nạp three khi máy có WebGL2; không có (thử `?nowebgl`) thì giữ tranh SVG tĩnh trong HTML. Ra khỏi màn hình thì canvas ẩn để renderer ngừng vẽ. Khung đứng thì camera nhìn thẳng vào đình (chữ nằm trên), khung ngang chữ trái đình phải.
 - Dấu ấn: `assets/brand` (dấu son tròn, tab icon Canva, thay ô đỏ chữ Hán người dùng chê), `scripts/hinh.mjs` xuất `hinh/brand/dau_an_96.webp` (logo đầu trang), `dau_an_256.webp` (đầu trang chủ, trang cổng) và chép favicon.
-- Chữ: Lora và Cormorant Garamond từ `@fontsource` (đủ dấu tiếng Việt, trình duyệt chỉ tải phần chữ cần). Token màu chép từ `proto/src/dashboard/tokens.css` (nền kem, khung đỏ mảnh, đỏ son ấn triện).
+- Chữ (người dùng chốt kiểu tiên hiệp 2026-11-05): Water Brush cho tên game và câu thơ (bút lông), Prata cho tiêu đề (chỉ có weight 400, đừng ép đậm), Lora cho chữ đọc; đều từ `@fontsource` (đủ dấu tiếng Việt, trình duyệt chỉ tải phần chữ cần). Token màu chép từ `proto/src/dashboard/tokens.css` (nền kem, khung đỏ mảnh, đỏ son ấn triện).
 
 ```
 cd web

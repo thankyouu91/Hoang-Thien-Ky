@@ -19,6 +19,8 @@ const TRANG = {
   lo_trinh: "lo-trinh/index.html",
   nhat_ky: "nhat-ky/index.html",
   gop_y: "gop-y/index.html",
+  cs_bao_mat: "chinh-sach-bao-mat/index.html",
+  cs_game: "chinh-sach-game/index.html",
   khong_co: "404.html",
 };
 

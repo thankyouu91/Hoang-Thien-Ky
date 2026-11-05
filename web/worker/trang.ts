@@ -18,7 +18,7 @@ a{color:#8a1f16}
 </style></head><body><main><img class="an" src="/hinh/brand/dau_an_256.webp" width="112" height="112" alt=""><h1>Thiên Hoang Ký</h1>`;
 
 function trang(status: number, tieuDe: string, doan: string[]): Response {
-  const body = `${DAU}<h2>${tieuDe}</h2>${doan.map((d) => `<p>${d}</p>`).join("")}<small>Bản thử nghiệm kín, chưa phát hành.</small></main></body></html>`;
+  const body = `${DAU}<h2>${tieuDe}</h2>${doan.map((d) => `<p>${d}</p>`).join("")}<small>Game đang trong thời gian phát triển và open test.</small></main></body></html>`;
   return new Response(body, {
     status,
     headers: {

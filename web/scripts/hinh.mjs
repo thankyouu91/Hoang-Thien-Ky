@@ -190,6 +190,8 @@ const RIENG = [
   // Dấu ấn Thiên Hoang Ký (assets/brand, tab icon Canva) thay ô đỏ chữ Hán: logo đầu trang, ấn lớn đầu trang chủ, trang cổng.
   { src: join(BRAND, "dau_an_256.png"), out: "brand/dau_an_96.webp", kieu: "brand", rong: 96, ten: "Dấu ấn nhỏ" },
   { src: join(BRAND, "dau_an.png"), out: "brand/dau_an_256.webp", kieu: "brand", rong: 256, ten: "Dấu ấn" },
+  // Toàn cảnh Hạ vị diện (chụp bằng scripts/chup.mjs --chi=dai_luc --w=1440 --h=900) cho phần Thiên Hoang đại lục ở trang chủ.
+  { src: join(WEB, "anh-chup", "dai_luc.webp"), out: "rieng/dai_luc.webp", kieu: "brand", rong: 1600, ten: "Hạ vị diện" },
 ];
 const rieng = [];
 for (const a of RIENG) {
