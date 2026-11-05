@@ -346,8 +346,10 @@ export function gearStats(
     });
     for (const part of parts) {
       const v = statAmount(part.stat, part.gia_tri, factor, level);
-      if (FLAT.indexOf(part.stat) >= 0) out[part.stat as "hp" | "atk" | "def" | "manaMax"] += v;
-      else out.bonuses[part.stat as BuffStat] = (out.bonuses[part.stat as BuffStat] ?? 0) + v;
+      // "Hút máu" của chỉ số phụ là hút theo sát thương (như set), không phải tăng hút máu Cực âm của sim.
+      const stat = (part.stat === "lifesteal" ? "lifestealFlat" : part.stat) as BuffStat;
+      if (FLAT.indexOf(stat) >= 0) out[stat as "hp" | "atk" | "def" | "manaMax"] += v;
+      else out.bonuses[stat] = (out.bonuses[stat] ?? 0) + v;
     }
     if ((item.dongAn ?? []).length > 0) trangSuc.push(item);
     for (const line of item.kham) {

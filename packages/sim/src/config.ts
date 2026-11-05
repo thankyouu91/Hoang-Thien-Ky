@@ -186,9 +186,8 @@ export type BuffStat =
   | "defOuter" | "defInner" | "manaCostCut" | "manaDrain" | "reflect" | "damageTakenCut" | "hpRegen" | "innerDamage" | "lifestealFlat";
 
 /**
- * Loại sát thương theo loại chiêu (tab Trang bị, phần 14.2.1; đề xuất, chờ duyệt ở mục 20): đòn ngoại giảm theo thủ ngoại,
- * đòn nội giảm theo thủ nội, xuyên giáp bỏ qua phòng thủ đúng loại. Không đồ thì thủ ngoại = thủ nội = phòng thủ, trận không đổi.
- * Gộp lại một loại phòng thủ: rules đổi defOuter, defInner thành def, bảng này không còn tác dụng.
+ * Loại sát thương theo loại chiêu (GDD mục 8, người dùng duyệt 2026-11-05; khớp loai_chieu.json loai_sat_thuong): đòn ngoại giảm
+ * theo thủ ngoại, đòn nội giảm theo thủ nội, xuyên giáp bỏ qua phòng thủ đúng loại. Phòng thủ gốc: thủ ngoại = thủ nội = phòng thủ.
  */
 export const DAMAGE_KIND: Record<SkillType, "ngoai" | "noi" | null> = {
   can_don: "ngoai", can_quet: "ngoai", than_phap: "ngoai", tam_xa: "ngoai", ho_the: "ngoai",
