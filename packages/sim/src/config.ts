@@ -173,11 +173,35 @@ export const COUNTER_FLOOR = 1200;
  * shieldTaken: khiên nhận được; monsterDamage: sát thương lên dị thú và boss PvE; armorPen: cộng vào xuyên giáp Kim của công pháp;
  * paralyzeTicks: cộng tick vào tê liệt khi chí mạng của Lôi; formationTicks, channelTicks: cộng tick vào thời gian bày trận,
  * vận công diện rộng (âm là nhanh hơn, không dưới CAST_FLOOR).
+ * Set đồ 2.0 (tab Trang bị, phần 14; đề xuất): defOuter, defInner: thủ ngoại, thủ nội cộng trên phòng thủ gốc;
+ * manaCostCut: chiêu tốn ít mana hơn; manaDrain: mỗi đòn rút chừng này mana tối đa của mục tiêu về mình;
+ * reflect: phản sát thương cận chiến nhận được; damageTakenCut: giảm sát thương đòn đánh nhận vào, sau phòng thủ;
+ * hpRegen: hồi chừng này máu tối đa mỗi giây; innerDamage: sát thương chiêu nội; lifestealFlat: hút máu theo sát thương
+ * gây ra (khác lifesteal là tăng hút máu của công pháp Cực âm).
  */
 export type BuffStat =
   | "hp" | "atk" | "def" | "manaMax" | "damage" | "critBonus" | "critDamage" | "attackSpeed" | "cooldownCut"
   | "healPower" | "healTaken" | "lifesteal" | "resistPen" | "dot" | "controlTime"
-  | "shieldTaken" | "monsterDamage" | "armorPen" | "paralyzeTicks" | "formationTicks" | "channelTicks";
+  | "shieldTaken" | "monsterDamage" | "armorPen" | "paralyzeTicks" | "formationTicks" | "channelTicks"
+  | "defOuter" | "defInner" | "manaCostCut" | "manaDrain" | "reflect" | "damageTakenCut" | "hpRegen" | "innerDamage" | "lifestealFlat";
+
+/**
+ * Loại sát thương theo loại chiêu (tab Trang bị, phần 14.2.1; đề xuất, chờ duyệt ở mục 20): đòn ngoại giảm theo thủ ngoại,
+ * đòn nội giảm theo thủ nội, xuyên giáp bỏ qua phòng thủ đúng loại. Không đồ thì thủ ngoại = thủ nội = phòng thủ, trận không đổi.
+ * Gộp lại một loại phòng thủ: rules đổi defOuter, defInner thành def, bảng này không còn tác dụng.
+ */
+export const DAMAGE_KIND: Record<SkillType, "ngoai" | "noi" | null> = {
+  can_don: "ngoai", can_quet: "ngoai", than_phap: "ngoai", tam_xa: "ngoai", ho_the: "ngoai",
+  dien_rong: "noi", bua_chu: "noi", tran_phap: "noi", khong_che: "noi",
+  hoi_phuc: null,
+};
+
+/** Dòng ẩn của trang sức (tab Trang bị, phần 14.3.5): ngưỡng của các điều kiện trong trận (đề xuất). */
+export const HIDDEN_RULES = {
+  lowHpBelow: 500, // máu dưới 50%
+  openingTicks: 10 * SEC, // 10 giây đầu trận
+  lateTicks: 30 * SEC, // sau giây thứ 30
+};
 
 /**
  * Buff khi luyện đúng hệ (GDD mục 9), áp cho cả nhân vật, mỗi hệ một lần. Trùng hệ chủ quyển nhận đủ, trùng hệ phụ quyển nhận một nửa.
