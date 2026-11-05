@@ -1,16 +1,20 @@
 # admin/ — Admin Dashboard Thiên Hoang Ký
 
-Trang quản trị cho admin và ban vận hành của bản chơi thử (Cửa 1), chạy ở **https://admin.thienhoangky.fun**, sau Cloudflare Access. Chỉ admin và vận hành đăng nhập bằng Access. Người chơi thử vào game bằng **link mời** `https://thienhoangky.fun/moi/<mã>`, không qua Access và không có email.
+Trang quản trị cho admin và ban vận hành của bản chơi thử (Cửa 1), chạy ở **https://admin.thienhoangky.fun**.
+
+- **Admin và vận hành** đăng nhập bằng **tên đăng nhập và mật khẩu**. Người dùng chốt cách này ngày 2026-11-05, thay cho Cloudflare Access theo email.
+- **Người chơi thử** vào game bằng **link mời** `https://choi.thienhoangky.fun/moi/<mã>`, không có tài khoản.
 
 | Thư mục, file | Việc |
 |---|---|
 | `src/` | Giao diện (Vite + TypeScript, không framework), phong cách tranh giấy của dashboard game; token màu chép từ `proto/src/dashboard/tokens.css` |
-| `worker/` | Worker `thienhoangky-admin`: phục vụ giao diện và `/api/*`, xác minh JWT Access, chặn quyền ở server |
+| `worker/` | Worker `thienhoangky-admin`: phục vụ giao diện và `/api/*`, đăng nhập và phiên (`taiKhoan.ts`, `matKhau.ts`), chặn quyền ở server |
 | `shared/hopDong.ts` | Hợp đồng dữ liệu giữa giao diện và API, nhãn sự kiện `LOAI_SU_KIEN`, 8 bước FTUE, mốc GDD mục 19 |
 | `migrations/` | Bảng `qt_*` trong D1 `thienhoangky` (dùng chung với Worker game), bảng theo dõi riêng `d1_migrations_qt` |
-| `test/` | `jwt.test.ts` (xác minh JWT), `e2e.ts` (Worker thật trong wrangler dev, 52 phép kiểm), `dev.ts` (chạy thử trên máy) |
+| `scripts/tao-tai-khoan.ts` | Tạo tài khoản đầu tiên, hoặc đặt lại mật khẩu khi không còn Admin nào vào được |
+| `test/` | `jwt.test.ts` (lớp Access tùy chọn), `e2e.ts` (Worker thật trong wrangler dev, 57 phép kiểm), `dev.ts` (chạy thử trên máy) |
 
-Bảng game (`loi_moi`, `nguoi_choi_thu`, `su_kien`, `phan_hoi`), Worker game và các ứng dụng Access do `cloudflare/` giữ. Hợp đồng chung nằm ở `docs/api.md`.
+Bảng game (`loi_moi`, `nguoi_choi_thu`, `su_kien`, `phan_hoi`) và Worker game do `cloudflare/` giữ. Hợp đồng chung nằm ở `docs/api.md`.
 
 ## Hai vai trò
 
@@ -23,62 +27,59 @@ Bảng game (`loi_moi`, `nguoi_choi_thu`, `su_kien`, `phan_hoi`), Worker game v�
 | Phản hồi: lọc, gắn trạng thái, ghi chú nội bộ | ✓ | ✓ |
 | Thông báo ở Động phủ: soạn, hẹn giờ, sửa, gỡ | ✓ | ✓ |
 | Cấu hình sống (cả xem) | ✓ | 403 |
-| Phân quyền (cả xem) | ✓ | 403 |
+| Tài khoản: tạo, đổi vai trò, đặt lại mật khẩu, khóa, xóa (cả xem) | ✓ | 403 |
 | Nhật ký quản trị | ✓ | ✓ |
+| Tự đổi mật khẩu của mình | ✓ | ✓ |
 
-Quyền chặn ở server: mỗi yêu cầu, Worker lấy email từ JWT đã xác minh rồi tra vai trò trong D1. Giao diện chỉ ẩn nút cho gọn; gõ thẳng đường dẫn hay gọi API vẫn nhận 403.
+Quyền chặn ở server: mỗi yêu cầu, Worker tìm phiên theo cookie rồi lấy vai trò của tài khoản trong D1. Giao diện chỉ ẩn nút cho gọn; gõ thẳng đường dẫn hay gọi API vẫn nhận 403.
 
-**Admin gốc** là các email trong biến `ADMIN_GOC` (`wrangler.jsonc`). Họ luôn là Admin, và giao diện không sửa hay thu quyền được, nên không ai tự khóa mình ra ngoài được.
+## Lần đăng nhập đầu: tài khoản `admin`
+
+Tài khoản đầu tiên không nằm trong migration. Nó được tạo bằng script, để mật khẩu không bao giờ vào git:
+
+```
+cd admin
+node scripts/tao-tai-khoan.ts admin admin --ghi <file mật khẩu>   # sinh .tmp/tai-khoan-admin.sql (chỉ có mật khẩu băm) và ghi mật khẩu tạm vào <file>
+npx.cmd wrangler d1 execute thienhoangky --remote --file .tmp/tai-khoan-admin.sql
+```
+
+1. Mở https://admin.thienhoangky.fun và đăng nhập `admin` bằng mật khẩu tạm.
+2. Trang bắt đổi mật khẩu ngay: ít nhất 12 ký tự, không chứa tên đăng nhập. Một câu dài dễ nhớ là tốt.
+3. Đổi xong thì xóa file mật khẩu tạm.
+
+**Quên mật khẩu:** nhờ một Admin khác vào **Tài khoản → Đặt lại mật khẩu**. Nếu không còn Admin nào vào được, chạy lại hai lệnh trên với tên tài khoản đó. Script đặt mật khẩu tạm mới, mở khóa tài khoản và đăng xuất mọi phiên của nó.
 
 ## Thêm Admin hoặc Vận hành
 
-Mỗi người cần hai thứ: **qua được cổng Access** của admin.thienhoangky.fun, và **có vai trò** trong admin.
+1. Admin vào **Tài khoản → Tạo tài khoản**: nhập tên đăng nhập (3–32 ký tự: chữ thường không dấu, số, `.` `_` `-`), chọn **Vận hành** hoặc **Admin**.
+2. Màn hiện **mật khẩu tạm một lần duy nhất**. Gửi cho người nhận qua kênh riêng, không dán vào nhóm chat chung.
+3. Người nhận đăng nhập và phải đặt mật khẩu của mình trước khi dùng các màn khác.
 
-1. **Cho email vào cổng Access.** Vào Zero Trust (one.dash.cloudflare.com) → Access controls:
-   - nếu policy của ứng dụng **Thiên Hoang Ký – quản trị** dùng Access group **THK quan tri**: vào Access groups → THK quan tri → Include → Emails → thêm email → Save;
-   - nếu policy ghi thẳng email: vào Applications → Thiên Hoang Ký – quản trị → Policies → thêm email vào Include → Emails.
+Trên màn Tài khoản còn có:
+- **đổi vai trò**: có hiệu lực ngay từ yêu cầu kế tiếp của người đó;
+- **đặt lại mật khẩu**: tạo mật khẩu tạm mới và đăng xuất mọi phiên của tài khoản;
+- **khóa**: đăng xuất ngay và không cho đăng nhập lại;
+- **xóa**: nhật ký cũ vẫn giữ tên tài khoản.
 
-   Màn **Phân quyền** có nút **Chép N email**, chép đúng danh sách cần có: Admin gốc cộng mọi email đã phân quyền. Đã nối đồng bộ (mục [Đồng bộ Access](#đồng-bộ-access-không-bắt-buộc)) thì bỏ qua bước này.
-2. **Đặt vai trò.** Đăng nhập admin bằng tài khoản Admin → **Phân quyền** → nhập email, chọn **Vận hành** hoặc **Admin** → **Lưu vai trò**.
-3. Người đó mở https://admin.thienhoangky.fun, nhập email, rồi nhập mã 6 số Cloudflare gửi tới hộp thư. Thư đến từ `noreply@notify.cloudflare.com`, có khi rơi vào spam.
-
-Thứ tự nào cũng được. Người qua Access mà chưa có vai trò thấy trang "Chưa được phân quyền", và mọi API trả 403.
-
-**Thu quyền:** Phân quyền → **Thu quyền**. Admin chặn email đó ngay từ yêu cầu kế tiếp. Sau đó bỏ email khỏi Access; phiên Access đang mở còn hiệu lực tới khi hết hạn, nhưng không còn làm được gì trong admin.
-
-**Thêm hoặc đổi Admin gốc:** sửa `ADMIN_GOC` trong `wrangler.jsonc` (nhiều email thì cách nhau dấu phẩy), deploy lại, và thêm email đó vào Access.
-
-Zero Trust Free cho tối đa 50 người dùng. Vì người chơi thử không qua Access, 50 chỗ này chỉ dành cho admin và vận hành.
+Không ai tự khóa, tự hạ quyền hay tự xóa chính mình được, và server luôn giữ ít nhất một Admin đang hoạt động.
 
 ## Người chơi thử và link mời
 
 - **Tạo link** (Admin): màn **Người chơi thử** → Tạo link mời. Đặt tên (để biết link phát ở đâu), số người tối đa và hạn dùng; hai mục sau để trống là không giới hạn. Server sinh mã ngẫu nhiên 12 ký tự.
-- **Tên miền của link:** link ghép từ biến `GAME_ORIGIN` trong `wrangler.jsonc` (hiện là `https://choi.thienhoangky.fun`, chốt 2026-11-05), theo dạng `GAME_ORIGIN/moi/<mã>`. Nếu sau này game dời tên miền nữa, đổi dòng đó rồi deploy lại admin. Mã link nằm trong D1 nên không đổi; chỉ phần tên miền hiện và chép trong admin đổi theo. Link cũ đã gửi đi vẫn trỏ tên miền cũ, nên Worker game cần chuyển hướng từ tên miền cũ.
-- Gửi link cho nhóm chơi thử. Mỗi trình duyệt mở link khi link còn mở trở thành một người chơi thử, có mã 10 ký tự, và giữ cookie vào game 180 ngày (do Worker game cấp).
+- **Tên miền của link:** link ghép từ biến `GAME_ORIGIN` trong `wrangler.jsonc` (hiện là `https://choi.thienhoangky.fun`), theo dạng `GAME_ORIGIN/moi/<mã>`. Game dời tên miền thì đổi dòng đó rồi deploy lại admin. Link đã gửi trước đó do trang ở tên miền cũ chuyển hướng sang tên miền mới.
+- Mỗi trình duyệt mở link khi link còn mở trở thành một người chơi thử, có mã 10 ký tự, và giữ cookie vào game 180 ngày (do Worker game cấp).
 - **Tắt link, hết lượt, hết hạn:** người mới mở link sẽ không vào được. Người đã vào vẫn chơi tiếp.
 - **Khóa người chơi** (Admin): ghi `nguoi_choi_thu.khoa = 1`. Worker game chặn trình duyệt đó ngay ở lần tải trang hoặc lần gọi API kế tiếp. Tiến độ trong trình duyệt của họ không bị xóa.
-- **Ghi chú** (cả hai vai trò): lưu ở `qt_ghi_chu_nguoi_choi`, chỉ admin và vận hành thấy. Không ghi thông tin định danh nếu không cần.
+- **Ghi chú** (cả hai vai trò): lưu ở `qt_ghi_chu_nguoi_choi`, chỉ admin và vận hành thấy.
 - Sự kiện game là ẩn danh (`an_danh` theo trình duyệt). FTUE, D1/D7 và người mỗi ngày đếm theo máy. Lần đầu, lần cuối và số phiên của từng người chơi thử lấy từ `nguoi_choi_thu`.
-
-## Đồng bộ Access (không bắt buộc)
-
-Chỉ áp dụng cho nhóm quản trị. Muốn Worker tự ghi danh sách Admin và Vận hành vào Access group **THK quan tri** sau mỗi lần phân quyền hay thu quyền:
-
-1. Policy của ứng dụng quản trị include Access group `THK quan tri` (tab deploy dựng sẵn khi tạo Access).
-2. Tạo API token ở dash.cloudflare.com → My Profile → API Tokens → Create Custom Token. Quyền: **Account → Access: Organizations, Identity Providers, and Groups → Edit**, chỉ cho tài khoản này, không thêm quyền khác.
-3. Trong `wrangler.jsonc` → `vars`, điền `CF_ACCOUNT_ID` và `ACCESS_GROUP_QUAN_TRI` (id group nằm trên URL trang group). Token là secret:
-   ```
-   npx.cmd wrangler secret put CF_API_TOKEN
-   ```
-4. Deploy lại. Khung Access ở màn Phân quyền đổi thành "Tự đồng bộ", và có nút **Đồng bộ lại**.
-
-Mỗi lần đồng bộ, Worker ghi đè toàn bộ Include của group bằng `ADMIN_GOC` cộng `qt_vai_tro`. Danh sách rỗng (chưa đặt `ADMIN_GOC`) thì không ghi.
 
 ## Hợp đồng với Worker game
 
 Admin **ghi** vào bảng game:
 - `loi_moi`: thêm, sửa `ten`, `toi_da`, `het_han`, `tat`, cùng `sua_boi` và `sua_luc`;
 - `nguoi_choi_thu`: chỉ các cột `khoa`, `ly_do_khoa`, `sua_boi`, `sua_luc`.
+
+Cột `*_boi` là tên đăng nhập của tài khoản quản trị.
 
 Admin **đọc** `nguoi_choi_thu` (không bao giờ đọc `the_hash`), `su_kien` và `phan_hoi`. Trạng thái xử lý phản hồi nằm ở `qt_phan_hoi_xu_ly`, nối qua `phan_hoi_id = CAST(id AS TEXT)`.
 
@@ -96,60 +97,65 @@ SELECT khoa, gia_tri FROM qt_cau_hinh;   -- gia_tri là JSON
 
 ## Bảo mật
 
-- **Mọi yêu cầu, kể cả file tĩnh,** đều qua Worker (`run_worker_first`). Worker kiểm JWT trong `Cf-Access-Jwt-Assertion`:
-  - chữ ký RS256 theo khóa của team;
-  - `aud` của ứng dụng admin;
-  - `iss` và hạn dùng;
-  - có `email`, nên service token bị từ chối.
-
-  Thiếu `ACCESS_TEAM_DOMAIN` hoặc `ACCESS_AUD` thì trả 503. Không có lối tắt bỏ qua JWT, kể cả khi chạy cục bộ.
-- `workers_dev: false` và `preview_urls: false`: chỉ vào được qua admin.thienhoangky.fun.
-- Chống CSRF: `POST` phải cùng `Origin` và là JSON. CSP chặt (`script-src 'self'`, `frame-ancestors 'none'`), `Cache-Control: no-store`.
-- **Email của admin và vận hành là dữ liệu cá nhân:**
-  - không nằm trong URL, vì thao tác theo email gửi qua thân POST;
-  - không `console.log`;
-  - Workers Logs tắt invocation log (`observability.logs.invocation_logs: false`).
-
-  Nơi duy nhất ngoài bảng `qt_vai_tro` có email là nhật ký quản trị (`qt_nhat_ky`). "Liên hệ" trong phản hồi do người chơi tự để lại, và chỉ người có vai trò mới thấy.
-- **"Xem như Vận hành"** (Admin bật ở thanh bên): giao diện gửi header `X-Xem-Nhu: van_hanh`, và server hạ quyền cho các yêu cầu đó. Header chỉ hạ quyền, không bao giờ nâng. Dùng để thử việc chặn mà không cần email thứ hai.
+- **Mật khẩu:**
+  - băm bằng PBKDF2-SHA256 với muối riêng từng tài khoản, 30.000 vòng (`worker/matKhau.ts`);
+  - không lưu, không log mật khẩu thô;
+  - mật khẩu tạm có 16 ký tự ngẫu nhiên, và người nhận phải đổi ở lần đăng nhập đầu;
+  - mật khẩu tự đặt có ít nhất 12 ký tự và không chứa tên đăng nhập.
+- **Phiên:**
+  - cookie `__Host-qt` (HttpOnly, Secure, SameSite=Strict, Path=/) giữ mã ngẫu nhiên 32 byte; D1 chỉ lưu SHA-256 của mã đó;
+  - hết hạn sau 12 giờ;
+  - đăng xuất, đổi mật khẩu, đặt lại mật khẩu hay khóa tài khoản đều xóa phiên tương ứng.
+- **Chống dò mật khẩu:**
+  - sai 5 lần liền thì tài khoản tạm khóa 15 phút;
+  - một IP sai quá 20 lần trong 15 phút thì bị chặn (429); IP chỉ lưu dạng băm;
+  - sai mật khẩu và sai tên đăng nhập trả cùng một câu, trong cùng một khoảng thời gian.
+- **Chống CSRF:** `POST`, kể cả đăng nhập, phải cùng `Origin` và là JSON; cookie SameSite=Strict. CSP chặt (`script-src 'self'`, `frame-ancestors 'none'`), `Cache-Control: no-store`.
+- **Không có địa chỉ phụ:** `workers_dev: false` và `preview_urls: false`, chỉ vào được qua admin.thienhoangky.fun.
+- **Log:** Workers Logs tắt invocation log. Worker không log mật khẩu, mã phiên hay thân yêu cầu. "Liên hệ" trong phản hồi do người chơi tự để lại, và chỉ người có vai trò mới thấy.
+- **"Xem như Vận hành"** (Admin bật ở thanh bên): giao diện gửi header `X-Xem-Nhu: van_hanh`, và server hạ quyền cho các yêu cầu đó. Header chỉ hạ quyền, không bao giờ nâng. Dùng để thử việc chặn mà không cần tài khoản thứ hai.
+- **Lớp Cloudflare Access bên ngoài (không bắt buộc):** đặt cả `ACCESS_TEAM_DOMAIN` và `ACCESS_AUD` trong `wrangler.jsonc`. Khi đó mọi yêu cầu, kể cả trang đăng nhập, phải qua Access trước, rồi mới tới mật khẩu. Đặt thiếu một trong hai thì Worker trả 503, không chạy với cấu hình nửa vời.
 
 ## Chạy ở máy
 
 ```
 cd admin
 npm.cmd install
-npm.cmd run dev              # http://127.0.0.1:5180, Admin gốc admin@example.com; số liệu game là mẫu
+npm.cmd run dev              # http://127.0.0.1:5180; số liệu game là mẫu
 node test/dev.ts --bang-game # chạy thêm migration game để thử tạo link mời, khóa thật
-node test/dev.ts --van-hanh  # vào với quyền Vận hành
 npm.cmd test                 # test JWT, build, rồi e2e trên wrangler dev
 ```
 
-`test/dev.ts` dựng máy chủ khóa giả, chạy Worker thật bằng wrangler dev với D1 cục bộ, rồi chạy Vite. Vite chuyển `/api` sang wrangler kèm JWT ký bằng khóa giả. Đổi migration `qt_*` thì xóa `.wrangler/state` để tạo lại D1 cục bộ.
+`test/dev.ts` chạy Worker thật bằng wrangler dev với D1 cục bộ, rồi chạy Vite (Vite chuyển `/api` sang wrangler). Lần đầu nó tạo hai tài khoản thử **chỉ có trong D1 cục bộ**:
+- `admin` (Admin) và `vanhanh` (Vận hành);
+- mật khẩu chung `mat-khau-thu-cuc-bo`.
+
+Đổi migration `qt_*` thì xóa `.wrangler/state` để tạo lại D1 cục bộ.
 
 ## Deploy
-
-Thứ tự:
-
-1. Đã có ứng dụng Access cho `admin.thienhoangky.fun`. Team `jolly-water-a8bd.cloudflareaccess.com` đã điền sẵn.
-2. Điền `ACCESS_AUD` và `ADMIN_GOC` trong `wrangler.jsonc`.
-3. Chạy:
 
 ```
 cd admin
 npm.cmd ci
-npx.cmd wrangler d1 migrations apply thienhoangky --remote   # tạo bảng qt_* (lần đầu, và khi có migration mới)
-npm.cmd run deploy                                         # check + build + wrangler deploy (gắn tên miền admin.thienhoangky.fun)
+npx.cmd wrangler d1 migrations apply thienhoangky --remote                    # tạo bảng qt_* (lần đầu, và khi có migration mới)
+npx.cmd wrangler d1 execute thienhoangky --remote --file .tmp/tai-khoan-admin.sql   # chỉ lần đầu: tài khoản admin (xem mục trên)
+npm.cmd run deploy                                                          # check + build + wrangler deploy (gắn tên miền admin.thienhoangky.fun)
 ```
 
-Phải có ứng dụng Access trước khi gắn tên miền. Kể cả khi Access tạm thiếu, Worker vẫn trả 401 hoặc 503, nên giao diện không lộ.
+Trước khi có tài khoản, trang chỉ hiện màn đăng nhập, và mọi API dữ liệu trả 401.
 
 ## Đã chọn và vì sao
 
-- **Worker riêng `thienhoangky-admin`, không gộp vào Worker game.** Ứng dụng Access riêng có `aud` riêng. Hai bên deploy không giẫm nhau, và Worker game không mang mã quản trị.
+- **Tên + mật khẩu thay Access theo email:** người dùng chốt ngày 2026-11-05. Lớp Access vẫn bật lại được bằng hai biến, nếu muốn thêm một cổng bên ngoài.
+- **PBKDF2 30.000 vòng, không phải 100.000:**
+  - gói Workers Free cho 10 ms CPU mỗi yêu cầu;
+  - đo trên máy dev, 30.000 vòng mất khoảng 5 ms, còn 100.000 vòng mất khoảng 16 ms;
+  - số vòng nằm trong chuỗi băm của từng tài khoản. Lên gói trả phí thì nâng `VONG` trong `worker/matKhau.ts` (trần của workerd là 100.000); mật khẩu cũ được băm lại ở lần đăng nhập đúng kế tiếp.
+- **Tài khoản đầu tạo bằng script, không nằm trong migration:** repo công khai, nên không đưa mật khẩu, kể cả bản băm, vào git.
+- **Worker riêng `thienhoangky-admin`, không gộp vào Worker game.** Hai bên deploy không giẫm nhau, và Worker game không mang mã quản trị.
 - **Bảng `qt_*` có migration riêng** (`migrations_table: d1_migrations_qt`): mỗi bên tự chạy migration của mình trên cùng D1.
-- **Tạo, sửa, tắt link và khóa người chơi chỉ Admin làm.** Mấy việc này đổi ai được vào game, gần với phân quyền. Vận hành vẫn xem, chép link và ghi chú được.
-- **Mã link do server sinh** (12 ký tự, bỏ các chữ dễ nhầm `l`, `o`, `0`, `1`), không cho tự đặt, để link khó đoán.
-- **Không tự đổi vai trò của chính mình, và không sửa Admin gốc từ giao diện**, để không ai lỡ tay khóa hết Admin.
+- **Tạo, sửa, tắt link và khóa người chơi chỉ Admin làm.** Mấy việc này đổi ai được vào game. Vận hành vẫn xem, chép link và ghi chú được.
+- **Mã link do server sinh** (12 ký tự, bỏ các chữ dễ nhầm), không cho tự đặt, để link khó đoán.
 - **Cấu hình sống là 7 tham số đề xuất:**
   - tốc độ kinh tế;
   - hệ số tua thời gian;

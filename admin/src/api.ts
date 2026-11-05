@@ -1,5 +1,5 @@
-// Gọi API admin cùng nguồn. Cookie Access đi kèm tự động; Access thêm JWT ở edge, Worker xác minh.
-// "Xem như Vận hành" gửi header X-Xem-Nhu để server tự hạ quyền: thử được việc chặn ở server mà không cần email thứ hai.
+// Gọi API admin cùng nguồn. Cookie phiên __Host-qt đi kèm tự động (và cookie Access nếu bật lớp Access bên ngoài).
+// "Xem như Vận hành" gửi header X-Xem-Nhu để server tự hạ quyền: thử được việc chặn ở server mà không cần tài khoản thứ hai.
 
 let xemNhuVanHanh = false;
 try {
@@ -39,8 +39,10 @@ async function goi<T>(method: "GET" | "POST", path: string, body?: unknown): Pro
   } catch {
     throw new ApiLoi(0, "Không gọi được máy chủ admin. Kiểm tra mạng rồi thử lại.");
   }
-  // Phiên Access hết hạn: Access trả chuyển hướng tới trang đăng nhập (opaqueredirect với redirect: "manual").
-  if (res.type === "opaqueredirect" || res.status === 0) throw new ApiLoi(401, "Phiên đăng nhập Access đã hết. Tải lại trang để đăng nhập lại.");
+  // Có lớp Access bên ngoài mà phiên Access hết hạn: Access trả chuyển hướng (opaqueredirect với redirect: "manual").
+  if (res.type === "opaqueredirect" || res.status === 0) throw new ApiLoi(401, "Phiên Access đã hết. Tải lại trang để đăng nhập lại.");
+  // Phiên admin hết hạn giữa chừng: báo khung để hiện lại màn đăng nhập (trừ chính lời gọi đăng nhập, xem mình, đổi mật khẩu).
+  if (res.status === 401 && !["/api/dang-nhap", "/api/toi", "/api/doi-mat-khau"].includes(path)) window.dispatchEvent(new Event("qt:het-phien"));
   const text = await res.text();
   let data: unknown = null;
   try {

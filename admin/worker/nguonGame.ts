@@ -219,13 +219,13 @@ export async function dsPhanHoi(db: D1Database, q: { trangThai?: TrangThaiPhanHo
 
   const [xl, gc] = await db.batch([
     db.prepare("SELECT phan_hoi_id, trang_thai, sua_boi, sua_luc FROM qt_phan_hoi_xu_ly"),
-    db.prepare("SELECT phan_hoi_id, email, noi_dung, luc FROM qt_phan_hoi_ghi_chu ORDER BY luc"),
+    db.prepare("SELECT phan_hoi_id, nguoi, noi_dung, luc FROM qt_phan_hoi_ghi_chu ORDER BY luc"),
   ]);
   const xuLy = new Map((xl.results as { phan_hoi_id: string; trang_thai: TrangThaiPhanHoi; sua_boi: string; sua_luc: number }[]).map((r) => [r.phan_hoi_id, r]));
   const ghiChu = new Map<string, PhanHoi["ghi_chu"]>();
-  for (const r of gc.results as { phan_hoi_id: string; email: string; noi_dung: string; luc: number }[]) {
+  for (const r of gc.results as { phan_hoi_id: string; nguoi: string; noi_dung: string; luc: number }[]) {
     const a = ghiChu.get(r.phan_hoi_id) ?? [];
-    a.push({ email: r.email, noi_dung: r.noi_dung, luc: r.luc });
+    a.push({ nguoi: r.nguoi, noi_dung: r.noi_dung, luc: r.luc });
     ghiChu.set(r.phan_hoi_id, a);
   }
   let dong: PhanHoi[] = goc.map((p) => {
@@ -363,9 +363,9 @@ async function nguoiChoiMau(db: D1Database, now: number): Promise<Omit<DsNguoiCh
   const r = rng(11);
   const ngay = 86400 * 1000;
   const link: LoiMoi[] = [
-    { ma: "maumoi-discord1", ten: "Discord đợt 1 (mẫu)", toi_da: 30, da_dung: 18, het_han: now + 9 * ngay, tat: false, tao_boi: "admin@example.com", tao_luc: now - 6 * ngay, sua_boi: null, sua_luc: null },
-    { ma: "maumoi-banbe00", ten: "Bạn bè (mẫu)", toi_da: null, da_dung: 6, het_han: null, tat: false, tao_boi: "admin@example.com", tao_luc: now - 5 * ngay, sua_boi: null, sua_luc: null },
-    { ma: "maumoi-cu00000", ten: "Link cũ đã tắt (mẫu)", toi_da: 10, da_dung: 10, het_han: null, tat: true, tao_boi: "admin@example.com", tao_luc: now - 12 * ngay, sua_boi: "admin@example.com", sua_luc: now - 6 * ngay },
+    { ma: "maumoi-discord1", ten: "Discord đợt 1 (mẫu)", toi_da: 30, da_dung: 18, het_han: now + 9 * ngay, tat: false, tao_boi: "admin", tao_luc: now - 6 * ngay, sua_boi: null, sua_luc: null },
+    { ma: "maumoi-banbe00", ten: "Bạn bè (mẫu)", toi_da: null, da_dung: 6, het_han: null, tat: false, tao_boi: "admin", tao_luc: now - 5 * ngay, sua_boi: null, sua_luc: null },
+    { ma: "maumoi-cu00000", ten: "Link cũ đã tắt (mẫu)", toi_da: 10, da_dung: 10, het_han: null, tat: true, tao_boi: "admin", tao_luc: now - 12 * ngay, sua_boi: "admin", sua_luc: now - 6 * ngay },
   ].map((l) => ({ ...l, trang_thai: trangThaiLink(l, now) }));
   let ghiChu = new Map<string, string>();
   try {
@@ -384,7 +384,7 @@ async function nguoiChoiMau(db: D1Database, now: number): Promise<Omit<DsNguoiCh
       so_phien: 1 + Math.floor(r() * 14),
       khoa: i === 7,
       ly_do_khoa: i === 7 ? "spam phản hồi (mẫu)" : null,
-      sua_boi: i === 7 ? "admin@example.com" : null,
+      sua_boi: i === 7 ? "admin" : null,
       sua_luc: i === 7 ? now - ngay : null,
       ghi_chu: ghiChu.get(id) ?? null,
       so_phan_hoi: i % 5 === 2 ? 1 : 0,

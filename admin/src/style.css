@@ -214,7 +214,7 @@ table.tbl pre { margin: 0; font: 12px/1.35 ui-monospace, Consolas, monospace; wh
 label.f { display: grid; gap: 4px; font-size: var(--fs-sm); color: var(--c-ink-2); }
 label.f > span { font-weight: 600; }
 label.f > small { color: var(--c-ink-3); }
-input[type="text"], input[type="email"], input[type="number"], input[type="datetime-local"], input[type="search"], select, textarea {
+input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="datetime-local"], input[type="search"], select, textarea {
   width: 100%; min-height: 38px; padding: 6px 10px; border: 0; border-radius: 2px;
   background: var(--c-raised); box-shadow: inset 0 0 0 1px var(--c-line-2); font-size: 15px;
 }
@@ -246,9 +246,9 @@ label.check input { width: 18px; height: 18px; accent-color: var(--c-accent); }
 .tb-xem b { display: block; font-family: var(--font-display); font-size: 18px; color: var(--c-accent-ink); }
 
 /* ---- Hộp thoại, thông báo nổi ---------------------------------------------------------------------------- */
-dialog.dlg { width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 0; border: 0; background: transparent; color: inherit; overflow: visible; }
+dialog.dlg { width: min(572px, calc(100vw - 12px)); max-height: calc(100dvh - 12px); padding: 6px; border: 0; background: transparent; color: inherit; overflow: auto; }
 dialog.dlg::backdrop { background: var(--c-scrim); }
-dialog.dlg > .panel { margin: 5px; max-height: calc(100dvh - 34px); overflow: auto; }
+dialog.dlg > .panel { margin: 0; }
 dialog.dlg header { display: flex; align-items: center; gap: var(--sp-2); }
 dialog.dlg header h2 { flex: 1; font-family: var(--font-display); font-size: 22px; color: var(--c-accent-ink); }
 .x { width: 36px; height: 36px; border: 0; border-radius: 50%; background: none; color: var(--c-ink-2); font-size: 22px; line-height: 1; }
@@ -264,3 +264,13 @@ code, kbd { font: 13px/1.3 ui-monospace, Consolas, monospace; padding: 1px 4px; 
 ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; font-size: 14px; }
 /* Điện thoại: thanh trên chỉ giữ dấu ấn để chừa chỗ cho menu cuộn ngang. */
 @media (max-width: 959px) { .brand > span:last-child { display: none; } }
+
+/* ---- Đăng nhập, đổi mật khẩu bắt buộc ------------------------------------------------------------------------- */
+.dang-nhap { min-height: 100dvh; display: grid; place-items: center; padding: 16px; }
+.dang-nhap > .panel { width: min(400px, 100%); gap: var(--sp-4); }
+.dang-nhap .brand { padding: 0 0 var(--sp-3); border-bottom: 1px solid var(--c-line); }
+.dang-nhap .brand b { font-size: 24px; }
+.an.lon { width: 44px; height: 44px; font-size: 19px; }
+.loi-dn { margin: 0; padding: 6px 10px; border-left: 2px solid var(--c-accent); background: var(--c-accent-soft); color: var(--c-accent-ink); font-size: var(--fs-sm); }
+.who-box .link { font-size: var(--fs-sm); font-weight: 500; }
+.dang-nhap .brand > span:last-child { display: block; }

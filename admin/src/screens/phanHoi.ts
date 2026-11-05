@@ -101,7 +101,7 @@ function the(p: PhanHoi): string {
     ${p.lien_he ? `<p class="note" style="margin-top:4px">Liên hệ người chơi để lại: <b>${esc(p.lien_he)}</b></p>` : ""}
     ${
       p.ghi_chu.length || p.sua_boi
-        ? `<div class="notes">${p.ghi_chu.map((g) => `<p><b>${esc(g.email)}</b> <small>${gio(g.luc)}</small><br>${esc(g.noi_dung)}</p>`).join("")}
+        ? `<div class="notes">${p.ghi_chu.map((g) => `<p><b>${esc(g.nguoi)}</b> <small>${gio(g.luc)}</small><br>${esc(g.noi_dung)}</p>`).join("")}
       ${p.sua_boi ? `<p class="muted" style="margin:0">Trạng thái do ${esc(p.sua_boi)} đặt lúc ${gio(p.sua_luc)}</p>` : ""}</div>`
         : ""
     }

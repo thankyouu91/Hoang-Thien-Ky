@@ -9,13 +9,15 @@ export const TEN_VAI_TRO: Record<VaiTro, string> = { admin: "Admin", van_hanh: "
 export type Nguon = "that" | "mau";
 
 export interface Toi {
-  email: string;
+  /** Tên đăng nhập. */
+  ten: string;
   /** Vai trò đang dùng cho yêu cầu này (Admin bật "Xem như Vận hành" thì là van_hanh). */
   vai_tro: VaiTro;
   vai_tro_that: VaiTro;
-  admin_goc: boolean;
-  /** Team Access và việc đồng bộ group quản trị đã nối chưa (để màn Phân quyền hiện hướng dẫn làm tay). */
-  access: { team: string; dong_bo_quan_tri: boolean };
+  /** true: phải đổi mật khẩu trước khi dùng các màn khác (lần đăng nhập đầu, hoặc sau khi Admin đặt lại). */
+  phai_doi_mat_khau: boolean;
+  /** Phiên hết hạn lúc nào (ms). */
+  het_han: number;
 }
 
 // ---- Tổng quan --------------------------------------------------------------------------------------------------
@@ -144,16 +146,6 @@ export interface DsNguoiChoi {
   dong: NguoiChoi[];
 }
 
-export interface DongBo {
-  nhom: "quan_tri";
-  /** false: chưa có API token và group id, admin cập nhật Access bằng tay. */
-  da_noi: boolean;
-  luc: number | null;
-  ok: boolean | null;
-  so_email: number | null;
-  loi: string | null;
-}
-
 // ---- Phản hồi ----------------------------------------------------------------------------------------------------
 
 export type TrangThaiPhanHoi = "moi" | "dang_xem" | "da_xu_ly";
@@ -176,7 +168,7 @@ export interface PhanHoi {
   trang_thai: TrangThaiPhanHoi;
   sua_boi: string | null;
   sua_luc: number | null;
-  ghi_chu: { email: string; noi_dung: string; luc: number }[];
+  ghi_chu: { nguoi: string; noi_dung: string; luc: number }[];
 }
 
 export interface DsPhanHoi {
@@ -240,27 +232,37 @@ export interface CauHinh {
   lich_su: LichSuCauHinh[];
 }
 
-// ---- Phân quyền và nhật ký ---------------------------------------------------------------------------------------
+// ---- Tài khoản quản trị và nhật ký -------------------------------------------------------------------------------
 
-export interface DongVaiTro {
-  email: string;
+export interface TaiKhoan {
+  ten: string;
   vai_tro: VaiTro;
+  khoa: boolean;
+  phai_doi: boolean;
   ghi_chu: string | null;
-  goc: boolean;
-  them_boi: string | null;
-  them_luc: number | null;
+  dang_nhap_cuoi: number | null;
+  doi_mat_khau_luc: number | null;
+  /** Đang tạm khóa vì sai mật khẩu nhiều lần (ms), hoặc null. */
+  tam_khoa_den: number | null;
+  so_phien: number;
+  tao_boi: string;
+  tao_luc: number;
 }
 
-export interface DsVaiTro {
-  dong: DongVaiTro[];
-  dong_bo: DongBo;
-  danh_sach_access: string[];
+export interface DsTaiKhoan {
+  dong: TaiKhoan[];
+}
+
+/** Trả về khi tạo tài khoản hoặc đặt lại mật khẩu: mật khẩu tạm chỉ hiện một lần cho Admin, người nhận phải đổi khi đăng nhập. */
+export interface MatKhauTam {
+  ten: string;
+  mat_khau_tam: string;
 }
 
 export interface NhatKy {
   id: number;
   luc: number;
-  email: string;
+  nguoi: string;
   vai_tro: VaiTro;
   hanh_dong: string;
   doi_tuong: string | null;
@@ -282,7 +284,13 @@ export const TEN_HANH_DONG: Record<string, string> = {
   "thong_bao.sua": "Sửa thông báo",
   "thong_bao.go": "Gỡ thông báo",
   "cau_hinh.doi": "Đổi cấu hình",
-  "vai_tro.dat": "Phân quyền",
-  "vai_tro.xoa": "Thu quyền",
-  "access.dong_bo": "Đồng bộ Access",
+  "phien.dang_nhap": "Đăng nhập",
+  "phien.dang_xuat": "Đăng xuất",
+  "phien.doi_mat_khau": "Đổi mật khẩu",
+  "tai_khoan.tao": "Tạo tài khoản",
+  "tai_khoan.sua": "Đổi vai trò, ghi chú",
+  "tai_khoan.dat_lai": "Đặt lại mật khẩu",
+  "tai_khoan.khoa": "Khóa tài khoản",
+  "tai_khoan.mo_khoa": "Mở khóa tài khoản",
+  "tai_khoan.xoa": "Xóa tài khoản",
 };

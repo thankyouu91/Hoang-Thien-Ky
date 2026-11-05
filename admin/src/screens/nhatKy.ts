@@ -1,4 +1,4 @@
-// Nhật ký quản trị: ai làm gì, lúc nào. Nơi duy nhất ghi email người làm (ngoài bảng dữ liệu).
+// Nhật ký quản trị: ai (tên đăng nhập) làm gì, lúc nào.
 
 import type { NhatKy } from "../../shared/hopDong.ts";
 import { TEN_HANH_DONG, TEN_VAI_TRO } from "../../shared/hopDong.ts";
@@ -12,8 +12,8 @@ const NHOM: [string, string][] = [
   ["phan_hoi", "Phản hồi"],
   ["thong_bao", "Thông báo"],
   ["cau_hinh", "Cấu hình"],
-  ["vai_tro", "Phân quyền"],
-  ["access", "Access"],
+  ["tai_khoan", "Tài khoản"],
+  ["phien", "Đăng nhập"],
 ];
 
 export const manNhatKy: Man = {
@@ -41,7 +41,7 @@ export const manNhatKy: Man = {
         ${
           dong
             .map(
-              (x) => `<tr><td class="nowrap">${gio(x.luc)}</td><td><span class="email">${esc(x.email)}</span><br><span class="muted">${TEN_VAI_TRO[x.vai_tro] ?? esc(x.vai_tro)}</span></td>
+              (x) => `<tr><td class="nowrap">${gio(x.luc)}</td><td><span class="email">${esc(x.nguoi)}</span><br><span class="muted">${TEN_VAI_TRO[x.vai_tro] ?? esc(x.vai_tro)}</span></td>
               <td>${esc(TEN_HANH_DONG[x.hanh_dong] ?? x.hanh_dong)}</td><td class="email">${esc(x.doi_tuong ?? "")}</td><td>${chiTiet(x.chi_tiet)}</td></tr>`,
             )
             .join("") || `<tr><td colspan="5" class="empty">Chưa có việc nào.</td></tr>`

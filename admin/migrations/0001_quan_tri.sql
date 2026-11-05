@@ -1,31 +1,56 @@
 -- Bảng của Admin Dashboard (Worker thienhoangky-admin), dùng chung D1 `thienhoangky` với Worker game.
 -- Mọi bảng có tiền tố qt_ (quản trị). Bảng migration riêng: d1_migrations_qt (wrangler.jsonc), nên không đụng
 -- migration của Worker game trong cloudflare/migrations/.
--- Thời gian là epoch mili giây (Date.now()). Email luôn viết thường.
+-- Thời gian là epoch mili giây (Date.now()). Cột *_boi, nguoi là tên đăng nhập của tài khoản quản trị.
 
--- Phân quyền: email nào là Admin, email nào là Vận hành. Email trong biến ADMIN_GOC luôn là Admin, không cần dòng ở đây.
-CREATE TABLE IF NOT EXISTS qt_vai_tro (
-  email     TEXT PRIMARY KEY,
-  vai_tro   TEXT NOT NULL CHECK (vai_tro IN ('admin', 'van_hanh')),
-  ghi_chu   TEXT,
-  them_boi  TEXT NOT NULL,
-  them_luc  INTEGER NOT NULL,
-  sua_boi   TEXT,
-  sua_luc   INTEGER
+-- Tài khoản quản trị: đăng nhập bằng tên + mật khẩu (người dùng chốt 2026-11-05). Mật khẩu chỉ lưu dạng băm
+-- (worker/matKhau.ts: PBKDF2-SHA256 có muối). Tài khoản đầu tiên tạo bằng scripts/tao-tai-khoan.ts, không nằm trong migration.
+CREATE TABLE IF NOT EXISTS qt_tai_khoan (
+  ten              TEXT PRIMARY KEY CHECK (ten = lower(ten) AND length(ten) BETWEEN 3 AND 32),
+  vai_tro          TEXT NOT NULL CHECK (vai_tro IN ('admin', 'van_hanh')),
+  mat_khau         TEXT NOT NULL,
+  phai_doi         INTEGER NOT NULL DEFAULT 1 CHECK (phai_doi IN (0, 1)),   -- 1: phải đổi mật khẩu trước khi làm gì khác
+  khoa             INTEGER NOT NULL DEFAULT 0 CHECK (khoa IN (0, 1)),       -- Admin khóa tài khoản
+  ghi_chu          TEXT,
+  sai_lien_tiep    INTEGER NOT NULL DEFAULT 0,                              -- sai mật khẩu liền nhau
+  tam_khoa_den     INTEGER,                                                 -- sai 5 lần liền: tạm khóa 15 phút
+  dang_nhap_cuoi   INTEGER,
+  doi_mat_khau_luc INTEGER,
+  tao_boi          TEXT NOT NULL,
+  tao_luc          INTEGER NOT NULL,
+  sua_boi          TEXT,
+  sua_luc          INTEGER
 );
 
--- Nhật ký quản trị: ai làm gì, lúc nào. Nơi duy nhất ngoài các bảng dữ liệu được ghi email.
+-- Phiên đăng nhập. Cookie __Host-qt giữ mã ngẫu nhiên 32 byte; bảng chỉ lưu SHA-256 của mã đó.
+CREATE TABLE IF NOT EXISTS qt_phien (
+  ma_bam    TEXT PRIMARY KEY,
+  ten       TEXT NOT NULL,
+  tao_luc   INTEGER NOT NULL,
+  het_han   INTEGER NOT NULL,
+  thiet_bi  TEXT
+);
+CREATE INDEX IF NOT EXISTS qt_phien_ten ON qt_phien (ten);
+
+-- Đếm đăng nhập sai theo IP (băm SHA-256, không lưu IP thô) để chặn dò mật khẩu: quá 20 lần trong 15 phút thì trả 429.
+CREATE TABLE IF NOT EXISTS qt_dang_nhap_sai (
+  ip_bam  TEXT PRIMARY KEY,
+  so_lan  INTEGER NOT NULL,
+  tu_luc  INTEGER NOT NULL
+);
+
+-- Nhật ký quản trị: ai làm gì, lúc nào.
 CREATE TABLE IF NOT EXISTS qt_nhat_ky (
   id         INTEGER PRIMARY KEY AUTOINCREMENT,
   luc        INTEGER NOT NULL,
-  email      TEXT NOT NULL,
+  nguoi      TEXT NOT NULL,
   vai_tro    TEXT NOT NULL,
   hanh_dong  TEXT NOT NULL,
   doi_tuong  TEXT,
   chi_tiet   TEXT
 );
 CREATE INDEX IF NOT EXISTS qt_nhat_ky_luc ON qt_nhat_ky (luc DESC);
-CREATE INDEX IF NOT EXISTS qt_nhat_ky_email ON qt_nhat_ky (email, luc DESC);
+CREATE INDEX IF NOT EXISTS qt_nhat_ky_nguoi ON qt_nhat_ky (nguoi, luc DESC);
 
 -- Cấu hình sống: Worker game đọc `SELECT khoa, gia_tri FROM qt_cau_hinh`. gia_tri là JSON (số, chuỗi, true/false).
 -- Khoa nào chưa có dòng thì game dùng mặc định trong admin/worker/cauHinh.ts (cũng trả ở GET /api/cau-hinh).
@@ -84,17 +109,8 @@ CREATE TABLE IF NOT EXISTS qt_phan_hoi_xu_ly (
 CREATE TABLE IF NOT EXISTS qt_phan_hoi_ghi_chu (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
   phan_hoi_id  TEXT NOT NULL,
-  email        TEXT NOT NULL,
+  nguoi        TEXT NOT NULL,
   noi_dung     TEXT NOT NULL,
   luc          INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS qt_phan_hoi_ghi_chu_ph ON qt_phan_hoi_ghi_chu (phan_hoi_id, luc);
-
--- Trạng thái đồng bộ Access Group của admin (lần cuối, kết quả), để màn Phân quyền báo còn phải làm tay hay không.
-CREATE TABLE IF NOT EXISTS qt_dong_bo (
-  nhom     TEXT PRIMARY KEY CHECK (nhom IN ('quan_tri')),
-  luc      INTEGER NOT NULL,
-  ok       INTEGER NOT NULL,
-  so_email INTEGER NOT NULL,
-  loi      TEXT
-);

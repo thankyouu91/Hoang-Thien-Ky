@@ -1,10 +1,12 @@
-// Khung Admin Dashboard: hỏi /api/toi (ai, vai trò), vẽ thanh bên theo vai trò, định tuyến theo hash.
+// Khung Admin Dashboard: hỏi /api/toi (ai, vai trò); chưa đăng nhập thì hiện màn đăng nhập, phải đổi mật khẩu thì hiện
+// màn đổi; còn lại vẽ thanh bên theo vai trò và định tuyến theo hash.
 // Màn chỉ Admin vẫn bị server chặn (403) nếu ai đó gõ thẳng đường dẫn; ở đây chỉ ẩn cho gọn.
 
 import "./style.css";
 import type { Toi } from "../shared/hopDong.ts";
 import { TEN_VAI_TRO } from "../shared/hopDong.ts";
 import { ApiLoi, api, dangXemNhu, datXemNhu } from "./api.ts";
+import { moDoiMatKhau, veDangNhap, veDoiBatBuoc } from "./dangNhap.ts";
 import { esc } from "./ui.ts";
 import type { Man } from "./screens/man.ts";
 import { manTongQuan } from "./screens/tongQuan.ts";
@@ -12,10 +14,10 @@ import { manNguoiChoi } from "./screens/nguoiChoi.ts";
 import { manPhanHoi } from "./screens/phanHoi.ts";
 import { manThongBao } from "./screens/thongBao.ts";
 import { manCauHinh } from "./screens/cauHinh.ts";
-import { manPhanQuyen } from "./screens/phanQuyen.ts";
+import { manTaiKhoan } from "./screens/phanQuyen.ts";
 import { manNhatKy } from "./screens/nhatKy.ts";
 
-const MAN: Man[] = [manTongQuan, manNguoiChoi, manPhanHoi, manThongBao, manCauHinh, manPhanQuyen, manNhatKy];
+const MAN: Man[] = [manTongQuan, manNguoiChoi, manPhanHoi, manThongBao, manCauHinh, manTaiKhoan, manNhatKy];
 
 const app = document.getElementById("app")!;
 let toi: Toi | null = null;
@@ -31,10 +33,11 @@ function veKhung(): void {
   const t = toi;
   const laAdmin = t.vai_tro === "admin";
   const cur = manHienTai();
-  const who = `<div class="who-box"><span class="email">${esc(t.email)}</span>
-    <span class="chip ${t.vai_tro === "admin" ? "son" : "info"}">${TEN_VAI_TRO[t.vai_tro]}${t.admin_goc && laAdmin ? " gốc" : ""}</span>
+  const who = `<div class="who-box"><span class="email">${esc(t.ten)}</span>
+    <span class="chip ${t.vai_tro === "admin" ? "son" : "info"}">${TEN_VAI_TRO[t.vai_tro]}</span>
     ${t.vai_tro_that === "admin" ? `<label class="check" title="Hạ quyền của chính bạn xuống Vận hành cho các lần gọi API, để thử việc chặn ở server."><input type="checkbox" aria-label="Xem như Vận hành" data-xem-nhu ${dangXemNhu() ? "checked" : ""}> Xem như Vận hành</label>` : ""}
-    <a href="/cdn-cgi/access/logout">Đăng xuất</a></div>`;
+    <button class="link" type="button" data-doi-mk>Đổi mật khẩu</button>
+    <button class="link" type="button" data-dang-xuat>Đăng xuất</button></div>`;
   app.innerHTML = `
     <aside class="rail">
       <a class="brand" href="#/tong-quan"><span class="an" aria-hidden="true">天荒</span><span><b>Thiên Hoang Ký</b><small>Quản trị · chơi thử kín</small></span></a>
@@ -57,6 +60,8 @@ function veKhung(): void {
       await batDau();
     }),
   );
+  app.querySelectorAll("[data-doi-mk]").forEach((b) => b.addEventListener("click", moDoiMatKhau));
+  app.querySelectorAll("[data-dang-xuat]").forEach((b) => b.addEventListener("click", dangXuat));
   // Điện thoại: menu cuộn ngang, đưa mục đang mở vào giữa.
   app.querySelector('nav.menu a[aria-current="page"]')?.scrollIntoView({ inline: "center", block: "nearest" });
   void veMan(cur);
@@ -79,21 +84,45 @@ async function veMan(m: Man): Promise<void> {
 }
 
 function veChan(tieuDe: string, cau: string): void {
-  app.innerHTML = `<div class="chan panel"><h1 style="font-family:var(--font-display);color:var(--c-accent-ink);font-size:26px">${esc(tieuDe)}</h1><p>${esc(cau)}</p><div class="btns"><button class="btn" type="button" data-tai-lai>Tải lại</button><a class="btn" href="/cdn-cgi/access/logout">Đăng xuất Access</a></div></div>`;
+  app.innerHTML = `<div class="chan panel"><h1 style="font-family:var(--font-display);color:var(--c-accent-ink);font-size:26px">${esc(tieuDe)}</h1><p>${esc(cau)}</p><div class="btns"><button class="btn" type="button" data-tai-lai>Tải lại</button></div></div>`;
   app.querySelector("[data-tai-lai]")!.addEventListener("click", () => location.reload());
+}
+
+async function dangXuat(): Promise<void> {
+  try {
+    await api.post("/api/dang-xuat", {});
+  } catch {
+    // phiên đã hết: vẫn về màn đăng nhập
+  }
+  toi = null;
+  datXemNhu(false);
+  veDangNhap(app, vao);
+}
+
+function vao(t: Toi): void {
+  toi = t;
+  if (t.vai_tro_that !== "admin" && dangXemNhu()) datXemNhu(false);
+  if (t.phai_doi_mat_khau) return veDoiBatBuoc(app, t, () => void batDau(), dangXuat);
+  veKhung();
 }
 
 async function batDau(): Promise<void> {
   try {
-    toi = await api.get<Toi>("/api/toi");
-    // Hết quyền Admin thật thì bỏ cờ xem như.
-    if (toi.vai_tro_that !== "admin" && dangXemNhu()) datXemNhu(false);
-    veKhung();
+    vao(await api.get<Toi>("/api/toi"));
   } catch (e) {
     const err = e as ApiLoi;
-    veChan(err.status === 403 ? "Chưa được phân quyền" : "Chưa vào được", err.message);
+    if (err.status === 401) return veDangNhap(app, vao);
+    veChan("Chưa vào được", err.message);
   }
 }
 
-window.addEventListener("hashchange", () => veKhung());
+// Phiên hết hạn giữa chừng (API trả 401): về màn đăng nhập, giữ nguyên đường dẫn màn đang mở.
+window.addEventListener("qt:het-phien", () => {
+  if (!toi) return;
+  toi = null;
+  veDangNhap(app, vao, "Phiên đăng nhập đã hết hạn. Đăng nhập lại để làm tiếp.");
+});
+window.addEventListener("hashchange", () => {
+  if (toi && !toi.phai_doi_mat_khau) veKhung();
+});
 void batDau();
