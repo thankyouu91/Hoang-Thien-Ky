@@ -202,3 +202,28 @@ test("trận có war: dòng ẩn chiến tranh chỉ bật khi cờ war", () => 
   const pve = inert(1, 0, { hidden: [{ cond: "pve", stat: "atk", value: 30 }] });
   assert.equal(get(new Battle({ seed: 1, teamA: [pve], teamB: [inert(101, 0, { monster: true })] }), 1).atk, 1030);
 });
+
+test("Bàn Thạch mốc 7: lần đầu máu dưới ngưỡng thì nhận khiên theo máu tối đa, giữ lowHpShieldTicks", () => {
+  const b = hit({}, { hp: 10000, setFx: { lowHpShieldBelow: 990, lowHpShield: 60, lowHpShieldTicks: 60 } });
+  const t = get(b, 101);
+  assert.equal(t.shield, 600);
+  assert.equal(t.shieldUntil, b.tick - 1 + 60);
+  assert.equal(t.once.lowShield, 0);
+});
+
+test("Băng Phách mốc 4: khống chế trúng kẻ đang vận công thì chiêu mất và đốt mana; mốc 7 tính cả kẻ bị khống chế", () => {
+  const b = new Battle({ seed: 1, teamA: [inert(1, 0, { setFx: { controlBreakChannel: true, controlManaBurn: 100 } })], teamB: [inert(101, 0, { manaMax: 1000 })] });
+  const t = get(b, 101);
+  t.channel = { slot: 0, startTick: 0, resolveTick: 100, center: 0, ult: false, interruptible: false, guarded: [], guardCut: 0, group: 101 };
+  const m0 = t.mana;
+  b.control(t, 20, get(b, 1));
+  assert.equal(t.channel, null);
+  assert.equal(m0 - t.mana, mul(t.manaMax, 100));
+  const base = hit({ setFx: { chilledBonus: 80 } });
+  const stunned = castNow({ seed: 1, teamA: [unit(1, 0, [tech("can_don")], { bonuses: noCrit, setFx: { chilledBonus: 80 } })], teamB: [inert(101)] },
+    (x) => {
+      place(x, { 1: 5000, 101: 5500 });
+      get(x, 101).stunUntil = 1000;
+    });
+  assert.ok(loss(stunned, 101) > loss(base, 101));
+});

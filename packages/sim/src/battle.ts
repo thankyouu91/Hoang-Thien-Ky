@@ -82,7 +82,12 @@ export interface SetFx {
   decoyTicks?: number; // Hỗn Độn: bao nhiêu tick đầu trận bị đánh tính theo `UnitSpec.decoyElement`
   artifactCooldownCut?: number; // Cổ Tông: hồi chiêu pháp bảo giảm chừng này
   artifactMana?: number; // Cổ Tông: mỗi lần pháp bảo của người mặc kích hoạt thì hồi chừng này mana tối đa
-  controlChannelTicks?: number; // Băng Phách: khống chế trúng kẻ đang vận công hoặc đang bày trận thì dài thêm chừng này tick
+  controlChannelTicks?: number; // khống chế trúng kẻ đang vận công hoặc đang bày trận thì dài thêm chừng này tick
+  controlBreakChannel?: boolean; // Băng Phách: khống chế trúng kẻ đang vận công hoặc đang bày trận thì chiêu đó mất (đã vào hồi chiêu)
+  controlManaBurn?: number; // ... và đốt chừng này mana tối đa của mục tiêu
+  lowHpShieldBelow?: number; // Bàn Thạch: lần đầu mỗi trận máu dưới ngưỡng này thì nhận khiên `lowHpShield` máu tối đa
+  lowHpShield?: number;
+  lowHpShieldTicks?: number; // khiên đó giữ chừng này tick
   artifactExtraUses?: number; // Cổ Tông: pháp bảo thêm lần mỗi trận, không quá `artifactMaxUses`
   artifactMaxUses?: number;
   // Khí văn (luyện khí, tab Trang bị phần 13); rules đã nhân theo số lần tính (tối đa 2):
@@ -277,7 +282,7 @@ export interface Unit {
   decoyUntil: number;
   qiReadyTick: number; // Vạn Kiếm: tick sớm nhất có kiếm khí
   critCount: number; // số đòn chí mạng đã ra trong trận (Lôi Trì)
-  once: { petrify: number; cleanse: number; instantAoe: number; resetHeal: number; stealthKill: number; bounce: number; lastStand: number }; // số lần còn lại mỗi trận
+  once: { petrify: number; cleanse: number; instantAoe: number; resetHeal: number; stealthKill: number; bounce: number; lastStand: number; lowShield: number }; // số lần còn lại mỗi trận
   shieldHit: Record<number, number>; // Phá Thuẫn: id mục tiêu → hạn tấm khiên đã ăn đòn đầu
   opened: boolean; // đã ra chiêu đánh đầu tiên (Tiên Phát)
   comboTarget: number; // Liên Kích: mục tiêu đang đánh liên tiếp và số lần
@@ -458,6 +463,7 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
       petrify: sfx.petrifyBelow ? 1 : 0, cleanse: sfx.cleanseHealCut ?? 0, instantAoe: sfx.instantFirstAoe ? 1 : 0,
       resetHeal: sfx.resetHealOnFall ?? 0, stealthKill: sfx.stealthOnDashKill ? 1 : 0, bounce: sfx.bounceCrit ? 1 : 0,
       lastStand: sfx.lastStandShield ? 1 : 0,
+      lowShield: sfx.lowHpShield ? 1 : 0,
     },
     shieldHit: {},
     opened: false,
@@ -669,7 +675,11 @@ export class Battle {
       t.controlBlocks--; // Bất Động Côn: khiên hộ thể đỡ một lần khống chế
       return;
     }
-    if (src?.fx.controlChannelTicks && t.channel) ticks += src.fx.controlChannelTicks; // Băng Phách: trúng kẻ đang vận công, bày trận
+    if (src?.fx.controlChannelTicks && t.channel) ticks += src.fx.controlChannelTicks;
+    if (src?.fx.controlBreakChannel && t.channel) {
+      t.channel = null; // Băng Phách: chiêu vận công, trận đang bày mất hẳn (hồi chiêu, mana đã tính lúc bắt đầu)
+      if (src.fx.controlManaBurn) t.mana -= Math.min(t.mana, mul(t.manaMax, src.fx.controlManaBurn));
+    }
     const dur = this.tick < t.stunUntil + R.controlDrWindow ? mul(ticks, src?.fx.controlDr ?? ONE / 2) : ticks;
     t.stunUntil = Math.max(t.stunUntil, this.tick + dur);
     if (t.channel && t.channel.interruptible) {
@@ -1018,7 +1028,7 @@ export class Battle {
       let extra = (t.monster ? u.b.monsterDamage : 0) + opener;
       if (i === 0 && s.mod.firstTargetBonus) extra += s.mod.firstTargetBonus;
       if (s.mod.lowHpBonus && t.curHp * ONE < t.hp * (s.mod.lowHpBelow ?? 0)) extra += s.mod.lowHpBonus;
-      if (uf.chilledBonus && (tick < t.slowUntil || tick < t.frozenUntil)) extra += uf.chilledBonus;
+      if (uf.chilledBonus && (tick < t.slowUntil || tick < t.frozenUntil || tick < t.stunUntil)) extra += uf.chilledBonus; // Băng Phách mốc 7: cả khi bị khống chế
       if (s.mod.channelTargetBonus && t.channel) extra += s.mod.channelTargetBonus; // Lạc Tinh Cung
       if (uf.lowHpAllBonus && t.curHp * ONE < t.hp * (uf.lowHpAllBelow ?? 0)) extra += uf.lowHpAllBonus; // Truy Mệnh Văn
       if (uf.shieldBreakBonus && t.shield > 0 && u.shieldHit[t.id] !== t.shieldUntil) {
@@ -1193,6 +1203,15 @@ export class Battle {
         if (shield > t.shield) {
           t.shield = shield;
           t.shieldUntil = this.tick + R.shieldTicks;
+        }
+      }
+      // Bàn Thạch mốc 7: lần đầu máu xuống dưới ngưỡng thì nhận khiên theo máu tối đa, giữ lowHpShieldTicks.
+      if (t.once.lowShield > 0 && t.curHp * ONE < t.hp * (t.fx.lowHpShieldBelow ?? 0)) {
+        t.once.lowShield = 0;
+        const shield = mul(t.hp, t.fx.lowHpShield ?? 0);
+        if (shield > t.shield) {
+          t.shield = shield;
+          t.shieldUntil = this.tick + (t.fx.lowHpShieldTicks ?? R.shieldTicks);
         }
       }
     }

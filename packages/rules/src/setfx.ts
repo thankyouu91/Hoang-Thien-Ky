@@ -32,8 +32,15 @@ const outside = (a: SetFxAcc, k: string, v: number) => {
 const HANDLERS: Record<string, (key: string, p: Params, a: SetFxAcc) => void> = {
   "bach_thao:7": (k, p, a) => { a.setFx.cleanseHealCut = num(k, p, "tayGiamHoiMau"); },
   "ban_thach:7": (k, p, a) => {
-    a.setFx.petrifyBelow = num(k, p, "nguongMau");
-    a.setFx.petrifyTicks = num(k, p, "hoaDaTicks");
+    // Set đồ 2.0 lần 2: khiên khi máu thấp thay hóa đá; dữ liệu cũ (hoaDaTicks) vẫn đọc được.
+    if (p.khienMau !== undefined) {
+      a.setFx.lowHpShieldBelow = num(k, p, "nguongMau");
+      a.setFx.lowHpShield = num(k, p, "khienMau");
+      a.setFx.lowHpShieldTicks = num(k, p, "khienTicks");
+    } else {
+      a.setFx.petrifyBelow = num(k, p, "nguongMau");
+      a.setFx.petrifyTicks = num(k, p, "hoaDaTicks");
+    }
     outside(a, "khaiKhoang", num(k, p, "khaiKhoang"));
   },
   "thiet_ky:7": (k, p, a) => { a.setFx.frontAoeCut = num(k, p, "giamDienRong"); },
@@ -49,7 +56,12 @@ const HANDLERS: Record<string, (key: string, p: Params, a: SetFxAcc) => void> = 
   },
   "bang_phach:4": (k, p, a) => {
     a.setFx.controlDr = num(k, p, "giamDanKhongChe");
-    a.setFx.controlChannelTicks = num(k, p, "khongCheDangVanCongTicks"); // khống chế trúng kẻ đang vận công, bày trận: dài thêm
+    if (p.huyVanCong !== undefined) {
+      a.setFx.controlBreakChannel = num(k, p, "huyVanCong") > 0; // khống chế trúng kẻ đang vận công, bày trận: hủy chiêu
+      a.setFx.controlManaBurn = num(k, p, "dotMana");
+    } else if (p.khongCheDangVanCongTicks !== undefined) {
+      a.setFx.controlChannelTicks = num(k, p, "khongCheDangVanCongTicks");
+    }
   },
   "bang_phach:7": (k, p, a) => { a.setFx.chilledBonus = num(k, p, "satThuongMucTieuCham"); },
   "loi_tri:7": (k, p, a) => {
@@ -93,7 +105,7 @@ const HANDLERS: Record<string, (key: string, p: Params, a: SetFxAcc) => void> = 
  * Ràng buộc trong set.json (`rang_buoc`) có tác dụng trong trận: mốc 7 cần ít nhất 1 công pháp mang theo có hệ chủ là
  * một trong các hệ này. Huyết Ảnh (sát nghiệp) và Phá Quân (chỉ trong chiến tranh) không thuộc trận.
  */
-const NEEDS: Record<string, Element[]> = { "bang_phach:7": ["thuy", "cuc_han"], "loi_tri:7": ["loi", "kim"] };
+const NEEDS: Record<string, Element[]> = { "loi_tri:7": ["loi", "kim"] }; // Băng Phách mốc 7 bỏ ràng buộc hệ (set đồ 2.0 lần 2)
 
 /** Hiệu ứng "bộ:mốc" có cách đổi chưa. */
 export function isKnownSetBehavior(bo: string, so: number): boolean {

@@ -50,7 +50,7 @@ test("Ngọc Tủy mốc 4: mana, giảm mana thi triển, công lực giảm; m
   assert.equal(g.setFx.resistTopEnemy, 80);
 });
 
-test("ràng buộc mốc 7: Lôi Trì cần công pháp hệ chủ Lôi hoặc Kim, Băng Phách cần Thủy hoặc Cực hàn", () => {
+test("ràng buộc mốc 7: Lôi Trì cần công pháp hệ chủ Lôi hoặc Kim; Băng Phách không còn ràng buộc hệ (set đồ 2.0)", () => {
   const items = sealed(Array(7).fill("NG-AN-010"));
   const withLoi = withGear(spec("loi"), items);
   assert.deepEqual([withLoi.setFx?.bounceCrit, withLoi.setFx?.bounceDamage], [3, 500]);
@@ -59,7 +59,7 @@ test("ràng buộc mốc 7: Lôi Trì cần công pháp hệ chủ Lôi hoặc K
   assert.deepEqual(g.sets[0].thieuDieuKien, [7]);
   assert.equal(g.bonuses.critBonus, gearStats(items, LV, ["moc"]).bonuses.critBonus); // mốc 2, 4 vẫn có tác dụng
   assert.equal(withGear(spec("moc", [tech("can_don", "thuy")]), sealed(Array(7).fill("NG-AN-009"))).setFx?.chilledBonus, 80);
-  assert.equal(withGear(spec("moc"), sealed(Array(7).fill("NG-AN-009"))).setFx?.chilledBonus, undefined);
+  assert.equal(withGear(spec("moc"), sealed(Array(7).fill("NG-AN-009"))).setFx?.chilledBonus, 80);
 });
 
 test("Linh Tuyền, Bàn Thạch vào setFx; phần bế quan, khai khoáng để ngoài trận", () => {
@@ -72,7 +72,12 @@ test("Linh Tuyền, Bàn Thạch vào setFx; phần bế quan, khai khoáng đ�
   // Mốc 4 là chỉ số (đồ cũng có thủ ngoại nên so với đồ không ấn).
   const b4 = bt.bonuses as Record<string, number>, r4 = bare.bonuses as Record<string, number>;
   for (const k of Object.keys(m4)) assert.equal((b4[k] ?? 0) - (r4[k] ?? 0), m4[k], k);
-  assert.deepEqual([bt.setFx.petrifyBelow, bt.setFx.petrifyTicks, bt.outside.khaiKhoang], [m7.nguongMau, m7.hoaDaTicks, m7.khaiKhoang]);
+  if (m7.khienMau !== undefined) {
+    assert.deepEqual([bt.setFx.lowHpShieldBelow, bt.setFx.lowHpShield, bt.setFx.lowHpShieldTicks, bt.setFx.petrifyBelow], [m7.nguongMau, m7.khienMau, m7.khienTicks, undefined]);
+  } else {
+    assert.deepEqual([bt.setFx.petrifyBelow, bt.setFx.petrifyTicks], [m7.nguongMau, m7.hoaDaTicks]);
+  }
+  assert.equal(bt.outside.khaiKhoang, m7.khaiKhoang);
 });
 
 test("Cổ Tông 7 món: pháp bảo thêm 1 lần (tối đa 3, không quá linh lực), hồi chiêu −15% trong trận", async () => {
