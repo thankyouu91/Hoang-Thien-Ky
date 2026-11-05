@@ -71,10 +71,12 @@ Team: `https://jolly-water-a8bd.cloudflareaccess.com`. Chỉ ứng dụng "Thiê
 | Policy | "THK quan tri" (Allow), gồm rule group "THK quan tri" (id `524b879b-be5c-48d8-99e7-d158c9a56b03`) |
 | AUD | Đặt trong `admin/wrangler.jsonc` (`ACCESS_AUD`) |
 
-**Thêm Admin hoặc Vận hành** (cần làm cả hai bước):
+Vào admin phải qua hai lớp: Access (mã một lần gửi qua email) rồi tên + mật khẩu của Admin Dashboard (`admin/README.md`). Người dùng chọn giữ cả hai ngày 2026-11-05.
+
+**Thêm người quản trị** (cần làm cả hai bước):
 
 1. Vào Zero Trust → Access controls → Policies → tab Rule groups → "THK quan tri", thêm email vào Include → Emails. Bước này cho người đó qua Access.
-2. Trong Admin Dashboard, màn Phân quyền, đặt vai trò cho email đó. Bước này cho người đó quyền trong dashboard.
+2. Trong Admin Dashboard, tạo tài khoản (tên, mật khẩu, vai trò) cho người đó. Bước này cho người đó đăng nhập và có quyền trong dashboard.
 
 ## Giới hạn của gói miễn phí
 
