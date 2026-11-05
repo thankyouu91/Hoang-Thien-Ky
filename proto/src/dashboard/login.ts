@@ -1,6 +1,6 @@
 // Màn đăng nhập (FTUE bước 1, dưới 1 phút): số điện thoại → mã OTP → ngày sinh lần đầu (dưới 16 tuổi thêm người giám hộ).
 // Nền là cảnh sơn thủy động tông giấy của lớp three (máy không có WebGL2 thì giữ núi thủy mặc SVG) và dấu ấn triện
-// 開宗立派; chân màn có nhãn tuổi và lời nhắc sức khỏe theo G1.
+// 天荒記 (tên game Thiên Hoang Ký); chân màn có nhãn tuổi và lời nhắc sức khỏe theo G1.
 import { mountScene } from "../three/index.ts";
 import { inkwashSvg } from "./art/inkwash.ts";
 import { ageOn, GUARDIAN_AGE, maskPhone, normalizePhone, type AuthSource } from "./auth.ts";
@@ -15,7 +15,7 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
     <div class="login-art">${inkwashSvg("#f6efdf")}</div>
     <span class="age-badge" title="Nhãn phân loại độ tuổi">${esc(ageLabel)}</span>
     <header class="login-brand">
-      <span class="login-seal" aria-hidden="true"><span>開</span><span>宗</span><span>立</span><span>派</span></span>
+      <span class="login-seal" aria-hidden="true"><span>天</span><span>荒</span><span class="tall">記</span></span>
       <h1>Thiên Hoang Ký</h1>
       <p class="tag">Lập tông, giữ mỏ, ghép công pháp.</p>
     </header>

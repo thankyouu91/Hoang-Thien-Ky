@@ -1176,7 +1176,7 @@ b.g-cao { color: #6d3a8e; }
 #login > :not(.login-art) { position: relative; }
 #login .age-badge { align-self: flex-end; padding: 1px 6px; border: 1px solid var(--c-line-2); border-radius: 4px; background: var(--c-surface); color: var(--c-ink-2); font-size: 12px; font-weight: 700; }
 .login-brand { margin: 5vh 0 auto; text-align: center; }
-/* Dấu ấn triện 開宗立派: đọc như dấu thật, cột phải từ trên xuống rồi cột trái */
+/* Dấu ấn triện 天荒記 (Thiên Hoang Ký): lối khắc ba chữ, cột phải 天荒 từ trên xuống, cột trái chữ 記 kéo cao bằng hai ô */
 .login-seal {
   display: inline-grid;
   grid-template-rows: 1fr 1fr;
@@ -1194,6 +1194,7 @@ b.g-cao { color: #6d3a8e; }
   font: 600 19px/1 "Noto Serif SC", "Songti SC", "SimSun", "Microsoft YaHei", serif;
   transform: rotate(-3deg);
 }
+.login-seal .tall { grid-row: 1 / span 2; font-size: 22px; transform: scaleY(1.7); }
 .login-brand h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.01em; line-height: 1.15; }
 .login-brand .tag { margin: 8px 0 0; color: var(--c-ink-2); font-size: var(--fs-md); }
 .login-card {
