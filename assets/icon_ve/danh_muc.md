@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 874 món, đã vẽ 413, cần vẽ lại 0.
+Tổng 874 món, đã vẽ 437, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -257,34 +257,34 @@ Tổng 874 món, đã vẽ 413, cần vẽ lại 0.
 | TB-DA-020 | Đai Vảy Cá | Lục | trang_bi/dai/20.webp | ✓ |
 | TB-DA-021 | Đai Đá Cuội | Lục | trang_bi/dai/21.webp | ✓ |
 | TB-DA-022 | Đai Thắt Nút | Lục | trang_bi/dai/22.webp | ✓ |
-| TB-DA-023 | Đai Mây Trắng | Lục | trang_bi/dai/23.webp |  |
-| TB-DA-024 | Đai Sừng Thú | Lục | trang_bi/dai/24.webp |  |
+| TB-DA-023 | Đai Mây Trắng | Lục | trang_bi/dai/23.webp | ✓ |
+| TB-DA-024 | Đai Sừng Thú | Lục | trang_bi/dai/24.webp | ✓ |
 | TB-DA-025 | Đai Lôi Văn | Lam | trang_bi/dai/25.webp | ✓ |
 | TB-DA-026 | Đai Ngân Hạc | Lam | trang_bi/dai/26.webp | ✓ |
-| TB-DA-027 | Đai Thanh Ngọc | Lam | trang_bi/dai/27.webp |  |
-| TB-DA-028 | Đai Hổ Đầu | Lam | trang_bi/dai/28.webp |  |
-| TB-DA-029 | Đai Lưu Vân | Lam | trang_bi/dai/29.webp |  |
-| TB-DA-030 | Đai Long Khấu | Lam | trang_bi/dai/30.webp |  |
-| TB-DA-031 | Đai Mai Hoa | Lam | trang_bi/dai/31.webp |  |
-| TB-DA-032 | Đai Bích Lạc | Lam | trang_bi/dai/32.webp |  |
-| TB-DA-033 | Đai Huyền Quy | Lam | trang_bi/dai/33.webp |  |
-| TB-DA-034 | Đai Tùng Văn | Lam | trang_bi/dai/34.webp |  |
-| TB-DA-035 | Đai Song Ngư | Lam | trang_bi/dai/35.webp |  |
-| TB-DA-036 | Đai Ngọc Bích | Lam | trang_bi/dai/36.webp |  |
-| TB-DA-037 | Đai Phi Yến | Lam | trang_bi/dai/37.webp |  |
-| TB-DA-038 | Đai Thất Hoàn | Lam | trang_bi/dai/38.webp |  |
-| TB-DA-039 | Đai Tử Trúc | Lam | trang_bi/dai/39.webp |  |
-| TB-DA-040 | Đai Bạch Lân | Lam | trang_bi/dai/40.webp |  |
+| TB-DA-027 | Đai Thanh Ngọc | Lam | trang_bi/dai/27.webp | ✓ |
+| TB-DA-028 | Đai Hổ Đầu | Lam | trang_bi/dai/28.webp | ✓ |
+| TB-DA-029 | Đai Lưu Vân | Lam | trang_bi/dai/29.webp | ✓ |
+| TB-DA-030 | Đai Long Khấu | Lam | trang_bi/dai/30.webp | ✓ |
+| TB-DA-031 | Đai Mai Hoa | Lam | trang_bi/dai/31.webp | ✓ |
+| TB-DA-032 | Đai Bích Lạc | Lam | trang_bi/dai/32.webp | ✓ |
+| TB-DA-033 | Đai Huyền Quy | Lam | trang_bi/dai/33.webp | ✓ |
+| TB-DA-034 | Đai Tùng Văn | Lam | trang_bi/dai/34.webp | ✓ |
+| TB-DA-035 | Đai Song Ngư | Lam | trang_bi/dai/35.webp | ✓ |
+| TB-DA-036 | Đai Ngọc Bích | Lam | trang_bi/dai/36.webp | ✓ |
+| TB-DA-037 | Đai Phi Yến | Lam | trang_bi/dai/37.webp | ✓ |
+| TB-DA-038 | Đai Thất Hoàn | Lam | trang_bi/dai/38.webp | ✓ |
+| TB-DA-039 | Đai Tử Trúc | Lam | trang_bi/dai/39.webp | ✓ |
+| TB-DA-040 | Đai Bạch Lân | Lam | trang_bi/dai/40.webp | ✓ |
 | TB-DA-041 | Đai Tinh Tú | Tím | trang_bi/dai/41.webp | ✓ |
 | TB-DA-042 | Đai Kỳ Lân | Tím | trang_bi/dai/42.webp | ✓ |
-| TB-DA-043 | Đai Phượng Vĩ | Tím | trang_bi/dai/43.webp |  |
-| TB-DA-044 | Đai Lưu Ly | Tím | trang_bi/dai/44.webp |  |
-| TB-DA-045 | Đai Tử Vân | Tím | trang_bi/dai/45.webp |  |
-| TB-DA-046 | Đai Thất Bảo | Tím | trang_bi/dai/46.webp |  |
-| TB-DA-047 | Đai Bát Quái | Tím | trang_bi/dai/47.webp |  |
-| TB-DA-048 | Đai Nguyệt Hoa | Tím | trang_bi/dai/48.webp |  |
-| TB-DA-049 | Đai Huyễn Lân | Tím | trang_bi/dai/49.webp |  |
-| TB-DA-050 | Đai Giao Long | Tím | trang_bi/dai/50.webp |  |
+| TB-DA-043 | Đai Phượng Vĩ | Tím | trang_bi/dai/43.webp | ✓ |
+| TB-DA-044 | Đai Lưu Ly | Tím | trang_bi/dai/44.webp | ✓ |
+| TB-DA-045 | Đai Tử Vân | Tím | trang_bi/dai/45.webp | ✓ |
+| TB-DA-046 | Đai Thất Bảo | Tím | trang_bi/dai/46.webp | ✓ |
+| TB-DA-047 | Đai Bát Quái | Tím | trang_bi/dai/47.webp | ✓ |
+| TB-DA-048 | Đai Nguyệt Hoa | Tím | trang_bi/dai/48.webp | ✓ |
+| TB-DA-049 | Đai Huyễn Lân | Tím | trang_bi/dai/49.webp | ✓ |
+| TB-DA-050 | Đai Giao Long | Tím | trang_bi/dai/50.webp | ✓ |
 | TB-DA-051 | Đai Bích Hải | Tím | trang_bi/dai/51.webp |  |
 | TB-DA-052 | Đai Ngọc Tủy | Tím | trang_bi/dai/52.webp |  |
 | TB-DA-053 | Đai Hoàng Long | Vàng | trang_bi/dai/53.webp | ✓ |
