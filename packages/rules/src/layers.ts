@@ -1,9 +1,10 @@
 // Tầng công pháp (GDD mục 6: "Mỗi công pháp có 10 tầng; tầng tăng bằng tu luyện và cống hiến"). Bảng số là đề xuất 2026-11-05
-// của phiên Bảng Điểm (ghi chú tang-cong-phap.md); dữ liệu data/he_thong/json/tang_cong_phap.json chưa có thì dùng TANG_DU_PHONG.
+// của phiên Bảng Điểm (ghi chú tang-cong-phap.md); số ở data/he_thong/json/tang_cong_phap.json và tham_so.json cong_phap.
 // Điểm luyện là quỹ chung của nhân vật: mỗi cấp +diemLuyenMoiCap; điểm đang có = (cấp − 1) × diemLuyenMoiCap trừ giá các tầng
 // đã lên của mọi công pháp đã học, nên không cần trường lưu riêng.
 import { GRADE_POW, mul, ONE, type Technique } from "@ktlp/sim";
 import THAM_SO from "../../../data/he_thong/json/tham_so.json" with { type: "json" };
+import TANG_JSON from "../../../data/he_thong/json/tang_cong_phap.json" with { type: "json" };
 import { RULES } from "./config.ts";
 import type { GameState, LearnedTechnique, Member } from "./state.ts";
 import type { Result } from "./apply.ts";
@@ -11,36 +12,20 @@ import type { Result } from "./apply.ts";
 /** Một tầng: uy lực, giảm hồi chiêu, giảm mana (phần nghìn cộng dồn so với tầng 1); giá lên tầng này ở phẩm Phàm. */
 export interface LayerRow { tang: number; uyLuc: number; hoiChieu: number; mana: number; diemLuyen: number; congHien: number }
 
-const TANG_DU_PHONG: LayerRow[] = [
-  { tang: 1, uyLuc: 0, hoiChieu: 0, mana: 0, diemLuyen: 0, congHien: 0 },
-  { tang: 2, uyLuc: 25, hoiChieu: 0, mana: 0, diemLuyen: 10, congHien: 0 },
-  { tang: 3, uyLuc: 50, hoiChieu: 0, mana: 0, diemLuyen: 20, congHien: 0 },
-  { tang: 4, uyLuc: 75, hoiChieu: 0, mana: 50, diemLuyen: 30, congHien: 1 },
-  { tang: 5, uyLuc: 100, hoiChieu: 0, mana: 50, diemLuyen: 40, congHien: 1 },
-  { tang: 6, uyLuc: 125, hoiChieu: 0, mana: 50, diemLuyen: 50, congHien: 2 },
-  { tang: 7, uyLuc: 150, hoiChieu: 0, mana: 100, diemLuyen: 60, congHien: 2 },
-  { tang: 8, uyLuc: 175, hoiChieu: 0, mana: 100, diemLuyen: 70, congHien: 3 },
-  { tang: 9, uyLuc: 200, hoiChieu: 0, mana: 100, diemLuyen: 80, congHien: 4 },
-  { tang: 10, uyLuc: 250, hoiChieu: 50, mana: 100, diemLuyen: 90, congHien: 5 },
-];
-/** Bảng tầng đang dùng; thay bằng dữ liệu khi có (setLayerTable). */
-let TANG: LayerRow[] = TANG_DU_PHONG;
-const CP = THAM_SO.cong_phap as { techniqueLayers: number; diemLuyenMoiCap?: number };
+
+const CP = THAM_SO.cong_phap as { techniqueLayers: number; diemLuyenMoiCap: number };
 /** Số tầng tối đa của một công pháp (tham_so.json cong_phap.techniqueLayers). */
 export const TECHNIQUE_LAYERS = CP.techniqueLayers;
-/** Điểm luyện mỗi lần lên cấp (tham_so.json cong_phap.diemLuyenMoiCap; chưa có thì 20, đề xuất 2026-11-05). */
-export const DIEM_LUYEN_MOI_CAP = CP.diemLuyenMoiCap ?? 20;
+/** Điểm luyện mỗi lần lên cấp (tham_so.json cong_phap.diemLuyenMoiCap). */
+export const DIEM_LUYEN_MOI_CAP = CP.diemLuyenMoiCap;
 
-/** Thay bảng tầng (dữ liệu tang_cong_phap.json); cần đúng TECHNIQUE_LAYERS dòng, tầng 1 cộng 0. */
-export function setLayerTable(rows: LayerRow[]): void {
-  if (rows.length !== TECHNIQUE_LAYERS) throw new Error(`Bảng tầng cần ${TECHNIQUE_LAYERS} dòng`);
-  rows.forEach((r, i) => {
-    if (r.tang !== i + 1) throw new Error(`Bảng tầng: dòng ${i + 1} ghi tầng ${r.tang}`);
-  });
-  const t1 = rows[0];
-  if (t1.uyLuc || t1.hoiChieu || t1.mana) throw new Error("Tầng 1 không cộng gì");
-  TANG = rows.slice();
-}
+/** Bảng tầng (tang_cong_phap.json): đúng TECHNIQUE_LAYERS dòng theo thứ tự tầng, tầng 1 không cộng gì. */
+const TANG = TANG_JSON as LayerRow[];
+if (TANG.length !== TECHNIQUE_LAYERS) throw new Error(`tang_cong_phap.json cần ${TECHNIQUE_LAYERS} dòng`);
+TANG.forEach((r, i) => {
+  if (r.tang !== i + 1) throw new Error(`tang_cong_phap.json: dòng ${i + 1} ghi tầng ${r.tang}`);
+});
+if (TANG[0].uyLuc || TANG[0].hoiChieu || TANG[0].mana) throw new Error("tang_cong_phap.json: tầng 1 không cộng gì");
 
 function row(layer: number): LayerRow {
   if (layer !== Math.floor(layer) || layer < 1 || layer > TECHNIQUE_LAYERS) throw new Error(`Tầng ${layer} sai`);
