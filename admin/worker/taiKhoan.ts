@@ -115,10 +115,16 @@ export async function dangNhap(db: D1Database, tenVao: string, matKhau: string, 
 
   if (await ipBiChan(db, ip, now)) return { ok: false, status: 429, loi: LOI_IP };
 
-  const tk = await db
-    .prepare("SELECT ten, mat_khau, khoa, sai_lien_tiep, tam_khoa_den FROM qt_tai_khoan WHERE ten = ?")
-    .bind(ten)
-    .first<{ ten: string; mat_khau: string; khoa: number; sai_lien_tiep: number; tam_khoa_den: number | null }>();
+  // Nhận cả email thay cho tên đăng nhập (chỉ khi đúng một tài khoản có email đó).
+  type Tk = { ten: string; mat_khau: string; khoa: number; sai_lien_tiep: number; tam_khoa_den: number | null };
+  const cot = "SELECT ten, mat_khau, khoa, sai_lien_tiep, tam_khoa_den FROM qt_tai_khoan";
+  let tk: Tk | null = null;
+  if (ten.includes("@")) {
+    const r = (await db.prepare(`${cot} WHERE email = ? LIMIT 2`).bind(ten).all<Tk>()).results;
+    tk = r.length === 1 ? r[0] : null;
+  } else {
+    tk = await db.prepare(`${cot} WHERE ten = ?`).bind(ten).first<Tk>();
+  }
 
   if (tk?.tam_khoa_den && tk.tam_khoa_den > now) {
     const phut = Math.ceil((tk.tam_khoa_den - now) / 60000);

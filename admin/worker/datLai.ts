@@ -15,19 +15,33 @@ export const DAT_LAI_MS = 30 * 60 * 1000;
 const TOI_DA_MOI_GIO = 3;
 const GUI_TU = { email: "khong-tra-loi@thienhoangky.fun", name: "Thiên Hoang Ký" };
 
-export const CAU_QUEN = "Nếu tài khoản này có email, link đặt lại mật khẩu đã được gửi tới đó. Link dùng một lần trong 30 phút.";
+export const CAU_QUEN = "Nếu có tài khoản khớp và đã gắn email, link đặt lại mật khẩu đã được gửi tới email đó (xem cả thư mục spam). Link dùng một lần trong 30 phút.";
 
-/** Chạy sau khi đã trả lời người yêu cầu. Không ném lỗi. */
-export async function guiLinkDatLai(env: Env, tenVao: string, origin: string): Promise<void> {
-  const ten = tenVao.trim().toLowerCase();
-  if (!/^[a-z0-9._-]{3,32}$/.test(ten)) return;
+type TaiKhoanGui = { ten: string; vai_tro: string; email: string | null; khoa: number };
+
+/** Chạy sau khi đã trả lời người yêu cầu. Nhận tên đăng nhập hoặc email (người dùng hay gõ email vì Access vừa hỏi email).
+ *  Không ném lỗi. Log kết quả (không có tên, email) để dò khi thư không tới. */
+export async function guiLinkDatLai(env: Env, vao: string, origin: string): Promise<void> {
+  const v = vao.trim().toLowerCase();
+  let ds: TaiKhoanGui[] = [];
+  if (v.includes("@")) {
+    if (v.length <= 254) ds = (await env.DB.prepare("SELECT ten, vai_tro, email, khoa FROM qt_tai_khoan WHERE email = ?").bind(v).all<TaiKhoanGui>()).results;
+  } else if (/^[a-z0-9._-]{3,32}$/.test(v)) {
+    const tk = await env.DB.prepare("SELECT ten, vai_tro, email, khoa FROM qt_tai_khoan WHERE ten = ?").bind(v).first<TaiKhoanGui>();
+    if (tk) ds = [tk];
+  }
+  if (ds.length === 0) return console.log(`dat-lai: khong tim thay tai khoan (${v.includes("@") ? "theo email" : "theo ten"})`);
+  for (const tk of ds) await guiChoMot(env, tk, origin);
+}
+
+async function guiChoMot(env: Env, tk: TaiKhoanGui, origin: string): Promise<void> {
+  const ten = tk.ten;
   const now = Date.now();
-  const tk = await env.DB.prepare("SELECT ten, vai_tro, email, khoa FROM qt_tai_khoan WHERE ten = ?")
-    .bind(ten)
-    .first<{ ten: string; vai_tro: string; email: string | null; khoa: number }>();
-  if (!tk || !tk.email || tk.khoa === 1) return;
+  if (!tk.email) return console.log("dat-lai: tai khoan chua co email");
+  if (tk.khoa === 1) return console.log("dat-lai: tai khoan dang khoa");
   const gan = await env.DB.prepare("SELECT COUNT(*) AS so FROM qt_dat_lai WHERE ten = ? AND tao_luc > ?").bind(ten, now - 3600 * 1000).first<{ so: number }>();
   if ((gan?.so ?? 0) >= TOI_DA_MOI_GIO) {
+    console.log("dat-lai: qua 3 link trong mot gio");
     await ghiNhatKyHeThong(env, tk, { ok: false, loi: "quá 3 link trong một giờ, không gửi" });
     return;
   }
@@ -61,6 +75,7 @@ export async function guiLinkDatLai(env: Env, tenVao: string, origin: string): P
 </div>`,
     });
     ok = true;
+    console.log("dat-lai: da gui thu");
   } catch (e) {
     loi = String((e as Error)?.message ?? e).slice(0, 300);
     console.warn(`dat-lai: gửi thư lỗi (${loi.slice(0, 120)})`);

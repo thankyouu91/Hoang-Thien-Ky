@@ -77,7 +77,7 @@ npx.cmd wrangler d1 execute thienhoangky --remote --command "UPDATE qt_tai_khoan
 ```
 
 **Cách chạy:**
-- **Quên mật khẩu?**: nhập tên đăng nhập. Server luôn trả cùng một câu và trả ngay. Việc tra tài khoản và gửi thư chạy sau (`waitUntil`), nên nhìn câu trả lời hay thời gian trả lời đều không đoán được tên nào có thật hay có email.
+- **Quên mật khẩu?**: nhập tên đăng nhập hoặc email của tài khoản (ô đăng nhập cũng nhận email nếu đúng một tài khoản có email đó). Server luôn trả cùng một câu và trả ngay. Việc tra tài khoản và gửi thư chạy sau (`waitUntil`), nên nhìn câu trả lời hay thời gian trả lời đều không đoán được tên nào có thật hay có email.
 - **Giới hạn:** mỗi tài khoản tối đa 3 link mỗi giờ. Mỗi yêu cầu còn được cộng vào bộ đếm IP chung với đăng nhập (quá 20 lần trong 15 phút thì 429).
 - **Thư:** gửi từ `khong-tra-loi@thienhoangky.fun`, chứa link `https://admin.thienhoangky.fun/dat-lai#<token>`.
   - Token 256 bit nằm sau dấu `#`, nên không vào log máy chủ hay Referer. Trang tự xóa token khỏi thanh địa chỉ ngay khi mở.

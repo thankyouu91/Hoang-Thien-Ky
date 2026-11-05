@@ -335,7 +335,8 @@ try {
   });
   await kiem("Worker game đọc được thông báo và cấu hình bằng câu SQL trong docs/api.md", async () => {
     await goi("POST", "/api/thong-bao", { cookie: ckAdmin, body: { tieu_de: "Đang hiện", noi_dung: "x", dang: true } });
-    const t = Date.now();
+    // Cộng 1 giây: giờ trong workerd và giờ của tiến trình test có thể lệch vài mili giây.
+    const t = Date.now() + 1000;
     const [row] = sql(
       `SELECT (SELECT COUNT(*) FROM qt_thong_bao WHERE trang_thai = 'dang' AND bat_dau <= ${t} AND (ket_thuc IS NULL OR ket_thuc > ${t})) AS tb, (SELECT gia_tri FROM qt_cau_hinh WHERE khoa = 'toc_do_kinh_te') AS kt`,
     );
@@ -391,6 +392,14 @@ try {
     assert.equal((await goi("POST", "/api/dat-lai", { body: { ma: token, moi: "mot mat khau khac 12345" } })).status, 400);
     MK_ADMIN = MK_QUA_EMAIL;
     ckAdmin = await vao("kiemthu", MK_ADMIN);
+  });
+  await kiem("gõ email thay tên: quên mật khẩu vẫn tạo link cho đúng tài khoản; đăng nhập bằng email được", async () => {
+    assert.equal((await goi("POST", "/api/quen-mat-khau", { body: { ten: " KT@Example.com " } })).status, 200);
+    await new Promise((r) => setTimeout(r, 1000));
+    assert.equal(sql("SELECT COUNT(*) AS so FROM qt_dat_lai WHERE ten = 'kiemthu'")[0].so, 2);
+    const ck = await vao("KT@example.com", MK_ADMIN);
+    assert.equal((await goi("GET", "/api/toi", { cookie: ck })).data.ten, "kiemthu");
+    assert.equal((await goi("POST", "/api/dang-nhap", { body: { ten: "khongco@example.com", mat_khau: MK_ADMIN } })).status, 401);
   });
   await kiem("mỗi tài khoản tối đa 3 link mỗi giờ; lần thứ 4 không tạo link, nhật ký ghi lý do", async () => {
     for (let i = 0; i < 4; i++) assert.equal((await goi("POST", "/api/quen-mat-khau", { body: { ten: "kiemthu" } })).status, 200);

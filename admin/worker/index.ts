@@ -615,7 +615,7 @@ export default {
 
       if (req.method === "POST" && url.pathname === "/api/dang-nhap") {
         const b = await than(req);
-        const ten = typeof b.ten === "string" ? b.ten.slice(0, 64) : "";
+        const ten = typeof b.ten === "string" ? b.ten.slice(0, 254) : "";
         // Bỏ khoảng trắng hai đầu (hay dính khi dán mật khẩu tạm); đặt mật khẩu mới cũng bỏ như vậy nên luôn khớp.
         const mk = typeof b.mat_khau === "string" ? b.mat_khau.trim().slice(0, 200) : "";
         if (!ten || !mk) return loi(400, "Nhập tên đăng nhập và mật khẩu.");
@@ -636,7 +636,7 @@ export default {
         if (await ipBiChan(env.DB, ip)) return loi(429, LOI_IP);
         // Mỗi yêu cầu cũng tính một lần vào bộ đếm IP, để không dùng đường này dò tên hay gửi thư dồn dập.
         await (await ghiIpSai(env.DB, ip)).run();
-        const ten = typeof b.ten === "string" ? b.ten.slice(0, 64) : "";
+        const ten = typeof b.ten === "string" ? b.ten.slice(0, 254) : "";
         // Tra tài khoản và gửi thư sau khi đã trả lời: mọi tên đều nhận cùng câu, cùng thời gian.
         exec.waitUntil(guiLinkDatLai(env, ten, url.origin).catch((e) => console.error(`quen-mat-khau: ${(e as Error)?.message ?? e}`)));
         return json({ ok: true, thong_diep: CAU_QUEN });

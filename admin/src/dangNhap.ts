@@ -11,7 +11,7 @@ export function veDangNhap(app: HTMLElement, xong: (t: Toi) => void, bao?: strin
   app.innerHTML = `<div class="dang-nhap"><form class="panel form" novalidate>
       <div class="brand">${DAU}<span><b>Thiên Hoang Ký</b><small>Quản trị · chơi thử kín</small></span></div>
       ${bao ? `<p class="note block">${esc(bao)}</p>` : ""}
-      <label class="f"><span>Tên đăng nhập</span><input type="text" name="ten" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+      <label class="f"><span>Tên đăng nhập hoặc email</span><input type="text" name="ten" autocomplete="username" autocapitalize="none" spellcheck="false" required><small>Tên do Admin cấp (ví dụ admin), hoặc email đã gắn với tài khoản.</small></label>
       <label class="f"><span>Mật khẩu</span><input type="password" name="mat_khau" autocomplete="current-password" required></label>
       <p class="loi-dn" role="alert" hidden></p>
       <button class="seal" type="submit">Đăng nhập</button>
@@ -26,7 +26,7 @@ export function veDangNhap(app: HTMLElement, xong: (t: Toi) => void, bao?: strin
     const fd = new FormData(f);
     const ten = String(fd.get("ten") ?? "").trim();
     const mk = String(fd.get("mat_khau") ?? "").trim();
-    if (!ten || !mk) return void ((loiEl.textContent = "Nhập tên đăng nhập và mật khẩu."), (loiEl.hidden = false));
+    if (!ten || !mk) return void ((loiEl.textContent = "Nhập tên đăng nhập (hoặc email) và mật khẩu."), (loiEl.hidden = false));
     const nut = f.querySelector<HTMLButtonElement>("button")!;
     nut.disabled = true;
     try {
@@ -99,7 +99,7 @@ function veQuenMatKhau(app: HTMLElement, xong: (t: Toi) => void): void {
   app.innerHTML = `<div class="dang-nhap"><form class="panel form" novalidate>
       <div class="brand">${DAU}<span><b>Quên mật khẩu</b><small>Gửi link đặt lại qua email</small></span></div>
       <p class="note block">Tài khoản đã có email (Admin đặt ở màn Tài khoản, hoặc bạn tự đặt ở thanh bên) sẽ nhận link đặt lại, dùng một lần trong 30 phút. Chưa có email thì nhờ Admin khác đặt lại ở màn Tài khoản.</p>
-      <label class="f"><span>Tên đăng nhập</span><input type="text" name="ten" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+      <label class="f"><span>Tên đăng nhập hoặc email</span><input type="text" name="ten" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
       <p class="loi-dn" role="alert" hidden></p>
       <p class="note block" data-da-gui hidden></p>
       <button class="seal" type="submit">Gửi link đặt lại</button>
@@ -113,7 +113,7 @@ function veQuenMatKhau(app: HTMLElement, xong: (t: Toi) => void): void {
   f.addEventListener("submit", async (e) => {
     e.preventDefault();
     const ten = String(new FormData(f).get("ten") ?? "").trim();
-    if (!ten) return void ((loiEl.textContent = "Nhập tên đăng nhập."), (loiEl.hidden = false));
+    if (!ten) return void ((loiEl.textContent = "Nhập tên đăng nhập hoặc email."), (loiEl.hidden = false));
     const nut = f.querySelector<HTMLButtonElement>(".seal")!;
     nut.disabled = true;
     loiEl.hidden = true;
