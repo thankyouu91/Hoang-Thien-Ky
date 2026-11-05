@@ -28,6 +28,7 @@ import { lang, langSwitch, setLang, type Lang } from "../i18n.ts";
 import { moGopY } from "../mayChuUi.ts";
 import { BAC_TEN, bacBadge, GHEP_AN_SO, ghepLen, binhAnArt, binhBoBlock, binhBoSheet, dongAnHtml, dongRenHtml, gearSet2Rows, setRow, setSheet } from "../set2View.ts";
 import { laBanMau } from "../moi/demo.ts";
+import { bacTrangPhuc, DANG_THEO_MA, hinhLonCands } from "../trangPhuc.ts";
 import { elementWheel } from "../elementWheel.ts";
 import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
 import { LuyenKhiPanel, type LkTab } from "./luyenKhiPanel.ts";
@@ -78,19 +79,26 @@ function statText(s: StatLine, v = s.value): string {
 type DragRef = string;
 
 /**
- * Hình nhân vật lớn vẽ bằng PixelLab (2026-11-05, người dùng chê hình ghép 64 px phóng to): một bức mỗi thân và bộ áo,
- * dáng lơ lửng, lưu ở assets/pixellab/nhan_vat/<thân>/<áo>/lon.png. Chưa có thì Pháp tướng vẽ hình ghép như cũ.
+ * Hình nhân vật lớn vẽ bằng PixelLab (2026-11-05, người dùng chê hình ghép 64 px phóng to), dáng lơ lửng. Thử lần lượt các
+ * khoá của hinhLonCands (trangPhuc.ts: dáng của áo đang mặc theo bậc cảnh giới, lùi bậc, rồi áo theo nghề); khoá thiếu hình
+ * thì nhớ là không có và thử khoá sau. Chưa có khoá nào thì Pháp tướng vẽ hình ghép của trận như cũ.
  */
 const bigArt = new Map<string, HTMLImageElement | null>();
-function bigArtOf(body: string, outfit: string, onload: () => void): HTMLImageElement | undefined {
-  const key = `${body}/${outfit}`;
-  const got = bigArt.get(key);
-  if (got !== undefined) return got && got.complete && got.naturalWidth ? got : undefined;
-  const img = new Image();
-  img.onload = onload;
-  img.onerror = () => bigArt.set(key, null);
-  img.src = assetUrl(`nhan_vat/${key}/lon`);
-  bigArt.set(key, img);
+function bigArtFirst(keys: string[], onload: () => void): HTMLImageElement | undefined {
+  for (const key of keys) {
+    const got = bigArt.get(key);
+    if (got === null) continue;
+    if (got) return got.complete && got.naturalWidth ? got : undefined;
+    const img = new Image();
+    img.onload = onload;
+    img.onerror = () => {
+      bigArt.set(key, null);
+      onload();
+    };
+    img.src = assetUrl(key);
+    bigArt.set(key, img);
+    return undefined;
+  }
   return undefined;
 }
 
@@ -765,6 +773,12 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   }
   private dollNap = new Set<string>();
 
+  /** Khoá hình lớn theo áo đang mặc (dáng) và cảnh giới (bậc), lùi về áo theo nghề của `look` (trangPhuc.ts). */
+  private hinhLon(v: NhanVatView, look: Look): string[] {
+    const ao = v.gear.ao?.code;
+    return hinhLonCands(look.body, look.outfit, ao ? DANG_THEO_MA[ao] : undefined, bacTrangPhuc(v.level));
+  }
+
   /** Thân (đã gồm áo), mũ neo ở đầu, vũ khí neo ở tay; dùng đúng hàm vẽ của màn Trận. */
   private drawDoll(): void {
     this.drawGhost();
@@ -788,7 +802,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const dang = dangFor(v.talent.id, v.sect.role === "tong_chu");
     const t = performance.now() / 1000;
     // Hình lớn vẽ sẵn (đạo bào, võ phục) thì dùng hình lớn; áo tài năng khác vẽ bằng dải trận có màu hệ và vũ khí.
-    const art = bigArtOf(look.body, look.outfit, () => this.drawDoll());
+    const art = bigArtFirst(this.hinhLon(v, look), () => this.drawDoll());
     if (art) {
       this.drawBig(ctx, art, v, w, h, t);
       return;
@@ -875,7 +889,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     ctx.clearRect(0, 0, w, h);
     ctx.imageSmoothingEnabled = true;
     const look = this.dollLook(v);
-    const art = bigArtOf(look.body, look.outfit, () => this.drawDoll());
+    const art = bigArtFirst(this.hinhLon(v, look), () => this.drawDoll());
     if (art) {
       const dh = h * 1.15;
       const dw = (dh * art.naturalWidth) / art.naturalHeight;
