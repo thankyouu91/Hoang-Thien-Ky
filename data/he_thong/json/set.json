@@ -163,7 +163,7 @@
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Máu +1,5%","tham_so":{"hp":15}},
+        {"so":2,"loai":"chi_so","mo_ta":"Máu +1%","tham_so":{"hp":10}},
         {
           "so": 4,
           "loai": "chi_so",
@@ -215,7 +215,7 @@
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Giảm sát thương nhận 4%","tham_so":{"damageTakenCut":40}},
+        {"so":2,"loai":"chi_so","mo_ta":"Giảm sát thương ngoại nhận 4%","tham_so":{"damageTakenCutOuter":40}},
         {
           "so": 4,
           "loai": "chi_so",
@@ -319,7 +319,12 @@
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Thời gian khống chế +20%","tham_so":{"controlTime":200}},
+        {
+          "so": 2,
+          "loai": "chi_so",
+          "mo_ta": "Thời gian khống chế +20%; tốc đánh +3%",
+          "tham_so": {"controlTime":200,"attackSpeed":30}
+        },
         {
           "so": 4,
           "loai": "hanh_vi",
@@ -639,7 +644,7 @@
       "ten": "Liên Kích",
       "lo": ["ngoai_cong"],
       "an": "NG-BA-003",
-      "moc_2": {"mo_ta":"Tốc đánh +3%","tham_so":{"attackSpeed":30}},
+      "moc_2": {"mo_ta":"Tốc đánh +4%","tham_so":{"attackSpeed":40}},
       "moc_3": {"mo_ta":"Giảm hồi chiêu 3%","tham_so":{"cooldownCut":30}}
     },
     {
