@@ -7617,41 +7617,35 @@
     },
     {
       "file": "cong_trinh/am_lanh_u_hon_dien/tang_kinh_cac.png",
-      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh, seed và bảng màu hệ.",
-      "tool": "create_image_pixflux",
+      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
       "params": {
         "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: a tall slender five-storey library pagoda of dark weathered wood with stacked curved black roofs, shelves of scroll books visible through windows lit by pale green ghost fire.",
         "width": 320,
         "height": 192,
         "no_background": false,
-        "view": "side",
-        "detail": "highly detailed",
-        "shading": "medium shading",
-        "outline": "selective outline",
         "seed": 7,
-        "color_image": "bang_mau/am_lanh.png"
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
       },
-      "created": "2026-11-03",
-      "pixellab_id": "7f41bf59-65f6-4cf1-8451-d93f87b3a789"
+      "created": "2026-11-05",
+      "pixellab_id": "26e4527f-0f74-464d-bae3-0115ce8a7781",
+      "api": "REST v2 generate-image-v2"
     },
     {
       "file": "cong_trinh/cuc_duong_thai_duong_cung/tang_kinh_cac.png",
-      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh, seed và bảng màu hệ.",
-      "tool": "create_image_pixflux",
+      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) của mô hình tông môn Thái Dương Cung (cuc_duong_thai_duong_cung), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
       "params": {
         "description": "Pixel art game background, wide landscape scene at a blazing orange sunset, a huge setting sun filling the fiery sky. A xianxia cultivation sect called Great Sun Palace, golden domed palaces decorated with sun emblems, glowing hot light on every roof. No people, no text, no UI. Main subject in the center foreground: a tall slender five-storey library pagoda with stacked curved golden roofs and a sun disc on its spire, shelves of scroll books visible through brightly lit windows.",
         "width": 320,
         "height": 192,
         "no_background": false,
-        "view": "side",
-        "detail": "highly detailed",
-        "shading": "medium shading",
-        "outline": "selective outline",
         "seed": 7,
-        "color_image": "bang_mau/cuc_duong.png"
+        "target_palette": "bảng màu cong_trinh/cuc_duong_thai_duong_cung/chinh_dien"
       },
-      "created": "2026-11-03",
-      "pixellab_id": "416121b1-27de-4899-bbe6-98da5bf14cd1"
+      "created": "2026-11-05",
+      "pixellab_id": "416121b1-27de-4899-bbe6-98da5bf14cd1",
+      "api": "REST v2 generate-image-v2"
     },
     {
       "file": "cong_trinh/cuc_am_huyen_am_dong/tang_kinh_cac.png",
@@ -23231,6 +23225,214 @@
           ]
         }
       ]
+    },
+    {
+      "file": "cong_trinh/kim_bach_ngan_dien/tang_kinh_cac.png",
+      "description": "Hình nền công trình Tàng Kinh Các (tang_kinh_cac) của mô hình tông môn Bạch Ngân Điện (kim_bach_ngan_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a clear cold morning. A xianxia cultivation sect called White Silver Palace, palaces of white stone with shining silver roofs and polished metal ornaments on a rocky plateau, pale blue sky. No people, no text, no UI. Main subject in the center foreground: a tall slender five-storey library pagoda with stacked curved roofs, shelves of scroll books visible through lit windows.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/kim_bach_ngan_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "67113a20-34d4-4343-ab4e-d5714cad204d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/quang_quang_minh_dien/phi_thang_dai.png",
+      "description": "Hình nền công trình Phi Thăng Đài (phi_thang_dai) của mô hình tông môn Quang Minh Điện (quang_quang_minh_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight. A xianxia cultivation sect called Radiant Light Temple, temples of white marble radiating holy golden light, golden sun rays breaking through soft white clouds, distant mountains glowing. No people, no text, no UI. Main subject in the center foreground: a huge man-made ascension altar, a tall stepped stone pyramid platform with long straight stairways and carved stone railings, a small pavilion on its flat top, a pillar of bright light rising from the top into the clouds, glowing rings of light in the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/quang_quang_minh_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "de46938c-2379-4ff3-a241-683dbd41b985",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/quang_quang_minh_dien/thuong_hoi.png",
+      "description": "Hình nền công trình Thương hội (thuong_hoi) của mô hình tông môn Quang Minh Điện (quang_quang_minh_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight. A xianxia cultivation sect called Radiant Light Temple, temples of white marble radiating holy golden light, golden sun rays breaking through soft white clouds, distant mountains glowing. No people, no text, no UI. Main subject in the center foreground: a small trading guild market street with wooden stalls under colorful cloth awnings and strings of glowing paper lanterns.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/quang_quang_minh_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "154c195d-0534-4576-a8e6-5a7d0f4ca902",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/quang_quang_minh_dien/truyen_tong_tran.png",
+      "description": "Hình nền công trình Truyền Tống Trận (truyen_tong_tran) của mô hình tông môn Quang Minh Điện (quang_quang_minh_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight. A xianxia cultivation sect called Radiant Light Temple, temples of white marble radiating holy golden light, golden sun rays breaking through soft white clouds, distant mountains glowing. No people, no text, no UI. Main subject in the center foreground: a circular stone teleportation array platform surrounded by tall stone pillars, glowing runes on the floor, a bright beam of light shooting straight up into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/quang_quang_minh_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b480d887-fa72-40e4-827d-899c45330db6",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/am_lanh_u_hon_dien/ho_son_dai_tran.png",
+      "description": "Hình nền công trình Hộ Sơn Đại Trận (ho_son_dai_tran) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: a huge translucent glowing protective barrier dome covering the sect buildings on the mountain, a ring of glowing rune array circles and hexagon patterns on the ground around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "773be81b-d3e6-4256-8d6a-027d5b7d68b0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/am_lanh_u_hon_dien/dien_vo_truong.png",
+      "description": "Hình nền công trình Diễn Võ Trường (dien_vo_truong) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: a large open stone martial arts training plaza, rows of wooden training dummies, weapon racks with spears and swords, tall banners on poles.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2cfdb21c-4077-4574-a417-8aa2dc3fda37",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/am_lanh_u_hon_dien/luyen_khi_cac.png",
+      "description": "Hình nền công trình Luyện Khí Các (luyen_khi_cac) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: a blacksmith forge workshop with a tall stone chimney, a glowing furnace, a large anvil outside and bright sparks flying.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "618d4447-534c-402b-bf9d-621b401454a3",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/am_lanh_u_hon_dien/linh_duoc_vien.png",
+      "description": "Hình nền công trình Linh Dược Viên (linh_duoc_vien) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: terraced fields of softly glowing spirit herbs on the hillside, a small clear spring pond, a small wooden herb hut.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c6672864-5331-4266-becb-2aad67f333af",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/am_lanh_u_hon_dien/luyen_dan_phong.png",
+      "description": "Hình nền công trình Luyện Đan Phòng (luyen_dan_phong) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: an alchemy house beside a big bronze three-legged pill cauldron, fire burning beneath the cauldron, thick fragrant smoke rising into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "36689d9c-172b-4f02-bbfa-1ff8ca5dac66",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/am_lanh_u_hon_dien/bao_kho.png",
+      "description": "Hình nền công trình Bảo Khố (bao_kho) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: a fortified stone treasury vault built into the rock, a heavy round bronze vault door with glowing runes, wooden treasure chests stacked outside.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f5734448-cbcf-4bd1-9333-87c27f0c0108",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/am_lanh_u_hon_dien/truyen_tong_tran.png",
+      "description": "Hình nền công trình Truyền Tống Trận (truyen_tong_tran) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: a circular stone teleportation array platform surrounded by tall stone pillars, glowing runes on the floor, a bright beam of light shooting straight up into the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3c697bd2-472e-4d25-ad0f-3d0447c12c0b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/am_lanh_u_hon_dien/thuong_hoi.png",
+      "description": "Hình nền công trình Thương hội (thuong_hoi) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: a small trading guild market street with wooden stalls under colorful cloth awnings and strings of glowing paper lanterns.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fc5769ad-9f89-44ab-9cc5-32dcaa2bfad8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "cong_trinh/am_lanh_u_hon_dien/phi_thang_dai.png",
+      "description": "Hình nền công trình Phi Thăng Đài (phi_thang_dai) của mô hình tông môn U Hồn Điện (am_lanh_u_hon_dien), dùng ở tab Sơn môn và đầu màn Tông môn. Cùng bộ của mô hình: chung bối cảnh và seed.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night. A xianxia cultivation sect called Ghost Soul Hall, dark halls among dead twisted trees, floating soul lanterns and drifting green ghost-fire wisps, cold creeping mist. No people, no text, no UI. Main subject in the center foreground: a huge man-made ascension altar, a tall stepped stone pyramid platform with long straight stairways and carved stone railings, a small pavilion on its flat top, a pillar of bright light rising from the top into the clouds, glowing rings of light in the sky.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu cong_trinh/am_lanh_u_hon_dien/chinh_dien"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": null,
+      "api": "REST v2 generate-image-v2"
     }
   ]
 }
