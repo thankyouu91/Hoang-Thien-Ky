@@ -29,7 +29,7 @@ const giam = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Gắn thẻ Nhiệm vụ nhập môn; trả hàm báo đổi màn để ẩn thẻ trong màn Trận. */
-export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: string): void } {
+export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: string): void; moBuoc(): Promise<void> } {
   const el = document.createElement("aside");
   el.id = "ftue";
   el.setAttribute("aria-live", "polite");
@@ -165,6 +165,15 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
       scene = id;
       void capNhat();
     },
+    // Dòng nhiệm vụ ở Việc nên làm hay Tin báo (Go "nhiem-vu"): mở đúng việc của bước đang làm, như nút trên thẻ nổi.
+    async moBuoc() {
+      const f = (await host.nguon.get()).ftue();
+      if (f.buoc) return void moViec(f.buoc.viec);
+      const ke = f.ke;
+      openSheet("Nhiệm vụ chính", `
+        <p>${ke ? `Nhiệm vụ kế: ${esc(ke.ten)} (${ke.mo ? "chưa có trong bản chơi thử" : `mở ở cấp ${ke.minLevel}`}).` : "Bạn đã xong các nhiệm vụ có trong bản chơi thử."}</p>
+        <p class="moi-nho">Trong lúc chờ: học công pháp truyền thụ ở Công pháp, thu mỏ ở Tông môn, bế quan ở Nhân vật.</p>`);
+    },
   };
 }
 
@@ -184,20 +193,26 @@ function baoLoi(e?: string): string {
 
 function bangVung(ct: FtueChiTiet, chon: (code: string) => void): void {
   let pick = ct.vung.find((v) => v.goiY && v.mo)?.code ?? "";
+  const row = (v: FtueChiTiet["vung"][number]) => `
+      <li><button type="button" class="row moi-vung-row" data-vung="${v.code}" ${v.mo ? "" : "disabled"} aria-pressed="${v.code === pick}">
+        <span class="moi-vung-ten"><b>${esc(v.name)}</b>${v.goiY ? '<em class="moi-tag">Gợi ý · ít người</em>' : ""}</span>
+        <span class="moi-vung-he"><span class="moi-nho">Hệ chủ đạo</span>${elementChip(v.element as Element)}</span>
+        <span class="moi-vung-he"><span class="moi-nho">Tàn quyển hay rơi</span>${v.drops.map((d) => elementChip(d as Element)).join("")}</span>
+        <span class="moi-nho">Thành chủ ${esc(v.capital)}</span>
+      </button></li>`;
+  const mo = ct.vung.filter((v) => v.mo);
+  const khoa = ct.vung.filter((v) => !v.mo);
+  // Nút chính đặt ngay sau các vùng mở được (và dính đáy bảng); vùng chưa mở gom vào một dòng thu gọn bên dưới.
   const body = openSheet("Chọn vùng bắt đầu", `
     <p class="moi-ghi">Vùng quyết định hệ chủ đạo và tàn quyển hay rơi. Vùng ít người xếp đầu và đã chọn sẵn.</p>
-    <ul class="list moi-vung">${ct.vung.map((v) => `
-      <li><button type="button" class="row moi-vung-row" data-vung="${v.code}" ${v.mo ? "" : "disabled"} aria-pressed="${v.code === pick}">
-        <span class="moi-vung-ten"><b>${esc(v.name)}</b>${v.goiY ? '<em class="moi-tag">Gợi ý · ít người</em>' : ""}${v.mo ? "" : '<em class="moi-tag xam">Chưa mở ở bản thử</em>'}</span>
-        <span class="moi-vung-he">${elementChip(v.element as Element)}<span class="moi-nho">Rơi:</span>${v.drops.map((d) => elementChip(d as Element, false)).join("")}</span>
-        <span class="moi-nho">Thành chủ ${esc(v.capital)}</span>
-      </button></li>`).join("")}</ul>
-    <div class="actions"><button type="button" class="seal wide" data-ok>Đến thành chủ</button></div>`);
+    <ul class="list moi-vung">${mo.map(row).join("")}</ul>
+    <div class="actions moi-actions"><button type="button" class="seal wide" data-ok>Đến thành chủ</button></div>
+    ${khoa.length ? `<details class="moi-khoa"><summary>${khoa.length} vùng chưa mở ở bản chơi thử</summary><ul class="list moi-vung">${khoa.map(row).join("")}</ul></details>` : ""}`);
   body.addEventListener("click", (e) => {
     const t = e.target as HTMLElement;
-    const row = t.closest<HTMLButtonElement>("[data-vung]");
-    if (row && !row.disabled) {
-      pick = row.dataset.vung!;
+    const o = t.closest<HTMLButtonElement>("[data-vung]");
+    if (o && !o.disabled) {
+      pick = o.dataset.vung!;
       body.querySelectorAll("[data-vung]").forEach((b) => b.setAttribute("aria-pressed", String((b as HTMLElement).dataset.vung === pick)));
     }
     if (t.closest("[data-ok]") && pick) chon(pick);
@@ -209,7 +224,7 @@ function bangTong(ct: FtueChiTiet, ok: () => void): void {
   const body = openSheet("Tông môn gợi ý", `
     <section class="card moi-tong">
       <h3>${esc(t.name)}</h3>
-      <p class="moi-nho">Cấp ${t.level} · Chính phái · ${elementChip(t.element as Element)} · ${t.members} thành viên</p>
+      <p class="moi-nho">${elementChip(t.element as Element)} Cấp ${t.level} · Chính phái · ${t.members} thành viên</p>
       <ul class="moi-ds">
         <li><span>Tông chủ</span><b>${esc(t.tongChu)}</b></li>
         <li><span>Sơn môn</span><b>${esc(t.sonMon)}, cấp nguy hiểm ${t.danger}</b></li>
@@ -218,7 +233,7 @@ function bangTong(ct: FtueChiTiet, ok: () => void): void {
       </ul>
       <p class="moi-ghi">Vào tông thì thành chủ nhà chuyển về vùng của tông; truyền tống thẳng về sơn môn qua Truyền Tống Trận.</p>
     </section>
-    <div class="actions">
+    <div class="actions moi-actions">
       <button type="button" class="seal wide" data-ok>Gia nhập ${esc(t.name)}</button>
       <button type="button" class="btn wide" disabled>Tự lập tông môn (mở ở cấp ${t.capLapTong}, bạn đang cấp ${t.level0})</button>
     </div>`);
@@ -245,21 +260,21 @@ function bangGhep(ct: FtueChiTiet, ok: () => void): void {
     <div class="moi-ghep">${quyen(g.main, "Chủ quyển")}<span class="moi-cong">+</span>${quyen(g.sub, "Phụ quyển")}</div>
     <section class="card moi-kq">
       <h3>${esc(g.ten)}</h3>
-      <p>${skillChip(g.type as SkillType)} · phẩm Phàm</p>
+      <p>${skillChip(g.type as SkillType)} <span>Phẩm Phàm</span></p>
       <p class="moi-nho">D ${g.damage} · ${g.targets} mục tiêu · hồi ${g.cd.toLocaleString("vi-VN")} s · ${g.mana} mana</p>
       <p class="moi-nho">${root}</p>
     </section>
-    <div class="actions"><button type="button" class="seal wide" data-ok>Ghép và mang vào trận</button></div>`);
+    <div class="actions moi-actions"><button type="button" class="seal wide" data-ok>Ghép và mang vào trận</button></div>`);
   body.querySelector("[data-ok]")!.addEventListener("click", ok);
 }
 
 function bangThuChieu(ct: FtueChiTiet, ok: () => void): void {
   const body = openSheet("Thử chiêu", `
     <section class="card">
-      <p>3 dị thú hệ <b>${esc(ct.thuChieu.foe)}</b> quanh sơn môn. Bạn đi cùng 2 đồng môn.</p>
+      <p>3 dị thú hệ ${esc(ct.thuChieu.foe)} quanh sơn môn. Bạn đi cùng 2 đồng môn.</p>
       <p class="moi-nho">${esc(ct.thuChieu.home)} khắc ${esc(ct.thuChieu.foe)}: công pháp hệ ${esc(ct.thuChieu.home)} đánh trúng gây sát thương ×1,5. Trận tự đánh, bạn xem lại được ở Chiến báo.</p>
     </section>
-    <div class="actions"><button type="button" class="seal wide" data-ok>Ra trận</button></div>`);
+    <div class="actions moi-actions"><button type="button" class="seal wide" data-ok>Ra trận</button></div>`);
   body.querySelector("[data-ok]")!.addEventListener("click", ok);
 }
 
@@ -271,7 +286,7 @@ function bangChiemMo(ct: FtueChiTiet, ok: () => void, xem: () => void): void {
       <p class="moi-nho">Mỏ linh thạch cấp ${m.level} · ${m.perHour} linh thạch mỗi giờ · ${esc(m.by)} đang canh · cách sơn môn 1 chặng</p>
       <p>Cùng 3 đồng môn đánh dị thú canh mỏ. Thắng thì mỏ về tay tông, sản lượng vào Bảo Khố.</p>
     </section>
-    <div class="actions"><button type="button" class="seal wide" data-ok>Đánh chiếm</button><button type="button" class="btn wide" data-xem>Xem trên bản đồ</button></div>`);
+    <div class="actions moi-actions"><button type="button" class="seal wide" data-ok>Đánh chiếm</button><button type="button" class="btn wide" data-xem>Xem trên bản đồ</button></div>`);
   body.querySelector("[data-ok]")!.addEventListener("click", ok);
   body.querySelector("[data-xem]")!.addEventListener("click", xem);
 }
@@ -281,17 +296,17 @@ function bangNhac(ct: FtueChiTiet, ok: () => void): void {
   const hom = new Date(at).toDateString() === new Date().toDateString() ? "hôm nay" : "ngày mai";
   const body = openSheet("Giờ mở cửa", `
     <section class="card">
-      <p>Bí cảnh kế mở lúc <b>${clockText(at)} ${hom}</b>, còn ${esc(durationText(at - Date.now()))}. Mỗi khung mở 30 phút.</p>
+      <p>Bí cảnh kế mở lúc ${clockText(at)} ${hom}, còn ${esc(durationText(at - Date.now()))}. Mỗi khung mở 30 phút.</p>
       <p class="moi-nho">Game nhắc bạn trước 5 phút khi đang mở trang. Khung giờ cũng nằm ở thẻ Lịch của Động phủ.</p>
     </section>
-    <div class="actions"><button type="button" class="seal wide" data-ok>Nhắc tôi</button></div>`);
+    <div class="actions moi-actions"><button type="button" class="seal wide" data-ok>Nhắc tôi</button></div>`);
   body.querySelector("[data-ok]")!.addEventListener("click", ok);
 }
 
 function bangChoiLai(ok: () => void): void {
   const body = openSheet("Chơi lại từ đầu", `
-    <p>Bỏ toàn bộ tiến độ của tài khoản này trên máy (cấp, đồ, tông môn, nhiệm vụ) và bắt đầu lại từ cấp 1. Không hoàn tác được.</p>
-    <div class="actions"><button type="button" class="seal wide" data-ok>Chơi lại từ cấp 1</button><button type="button" class="btn wide" data-close>Thôi</button></div>`);
+    <p>Mất hết tiến độ trên máy này của tài khoản đang chơi: cấp, đồ, tông môn, nhiệm vụ. Bạn bắt đầu lại từ cấp 1 và không hoàn tác được.</p>
+    <div class="actions moi-actions"><button type="button" class="seal wide" data-ok>Chơi lại từ cấp 1</button><button type="button" class="btn wide" data-close>Thôi</button></div>`);
   body.querySelector("[data-ok]")!.addEventListener("click", ok);
 }
 
@@ -373,11 +388,23 @@ function manGieoQue(ct: FtueChiTiet, xong: (look: { body: Than; outfit: Ao }, na
             <img src="${assetUrl(`nhan_vat/${b}/${look.outfit}`)}" alt=""><span>${TEN_THAN[b]}</span></button>`).join("")}</div>
         <div class="seg th-ao" role="group" aria-label="Áo">${AO.map((o) => `<button type="button" data-ao="${o}" aria-pressed="${o === look.outfit}">${TEN_AO[o]}</button>`).join("")}</div>
         <label class="th-ten"><span class="moi-nho">Đạo hiệu</span>
-          <span class="th-ten-o"><input type="text" maxlength="16" value="${esc(ct.name)}" autocomplete="off" spellcheck="false"><button type="button" class="btn small" data-ngau>Đổi</button></span></label>
-        <div class="gq-nut"><button type="button" class="seal wide" data-xong>Vào thành chủ</button></div>`;
+          <span class="th-ten-o"><input type="text" maxlength="16" value="${esc(ct.name)}" autocomplete="off" spellcheck="false" aria-describedby="th-loi"><button type="button" class="btn small" data-ngau>Đổi</button></span></label>
+        <p class="th-loi" id="th-loi" role="alert"></p>
+        <div class="gq-nut"><button type="button" class="seal wide" data-xong>Bắt đầu tu đạo</button></div>`;
       khung.querySelector(".gq-dong")!.addEventListener("click", dong);
+      kiemTen();
+    };
+    /** Đạo hiệu 2–16 ký tự: báo ngay dưới ô và khóa nút khi sai (màn này phủ trên toast). */
+    const kiemTen = (): boolean => {
+      const input = khung.querySelector<HTMLInputElement>(".th-ten input")!;
+      const n = input.value.replace(/\s+/g, " ").trim().length;
+      const ok = n >= 2 && n <= 16;
+      khung.querySelector(".th-loi")!.textContent = ok ? "" : "Đạo hiệu cần 2–16 ký tự.";
+      khung.querySelector<HTMLButtonElement>("[data-xong]")!.disabled = !ok;
+      return ok;
     };
     ve();
+    khung.addEventListener("input", kiemTen);
     khung.addEventListener("click", async (e) => {
       const t = e.target as HTMLElement;
       const input = khung.querySelector<HTMLInputElement>(".th-ten input")!;
@@ -388,9 +415,11 @@ function manGieoQue(ct: FtueChiTiet, xong: (look: { body: Than; outfit: Ao }, na
         look = { body: (b?.dataset.than as Than) ?? look.body, outfit: (o?.dataset.ao as Ao) ?? look.outfit };
         ct.name = name;
         ve();
-      } else if (t.closest("[data-ngau]")) input.value = tenNgauNhien(Math.random);
-      else if (t.closest("[data-xong]")) {
-        if (await xong(look, input.value)) dong();
+      } else if (t.closest("[data-ngau]")) {
+        input.value = tenNgauNhien(Math.random);
+        kiemTen();
+      } else if (t.closest("[data-xong]")) {
+        if (kiemTen() && (await xong(look, input.value))) dong();
       }
     });
   };

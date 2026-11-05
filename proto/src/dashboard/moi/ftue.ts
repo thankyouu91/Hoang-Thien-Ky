@@ -1,7 +1,7 @@
 // Chuỗi nhập môn (FTUE, GDD mục 14; tab Nhiệm vụ chương 0 "Nhập Thế", data/nhiem_vu/ha_nhiem_vu.json chinh.0.1–0.7).
 // File thuần: thứ tự bước, lời chỉ dẫn (tối đa 2 câu, GDD mục 14), phần thưởng lấy từ JSON, và dựng trận cho 0.5, 0.6 sao cho
 // người mới luôn thắng được (không kẹt). Lệnh làm từng bước nằm ở nguonMoi.ts.
-import { apply, loadoutTechniques, techniqueName, techniqueOf, toScroll, type LearnedTechnique, type OwnedScroll } from "@ktlp/rules";
+import { apply, loadoutTechniques, TAN_THU_SECT, techniqueName, techniqueOf, toScroll, type OwnedScroll } from "@ktlp/rules";
 import { baseStats, composeTechnique, simulate, type BattleInput, type Element, type SkillType, type Technique, type UnitSpec } from "@ktlp/sim";
 import type { World } from "../mock/world.ts";
 import NHIEM_VU from "../../../../data/nhiem_vu/ha_nhiem_vu.json" with { type: "json" };
@@ -200,20 +200,16 @@ export function lamTaoHinh(w: World, moi: MoiState, look: MoiState["look"], name
 /** 0.3: vào tông gợi ý làm ngoại môn (GDD mục 6), truyền tống từ thành chủ về sơn môn qua Truyền Tống Trận cơ bản. */
 export function lamGiaNhap(w: World, moi: MoiState, sectId: string, now: number): KetQua {
   if (!dangLam(moi, "chinh.0.3")) return { ok: false, error: "khong_dung_buoc" };
-  const me = w.rules.members[PLAYER];
-  if (me.sectId) return { ok: false, error: "da_co_tong" };
-  if (!w.rules.sects[sectId]) return { ok: false, error: "khong_co_tong" };
-  // Tạm cho tới khi @ktlp/rules có lệnh gia nhập (đã nhờ phiên Sprint): ghi thẳng như duyet_don của mock.
-  me.sectId = sectId;
-  me.role = "ngoai_mon";
+  const r = apply(w.rules, { type: "gia_nhap_tong", actor: PLAYER, sectId }, now);
+  if (!r.ok) return { ok: false, error: r.error };
   // Truyền tống tức thì: chuyến đã xong, không hiện "Hành trình" ở Động phủ.
   // Bản đồ coi chuyến đã xong là đứng ở điểm đi (mapScene.hereId), nên cả hai đầu là sơn môn.
   w.travel = { from: w.sonMon, to: w.sonMon, startsAt: now - 62 * 60_000, endsAt: now - 61 * 60_000 };
   return { ok: true };
 }
 
-/** Mã tông ghi trên công pháp tân thủ: riêng chủ nhân, không thuộc bộ truyền thụ, không đóng băng khi rời tông (nhiệm vụ 0.4). */
-export const TAN_THU = "tan_thu";
+/** Mã tông ghi trên công pháp tân thủ (TAN_THU_SECT của @ktlp/rules): riêng chủ nhân, không đóng băng khi rời tông. */
+export const TAN_THU = TAN_THU_SECT;
 
 /** Xem trước công pháp ghép từ 2 tàn quyển tặng: tên và chỉ số trận. */
 export function xemTruocTanThu(w: World, moi: MoiState): { main: OwnedScroll; sub: OwnedScroll; ten: string; tech: Technique } | undefined {
@@ -224,24 +220,21 @@ export function xemTruocTanThu(w: World, moi: MoiState): { main: OwnedScroll; su
 }
 
 /**
- * 0.4: ghép 2 tàn quyển tặng thành công pháp tân thủ, học luôn tầng 1 và mang vào trận ô đầu. Tạm làm ở đây cho tới khi
- * @ktlp/rules có lệnh ghép tân thủ (đã nhờ phiên Sprint); tên theo techniqueName, chỉ số theo techniqueOf của rules.
+ * 0.4: ghép 2 tàn quyển tặng thành công pháp tân thủ (lệnh ghep_tan_thu của @ktlp/rules: không cần nộp, không cần chức vị,
+ * học luôn tầng 1), rồi mang vào trận ô đầu.
  */
 export function lamGhepTanThu(w: World, moi: MoiState, now: number): KetQua {
   if (!dangLam(moi, "chinh.0.4")) return { ok: false, error: "khong_dung_buoc" };
   const xem = xemTruocTanThu(w, moi);
   if (!xem) return { ok: false, error: "khong_co_tan_quyen" };
+  const g = apply(w.rules, { type: "ghep_tan_thu", actor: PLAYER, main: xem.main.uid, subs: [xem.sub.uid] }, now);
+  if (!g.ok) return { ok: false, error: g.error };
+  const ev = g.events[0];
+  if (ev.type !== "ghep_tan_thu") return { ok: false, error: "lenh_khong_hop_le" };
   const me = w.rules.members[PLAYER];
-  const l: LearnedTechnique = {
-    techniqueId: w.rules.nextId++, sectId: TAN_THU, name: xem.ten,
-    main: { kind: xem.main.kind, grade: xem.main.grade }, subs: [{ kind: xem.sub.kind, grade: xem.sub.grade }],
-    grade: Math.min(xem.main.grade, xem.sub.grade), layer: 1, frozen: false, betrayed: false,
-  };
-  me.bag = me.bag.filter((s) => !moi.quaTanThu.includes(s.uid));
-  me.learned.push(l);
-  const r = apply(w.rules, { type: "mang_vao_tran", actor: PLAYER, techniqueIds: [l.techniqueId, ...me.loadout].slice(0, 4) }, now);
+  const r = apply(w.rules, { type: "mang_vao_tran", actor: PLAYER, techniqueIds: [ev.technique.techniqueId, ...me.loadout].slice(0, 4) }, now);
   if (!r.ok) return { ok: false, error: r.error };
-  return { ok: true, message: `Ghép được ${xem.ten}, đã mang vào trận` };
+  return { ok: true, message: `Ghép được ${ev.technique.name}, đã mang vào trận` };
 }
 
 export const TEN_HE: Record<Element, string> = {

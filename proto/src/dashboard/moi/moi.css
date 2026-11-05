@@ -133,3 +133,15 @@ body[data-scene="tran"] #ftue { display: none; }
 .gq-goc { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .gq-goc b { display: inline-flex; align-items: center; gap: 4px; }
 .gq-goc img { width: 26px; height: 26px; }
+/* Nút chính của bảng nhập môn luôn trong tầm mắt: dính đáy vùng cuộn của bảng trượt. */
+#sheet .moi-actions {
+  position: sticky; bottom: 0; z-index: 1; margin: 12px calc(-1 * var(--gutter, 16px)) 0; padding: 10px var(--gutter, 16px) 12px;
+  background: linear-gradient(to bottom, transparent, var(--c-surface) 14px);
+}
+.moi-khoa { margin-top: 12px; }
+.moi-khoa summary { cursor: pointer; padding: 8px 0; color: var(--c-ink-3, #6b5a48); font-size: var(--fs-sm); }
+.moi-khoa .moi-vung { margin-top: 6px; }
+.moi-vung-he .moi-nho { margin-right: 2px; }
+/* Lỗi đạo hiệu ngay dưới ô nhập (màn gieo quẻ phủ trên toast). */
+.th-loi { min-height: 1.2em; margin: 2px 0 0; color: var(--c-accent); font-size: var(--fs-xs); }
+#gieo-que .seal:disabled { opacity: 0.45; cursor: not-allowed; }

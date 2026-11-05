@@ -74,6 +74,10 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
         case "thanh-chu":
           app.show(dongPhu);
           break;
+        case "nhiem-vu":
+          if (ftue) ftue.moBuoc();
+          else app.show(dongPhu);
+          break;
         case "tran":
           void openBattle(g.battleId);
           break;

@@ -91,7 +91,9 @@ export type Go =
   | { screen: "cong-phap"; section?: "mang" | "truyen-thu" | "tui" | "tang-kinh" }
   | { screen: "lien-minh" }
   | { screen: "thanh-chu" }
-  | { screen: "tran"; battleId: number };
+  | { screen: "tran"; battleId: number }
+  /** Nhiệm vụ nhập môn của người mới: mở đúng việc của bước đang làm (moi/ftueUi.ts); bản mẫu không dùng. */
+  | { screen: "nhiem-vu"; id?: string };
 
 export interface TodoCard {
   id: string;

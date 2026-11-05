@@ -92,9 +92,9 @@ export class NguonMoi extends MockDashboardSource {
 
   protected override currentQuest(): { id: string; name: string; step: string; go: Go } | undefined {
     const b = buocHienTai(this.moi);
-    if (b) return { id: b.id, name: `Nhập Thế ${b.so}/7: ${b.ten}`, step: b.loi, go: { screen: "dong-phu" } };
+    if (b) return { id: b.id, name: `Nhập Thế ${b.so}/7: ${b.ten}`, step: b.loi, go: { screen: "nhiem-vu", id: b.id } };
     const ke = nhiemVuKe(this.me.level);
-    return ke && { id: "ke", name: `Nhiệm vụ chính: ${ke.ten}`, step: ke.mo ? "Chưa có trong bản chơi thử" : `Mở ở cấp ${ke.minLevel}`, go: { screen: "dong-phu" } };
+    return ke && { id: "ke", name: `Nhiệm vụ chính: ${ke.ten}`, step: ke.mo ? "Chưa có trong bản chơi thử" : `Mở ở cấp ${ke.minLevel}`, go: { screen: "nhiem-vu", id: "ke" } };
   }
 
   protected override todo(now: number): TodoCard[] {
@@ -222,7 +222,8 @@ export class NguonMoi extends MockDashboardSource {
     if (r.items) parts.push(...themMon(this.w, r.items));
     ghi("ftue_buoc", { buoc: BUOC_FTUE[id] });
     this.luu();
-    return parts.join(", ");
+    // Nối bằng " · " để lớp dịch tiếng Anh dịch từng phần (i18nTra).
+    return parts.join(" · ");
   }
 
   ftue(): FtueView {
