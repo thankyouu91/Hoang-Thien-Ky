@@ -758,7 +758,7 @@ body[data-may-chu="khong_co"] .can-may-chu { display: none; }
 #bao-tri h2 { margin: 0; color: var(--c-accent-ink); font: 700 26px/1.2 var(--font-display); }
 #bao-tri p { margin: 0 0 6px; color: var(--c-ink-2); }
 #bao-tri button { min-height: 44px; padding: 0 22px; font: inherit; cursor: pointer; }
-.bao-tri-an { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 6px; background: var(--c-accent); color: var(--c-on-accent); font: 600 30px/1 "Noto Serif SC", "Songti SC", "SimSun", serif; transform: rotate(-3deg); }
+.bao-tri-an { display: block; width: 64px; height: 64px; }
 .page .nv-main { width: 100%; min-height: 46px; margin-top: var(--sp-2); font-family: var(--font-serif); font-size: 16px; letter-spacing: 0.04em; }
 
 /* Cột giữa: Pháp tướng */
@@ -1217,25 +1217,9 @@ b.g-cao { color: #6d3a8e; }
 .lang-sw button[aria-pressed="true"] { background: var(--c-accent); color: var(--c-on-accent); }
 #login .age-badge { padding: 1px 6px; border: 1px solid var(--c-line-2); border-radius: 4px; background: var(--c-surface); color: var(--c-ink-2); font-size: 12px; font-weight: 700; }
 .login-brand { margin: 5vh 0 auto; text-align: center; }
-/* Dấu ấn triện 天荒記 (Thiên Hoang Ký): lối khắc ba chữ, cột phải 天荒 từ trên xuống, cột trái chữ 記 kéo cao bằng hai ô */
-.login-seal {
-  display: inline-grid;
-  grid-template-rows: 1fr 1fr;
-  grid-auto-flow: column;
-  direction: rtl;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  margin-bottom: var(--sp-4);
-  padding: 7px;
-  border-radius: 8px;
-  background: var(--c-accent);
-  box-shadow: inset 0 0 0 3px var(--c-accent), inset 0 0 0 4.5px rgba(255, 238, 222, 0.55), 0 6px 16px rgba(179, 38, 30, 0.25);
-  color: var(--c-on-accent);
-  font: 600 19px/1 "Noto Serif SC", "Songti SC", "SimSun", "Microsoft YaHei", serif;
-  transform: rotate(-3deg);
-}
-.login-seal .tall { grid-row: 1 / span 2; font-size: 22px; transform: scaleY(1.7); }
+/* Dấu ấn Thiên Hoang Ký (assets/brand, phiên icon Canva): dấu tròn son không chữ, đặt thẳng lên nền kem, không lót, không
+   khung; mực son nhạt bán trong suốt nên trông như in trên giấy (người dùng chê ô đỏ chữ Hán cũ) */
+.login-seal { display: block; width: 104px; height: 104px; margin: 0 auto var(--sp-3); }
 .login-brand h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.01em; line-height: 1.15; }
 .login-brand .tag { margin: 8px 0 0; color: var(--c-ink-2); font-size: var(--fs-md); }
 .login-card {

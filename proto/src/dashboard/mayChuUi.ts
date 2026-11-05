@@ -176,7 +176,7 @@ async function kiemBaoTri(): Promise<void> {
     document.body.append(baoTriEl);
   }
   baoTriEl.innerHTML = `<div class="box">
-      <span class="bao-tri-an" aria-hidden="true">修</span>
+      <img class="bao-tri-an" src="${import.meta.env.BASE_URL}brand/dau_an_128.png" alt="" width="64" height="64">
       <h2 id="bao-tri-h">Đang bảo trì</h2>
       ${loi ? `<p data-no-tr>${esc(loi)}</p>` : `<p>Máy chủ đang bảo trì. Đạo hữu quay lại sau ít phút nhé.</p>`}
       <button type="button" class="seal">Thử lại</button>
