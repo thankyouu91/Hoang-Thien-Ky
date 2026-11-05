@@ -19,6 +19,10 @@ import {
   axialToXY, bonusOf, CELLS, CENTER, cellOpen, cellOpensAt, drawOf, hexSize, LINK_NAMES, onOpenCells, pieceName, REALMS, RESONANCE, sealSet, setName, type BanDraw,
 } from "../daoCoBan.ts";
 import { dangFor, dangHeadroom, dangLift, drawDang } from "../../scenes/battle/dangDung.ts";
+import { lookTheoTaiNang } from "../../scenes/battle/aoTaiNang.ts";
+import { lightRange, recolor, type AoSpec, type Rgb } from "../../scenes/battle/mauAo.ts";
+import MAU_HE from "../../../../assets/pixellab/nhan_vat/mau_he.json";
+import type { Look, ReplayUnit } from "../../replay/types.ts";
 import { drawPhapLuan, phapLuanExtent, trackLevel, type PhapLuanSpec } from "../../scenes/battle/phapLuan.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { daoDoHtml, daoDoManDotPha, daoDoReduced, daoDoSan, khiManDotPhaDong } from "../daoDoFx.ts";
@@ -90,6 +94,41 @@ function bigArtOf(body: string, outfit: string, onload: () => void): HTMLImageEl
   img.src = assetUrl(`nhan_vat/${key}/lon`);
   bigArt.set(key, img);
   return undefined;
+}
+
+/**
+ * Hình lớn đổi màu áo theo hệ, cùng bảng mau_he.json và hàm recolor của trận (mauAo.ts): chuẩn hoá độ sáng trên chính
+ * hình lớn. Tính một lần mỗi (thân, áo, hệ) rồi đệm; bộ áo hay hệ không có trong bảng thì giữ hình gốc.
+ */
+const bigTinted = new Map<string, HTMLCanvasElement | null>();
+function bigArtTinted(art: HTMLImageElement, outfit: string, key: string, he: string | undefined): CanvasImageSource {
+  const spec = (MAU_HE.ao as unknown as Record<string, AoSpec>)[outfit];
+  const tones = he ? (MAU_HE.he as unknown as Record<string, [Rgb, Rgb, Rgb]>)[he] : undefined;
+  if (!spec || !tones) return art;
+  const k = `${key}/${he}`;
+  let c = bigTinted.get(k);
+  if (c === undefined) {
+    c = null;
+    try {
+      const cv = document.createElement("canvas");
+      cv.width = art.naturalWidth;
+      cv.height = art.naturalHeight;
+      const ctx = cv.getContext("2d", { willReadFrequently: true });
+      if (ctx) {
+        ctx.drawImage(art, 0, 0);
+        const d = ctx.getImageData(0, 0, cv.width, cv.height);
+        const range = lightRange(d.data, spec);
+        if (range && recolor(d.data, spec, tones, range) > 0) {
+          ctx.putImageData(d, 0, 0);
+          c = cv;
+        }
+      }
+    } catch {
+      c = null;
+    }
+    bigTinted.set(k, c);
+  }
+  return c ?? art;
 }
 
 /**
@@ -651,6 +690,30 @@ export class NhanVatScene extends PageScene<NhanVatView> {
 
   // ---- Hình nhân vật ------------------------------------------------------------------------------------------
 
+  /**
+   * Ngoại hình như trong trận (gói 3, docs/DO_MAC.md): áo và vũ khí theo tài năng, màu áo theo linh căn chính (lookTheoTaiNang
+   * chỉ đọc element và sprite "tu_si/<tài năng>"), vầng sáng theo độ hiếm và nấc rèn của vũ khí đang mặc. Lần đầu gặp một
+   * bộ áo thì nạp ngay dải của nó (áo tài năng nạp dần lúc rảnh), để búp bê khỏi hiện đạo bào mấy giây đầu.
+   */
+  private dollLook(v: NhanVatView): Look {
+    const base: Look = { body: v.look.body, outfit: v.look.outfit, hat: v.look.hat, weapon: v.look.weapon };
+    const unit = { element: v.roots[0], sprite: v.talent.id ? `tu_si/${v.talent.id}` : undefined } as Pick<ReplayUnit, "element" | "sprite">;
+    const look = lookTheoTaiNang(unit as ReplayUnit, base);
+    const wpn = v.gear.vu_khi;
+    if (wpn) {
+      look.weaponRarity = wpn.rarity;
+      look.weaponPlus = wpn.plus;
+    }
+    const key = `nhan_vat/${look.body}/${look.outfit}`;
+    if (!this.dollNap.has(key)) {
+      this.dollNap.add(key);
+      this.sprites.ensure(`${key}/`);
+      this.sprites.ensure(`${key}.png`);
+    }
+    return look;
+  }
+  private dollNap = new Set<string>();
+
   /** Thân (đã gồm áo), mũ neo ở đầu, vũ khí neo ở tay; dùng đúng hàm vẽ của màn Trận. */
   private drawDoll(): void {
     this.drawGhost();
@@ -669,13 +732,14 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
     ctx.imageSmoothingEnabled = false;
-    const look = { body: v.look.body, outfit: v.look.outfit, hat: v.look.hat, weapon: v.look.weapon };
+    const look = this.dollLook(v);
     // Dáng đứng theo tài năng (tông chủ ngự kiếm); dáng bay chừa chỗ phía trên, bóng nhỏ và nhạt đi theo độ nhấc.
     const dang = dangFor(v.talent.id, v.sect.role === "tong_chu");
     const t = performance.now() / 1000;
-    const art = bigArtOf(v.look.body, v.look.outfit, () => this.drawDoll());
+    // Hình lớn vẽ sẵn (đạo bào, võ phục) thì dùng hình lớn; áo tài năng khác vẽ bằng dải trận có màu hệ và vũ khí.
+    const art = bigArtOf(look.body, look.outfit, () => this.drawDoll());
     if (art) {
-      this.drawBig(ctx, art, v, w, h, t);
+      this.drawBig(ctx, art, v, w, h, t, look);
       return;
     }
     // Pháp luân (phapLuan.ts) theo công pháp mang vào trận đầu tiên và cấp: từ Trúc Cơ; lên cấp thì vòng lớn dần, đột phá
@@ -700,7 +764,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const tint = ELEMENT_STYLE[v.roots[0]]?.color;
     if (!drawDang(ctx, this.sprites, look, dang, "dung", 0, t, w / 2, h - 10, scale, false, tint, 0, luan)) {
       // Chưa có dải hoạt ảnh: vẽ ảnh tĩnh của thân mặc áo.
-      const img = this.sprites.get(`nhan_vat/${v.look.body}/${v.look.outfit}`);
+      const img = this.sprites.get(`nhan_vat/${look.body}/${look.outfit}`);
       if (img) ctx.drawImage(img, w / 2 - 32 * scale, h - 10 - 56 * scale, 64 * scale, 64 * scale);
     }
   }
@@ -713,7 +777,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
    * Hình lớn lơ lửng: nhấp nhô chậm, bóng dưới đất nhỏ lại khi bay cao;
    * pháp luân (phapLuan.ts, từ Trúc Cơ) vẽ sau lưng ngang ngực như ở hình ghép.
    */
-  private drawBig(ctx: CanvasRenderingContext2D, art: HTMLImageElement, v: NhanVatView, w: number, h: number, t: number): void {
+  private drawBig(ctx: CanvasRenderingContext2D, art: HTMLImageElement, v: NhanVatView, w: number, h: number, t: number, look: Look): void {
     // Từ 1 lần trở lên phóng theo bậc nửa số nguyên cho điểm ảnh đều; nhỏ hơn thì theo đúng chỗ trống (điện thoại).
     const fit = Math.min((w - 4) / art.naturalWidth, (h - 12) / art.naturalHeight);
     const k = fit >= 1 ? Math.floor(fit * 2) / 2 : fit;
@@ -738,7 +802,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       ctx.restore();
     }
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(art, x0, y0, dw, dh);
+    ctx.drawImage(bigArtTinted(art, look.outfit, `${look.body}/${look.outfit}`, look.tint), x0, y0, dw, dh);
   }
 
   private drawGhost(): void {
@@ -755,19 +819,19 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const ctx = c.getContext("2d")!;
     ctx.clearRect(0, 0, w, h);
     ctx.imageSmoothingEnabled = true;
-    const art = bigArtOf(v.look.body, v.look.outfit, () => this.drawDoll());
+    const look = this.dollLook(v);
+    const art = bigArtOf(look.body, look.outfit, () => this.drawDoll());
     if (art) {
       const dh = h * 1.15;
       const dw = (dh * art.naturalWidth) / art.naturalHeight;
-      ctx.drawImage(art, (w - dw) / 2, h * 0.02, dw, dh);
+      ctx.drawImage(bigArtTinted(art, look.outfit, `${look.body}/${look.outfit}`, look.tint), (w - dw) / 2, h * 0.02, dw, dh);
       return;
     }
-    const look = { body: v.look.body, outfit: v.look.outfit, hat: v.look.hat, weapon: v.look.weapon };
     const dang = dangFor(v.talent.id, v.sect.role === "tong_chu");
     const scale = (h * 1.18) / 72;
     const foot = h * 1.16;
     if (!drawDang(ctx, this.sprites, look, dang, "dung", 0, performance.now() / 1000, w / 2, foot, scale, false, ELEMENT_STYLE[v.roots[0]]?.color)) {
-      const img = this.sprites.get(`nhan_vat/${v.look.body}/${v.look.outfit}`);
+      const img = this.sprites.get(`nhan_vat/${look.body}/${look.outfit}`);
       if (img) ctx.drawImage(img, w / 2 - 32 * scale, foot - 56 * scale, 64 * scale, 64 * scale);
     }
   }
