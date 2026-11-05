@@ -52,6 +52,51 @@
      "diem/mo_linh_thach/moc_3_1",
      "diem/mo_linh_thach/moc_3_2"
     ]
+   },
+   "thuy": {
+    "1": [
+     "diem/mo_linh_thach/thuy_1_1",
+     "diem/mo_linh_thach/thuy_1_2",
+     "diem/mo_linh_thach/thuy_1_3"
+    ],
+    "2": [
+     "diem/mo_linh_thach/thuy_2_1",
+     "diem/mo_linh_thach/thuy_2_2"
+    ],
+    "3": [
+     "diem/mo_linh_thach/thuy_3_1",
+     "diem/mo_linh_thach/thuy_3_2"
+    ]
+   },
+   "hoa": {
+    "1": [
+     "diem/mo_linh_thach/hoa_1_1",
+     "diem/mo_linh_thach/hoa_1_2",
+     "diem/mo_linh_thach/hoa_1_3"
+    ],
+    "2": [
+     "diem/mo_linh_thach/hoa_2_1",
+     "diem/mo_linh_thach/hoa_2_2"
+    ],
+    "3": [
+     "diem/mo_linh_thach/hoa_3_1",
+     "diem/mo_linh_thach/hoa_3_2"
+    ]
+   },
+   "tho": {
+    "1": [
+     "diem/mo_linh_thach/tho_1_1",
+     "diem/mo_linh_thach/tho_1_2",
+     "diem/mo_linh_thach/tho_1_3"
+    ],
+    "2": [
+     "diem/mo_linh_thach/tho_2_1",
+     "diem/mo_linh_thach/tho_2_2"
+    ],
+    "3": [
+     "diem/mo_linh_thach/tho_3_1",
+     "diem/mo_linh_thach/tho_3_2"
+    ]
    }
   },
   "mo_quang": {
@@ -90,6 +135,51 @@
     "3": [
      "diem/mo_quang/moc_3_1",
      "diem/mo_quang/moc_3_2"
+    ]
+   },
+   "thuy": {
+    "1": [
+     "diem/mo_quang/thuy_1_1",
+     "diem/mo_quang/thuy_1_2",
+     "diem/mo_quang/thuy_1_3"
+    ],
+    "2": [
+     "diem/mo_quang/thuy_2_1",
+     "diem/mo_quang/thuy_2_2"
+    ],
+    "3": [
+     "diem/mo_quang/thuy_3_1",
+     "diem/mo_quang/thuy_3_2"
+    ]
+   },
+   "hoa": {
+    "1": [
+     "diem/mo_quang/hoa_1_1",
+     "diem/mo_quang/hoa_1_2",
+     "diem/mo_quang/hoa_1_3"
+    ],
+    "2": [
+     "diem/mo_quang/hoa_2_1",
+     "diem/mo_quang/hoa_2_2"
+    ],
+    "3": [
+     "diem/mo_quang/hoa_3_1",
+     "diem/mo_quang/hoa_3_2"
+    ]
+   },
+   "tho": {
+    "1": [
+     "diem/mo_quang/tho_1_1",
+     "diem/mo_quang/tho_1_2",
+     "diem/mo_quang/tho_1_3"
+    ],
+    "2": [
+     "diem/mo_quang/tho_2_1",
+     "diem/mo_quang/tho_2_2"
+    ],
+    "3": [
+     "diem/mo_quang/tho_3_1",
+     "diem/mo_quang/tho_3_2"
     ]
    }
   },
@@ -130,6 +220,51 @@
      "diem/mo_duoc/moc_3_1",
      "diem/mo_duoc/moc_3_2"
     ]
+   },
+   "thuy": {
+    "1": [
+     "diem/mo_duoc/thuy_1_1",
+     "diem/mo_duoc/thuy_1_2",
+     "diem/mo_duoc/thuy_1_3"
+    ],
+    "2": [
+     "diem/mo_duoc/thuy_2_1",
+     "diem/mo_duoc/thuy_2_2"
+    ],
+    "3": [
+     "diem/mo_duoc/thuy_3_1",
+     "diem/mo_duoc/thuy_3_2"
+    ]
+   },
+   "hoa": {
+    "1": [
+     "diem/mo_duoc/hoa_1_1",
+     "diem/mo_duoc/hoa_1_2",
+     "diem/mo_duoc/hoa_1_3"
+    ],
+    "2": [
+     "diem/mo_duoc/hoa_2_1",
+     "diem/mo_duoc/hoa_2_2"
+    ],
+    "3": [
+     "diem/mo_duoc/hoa_3_1",
+     "diem/mo_duoc/hoa_3_2"
+    ]
+   },
+   "tho": {
+    "1": [
+     "diem/mo_duoc/tho_1_1",
+     "diem/mo_duoc/tho_1_2",
+     "diem/mo_duoc/tho_1_3"
+    ],
+    "2": [
+     "diem/mo_duoc/tho_2_1",
+     "diem/mo_duoc/tho_2_2"
+    ],
+    "3": [
+     "diem/mo_duoc/tho_3_1",
+     "diem/mo_duoc/tho_3_2"
+    ]
    }
   },
   "linh_tuyen": {
@@ -150,6 +285,27 @@
      "diem/linh_tuyen/moc_0_1",
      "diem/linh_tuyen/moc_0_2",
      "diem/linh_tuyen/moc_0_3"
+    ]
+   },
+   "thuy": {
+    "0": [
+     "diem/linh_tuyen/thuy_0_1",
+     "diem/linh_tuyen/thuy_0_2",
+     "diem/linh_tuyen/thuy_0_3"
+    ]
+   },
+   "hoa": {
+    "0": [
+     "diem/linh_tuyen/hoa_0_1",
+     "diem/linh_tuyen/hoa_0_2",
+     "diem/linh_tuyen/hoa_0_3"
+    ]
+   },
+   "tho": {
+    "0": [
+     "diem/linh_tuyen/tho_0_1",
+     "diem/linh_tuyen/tho_0_2",
+     "diem/linh_tuyen/tho_0_3"
     ]
    }
   },
@@ -172,6 +328,24 @@
      "diem/hang_di_thu/moc_0_1",
      "diem/hang_di_thu/moc_0_2"
     ]
+   },
+   "thuy": {
+    "0": [
+     "diem/hang_di_thu/thuy_0_1",
+     "diem/hang_di_thu/thuy_0_2"
+    ]
+   },
+   "hoa": {
+    "0": [
+     "diem/hang_di_thu/hoa_0_1",
+     "diem/hang_di_thu/hoa_0_2"
+    ]
+   },
+   "tho": {
+    "0": [
+     "diem/hang_di_thu/tho_0_1",
+     "diem/hang_di_thu/tho_0_2"
+    ]
    }
   },
   "deo": {
@@ -189,6 +363,21 @@
     "0": [
      "diem/deo/moc_0_1"
     ]
+   },
+   "thuy": {
+    "0": [
+     "diem/deo/thuy_0_1"
+    ]
+   },
+   "hoa": {
+    "0": [
+     "diem/deo/hoa_0_1"
+    ]
+   },
+   "tho": {
+    "0": [
+     "diem/deo/tho_0_1"
+    ]
    }
   },
   "ben_do": {
@@ -205,6 +394,21 @@
    "moc": {
     "0": [
      "diem/ben_do/moc_0_1"
+    ]
+   },
+   "thuy": {
+    "0": [
+     "diem/ben_do/thuy_0_1"
+    ]
+   },
+   "hoa": {
+    "0": [
+     "diem/ben_do/hoa_0_1"
+    ]
+   },
+   "tho": {
+    "0": [
+     "diem/ben_do/tho_0_1"
     ]
    }
   },
@@ -240,6 +444,39 @@
     ],
     "cao": [
      "diem/cua_bi_canh/moc_cao_1"
+    ]
+   },
+   "thuy": {
+    "thap": [
+     "diem/cua_bi_canh/thuy_thap_1"
+    ],
+    "vua": [
+     "diem/cua_bi_canh/thuy_vua_1"
+    ],
+    "cao": [
+     "diem/cua_bi_canh/thuy_cao_1"
+    ]
+   },
+   "hoa": {
+    "thap": [
+     "diem/cua_bi_canh/hoa_thap_1"
+    ],
+    "vua": [
+     "diem/cua_bi_canh/hoa_vua_1"
+    ],
+    "cao": [
+     "diem/cua_bi_canh/hoa_cao_1"
+    ]
+   },
+   "tho": {
+    "thap": [
+     "diem/cua_bi_canh/tho_thap_1"
+    ],
+    "vua": [
+     "diem/cua_bi_canh/tho_vua_1"
+    ],
+    "cao": [
+     "diem/cua_bi_canh/tho_cao_1"
     ]
    }
   },

@@ -25723,6 +25723,2145 @@
       "created": "2026-11-05",
       "pixellab_id": "4ffb7515-ad94-4212-b1a6-ea189b406594",
       "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem/mo_linh_thach/thuy_1_1.png",
+      "description": "Mỏ linh thạch hệ Thủy, bậc 1 (cấp mỏ 1–2), dáng 1 (diem/mo_linh_thach/thuy_1_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small cluster of glowing deep sapphire blue spirit stone crystals jutting out of the rock, a pickaxe leaning on a stone; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d1c2651c-fa80-484a-8e79-791a6aa4bf4b"
+    },
+    {
+      "file": "diem/mo_linh_thach/thuy_1_2.png",
+      "description": "Mỏ linh thạch hệ Thủy, bậc 1 (cấp mỏ 1–2), dáng 2 (diem/mo_linh_thach/thuy_1_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small cluster of glowing deep sapphire blue spirit stone crystals jutting out of the rock, a pickaxe leaning on a stone on a wider, flatter island with a lone gnarled tree at one edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "da9c5597-1e58-4d26-92af-52394a2d4118"
+    },
+    {
+      "file": "diem/mo_linh_thach/thuy_1_3.png",
+      "description": "Mỏ linh thạch hệ Thủy, bậc 1 (cấp mỏ 1–2), dáng 3 (diem/mo_linh_thach/thuy_1_3): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small cluster of glowing deep sapphire blue spirit stone crystals jutting out of the rock, a pickaxe leaning on a stone on a taller island with a jagged rock outcrop at the back; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 2,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e0750a33-862f-4010-adae-d2269aa53ac1"
+    },
+    {
+      "file": "diem/mo_linh_thach/thuy_2_1.png",
+      "description": "Mỏ linh thạch hệ Thủy, bậc 2 (cấp mỏ 3–4), dáng 1 (diem/mo_linh_thach/thuy_2_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large cluster of glowing deep sapphire blue spirit stone crystals, simple wooden mining scaffolding and a small cart heaped with crystals; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b61ced25-6c60-45c0-974d-345c27389f1b"
+    },
+    {
+      "file": "diem/mo_linh_thach/thuy_2_2.png",
+      "description": "Mỏ linh thạch hệ Thủy, bậc 2 (cấp mỏ 3–4), dáng 2 (diem/mo_linh_thach/thuy_2_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large cluster of glowing deep sapphire blue spirit stone crystals, simple wooden mining scaffolding and a small cart heaped with crystals on a wider, flatter island with a lone gnarled tree at one edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "db4c4280-a2c3-4c1a-839b-16344b5055e2"
+    },
+    {
+      "file": "diem/mo_linh_thach/thuy_3_1.png",
+      "description": "Mỏ linh thạch hệ Thủy, bậc 3 (cấp mỏ 5), dáng 1 (diem/mo_linh_thach/thuy_3_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a huge cluster of tall radiant deep sapphire blue spirit stone crystals with a bright aura, a small pagoda shrine and two banners beside it; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d9510977-006a-472e-9e54-d578eea31223"
+    },
+    {
+      "file": "diem/mo_linh_thach/thuy_3_2.png",
+      "description": "Mỏ linh thạch hệ Thủy, bậc 3 (cấp mỏ 5), dáng 2 (diem/mo_linh_thach/thuy_3_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a huge cluster of tall radiant deep sapphire blue spirit stone crystals with a bright aura, a small pagoda shrine and two banners beside it on a wider, flatter island with a lone gnarled tree at one edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "38d29799-0039-4f55-a69a-96635139df14"
+    },
+    {
+      "file": "diem/mo_quang/thuy_1_1.png",
+      "description": "Mỏ quặng hệ Thủy, bậc 1 (cấp mỏ 1–2), dáng 1 (diem/mo_quang/thuy_1_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small mine tunnel entrance with a wooden timber frame dug into a rocky mound, a pile of blue sapphire-veined ore chunks beside it; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "16427937-7e1c-4f61-8700-021550305201"
+    },
+    {
+      "file": "diem/mo_quang/thuy_1_2.png",
+      "description": "Mỏ quặng hệ Thủy, bậc 1 (cấp mỏ 1–2), dáng 2 (diem/mo_quang/thuy_1_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small mine tunnel entrance with a wooden timber frame dug into a rocky mound, a pile of blue sapphire-veined ore chunks beside it on a wider, flatter island with a lone gnarled tree at one edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "82930f3e-769e-4b47-b8fd-df9ce4dcb4d2"
+    },
+    {
+      "file": "diem/mo_quang/thuy_1_3.png",
+      "description": "Mỏ quặng hệ Thủy, bậc 1 (cấp mỏ 1–2), dáng 3 (diem/mo_quang/thuy_1_3): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small mine tunnel entrance with a wooden timber frame dug into a rocky mound, a pile of blue sapphire-veined ore chunks beside it on a taller island with a jagged rock outcrop at the back; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 2,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0ea77ed7-47d3-4267-ad9c-844c823d6ad6"
+    },
+    {
+      "file": "diem/mo_quang/thuy_2_1.png",
+      "description": "Mỏ quặng hệ Thủy, bậc 2 (cấp mỏ 3–4), dáng 1 (diem/mo_quang/thuy_2_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mine tunnel entrance with a sturdy wooden timber frame, a mine cart on short rails full of blue sapphire-veined ore chunks, a wooden pulley crane; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "189ce4f1-5077-43cb-aa11-79b197872d92"
+    },
+    {
+      "file": "diem/mo_quang/thuy_2_2.png",
+      "description": "Mỏ quặng hệ Thủy, bậc 2 (cấp mỏ 3–4), dáng 2 (diem/mo_quang/thuy_2_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mine tunnel entrance with a sturdy wooden timber frame, a mine cart on short rails full of blue sapphire-veined ore chunks, a wooden pulley crane on a wider, flatter island with a lone gnarled tree at one edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "70f7ddf9-66e5-47c1-8e48-d1b12f101446"
+    },
+    {
+      "file": "diem/mo_quang/thuy_3_1.png",
+      "description": "Mỏ quặng hệ Thủy, bậc 3 (cấp mỏ 5), dáng 1 (diem/mo_quang/thuy_3_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large prosperous mine: a big tunnel entrance with a carved stone frame, several mine carts full of blue sapphire-veined ore chunks, a glowing smelting furnace and a small storehouse with a tiled roof; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fcadf86c-348a-43fd-bfc2-52f357ce00e0"
+    },
+    {
+      "file": "diem/mo_quang/thuy_3_2.png",
+      "description": "Mỏ quặng hệ Thủy, bậc 3 (cấp mỏ 5), dáng 2 (diem/mo_quang/thuy_3_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large prosperous mine: a big tunnel entrance with a carved stone frame, several mine carts full of blue sapphire-veined ore chunks, a glowing smelting furnace and a small storehouse with a tiled roof on a wider, flatter island with a lone gnarled tree at one edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b0baa672-8361-4374-87d1-cb730a734101"
+    },
+    {
+      "file": "diem/mo_duoc/thuy_1_1.png",
+      "description": "Mỏ dược hệ Thủy, bậc 1 (cấp mỏ 1–2), dáng 1 (diem/mo_duoc/thuy_1_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small patch of pink water lotus flowers and blue spirit herbs with a little low wooden fence; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "21f76ca5-c4a0-4f79-8445-a2e83785925e"
+    },
+    {
+      "file": "diem/mo_duoc/thuy_1_2.png",
+      "description": "Mỏ dược hệ Thủy, bậc 1 (cấp mỏ 1–2), dáng 2 (diem/mo_duoc/thuy_1_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small patch of pink water lotus flowers and blue spirit herbs with a little low wooden fence on a wider, flatter island with a lone gnarled tree at one edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a96be1a5-a9c7-44f4-9268-81e4107c1ace"
+    },
+    {
+      "file": "diem/mo_duoc/thuy_1_3.png",
+      "description": "Mỏ dược hệ Thủy, bậc 1 (cấp mỏ 1–2), dáng 3 (diem/mo_duoc/thuy_1_3): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small patch of pink water lotus flowers and blue spirit herbs with a little low wooden fence on a taller island with a jagged rock outcrop at the back; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 2,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6a4c4f57-a04f-4ba1-9c72-1e5ea5bad9d9"
+    },
+    {
+      "file": "diem/mo_duoc/thuy_2_1.png",
+      "description": "Mỏ dược hệ Thủy, bậc 2 (cấp mỏ 3–4), dáng 1 (diem/mo_duoc/thuy_2_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top neat rows of pink water lotus flowers and blue spirit herbs in a fenced herb garden, a small straw hut and woven herb baskets; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ac166392-d051-441f-a85b-63c139b00aa3"
+    },
+    {
+      "file": "diem/mo_duoc/thuy_2_2.png",
+      "description": "Mỏ dược hệ Thủy, bậc 2 (cấp mỏ 3–4), dáng 2 (diem/mo_duoc/thuy_2_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top neat rows of pink water lotus flowers and blue spirit herbs in a fenced herb garden, a small straw hut and woven herb baskets on a wider, flatter island with a lone gnarled tree at one edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e5ed5828-3167-4c60-9b61-8e1a46d775b4"
+    },
+    {
+      "file": "diem/mo_duoc/thuy_3_1.png",
+      "description": "Mỏ dược hệ Thủy, bậc 3 (cấp mỏ 5), dáng 1 (diem/mo_duoc/thuy_3_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a lavish terraced herb garden of glowing pink water lotus flowers and blue spirit herbs, a small pavilion with a curved tile roof and wooden racks of drying herbs; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d8a7f6e1-2368-424b-ae19-6884ad405fa4"
+    },
+    {
+      "file": "diem/mo_duoc/thuy_3_2.png",
+      "description": "Mỏ dược hệ Thủy, bậc 3 (cấp mỏ 5), dáng 2 (diem/mo_duoc/thuy_3_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a lavish terraced herb garden of glowing pink water lotus flowers and blue spirit herbs, a small pavilion with a curved tile roof and wooden racks of drying herbs on a wider, flatter island with a lone gnarled tree at one edge; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "363f7936-4ce0-4e7e-beff-cf9522c10fc3"
+    },
+    {
+      "file": "diem/linh_tuyen/thuy_0_1.png",
+      "description": "Linh tuyền hệ Thủy, dáng 1 (diem/linh_tuyen/thuy_0_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a round spirit spring pool of deep blue glowing water ringed by mossy rocks, glowing mist rising from it, a small stone lantern; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a043d491-9046-4edd-9814-e6318552be5b"
+    },
+    {
+      "file": "diem/linh_tuyen/thuy_0_2.png",
+      "description": "Linh tuyền hệ Thủy, dáng 2 (diem/linh_tuyen/thuy_0_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a spirit spring bubbling up between rocks into a small pool of deep blue glowing water, glowing mist, a little arched wooden bridge over it; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e1fedb66-6719-448f-ad32-114952b7e4a8"
+    },
+    {
+      "file": "diem/linh_tuyen/thuy_0_3.png",
+      "description": "Linh tuyền hệ Thủy, dáng 3 (diem/linh_tuyen/thuy_0_3): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a natural rock basin filled with deep blue glowing water fed by a tiny stream from a carved stone dragon head, glowing mist; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d27d2b44-a332-4033-8260-1723d1c11d72"
+    },
+    {
+      "file": "diem/hang_di_thu/thuy_0_1.png",
+      "description": "Hang dị thú hệ Thủy, dáng 1 (diem/hang_di_thu/thuy_0_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a dark beast cave mouth in a rocky mound, a huge horned beast skull and scattered bones in front of it, deep sapphire blue glowing eyes in the darkness; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fbc5cf39-4eef-4e90-97d6-e0002e3610e3"
+    },
+    {
+      "file": "diem/hang_di_thu/thuy_0_2.png",
+      "description": "Hang dị thú hệ Thủy, dáng 2 (diem/hang_di_thu/thuy_0_2): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a beast lair under the roots of a twisted dead tree, deep claw marks on the rocks, bones and a broken shield, deep sapphire blue glowing eyes in the dark; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fad15409-a3f1-40d7-adfe-e5319ccc21d3"
+    },
+    {
+      "file": "diem/cua_bi_canh/thuy_thap_1.png",
+      "description": "Cửa bí cảnh hệ Thủy, bậc thấp (cửa xoáy xanh), dáng 1 (diem/cua_bi_canh/thuy_thap_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small weathered ancient stone gate arch with a swirling vortex portal of glowing bright blue light filling the opening, blue sparkles around it; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "75867a43-d654-46e5-8a73-b3c01ca26355"
+    },
+    {
+      "file": "diem/cua_bi_canh/thuy_vua_1.png",
+      "description": "Cửa bí cảnh hệ Thủy, bậc vừa (cửa xoáy vàng), dáng 1 (diem/cua_bi_canh/thuy_vua_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a tall carved stone gate arch flanked by two guardian lion statues, a swirling vortex portal of glowing bright golden yellow light filling the opening, golden sparkles around it; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "52dde677-376d-4924-a5cb-cf3ce9419a04"
+    },
+    {
+      "file": "diem/cua_bi_canh/thuy_cao_1.png",
+      "description": "Cửa bí cảnh hệ Thủy, bậc cao (cửa xoáy đỏ), dáng 1 (diem/cua_bi_canh/thuy_cao_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a huge ominous carved black stone gate arch with heavy chains and horned skull ornaments, a swirling vortex portal of glowing blood red light filling the opening, red sparks around it; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "39f32735-0f2b-4892-bde0-6e92b3fe759c"
+    },
+    {
+      "file": "diem/deo/thuy_0_1.png",
+      "description": "Đèo hệ Thủy, dáng 1 (diem/deo/thuy_0_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mountain pass, a fortified wooden gate tower with a curved tile roof standing in the gap between two steep rocky cliffs, small deep sapphire blue banners on the tower; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e4f01a21-eeb2-4b46-8785-0f07df5ed388"
+    },
+    {
+      "file": "diem/ben_do/thuy_0_1.png",
+      "description": "Bến đò hệ Thủy, dáng 1 (diem/ben_do/thuy_0_1): đảo nổi cho điểm bản đồ vùng hệ Thủy, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a small wooden sampan rowboat with a pointed curved hull and a little straw canopy moored alongside, a lantern post with a deep sapphire blue lantern at the pier end; green top, blue-grey wet rock underside tapering to a point with thin trickles of water dripping off, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f34727ff-161e-43b4-9d93-fb84aae19e7e"
+    },
+    {
+      "file": "diem/mo_linh_thach/hoa_1_1.png",
+      "description": "Mỏ linh thạch hệ Hỏa, bậc 1 (cấp mỏ 1–2), dáng 1 (diem/mo_linh_thach/hoa_1_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small cluster of glowing fiery red-orange spirit stone crystals jutting out of the rock, a pickaxe leaning on a stone; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e2477227-3031-4aaa-bada-e08f491d0961"
+    },
+    {
+      "file": "diem/mo_linh_thach/hoa_1_2.png",
+      "description": "Mỏ linh thạch hệ Hỏa, bậc 1 (cấp mỏ 1–2), dáng 2 (diem/mo_linh_thach/hoa_1_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small cluster of glowing fiery red-orange spirit stone crystals jutting out of the rock, a pickaxe leaning on a stone on a wider, flatter island with a lone gnarled tree at one edge; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a8b8f97a-19c3-4852-8be4-789710f1025f"
+    },
+    {
+      "file": "diem/mo_linh_thach/hoa_1_3.png",
+      "description": "Mỏ linh thạch hệ Hỏa, bậc 1 (cấp mỏ 1–2), dáng 3 (diem/mo_linh_thach/hoa_1_3): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small cluster of glowing fiery red-orange spirit stone crystals jutting out of the rock, a pickaxe leaning on a stone on a taller island with a jagged rock outcrop at the back; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 2,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "36b1c710-6f76-42b0-a7a6-20c74e27750a"
+    },
+    {
+      "file": "diem/mo_linh_thach/hoa_2_1.png",
+      "description": "Mỏ linh thạch hệ Hỏa, bậc 2 (cấp mỏ 3–4), dáng 1 (diem/mo_linh_thach/hoa_2_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large cluster of glowing fiery red-orange spirit stone crystals, simple wooden mining scaffolding and a small cart heaped with crystals; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6d766a2b-89ca-4821-b09d-fa7c7ee63e29"
+    },
+    {
+      "file": "diem/mo_linh_thach/hoa_2_2.png",
+      "description": "Mỏ linh thạch hệ Hỏa, bậc 2 (cấp mỏ 3–4), dáng 2 (diem/mo_linh_thach/hoa_2_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large cluster of glowing fiery red-orange spirit stone crystals, simple wooden mining scaffolding and a small cart heaped with crystals on a wider, flatter island with a lone gnarled tree at one edge; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d80e0718-3c24-4398-ac84-db326647cf28"
+    },
+    {
+      "file": "diem/mo_linh_thach/hoa_3_1.png",
+      "description": "Mỏ linh thạch hệ Hỏa, bậc 3 (cấp mỏ 5), dáng 1 (diem/mo_linh_thach/hoa_3_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a huge cluster of tall radiant fiery red-orange spirit stone crystals with a bright aura, a small pagoda shrine and two banners beside it; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f1336f8a-4672-4183-a687-9533cfa74083"
+    },
+    {
+      "file": "diem/mo_linh_thach/hoa_3_2.png",
+      "description": "Mỏ linh thạch hệ Hỏa, bậc 3 (cấp mỏ 5), dáng 2 (diem/mo_linh_thach/hoa_3_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a huge cluster of tall radiant fiery red-orange spirit stone crystals with a bright aura, a small pagoda shrine and two banners beside it on a wider, flatter island with a lone gnarled tree at one edge; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7e5e6981-d452-444f-a61d-bcb3146e5719"
+    },
+    {
+      "file": "diem/mo_quang/hoa_1_1.png",
+      "description": "Mỏ quặng hệ Hỏa, bậc 1 (cấp mỏ 1–2), dáng 1 (diem/mo_quang/hoa_1_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small mine tunnel entrance with a wooden timber frame dug into a rocky mound, a pile of red-hot glowing ore chunks beside it; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "37de8725-fb63-4e90-ae61-194c5dccfd7c"
+    },
+    {
+      "file": "diem/mo_quang/hoa_1_2.png",
+      "description": "Mỏ quặng hệ Hỏa, bậc 1 (cấp mỏ 1–2), dáng 2 (diem/mo_quang/hoa_1_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small mine tunnel entrance with a wooden timber frame dug into a rocky mound, a pile of red-hot glowing ore chunks beside it on a wider, flatter island with a lone gnarled tree at one edge; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "327c8c2d-7be1-447b-abac-11bd2788e09d"
+    },
+    {
+      "file": "diem/mo_quang/hoa_1_3.png",
+      "description": "Mỏ quặng hệ Hỏa, bậc 1 (cấp mỏ 1–2), dáng 3 (diem/mo_quang/hoa_1_3): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small mine tunnel entrance with a wooden timber frame dug into a rocky mound, a pile of red-hot glowing ore chunks beside it on a taller island with a jagged rock outcrop at the back; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 2,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b3793845-8f03-40a1-aaf4-b2fb3c161216"
+    },
+    {
+      "file": "diem/mo_quang/hoa_2_1.png",
+      "description": "Mỏ quặng hệ Hỏa, bậc 2 (cấp mỏ 3–4), dáng 1 (diem/mo_quang/hoa_2_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mine tunnel entrance with a sturdy wooden timber frame, a mine cart on short rails full of red-hot glowing ore chunks, a wooden pulley crane; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c1798884-2dce-4d76-a02c-c496c3f6b694"
+    },
+    {
+      "file": "diem/mo_quang/hoa_2_2.png",
+      "description": "Mỏ quặng hệ Hỏa, bậc 2 (cấp mỏ 3–4), dáng 2 (diem/mo_quang/hoa_2_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mine tunnel entrance with a sturdy wooden timber frame, a mine cart on short rails full of red-hot glowing ore chunks, a wooden pulley crane on a wider, flatter island with a lone gnarled tree at one edge; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e0f5da45-08c0-409c-8622-109096e9ea92"
+    },
+    {
+      "file": "diem/mo_quang/hoa_3_1.png",
+      "description": "Mỏ quặng hệ Hỏa, bậc 3 (cấp mỏ 5), dáng 1 (diem/mo_quang/hoa_3_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large prosperous mine: a big tunnel entrance with a carved stone frame, several mine carts full of red-hot glowing ore chunks, a glowing smelting furnace and a small storehouse with a tiled roof; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "06c17f03-1f97-4d92-be08-068ae8c35d43"
+    },
+    {
+      "file": "diem/mo_quang/hoa_3_2.png",
+      "description": "Mỏ quặng hệ Hỏa, bậc 3 (cấp mỏ 5), dáng 2 (diem/mo_quang/hoa_3_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large prosperous mine: a big tunnel entrance with a carved stone frame, several mine carts full of red-hot glowing ore chunks, a glowing smelting furnace and a small storehouse with a tiled roof on a wider, flatter island with a lone gnarled tree at one edge; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6e4e0e5d-038a-4c7c-a8a9-00132f2e2efb"
+    },
+    {
+      "file": "diem/mo_duoc/hoa_1_1.png",
+      "description": "Mỏ dược hệ Hỏa, bậc 1 (cấp mỏ 1–2), dáng 1 (diem/mo_duoc/hoa_1_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small patch of red fire lotus and flame-coloured spirit herbs with a little low wooden fence; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fba36910-9f18-4075-bfc0-8d9326622caf"
+    },
+    {
+      "file": "diem/mo_duoc/hoa_1_2.png",
+      "description": "Mỏ dược hệ Hỏa, bậc 1 (cấp mỏ 1–2), dáng 2 (diem/mo_duoc/hoa_1_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small patch of red fire lotus and flame-coloured spirit herbs with a little low wooden fence on a wider, flatter island with a lone gnarled tree at one edge; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "edba95b2-6490-4ce4-ac8a-3a286498074b"
+    },
+    {
+      "file": "diem/mo_duoc/hoa_1_3.png",
+      "description": "Mỏ dược hệ Hỏa, bậc 1 (cấp mỏ 1–2), dáng 3 (diem/mo_duoc/hoa_1_3): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small patch of red fire lotus and flame-coloured spirit herbs with a little low wooden fence on a taller island with a jagged rock outcrop at the back; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 2,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0f8530c0-26d0-41e9-aaea-151135308e6c"
+    },
+    {
+      "file": "diem/mo_duoc/hoa_2_1.png",
+      "description": "Mỏ dược hệ Hỏa, bậc 2 (cấp mỏ 3–4), dáng 1 (diem/mo_duoc/hoa_2_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top neat rows of red fire lotus and flame-coloured spirit herbs in a fenced herb garden, a small straw hut and woven herb baskets; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2965a7d6-f7f5-4efb-8b73-fb2d724b42c1"
+    },
+    {
+      "file": "diem/mo_duoc/hoa_2_2.png",
+      "description": "Mỏ dược hệ Hỏa, bậc 2 (cấp mỏ 3–4), dáng 2 (diem/mo_duoc/hoa_2_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top neat rows of red fire lotus and flame-coloured spirit herbs in a fenced herb garden, a small straw hut and woven herb baskets on a wider, flatter island with a lone gnarled tree at one edge; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ef357ccc-462e-4ed8-bf6c-0c2fa44d527f"
+    },
+    {
+      "file": "diem/mo_duoc/hoa_3_1.png",
+      "description": "Mỏ dược hệ Hỏa, bậc 3 (cấp mỏ 5), dáng 1 (diem/mo_duoc/hoa_3_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a lavish terraced herb garden of glowing red fire lotus and flame-coloured spirit herbs, a small pavilion with a curved tile roof and wooden racks of drying herbs; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "360186aa-f269-412f-9094-5562ce5ac118"
+    },
+    {
+      "file": "diem/mo_duoc/hoa_3_2.png",
+      "description": "Mỏ dược hệ Hỏa, bậc 3 (cấp mỏ 5), dáng 2 (diem/mo_duoc/hoa_3_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a lavish terraced herb garden of glowing red fire lotus and flame-coloured spirit herbs, a small pavilion with a curved tile roof and wooden racks of drying herbs on a wider, flatter island with a lone gnarled tree at one edge; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "06e7780d-3aba-4ef3-baf8-c590db41601e"
+    },
+    {
+      "file": "diem/linh_tuyen/hoa_0_1.png",
+      "description": "Linh tuyền hệ Hỏa, dáng 1 (diem/linh_tuyen/hoa_0_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a round spirit spring pool of steaming orange-red hot spring water ringed by mossy rocks, glowing mist rising from it, a small stone lantern; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5bfe74a3-b437-4e5c-9772-e81cee2efb53"
+    },
+    {
+      "file": "diem/linh_tuyen/hoa_0_2.png",
+      "description": "Linh tuyền hệ Hỏa, dáng 2 (diem/linh_tuyen/hoa_0_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a spirit spring bubbling up between rocks into a small pool of steaming orange-red hot spring water, glowing mist, a little arched wooden bridge over it; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "cbbc8359-4702-433a-8d14-a6e85463fbf1"
+    },
+    {
+      "file": "diem/linh_tuyen/hoa_0_3.png",
+      "description": "Linh tuyền hệ Hỏa, dáng 3 (diem/linh_tuyen/hoa_0_3): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a natural rock basin filled with steaming orange-red hot spring water fed by a tiny stream from a carved stone dragon head, glowing mist; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a73645ce-f1ac-4db9-8228-f7d4a6e1ad2d"
+    },
+    {
+      "file": "diem/hang_di_thu/hoa_0_1.png",
+      "description": "Hang dị thú hệ Hỏa, dáng 1 (diem/hang_di_thu/hoa_0_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a dark beast cave mouth in a rocky mound, a huge horned beast skull and scattered bones in front of it, fiery red-orange glowing eyes in the darkness; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "949d9580-9832-4a02-9ce8-ece5759fbd96"
+    },
+    {
+      "file": "diem/hang_di_thu/hoa_0_2.png",
+      "description": "Hang dị thú hệ Hỏa, dáng 2 (diem/hang_di_thu/hoa_0_2): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a beast lair under the roots of a twisted dead tree, deep claw marks on the rocks, bones and a broken shield, fiery red-orange glowing eyes in the dark; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b932a199-19f2-4d16-94c0-d06cfb7c8c1f"
+    },
+    {
+      "file": "diem/cua_bi_canh/hoa_thap_1.png",
+      "description": "Cửa bí cảnh hệ Hỏa, bậc thấp (cửa xoáy xanh), dáng 1 (diem/cua_bi_canh/hoa_thap_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small weathered ancient stone gate arch with a swirling vortex portal of glowing bright blue light filling the opening, blue sparkles around it; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "17b035df-6a23-4062-8f1b-024d41e22183"
+    },
+    {
+      "file": "diem/cua_bi_canh/hoa_vua_1.png",
+      "description": "Cửa bí cảnh hệ Hỏa, bậc vừa (cửa xoáy vàng), dáng 1 (diem/cua_bi_canh/hoa_vua_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a tall carved stone gate arch flanked by two guardian lion statues, a swirling vortex portal of glowing bright golden yellow light filling the opening, golden sparkles around it; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "bc7ac223-e229-419d-bda6-eb25e2c54472"
+    },
+    {
+      "file": "diem/cua_bi_canh/hoa_cao_1.png",
+      "description": "Cửa bí cảnh hệ Hỏa, bậc cao (cửa xoáy đỏ), dáng 1 (diem/cua_bi_canh/hoa_cao_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a huge ominous carved black stone gate arch with heavy chains and horned skull ornaments, a swirling vortex portal of glowing blood red light filling the opening, red sparks around it; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ccc2cf48-eca8-4f24-922c-1b308f06ce3a"
+    },
+    {
+      "file": "diem/deo/hoa_0_1.png",
+      "description": "Đèo hệ Hỏa, dáng 1 (diem/deo/hoa_0_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mountain pass, a fortified wooden gate tower with a curved tile roof standing in the gap between two steep rocky cliffs, small fiery red-orange banners on the tower; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "daae58e4-ccc1-4e49-a1bc-c93d1ae602b6"
+    },
+    {
+      "file": "diem/ben_do/hoa_0_1.png",
+      "description": "Bến đò hệ Hỏa, dáng 1 (diem/ben_do/hoa_0_1): đảo nổi cho điểm bản đồ vùng hệ Hỏa, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a small wooden sampan rowboat with a pointed curved hull and a little straw canopy moored alongside, a lantern post with a fiery red-orange lantern at the pier end; scorched dark rock top, black volcanic rock underside with glowing orange lava cracks, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7db6cbdb-9622-4c72-8ecb-1adc25074d5f"
+    },
+    {
+      "file": "diem/mo_linh_thach/tho_1_1.png",
+      "description": "Mỏ linh thạch hệ Thổ, bậc 1 (cấp mỏ 1–2), dáng 1 (diem/mo_linh_thach/tho_1_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small cluster of glowing amber yellow spirit stone crystals jutting out of the rock, a pickaxe leaning on a stone; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "58e0653b-52ac-431e-8901-9f6c10a23293"
+    },
+    {
+      "file": "diem/mo_linh_thach/tho_1_2.png",
+      "description": "Mỏ linh thạch hệ Thổ, bậc 1 (cấp mỏ 1–2), dáng 2 (diem/mo_linh_thach/tho_1_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small cluster of glowing amber yellow spirit stone crystals jutting out of the rock, a pickaxe leaning on a stone on a wider, flatter island with a lone gnarled tree at one edge; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d3f532a2-e845-4de8-8567-2360125ea3be"
+    },
+    {
+      "file": "diem/mo_linh_thach/tho_1_3.png",
+      "description": "Mỏ linh thạch hệ Thổ, bậc 1 (cấp mỏ 1–2), dáng 3 (diem/mo_linh_thach/tho_1_3): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small cluster of glowing amber yellow spirit stone crystals jutting out of the rock, a pickaxe leaning on a stone on a taller island with a jagged rock outcrop at the back; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 2,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f9bf8287-cce8-4dc8-af7e-eb9c417dcef1"
+    },
+    {
+      "file": "diem/mo_linh_thach/tho_2_1.png",
+      "description": "Mỏ linh thạch hệ Thổ, bậc 2 (cấp mỏ 3–4), dáng 1 (diem/mo_linh_thach/tho_2_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large cluster of glowing amber yellow spirit stone crystals, simple wooden mining scaffolding and a small cart heaped with crystals; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "42f42036-9a42-4c07-8990-1703905d4de2"
+    },
+    {
+      "file": "diem/mo_linh_thach/tho_2_2.png",
+      "description": "Mỏ linh thạch hệ Thổ, bậc 2 (cấp mỏ 3–4), dáng 2 (diem/mo_linh_thach/tho_2_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large cluster of glowing amber yellow spirit stone crystals, simple wooden mining scaffolding and a small cart heaped with crystals on a wider, flatter island with a lone gnarled tree at one edge; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "56a7fbf3-0238-4c33-8d69-aae716414511"
+    },
+    {
+      "file": "diem/mo_linh_thach/tho_3_1.png",
+      "description": "Mỏ linh thạch hệ Thổ, bậc 3 (cấp mỏ 5), dáng 1 (diem/mo_linh_thach/tho_3_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a huge cluster of tall radiant amber yellow spirit stone crystals with a bright aura, a small pagoda shrine and two banners beside it; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6be58751-5904-478a-9c22-3e7c2ca73d4c"
+    },
+    {
+      "file": "diem/mo_linh_thach/tho_3_2.png",
+      "description": "Mỏ linh thạch hệ Thổ, bậc 3 (cấp mỏ 5), dáng 2 (diem/mo_linh_thach/tho_3_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a huge cluster of tall radiant amber yellow spirit stone crystals with a bright aura, a small pagoda shrine and two banners beside it on a wider, flatter island with a lone gnarled tree at one edge; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c5ee32d8-61db-4cef-8497-55da31538720"
+    },
+    {
+      "file": "diem/mo_quang/tho_1_1.png",
+      "description": "Mỏ quặng hệ Thổ, bậc 1 (cấp mỏ 1–2), dáng 1 (diem/mo_quang/tho_1_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small mine tunnel entrance with a wooden timber frame dug into a rocky mound, a pile of golden-brown ore with gold nuggets chunks beside it; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "bcb4eccf-af04-41ac-a04c-baa4250b9678"
+    },
+    {
+      "file": "diem/mo_quang/tho_1_2.png",
+      "description": "Mỏ quặng hệ Thổ, bậc 1 (cấp mỏ 1–2), dáng 2 (diem/mo_quang/tho_1_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small mine tunnel entrance with a wooden timber frame dug into a rocky mound, a pile of golden-brown ore with gold nuggets chunks beside it on a wider, flatter island with a lone gnarled tree at one edge; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "8841a033-4020-4cdc-88dc-af6e62c7693c"
+    },
+    {
+      "file": "diem/mo_quang/tho_1_3.png",
+      "description": "Mỏ quặng hệ Thổ, bậc 1 (cấp mỏ 1–2), dáng 3 (diem/mo_quang/tho_1_3): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small mine tunnel entrance with a wooden timber frame dug into a rocky mound, a pile of golden-brown ore with gold nuggets chunks beside it on a taller island with a jagged rock outcrop at the back; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 2,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4f0a1bd5-791b-46b6-900f-ed563c65f752"
+    },
+    {
+      "file": "diem/mo_quang/tho_2_1.png",
+      "description": "Mỏ quặng hệ Thổ, bậc 2 (cấp mỏ 3–4), dáng 1 (diem/mo_quang/tho_2_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mine tunnel entrance with a sturdy wooden timber frame, a mine cart on short rails full of golden-brown ore with gold nuggets chunks, a wooden pulley crane; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f1df3b68-7c1f-445a-a826-af0d662e31c4"
+    },
+    {
+      "file": "diem/mo_quang/tho_2_2.png",
+      "description": "Mỏ quặng hệ Thổ, bậc 2 (cấp mỏ 3–4), dáng 2 (diem/mo_quang/tho_2_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mine tunnel entrance with a sturdy wooden timber frame, a mine cart on short rails full of golden-brown ore with gold nuggets chunks, a wooden pulley crane on a wider, flatter island with a lone gnarled tree at one edge; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1db79db8-0470-4831-9aed-dbb4943f5199"
+    },
+    {
+      "file": "diem/mo_quang/tho_3_1.png",
+      "description": "Mỏ quặng hệ Thổ, bậc 3 (cấp mỏ 5), dáng 1 (diem/mo_quang/tho_3_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large prosperous mine: a big tunnel entrance with a carved stone frame, several mine carts full of golden-brown ore with gold nuggets chunks, a glowing smelting furnace and a small storehouse with a tiled roof; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b9f83db3-a0e4-475c-80e4-e60db7f9477d"
+    },
+    {
+      "file": "diem/mo_quang/tho_3_2.png",
+      "description": "Mỏ quặng hệ Thổ, bậc 3 (cấp mỏ 5), dáng 2 (diem/mo_quang/tho_3_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a large prosperous mine: a big tunnel entrance with a carved stone frame, several mine carts full of golden-brown ore with gold nuggets chunks, a glowing smelting furnace and a small storehouse with a tiled roof on a wider, flatter island with a lone gnarled tree at one edge; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e2c5dbf5-4bd1-4721-8136-fdb3b5987eb8"
+    },
+    {
+      "file": "diem/mo_duoc/tho_1_1.png",
+      "description": "Mỏ dược hệ Thổ, bậc 1 (cấp mỏ 1–2), dáng 1 (diem/mo_duoc/tho_1_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small patch of golden ginseng and yellow spirit herbs with a little low wooden fence; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "eda90e01-2384-4f91-bbe9-4936444ee0e3"
+    },
+    {
+      "file": "diem/mo_duoc/tho_1_2.png",
+      "description": "Mỏ dược hệ Thổ, bậc 1 (cấp mỏ 1–2), dáng 2 (diem/mo_duoc/tho_1_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small patch of golden ginseng and yellow spirit herbs with a little low wooden fence on a wider, flatter island with a lone gnarled tree at one edge; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e4ddf79a-d7da-46bd-9bda-bfa4489f2524"
+    },
+    {
+      "file": "diem/mo_duoc/tho_1_3.png",
+      "description": "Mỏ dược hệ Thổ, bậc 1 (cấp mỏ 1–2), dáng 3 (diem/mo_duoc/tho_1_3): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small patch of golden ginseng and yellow spirit herbs with a little low wooden fence on a taller island with a jagged rock outcrop at the back; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 2,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "954882c9-4945-4ad5-abde-7cbf835a0dd3"
+    },
+    {
+      "file": "diem/mo_duoc/tho_2_1.png",
+      "description": "Mỏ dược hệ Thổ, bậc 2 (cấp mỏ 3–4), dáng 1 (diem/mo_duoc/tho_2_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top neat rows of golden ginseng and yellow spirit herbs in a fenced herb garden, a small straw hut and woven herb baskets; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a6331b81-cd7f-4f43-a3c4-7b8597ebfe8a"
+    },
+    {
+      "file": "diem/mo_duoc/tho_2_2.png",
+      "description": "Mỏ dược hệ Thổ, bậc 2 (cấp mỏ 3–4), dáng 2 (diem/mo_duoc/tho_2_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top neat rows of golden ginseng and yellow spirit herbs in a fenced herb garden, a small straw hut and woven herb baskets on a wider, flatter island with a lone gnarled tree at one edge; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "9e76f77e-6660-48d5-89b3-f477f2acb838"
+    },
+    {
+      "file": "diem/mo_duoc/tho_3_1.png",
+      "description": "Mỏ dược hệ Thổ, bậc 3 (cấp mỏ 5), dáng 1 (diem/mo_duoc/tho_3_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a lavish terraced herb garden of glowing golden ginseng and yellow spirit herbs, a small pavilion with a curved tile roof and wooden racks of drying herbs; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a746bfa2-79dc-4f27-b93e-1546b8f1610c"
+    },
+    {
+      "file": "diem/mo_duoc/tho_3_2.png",
+      "description": "Mỏ dược hệ Thổ, bậc 3 (cấp mỏ 5), dáng 2 (diem/mo_duoc/tho_3_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a lavish terraced herb garden of glowing golden ginseng and yellow spirit herbs, a small pavilion with a curved tile roof and wooden racks of drying herbs on a wider, flatter island with a lone gnarled tree at one edge; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 1,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "bba776f4-862c-4f74-b31f-6467b29a2ea8"
+    },
+    {
+      "file": "diem/linh_tuyen/tho_0_1.png",
+      "description": "Linh tuyền hệ Thổ, dáng 1 (diem/linh_tuyen/tho_0_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a round spirit spring pool of warm amber water ringed by mossy rocks, glowing mist rising from it, a small stone lantern; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c31c959d-3185-4506-a940-d03ab4262f52"
+    },
+    {
+      "file": "diem/linh_tuyen/tho_0_2.png",
+      "description": "Linh tuyền hệ Thổ, dáng 2 (diem/linh_tuyen/tho_0_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a spirit spring bubbling up between rocks into a small pool of warm amber water, glowing mist, a little arched wooden bridge over it; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "368caa9c-5e2d-4db3-b107-372e9b8d9e30"
+    },
+    {
+      "file": "diem/linh_tuyen/tho_0_3.png",
+      "description": "Linh tuyền hệ Thổ, dáng 3 (diem/linh_tuyen/tho_0_3): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a natural rock basin filled with warm amber water fed by a tiny stream from a carved stone dragon head, glowing mist; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "69f23227-9a28-4f37-b494-29ec594fa70b"
+    },
+    {
+      "file": "diem/hang_di_thu/tho_0_1.png",
+      "description": "Hang dị thú hệ Thổ, dáng 1 (diem/hang_di_thu/tho_0_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a dark beast cave mouth in a rocky mound, a huge horned beast skull and scattered bones in front of it, amber yellow glowing eyes in the darkness; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "568c892c-8bcf-40cd-bce5-ef9df7df13f7"
+    },
+    {
+      "file": "diem/hang_di_thu/tho_0_2.png",
+      "description": "Hang dị thú hệ Thổ, dáng 2 (diem/hang_di_thu/tho_0_2): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a beast lair under the roots of a twisted dead tree, deep claw marks on the rocks, bones and a broken shield, amber yellow glowing eyes in the dark; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "642ec5ed-b6ea-4b1a-af74-ac17cb169c72"
+    },
+    {
+      "file": "diem/cua_bi_canh/tho_thap_1.png",
+      "description": "Cửa bí cảnh hệ Thổ, bậc thấp (cửa xoáy xanh), dáng 1 (diem/cua_bi_canh/tho_thap_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a small weathered ancient stone gate arch with a swirling vortex portal of glowing bright blue light filling the opening, blue sparkles around it; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "012152b7-3145-458c-8252-8ec8915b72a8"
+    },
+    {
+      "file": "diem/cua_bi_canh/tho_vua_1.png",
+      "description": "Cửa bí cảnh hệ Thổ, bậc vừa (cửa xoáy vàng), dáng 1 (diem/cua_bi_canh/tho_vua_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a tall carved stone gate arch flanked by two guardian lion statues, a swirling vortex portal of glowing bright golden yellow light filling the opening, golden sparkles around it; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "8e9d05d5-f439-4c92-b7bb-972295fb2465"
+    },
+    {
+      "file": "diem/cua_bi_canh/tho_cao_1.png",
+      "description": "Cửa bí cảnh hệ Thổ, bậc cao (cửa xoáy đỏ), dáng 1 (diem/cua_bi_canh/tho_cao_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a huge ominous carved black stone gate arch with heavy chains and horned skull ornaments, a swirling vortex portal of glowing blood red light filling the opening, red sparks around it; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d4f07c03-f84f-471c-8338-11f0f0020778"
+    },
+    {
+      "file": "diem/deo/tho_0_1.png",
+      "description": "Đèo hệ Thổ, dáng 1 (diem/deo/tho_0_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a mountain pass, a fortified wooden gate tower with a curved tile roof standing in the gap between two steep rocky cliffs, small amber yellow banners on the tower; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "52d2ba91-1048-4659-b49f-ca8ba6a0b2c0"
+    },
+    {
+      "file": "diem/ben_do/tho_0_1.png",
+      "description": "Bến đò hệ Thổ, dáng 1 (diem/ben_do/tho_0_1): đảo nổi cho điểm bản đồ vùng hệ Thổ, mặt và đáy đảo theo hệ. Góc 3/4 từ trên xuống, nền trong suốt; neo giữa cạnh dưới. Chọn hình theo diem/bo_hinh.json.",
+      "tool": "create_object_pro_flash",
+      "params": {
+        "description": "small floating sky island hovering in the air: on top a short wooden plank pier jutting out over the island edge, a small wooden sampan rowboat with a pointed curved hull and a little straw canopy moored alongside, a lantern post with a amber yellow lantern at the pier end; dry yellow grass top, layered ochre sandstone underside tapering to a point, ancient Chinese xianxia fantasy, 3/4 view, whole island visible",
+        "view": "low top-down",
+        "width": 64,
+        "height": 64,
+        "n_directions": 1,
+        "seed": 0,
+        "style_image": "03bee604-bfb8-46f7-8b6f-2df060a81c95 (diem/son_mon)",
+        "style_image_usage": "same floating island art style: rock underside shape, outline, shading",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "shading": true,
+          "detail": true
+        }
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "9608a8a0-7791-49ab-b163-a3c85673d40e"
     }
   ]
 }
