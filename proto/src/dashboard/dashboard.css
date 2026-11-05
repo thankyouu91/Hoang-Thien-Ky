@@ -931,6 +931,37 @@ body[data-may-chu="khong_co"] .can-may-chu { display: none; }
 .pt-slot .lt-seal.mini { position: absolute; left: 2px; bottom: 6px; z-index: 1; min-width: 0; height: 15px; padding: 0 3px; font-size: 9px; transform: none; box-shadow: none; }
 .page .lt-preview { margin: 4px 0 0; text-align: center; }
 
+/* ---- Set đồ 2.0 (set2View.ts): bậc ấn tô bằng màu viền, không vẽ hình riêng; bộ đang kích, binh bộ, dòng rèn, dòng ẩn ---- */
+.bac-luc { --bac: var(--rar-luc); --bac-bg: var(--rar-luc-bg); --bac-ink: var(--rar-luc-ink); }
+.bac-lam { --bac: var(--rar-lam); --bac-bg: var(--rar-lam-bg); --bac-ink: var(--rar-lam-ink); }
+.bac-tim { --bac: var(--rar-tim); --bac-bg: var(--rar-tim-bg); --bac-ink: var(--rar-tim-ink); }
+.bac-vang { --bac: var(--rar-vang); --bac-bg: var(--rar-vang-bg); --bac-ink: var(--rar-vang-ink); }
+.bac-do { --bac: var(--rar-do); --bac-bg: var(--rar-do-bg); --bac-ink: var(--rar-do-ink); }
+.bac { display: inline-block; padding: 0 5px; border: 1px solid var(--bac); border-radius: 2px; background: var(--bac-bg); color: var(--bac-ink); font-size: 11px; font-weight: 700; line-height: 16px; white-space: nowrap; vertical-align: 1px; }
+/* Ấn son: viền trong theo bậc thay viền son */
+.lt-seal[class*="bac-"] { box-shadow: inset 0 0 0 2.5px var(--bac), inset 0 0 0 3.5px rgba(255, 238, 222, 0.55); }
+.pt-slot .lt-seal.mini[class*="bac-"] { box-shadow: inset 0 0 0 1.5px var(--bac); }
+/* Binh ấn trên ô công: ô nhỏ góc phải dưới, viền theo bậc */
+.pt-slot .binh-mini { position: absolute; right: 2px; bottom: 6px; z-index: 1; width: 16px; height: 16px; border: 1.5px solid var(--bac, var(--c-line-2)); border-radius: 2px; background: var(--c-surface); overflow: hidden; }
+.pt-slot .binh-mini img { position: static; display: block; width: 100%; height: 100%; object-fit: cover; image-rendering: auto; }
+.nv-row.set2 { align-items: center; padding: 5px 4px; }
+.nv-row.set2.tat { opacity: 0.72; }
+.set2-l { flex: 1; min-width: 0; display: grid; gap: 1px; }
+.set2-top { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 6px; }
+.set2-n { color: var(--c-ink-3); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.set2-f { padding: 0 4px; border-radius: 2px; background: var(--c-accent-soft); color: var(--c-accent-ink); font-size: 11px; font-weight: 700; line-height: 16px; }
+.set2-sub { font-size: 12.5px; line-height: 1.35; }
+.lt-tiers i.lock { border: 1px dashed var(--c-accent); color: var(--c-accent-ink); background: repeating-linear-gradient(-45deg, transparent 0 3px, rgba(179, 38, 30, 0.08) 3px 5px); }
+.lt-sets > li.nv-note { padding: 4px; }
+/* Dòng rèn, dòng ẩn (bảng xem món) */
+#sheet .dong-ren li, #sheet .dong-an li { align-items: center; gap: 8px; }
+#sheet .dong-ren .moc { flex: 0 0 auto; min-width: 34px; color: var(--c-accent-ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+#sheet .dong-ren li.muted .moc { color: var(--c-ink-3); }
+#sheet .dong-an .an { color: var(--c-ink-3); font-weight: 700; letter-spacing: 2px; }
+#sheet .dong-an .btn { flex: 0 0 auto; }
+.song-an { display: inline-block; padding: 0 5px; border: 1px solid var(--rar-vang); border-radius: 2px; background: var(--rar-vang-bg); color: var(--rar-vang-ink); font-size: 11px; font-weight: 700; line-height: 16px; }
+#sheet h3 .muted { font-size: 12px; font-weight: 400; }
+
 /* ---- Luyện khí (GDD tab Trang bị phần 13): phân giải, tẩy luyện, khí linh, ngọc, Bảo Giám; lò danh khí ở Luyện Khí Các ---- */
 /* Điện thoại: 5 tab màn Nhân vật rộng theo chữ để "Pháp tướng" không bị cắt */
 @media (max-width: 1099px) { .page .nv-tabs { gap: 3px; } .page .nv-tabs button { flex: 1 1 auto; padding: 0 3px; font-size: 12.5px; } }
@@ -1043,7 +1074,14 @@ i.pip.ready, .pt-legend i.pip.ready { border-color: var(--c-accent); background:
 .lk-entry:not(.have) .glyph { opacity: 0.3; }
 .lk-entry.sel { outline: 2px solid var(--c-accent); outline-offset: 1px; }
 #sheet .lk-caption { min-height: 2.8em; margin: var(--sp-2) 0 0; }
+/* Ẩn văn: trang một điều kiện 12 ô; trang nhập môn, toàn thư 144 ô xếp 12 cột (hàng là điều kiện, cột là hiệu ứng) */
+#sheet .lk-book.an-van.day { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; }
+#sheet .lk-book.an-van.day .lk-entry { min-width: 0; aspect-ratio: 1; }
+#sheet .lk-book.an-van.day .glyph { width: 60%; height: 60%; }
+.lk-entry.an-van.have { border-color: var(--c-frame); background: var(--c-accent-soft); }
+.lk-entry.an-van.have .glyph { color: var(--c-accent-ink); }
 #sheet .lk-pager { justify-content: space-between; }
+#sheet .lk-pager button { display: block; flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Lò danh khí (bảng chi tiết Luyện Khí Các): danh sách 10 thần binh, điều kiện xanh hoặc đỏ, 4 ghế người luyện */
 .lk-dk-art { flex: 0 0 auto; width: 44px; }

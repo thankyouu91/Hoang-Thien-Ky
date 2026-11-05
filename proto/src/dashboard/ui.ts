@@ -262,4 +262,13 @@ export const ERROR_TEXT: Record<string, string> = {
   thieu_nguyen_lieu: "Thiếu đồ phổ, phôi hoặc nguyên liệu.",
   thieu_nguoi_luyen: "Cần đủ 4 người khác nhau cùng tông.",
   chua_co_trong_proto: "Chức năng này chưa có trong prototype.",
+  // Set đồ 2.0: ghép ấn, dòng ẩn
+  khong_phai_an: "Món này không phải ấn bộ.",
+  an_khong_du: "Cần đủ 3 ấn cùng bộ cùng bậc.",
+  an_khong_ghep_len: "Ấn bậc này không ghép lên được.",
+  khong_co_dong_an: "Món này không có dòng ẩn.",
+  da_lo: "Điều kiện của dòng này đã lộ.",
+  khong_thay_dong: "Không thấy dòng ẩn này.",
+  thieu_giam_dinh_phu: "Hết Giám Định Phù.",
+  an_chua_lo: "Hiệu ứng chưa lộ: dòng phải kích phát một lần mới tẩy được.",
 };

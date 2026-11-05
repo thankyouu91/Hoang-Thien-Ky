@@ -250,8 +250,10 @@ export interface BaoEntry {
 export interface BaoPage {
   id: string;
   ten: string;
-  nhom: "Trang bị" | "Pháp bảo" | "Khác";
+  nhom: "Trang bị" | "Pháp bảo" | "Ẩn văn" | "Khác";
   entries: BaoEntry[];
+  /** Số ô cần để đủ trang khi khác số entries (trang "bất kỳ": Ẩn văn nhập môn cần 24 cặp bất kỳ trong 144). */
+  can?: number;
   /** Phần thưởng khi đủ trang, không cộng chỉ số chiến đấu. */
   thuong: string;
 }
@@ -262,7 +264,16 @@ interface Dem {
   loai: string;
   o?: GearSlot;
   phap_bao?: string;
+  /** Trang Ẩn văn của một điều kiện (DN-DK-…): 12 hiệu ứng đi cùng điều kiện đó. */
+  dieu_kien?: string;
+  bat_ky?: boolean;
 }
+/** Dòng ẩn (trang_bi.json dong_an): 12 điều kiện × 12 hiệu ứng = 144 cặp; ô của trang Ẩn văn mang mã "DK|HU". */
+const DONG_AN = TRANG_BI.dong_an as { ma: string; loai: "dieu_kien" | "hieu_ung"; noi_dung: string }[];
+const DA_DK = DONG_AN.filter((d) => d.loai === "dieu_kien");
+const DA_HU = DONG_AN.filter((d) => d.loai === "hieu_ung");
+const anVanEntries = (dk: typeof DA_DK): BaoEntry[] =>
+  dk.flatMap((k) => DA_HU.map((h) => ({ ma: `${k.ma}|${h.ma}`, ten: `Khi ${k.noi_dung} thì ${h.noi_dung}` })));
 function entriesOf(d: Dem): BaoEntry[] {
   switch (d.loai) {
     case "trang_bi":
@@ -277,6 +288,8 @@ function entriesOf(d: Dem): BaoEntry[] {
       return (NGOC.an_bo as { ma_vp: string; ten: string; he: string | null }[]).map((m) => ({ ma: m.ma_vp, ten: m.ten, he: m.he ?? undefined }));
     case "phach":
       return PHACH.map((m) => ({ ma: m.ma_vp, ten: m.ten, he: m.he }));
+    case "an_van":
+      return anVanEntries(d.dieu_kien ? DA_DK.filter((k) => k.ma === d.dieu_kien) : DA_DK);
     case "danh_khi":
       return DANH_KHI.map((dk) => KIEU.find((k) => k.ma_vp === dk.ma)).filter((k): k is (typeof KIEU)[number] => !!k).map(gearEntry);
     default:
@@ -284,15 +297,23 @@ function entriesOf(d: Dem): BaoEntry[] {
   }
 }
 /** Các trang theo luyen_khi.json bao_giam (đếm theo loại, ô, loại pháp bảo); một kiểu có thể nằm ở nhiều trang. */
-export const BAO_PAGES: BaoPage[] = (LK.bao_giam as { ma: string; ten: string; dem: Dem; thuong: string }[]).map((p) => ({
-  id: p.ma,
-  ten: p.ten,
-  nhom: p.dem.loai === "trang_bi" ? "Trang bị" : p.dem.loai === "phap_bao" ? "Pháp bảo" : "Khác",
-  entries: entriesOf(p.dem),
-  thuong: p.thuong,
-}));
-/** Tổng số kiểu khác nhau trong sổ. */
-export const BAO_TOTAL = new Set(BAO_PAGES.flatMap((p) => p.entries.map((e) => e.ma))).size;
+export const BAO_PAGES: BaoPage[] = (LK.bao_giam as { ma: string; ten: string; dem: Dem; thuong: string; so_luong?: number }[]).map((p) => {
+  const entries = entriesOf(p.dem);
+  return {
+    id: p.ma,
+    ten: p.ten,
+    nhom: p.dem.loai === "trang_bi" ? "Trang bị" : p.dem.loai === "phap_bao" ? "Pháp bảo" : p.dem.loai === "an_van" ? "Ẩn văn" : "Khác",
+    entries,
+    can: p.dem.bat_ky && p.so_luong && p.so_luong < entries.length ? p.so_luong : undefined,
+    thuong: p.thuong,
+  };
+});
+/** Số ô cần để đủ một trang. */
+export const baoCan = (p: BaoPage) => p.can ?? p.entries.length;
+/** Tổng số kiểu đồ khác nhau trong sổ (cặp ẩn văn đếm riêng, không phải kiểu đồ). */
+export const BAO_TOTAL = new Set(BAO_PAGES.filter((p) => p.nhom !== "Ẩn văn").flatMap((p) => p.entries.map((e) => e.ma))).size;
+/** Số cặp dòng ẩn (12 × 12). */
+export const AN_VAN_TOTAL = DA_DK.length * DA_HU.length;
 export const BAO_WEEK_REWARD = L.baoGiamTuanLinhVanThach;
 
 /** Số lần một khí văn đang có trên mọi món (tính tối đa VAN_STACK). */

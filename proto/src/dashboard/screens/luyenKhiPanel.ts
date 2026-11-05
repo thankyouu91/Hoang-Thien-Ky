@@ -7,7 +7,7 @@
 import type { Element } from "@ktlp/sim";
 import { icon } from "../icons.ts";
 import {
-  BAO_PAGES, BAO_TOTAL, BAO_WEEK_REWARD, canDecompose, DMG_CAP, DMG_CAP_PHACH, gemValue, GEM_NAME, hasKhiLinh, KHI_TINH_PER_KL, KHI_TINH_TEXT, khiTinhOf,
+  AN_VAN_TOTAL, baoCan, BAO_PAGES, BAO_TOTAL, BAO_WEEK_REWARD, canDecompose, DMG_CAP, DMG_CAP_PHACH, gemValue, GEM_NAME, hasKhiLinh, KHI_TINH_PER_KL, KHI_TINH_TEXT, khiTinhOf,
   khiTinhToNext, khiVan, klBonus, klNeed, KL_MAX, KL_PER_BI_CANH, KL_PER_KHI_TINH, KL_PER_TRAN, PHACH_FROM, PHACH_KHI_TINH, PHACH_RATE, PHACH_VALUE, phachName,
   RARITY_NAMES, reached, REROLL_KHI_TINH, rerollStone, SLOT_NAMES, SLOTS, SONG_HE_FROM, SONG_HE_PART, SONG_HE_PHU, SONG_HE_RATE, songHeOk, stoneBack, SUB, UNLOCK, VAN_AT,
   VAN_CAP, VAN_REROLL, VAN_STACK, vanCount, vanGroup, vanSlots, yieldLocked, type Gate,
@@ -485,17 +485,18 @@ export class LuyenKhiPanel {
   private baoGiam(v: NhanVatView): string {
     if (!this.open(v, UNLOCK.baoGiam)) return this.locked(UNLOCK.baoGiam, "Sổ ghi mọi kiểu đã từng sở hữu.");
     const st = v.luyenKhi;
-    const owned = new Set(st.owned);
+    const owned = new Set([...st.owned, ...st.anVanLo]);
     const w = st.week;
     const group = (nhom: string) =>
       BAO_PAGES.filter((pg) => pg.nhom === nhom)
         .map((pg) => {
-          const n = pg.entries.filter((e) => owned.has(e.ma)).length;
-          return `<li><button type="button" class="row lk-page${n >= pg.entries.length ? " done" : ""}" data-act="lk-page" data-page="${pg.id}"><span class="grow"><b>${esc(pg.ten)}</b><span class="muted block">${esc(pg.thuong)}</span></span>
-            <span class="lk-prog"><span><b>${n}</b> / ${pg.entries.length}</span><span class="lk-bar small"><i style="width:${((n / pg.entries.length) * 100).toFixed(0)}%"></i></span></span>${icon("chevron", "chev")}</button></li>`;
+          const can = baoCan(pg);
+          const n = Math.min(can, pg.entries.filter((e) => owned.has(e.ma)).length);
+          return `<li><button type="button" class="row lk-page${n >= can ? " done" : ""}" data-act="lk-page" data-page="${pg.id}"><span class="grow"><b>${esc(pg.ten)}</b><span class="muted block">${esc(pg.thuong)}</span></span>
+            <span class="lk-prog"><span><b>${n}</b> / ${can}</span><span class="lk-bar small"><i style="width:${((n / can) * 100).toFixed(0)}%"></i></span></span>${icon("chevron", "chev")}</button></li>`;
         })
         .join("");
-    const have = new Set(BAO_PAGES.flatMap((p) => p.entries.map((e) => e.ma)).filter((m) => owned.has(m))).size;
+    const have = new Set(BAO_PAGES.filter((p) => p.nhom !== "Ẩn văn").flatMap((p) => p.entries.map((e) => e.ma)).filter((m) => owned.has(m))).size;
     return `
       <div class="lk-week">
         <b>Trang tuần</b><span>${esc(w.text)}</span>
@@ -506,21 +507,26 @@ export class LuyenKhiPanel {
       <p class="nv-note">Ghi cả món đã phân giải. Đủ một trang thì nhận thưởng; thưởng không cộng chỉ số chiến đấu.</p>
       <h3 class="nv-h lk-group">Trang bị</h3><ul class="list lk-pages">${group("Trang bị")}</ul>
       <h3 class="nv-h lk-group">Pháp bảo</h3><ul class="list lk-pages">${group("Pháp bảo")}</ul>
-      <h3 class="nv-h lk-group">Khác</h3><ul class="list lk-pages">${group("Khác")}</ul>`;
+      <h3 class="nv-h lk-group">Khác</h3><ul class="list lk-pages">${group("Khác")}</ul>
+      <h3 class="nv-h lk-group">Ẩn văn <span>${fmt(st.anVanLo.length)} / ${fmt(AN_VAN_TOTAL)} cặp</span></h3>
+      <p class="nv-note">Một cặp vào sổ khi cả điều kiện và hiệu ứng của dòng ẩn đã lộ (sau lần kích phát đầu, hoặc sau Tẩy ẩn).</p>
+      <ul class="list lk-pages">${group("Ẩn văn")}</ul>`;
   }
 
   private openPage(v: NhanVatView, id: string): void {
-    const owned = new Set(v.luyenKhi.owned);
+    const owned = new Set([...v.luyenKhi.owned, ...v.luyenKhi.anVanLo]);
     const i = BAO_PAGES.findIndex((p) => p.id === id);
     const pg = BAO_PAGES[i];
     if (!pg) return;
-    const n = pg.entries.filter((e) => owned.has(e.ma)).length;
-    const glyph = pg.nhom === "Trang bị" ? "sword" : "gem";
+    const can = baoCan(pg);
+    const n = Math.min(can, pg.entries.filter((e) => owned.has(e.ma)).length);
+    const anVan = pg.nhom === "Ẩn văn";
+    const glyph = pg.nhom === "Trang bị" ? "sword" : anVan ? "scroll" : "gem";
     const cells = pg.entries
       .map((e, j) => {
         const own = owned.has(e.ma);
         const c = e.he ? ` style="--el:${ELEMENT_STYLE[e.he as Element]?.color ?? "#8a7f70"}"` : "";
-        return `<button type="button" class="bag-cell lk-entry${e.rarity ? ` r-${e.rarity}` : ""}${own ? " have" : ""}" data-a="entry" data-j="${j}"${c} aria-label="${esc(`${e.ten}${own ? "" : ", chưa có"}`)}">
+        return `<button type="button" class="bag-cell lk-entry${anVan ? " an-van" : ""}${e.rarity ? ` r-${e.rarity}` : ""}${own ? " have" : ""}" data-a="entry" data-j="${j}"${c} aria-label="${esc(anVan ? (own ? e.ten : "Cặp ẩn văn chưa lộ") : `${e.ten}${own ? "" : ", chưa có"}`)}">
           ${icon(glyph, "glyph")}${e.art ? `<img class="ve" loading="lazy" src="${artUrl(e.art)}" alt="" onerror="this.remove()">` : ""}</button>`;
       })
       .join("");
@@ -528,10 +534,10 @@ export class LuyenKhiPanel {
     const next = BAO_PAGES[(i + 1) % BAO_PAGES.length];
     const body = openSheet(
       `Bảo Giám · ${pg.ten}`,
-      `<p class="muted">${n} / ${pg.entries.length} kiểu · đủ trang: ${esc(pg.thuong)}</p>
-       <div class="lk-book">${cells}</div>
+      `<p class="muted"><span>${n} / ${can} ${anVan ? "cặp" : "kiểu"}${pg.can ? ` bất kỳ trong ${pg.entries.length}` : ""}</span> · <span>đủ trang: ${esc(pg.thuong)}</span></p>
+       <div class="lk-book${anVan ? ` an-van${pg.entries.length > 24 ? " day" : ""}` : ""}">${cells}</div>
        <p class="lk-caption muted" aria-live="polite">Chạm một ô để xem tên.</p>
-       <div class="actions lk-pager"><button type="button" data-a="go" data-page="${prev.id}">‹ ${esc(prev.ten)}</button><button type="button" data-a="go" data-page="${next.id}">${esc(next.ten)} ›</button></div>`,
+       <div class="actions lk-pager"><button type="button" data-a="go" data-page="${prev.id}">‹ <span>${esc(prev.ten)}</span></button><button type="button" data-a="go" data-page="${next.id}"><span>${esc(next.ten)}</span> ›</button></div>`,
     );
     body.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLElement>("[data-a]");
@@ -540,7 +546,9 @@ export class LuyenKhiPanel {
       else if (a.dataset.a === "entry") {
         const en = pg.entries[Number(a.dataset.j)];
         const own = owned.has(en.ma);
-        body.querySelector(".lk-caption")!.innerHTML = `<b>${esc(en.ten)}</b>${en.rarity ? ` · <span class="rar r-${en.rarity}">${RARITY_NAMES[en.rarity]}</span>` : ""} · ${own ? "đã có" : "chưa có"} <span class="muted">${esc(en.ma)}</span>`;
+        // Cặp ẩn văn chưa lộ thì không nói trước nội dung: chỉ "???".
+        const ten = anVan && !own ? "???" : en.ten;
+        body.querySelector(".lk-caption")!.innerHTML = `<b>${esc(ten)}</b>${en.rarity ? ` · <span class="rar r-${en.rarity}">${RARITY_NAMES[en.rarity]}</span>` : ""} · ${own ? (anVan ? "đã lộ" : "đã có") : anVan ? "chưa lộ" : "chưa có"}${anVan ? "" : ` <span class="muted">${esc(en.ma)}</span>`}`;
         for (const x of body.querySelectorAll(".lk-entry.sel")) x.classList.remove("sel");
         a.classList.add("sel");
       }
