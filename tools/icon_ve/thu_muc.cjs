@@ -8,6 +8,8 @@ const TM = {
   giay: "FAHZ1naC6cs", ngoc_boi: "FAHZ1n8nJu8", ngoc: "FAHZ1rhaPVA", tan_quyen: "FAHZ1sNqPs4",
   linh_thach: "FAHZ1tSo9xk", quang: "FAHZ1kVUdSI", duoc: "FAHZ1tZ9w7o", dan: "FAHZ1s-kfAs",
   trung_thu: "FAHZ1h-fQNA", lo: "FAHZ1kRC-WY", phu: "FAHZ1-UPg-o", bo: "FAHZ1qKqhag",
+  cong_phap: "FAHaAQfqVFA", chieu: "FAHaAQfqVFA", vu_khi_tai_nang: "FAHaARZvTw8", phap_khi: "FAHaARZvTw8",
+  an_bo: "FAHaAteJRzM", binh_an: "FAHaAteJRzM",
 };
 function thuMuc(ma, ghi) {
   if ((ghi || "").startsWith("bo")) return TM.bo;
