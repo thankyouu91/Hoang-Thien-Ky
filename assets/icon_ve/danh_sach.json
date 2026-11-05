@@ -79,6 +79,7 @@
     "MA": "Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo)",
     "DB": "Vật phẩm đặc biệt (DB)",
     "VK": "Vũ khí theo tài năng, hình khi cầm (TN)",
+    "CT": "Chiêu thức (LO: loại chiêu, số theo thứ tự SKILL_NAME)",
     "NL": "Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh, KT khí tinh và linh văn thạch, DP danh khí đồ phổ)",
     "PB": "Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo)",
     "PK": "Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính)"
@@ -111,10 +112,10 @@
     }
   ],
   "so_luong": {
-    "tong": 779,
-    "uu_tien_1": 116,
-    "uu_tien_2": 654,
-    "uu_tien_3": 9
+    "tong": 789,
+    "uu_tien_1": 126,
+    "uu_tien_2": 662,
+    "uu_tien_3": 1
   },
   "icon": [
     {
@@ -5664,80 +5665,180 @@
       "ma": "vu_khi_tai_nang/quyen_giap",
       "nhom": "vu_khi_tai_nang",
       "ten": "Quyền giáp (Tu thể)",
-      "uu_tien": 3,
+      "uu_tien": 2,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a pair of heavy bronze battle gauntlets with knuckle spikes",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
+      "ghi_chu": "Hình khi cầm trên người theo tài năng; người dùng chốt 2026-11-03: 60–70 kiểu vũ khí là hình trong túi, cầm lên hiện nhóm này"
     },
     {
       "ma_vp": "VK-TN-002",
       "ma": "vu_khi_tai_nang/phap_truong",
       "nhom": "vu_khi_tai_nang",
       "ten": "Pháp trượng (Tu pháp)",
-      "uu_tien": 3,
+      "uu_tien": 2,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a tall wooden magic staff topped with a glowing crystal orb held by carved branches",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
+      "ghi_chu": "Hình khi cầm trên người theo tài năng; người dùng chốt 2026-11-03: 60–70 kiểu vũ khí là hình trong túi, cầm lên hiện nhóm này"
     },
     {
       "ma_vp": "VK-TN-003",
       "ma": "vu_khi_tai_nang/tran_ban",
       "nhom": "vu_khi_tai_nang",
       "ten": "Trận bàn (Tu trận)",
-      "uu_tien": 3,
+      "uu_tien": 2,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a round bronze formation array disc engraved with trigram and rune circles, faint glowing lines",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
+      "ghi_chu": "Hình khi cầm trên người theo tài năng; người dùng chốt 2026-11-03: 60–70 kiểu vũ khí là hình trong túi, cầm lên hiện nhóm này"
     },
     {
       "ma_vp": "VK-TN-004",
       "ma": "vu_khi_tai_nang/ho_lo",
       "nhom": "vu_khi_tai_nang",
       "ten": "Hồ lô (Tu đan)",
-      "uu_tien": 3,
+      "uu_tien": 2,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a lacquered red calabash gourd bottle with a cork stopper and a cord, wisps of medicinal mist",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
+      "ghi_chu": "Hình khi cầm trên người theo tài năng; người dùng chốt 2026-11-03: 60–70 kiểu vũ khí là hình trong túi, cầm lên hiện nhóm này"
     },
     {
       "ma_vp": "VK-TN-005",
       "ma": "vu_khi_tai_nang/song_chuy_thu",
       "nhom": "vu_khi_tai_nang",
       "ten": "Song chủy thủ (Sát thủ)",
-      "uu_tien": 3,
+      "uu_tien": 2,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a pair of crossed sleek black daggers with curved blades and dark red wrapped handles",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
+      "ghi_chu": "Hình khi cầm trên người theo tài năng; người dùng chốt 2026-11-03: 60–70 kiểu vũ khí là hình trong túi, cầm lên hiện nhóm này"
     },
     {
       "ma_vp": "VK-TN-006",
       "ma": "vu_khi_tai_nang/bua_ren",
       "nhom": "vu_khi_tai_nang",
       "ten": "Búa rèn (Tu rèn)",
-      "uu_tien": 3,
+      "uu_tien": 2,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a heavy forging hammer with a bronze head engraved with fire patterns and a wooden handle",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
+      "ghi_chu": "Hình khi cầm trên người theo tài năng; người dùng chốt 2026-11-03: 60–70 kiểu vũ khí là hình trong túi, cầm lên hiện nhóm này"
     },
     {
       "ma_vp": "VK-TN-007",
       "ma": "vu_khi_tai_nang/liem_hai_thuoc",
       "nhom": "vu_khi_tai_nang",
       "ten": "Liềm hái thuốc (Tu dược)",
-      "uu_tien": 3,
+      "uu_tien": 2,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "a small curved herb-gathering sickle with a jade handle and a sprig of spirit herb tied to it",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
+      "ghi_chu": "Hình khi cầm trên người theo tài năng; người dùng chốt 2026-11-03: 60–70 kiểu vũ khí là hình trong túi, cầm lên hiện nhóm này"
     },
     {
       "ma_vp": "VK-TN-008",
       "ma": "vu_khi_tai_nang/ban_tinh",
       "nhom": "vu_khi_tai_nang",
       "ten": "Bàn tính (Tu kim tiền)",
-      "uu_tien": 3,
+      "uu_tien": 2,
       "nguon": "GDD mục 6 (Vũ khí theo tài năng)",
       "mo_ta": "an ornate golden abacus with jade beads and a carved rosewood frame",
-      "ghi_chu": "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)"
+      "ghi_chu": "Hình khi cầm trên người theo tài năng; người dùng chốt 2026-11-03: 60–70 kiểu vũ khí là hình trong túi, cầm lên hiện nhóm này"
+    },
+    {
+      "ma_vp": "CT-LO-001",
+      "ma": "chieu/can_don",
+      "nhom": "chieu",
+      "ten": "Cận chiến đơn",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: a single straight sword thrusting forward, a bright concentrated streak of white-gold sword qi bursting from its tip",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
+    },
+    {
+      "ma_vp": "CT-LO-002",
+      "ma": "chieu/can_quet",
+      "nhom": "chieu",
+      "ten": "Cận chiến quét",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: a broadsword sweeping through a wide crescent arc of glowing blade energy",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
+    },
+    {
+      "ma_vp": "CT-LO-003",
+      "ma": "chieu/tam_xa",
+      "nhom": "chieu",
+      "ten": "Tầm xa",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: a glowing arrow of spirit energy flying forward with a long luminous trail",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
+    },
+    {
+      "ma_vp": "CT-LO-004",
+      "ma": "chieu/dien_rong",
+      "nhom": "chieu",
+      "ten": "Diện rộng",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: an explosive burst of spirit energy expanding in glowing rings over a small patch of cracked ground",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
+    },
+    {
+      "ma_vp": "CT-LO-005",
+      "ma": "chieu/ho_the",
+      "nhom": "chieu",
+      "ten": "Hộ thể",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: a translucent golden protective barrier shaped like a bell dome, shimmering runes on its surface",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
+    },
+    {
+      "ma_vp": "CT-LO-006",
+      "ma": "chieu/bua_chu",
+      "nhom": "chieu",
+      "ten": "Bùa chú",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: a yellow paper talisman with red cinnabar seal patterns (no readable text) flying through the air, wreathed in crackling magic energy",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
+    },
+    {
+      "ma_vp": "CT-LO-007",
+      "ma": "chieu/tran_phap",
+      "nhom": "chieu",
+      "ten": "Trận pháp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: a glowing formation array of concentric rings and trigram symbols hovering flat, light beams rising from its edges",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
+    },
+    {
+      "ma_vp": "CT-LO-008",
+      "ma": "chieu/hoi_phuc",
+      "nhom": "chieu",
+      "ten": "Hồi phục",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: a blooming jade-green lotus with rising healing sparkles and a soft green glow",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
+    },
+    {
+      "ma_vp": "CT-LO-009",
+      "ma": "chieu/khong_che",
+      "nhom": "chieu",
+      "ten": "Khống chế",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: glowing spirit chains coiling into a binding ring around a seal sigil",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
+    },
+    {
+      "ma_vp": "CT-LO-010",
+      "ma": "chieu/than_phap",
+      "nhom": "chieu",
+      "ten": "Thân pháp",
+      "uu_tien": 1,
+      "nguon": "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME",
+      "mo_ta": "a cultivation skill emblem: a swift gust of wind with ghostly afterimage trails and a single floating feather, a strong sense of speed",
+      "ghi_chu": "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png"
     },
     {
       "ma_vp": "PH-CH-008",

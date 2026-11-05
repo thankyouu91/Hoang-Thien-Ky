@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 779 món, đã vẽ 285, cần vẽ lại 0.
+Tổng 789 món, đã vẽ 285, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -21,6 +21,7 @@ Tổng 779 món, đã vẽ 285, cần vẽ lại 0.
 | MA | Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo) |
 | DB | Vật phẩm đặc biệt (DB) |
 | VK | Vũ khí theo tài năng, hình khi cầm (TN) |
+| CT | Chiêu thức (LO: loại chiêu, số theo thứ tự SKILL_NAME) |
 | NL | Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh, KT khí tinh và linh văn thạch, DP danh khí đồ phổ) |
 | PB | Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo) |
 | PK | Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính) |
@@ -792,6 +793,21 @@ Tổng 779 món, đã vẽ 285, cần vẽ lại 0.
 | VK-TN-006 | Búa rèn (Tu rèn) | vu_khi_tai_nang/bua_ren.webp |  |
 | VK-TN-007 | Liềm hái thuốc (Tu dược) | vu_khi_tai_nang/liem_hai_thuoc.webp |  |
 | VK-TN-008 | Bàn tính (Tu kim tiền) | vu_khi_tai_nang/ban_tinh.webp |  |
+
+## Loại chiêu (10)
+
+| Mã | Tên | File | Hình |
+|---|---|---|---|
+| CT-LO-001 | Cận chiến đơn | chieu/can_don.webp |  |
+| CT-LO-002 | Cận chiến quét | chieu/can_quet.webp |  |
+| CT-LO-003 | Tầm xa | chieu/tam_xa.webp |  |
+| CT-LO-004 | Diện rộng | chieu/dien_rong.webp |  |
+| CT-LO-005 | Hộ thể | chieu/ho_the.webp |  |
+| CT-LO-006 | Bùa chú | chieu/bua_chu.webp |  |
+| CT-LO-007 | Trận pháp | chieu/tran_phap.webp |  |
+| CT-LO-008 | Hồi phục | chieu/hoi_phuc.webp |  |
+| CT-LO-009 | Khống chế | chieu/khong_che.webp |  |
+| CT-LO-010 | Thân pháp | chieu/than_phap.webp |  |
 
 ## Nguyên liệu (16)
 

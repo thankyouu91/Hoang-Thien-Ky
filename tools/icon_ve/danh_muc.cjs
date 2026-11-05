@@ -24,7 +24,7 @@ const TEN_NHOM = {
   trang_bi: "Trang bị", ngoc: "Ngọc khảm", tan_quyen: "Tàn quyển", cong_phap: "Công pháp", linh_thach: "Linh thạch",
   quang: "Quặng", duoc: "Dược liệu", dan: "Đan", linh_don: "Linh đơn (thú)", phu: "Phù chú", trung_thu: "Trứng thú",
   lo_dinh: "Lô đỉnh", lo_ren: "Lò rèn", manh: "Mảnh", dac_biet: "Vật phẩm đặc biệt", vu_khi_tai_nang: "Vũ khí theo tài năng",
-  nguyen_lieu: "Nguyên liệu", phap_bao: "Pháp bảo", phap_khi: "Pháp khí", y_chau: "Ý châu", an_bo: "Ấn bộ", ngoc_phach: "Ngọc Phách",
+  nguyen_lieu: "Nguyên liệu", phap_bao: "Pháp bảo", phap_khi: "Pháp khí", y_chau: "Ý châu", an_bo: "Ấn bộ", ngoc_phach: "Ngọc Phách", chieu: "Loại chiêu",
 };
 const dh = Object.fromEntries(DS.do_hiem.map(d => [d.id, d.ten]));
 let md = "# Danh mục vật phẩm có icon vẽ\n\n";

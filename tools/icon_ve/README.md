@@ -20,7 +20,7 @@ Icon vật phẩm và giao diện vẽ bằng Canva theo phong cách tranh vẽ 
 3. API Canva chỉ trả ảnh 200 px. Muốn có bản 512 px thì chèn ảnh đã tách nền vào trang 512×512 của design tờ xuất `DAHZ1iamT_w`, lưu, rồi `export-design` dạng PNG với `transparent_background` và `width` 512.
     - Mỗi design chỉ chứa được 100 trang. Tờ xuất 1 `DAHZ1iamT_w`, tờ 2 `DAHZ2R_YFBk` và tờ 3 `DAHZ2im7cjI` đã đầy (tờ 3 dùng cho lô 8–11). Lô sau tạo tờ mới và chạy `xu_ly.cjs` với `DESIGN=<id tờ đang dùng>`. Tờ mới tạo bằng `create-design` với brief trang trắng, rồi `add_page` 512×512; id trang chỉ đọc được sau khi lưu.
     - Khi tờ đang dùng cũng đầy thì tạo tờ mới như trên, hoặc dùng lại trang đã xuất: `update_fill`, rồi `crop_media` về 512×512, vì `update_fill` tự phóng ảnh lên khoảng 4%.
-4. Chạy `tao_lo.cjs` rồi `xu_ly.cjs`, sau đó `danh_muc.cjs`. Commit file trong `assets/icon_ve/`. Món đổi tên hoặc đổi hình thì vẽ lại cùng đường dẫn: `xu_ly.cjs` thay dòng manifest cũ, và `danh_muc.md` ghi "vẽ lại" cho món có tên trong manifest lệch danh sách.
+4. Chạy `tao_lo.cjs` rồi `xu_ly.cjs`, sau đó `danh_muc.cjs`. Commit file trong `assets/icon_ve/`; nhớ `git add` thư mục webp trước, vì `git commit -- <đường dẫn>` không lấy file mới (lô 10–11 từng sót 48 file). Món đổi tên hoặc đổi hình thì vẽ lại cùng đường dẫn: `xu_ly.cjs` thay dòng manifest cũ, và `danh_muc.md` ghi "vẽ lại" cho món có tên trong manifest lệch danh sách.
 5. Chuyển ảnh gốc vào thư mục Canva "KTLP – Icon vật phẩm" (`FAHZ1p8MzDI`), đúng thư mục con theo loại món. Ảnh đã tách nền không chuyển được bằng API (lỗi "Not allowed to access this folder") và cũng không hiện ở thư mục gốc.
 
 ## Quy ước mã `ma_vp`

@@ -200,7 +200,22 @@ const VK = [
   ["liem_hai_thuoc", "Liềm hái thuốc (Tu dược)", "a small curved herb-gathering sickle with a jade handle and a sprig of spirit herb tied to it"],
   ["ban_tinh", "Bàn tính (Tu kim tiền)", "an ornate golden abacus with jade beads and a carved rosewood frame"],
 ];
-for (const [id, ten, m] of VK) add(`vu_khi_tai_nang/${id}`, ten, 3, "GDD mục 6 (Vũ khí theo tài năng)", m, "Hình nhóm vũ khí khi cầm theo GDD mục 6; cần chốt lại với 60 kiểu kiếm (người dùng 2026-11-03)");
+for (const [id, ten, m] of VK) add(`vu_khi_tai_nang/${id}`, ten, 2, "GDD mục 6 (Vũ khí theo tài năng)", m, "Hình khi cầm trên người theo tài năng; người dùng chốt 2026-11-03: 60–70 kiểu vũ khí là hình trong túi, cầm lên hiện nhóm này");
+
+// 15. Loại chiêu (10), chip loại chiêu trên màn. Thay 10 icon PixelLab cũ ở assets/pixellab/chieu/ (người dùng 2026-11-05: vẽ chiêu thức bằng Canva).
+const CHIEU = [
+  ["can_don", "Cận chiến đơn", "a single straight sword thrusting forward, a bright concentrated streak of white-gold sword qi bursting from its tip"],
+  ["can_quet", "Cận chiến quét", "a broadsword sweeping through a wide crescent arc of glowing blade energy"],
+  ["tam_xa", "Tầm xa", "a glowing arrow of spirit energy flying forward with a long luminous trail"],
+  ["dien_rong", "Diện rộng", "an explosive burst of spirit energy expanding in glowing rings over a small patch of cracked ground"],
+  ["ho_the", "Hộ thể", "a translucent golden protective barrier shaped like a bell dome, shimmering runes on its surface"],
+  ["bua_chu", "Bùa chú", "a yellow paper talisman with red cinnabar seal patterns (no readable text) flying through the air, wreathed in crackling magic energy"],
+  ["tran_phap", "Trận pháp", "a glowing formation array of concentric rings and trigram symbols hovering flat, light beams rising from its edges"],
+  ["hoi_phuc", "Hồi phục", "a blooming jade-green lotus with rising healing sparkles and a soft green glow"],
+  ["khong_che", "Khống chế", "glowing spirit chains coiling into a binding ring around a seal sigil"],
+  ["than_phap", "Thân pháp", "a swift gust of wind with ghostly afterimage trails and a single floating feather, a strong sense of speed"],
+];
+for (const [id, ten, m] of CHIEU) add(`chieu/${id}`, ten, 1, "GDD mục 9 (10 loại chiêu); proto/src/theme/elements.ts SKILL_NAME", `a cultivation skill emblem: ${m}`, "Chip loại chiêu trên màn; thay assets/pixellab/chieu/<loại>.png");
 
 // Mã vật phẩm (ma_vp) để theo dõi, theo yêu cầu người dùng 2026-11-03: NHÓM-LOẠI-SỐ, chữ in không dấu.
 // Mã đã cấp không đổi và không dùng lại: lấy lại mã cũ từ file danh sách đang có, món mới nhận số kế tiếp trong nhóm-loại.
@@ -225,6 +240,7 @@ function tienTo(ma) {
   if (nhom === "manh") return { tt: { lo_dinh: "MA-LD", lo_ren: "MA-LR", phap_bao_tran_giao: "MA-PB" }[a] };
   if (nhom === "dac_biet") return { tt: "DB-DB" };
   if (nhom === "vu_khi_tai_nang") return { tt: "VK-TN" };
+  if (nhom === "chieu") return { tt: "CT-LO", so: CHIEU.findIndex(c => c[0] === a) + 1 };
   throw new Error("Chưa có quy tắc mã cho " + ma);
 }
 const cu = {};
@@ -274,7 +290,7 @@ const out = {
   duoi_loi_mo_ta: "Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
   ty_le: "SQUARE_1_1",
   mau_he: Object.fromEntries(HE.map(([id, ten, mau]) => [id, { ten, mau }])),
-  tien_to_ma: { TB: "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu; KI 061–070 là danh khí)", NG: "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ)", TQ: "Tàn quyển (HE; số = thứ tự hệ)", CP: "Công pháp (HE; số = thứ tự hệ)", LT: "Linh thạch (PH: phẩm)", QU: "Quặng (BA: bậc)", DL: "Dược liệu (TH: 4 bậc thường, HI: hiếm)", DA: "Đan (DD đan dược, LD linh đan, TD thần đan, DB đặc biệt)", LD: "Linh đơn cho thú (TH)", PH: "Phù chú (CH)", TT: "Trứng thú (TH)", LO: "Lô đỉnh (LD), lò rèn (LR)", MA: "Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo)", DB: "Vật phẩm đặc biệt (DB)", VK: "Vũ khí theo tài năng, hình khi cầm (TN)", NL: "Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh, KT khí tinh và linh văn thạch, DP danh khí đồ phổ)", PB: "Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo)", PK: "Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính)" },
+  tien_to_ma: { TB: "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu; KI 061–070 là danh khí)", NG: "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ)", TQ: "Tàn quyển (HE; số = thứ tự hệ)", CP: "Công pháp (HE; số = thứ tự hệ)", LT: "Linh thạch (PH: phẩm)", QU: "Quặng (BA: bậc)", DL: "Dược liệu (TH: 4 bậc thường, HI: hiếm)", DA: "Đan (DD đan dược, LD linh đan, TD thần đan, DB đặc biệt)", LD: "Linh đơn cho thú (TH)", PH: "Phù chú (CH)", TT: "Trứng thú (TH)", LO: "Lô đỉnh (LD), lò rèn (LR)", MA: "Mảnh (LD lô đỉnh, LR lò rèn, PB pháp bảo trấn giáo)", DB: "Vật phẩm đặc biệt (DB)", VK: "Vũ khí theo tài năng, hình khi cầm (TN)", CT: "Chiêu thức (LO: loại chiêu, số theo thứ tự SKILL_NAME)", NL: "Nguyên liệu (LK luyện khí thạch, TB tu bổ sa, KM khai mạch đinh, GL nguyên liệu gia công, PB phôi pháp bảo, DB rèn lại đồ bí cảnh, KT khí tinh và linh văn thạch, DP danh khí đồ phổ)", PB: "Pháp bảo (TH thuẫn, LU luân, CH châu, TA tháp, HL hồ lô, KN kính, PN phiên, DI đỉnh, CU chuông, AN ấn; TG trấn giáo)", PK: "Pháp khí (CU cuốc, LB la bàn, TB trận bàn, QP quạt lửa, AT ngọc ẩn tức, CR chùy rèn, LI liềm, BA bàn tính)" },
   do_hiem: Object.entries(TEN_DO_HIEM).map(([id, ten], i) => ({ id, ten, bac: i + 1 })),
   so_luong: { tong: ds.length, uu_tien_1: ds.filter(x => x.uu_tien === 1).length, uu_tien_2: ds.filter(x => x.uu_tien === 2).length, uu_tien_3: ds.filter(x => x.uu_tien === 3).length },
   icon: ds,
