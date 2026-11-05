@@ -1,0 +1,571 @@
+{
+  "ghi_chu": "Nền thẻ điểm 320×192 theo hệ vùng, bậc, dáng; chọn như diem/bo_hinh.json (bậc mỏ: cấp 1–2 → 1, 3–4 → 2, 5 → 3; cửa bí cảnh theo tier; loại khác 0; dáng = ds[bam(id) % ds.length], bam(id) = Math.imul(id + 1, 2654435761) >>> 0). Thiếu bậc thì lùi bậc 1, thiếu nữa thì hình cũ diem_nen/<vùng>/<loại>.",
+  "loai": {
+    "mo_linh_thach": {
+      "loi": {
+        "1": [
+          "diem_nen/loi_dinh_coc/mo_linh_thach",
+          "diem_nen/mo_linh_thach/loi_1_2"
+        ],
+        "2": [
+          "diem_nen/mo_linh_thach/loi_2_1",
+          "diem_nen/mo_linh_thach/loi_2_2"
+        ],
+        "3": [
+          "diem_nen/mo_linh_thach/loi_3_1",
+          "diem_nen/mo_linh_thach/loi_3_2"
+        ]
+      },
+      "kim": {
+        "1": [
+          "diem_nen/thien_kiem_nguyen/mo_linh_thach",
+          "diem_nen/mo_linh_thach/kim_1_2"
+        ],
+        "2": [
+          "diem_nen/mo_linh_thach/kim_2_1",
+          "diem_nen/mo_linh_thach/kim_2_2"
+        ],
+        "3": [
+          "diem_nen/mo_linh_thach/kim_3_1",
+          "diem_nen/mo_linh_thach/kim_3_2"
+        ]
+      },
+      "moc": {
+        "1": [
+          "diem_nen/van_moc_lam/mo_linh_thach"
+        ]
+      },
+      "thuy": {
+        "1": [
+          "diem_nen/bich_ba_hai/mo_linh_thach"
+        ]
+      },
+      "hoa": {
+        "1": [
+          "diem_nen/xich_viem_son/mo_linh_thach"
+        ]
+      },
+      "tho": {
+        "1": [
+          "diem_nen/hau_tho_nguyen/mo_linh_thach"
+        ]
+      },
+      "phong": {
+        "1": [
+          "diem_nen/cuong_phong_nguyen/mo_linh_thach"
+        ]
+      },
+      "quang": {
+        "1": [
+          "diem_nen/dieu_quang_dai/mo_linh_thach"
+        ]
+      },
+      "am_lanh": {
+        "1": [
+          "diem_nen/u_minh_dam/mo_linh_thach"
+        ]
+      },
+      "cuc_duong": {
+        "1": [
+          "diem_nen/liet_duong_mac/mo_linh_thach"
+        ]
+      },
+      "cuc_am": {
+        "1": [
+          "diem_nen/cuu_u_uyen/mo_linh_thach"
+        ]
+      },
+      "cuc_han": {
+        "1": [
+          "diem_nen/van_nien_bang_nguyen/mo_linh_thach"
+        ]
+      }
+    },
+    "mo_quang": {
+      "loi": {
+        "1": [
+          "diem_nen/loi_dinh_coc/mo_quang",
+          "diem_nen/mo_quang/loi_1_2"
+        ],
+        "2": [
+          "diem_nen/mo_quang/loi_2_1",
+          "diem_nen/mo_quang/loi_2_2"
+        ],
+        "3": [
+          "diem_nen/mo_quang/loi_3_1",
+          "diem_nen/mo_quang/loi_3_2"
+        ]
+      },
+      "kim": {
+        "1": [
+          "diem_nen/thien_kiem_nguyen/mo_quang",
+          "diem_nen/mo_quang/kim_1_2"
+        ],
+        "2": [
+          "diem_nen/mo_quang/kim_2_1",
+          "diem_nen/mo_quang/kim_2_2"
+        ],
+        "3": [
+          "diem_nen/mo_quang/kim_3_1",
+          "diem_nen/mo_quang/kim_3_2"
+        ]
+      },
+      "moc": {
+        "1": [
+          "diem_nen/van_moc_lam/mo_quang"
+        ]
+      },
+      "thuy": {
+        "1": [
+          "diem_nen/bich_ba_hai/mo_quang"
+        ]
+      },
+      "hoa": {
+        "1": [
+          "diem_nen/xich_viem_son/mo_quang"
+        ]
+      },
+      "tho": {
+        "1": [
+          "diem_nen/hau_tho_nguyen/mo_quang"
+        ]
+      },
+      "phong": {
+        "1": [
+          "diem_nen/cuong_phong_nguyen/mo_quang"
+        ]
+      },
+      "quang": {
+        "1": [
+          "diem_nen/dieu_quang_dai/mo_quang"
+        ]
+      },
+      "am_lanh": {
+        "1": [
+          "diem_nen/u_minh_dam/mo_quang"
+        ]
+      },
+      "cuc_duong": {
+        "1": [
+          "diem_nen/liet_duong_mac/mo_quang"
+        ]
+      },
+      "cuc_am": {
+        "1": [
+          "diem_nen/cuu_u_uyen/mo_quang"
+        ]
+      },
+      "cuc_han": {
+        "1": [
+          "diem_nen/van_nien_bang_nguyen/mo_quang"
+        ]
+      }
+    },
+    "mo_duoc": {
+      "loi": {
+        "1": [
+          "diem_nen/loi_dinh_coc/mo_duoc",
+          "diem_nen/mo_duoc/loi_1_2"
+        ],
+        "2": [
+          "diem_nen/mo_duoc/loi_2_1",
+          "diem_nen/mo_duoc/loi_2_2"
+        ],
+        "3": [
+          "diem_nen/mo_duoc/loi_3_1",
+          "diem_nen/mo_duoc/loi_3_2"
+        ]
+      },
+      "kim": {
+        "1": [
+          "diem_nen/thien_kiem_nguyen/mo_duoc",
+          "diem_nen/mo_duoc/kim_1_2"
+        ],
+        "2": [
+          "diem_nen/mo_duoc/kim_2_1",
+          "diem_nen/mo_duoc/kim_2_2"
+        ],
+        "3": [
+          "diem_nen/mo_duoc/kim_3_1",
+          "diem_nen/mo_duoc/kim_3_2"
+        ]
+      },
+      "moc": {
+        "1": [
+          "diem_nen/van_moc_lam/mo_duoc"
+        ]
+      },
+      "thuy": {
+        "1": [
+          "diem_nen/bich_ba_hai/mo_duoc"
+        ]
+      },
+      "hoa": {
+        "1": [
+          "diem_nen/xich_viem_son/mo_duoc"
+        ]
+      },
+      "tho": {
+        "1": [
+          "diem_nen/hau_tho_nguyen/mo_duoc"
+        ]
+      },
+      "phong": {
+        "1": [
+          "diem_nen/cuong_phong_nguyen/mo_duoc"
+        ]
+      },
+      "quang": {
+        "1": [
+          "diem_nen/dieu_quang_dai/mo_duoc"
+        ]
+      },
+      "am_lanh": {
+        "1": [
+          "diem_nen/u_minh_dam/mo_duoc"
+        ]
+      },
+      "cuc_duong": {
+        "1": [
+          "diem_nen/liet_duong_mac/mo_duoc"
+        ]
+      },
+      "cuc_am": {
+        "1": [
+          "diem_nen/cuu_u_uyen/mo_duoc"
+        ]
+      },
+      "cuc_han": {
+        "1": [
+          "diem_nen/van_nien_bang_nguyen/mo_duoc"
+        ]
+      }
+    },
+    "linh_tuyen": {
+      "loi": {
+        "0": [
+          "diem_nen/loi_dinh_coc/linh_tuyen",
+          "diem_nen/linh_tuyen/loi_0_2"
+        ]
+      },
+      "kim": {
+        "0": [
+          "diem_nen/thien_kiem_nguyen/linh_tuyen",
+          "diem_nen/linh_tuyen/kim_0_2"
+        ]
+      },
+      "moc": {
+        "0": [
+          "diem_nen/van_moc_lam/linh_tuyen"
+        ]
+      },
+      "thuy": {
+        "0": [
+          "diem_nen/bich_ba_hai/linh_tuyen"
+        ]
+      },
+      "hoa": {
+        "0": [
+          "diem_nen/xich_viem_son/linh_tuyen"
+        ]
+      },
+      "tho": {
+        "0": [
+          "diem_nen/hau_tho_nguyen/linh_tuyen"
+        ]
+      },
+      "phong": {
+        "0": [
+          "diem_nen/cuong_phong_nguyen/linh_tuyen"
+        ]
+      },
+      "quang": {
+        "0": [
+          "diem_nen/dieu_quang_dai/linh_tuyen"
+        ]
+      },
+      "am_lanh": {
+        "0": [
+          "diem_nen/u_minh_dam/linh_tuyen"
+        ]
+      },
+      "cuc_duong": {
+        "0": [
+          "diem_nen/liet_duong_mac/linh_tuyen"
+        ]
+      },
+      "cuc_am": {
+        "0": [
+          "diem_nen/cuu_u_uyen/linh_tuyen"
+        ]
+      },
+      "cuc_han": {
+        "0": [
+          "diem_nen/van_nien_bang_nguyen/linh_tuyen"
+        ]
+      }
+    },
+    "hang_di_thu": {
+      "loi": {
+        "0": [
+          "diem_nen/loi_dinh_coc/hang_di_thu",
+          "diem_nen/hang_di_thu/loi_0_2"
+        ]
+      },
+      "kim": {
+        "0": [
+          "diem_nen/thien_kiem_nguyen/hang_di_thu"
+        ]
+      },
+      "moc": {
+        "0": [
+          "diem_nen/van_moc_lam/hang_di_thu"
+        ]
+      },
+      "thuy": {
+        "0": [
+          "diem_nen/bich_ba_hai/hang_di_thu"
+        ]
+      },
+      "hoa": {
+        "0": [
+          "diem_nen/xich_viem_son/hang_di_thu"
+        ]
+      },
+      "tho": {
+        "0": [
+          "diem_nen/hau_tho_nguyen/hang_di_thu"
+        ]
+      },
+      "phong": {
+        "0": [
+          "diem_nen/cuong_phong_nguyen/hang_di_thu"
+        ]
+      },
+      "quang": {
+        "0": [
+          "diem_nen/dieu_quang_dai/hang_di_thu"
+        ]
+      },
+      "am_lanh": {
+        "0": [
+          "diem_nen/u_minh_dam/hang_di_thu"
+        ]
+      },
+      "cuc_duong": {
+        "0": [
+          "diem_nen/liet_duong_mac/hang_di_thu"
+        ]
+      },
+      "cuc_am": {
+        "0": [
+          "diem_nen/cuu_u_uyen/hang_di_thu"
+        ]
+      },
+      "cuc_han": {
+        "0": [
+          "diem_nen/van_nien_bang_nguyen/hang_di_thu"
+        ]
+      }
+    },
+    "cua_bi_canh": {
+      "loi": {
+        "thap": [
+          "diem_nen/cua_bi_canh/loi_thap_1"
+        ],
+        "vua": [
+          "diem_nen/cua_bi_canh/loi_vua_1"
+        ],
+        "cao": [
+          "diem_nen/cua_bi_canh/loi_cao_1"
+        ]
+      }
+    },
+    "deo": {
+      "loi": {
+        "0": [
+          "diem_nen/loi_dinh_coc/deo"
+        ]
+      },
+      "kim": {
+        "0": [
+          "diem_nen/thien_kiem_nguyen/deo"
+        ]
+      },
+      "moc": {
+        "0": [
+          "diem_nen/van_moc_lam/deo"
+        ]
+      },
+      "thuy": {
+        "0": [
+          "diem_nen/bich_ba_hai/deo"
+        ]
+      },
+      "hoa": {
+        "0": [
+          "diem_nen/xich_viem_son/deo"
+        ]
+      },
+      "tho": {
+        "0": [
+          "diem_nen/hau_tho_nguyen/deo"
+        ]
+      },
+      "phong": {
+        "0": [
+          "diem_nen/cuong_phong_nguyen/deo"
+        ]
+      },
+      "quang": {
+        "0": [
+          "diem_nen/dieu_quang_dai/deo"
+        ]
+      },
+      "am_lanh": {
+        "0": [
+          "diem_nen/u_minh_dam/deo"
+        ]
+      },
+      "cuc_duong": {
+        "0": [
+          "diem_nen/liet_duong_mac/deo"
+        ]
+      },
+      "cuc_am": {
+        "0": [
+          "diem_nen/cuu_u_uyen/deo"
+        ]
+      },
+      "cuc_han": {
+        "0": [
+          "diem_nen/van_nien_bang_nguyen/deo"
+        ]
+      }
+    },
+    "ben_do": {
+      "loi": {
+        "0": [
+          "diem_nen/loi_dinh_coc/ben_do"
+        ]
+      },
+      "kim": {
+        "0": [
+          "diem_nen/thien_kiem_nguyen/ben_do"
+        ]
+      },
+      "moc": {
+        "0": [
+          "diem_nen/van_moc_lam/ben_do"
+        ]
+      },
+      "thuy": {
+        "0": [
+          "diem_nen/bich_ba_hai/ben_do"
+        ]
+      },
+      "hoa": {
+        "0": [
+          "diem_nen/xich_viem_son/ben_do"
+        ]
+      },
+      "tho": {
+        "0": [
+          "diem_nen/hau_tho_nguyen/ben_do"
+        ]
+      },
+      "phong": {
+        "0": [
+          "diem_nen/cuong_phong_nguyen/ben_do"
+        ]
+      },
+      "quang": {
+        "0": [
+          "diem_nen/dieu_quang_dai/ben_do"
+        ]
+      },
+      "am_lanh": {
+        "0": [
+          "diem_nen/u_minh_dam/ben_do"
+        ]
+      },
+      "cuc_duong": {
+        "0": [
+          "diem_nen/liet_duong_mac/ben_do"
+        ]
+      },
+      "cuc_am": {
+        "0": [
+          "diem_nen/cuu_u_uyen/ben_do"
+        ]
+      },
+      "cuc_han": {
+        "0": [
+          "diem_nen/van_nien_bang_nguyen/ben_do"
+        ]
+      }
+    },
+    "thanh_chu": {
+      "loi": {
+        "0": [
+          "diem_nen/loi_dinh_coc/thanh_chu"
+        ]
+      },
+      "kim": {
+        "0": [
+          "diem_nen/thien_kiem_nguyen/thanh_chu"
+        ]
+      },
+      "moc": {
+        "0": [
+          "diem_nen/van_moc_lam/thanh_chu"
+        ]
+      },
+      "thuy": {
+        "0": [
+          "diem_nen/bich_ba_hai/thanh_chu"
+        ]
+      },
+      "hoa": {
+        "0": [
+          "diem_nen/xich_viem_son/thanh_chu"
+        ]
+      },
+      "tho": {
+        "0": [
+          "diem_nen/hau_tho_nguyen/thanh_chu"
+        ]
+      },
+      "phong": {
+        "0": [
+          "diem_nen/cuong_phong_nguyen/thanh_chu"
+        ]
+      },
+      "quang": {
+        "0": [
+          "diem_nen/dieu_quang_dai/thanh_chu"
+        ]
+      },
+      "am_lanh": {
+        "0": [
+          "diem_nen/u_minh_dam/thanh_chu"
+        ]
+      },
+      "cuc_duong": {
+        "0": [
+          "diem_nen/liet_duong_mac/thanh_chu"
+        ]
+      },
+      "cuc_am": {
+        "0": [
+          "diem_nen/cuu_u_uyen/thanh_chu"
+        ]
+      },
+      "cuc_han": {
+        "0": [
+          "diem_nen/van_nien_bang_nguyen/thanh_chu"
+        ]
+      }
+    }
+  }
+}
