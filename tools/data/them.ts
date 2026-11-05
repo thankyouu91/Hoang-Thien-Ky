@@ -22,6 +22,7 @@
 //   set_2b          cột Loại sát thương ở Loại chiêu (khớp sim DAMAGE_KIND); ghi chú áo, giày theo chốt tách 2026-11-05
 //   set_2c          14 trang Ẩn văn ở Bảo Giám; chỉ số kèm gộp vào tham_so của Set mốc, xóa cột Chỉ số kèm
 //   goc_085         chỉ số gốc 7 ô (chính, phụ, 4 loại tẩy luyện) ×0,85, làm tròn 0,5 lên (phiên Sprint đo)
+//   set_2d          set đồ 2.0 sau lần đo 1: 6 mốc set, nhóm và hệ số dòng ẩn, giảm sát thương ngoại/nội, dòng rèn 15%
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -1032,11 +1033,11 @@ const SET2_MOC: [string, number, string, string, string, string | null][] = [
   ["do_kiep", 2, "chi_so", "Kháng Lôi +4%", "khangLoi: 40", null],
   ["do_kiep", 4, "hanh_vi", "Bùa chú giảm mana thi triển 15%; lần Bùa chú cuối cùng mỗi trận không tốn mana", "buaGiamMana: 150; buaCuoiMienMana: 1", null],
   ["ban_thach", 2, "chi_so", "Máu +3%", "hp: 30", null],
-  ["ban_thach", 4, "chi_so", "Thủ ngoại +5%; hồi 0,2% máu mỗi giây", "defOuter: 50; hpRegen: 2", null],
+  ["ban_thach", 4, "chi_so", "Giảm sát thương ngoại nhận 10%; hồi 0,1% máu mỗi giây", "damageTakenCutOuter: 100; hpRegen: 1", null],
   ["ngoc_tuy", 2, "chi_so", "Thủ nội +4%", "defInner: 40", null],
-  ["ngoc_tuy", 4, "chi_so", "Mana tối đa +5%; giảm mana thi triển 8%; công lực −3%", "manaMax: 50; manaCostCut: 80; atk: -30", null],
+  ["ngoc_tuy", 4, "chi_so", "Mana tối đa +5%; giảm mana thi triển 8%; giảm sát thương nội nhận 10%; công lực −3%", "manaMax: 50; manaCostCut: 80; damageTakenCutInner: 100; atk: -30", null],
   ["chu_thien", 2, "chi_so", "Bày trận nhanh hơn 0,5 s", "bayTranTicks: -10", null],
-  ["chu_thien", 4, "hanh_vi", "Thủ nội +4%; Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên", "chonViTri: dong_dich_nhat; defInner: 40", null],
+  ["chu_thien", 4, "hanh_vi", "Giảm sát thương nội nhận 8%; Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên", "chonViTri: dong_dich_nhat; damageTakenCutInner: 80", null],
   ["bach_thao", 2, "chi_so", "Hồi máu nhận +4%", "healTaken: 40", null],
   ["bach_thao", 4, "kinh_te", "Hồi 0,3% máu mỗi giây; mỏ dược trấn giữ +5%", "sanLuongMoDuoc: 50; hpRegen: 3", null],
   ["linh_tuyen", 2, "chi_so", "Hiệu quả hồi máu và khiên +4%", "healPower: 40", null],
@@ -1046,9 +1047,9 @@ const SET2_MOC: [string, number, string, string, string, string | null][] = [
   ["co_tong", 2, "chi_so", "Hút mana: mỗi đòn rút 1% mana tối đa của mục tiêu", "manaDrain: 10", null],
   ["co_tong", 4, "hanh_vi", "Hồi chiêu pháp bảo −15%; mỗi lần pháp bảo kích hoạt hồi 5% mana", "hoiChieuPhapBao: -150; hoiManaPhapBao: 50", null],
   ["thiet_ky", 2, "chi_so", "Giảm sát thương nhận 2%", "damageTakenCut: 20", null],
-  ["thiet_ky", 4, "chi_so", "Phản 5% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%", "reflect: 50; damageTakenCut: 10", null],
-  ["bang_phach", 2, "chi_so", "Thời gian khống chế +5%", "controlTime: 50", null],
-  ["bang_phach", 4, "hanh_vi", "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; thủ nội +2%", "giamDanKhongChe: 750; defInner: 20", null],
+  ["thiet_ky", 4, "chi_so", "Phản 12% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%", "reflect: 120; damageTakenCut: 10", null],
+  ["bang_phach", 2, "chi_so", "Thời gian khống chế +15%", "controlTime: 150", null],
+  ["bang_phach", 4, "hanh_vi", "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; khống chế mục tiêu đang vận công thêm 0,5 s; thủ nội +2%", "giamDanKhongChe: 750; khongCheDangVanCongTicks: 10; defInner: 20", null],
   ["hon_don", 2, "chi_so", "Kháng mọi hệ +2%", "khangMoiHe: 20", null],
   ["hon_don", 4, "khac_che", "Trúng đòn của hệ khắc mình thì hệ số ×1,5 giảm còn ×1,4", "heSoBiKhac: 1400", null],
 ];
@@ -1115,7 +1116,8 @@ const SET2_DIEM: [string, string, number, number][] = [
   ["elementDamage", "Sát thương hệ (ngọc)", 4, 0.01], ["resist", "Kháng hệ (ngọc)", 3, 0.01], ["lifesteal", "Hút máu", 15, 0.01],
   ["manaDrain", "Hút mana", 8, 0.01], ["manaCostCut", "Giảm mana thi triển", 4, 0.01], ["manaMax", "Mana tối đa", 2, 0.01],
   ["hpRegen", "Hồi máu mỗi giây", 10, 0.001], ["healTaken", "Hồi máu nhận", 4, 0.01], ["healPower", "Hiệu quả hồi máu và khiên", 4, 0.01],
-  ["shieldTaken", "Khiên nhận", 3, 0.01], ["damageTakenCut", "Giảm sát thương nhận", 12, 0.01], ["reflect", "Phản đòn", 6, 0.01],
+  ["shieldTaken", "Khiên nhận", 3, 0.01], ["damageTakenCut", "Giảm sát thương nhận", 12, 0.01],
+  ["damageTakenCutOuter", "Giảm sát thương ngoại nhận", 6, 0.01], ["damageTakenCutInner", "Giảm sát thương nội nhận", 6, 0.01], ["reflect", "Phản đòn", 6, 0.01],
   ["controlTime", "Thời gian khống chế", 3, 0.01], ["innerDamage", "Sát thương chiêu nội", 8, 0.01],
 ];
 /** Luật mới: khóa, giá trị như hiện trong Excel (theo kiểu ở TB.LUAT). */
@@ -1123,9 +1125,10 @@ const SET2_LUAT: [string, number][] = [
   ["set.json:luat.ghepAnSo", 3], ["set.json:luat.boThanTuBac", 3], ["set.json:luat.binhBoMoiNguoi", 1],
   ["set.json:luat.binhBoMoc[0]", 2], ["set.json:luat.binhBoMoc[1]", 3], ["set.json:luat.binhBoDongLoHeSo", 1.2],
   ["trang_bi.json:luat.dongAn.soDong.lam", 1], ["trang_bi.json:luat.dongAn.soDong.tim", 2], ["trang_bi.json:luat.dongAn.soDong.vang", 3],
-  ["trang_bi.json:luat.dongAn.soDong.do", 3], ["trang_bi.json:luat.dongAn.songAnHeSo", 1.5], ["trang_bi.json:luat.dongAn.tayAnLinhVanThach", 3],
-  ["trang_bi.json:luat.dongAn.tranMoiDong", 0.003], ["trang_bi.json:luat.dongAn.tranTong", 0.01],
-  ["trang_bi.json:luat.dongRen.heSoLoaiPhu", 0.5], ["trang_bi.json:luat.dongRen.toiDa.ha", 3], ["trang_bi.json:luat.dongRen.toiDa.trung", 3],
+  ["trang_bi.json:luat.dongAn.soDong.do", 3], ["trang_bi.json:luat.dongAn.songAnHeSo", 1.25], ["trang_bi.json:luat.dongAn.tayAnLinhVanThach", 3],
+  ["trang_bi.json:luat.dongAn.tranMoiDong", 0.003], ["trang_bi.json:luat.dongAn.tranTong", 0.01], ["trang_bi.json:luat.dongAn.toiDaHieuLuc", 3],
+  ["trang_bi.json:luat.giamSatThuongNhanToiDa", 0.25],
+  ["trang_bi.json:luat.dongRen.heSoLoaiPhu", 0.15], ["trang_bi.json:luat.dongRen.toiDa.ha", 3], ["trang_bi.json:luat.dongRen.toiDa.trung", 3],
   ["trang_bi.json:luat.dongRen.toiDa.than", 5], ["trang_bi.json:luat.dongRen.toiDa.thanh", 5], ["trang_bi.json:luat.dongRen.doiDongKhiTinh", 2],
 ];
 const SET2_GHI_CHU: Record<string, [string, string][]> = {
@@ -1134,7 +1137,7 @@ const SET2_GHI_CHU: Record<string, [string, string][]> = {
     ["Hiệu ứng set không tăng theo", "Hiệu ứng set không tăng theo cường hóa, độ hiếm hay cấp đồ; ấn bộ không có cấp nhưng có bậc lục → đỏ (bac_an): mốc 2 và 4 nhân he_so theo bậc thấp nhất trong các ấn đang tính cho bộ đó; số trong moc[] là ở bậc tím (set đồ 2.0, đề xuất)."],
     ["3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn): ấn khóa", "Giao dịch theo bậc ấn (bac_an[].giao_dich): lục không bán lại trên chợ, lam và tím bán được, vàng và đỏ khóa vào nhân vật. 3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn) chỉ có ấn từ bậc luat.boThanTuBac. Món đã khảm bán kèm ấn nếu món đó và ấn đều bán được."],
     ["", "bo[].lo: lộ sức mạnh của bộ (ngoai_cong, noi_cong, thu_ngoai, thu_noi, hap_thu, phan_chan, khong_toc, kinh_te, khac_che), dùng cho binh bộ đồng lộ và bản đồ khắc lộ (GDD tab Trang bị phần 14)."],
-    ["moc[].", "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, reflect; buaGiamMana, hoiManaPhapBao là hành vi mới."],
+    ["moc[].", "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, damageTakenCutOuter, damageTakenCutInner (giảm sát thương ngoại, nội nhận; mỗi loại đòn tổng tối đa trang_bi.json luat.giamSatThuongNhanToiDa), reflect; buaGiamMana, hoiManaPhapBao, khongCheDangVanCongTicks là hành vi mới."],
     ["", "bac_an: mốc 7 chỉ mở khi cả 7 ấn có tinh_moc_7; ghép luat.ghepAnSo ấn cùng bộ cùng bậc thành 1 ấn bậc trên, chỉ ở bậc có ghep_len (lục lên lam, lam lên tím); vàng, đỏ chỉ rơi. Bậc là thuộc tính từng viên, mã giữ NG-AN-001…020."],
     ["", "hop_bo: mặc cùng lúc từ 2 bộ đang kích (đủ mốc 2), mỗi cặp xét quan hệ hệ ấn (quan_he_to_hop.json). Mỗi bộ lấy he_so tốt nhất của nó (cộng hưởng Đạo Cơ Bàn thay nếu cao hơn), rồi nhân he_so của tuong_khac nếu có bất kỳ bộ đang kích nào khắc nó. Chỉ nhân mốc 2; mana_max cộng một lần cho mỗi cặp đối cực."],
     ["", "binh_bo: binh ấn (ngoc.json binh_an) khảm vào vũ khí, bao tay, ngọc bội và chiếm dòng khảm. Mốc luat.binhBoMoc (2 và 3 món), mỗi người luat.binhBoMoiNguoi binh bộ; cùng lộ với một ấn bộ đang kích thì mốc 3 nhân luat.binhBoDongLoHeSo. Bậc binh ấn như ấn bộ (bac_an); số ở bậc tím."],
@@ -1143,7 +1146,7 @@ const SET2_GHI_CHU: Record<string, [string, string][]> = {
   "trang_bi.json": [
     ["", "Áo, giày (set đồ 2.0): tách phòng thủ thành thủ ngoại, thủ nội đã chốt 2026-11-05 (GDD mục 8), số vẫn là đề xuất. Chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội. Loại sát thương của từng loại chiêu ở loai_chieu.json loai_sat_thuong."],
     ["", "dong_ren: cường hóa lên nac mở 1 dòng rèn ở vi_dien; chọn 1 trong 4 loại phụ của ô (luyen_khi.json tay_luyen), giá trị luat.dongRen.heSoLoaiPhu của loại đó. Tối đa luat.dongRen.toiDa theo vị diện; đổi dòng tốn luat.dongRen.doiDongKhiTinh Khí Tinh; tụt nấc dưới mốc thì dòng tạm tắt."],
-    ["", "dong_an: chỉ trên ô có co_dong_an (ngọc bội, đai). Mỗi dòng là 1 điều kiện (loai dieu_kien) + 1 hiệu ứng (hieu_ung), quay khi món rơi hoặc rèn ra; số dòng luat.dongAn.soDong theo độ hiếm. Hiện ??? tới lần đầu kích phát; Giám Định Phù (PH-CH-011) lộ trước điều kiện 1 dòng; tẩy ẩn quay lại hiệu ứng, giữ điều kiện. Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng ×luat.dongAn.songAnHeSo."],
+    ["", "dong_an: chỉ trên ô có co_dong_an (ngọc bội, đai). Mỗi dòng là 1 điều kiện (loai dieu_kien) + 1 hiệu ứng (hieu_ung), quay khi món rơi hoặc rèn ra; số dòng luat.dongAn.soDong theo độ hiếm. Hiện ??? tới lần đầu kích phát; Giám Định Phù (PH-CH-011) lộ trước điều kiện 1 dòng; tẩy ẩn quay lại hiệu ứng, giữ điều kiện. Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng ×luat.dongAn.songAnHeSo. Nhóm của điều kiện (nhom) nhân hiệu ứng theo he_so: tinh ×0,2, loai_tran ×0,5, trong_tran ×1,0; cùng lúc tối đa luat.dongAn.toiDaHieuLuc dòng có hiệu lực, chọn theo điểm trang bị sau hệ số."],
     ["", "diem: điểm trang bị cho mỗi `moi` (1% hoặc 0,1%) của chỉ số; điểm món là tổng các lớp, điểm nhân vật là 7 món cộng set. Chỉ để so sánh, gợi ý và lọc chợ, không dùng trong trận; phiên Sprint chỉnh bằng đo."],
   ],
   "ngoc.json": [
@@ -1312,7 +1315,7 @@ const set2b: Step = (wb, log) => {
 
 /** Ghi chú bao_giam của luyen_khi.json (luyen_khi_2 viết, set_2c thêm câu Ẩn văn). */
 const GHI_CHU_BAO_GIAM = "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu, loại thưởng theo thứ được đếm (vũ khí, danh khí: ánh sáng vũ khí; ô khác: khung ô; pháp bảo, Phách: danh hiệu; pháp khí: ô kho; ấn bộ: ô túi; Ý châu: Khí Tinh). Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch. Trang Ẩn văn (dem loai an_van): một cặp điều kiện và hiệu ứng dòng ẩn (trang_bi.json dong_an) tính khi cả cặp đã lộ, tức sau lần kích phát đầu; Giám Định Phù chỉ lộ điều kiện nên chưa tính. dieu_kien là đủ các cặp của điều kiện đó; bat_ky là đủ so_luong cặp bất kỳ.";
-const GHI_CHU_THAM_SO_SET = "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, reflect; buaGiamMana, hoiManaPhapBao là hành vi mới.";
+const GHI_CHU_THAM_SO_SET = "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, damageTakenCutOuter, damageTakenCutInner (giảm sát thương ngoại, nội nhận; mỗi loại đòn tổng tối đa trang_bi.json luat.giamSatThuongNhanToiDa), reflect; buaGiamMana, hoiManaPhapBao, khongCheDangVanCongTicks là hành vi mới.";
 
 const set2c: Step = (wb, log) => {
   const text = (v: string | number): Cell => ({ v, fill: "de_xuat" });
@@ -1396,10 +1399,84 @@ const goc085: Step = (wb, log) => {
   }
 };
 
+// ---------- set đồ 2.0 lần 4: sửa số sau lần đo 1 của phiên Sprint (GDD tab Trang bị rev 74; đề xuất) ----------
+
+/** Nhóm điều kiện dòng ẩn và hệ số hiệu ứng (phần nghìn). */
+const DONG_AN_NHOM: Record<string, [string, number]> = {
+  "DN-DK-001": ["tinh", 200], "DN-DK-002": ["tinh", 200], "DN-DK-003": ["tinh", 200], "DN-DK-009": ["tinh", 200],
+  "DN-DK-010": ["tinh", 200], "DN-DK-011": ["tinh", 200], "DN-DK-004": ["loai_tran", 500], "DN-DK-005": ["loai_tran", 500],
+  "DN-DK-012": ["loai_tran", 500], "DN-DK-006": ["trong_tran", 1000], "DN-DK-007": ["trong_tran", 1000], "DN-DK-008": ["trong_tran", 1000],
+};
+
+const set2d: Step = (wb, log) => {
+  const text = (v: string | number): Cell => ({ v, fill: "de_xuat" });
+  const hdr = (v: string): Cell => ({ v, fill: "tieu_de", bold: true, wrap: true });
+  const head = (def: B.TableDef, key: string) => def.cols.find((c) => c.key === key)!.header;
+  const at = (sheet: string, header: string) => (wb.sheet(sheet).cells[0] ?? []).map(norm).indexOf(header);
+  let n = 0;
+
+  // 1. Set mốc theo SET2_MOC (chỉ ghi ô khác)
+  const mocDef = partDef("Set mốc");
+  const mBo = at(mocDef.sheet, head(mocDef, "bo")), mSo = at(mocDef.sheet, head(mocDef, "so"));
+  const cols = { loai: at(mocDef.sheet, head(mocDef, "loai")), mo_ta: at(mocDef.sheet, head(mocDef, "mo_ta")), tham_so: at(mocDef.sheet, head(mocDef, "tham_so")) };
+  for (const [bo, so, loai, mo_ta, tham_so] of SET2_MOC) {
+    const r = wb.sheet(mocDef.sheet).cells.findIndex((row, k) => k > 0 && norm(row?.[mBo]) === bo && Number(row?.[mSo]) === so);
+    if (r < 0) throw new Error(`Set mốc: không có dòng ${bo} mốc ${so}`);
+    const row = wb.sheet(mocDef.sheet).cells[r];
+    if (norm(row[cols.loai]) !== loai) { wb.setCell(mocDef.sheet, r, cols.loai, text(loai)); n++; }
+    if (norm(row[cols.mo_ta]) !== mo_ta) { wb.setCell(mocDef.sheet, r, cols.mo_ta, text(mo_ta)); n++; }
+    if (JSON.stringify(B.parseKv(norm(row[cols.tham_so]))) !== JSON.stringify(B.parseKv(tham_so))) { wb.setCell(mocDef.sheet, r, cols.tham_so, text(tham_so)); n++; }
+  }
+  log.push(`Set mốc: sửa theo lần đo 1 (${n} ô đổi)`);
+
+  // 2. Dòng ẩn: cột Nhóm và Hệ số cho 12 điều kiện
+  const da = partDef("Dòng ẩn"), daMa = at(da.sheet, head(da, "ma"));
+  for (const [key, pick] of [["nhom", (v: [string, number]) => text(v[0])], ["he_so", (v: [string, number]) => text(v[1] / 1000)]] as const) {
+    const h = head(da, key), col = at(da.sheet, h);
+    const cellFor = (row: Value[]) => { const v = DONG_AN_NHOM[norm(row[daMa])]; return v ? pick(v) : null; };
+    if (col < 0) { wb.addColumn(da.sheet, hdr(h), (r, row) => (r > 0 ? cellFor(row) : null), key === "nhom" ? 11 : 9); log.push(`Dòng ẩn: thêm cột ${h}`); }
+    else wb.sheet(da.sheet).cells.forEach((row, r) => {
+      const c = r > 0 ? cellFor(row) : null;
+      if (c && norm(row[col]) !== norm(c.v as Value)) wb.setCell(da.sheet, r, col, c);
+    });
+  }
+
+  // 3. Điểm trang bị: 2 chỉ số mới
+  const dm = partDef("Điểm trang bị"), dmStat = at(dm.sheet, head(dm, "stat"));
+  const haveDiem = new Set(wb.sheet(dm.sheet).cells.map((r) => norm(r?.[dmStat])));
+  const addDiem = SET2_DIEM.filter(([stat]) => !haveDiem.has(stat)).map(([stat, ten, diem, moi]) => ({ stat, ten, diem, moi }));
+  if (addDiem.length) wb.appendRows(dm.sheet, tableRows(dm, addDiem));
+  log.push(`Điểm trang bị: thêm ${addDiem.length} dòng`);
+
+  // 4. Luật: sửa giá trị có sẵn, thêm khóa mới
+  const luatDef = partDef("Luật trang bị"), ls = wb.sheet(luatDef.sheet), lv = at(luatDef.sheet, head(luatDef, "gia_tri"));
+  const keys = ls.cells.map((r) => norm(r?.[0]));
+  const addLuat: Record<string, string | number>[] = [];
+  for (const [khoa, gia_tri] of SET2_LUAT) {
+    const [, ten, kieu] = TB.LUAT.find((l) => l[0] === khoa)!;
+    const r = keys.indexOf(khoa);
+    if (r < 0) { addLuat.push({ khoa, ten, gia_tri, kieu }); continue; }
+    if (Math.abs(Number(ls.cells[r][lv]) - gia_tri) > 1e-9) { wb.setCell(luatDef.sheet, r, lv, kieu === "%" ? pctCell(gia_tri) : text(gia_tri)); log.push(`Luật trang bị: ${khoa} = ${gia_tri}`); }
+  }
+  if (addLuat.length) wb.appendRows(luatDef.sheet, tableRows(luatDef, addLuat));
+  log.push(`Luật trang bị: thêm ${addLuat.length} dòng`);
+
+  // 5. Ghi chú theo SET2_GHI_CHU và GHI_CHU_THAM_SO_SET
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet);
+  const fAt = at(gc.sheet, head(gc, "file")), nAt = at(gc.sheet, head(gc, "noi_dung"));
+  const fix = (file: string, startsWith: string, v: string) => {
+    const k = gs.cells.findIndex((r) => norm(r?.[fAt]) === file && norm(r?.[nAt]).startsWith(startsWith));
+    if (k < 0) throw new Error(`Ghi chú trang bị: không có dòng ${file} "${startsWith}…"`);
+    if (norm(gs.cells[k][nAt]) !== v) { wb.setCell(gc.sheet, k, nAt, text(v)); log.push(`Ghi chú trang bị: sửa dòng ${file} "${startsWith}"`); }
+  };
+  fix("trang_bi.json", "dong_an:", SET2_GHI_CHU["trang_bi.json"].find(([, v]) => v.startsWith("dong_an:"))![1]);
+  fix("set.json", "moc[].", GHI_CHU_THAM_SO_SET);
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
-  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085,
+  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

@@ -7,7 +7,7 @@
     "Trần: trang bị, ngọc, cường hóa và set cộng lại không quá khoảng 35% lực chiến (mục 13). Phiên Sprint chỉnh số tuyệt đối bằng công cụ cân bằng; ở đây chỉ là tỷ lệ giữa các ô.",
     "Áo, giày (set đồ 2.0): tách phòng thủ thành thủ ngoại, thủ nội đã chốt 2026-11-05 (GDD mục 8), số vẫn là đề xuất. Chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội. Loại sát thương của từng loại chiêu ở loai_chieu.json loai_sat_thuong.",
     "dong_ren: cường hóa lên nac mở 1 dòng rèn ở vi_dien; chọn 1 trong 4 loại phụ của ô (luyen_khi.json tay_luyen), giá trị luat.dongRen.heSoLoaiPhu của loại đó. Tối đa luat.dongRen.toiDa theo vị diện; đổi dòng tốn luat.dongRen.doiDongKhiTinh Khí Tinh; tụt nấc dưới mốc thì dòng tạm tắt.",
-    "dong_an: chỉ trên ô có co_dong_an (ngọc bội, đai). Mỗi dòng là 1 điều kiện (loai dieu_kien) + 1 hiệu ứng (hieu_ung), quay khi món rơi hoặc rèn ra; số dòng luat.dongAn.soDong theo độ hiếm. Hiện ??? tới lần đầu kích phát; Giám Định Phù (PH-CH-011) lộ trước điều kiện 1 dòng; tẩy ẩn quay lại hiệu ứng, giữ điều kiện. Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng ×luat.dongAn.songAnHeSo.",
+    "dong_an: chỉ trên ô có co_dong_an (ngọc bội, đai). Mỗi dòng là 1 điều kiện (loai dieu_kien) + 1 hiệu ứng (hieu_ung), quay khi món rơi hoặc rèn ra; số dòng luat.dongAn.soDong theo độ hiếm. Hiện ??? tới lần đầu kích phát; Giám Định Phù (PH-CH-011) lộ trước điều kiện 1 dòng; tẩy ẩn quay lại hiệu ứng, giữ điều kiện. Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng ×luat.dongAn.songAnHeSo. Nhóm của điều kiện (nhom) nhân hiệu ứng theo he_so: tinh ×0,2, loai_tran ×0,5, trong_tran ×1,0; cùng lúc tối đa luat.dongAn.toiDaHieuLuc dòng có hiệu lực, chọn theo điểm trang bị sau hệ số.",
     "diem: điểm trang bị cho mỗi `moi` (1% hoặc 0,1%) của chỉ số; điểm món là tổng các lớp, điểm nhân vật là 7 món cộng set. Chỉ để so sánh, gợi ý và lọc chợ, không dùng trong trận; phiên Sprint chỉnh bằng đo.",
     "Chỉ số chính, phụ của 7 ô và 4 loại tẩy luyện (luyen_khi.json tay_luyen) đã hạ ×0,85 theo trần 35% chia lại của set đồ 2.0 (phiên Sprint đo 2026-11-05), làm tròn về số nguyên gần nhất, 0,5 làm tròn lên; dòng rèn lấy theo bảng tẩy luyện này."
   ],
@@ -4447,32 +4447,94 @@
     {"so":5,"nac":50,"vi_dien":["than","thanh"]}
   ],
   "dong_an": [
-    {"ma":"DN-DK-001","loai":"dieu_kien","noi_dung":"Đang mặc từ 4 món cùng một bộ","tham_so":{"cungBoToiThieu":4}},
+    {
+      "ma": "DN-DK-001",
+      "loai": "dieu_kien",
+      "noi_dung": "Đang mặc từ 4 món cùng một bộ",
+      "tham_so": {"cungBoToiThieu":4},
+      "nhom": "tinh",
+      "he_so": 200
+    },
     {
       "ma": "DN-DK-002",
       "loai": "dieu_kien",
       "noi_dung": "Hai ngọc trên món này tương sinh nhau",
-      "tham_so": {"haiNgocTuongSinh":true}
+      "tham_so": {"haiNgocTuongSinh":true},
+      "nhom": "tinh",
+      "he_so": 200
     },
     {
       "ma": "DN-DK-003",
       "loai": "dieu_kien",
       "noi_dung": "Linh căn trùng hệ một ngọc trên món này",
-      "tham_so": {"linhCanTrungNgoc":true}
+      "tham_so": {"linhCanTrungNgoc":true},
+      "nhom": "tinh",
+      "he_so": 200
     },
-    {"ma":"DN-DK-004","loai":"dieu_kien","noi_dung":"Trận PvE (dị thú, boss)","tham_so":{"tran":"pve"}},
-    {"ma":"DN-DK-005","loai":"dieu_kien","noi_dung":"Trận chiến tranh địa bàn","tham_so":{"tran":"chien_tranh"}},
-    {"ma":"DN-DK-006","loai":"dieu_kien","noi_dung":"Máu dưới 50%","tham_so":{"mauDuoi":500}},
-    {"ma":"DN-DK-007","loai":"dieu_kien","noi_dung":"10 giây đầu trận","tham_so":{"truocTicks":200}},
-    {"ma":"DN-DK-008","loai":"dieu_kien","noi_dung":"Sau giây thứ 30","tham_so":{"sauTicks":600}},
-    {"ma":"DN-DK-009","loai":"dieu_kien","noi_dung":"Đứng hàng trước","tham_so":{"hang":"truoc"}},
-    {"ma":"DN-DK-010","loai":"dieu_kien","noi_dung":"Đứng hàng sau","tham_so":{"hang":"sau"}},
-    {"ma":"DN-DK-011","loai":"dieu_kien","noi_dung":"Khí linh của món từ cấp 3","tham_so":{"khiLinhCapToiThieu":3}},
+    {
+      "ma": "DN-DK-004",
+      "loai": "dieu_kien",
+      "noi_dung": "Trận PvE (dị thú, boss)",
+      "tham_so": {"tran":"pve"},
+      "nhom": "loai_tran",
+      "he_so": 500
+    },
+    {
+      "ma": "DN-DK-005",
+      "loai": "dieu_kien",
+      "noi_dung": "Trận chiến tranh địa bàn",
+      "tham_so": {"tran":"chien_tranh"},
+      "nhom": "loai_tran",
+      "he_so": 500
+    },
+    {
+      "ma": "DN-DK-006",
+      "loai": "dieu_kien",
+      "noi_dung": "Máu dưới 50%",
+      "tham_so": {"mauDuoi":500},
+      "nhom": "trong_tran",
+      "he_so": 1000
+    },
+    {
+      "ma": "DN-DK-007",
+      "loai": "dieu_kien",
+      "noi_dung": "10 giây đầu trận",
+      "tham_so": {"truocTicks":200},
+      "nhom": "trong_tran",
+      "he_so": 1000
+    },
+    {
+      "ma": "DN-DK-008",
+      "loai": "dieu_kien",
+      "noi_dung": "Sau giây thứ 30",
+      "tham_so": {"sauTicks":600},
+      "nhom": "trong_tran",
+      "he_so": 1000
+    },
+    {
+      "ma": "DN-DK-009",
+      "loai": "dieu_kien",
+      "noi_dung": "Đứng hàng trước",
+      "tham_so": {"hang":"truoc"},
+      "nhom": "tinh",
+      "he_so": 200
+    },
+    {"ma":"DN-DK-010","loai":"dieu_kien","noi_dung":"Đứng hàng sau","tham_so":{"hang":"sau"},"nhom":"tinh","he_so":200},
+    {
+      "ma": "DN-DK-011",
+      "loai": "dieu_kien",
+      "noi_dung": "Khí linh của món từ cấp 3",
+      "tham_so": {"khiLinhCapToiThieu":3},
+      "nhom": "tinh",
+      "he_so": 200
+    },
     {
       "ma": "DN-DK-012",
       "loai": "dieu_kien",
       "noi_dung": "Đội địch có hệ khắc linh căn mình",
-      "tham_so": {"dichKhacLinhCan":true}
+      "tham_so": {"dichKhacLinhCan":true},
+      "nhom": "loai_tran",
+      "he_so": 500
     },
     {"ma":"DN-HU-001","loai":"hieu_ung","noi_dung":"Công lực +3%","tham_so":{"atk":30}},
     {"ma":"DN-HU-002","loai":"hieu_ung","noi_dung":"Thủ ngoại +4%","tham_so":{"defOuter":40}},
@@ -4511,10 +4573,20 @@
     {"stat":"damageTakenCut","ten":"Giảm sát thương nhận","diem":12,"moi":10},
     {"stat":"reflect","ten":"Phản đòn","diem":6,"moi":10},
     {"stat":"controlTime","ten":"Thời gian khống chế","diem":3,"moi":10},
-    {"stat":"innerDamage","ten":"Sát thương chiêu nội","diem":8,"moi":10}
+    {"stat":"innerDamage","ten":"Sát thương chiêu nội","diem":8,"moi":10},
+    {"stat":"damageTakenCutOuter","ten":"Giảm sát thương ngoại nhận","diem":6,"moi":10},
+    {"stat":"damageTakenCutInner","ten":"Giảm sát thương nội nhận","diem":6,"moi":10}
   ],
   "luat": {
-    "dongAn": {"soDong":{"lam":1,"tim":2,"vang":3,"do":3},"songAnHeSo":1500,"tayAnLinhVanThach":3,"tranMoiDong":3,"tranTong":10},
-    "dongRen": {"heSoLoaiPhu":500,"toiDa":{"ha":3,"trung":3,"than":5,"thanh":5},"doiDongKhiTinh":2}
+    "dongAn": {
+      "soDong": {"lam":1,"tim":2,"vang":3,"do":3},
+      "songAnHeSo": 1250,
+      "tayAnLinhVanThach": 3,
+      "tranMoiDong": 3,
+      "tranTong": 10,
+      "toiDaHieuLuc": 3
+    },
+    "dongRen": {"heSoLoaiPhu":150,"toiDa":{"ha":3,"trung":3,"than":5,"thanh":5},"doiDongKhiTinh":2},
+    "giamSatThuongNhanToiDa": 250
   }
 }

@@ -42,6 +42,8 @@ export const PARTS: PartDef[] = [
   T("Dòng ẩn", "trang_bi.json", "dong_an", "ma", [
     c("ma", "Mã", "text", { width: 11 }), c("loai", "Loại (dieu_kien, hieu_ung)", "text", { width: 10 }),
     c("noi_dung", "Nội dung", "text", { width: 45 }), c("tham_so", "Tham số (đơn vị code)", "kv", { width: 30 }),
+    c("nhom", "Nhóm điều kiện (tinh, loai_tran, trong_tran)", "text", { optional: true, width: 11 }),
+    c("he_so", "Hệ số hiệu ứng theo nhóm", "mul", { optional: true, width: 9 }),
   ]),
   T("Điểm trang bị", "trang_bi.json", "diem", "stat", [
     c("stat", "Chỉ số (khóa)", "text", { width: 14 }), c("ten", "Tên", "text", { width: 26 }),
@@ -312,6 +314,8 @@ export const LUAT: [string, string, string][] = [
   ["trang_bi.json:luat.dongAn.tayAnLinhVanThach", "Tẩy ẩn (quay lại hiệu ứng, giữ điều kiện): Linh Văn Thạch mỗi lần", "số"],
   ["trang_bi.json:luat.dongAn.tranMoiDong", "Dòng ẩn: mỗi dòng tối đa lực chiến", "%"],
   ["trang_bi.json:luat.dongAn.tranTong", "Dòng ẩn: tổng tối đa lực chiến", "%"],
+  ["trang_bi.json:luat.dongAn.toiDaHieuLuc", "Dòng ẩn: tối đa số dòng có hiệu lực cùng lúc (chọn theo điểm sau hệ số nhóm)", "số"],
+  ["trang_bi.json:luat.giamSatThuongNhanToiDa", "Tổng giảm sát thương nhận của một loại đòn (ngoại hoặc nội) tối đa", "%"],
   ["trang_bi.json:luat.dongRen.heSoLoaiPhu", "Dòng rèn: giá trị so với loại chỉ số phụ đó", "%"],
   ["trang_bi.json:luat.dongRen.toiDa.ha", "Dòng rèn tối đa mỗi món ở Hạ vị", "số"],
   ["trang_bi.json:luat.dongRen.toiDa.trung", "Dòng rèn tối đa mỗi món ở Trung vị", "số"],

@@ -10,7 +10,7 @@
     "Giao dịch theo bậc ấn (bac_an[].giao_dich): lục không bán lại trên chợ, lam và tím bán được, vàng và đỏ khóa vào nhân vật. 3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn) chỉ có ấn từ bậc luat.boThanTuBac. Món đã khảm bán kèm ấn nếu món đó và ấn đều bán được.",
     "Gỡ ấn bằng Thoát Khảm Phù (PH-CH-008) thì ấn còn nguyên; gỡ không phù thì ấn vỡ.",
     "bo[].lo: lộ sức mạnh của bộ (ngoai_cong, noi_cong, thu_ngoai, thu_noi, hap_thu, phan_chan, khong_toc, kinh_te, khac_che), dùng cho binh bộ đồng lộ và bản đồ khắc lộ (GDD tab Trang bị phần 14).",
-    "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, reflect; buaGiamMana, hoiManaPhapBao là hành vi mới.",
+    "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, damageTakenCutOuter, damageTakenCutInner (giảm sát thương ngoại, nội nhận; mỗi loại đòn tổng tối đa trang_bi.json luat.giamSatThuongNhanToiDa), reflect; buaGiamMana, hoiManaPhapBao, khongCheDangVanCongTicks là hành vi mới.",
     "bac_an: mốc 7 chỉ mở khi cả 7 ấn có tinh_moc_7; ghép luat.ghepAnSo ấn cùng bộ cùng bậc thành 1 ấn bậc trên, chỉ ở bậc có ghep_len (lục lên lam, lam lên tím); vàng, đỏ chỉ rơi. Bậc là thuộc tính từng viên, mã giữ NG-AN-001…020.",
     "hop_bo: mặc cùng lúc từ 2 bộ đang kích (đủ mốc 2), mỗi cặp xét quan hệ hệ ấn (quan_he_to_hop.json). Mỗi bộ lấy he_so tốt nhất của nó (cộng hưởng Đạo Cơ Bàn thay nếu cao hơn), rồi nhân he_so của tuong_khac nếu có bất kỳ bộ đang kích nào khắc nó. Chỉ nhân mốc 2; mana_max cộng một lần cho mỗi cặp đối cực.",
     "binh_bo: binh ấn (ngoc.json binh_an) khảm vào vũ khí, bao tay, ngọc bội và chiếm dòng khảm. Mốc luat.binhBoMoc (2 và 3 món), mỗi người luat.binhBoMoiNguoi binh bộ; cùng lộ với một ấn bộ đang kích thì mốc 3 nhân luat.binhBoDongLoHeSo. Bậc binh ấn như ấn bộ (bac_an); số ở bậc tím.",
@@ -159,7 +159,12 @@
       "rang_buoc": null,
       "moc": [
         {"so":2,"loai":"chi_so","mo_ta":"Máu +3%","tham_so":{"hp":30}},
-        {"so":4,"loai":"chi_so","mo_ta":"Thủ ngoại +5%; hồi 0,2% máu mỗi giây","tham_so":{"defOuter":50,"hpRegen":2}},
+        {
+          "so": 4,
+          "loai": "chi_so",
+          "mo_ta": "Giảm sát thương ngoại nhận 10%; hồi 0,1% máu mỗi giây",
+          "tham_so": {"damageTakenCutOuter":100,"hpRegen":1}
+        },
         {
           "so": 7,
           "loai": "hanh_vi",
@@ -209,8 +214,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Phản 5% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%",
-          "tham_so": {"reflect":50,"damageTakenCut":10}
+          "mo_ta": "Phản 12% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%",
+          "tham_so": {"reflect":120,"damageTakenCut":10}
         },
         {
           "so": 7,
@@ -261,8 +266,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Mana tối đa +5%; giảm mana thi triển 8%; công lực −3%",
-          "tham_so": {"manaMax":50,"manaCostCut":80,"atk":-30}
+          "mo_ta": "Mana tối đa +5%; giảm mana thi triển 8%; giảm sát thương nội nhận 10%; công lực −3%",
+          "tham_so": {"manaMax":50,"manaCostCut":80,"damageTakenCutInner":100,"atk":-30}
         },
         {
           "so": 7,
@@ -309,12 +314,12 @@
       "than": false,
       "rang_buoc": "Mốc 7 cần ít nhất 1 công pháp hệ chủ Thủy hoặc Cực hàn",
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Thời gian khống chế +5%","tham_so":{"controlTime":50}},
+        {"so":2,"loai":"chi_so","mo_ta":"Thời gian khống chế +15%","tham_so":{"controlTime":150}},
         {
           "so": 4,
           "loai": "hanh_vi",
-          "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; thủ nội +2%",
-          "tham_so": {"giamDanKhongChe":750,"defInner":20}
+          "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; khống chế mục tiêu đang vận công thêm 0,5 s; thủ nội +2%",
+          "tham_so": {"giamDanKhongChe":750,"khongCheDangVanCongTicks":10,"defInner":20}
         },
         {
           "so": 7,
@@ -537,8 +542,8 @@
         {
           "so": 4,
           "loai": "hanh_vi",
-          "mo_ta": "Thủ nội +4%; Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên",
-          "tham_so": {"chonViTri":"dong_dich_nhat","defInner":40}
+          "mo_ta": "Giảm sát thương nội nhận 8%; Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên",
+          "tham_so": {"chonViTri":"dong_dich_nhat","damageTakenCutInner":80}
         },
         {
           "so": 7,

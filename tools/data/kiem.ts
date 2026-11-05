@@ -395,6 +395,11 @@ export function kiem(d: Any, raw: Raw): Report {
     const an = (tb.dong_an ?? []) as Any[];
     const dk = an.filter((x) => x.loai === "dieu_kien").length, hu = an.filter((x) => x.loai === "hieu_ung").length;
     if (dk !== 12 || hu !== 12 || an.length !== 24) bad.push(`dòng ẩn: ${dk} điều kiện, ${hu} hiệu ứng, cần 12 và 12`);
+    const NHOM = ["tinh", "loai_tran", "trong_tran"];
+    for (const x of an) {
+      if (x.loai === "dieu_kien" && x.nhom !== undefined && (!NHOM.includes(x.nhom) || !(x.he_so > 0 && x.he_so <= 1000))) bad.push(`${x.ma}: nhóm ${x.nhom} hoặc hệ số ${x.he_so} lạ`);
+      if (x.loai === "hieu_ung" && x.nhom !== undefined) bad.push(`${x.ma}: hiệu ứng không có nhóm`);
+    }
     const slotsAn = (tb.o as Any[]).filter((o) => o.co_dong_an).map((o) => o.id).sort().join(",");
     if (tb.o.some((o: Any) => o.co_dong_an !== undefined) && slotsAn !== "dai,ngoc_boi") bad.push(`ô có dòng ẩn: ${slotsAn}, cần đai và ngọc bội`);
     const ren = (tb.dong_ren ?? []) as Any[];
