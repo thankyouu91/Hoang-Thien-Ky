@@ -1,4 +1,4 @@
-// Worker `thienhoangky`: bản chơi thử ở https://choi.thienhoangky.fun, vào bằng link mời /moi/<ma> (không qua Access), API /api/*, D1.
+// Worker `thienhoangky`: bản chơi thử ở https://play.thienhoangky.fun, vào bằng link mời /moi/<ma> (không qua Access), API /api/*, D1.
 // Hướng dẫn deploy: cloudflare/README.md. Hợp đồng API: docs/api.md.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
@@ -8,7 +8,7 @@
   // Chỉ một đường vào là tên miền (có cổng link mời): tắt *.workers.dev và URL xem trước của từng phiên bản.
   "workers_dev": false,
   "preview_urls": false,
-  "routes": [{ "pattern": "choi.thienhoangky.fun", "custom_domain": true }],
+  "routes": [{ "pattern": "play.thienhoangky.fun", "custom_domain": true }],
   // Trước khi đẩy: build proto/dist, chép _headers, kiểm giới hạn số file và dung lượng.
   "build": { "command": "node scripts/chuan-bi.mjs" },
   "assets": {

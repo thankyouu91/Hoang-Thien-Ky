@@ -1,4 +1,4 @@
-// Cổng link mời của bản chơi thử: https://choi.thienhoangky.fun/moi/<ma> cấp cookie `thk_moi` (thẻ ngẫu nhiên 256 bit).
+// Cổng link mời của bản chơi thử: https://play.thienhoangky.fun/moi/<ma> cấp cookie `thk_moi` (thẻ ngẫu nhiên 256 bit).
 // D1 chỉ giữ SHA-256 của thẻ, nên lộ bảng cũng không giả được cookie. Các hàm ở đây thuần (chỉ WebCrypto), test bằng node --test.
 
 export const COOKIE = "thk_moi";
@@ -49,7 +49,7 @@ export function docThe(cookieHeader: string | null): string | null {
 }
 
 /**
- * Cookie dùng chung cho tên gốc và mọi tên miền con (website thienhoangky.fun, game choi., wiki.), để website và wiki
+ * Cookie dùng chung cho tên gốc và mọi tên miền con (website thienhoangky.fun, game play., wiki.), để website và wiki
  * cũng mở được cho người đã có link mời. Chạy local (localhost) thì bỏ Domain, vì trình duyệt sẽ từ chối.
  */
 export const MIEN_COOKIE = "thienhoangky.fun";

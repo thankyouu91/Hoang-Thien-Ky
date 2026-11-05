@@ -1,4 +1,4 @@
-// Worker `thienhoangky` ở choi.thienhoangky.fun: bản chơi thử mở bằng link mời (không qua Cloudflare Access).
+// Worker `thienhoangky` ở play.thienhoangky.fun: bản chơi thử mở bằng link mời (không qua Cloudflare Access).
 // Cookie thk_moi gắn Domain=thienhoangky.fun, nên website (tên gốc) và wiki dùng chung cổng: chỉ cần tra the_hash.
 //   /moi/<ma>  — kiểm link mời (bảng loi_moi), tạo người chơi thử, cấp cookie thk_moi rồi chuyển về /.
 //   HTML, /api/* — chỉ cho trình duyệt có cookie thk_moi hợp lệ và chưa bị khóa.

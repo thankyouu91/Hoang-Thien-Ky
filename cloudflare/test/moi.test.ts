@@ -36,7 +36,7 @@ test("mã link mời", () => {
 });
 
 test("cookie dùng chung tên miền con, trừ khi chạy local", () => {
-  assert.ok(datCookie("t", "choi.thienhoangky.fun").includes("; Domain=thienhoangky.fun;"));
+  assert.ok(datCookie("t", "play.thienhoangky.fun").includes("; Domain=thienhoangky.fun;"));
   assert.ok(datCookie("t", "thienhoangky.fun").includes("; Domain=thienhoangky.fun;"));
   assert.ok(!datCookie("t", "127.0.0.1").includes("Domain="));
   assert.ok(!datCookie("t", "evilthienhoangky.fun").includes("Domain="));

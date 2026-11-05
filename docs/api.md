@@ -6,11 +6,12 @@ Hợp đồng giữa game (`proto/`), Worker game (`cloudflare/`) và Admin Dash
 
 | Hostname | Worker | Cách vào | Nội dung |
 |---|---|---|---|
-| `choi.thienhoangky.fun` | `thienhoangky` (`cloudflare/wrangler.jsonc`) | Link mời `https://choi.thienhoangky.fun/moi/<ma>` cấp cookie | Bản build `proto/dist`, `/api/*` bên dưới |
-| `thienhoangky.fun` | `thienhoangky-web` (`web/`) | Cùng cookie link mời (đọc `nguoi_choi_thu`); `/moi/*` chuyển 302 sang `choi.` | Website (trang chủ) |
+| `play.thienhoangky.fun` | `thienhoangky` (`cloudflare/wrangler.jsonc`) | Link mời `https://play.thienhoangky.fun/moi/<ma>` cấp cookie | Bản build `proto/dist`, `/api/*` bên dưới |
+| `thienhoangky.fun` | `thienhoangky-web` (`web/`) | Cùng cookie link mời (đọc `nguoi_choi_thu`); `/moi/*` chuyển 302 sang `play.` | Website (trang chủ) |
 | `wiki.thienhoangky.fun` | `thienhoangky-wiki` (`wiki/`) | Cùng cookie link mời | Wiki |
 | `admin.thienhoangky.fun` | `thienhoangky-admin` (`admin/wrangler.jsonc`) | Cloudflare Access, mã một lần gửi qua email | Admin Dashboard, `/api/*` của admin (`admin/shared/hopDong.ts`) |
 | `www.thienhoangky.fun` | `thienhoangky-www` (`cloudflare/wrangler.www.jsonc`) | — | 301 về `https://thienhoangky.fun` |
+| `choi.thienhoangky.fun` | `thienhoangky-www` | — | Tên cũ của game: 301 về `https://play.thienhoangky.fun` (giữ đường dẫn, link mời cũ vẫn chạy) |
 
 - Ba Worker đều tắt `*.workers.dev` và URL xem trước, nên chỉ vào được qua tên miền.
 - Hai Worker game và admin dùng chung D1 `thienhoangky` (id `aa2c1b16-661a-4df8-94a3-37ee20cc0f5e`, vùng APAC).
@@ -19,7 +20,7 @@ Hợp đồng giữa game (`proto/`), Worker game (`cloudflare/`) và Admin Dash
 
 ## Link mời và cookie
 
-1. Người chơi mở `https://choi.thienhoangky.fun/moi/<ma>`. Mã gồm 6–40 ký tự `[a-z0-9-]`, không phân biệt hoa thường.
+1. Người chơi mở `https://play.thienhoangky.fun/moi/<ma>`. Mã gồm 6–40 ký tự `[a-z0-9-]`, không phân biệt hoa thường.
 2. Worker kiểm dòng `loi_moi`: chưa tắt (`tat = 0`), chưa hết hạn (`het_han`), còn lượt (`da_dung < toi_da`). Nếu hợp lệ, Worker:
    - tăng `da_dung`;
    - tạo một dòng `nguoi_choi_thu` (mã `id` 10 ký tự);
@@ -51,7 +52,7 @@ Trình duyệt tự gửi cookie, nên game chỉ cần gọi `fetch("/api/...")
 
 Mọi phản hồi API có `Cache-Control: no-store`.
 
-## API game (`https://choi.thienhoangky.fun`)
+## API game (`https://play.thienhoangky.fun`)
 
 ### `GET /api/toi`
 
