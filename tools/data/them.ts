@@ -21,6 +21,7 @@
 //                   cột Lộ, Chỉ số kèm, Có dòng ẩn; mốc 2, 4 của 16 bộ; áo, giày thủ ngoại, thủ nội; luật, ghi chú
 //   set_2b          cột Loại sát thương ở Loại chiêu (khớp sim DAMAGE_KIND); ghi chú áo, giày theo chốt tách 2026-11-05
 //   set_2c          14 trang Ẩn văn ở Bảo Giám; chỉ số kèm gộp vào tham_so của Set mốc, xóa cột Chỉ số kèm
+//   goc_085         chỉ số gốc 7 ô (chính, phụ, 4 loại tẩy luyện) ×0,85, làm tròn 0,5 lên (phiên Sprint đo)
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -359,8 +360,15 @@ const pctCell = (v: number): Cell => ({ v, fill: "de_xuat", fmt: pctFmt(v) });
 
 /** Chỉ số món theo ô sau lần đo trần 2 (phần nghìn của chỉ số chuẩn cùng cấp; trước đó gấp đôi). */
 const TRAN_O: Record<string, [number, number]> = {
-  vu_khi: [40, 20], mu: [20, 20], ao: [40, 15], dai: [25, 10], bao_tay: [20, 5], giay: [20, 10], ngoc_boi: [25, 5],
+  vu_khi: [40, 20], mu: [20, 20], ao: [30, 15], dai: [25, 10], bao_tay: [20, 5], giay: [30, 10], ngoc_boi: [25, 5],
 };
+/**
+ * Hạ chỉ số gốc 7 ô (chính, phụ, 4 loại tẩy luyện) theo trần 35% chia lại của set đồ 2.0 (phiên Sprint đo, 2026-11-05):
+ * × GOC_HE_SO, làm tròn về số nguyên gần nhất, 0,5 làm tròn lên (30 → 26, 10 → 9, 5 → 4). TRAN_O (áo, giày đã theo set_2)
+ * và TAY_LUYEN là số trước khi hạ; mọi bước ghi các ô này đều qua goc() nên chạy lại không lệch nhau.
+ */
+const GOC_HE_SO = 0.85;
+const goc = (v: number): number => Math.floor(v * GOC_HE_SO + 0.5);
 /** Ngọc cấp k: k × (k + 1) phần nghìn, tức 0,1 × k × (k + 1)%. */
 const NGOC_CAP = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((k) => k * (k + 1));
 const LUAT_NGOC: [string, number][] = [
@@ -380,8 +388,8 @@ const GHI_CHU_NGOC: [number, string][] = [
 const tranLan2: Step = (wb, log) => {
   const o = partDef("Ô trang bị"), oh = (k: string) => o.cols.find((c) => c.key === k)!.header;
   for (const [id, [chinh, phu]] of Object.entries(TRAN_O)) {
-    wb.setCell(o.sheet, ...locate(wb, o.sheet, oh("id"), id, oh("chinh_gia_tri")), pctCell(chinh / 1000));
-    wb.setCell(o.sheet, ...locate(wb, o.sheet, oh("id"), id, oh("phu_gia_tri")), pctCell(phu / 1000));
+    wb.setCell(o.sheet, ...locate(wb, o.sheet, oh("id"), id, oh("chinh_gia_tri")), pctCell(goc(chinh) / 1000));
+    wb.setCell(o.sheet, ...locate(wb, o.sheet, oh("id"), id, oh("phu_gia_tri")), pctCell(goc(phu) / 1000));
   }
   log.push("Ô trang bị: chỉ số chính và phụ của 7 ô theo trần lần 2 (×0,5)");
 
@@ -1221,7 +1229,7 @@ const set2: Step = (wb, log) => {
     const r = oRow(id);
     put(oDef.sheet, r, head(oDef, "chinh_stat"), stat);
     put(oDef.sheet, r, head(oDef, "chinh_ten"), ten);
-    put(oDef.sheet, r, head(oDef, "chinh_gia_tri"), 0.03, false, pctCell(0.03));
+    put(oDef.sheet, r, head(oDef, "chinh_gia_tri"), goc(30) / 1000, false, pctCell(goc(30) / 1000));
   }
   const tl = partDef("Tẩy luyện"), tlO = at(tl.sheet, head(tl, "o")), tlL = at(tl.sheet, head(tl, "loai"));
   for (const [o, stat, ten] of [["giay", "defOuter", "Thủ ngoại"], ["ao", "defInner", "Thủ nội"]]) {
@@ -1351,10 +1359,47 @@ const set2c: Step = (wb, log) => {
   fix("set.json", "moc[].", GHI_CHU_THAM_SO_SET);
 };
 
+// ---------- chỉ số gốc 7 ô ×0,85 (phiên Sprint đo, theo trần 35% chia lại của set đồ 2.0; đề xuất) ----------
+
+const goc085: Step = (wb, log) => {
+  const o = partDef("Ô trang bị"), oh = (k: string) => o.cols.find((c) => c.key === k)!.header;
+  const at = (sheet: string, header: string) => (wb.sheet(sheet).cells[0] ?? []).map(norm).indexOf(header);
+  let n = 0;
+  const put = (sheet: string, r: number, col: number, v: number) => {
+    const cur = Number(wb.sheet(sheet).cells[r]?.[col]);
+    if (Math.round(cur * 1000) === v) return;
+    wb.setCell(sheet, r, col, pctCell(v / 1000));
+    n++;
+  };
+  const oId = at(o.sheet, oh("id")), oChinh = at(o.sheet, oh("chinh_gia_tri")), oPhu = at(o.sheet, oh("phu_gia_tri"));
+  for (const [id, [chinh, phu]] of Object.entries(TRAN_O)) {
+    const r = wb.sheet(o.sheet).cells.findIndex((row, k) => k > 0 && norm(row?.[oId]) === id);
+    if (r < 0) throw new Error(`Ô trang bị: không có ô ${id}`);
+    put(o.sheet, r, oChinh, goc(chinh));
+    put(o.sheet, r, oPhu, goc(phu));
+  }
+  const tl = partDef("Tẩy luyện"), th = (k: string) => tl.cols.find((c) => c.key === k)!.header;
+  const tO = at(tl.sheet, th("o")), tL = at(tl.sheet, th("loai")), tV = at(tl.sheet, th("gia_tri"));
+  for (const [ten, list] of Object.entries(TAY_LUYEN)) list.forEach(([, v], i) => {
+    const r = wb.sheet(tl.sheet).cells.findIndex((row, k) => k > 0 && norm(row?.[tO]) === ten && Number(row?.[tL]) === i + 1);
+    if (r < 0) throw new Error(`Tẩy luyện: không có ${ten} loại ${i + 1}`);
+    put(tl.sheet, r, tV, goc(v));
+  });
+  log.push(`Ô trang bị, Tẩy luyện: chỉ số gốc ×${GOC_HE_SO} (${n} ô đổi)`);
+  // Ghi chú trang_bi.json: nói rõ số đã hạ
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), gh = (k: string) => at(gc.sheet, gc.cols.find((c) => c.key === k)!.header);
+  const note = "Chỉ số chính, phụ của 7 ô và 4 loại tẩy luyện (luyen_khi.json tay_luyen) đã hạ ×0,85 theo trần 35% chia lại của set đồ 2.0 (phiên Sprint đo 2026-11-05), làm tròn về số nguyên gần nhất, 0,5 làm tròn lên; dòng rèn lấy theo bảng tẩy luyện này.";
+  if (!gs.cells.some((r) => norm(r?.[gh("noi_dung")]) === note)) {
+    const stt = Math.max(0, ...gs.cells.filter((r) => norm(r?.[gh("file")]) === "trang_bi.json").map((r) => Number(r[gh("stt")])));
+    wb.appendRows(gc.sheet, tableRows(gc, [{ file: "trang_bi.json", stt: stt + 1, noi_dung: note }]));
+    log.push("Ghi chú trang bị: thêm câu chỉ số gốc ×0,85");
+  }
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
-  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c,
+  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
