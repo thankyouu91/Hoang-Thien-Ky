@@ -28,6 +28,7 @@ const MANA = "#5aa9e6";
 const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
 const COUNTER_COLOR = "#ff8a3d"; // số sát thương của đòn khắc hệ
 const COUNTER_TIPS = 4; // mấy đòn khắc đầu trận có nhãn "Khắc ×1,5" (GDD mục 14, FTUE: thấy khắc chế hoạt động)
+const SCORE_SIDE = 104; // px CSS mỗi bên mép trên dành cho nút của thanh trên (Quay lại), dòng tỉ số nằm giữa
 const HEAVY_HIT = 0.05; // đòn từ 5% máu tối đa trở lên mới diễn hoạt ảnh trúng đòn
 const BADGE = 12; // cạnh dấu hệ đặt trước thanh máu, đơn vị thế giới
 const DEFAULT_ARENA = "vo_truong"; // nền sân khi replay không nói trận đánh ở đâu
@@ -679,7 +680,16 @@ export class BattleScene implements Scene {
     ctx.textAlign = "center";
     ctx.font = `bold 14px ${FONT_TEXT}`;
     ctx.fillStyle = "#efe6d6";
-    ctx.fillText(`${names[0]} ${index.alive(0, t)}  ·  ${index.alive(1, t)} ${names[1]}`, v.w / 2, 8);
+    const score = `${names[0]} ${index.alive(0, t)}  ·  ${index.alive(1, t)} ${names[1]}`;
+    // Tên tông môn dài không vừa khoảng giữa hai bên thanh trên (nút Quay lại ở góc phải): hạ xuống dưới thanh, vẫn dài thì thu chữ.
+    let sy = 8;
+    const sw = ctx.measureText(score).width;
+    if (sw > v.w - 2 * SCORE_SIDE) {
+      sy = 50;
+      const room = v.w - 24;
+      if (sw > room) ctx.font = `bold ${Math.max(10, Math.floor((14 * room) / sw))}px ${FONT_TEXT}`;
+    }
+    ctx.fillText(score, v.w / 2, sy);
     const mid = (v.h - v.bottom) / 2;
     const ended = t >= r.ticks && !player.playing;
     this.controls.ended(ended ? mid + 30 : null);
