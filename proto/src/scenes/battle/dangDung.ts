@@ -9,6 +9,7 @@ import type { Sprites } from "../../assets/sprites.ts";
 import type { Look, ReplayUnit } from "../../replay/types.ts";
 import { animInfo, drawCharacter, type Anim } from "./character.ts";
 import { drawPhapLuan, growth, type PhapLuanBeat, type PhapLuanSpec } from "./phapLuan.ts";
+import { pretint } from "./mauAo.ts";
 
 export type DangId =
   | "thuong"
@@ -226,6 +227,8 @@ export function drawDang(
   const body: Anim = idle ? idleStrip(sprites, look, d) : anim;
   const info = animInfo(sprites, look, body);
   if (!info) return false;
+  // Màu áo theo hệ: xếp hàng đổi màu sẵn các dải người này sẽ dùng (dải đứng trước), làm khi trình duyệt rảnh.
+  if (look.tint) pretint(sprites, look, [idle ? body : idleStrip(sprites, look, d), ...ANIM_CHUNG]);
   const f = idle ? Math.floor(time * info.fps + phase * 7) % info.frames : frame;
   const lift = dangLift(dang, anim, time, phase);
   const fx = anim === "nga" ? [] : d.fx ?? [];
@@ -237,10 +240,14 @@ export function drawDang(
   const shown = fx.filter((k) => (idle || k === "phi_kiem" || k === "khi_lo_lung") && !(fullLuan && (k === "hao_quang" || k === "hao_quang_vang")));
   const neo = sprites.asset(`nhan_vat/${look.body}/${look.outfit}/${body}`)?.meta.neo;
   const anchor = Array.isArray(neo) ? neo[Math.max(0, Math.min(neo.length - 1, f))] : undefined;
-  // Chạy: dáng đeo lưng hay cất vũ khí thì giữ nguyên, dáng khác cầm tay. Ra chiêu, trúng đòn: cầm tay.
-  const weapon = idle ? d.weapon : anim === "chay" && (d.weapon === "lung" || d.weapon === "cat") ? d.weapon : "tay";
-  // Dải chạy và ra chiêu theo loại (gói 2) có góc cẳng tay trong neo tay: vũ khí xoay theo, proto tự vẽ.
-  const held = weapon === "tay" && !!anchor?.tay && (anchor.tay as readonly number[]).length >= 4;
+  // Chạy: dáng đeo lưng hay cất vũ khí thì giữ nguyên, dáng khác cầm tay. Ra chiêu, trúng đòn: cầm tay. Đồ đeo trên
+  // nắm tay (quyền giáp) thì lúc nào cũng ở tay.
+  const worn = !!look.weapon && DEO_TAY.has(look.weapon);
+  const weapon = worn ? "tay" : idle ? d.weapon : anim === "chay" && (d.weapon === "lung" || d.weapon === "cat") ? d.weapon : "tay";
+  // Dải chạy và ra chiêu theo loại (gói 2) có góc cẳng tay trong neo tay: vũ khí xoay theo, proto tự vẽ. Vũ khí có vầng
+  // sáng theo độ hiếm cũng vẽ riêng, để bóng sáng không phủ lên thân.
+  const glow = weaponGlow(look, time);
+  const held = weapon === "tay" && !!anchor?.tay && ((anchor.tay as readonly number[]).length >= 4 || !!glow);
 
   ctx.save();
   ctx.translate(x, footY);
@@ -256,14 +263,14 @@ export function drawDang(
     drawPhapLuan(ctx, luan!.spec, luan!.beat, cx, cy, 17);
   }
   for (const k of shown) drawFx(ctx, k, "back", time, lift, feet, tint, phase);
-  if (look.weapon && weapon === "lung" && anchor) drawWeapon(ctx, sprites, look.weapon, "lung", anchor, lift);
+  if (look.weapon && weapon === "lung" && anchor) drawWeapon(ctx, sprites, look.weapon, "lung", anchor, lift, 1, glow);
 
   const carry = weapon === "tay" && !held ? look : { ...look, weapon: undefined };
   drawCharacter(ctx, sprites, carry, body, f, 0, -lift, 1, false);
   // Lúc chạy vũ khí chỉ đung đưa nhẹ theo tay (40%), khỏi múa lưỡi theo từng bước.
-  if (look.weapon && held) drawWeapon(ctx, sprites, look.weapon, "cam", anchor!, lift, anim === "chay" ? 0.4 : 1);
+  if (look.weapon && held) drawWeapon(ctx, sprites, look.weapon, "cam", anchor!, lift, anim === "chay" ? 0.4 : 1, glow);
 
-  if (look.weapon && (weapon === "vai" || weapon === "chuc") && anchor?.tay) drawWeapon(ctx, sprites, look.weapon, weapon, anchor, lift);
+  if (look.weapon && (weapon === "vai" || weapon === "chuc") && anchor?.tay) drawWeapon(ctx, sprites, look.weapon, weapon, anchor, lift, 1, glow);
   for (const k of shown) drawFx(ctx, k, "front", time, lift, feet, tint, phase);
   ctx.restore();
   return true;
@@ -272,7 +279,18 @@ export function drawDang(
 // ---- vệt vũ khí khi ra chiêu ----
 
 /** Mũi vũ khí so với chỗ cầm (pivot) trong ảnh đồ gốc, px; tay không thì vệt theo nắm tay. */
-const TIP: Record<string, [number, number]> = { kiem: [15.3, -27.4], dao: [16.3, -27.4], truong: [-2.7, -35.4] };
+const TIP: Record<string, [number, number]> = {
+  kiem: [15.3, -27.4],
+  dao: [16.3, -27.4],
+  truong: [-2.7, -35.4],
+  // Gói 3, vũ khí theo tài năng: mũi đo là điểm xa chỗ cầm nhất của ảnh đồ; quyền giáp lấy đốt tay (theo hướng cẳng tay).
+  song_chuy: [4.8, -14.9],
+  bua_ren: [6.8, -25.9],
+  liem: [5.8, -15.9],
+  quyen_giap: [3, 2],
+};
+/** Đồ cầm không xoay theo cẳng tay (trận bàn, hồ lô, bàn tính): giữ thế như lúc đứng, không có vệt. */
+const KHONG_XOAY = new Set(["tran_ban", "ho_lo", "ban_tinh"]);
 
 const wrapDeg = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180;
 
@@ -282,7 +300,7 @@ const wrapDeg = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180;
  * nhân thêm `k`. Neo cũ chỉ có [x, y] thì 0 (vẽ như trước).
  */
 export function heldRotation(key: string | undefined, tay: readonly number[] | null | undefined, k = 1): number {
-  if (!tay || tay.length < 4) return 0;
+  if (!tay || tay.length < 4 || (key && KHONG_XOAY.has(key))) return 0;
   const tip = (key && TIP[key]) || TIP.kiem;
   const base = (Math.atan2(tip[1], tip[0]) * 180) / Math.PI;
   return tay[3] * k * wrapDeg(tay[2] - base);
@@ -362,6 +380,14 @@ const CARRY: Record<string, { lung: [number, number, number]; vai: number; chuc:
   kiem: { lung: [160, -7, -4], vai: -74, chuc: 140 },
   dao: { lung: [160, -7, -4], vai: -74, chuc: 140 },
   truong: { lung: [30, 0, 16], vai: -50, chuc: 0 },
+  // Gói 3. Dao găm, liềm chĩa lên như kiếm (khoảng −70°) nên mang như kiếm; búa vác vai cán chếch ra sau, chống đất thì
+  // đầu búa chúc xuống; hồ lô treo sau hông; trận bàn, bàn tính đeo sau lưng (chỉ tông chủ ngự kiếm mới đeo lưng).
+  song_chuy: { lung: [160, -7, -4], vai: -74, chuc: 140 },
+  liem: { lung: [160, -7, 2], vai: -70, chuc: 140 },
+  bua_ren: { lung: [160, -6, -2], vai: -60, chuc: 165 },
+  ho_lo: { lung: [0, -9, 23], vai: 0, chuc: 0 },
+  tran_ban: { lung: [0, -6, 12], vai: 0, chuc: 0 },
+  ban_tinh: { lung: [0, -6, 14], vai: 0, chuc: 0 },
 };
 const CARRY_DEFAULT = CARRY.kiem;
 
@@ -400,9 +426,34 @@ function bareWeapon(sprites: Sprites, key: string): { img: CanvasImageSource; pi
   return { img: bare.get(key) ?? asset.img, pivot };
 }
 
+/** Các dải chung của mọi bộ áo, xếp hàng đổi màu sau dải đứng. */
+const ANIM_CHUNG = ["chay", "ra_chieu_chem", "ra_chieu_dam", "ra_chieu_dap", "ra_chieu_phong", "ra_chieu", "trung_don", "nga"];
+
+/** Đồ đeo trên nắm tay: luôn vẽ ở tay, không đeo lưng, vác vai hay chúc xuống đất. */
+const DEO_TAY = new Set(["quyen_giap"]);
+
+/** Màu vầng sáng vũ khí theo nhóm độ hiếm (GDD mục 6: lục và lam không sáng, tím, vàng và đỏ có sáng). */
+const SANG_PHAM: Record<string, string> = { tim: "192,124,255", vang: "255,211,77", do: "255,77,58" };
+/** Mức cường hoá có thêm ánh sáng (GDD mục 6: vũ khí từ +21). */
+const CUONG_HOA_SANG = 21;
+
+/**
+ * Vầng sáng quanh vũ khí theo độ hiếm và cường hoá của `look`, nhịp thở theo `time` (giây); null nếu không sáng.
+ * `blur` tính theo px ảnh đồ.
+ */
+export function weaponGlow(look: Look, time: number): { color: string; blur: number } | null {
+  const rgb = look.weaponRarity ? SANG_PHAM[look.weaponRarity] : undefined;
+  const bright = (look.weaponPlus ?? 0) >= CUONG_HOA_SANG;
+  if (!rgb && !bright) return null;
+  const pulse = 0.5 + 0.5 * Math.sin(time * 2.6);
+  const a = (bright ? 0.75 : 0.5) + 0.25 * pulse;
+  return { color: `rgba(${rgb ?? "255,241,176"},${a.toFixed(3)})`, blur: (bright ? 4 : 2.5) + pulse };
+}
+
 function drawWeapon(
   ctx: CanvasRenderingContext2D, sprites: Sprites, key: string, mode: "lung" | "vai" | "chuc" | "cam",
   anchor: { dau: [number, number, number]; tay: [number, number] | null }, lift: number, k = 1,
+  glow: { color: string; blur: number } | null = null,
 ): void {
   // Đeo lưng và chúc kiếm dùng ảnh đã xoá nắm tay (tay của thân tự nắm chuôi); vác vai và cầm tay giữ nắm tay của ảnh đồ.
   const w = mode === "lung" || mode === "chuc" ? bareWeapon(sprites, key) : sprites.asset(`do/vu_khi/${key}`) && {
@@ -426,6 +477,12 @@ function drawWeapon(
   ctx.save();
   ctx.translate(px - FRAME_X, py - FRAME_FOOT - lift);
   ctx.rotate((rot * Math.PI) / 180);
+  if (glow) {
+    // Bóng mờ của canvas tính theo px thiết bị, không theo phép biến đổi: đổi từ px ảnh đồ ra px thiết bị.
+    const m = ctx.getTransform();
+    ctx.shadowColor = glow.color;
+    ctx.shadowBlur = glow.blur * Math.hypot(m.a, m.b);
+  }
   ctx.drawImage(w.img, -w.pivot[0], -w.pivot[1]);
   ctx.restore();
 }

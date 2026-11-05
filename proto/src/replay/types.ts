@@ -49,6 +49,12 @@ export interface Look {
   hat?: string;
   /** Mã vũ khí trong do/vu_khi/ */
   weapon?: string;
+  /** Màu áo theo hệ (linh căn chính), bảng nhan_vat/mau_he.json; bỏ trống thì giữ màu gốc của bộ áo */
+  tint?: ElementId;
+  /** Nhóm độ hiếm của vũ khí: tím, vàng, đỏ thì vũ khí có vầng sáng (GDD mục 6) */
+  weaponRarity?: "luc" | "lam" | "tim" | "vang" | "do";
+  /** Mức cường hoá của vũ khí; từ +21 có thêm ánh sáng (GDD mục 6) */
+  weaponPlus?: number;
 }
 
 /** Sự kiện xếp theo tick tăng dần. Các trường hp, mana, pos là giá trị sau sự kiện. */
