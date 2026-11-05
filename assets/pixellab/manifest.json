@@ -25435,6 +25435,102 @@
       "created": "2026-11-05",
       "pixellab_id": "528eeec2-d9da-42d3-af6f-b65c1f39816c",
       "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/loi_dinh_coc/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Lôi Đình Cốc (loi_dinh_coc), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"loi_dinh_coc/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: dark slate rock and wet purple-tinged grass, small pools reflecting violet light, scorch marks from lightning strikes. Along the top and bottom edges: jagged dark crags, stormy pine trees and crackling violet lightning rods. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/loi_dinh_coc/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "24a4fc12-1d7f-4952-ade1-744adf2d0b9e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_nien_bang_nguyen/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Vạn Niên Băng Nguyên (van_nien_bang_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_nien_bang_nguyen/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed snow and blue ice with frost cracks. Along the top and bottom edges: frozen pine trees, ice cliffs and snowdrifts. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7e858a96-c1ff-4929-ba5c-5361cc016afe",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/loi_dinh_coc/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Lôi Đình Cốc (loi_dinh_coc), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"loi_dinh_coc/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: dark slate rock and wet purple-tinged grass, small pools reflecting violet light, scorch marks from lightning strikes. Along the top and bottom edges: jagged dark crags, stormy pine trees and crackling violet lightning rods. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/loi_dinh_coc/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d13b17a9-be9c-4a45-b416-b0a81a908c1d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/loi_dinh_coc/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Lôi Đình Cốc (loi_dinh_coc), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"loi_dinh_coc/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: dark slate rock and wet purple-tinged grass, small pools reflecting violet light, scorch marks from lightning strikes. Along the top and bottom edges: jagged dark crags, stormy pine trees and crackling violet lightning rods. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/loi_dinh_coc/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "926c4954-9752-4eb4-ad4f-a84695b70310",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/loi_dinh_coc/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Lôi Đình Cốc (loi_dinh_coc), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"loi_dinh_coc/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: dark slate rock and wet purple-tinged grass, small pools reflecting violet light, scorch marks from lightning strikes. Along the top and bottom edges: jagged dark crags, stormy pine trees and crackling violet lightning rods. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/loi_dinh_coc/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "39e6a2a3-735a-45a4-b8d8-e8bb66e53341",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/loi_dinh_coc/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Lôi Đình Cốc (loi_dinh_coc), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"loi_dinh_coc/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: dark slate rock and wet purple-tinged grass, small pools reflecting violet light, scorch marks from lightning strikes. Along the top and bottom edges: jagged dark crags, stormy pine trees and crackling violet lightning rods. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/loi_dinh_coc/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a9384661-ce86-40d6-b510-aaca2fcc7f30",
+      "api": "REST v2 generate-image-v2"
     }
   ]
 }
