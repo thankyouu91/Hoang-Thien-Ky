@@ -8,7 +8,7 @@
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
 import type { ChildProcess } from "node:child_process";
-import { readdirSync, rmSync } from "node:fs";
+import { readFileSync, readdirSync, rmSync } from "node:fs";
 import { AUD, TEAM, kyJwt, phucVuKhoa, taoKhoa } from "./khoaGia.ts";
 
 const PORT = 8791;
@@ -107,9 +107,10 @@ async function vao(ten: string, matKhau: string, base = BASE, headers: Record<st
   return `__Host-qt=${m[1]}`;
 }
 
-const MK_ADMIN = "đường lên Thiên Hoang còn xa 2026";
+let MK_ADMIN = "đường lên Thiên Hoang còn xa 2026";
+const MK_QUA_EMAIL = "mây trôi qua đỉnh Thiên Hoang 2027";
 const MK_VAN = "mây trắng ngang núi Thanh Vân";
-const MATKHAU_DA_THAY: string[] = [TAM_DAU, MK_ADMIN, MK_VAN];
+const MATKHAU_DA_THAY: string[] = [TAM_DAU, MK_ADMIN, MK_VAN, MK_QUA_EMAIL];
 
 // Tắt lớp Access của wrangler.jsonc cho phần kiểm mật khẩu; lớp Access kiểm riêng ở cuối với khóa giả.
 const w = chayWorker(PORT, { GAME_ORIGIN: "https://choi.thienhoangky.fun/", ACCESS_TEAM_DOMAIN: "", ACCESS_AUD: "" });
@@ -339,6 +340,67 @@ try {
       `SELECT (SELECT COUNT(*) FROM qt_thong_bao WHERE trang_thai = 'dang' AND bat_dau <= ${t} AND (ket_thuc IS NULL OR ket_thuc > ${t})) AS tb, (SELECT gia_tri FROM qt_cau_hinh WHERE khoa = 'toc_do_kinh_te') AS kt`,
     );
     assert.deepEqual(row, { tb: 1, kt: "2" });
+  });
+
+  console.log("Đặt lại mật khẩu qua email");
+  await kiem("tự đặt email nhận link: sai mật khẩu → 400, email sai → 400; đúng → lưu, /api/toi trả email", async () => {
+    assert.equal((await goi("POST", "/api/email-cua-toi", { cookie: ckAdmin, body: { email: "kt@example.com", mat_khau: "sai" } })).status, 400);
+    assert.equal((await goi("POST", "/api/email-cua-toi", { cookie: ckAdmin, body: { email: "khong-phai-email", mat_khau: MK_ADMIN } })).status, 400);
+    assert.equal((await goi("POST", "/api/email-cua-toi", { cookie: ckAdmin, body: { email: "KT@Example.com", mat_khau: MK_ADMIN } })).status, 200);
+    assert.equal((await goi("GET", "/api/toi", { cookie: ckAdmin })).data.email, "kt@example.com");
+  });
+  await kiem("Admin đặt email cho Vận hành ở màn Tài khoản; Vận hành không đặt được cho người khác", async () => {
+    assert.equal((await goi("POST", "/api/tai-khoan/sua", { cookie: ckAdmin, body: { ten: "van", vai_tro: "van_hanh", ghi_chu: "trực tối", email: "van@example.com" } })).status, 200);
+    const t = (await goi("GET", "/api/tai-khoan", { cookie: ckAdmin })).data.dong.find((x: any) => x.ten === "van");
+    assert.equal(t.email, "van@example.com");
+    assert.equal(t.ghi_chu, "trực tối");
+    assert.equal((await goi("POST", "/api/tai-khoan/sua", { cookie: ckVan, body: { ten: "kiemthu", vai_tro: "admin", email: "x@example.com" } })).status, 403);
+  });
+  await kiem("quên mật khẩu: tên có email, tên không có, tên sai dạng đều trả cùng một câu", async () => {
+    const a = await goi("POST", "/api/quen-mat-khau", { body: { ten: "kiemthu" } });
+    const b = await goi("POST", "/api/quen-mat-khau", { body: { ten: "khongco" } });
+    const c = await goi("POST", "/api/quen-mat-khau", { body: { ten: "Có Dấu!" } });
+    assert.equal(a.status, 200);
+    assert.deepEqual(a.data, b.data);
+    assert.deepEqual(a.data, c.data);
+    assert.equal((await goi("POST", "/api/quen-mat-khau", { body: { ten: "kiemthu" }, headers: { Origin: "https://evil.example" } })).status, 403);
+  });
+  let token = "";
+  await kiem("thư đặt lại (giả lập cục bộ) có link /dat-lai#<token 43 ký tự>, D1 chỉ giữ băm", async () => {
+    let tep = "";
+    for (let i = 0; i < 60 && !tep; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      tep = /Text:\s*(\S+?\.txt)/.exec(log)?.[1] ?? "";
+    }
+    assert.ok(tep, "không thấy thư trong log wrangler");
+    const m = /\/dat-lai#([A-Za-z0-9_-]{43})/.exec(readFileSync(tep, "utf8"));
+    assert.ok(m, "thư không có link đặt lại");
+    token = m[1];
+    const rows = sql("SELECT ma_bam, het_han - tao_luc AS han FROM qt_dat_lai WHERE ten = 'kiemthu'");
+    assert.equal(rows.length, 1);
+    assert.notEqual(rows[0].ma_bam, token);
+    assert.equal(rows[0].han, 30 * 60 * 1000);
+    assert.equal(sql("SELECT COUNT(*) AS so FROM qt_dat_lai WHERE ten = 'khongco'")[0].so, 0);
+  });
+  await kiem("đặt lại: token sai → 400, mật khẩu yếu → 400; đúng → 200, phiên cũ mất, mật khẩu cũ hết dùng, token không dùng lại được", async () => {
+    assert.equal((await goi("POST", "/api/dat-lai", { body: { ma: "A".repeat(43), moi: MK_QUA_EMAIL } })).status, 400);
+    assert.equal((await goi("POST", "/api/dat-lai", { body: { ma: token, moi: "ngan" } })).status, 400);
+    assert.equal((await goi("POST", "/api/dat-lai", { body: { ma: token, moi: MK_QUA_EMAIL } })).status, 200);
+    assert.equal((await goi("GET", "/api/toi", { cookie: ckAdmin })).status, 401);
+    assert.equal((await goi("POST", "/api/dang-nhap", { body: { ten: "kiemthu", mat_khau: MK_ADMIN } })).status, 401);
+    assert.equal((await goi("POST", "/api/dat-lai", { body: { ma: token, moi: "mot mat khau khac 12345" } })).status, 400);
+    MK_ADMIN = MK_QUA_EMAIL;
+    ckAdmin = await vao("kiemthu", MK_ADMIN);
+  });
+  await kiem("mỗi tài khoản tối đa 3 link mỗi giờ; lần thứ 4 không tạo link, nhật ký ghi lý do", async () => {
+    for (let i = 0; i < 4; i++) assert.equal((await goi("POST", "/api/quen-mat-khau", { body: { ten: "kiemthu" } })).status, 200);
+    await new Promise((r) => setTimeout(r, 1500));
+    assert.equal(sql("SELECT COUNT(*) AS so FROM qt_dat_lai WHERE ten = 'kiemthu'")[0].so, 3);
+    const nk = (await goi("GET", "/api/nhat-ky?hanh_dong=phien", { cookie: ckAdmin })).data.dong;
+    assert.ok(nk.some((x: any) => x.hanh_dong === "phien.gui_dat_lai" && /quá 3 link/.test(JSON.stringify(x.chi_tiet))));
+    assert.ok(nk.some((x: any) => x.hanh_dong === "phien.dat_lai" && x.nguoi === "kiemthu"));
+    // Bỏ các lần gọi trên khỏi bộ đếm IP để phần sau đo đúng.
+    sql("DELETE FROM qt_dang_nhap_sai");
   });
 
   console.log("Đặt lại, khóa, đăng xuất, hết hạn");

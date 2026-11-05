@@ -14,7 +14,7 @@ Trang quản trị cho admin và ban vận hành của bản chơi thử (Cửa 
 | `shared/hopDong.ts` | Hợp đồng dữ liệu giữa giao diện và API, nhãn sự kiện `LOAI_SU_KIEN`, 8 bước FTUE, mốc GDD mục 19 |
 | `migrations/` | Bảng `qt_*` trong D1 `thienhoangky` (dùng chung với Worker game), bảng theo dõi riêng `d1_migrations_qt` |
 | `scripts/tao-tai-khoan.ts` | Tạo tài khoản đầu tiên, hoặc đặt lại mật khẩu khi không còn Admin nào vào được |
-| `test/` | `jwt.test.ts` (xác minh JWT Access), `e2e.ts` (Worker thật trong wrangler dev, 57 phép kiểm), `dev.ts` (chạy thử trên máy, tắt lớp Access) |
+| `test/` | `jwt.test.ts` (xác minh JWT Access), `e2e.ts` (Worker thật trong wrangler dev, 64 phép kiểm), `dev.ts` (chạy thử trên máy, tắt lớp Access) |
 
 Bảng game (`loi_moi`, `nguoi_choi_thu`, `su_kien`, `phan_hoi`) và Worker game do `cloudflare/` giữ. Hợp đồng chung nằm ở `docs/api.md`.
 
@@ -49,7 +49,42 @@ npx.cmd wrangler d1 execute thienhoangky --remote --file .tmp/tai-khoan-admin.sq
 2. Trang bắt đổi mật khẩu ngay: ít nhất 12 ký tự, không chứa tên đăng nhập. Một câu dài dễ nhớ là tốt.
 3. Đổi xong thì xóa file mật khẩu tạm.
 
-**Quên mật khẩu:** nhờ một Admin khác vào **Tài khoản → Đặt lại mật khẩu**. Nếu không còn Admin nào vào được, chạy lại hai lệnh trên với tên tài khoản đó. Script đặt mật khẩu tạm mới, mở khóa tài khoản và đăng xuất mọi phiên của nó.
+**Quên mật khẩu**, theo thứ tự ưu tiên:
+1. Màn đăng nhập → **Quên mật khẩu?** → nhận link qua email (mục dưới). Cách này cần tài khoản đã có email.
+2. Nhờ một Admin khác vào **Tài khoản → Đặt lại mật khẩu**.
+3. Không còn Admin nào vào được thì chạy lại hai lệnh trên với tên tài khoản đó. Script đặt mật khẩu tạm mới, mở khóa tài khoản và đăng xuất mọi phiên của nó. Chạy script thì **phải** chạy cả lệnh `d1 execute`. Nếu không, mật khẩu trong file không khớp với D1, và mật khẩu tạm của lần chạy trước cũng hết dùng.
+
+## Đặt lại mật khẩu qua email
+
+Người dùng yêu cầu ngày 2026-11-05: chỉ cho tài khoản quản trị, giữ gói Workers Free.
+
+**Dựng một lần.** Người dùng tự chạy các lệnh này, vì lệnh đổi DNS và Cloudflare bị chặn quyền ở các phiên Claude:
+
+```
+npx.cmd wrangler email routing enable thienhoangky.fun                      # thêm MX, SPF, DKIM cho tên miền gốc
+npx.cmd wrangler email routing addresses create <email của tài khoản>      # mỗi email một lần, rồi bấm link xác nhận trong thư
+```
+
+Gói Free chỉ gửi được tới **địa chỉ đã xác nhận** ở Email Routing của tài khoản Cloudflare. Email nào chưa xác nhận thì thư đặt lại không tới. Lỗi gửi được ghi trong nhật ký quản trị ("Gửi link đặt lại mật khẩu"), không hiện cho người yêu cầu. Gửi tới địa chỉ bất kỳ cần gói Workers Paid.
+
+**Đặt email cho tài khoản:**
+- tự đặt: thanh bên → **Email** (phải nhập mật khẩu hiện tại);
+- Admin đặt cho người khác: **Tài khoản → Email**.
+
+Chưa đăng nhập được mà muốn đặt email cho `admin` thì chạy:
+```
+npx.cmd wrangler d1 execute thienhoangky --remote --command "UPDATE qt_tai_khoan SET email = '<email>' WHERE ten = 'admin'"
+```
+
+**Cách chạy:**
+- **Quên mật khẩu?**: nhập tên đăng nhập. Server luôn trả cùng một câu và trả ngay. Việc tra tài khoản và gửi thư chạy sau (`waitUntil`), nên nhìn câu trả lời hay thời gian trả lời đều không đoán được tên nào có thật hay có email.
+- **Giới hạn:** mỗi tài khoản tối đa 3 link mỗi giờ. Mỗi yêu cầu còn được cộng vào bộ đếm IP chung với đăng nhập (quá 20 lần trong 15 phút thì 429).
+- **Thư:** gửi từ `khong-tra-loi@thienhoangky.fun`, chứa link `https://admin.thienhoangky.fun/dat-lai#<token>`.
+  - Token 256 bit nằm sau dấu `#`, nên không vào log máy chủ hay Referer. Trang tự xóa token khỏi thanh địa chỉ ngay khi mở.
+  - D1 (`qt_dat_lai`) chỉ giữ SHA-256 của token.
+- **Link:** dùng một lần trong 30 phút. Đặt xong thì mọi link khác của tài khoản hết dùng, mọi phiên bị đăng xuất, và tạm khóa vì sai mật khẩu được gỡ. Tài khoản bị Admin khóa thì không đặt lại được.
+- Trang `/dat-lai` vẫn nằm sau Cloudflare Access như cả tên miền, nên người đặt lại phải qua mã email Access trước.
+- Chạy cục bộ: wrangler không gửi thư thật, mà ghi nội dung thư ra file và in đường dẫn ra console. `test/e2e.ts` đọc file đó để lấy link.
 
 ## Thêm Admin hoặc Vận hành
 
@@ -148,7 +183,7 @@ npm.cmd test                 # test JWT, build, rồi e2e trên wrangler dev
 ```
 cd admin
 npm.cmd ci
-npx.cmd wrangler d1 migrations apply thienhoangky --remote                    # tạo bảng qt_* (lần đầu, và khi có migration mới)
+npx.cmd wrangler d1 migrations apply thienhoangky --remote                    # tạo bảng qt_* (lần đầu, và khi có migration mới, như 0002_dat_lai)
 npx.cmd wrangler d1 execute thienhoangky --remote --file .tmp/tai-khoan-admin.sql   # chỉ lần đầu: tài khoản admin (xem mục trên)
 npm.cmd run deploy                                                          # check + build + wrangler deploy (gắn tên miền admin.thienhoangky.fun)
 ```

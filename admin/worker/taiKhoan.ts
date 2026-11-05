@@ -21,14 +21,15 @@ export interface Phien {
   phaiDoi: boolean;
   hetHan: number;
   maBam: string;
+  email: string | null;
 }
 
-async function sha256hex(s: string): Promise<string> {
+export async function sha256hex(s: string): Promise<string> {
   const h = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)));
   return [...h].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
-function b64u(b: Uint8Array): string {
+export function b64u(b: Uint8Array): string {
   let s = "";
   for (const x of b) s += String.fromCharCode(x);
   return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -59,15 +60,15 @@ export async function layPhien(db: D1Database, req: Request): Promise<Phien | nu
   if (!ma) return null;
   const maBam = await sha256hex(ma);
   const r = await db
-    .prepare("SELECT p.ten, p.het_han, t.vai_tro, t.phai_doi, t.khoa FROM qt_phien p JOIN qt_tai_khoan t ON t.ten = p.ten WHERE p.ma_bam = ?")
+    .prepare("SELECT p.ten, p.het_han, t.vai_tro, t.phai_doi, t.khoa, t.email FROM qt_phien p JOIN qt_tai_khoan t ON t.ten = p.ten WHERE p.ma_bam = ?")
     .bind(maBam)
-    .first<{ ten: string; het_han: number; vai_tro: VaiTro; phai_doi: number; khoa: number }>();
+    .first<{ ten: string; het_han: number; vai_tro: VaiTro; phai_doi: number; khoa: number; email: string | null }>();
   if (!r) return null;
   if (r.het_han <= Date.now() || r.khoa === 1) {
     await db.prepare("DELETE FROM qt_phien WHERE ma_bam = ?").bind(maBam).run();
     return null;
   }
-  return { ten: r.ten, vaiTro: r.vai_tro, phaiDoi: r.phai_doi === 1, hetHan: r.het_han, maBam };
+  return { ten: r.ten, vaiTro: r.vai_tro, phaiDoi: r.phai_doi === 1, hetHan: r.het_han, maBam, email: r.email ?? null };
 }
 
 export async function taoPhien(db: D1Database, ten: string, thietBi: string | null): Promise<{ ma: string; hetHan: number }> {
@@ -82,6 +83,26 @@ export async function taoPhien(db: D1Database, ten: string, thietBi: string | nu
   return { ma, hetHan };
 }
 
+// ---- Chặn theo IP (dùng chung cho đăng nhập, quên mật khẩu, đặt lại) ----------------------------------------------
+
+/** IP đã sai quá IP_SAI_TOI_DA lần trong IP_CUA_SO_MS thì chặn (429). IP chỉ lưu dạng băm. */
+export async function ipBiChan(db: D1Database, ip: string, now = Date.now()): Promise<boolean> {
+  const r = await db.prepare("SELECT so_lan, tu_luc FROM qt_dang_nhap_sai WHERE ip_bam = ?").bind(await sha256hex(`qt-ip|${ip}`)).first<{ so_lan: number; tu_luc: number }>();
+  return Boolean(r && now - r.tu_luc < IP_CUA_SO_MS && r.so_lan >= IP_SAI_TOI_DA);
+}
+
+/** Cộng một lần sai cho IP (cửa sổ 15 phút tính từ lần sai đầu). */
+export async function ghiIpSai(db: D1Database, ip: string, now = Date.now()): Promise<D1PreparedStatement> {
+  const ipBam = await sha256hex(`qt-ip|${ip}`);
+  return db
+    .prepare(
+      "INSERT INTO qt_dang_nhap_sai (ip_bam, so_lan, tu_luc) VALUES (?, 1, ?) ON CONFLICT(ip_bam) DO UPDATE SET so_lan = CASE WHEN ? - qt_dang_nhap_sai.tu_luc < ? THEN qt_dang_nhap_sai.so_lan + 1 ELSE 1 END, tu_luc = CASE WHEN ? - qt_dang_nhap_sai.tu_luc < ? THEN qt_dang_nhap_sai.tu_luc ELSE excluded.tu_luc END",
+    )
+    .bind(ipBam, now, now, IP_CUA_SO_MS, now, IP_CUA_SO_MS);
+}
+
+export const LOI_IP = "Sai quá nhiều lần từ máy này. Thử lại sau 15 phút.";
+
 export type KetQuaDangNhap =
   | { ok: true; ten: string }
   | { ok: false; status: 401 | 403 | 429; loi: string };
@@ -90,13 +111,9 @@ export type KetQuaDangNhap =
 export async function dangNhap(db: D1Database, tenVao: string, matKhau: string, ip: string): Promise<KetQuaDangNhap> {
   const now = Date.now();
   const ten = tenVao.trim().toLowerCase();
-  const ipBam = await sha256hex(`qt-ip|${ip}`);
   const sai = { ok: false as const, status: 401 as const, loi: "Sai tên đăng nhập hoặc mật khẩu." };
 
-  const ipRow = await db.prepare("SELECT so_lan, tu_luc FROM qt_dang_nhap_sai WHERE ip_bam = ?").bind(ipBam).first<{ so_lan: number; tu_luc: number }>();
-  if (ipRow && now - ipRow.tu_luc < IP_CUA_SO_MS && ipRow.so_lan >= IP_SAI_TOI_DA) {
-    return { ok: false, status: 429, loi: "Sai quá nhiều lần từ máy này. Thử lại sau 15 phút." };
-  }
+  if (await ipBiChan(db, ip, now)) return { ok: false, status: 429, loi: LOI_IP };
 
   const tk = await db
     .prepare("SELECT ten, mat_khau, khoa, sai_lien_tiep, tam_khoa_den FROM qt_tai_khoan WHERE ten = ?")
@@ -112,11 +129,7 @@ export async function dangNhap(db: D1Database, tenVao: string, matKhau: string, 
   const dung = tk ? await kiemMatKhau(matKhau, tk.mat_khau) : (await kiemMatKhau(matKhau, BAM_GIA), false);
 
   if (!dung) {
-    const stmts = [
-      ipRow && now - ipRow.tu_luc < IP_CUA_SO_MS
-        ? db.prepare("UPDATE qt_dang_nhap_sai SET so_lan = so_lan + 1 WHERE ip_bam = ?").bind(ipBam)
-        : db.prepare("INSERT INTO qt_dang_nhap_sai (ip_bam, so_lan, tu_luc) VALUES (?, 1, ?) ON CONFLICT(ip_bam) DO UPDATE SET so_lan = 1, tu_luc = excluded.tu_luc").bind(ipBam, now),
-    ];
+    const stmts = [await ghiIpSai(db, ip, now)];
     if (tk) {
       const lan = tk.sai_lien_tiep + 1;
       stmts.push(

@@ -35,6 +35,8 @@
     "ACCESS_TEAM_DOMAIN": "jolly-water-a8bd.cloudflareaccess.com",
     "ACCESS_AUD": "8845cb2cdf92bb8fbe412aff4968092b4a6800f594bb53831b46abe8a092c505"
   },
+  // Gửi thư đặt lại mật khẩu (worker/datLai.ts). Gói Free: chỉ tới địa chỉ đã xác nhận ở Email Routing của tài khoản.
+  "send_email": [{ "name": "THU" }],
   // Log do Worker tự ghi (không có mật khẩu, mã phiên). Tắt invocation log để header và đường dẫn không vào Workers Logs.
   "observability": { "enabled": true, "logs": { "invocation_logs": false } }
 }

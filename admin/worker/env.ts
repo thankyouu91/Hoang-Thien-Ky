@@ -11,6 +11,8 @@ export interface Env {
   ACCESS_CERTS_URL?: string;
   /** Nơi chạy game, ví dụ "https://play.thienhoangky.fun". Link mời = GAME_ORIGIN/moi/<ma>. */
   GAME_ORIGIN?: string;
+  /** Gửi thư đặt lại mật khẩu (send_email). Gói Free: chỉ tới địa chỉ đã xác nhận ở Email Routing. */
+  THU?: SendEmail;
 }
 
 /** Team domain không có scheme và dấu / cuối: "https://x.cloudflareaccess.com/" → "x.cloudflareaccess.com". */

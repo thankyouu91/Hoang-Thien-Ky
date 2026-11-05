@@ -10,7 +10,8 @@ import { linkGoc, teamDomain } from "./env.ts";
 import { defaultKeyLoader, certsUrl, verifyAccessJwt } from "./jwt.ts";
 import { bamMatKhau, kiemMatKhau, loiMatKhauMoi, matKhauNgauNhien } from "./matKhau.ts";
 import { coPhanHoi, dsNguoiChoi, dsPhanHoi, dsSuKien, thieuBang, tongQuan } from "./nguonGame.ts";
-import { cookieDat, cookieXoa, dangNhap, layPhien, taoPhien, tenHopLe, thietBi } from "./taiKhoan.ts";
+import { cookieDat, cookieXoa, dangNhap, ghiIpSai, ipBiChan, layPhien, LOI_IP, taoPhien, tenHopLe, thietBi } from "./taiKhoan.ts";
+import { CAU_QUEN, datLaiBangToken, guiLinkDatLai } from "./datLai.ts";
 import type { Phien } from "./taiKhoan.ts";
 
 interface Nguoi {
@@ -85,7 +86,7 @@ async function ghiNhatKy(env: Env, n: { ten: string; vaiTroThat: VaiTro }, hanhD
 }
 
 function toiTu(n: Nguoi): Toi {
-  return { ten: n.ten, vai_tro: n.vaiTro, vai_tro_that: n.vaiTroThat, phai_doi_mat_khau: n.phien.phaiDoi, het_han: n.phien.hetHan };
+  return { ten: n.ten, vai_tro: n.vaiTro, vai_tro_that: n.vaiTroThat, phai_doi_mat_khau: n.phien.phaiDoi, het_han: n.phien.hetHan, email: n.phien.email };
 }
 
 // ---- Đọc thân yêu cầu -----------------------------------------------------------------------------------------
@@ -172,6 +173,17 @@ const routes: Record<string, Handler> = {
     await env.DB.prepare("DELETE FROM qt_phien WHERE ma_bam = ?").bind(n.phien.maBam).run();
     await ghiNhatKy(env, n, "phien.dang_xuat", null);
     return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "Set-Cookie": cookieXoa(), ...BAO_MAT } });
+  },
+  // Email nhận link đặt lại mật khẩu của chính mình. Phải nhập mật khẩu hiện tại: ai cầm được phiên cũng không đổi được.
+  "POST /api/email-cua-toi": async ({ req, env, n }) => {
+    const b = await than(req);
+    const mk = typeof b.mat_khau === "string" ? b.mat_khau.trim() : "";
+    const tk = await env.DB.prepare("SELECT mat_khau FROM qt_tai_khoan WHERE ten = ?").bind(n.ten).first<{ mat_khau: string }>();
+    if (!tk || !(await kiemMatKhau(mk, tk.mat_khau))) throw new Loi(400, "Mật khẩu hiện tại không đúng.");
+    const email = emailTuyChon(b.email);
+    await env.DB.prepare("UPDATE qt_tai_khoan SET email = ?, sua_boi = ?, sua_luc = ? WHERE ten = ?").bind(email, n.ten, Date.now(), n.ten).run();
+    await ghiNhatKy(env, n, "tai_khoan.email", n.ten, { co_email: email !== null });
+    return json({ ok: true, email });
   },
   "POST /api/doi-mat-khau": async ({ req, env, n }) => {
     const b = await than(req);
@@ -399,7 +411,7 @@ const routes: Record<string, Handler> = {
     canAdmin(n);
     const now = Date.now();
     const r = await env.DB.prepare(
-      "SELECT t.ten, t.vai_tro, t.khoa, t.phai_doi, t.ghi_chu, t.dang_nhap_cuoi, t.doi_mat_khau_luc, t.tam_khoa_den, t.tao_boi, t.tao_luc, (SELECT COUNT(*) FROM qt_phien p WHERE p.ten = t.ten AND p.het_han > ?) AS so_phien FROM qt_tai_khoan t ORDER BY t.vai_tro, t.ten",
+      "SELECT t.ten, t.vai_tro, t.khoa, t.phai_doi, t.ghi_chu, t.email, t.dang_nhap_cuoi, t.doi_mat_khau_luc, t.tam_khoa_den, t.tao_boi, t.tao_luc, (SELECT COUNT(*) FROM qt_phien p WHERE p.ten = t.ten AND p.het_han > ?) AS so_phien FROM qt_tai_khoan t ORDER BY t.vai_tro, t.ten",
     )
       .bind(now)
       .all<Record<string, unknown>>();
@@ -409,6 +421,7 @@ const routes: Record<string, Handler> = {
       khoa: x.khoa === 1,
       phai_doi: x.phai_doi === 1,
       ghi_chu: (x.ghi_chu as string | null) ?? null,
+      email: (x.email as string | null) ?? null,
       dang_nhap_cuoi: (x.dang_nhap_cuoi as number | null) ?? null,
       doi_mat_khau_luc: (x.doi_mat_khau_luc as number | null) ?? null,
       tam_khoa_den: typeof x.tam_khoa_den === "number" && x.tam_khoa_den > now ? x.tam_khoa_den : null,
@@ -443,8 +456,15 @@ const routes: Record<string, Handler> = {
     const ghiChu = chuoi(b.ghi_chu, "ghi chú", 200, false);
     const cu = await taiKhoanKhac(env, n, ten);
     if (cu.vai_tro === "admin" && vt !== "admin") await conAdminKhac(env, ten);
-    await env.DB.prepare("UPDATE qt_tai_khoan SET vai_tro = ?, ghi_chu = ?, sua_boi = ?, sua_luc = ? WHERE ten = ?").bind(vt, ghiChu, n.ten, Date.now(), ten).run();
-    await ghiNhatKy(env, n, "tai_khoan.sua", ten, { cu: cu.vai_tro, moi: vt });
+    // email: không gửi thì giữ nguyên; chuỗi rỗng thì bỏ email.
+    const doiEmail = b.email !== undefined;
+    const email = doiEmail ? emailTuyChon(b.email) : null;
+    await env.DB.prepare(
+      `UPDATE qt_tai_khoan SET vai_tro = ?, ghi_chu = ?${doiEmail ? ", email = ?" : ""}, sua_boi = ?, sua_luc = ? WHERE ten = ?`,
+    )
+      .bind(...[vt, ghiChu, ...(doiEmail ? [email] : []), n.ten, Date.now(), ten])
+      .run();
+    await ghiNhatKy(env, n, "tai_khoan.sua", ten, { cu: cu.vai_tro, moi: vt, ...(doiEmail ? { co_email: email !== null } : {}) });
     return json({ ok: true });
   },
   "POST /api/tai-khoan/dat-lai": async ({ req, env, n }) => {
@@ -542,6 +562,15 @@ function docThongBao(b: Record<string, unknown>) {
   return { tieu_de, noi_dung, muc, bat_dau, ket_thuc, dang: b.dang === true };
 }
 
+/** Email nhận link đặt lại: chuỗi rỗng hoặc null là bỏ email. */
+function emailTuyChon(v: unknown): string | null {
+  if (v === null || v === undefined || (typeof v === "string" && v.trim() === "")) return null;
+  if (typeof v !== "string") throw new Loi(400, "Email phải là chữ.");
+  const e = v.trim().toLowerCase();
+  if (!/^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>"]+$/.test(e) || e.length > 254) throw new Loi(400, "Email không hợp lệ.");
+  return e;
+}
+
 function vaiTroTu(v: unknown): VaiTro {
   if (v !== "admin" && v !== "van_hanh") throw new Loi(400, "Vai trò là admin hoặc van_hanh.");
   return v;
@@ -599,6 +628,31 @@ export default {
         return new Response(JSON.stringify(toiTu(n)), {
           headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "Set-Cookie": cookieDat(p.ma), ...BAO_MAT },
         });
+      }
+
+      const ip = req.headers.get("CF-Connecting-IP") ?? "khong-ro";
+      if (req.method === "POST" && url.pathname === "/api/quen-mat-khau") {
+        const b = await than(req);
+        if (await ipBiChan(env.DB, ip)) return loi(429, LOI_IP);
+        // Mỗi yêu cầu cũng tính một lần vào bộ đếm IP, để không dùng đường này dò tên hay gửi thư dồn dập.
+        await (await ghiIpSai(env.DB, ip)).run();
+        const ten = typeof b.ten === "string" ? b.ten.slice(0, 64) : "";
+        // Tra tài khoản và gửi thư sau khi đã trả lời: mọi tên đều nhận cùng câu, cùng thời gian.
+        exec.waitUntil(guiLinkDatLai(env, ten, url.origin).catch((e) => console.error(`quen-mat-khau: ${(e as Error)?.message ?? e}`)));
+        return json({ ok: true, thong_diep: CAU_QUEN });
+      }
+      if (req.method === "POST" && url.pathname === "/api/dat-lai") {
+        const b = await than(req);
+        if (await ipBiChan(env.DB, ip)) return loi(429, LOI_IP);
+        const token = typeof b.ma === "string" ? b.ma.trim() : "";
+        const moi = typeof b.moi === "string" ? b.moi.trim() : "";
+        const kq = await datLaiBangToken(env, token, moi);
+        if (!kq.ok) {
+          if (kq.status === 400 && kq.loi.startsWith("Link")) await (await ghiIpSai(env.DB, ip)).run();
+          return loi(kq.status, kq.loi);
+        }
+        await ghiNhatKy(env, { ten: kq.ten, vaiTroThat: kq.vai_tro as VaiTro }, "phien.dat_lai", kq.ten);
+        return json({ ok: true });
       }
 
       const phien = await layPhien(env.DB, req);

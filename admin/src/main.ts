@@ -6,7 +6,7 @@ import "./style.css";
 import type { Toi } from "../shared/hopDong.ts";
 import { TEN_VAI_TRO } from "../shared/hopDong.ts";
 import { ApiLoi, api, dangXemNhu, datXemNhu } from "./api.ts";
-import { moDoiMatKhau, veDangNhap, veDoiBatBuoc } from "./dangNhap.ts";
+import { moDoiMatKhau, moEmailCuaToi, veDangNhap, veDatLai, veDoiBatBuoc } from "./dangNhap.ts";
 import { esc } from "./ui.ts";
 import type { Man } from "./screens/man.ts";
 import { manTongQuan } from "./screens/tongQuan.ts";
@@ -37,6 +37,7 @@ function veKhung(): void {
     <span class="chip ${t.vai_tro === "admin" ? "son" : "info"}">${TEN_VAI_TRO[t.vai_tro]}</span>
     ${t.vai_tro_that === "admin" ? `<label class="check" title="Hạ quyền của chính bạn xuống Vận hành cho các lần gọi API, để thử việc chặn ở server."><input type="checkbox" aria-label="Xem như Vận hành" data-xem-nhu ${dangXemNhu() ? "checked" : ""}> Xem như Vận hành</label>` : ""}
     <button class="link" type="button" data-doi-mk>Đổi mật khẩu</button>
+    <button class="link" type="button" data-email title="Email nhận link đặt lại mật khẩu">Email</button>
     <button class="link" type="button" data-dang-xuat>Đăng xuất</button></div>`;
   app.innerHTML = `
     <aside class="rail">
@@ -61,6 +62,13 @@ function veKhung(): void {
     }),
   );
   app.querySelectorAll("[data-doi-mk]").forEach((b) => b.addEventListener("click", moDoiMatKhau));
+  app.querySelectorAll("[data-email]").forEach((b) =>
+    b.addEventListener("click", () =>
+      moEmailCuaToi(t, (email) => {
+        if (toi) toi = { ...toi, email };
+      }),
+    ),
+  );
   app.querySelectorAll("[data-dang-xuat]").forEach((b) => b.addEventListener("click", dangXuat));
   // Điện thoại: menu cuộn ngang, đưa mục đang mở vào giữa.
   app.querySelector('nav.menu a[aria-current="page"]')?.scrollIntoView({ inline: "center", block: "nearest" });
@@ -123,6 +131,14 @@ window.addEventListener("qt:het-phien", () => {
   veDangNhap(app, vao, "Phiên đăng nhập đã hết hạn. Đăng nhập lại để làm tiếp.");
 });
 window.addEventListener("hashchange", () => {
-  if (toi && !toi.phai_doi_mat_khau) veKhung();
+  if (toi && !toi.phai_doi_mat_khau && location.pathname !== "/dat-lai") veKhung();
 });
-void batDau();
+
+if (location.pathname === "/dat-lai") {
+  // Link trong thư: /dat-lai#<token>. Lấy token rồi xóa khỏi thanh địa chỉ và lịch sử trình duyệt ngay.
+  const token = location.hash.slice(1);
+  history.replaceState(null, "", "/dat-lai");
+  veDatLai(app, token);
+} else {
+  void batDau();
+}

@@ -103,6 +103,27 @@ export const manTaiKhoan: Man = {
           toast(`${t.ten} là ${TEN_VAI_TRO[vt]}.`);
           await tai();
         });
+      } else if (b.matches("[data-email]")) {
+        hopThoai(
+          `Email của ${t.ten}`,
+          `<form class="form" novalidate>
+            <label class="f"><span>Email nhận link đặt lại mật khẩu</span><input type="email" name="email" value="${esc(t.email ?? "")}" autocomplete="off"><small>Để trống rồi lưu là bỏ email.</small></label>
+            <p class="note block">Gói miễn phí của Cloudflare chỉ gửi được tới địa chỉ đã xác nhận ở Email Routing: thêm email này ở đó (\`wrangler email routing addresses create <email>\`) và bấm link xác nhận trong thư, nếu không thư đặt lại sẽ không tới.</p>
+            <div class="btns"><button class="seal" type="submit">Lưu</button><button class="btn" type="button" data-dong>Thôi</button></div>
+          </form>`,
+          (d) => {
+            const f = d.querySelector("form")!;
+            f.addEventListener("submit", async (ev) => {
+              ev.preventDefault();
+              await voiNut(f.querySelector<HTMLButtonElement>(".seal"), async () => {
+                await api.post("/api/tai-khoan/sua", { ten: t.ten, vai_tro: t.vai_tro, ghi_chu: t.ghi_chu, email: String(new FormData(f).get("email") ?? "") });
+                d.close();
+                toast(`Đã lưu email của ${t.ten}.`);
+                await tai();
+              });
+            });
+          },
+        );
       } else if (b.matches("[data-dat-lai]")) {
         const ok = await xacNhan("Đặt lại mật khẩu", `Tạo mật khẩu tạm mới cho <b>${esc(t.ten)}</b> và đăng xuất mọi phiên của tài khoản này.`, "Đặt lại");
         if (!ok) return;
@@ -145,16 +166,17 @@ function dong(t: TaiKhoan, laToi: boolean): string {
         ? `<span class="chip warn">Chờ đổi mật khẩu</span>`
         : `<span class="chip ok">Hoạt động</span>`;
   return `<tr data-ten="${esc(t.ten)}" class="${t.khoa ? "khoa" : ""}">
-    <td><span class="email">${esc(t.ten)}</span>${laToi ? ` <span class="muted">(bạn)</span>` : ""}${t.ghi_chu ? `<br><span class="muted">${esc(t.ghi_chu)}</span>` : ""}<br><span class="muted">tạo bởi ${esc(t.tao_boi)} ${gio(t.tao_luc)}</span></td>
+    <td><span class="email">${esc(t.ten)}</span>${laToi ? ` <span class="muted">(bạn)</span>` : ""}${t.ghi_chu ? `<br><span class="muted">${esc(t.ghi_chu)}</span>` : ""}<br><span class="muted">${t.email ? `email ${esc(t.email)}` : "chưa có email đặt lại"}</span><br><span class="muted">tạo bởi ${esc(t.tao_boi)} ${gio(t.tao_luc)}</span></td>
     <td><span class="chip ${t.vai_tro === "admin" ? "son" : "info"}">${TEN_VAI_TRO[t.vai_tro]}</span></td>
     <td class="nowrap" title="${gio(t.dang_nhap_cuoi)}">${t.dang_nhap_cuoi ? esc(truoc(t.dang_nhap_cuoi)) : "chưa"}${t.so_phien ? `<br><span class="muted">${t.so_phien} phiên đang mở</span>` : ""}</td>
     <td>${tt}</td>
     <td>${
       laToi
-        ? `<span class="muted">Đổi mật khẩu ở thanh bên</span>`
+        ? `<span class="muted">Đổi mật khẩu, email ở thanh bên</span>`
         : `<div class="btns" style="justify-content:flex-end;min-width:15rem">
         <button class="btn small" type="button" data-doi="${khac}">Sang ${TEN_VAI_TRO[khac]}</button>
         <button class="btn small" type="button" data-dat-lai>Đặt lại mật khẩu</button>
+        <button class="btn small" type="button" data-email>Email</button>
         <button class="btn small ${t.khoa ? "" : "danger"}" type="button" data-khoa>${t.khoa ? "Mở khóa" : "Khóa"}</button>
         <button class="btn small danger" type="button" data-xoa>Xóa</button></div>`
     }</td></tr>`;

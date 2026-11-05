@@ -18,6 +18,8 @@ export interface Toi {
   phai_doi_mat_khau: boolean;
   /** Phiên hết hạn lúc nào (ms). */
   het_han: number;
+  /** Email nhận link đặt lại mật khẩu của chính mình, hoặc null. */
+  email: string | null;
 }
 
 // ---- Tổng quan --------------------------------------------------------------------------------------------------
@@ -240,6 +242,8 @@ export interface TaiKhoan {
   khoa: boolean;
   phai_doi: boolean;
   ghi_chu: string | null;
+  /** Email nhận link đặt lại mật khẩu (chỉ Admin thấy ở màn Tài khoản). */
+  email: string | null;
   dang_nhap_cuoi: number | null;
   doi_mat_khau_luc: number | null;
   /** Đang tạm khóa vì sai mật khẩu nhiều lần (ms), hoặc null. */
@@ -287,6 +291,9 @@ export const TEN_HANH_DONG: Record<string, string> = {
   "phien.dang_nhap": "Đăng nhập",
   "phien.dang_xuat": "Đăng xuất",
   "phien.doi_mat_khau": "Đổi mật khẩu",
+  "phien.gui_dat_lai": "Gửi link đặt lại mật khẩu",
+  "phien.dat_lai": "Đặt lại mật khẩu qua email",
+  "tai_khoan.email": "Đổi email nhận link đặt lại",
   "tai_khoan.tao": "Tạo tài khoản",
   "tai_khoan.sua": "Đổi vai trò, ghi chú",
   "tai_khoan.dat_lai": "Đặt lại mật khẩu",
