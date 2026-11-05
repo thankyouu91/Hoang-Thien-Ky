@@ -89,7 +89,6 @@ export const PARTS: PartDef[] = [
   T("Set mốc", "set.json", "", "bo", [
     c("bo", "Mã bộ", "text"), c("so", "Số món", "int"), c("loai", "Loại hiệu ứng", "text"),
     c("mo_ta", "Mô tả", "text", { width: 60 }), c("tham_so", "Tham số (đơn vị code)", "kv", { width: 50 }),
-    c("chi_so_kem", "Chỉ số kèm hiệu ứng (đơn vị code)", "kv", { optional: true, width: 30 }),
   ]),
   T("Bậc ấn", "set.json", "bac_an", "ma", [
     c("ma", "Mã (độ hiếm)", "text", { width: 8 }), c("ten", "Tên", "text", { width: 7 }), c("bac", "Bậc", "int", { width: 5 }),

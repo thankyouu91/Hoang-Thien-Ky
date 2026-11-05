@@ -339,7 +339,7 @@ export function kiem(d: Any, raw: Raw): Report {
     // Bảo Giám: loại thưởng theo thứ được đếm (GDD tab Trang bị phần 13 rev 47)
     const thuong: Record<string, string> = { phap_bao: "danh_hieu", phach: "danh_hieu", phap_khi: "o_kho", an_bo: "o_tui", y_chau: "khi_tinh", danh_khi: "anh_sang_vu_khi" };
     for (const p of lk.bao_giam as Any[]) {
-      if (p.loai_thuong === undefined) continue;
+      if (p.loai_thuong === undefined || p.dem?.loai === "an_van") continue; // Ẩn văn có thưởng riêng từng trang
       const want = p.dem?.loai === "trang_bi" ? (p.dem.o === "vu_khi" ? "anh_sang_vu_khi" : "khung_o") : thuong[p.dem?.loai];
       if (p.loai_thuong !== want) bad.push(`Bảo Giám ${p.ma}: loại thưởng ${p.loai_thuong}, cần ${want}`);
     }
@@ -350,6 +350,14 @@ export function kiem(d: Any, raw: Raw): Report {
     };
     for (const p of lk.bao_giam as Any[]) {
       const { loai, ...loc } = p.dem ?? {};
+      if (loai === "an_van") {
+        // Một cặp điều kiện × hiệu ứng của dòng ẩn; dieu_kien: các cặp của điều kiện đó; bat_ky: đủ so_luong cặp bất kỳ
+        const da = (tb.dong_an ?? []) as Any[], dk = da.filter((x) => x.loai === "dieu_kien"), hu = da.filter((x) => x.loai === "hieu_ung");
+        if (loc.dieu_kien && !dk.some((x) => x.ma === loc.dieu_kien)) { bad.push(`Bảo Giám ${p.ma}: điều kiện lạ ${loc.dieu_kien}`); continue; }
+        const n = loc.dieu_kien ? hu.length : dk.length * hu.length;
+        if (loc.bat_ky ? !(p.so_luong > 0 && p.so_luong < n) : p.so_luong !== n) bad.push(`Bảo Giám ${p.ma}: cần đủ ${p.so_luong}, có ${n} cặp ẩn văn`);
+        continue;
+      }
       const list = pool[loai];
       if (!list) { bad.push(`Bảo Giám ${p.ma}: loại đếm lạ ${loai}`); continue; }
       const n = list.filter((x) => Object.entries(loc).every(([k, v]) => x[k === "phap_bao" ? "loai" : k] === v)).length;

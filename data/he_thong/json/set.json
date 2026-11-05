@@ -10,7 +10,7 @@
     "Giao dịch theo bậc ấn (bac_an[].giao_dich): lục không bán lại trên chợ, lam và tím bán được, vàng và đỏ khóa vào nhân vật. 3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn) chỉ có ấn từ bậc luat.boThanTuBac. Món đã khảm bán kèm ấn nếu món đó và ấn đều bán được.",
     "Gỡ ấn bằng Thoát Khảm Phù (PH-CH-008) thì ấn còn nguyên; gỡ không phù thì ấn vỡ.",
     "bo[].lo: lộ sức mạnh của bộ (ngoai_cong, noi_cong, thu_ngoai, thu_noi, hap_thu, phan_chan, khong_toc, kinh_te, khac_che), dùng cho binh bộ đồng lộ và bản đồ khắc lộ (GDD tab Trang bị phần 14).",
-    "moc[].chi_so_kem: chỉ số áp như hiệu ứng chi_so, đi kèm một mốc có loai khác (hanh_vi, ho_tran, kinh_te). Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal, manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, reflect; buaGiamMana, hoiManaPhapBao là hành vi mới.",
+    "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, reflect; buaGiamMana, hoiManaPhapBao là hành vi mới.",
     "bac_an: mốc 7 chỉ mở khi cả 7 ấn có tinh_moc_7; ghép luat.ghepAnSo ấn cùng bộ cùng bậc thành 1 ấn bậc trên, chỉ ở bậc có ghep_len (lục lên lam, lam lên tím); vàng, đỏ chỉ rơi. Bậc là thuộc tính từng viên, mã giữ NG-AN-001…020.",
     "hop_bo: mặc cùng lúc từ 2 bộ đang kích (đủ mốc 2), mỗi cặp xét quan hệ hệ ấn (quan_he_to_hop.json). Mỗi bộ lấy he_so tốt nhất của nó (cộng hưởng Đạo Cơ Bàn thay nếu cao hơn), rồi nhân he_so của tuong_khac nếu có bất kỳ bộ đang kích nào khắc nó. Chỉ nhân mốc 2; mana_max cộng một lần cho mỗi cặp đối cực.",
     "binh_bo: binh ấn (ngoc.json binh_an) khảm vào vũ khí, bao tay, ngọc bội và chiếm dòng khảm. Mốc luat.binhBoMoc (2 và 3 món), mỗi người luat.binhBoMoiNguoi binh bộ; cùng lộ với một ấn bộ đang kích thì mốc 3 nhân luat.binhBoDongLoHeSo. Bậc binh ấn như ấn bộ (bac_an); số ở bậc tím.",
@@ -137,8 +137,7 @@
           "so": 4,
           "loai": "kinh_te",
           "mo_ta": "Hồi 0,3% máu mỗi giây; mỏ dược trấn giữ +5%",
-          "tham_so": {"sanLuongMoDuoc":50},
-          "chi_so_kem": {"hpRegen":3}
+          "tham_so": {"sanLuongMoDuoc":50,"hpRegen":3}
         },
         {
           "so": 7,
@@ -289,8 +288,7 @@
           "so": 4,
           "loai": "hanh_vi",
           "mo_ta": "Hồi phục: hồi mana khi đang vận chỉ −10% thay −20%; thủ nội +2%",
-          "tham_so": {"hoiManaKhiVan":-100},
-          "chi_so_kem": {"defInner":20}
+          "tham_so": {"hoiManaKhiVan":-100,"defInner":20}
         },
         {
           "so": 7,
@@ -316,8 +314,7 @@
           "so": 4,
           "loai": "hanh_vi",
           "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; thủ nội +2%",
-          "tham_so": {"giamDanKhongChe":750},
-          "chi_so_kem": {"defInner":20}
+          "tham_so": {"giamDanKhongChe":750,"defInner":20}
         },
         {
           "so": 7,
@@ -463,8 +460,7 @@
           "so": 4,
           "loai": "hanh_vi",
           "mo_ta": "Sát thương chí mạng +5%; Thân pháp chỉ lộ vị trí 2 s thay 3 s",
-          "tham_so": {"loViTriTicks":40},
-          "chi_so_kem": {"critDamage":50}
+          "tham_so": {"loViTriTicks":40,"critDamage":50}
         },
         {
           "so": 7,
@@ -516,8 +512,7 @@
           "so": 4,
           "loai": "hanh_vi",
           "mo_ta": "Xuyên giáp +4%; Cận chiến đơn đánh mục tiêu dưới 30% máu +15% sát thương",
-          "tham_so": {"nguongMau":300,"satThuong":150},
-          "chi_so_kem": {"xuyenGiap":40}
+          "tham_so": {"nguongMau":300,"satThuong":150,"xuyenGiap":40}
         },
         {
           "so": 7,
@@ -543,8 +538,7 @@
           "so": 4,
           "loai": "hanh_vi",
           "mo_ta": "Thủ nội +4%; Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên",
-          "tham_so": {"chonViTri":"dong_dich_nhat"},
-          "chi_so_kem": {"defInner":40}
+          "tham_so": {"chonViTri":"dong_dich_nhat","defInner":40}
         },
         {
           "so": 7,
@@ -569,8 +563,7 @@
           "so": 2,
           "loai": "ho_tran",
           "mo_ta": "Xuyên giáp +2%; sát thương lên trận nhãn và hộ trận +5%",
-          "tham_so": {"satThuongHoTran":50},
-          "chi_so_kem": {"xuyenGiap":20}
+          "tham_so": {"satThuongHoTran":50,"xuyenGiap":20}
         },
         {"so":4,"loai":"ho_tran","mo_ta":"Đòn phá trận đầu tiên mỗi trận công thành ×1,5","tham_so":{"heSoDonDau":1500}},
         {

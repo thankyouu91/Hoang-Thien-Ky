@@ -7,7 +7,7 @@
     "khi_van: gia_tri là số chính của tác dụng để chỉnh. Mỗi người chọn tối đa luat.khiVanKichToiDa khí văn đang kích, khác nhau, mỗi khí văn tính 1 lần; tổng mọi khí văn không quá luat.khiVanTranLucChien lực chiến; khắc hệ sau mọi nguồn làm mềm vẫn còn ít nhất tham_so.json cong_phap.counterFloor (×1,2). khi_van[].tham_so: ngưỡng, chu kỳ trong câu tác dụng (nguongMau phần nghìn máu, chuKyTicks tick); trống là không có.",
     "phan_giai: món từ lam ra Khí Tinh theo độ hiếm, cộng luat.phanGiaiKhiTinhMoiCapKhiLinh mỗi cấp khí linh; ngọc, Ý châu, ấn trả nguyên vẹn; luat.phanGiaiTraNac số nấc cường hóa trả lại thành Luyện Khí Thạch đúng phẩm. Khí Tinh từ đồ khóa cũng khóa.",
     "danh_khi: luyện ở lò tông môn cấp luat.danhKhiLoToiThieu trở lên theo đồ phổ, phôi là 1 vũ khí đỏ cùng khí hình; Ý của khí hình mạnh bằng Ý châu (luat.danhKhiYHeSo), không chiếm dòng khảm, cộng danh văn riêng. Mỗi người mặc luat.danhKhiMoiNguoi danh khí; khóa. Thất bại mất Khí Tinh và Vẫn Thiết, giữ phôi và đồ phổ. danh_khi[].tham_so: số của danh văn theo đơn vị code (phần nghìn, tick, số lần); loại chiêu của danh văn là loại chiêu của khí hình.",
-    "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu, loại thưởng theo thứ được đếm (vũ khí, danh khí: ánh sáng vũ khí; ô khác: khung ô; pháp bảo, Phách: danh hiệu; pháp khí: ô kho; ấn bộ: ô túi; Ý châu: Khí Tinh). Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch.",
+    "bao_giam: ghi mọi kiểu đã từng sở hữu, cả khi đã phân giải; mỗi trang cho thưởng không cộng chỉ số chiến đấu, loại thưởng theo thứ được đếm (vũ khí, danh khí: ánh sáng vũ khí; ô khác: khung ô; pháp bảo, Phách: danh hiệu; pháp khí: ô kho; ấn bộ: ô túi; Ý châu: Khí Tinh). Trang, số lượng và thưởng là đề xuất. Mỗi tuần một trang tuần ngẫu nhiên cho luat.baoGiamTuanLinhVanThach Linh Văn Thạch. Trang Ẩn văn (dem loai an_van): một cặp điều kiện và hiệu ứng dòng ẩn (trang_bi.json dong_an) tính khi cả cặp đã lộ, tức sau lần kích phát đầu; Giám Định Phù chỉ lộ điều kiện nên chưa tính. dieu_kien là đủ các cặp của điều kiện đó; bat_ky là đủ so_luong cặp bất kỳ.",
     "te_luyen_tang: pháp bảo đã tế luyện, từ Trung vị, lên tầng 1–5; linh_luc, hoi_chieu là cộng dồn tới tầng đó. Hồi chiêu pháp bảo sau mọi nguồn (set Cổ Tông, tầng) không dưới luat.teLuyenHoiChieuSan hồi chiêu gốc."
   ],
   "tay_luyen": [
@@ -492,6 +492,132 @@
       "so_luong": 10,
       "thuong": "Ánh sáng vũ khí riêng của danh khí",
       "loai_thuong": "anh_sang_vu_khi",
+      "so_thuong": null
+    },
+    {
+      "ma": "BG-AV-NHAPMON",
+      "ten": "Ẩn văn nhập môn",
+      "dem": {"loai":"an_van","bat_ky":true},
+      "so_luong": 24,
+      "thuong": "2 Giám Định Phù",
+      "loai_thuong": "giam_dinh_phu",
+      "so_thuong": 2
+    },
+    {
+      "ma": "BG-AV-DK-001",
+      "ten": "Ẩn văn: Đang mặc từ 4 món cùng một bộ",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-001"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-002",
+      "ten": "Ẩn văn: Hai ngọc trên món này tương sinh nhau",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-002"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-003",
+      "ten": "Ẩn văn: Linh căn trùng hệ một ngọc trên món này",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-003"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-004",
+      "ten": "Ẩn văn: Trận PvE (dị thú, boss)",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-004"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-005",
+      "ten": "Ẩn văn: Trận chiến tranh địa bàn",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-005"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-006",
+      "ten": "Ẩn văn: Máu dưới 50%",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-006"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-007",
+      "ten": "Ẩn văn: 10 giây đầu trận",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-007"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-008",
+      "ten": "Ẩn văn: Sau giây thứ 30",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-008"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-009",
+      "ten": "Ẩn văn: Đứng hàng trước",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-009"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-010",
+      "ten": "Ẩn văn: Đứng hàng sau",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-010"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-011",
+      "ten": "Ẩn văn: Khí linh của món từ cấp 3",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-011"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-DK-012",
+      "ten": "Ẩn văn: Đội địch có hệ khắc linh căn mình",
+      "dem": {"loai":"an_van","dieu_kien":"DN-DK-012"},
+      "so_luong": 12,
+      "thuong": "3 Linh Văn Thạch",
+      "loai_thuong": "linh_van_thach",
+      "so_thuong": 3
+    },
+    {
+      "ma": "BG-AV-TOAN",
+      "ten": "Ẩn văn toàn thư",
+      "dem": {"loai":"an_van"},
+      "so_luong": 144,
+      "thuong": "Danh hiệu Ẩn Văn Thông Giám; khung ô ngọc bội, đai kiểu ẩn văn",
+      "loai_thuong": "danh_hieu",
       "so_thuong": null
     }
   ],
