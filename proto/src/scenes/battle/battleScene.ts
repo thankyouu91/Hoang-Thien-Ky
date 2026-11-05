@@ -18,6 +18,7 @@ import { createSkillFx, type SkillFx } from "../../hieu_ung/index.ts";
 import { drawMotif } from "../../hieu_ung/motifs.ts";
 import { VfxLib } from "../../hieu_ung/vfx.ts";
 import { tr } from "../../dashboard/i18n.ts";
+import { installChunkGuard, setReturnHash } from "../../chunkGuard.ts";
 
 const CELL = 64; // đơn vị thế giới mỗi ô sân
 const LANE = 60; // khoảng cách ngang giữa hai người cùng hàng
@@ -103,6 +104,8 @@ export class BattleScene implements Scene {
   private fitted: { w: number; h: number; x: number; y: number; zoom: number } | null = null;
   /** Nền sân Three.js của loại sân và chiều dài sân đang xem; layer null khi sân đó chưa có bản Three.js */
   private backdrop: { key: string; layer: ArenaBackdrop | null } | null = null;
+  /** Màn đã mở trận (hash lúc gọi open), để tải lại trang giữa trận thì về đó thay vì trận thử của #tran */
+  private openedFrom: string | null = null;
 
   /** sources[0] mở mặc định; người xem đổi nguồn ở ô chọn trên thanh điều khiển. */
   constructor(sources: ReplaySource[], sprites: Sprites) {
@@ -117,6 +120,10 @@ export class BattleScene implements Scene {
     };
     this.controls = new ReplayControls(this.sources.map((s) => s.label), (i) => this.load(this.sources[i]), back);
     this.hud = this.controls.el;
+    // Màn Trận dựng ngay lúc mở app (main.ts), nên gắn bộ chặn lỗi tải chunk sau deploy ở đây cho cả app. Trận mở từ chiến
+    // báo không giữ được qua lần tải lại (nguồn trận không nằm trong URL): khi đó về màn đã mở trận.
+    installChunkGuard();
+    setReturnHash(() => (location.hash === "#" + this.id ? this.openedFrom : null));
   }
 
   /**
@@ -125,6 +132,8 @@ export class BattleScene implements Scene {
    */
   open(source: ReplaySource): void {
     if (!this.sources.includes(source)) this.sources.unshift(source);
+    // Nơi gọi mở trận rồi mới chuyển màn, nên hash lúc này còn là màn trước (Động phủ, chiến báo…).
+    if (location.hash !== "#" + this.id) this.openedFrom = location.hash || "#dong-phu";
     // Trận mở cho người chơi: ẩn ô chọn nguồn (công cụ thử trận), hết trận có nút Tiếp tục.
     this.controls.lock();
     this.controls.setSources(this.sources.map((s) => s.label), this.sources.indexOf(source));
