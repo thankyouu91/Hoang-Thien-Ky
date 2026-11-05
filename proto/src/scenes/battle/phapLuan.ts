@@ -48,6 +48,11 @@ export interface PhapLuanSpec {
   level: number;
   /** Tông chủ: thêm vành lông vũ vàng ngoài cùng */
   leader?: boolean;
+  /**
+   * Màn đông người (Trận): vòng nhỏ hơn 20% và nhạt còn 55% lúc nghỉ, đậm dần khi tụ lực, đậm hẳn lúc bung và khung chạm
+   * rồi nhạt lại, để hàng người đứng sát nhau không rối mà lúc ra chiêu vẫn nổi.
+   */
+  quiet?: boolean;
 }
 
 /**
@@ -87,7 +92,7 @@ export function buildPhapLuan(units: readonly ReplayUnit[], events: readonly Rep
   for (const u of units) {
     const level = u.level;
     out.set(u.id, {
-      spec: { element: u.element, type: "can_don", grade: 3, level: level ?? 0, leader: leaders.has(u.id) },
+      spec: { element: u.element, type: "can_don", grade: 3, level: level ?? 0, leader: leaders.has(u.id), quiet: true },
       casts: [],
     });
   }
@@ -351,7 +356,25 @@ export function drawPhapLuan(ctx: CanvasRenderingContext2D, spec: PhapLuanSpec, 
   }
   // Lên cấp: một nhịp sáng mềm (không trắng) 0,3 s để thấy vòng vừa lớn.
   const boost = up && up.age < 0.3 ? 0.5 * (1 - up.age / 0.3) : 0;
+  if (spec.quiet) {
+    drawLuan(ctx, spec, g, beat, cx, cy, r * 0.8, 0.55 + 0.45 * activity(beat), boost);
+    return;
+  }
   drawLuan(ctx, spec, g, beat, cx, cy, r, 1, boost);
+}
+
+/**
+ * Độ "đang hành động" của vòng (0 nghỉ → 1): tụ lực đậm dần trong 14 khung (ease-in-out-sine, mỗi khung tối đa ~0,11); bung và khung chạm (khung 0–8 sau lúc phát)
+ * là 1; lắng (khung 8–25) nhạt dần về 0 (ease-in-out-sine). Dùng cho chế độ quiet của màn Trận.
+ */
+export function activity(beat: PhapLuanBeat): number {
+  if (beat.wind !== undefined && beat.wind >= 0) return easeInOutSine(clamp01((beat.wind * FPS) / 14));
+  if (beat.release !== undefined && beat.release >= 0) {
+    const fr = beat.release * FPS;
+    if (fr < 8) return 1;
+    if (fr < 25) return 1 - easeInOutSine((fr - 8) / 17);
+  }
+  return 0;
 }
 
 /** Vẽ một vòng theo tăng trưởng `gr`; `alpha` độ đậm chung, `boost` sáng thêm (lên cấp), `envOverride` bao định sẵn. */
@@ -941,7 +964,16 @@ export function probe(): string[] {
     if (cur.motifs - prev.motifs > 0.2) errors.push(`cấp ${lv}: ký hiệu nhảy ${(cur.motifs - prev.motifs).toFixed(2)}`);
     prev = cur;
   }
-  // 5. Đột phá: khung 0 của nhịp tụ trùng với vòng đang thở (bao tụ lực ở 0 bằng bao thường).
+  // 5. Độ đậm (quiet): tụ lực rồi phát rồi lắng, không nhảy quá 0,15 mỗi khung, về 0 khi hết lắng.
+  let act = 0;
+  for (let f = 0; f < 60; f++) {
+    const b: PhapLuanBeat = f < 20 ? { appear: 9, clock: f / FPS, wind: f / FPS } : { appear: 9, clock: f / FPS, release: (f - 20) / FPS };
+    const a = activity(b);
+    if (Math.abs(a - act) > 0.15 && f !== 0) errors.push(`khung ${f}: độ đậm nhảy ${(a - act).toFixed(2)}`);
+    act = a;
+  }
+  if (activity({ appear: 9, clock: 3, release: 1 }) !== 0) errors.push("độ đậm không về 0 sau lắng");
+  // 6. Đột phá: khung 0 của nhịp tụ trùng với vòng đang thở (bao tụ lực ở 0 bằng bao thường).
   const idle = envelope({ appear: 9, clock: 2 });
   const tu0 = envelope({ appear: 9, clock: 2, wind: 0 });
   if (Math.abs(idle.scale - tu0.scale) > 1e-9) errors.push("đột phá: khung 0 giật so với lúc thở");
