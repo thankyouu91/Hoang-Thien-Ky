@@ -1148,7 +1148,9 @@ b.g-cao { color: #6d3a8e; }
  * nhãn cạnh ngón tay nói việc sẽ làm. Giữ tay trên cảm ứng thì món lún xuống báo sắp nhấc.
  */
 [data-drag] { cursor: grab; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-[data-drag].pressing { transform: scale(0.94); transition: transform 0.25s ease-out; }
+/* game.css (nạp sau) có nút :active thu nhẹ và ô nhấc lên khi rê chuột: lúc giữ tay, lúc đang kéo thì luật ở đây thắng. */
+.page [data-drag].pressing, .page button[data-drag].pressing:not(:disabled):active { transform: scale(0.94); transition: transform 0.25s ease-out; }
+body.is-dragging .bag-cell:not(.empty):hover, body.is-dragging .pt-slot:not(.empty):hover { transform: none; }
 body.is-dragging, body.is-dragging * { cursor: grabbing !important; -webkit-user-select: none; user-select: none; }
 .drag-ghost { position: fixed; left: 0; top: 0; z-index: 60; opacity: 0.95; pointer-events: none; box-shadow: 0 10px 24px rgba(42, 32, 24, 0.32); }
 .dragging { opacity: 0.35; }
