@@ -155,6 +155,7 @@ const SET_STAT: Record<string, BuffStat> = {
   attackSpeed: "attackSpeed", cooldownCut: "cooldownCut", resistPen: "resistPen", armorPen: "armorPen", shieldTaken: "shieldTaken",
   monsterDamage: "monsterDamage",
   damageTakenCutOuter: "damageTakenCutOuter", damageTakenCutInner: "damageTakenCutInner",
+  reflectTakenCut: "reflectTakenCut", controlTakenCut: "controlTakenCut",
   // "Hút máu +x%" của set, binh bộ (Huyết Ảnh, Hấp Hồn): hút theo sát thương gây ra; khác lifesteal của sim (tăng hút máu Cực âm).
   lifesteal: "lifestealFlat",
 };

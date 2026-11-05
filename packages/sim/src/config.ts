@@ -178,14 +178,15 @@ export const COUNTER_FLOOR = 1200;
  * reflect: phản sát thương cận chiến nhận được; damageTakenCut: giảm sát thương đòn đánh nhận vào, sau phòng thủ;
  * hpRegen: hồi chừng này máu tối đa mỗi giây; innerDamage: sát thương chiêu nội; lifestealFlat: hút máu theo sát thương
  * gây ra (khác lifesteal là tăng hút máu của công pháp Cực âm); damageTakenCutOuter, damageTakenCutInner: giảm sát thương nhận chỉ
- * với đòn ngoại, đòn nội (cộng với damageTakenCut, mỗi loại đòn không quá DAMAGE_CUT_CAP).
+ * với đòn ngoại, đòn nội (cộng với damageTakenCut, mỗi loại đòn không quá DAMAGE_CUT_CAP); reflectTakenCut: sát thương phản đòn
+ * nhận vào ít hơn; controlTakenCut: thời gian bị khống chế (choáng, đóng băng, trói chân) ngắn hơn.
  */
 export type BuffStat =
   | "hp" | "atk" | "def" | "manaMax" | "damage" | "critBonus" | "critDamage" | "attackSpeed" | "cooldownCut"
   | "healPower" | "healTaken" | "lifesteal" | "resistPen" | "dot" | "controlTime"
   | "shieldTaken" | "monsterDamage" | "armorPen" | "paralyzeTicks" | "formationTicks" | "channelTicks"
   | "defOuter" | "defInner" | "manaCostCut" | "manaDrain" | "reflect" | "damageTakenCut" | "hpRegen" | "innerDamage" | "lifestealFlat"
-  | "damageTakenCutOuter" | "damageTakenCutInner";
+  | "damageTakenCutOuter" | "damageTakenCutInner" | "reflectTakenCut" | "controlTakenCut";
 
 /** Tổng giảm sát thương nhận của một loại đòn (chung + theo loại) không quá chừng này phần nghìn (tab Trang bị, phần 14; đề xuất). */
 export const DAMAGE_CUT_CAP = 250;

@@ -280,7 +280,7 @@ const DU_PHONG_DIEM: [string, number][] = [
   ["atk", 10], ["hp", 8], ["defOuter", 5], ["defInner", 5], ["critBonus", 12], ["critDamage", 3], ["attackSpeed", 10], ["cooldownCut", 12],
   ["armorPen", 6], ["resistPen", 6], ["elementDamage", 4], ["resist", 3], ["lifesteal", 15], ["manaDrain", 8], ["manaCostCut", 4],
   ["manaMax", 2], ["healTaken", 4], ["healPower", 4], ["shieldTaken", 3], ["damageTakenCut", 12], ["reflect", 6], ["controlTime", 3],
-  ["innerDamage", 8], ["damageTakenCutOuter", 6], ["damageTakenCutInner", 6],
+  ["innerDamage", 8], ["damageTakenCutOuter", 6], ["damageTakenCutInner", 6], ["controlTakenCut", 3], ["reflectTakenCut", 1],
 ];
 for (const [stat, diem] of DU_PHONG_DIEM) DIEM[stat] = { diem, moi: 10 };
 DIEM.hpRegen = { diem: 10, moi: 1 };

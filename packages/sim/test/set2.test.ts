@@ -203,6 +203,16 @@ test("trận có war: dòng ẩn chiến tranh chỉ bật khi cờ war", () => 
   assert.equal(get(new Battle({ seed: 1, teamA: [pve], teamB: [inert(101, 0, { monster: true })] }), 1).atk, 1030);
 });
 
+test("giảm phản đòn nhận vào (Hấp Hồn) và giảm thời gian bị khống chế (Bách Thảo)", () => {
+  const refl = hit({}, { bonuses: { reflect: 200 } });
+  const cut = hit({ bonuses: { ...noCrit, reflectTakenCut: 500 } }, { bonuses: { reflect: 200 } });
+  assert.equal(loss(cut, 1), Math.max(1, mul(loss(refl, 101), 200) - mul(mul(loss(refl, 101), 200), 500)));
+  const b = new Battle({ seed: 1, teamA: [inert(1)], teamB: [inert(101, 0, { bonuses: { controlTakenCut: 200 } }), inert(102)] });
+  b.control(get(b, 101), 50);
+  b.control(get(b, 102), 50);
+  assert.deepEqual([get(b, 101).stunUntil - b.tick, get(b, 102).stunUntil - b.tick], [40, 50]);
+});
+
 test("Bàn Thạch mốc 7: lần đầu máu dưới ngưỡng thì nhận khiên theo máu tối đa, giữ lowHpShieldTicks", () => {
   const b = hit({}, { hp: 10000, setFx: { lowHpShieldBelow: 990, lowHpShield: 60, lowHpShieldTicks: 60 } });
   const t = get(b, 101);

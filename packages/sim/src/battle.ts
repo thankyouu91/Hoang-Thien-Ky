@@ -680,7 +680,8 @@ export class Battle {
       t.channel = null; // Băng Phách: chiêu vận công, trận đang bày mất hẳn (hồi chiêu, mana đã tính lúc bắt đầu)
       if (src.fx.controlManaBurn) t.mana -= Math.min(t.mana, mul(t.manaMax, src.fx.controlManaBurn));
     }
-    const dur = this.tick < t.stunUntil + R.controlDrWindow ? mul(ticks, src?.fx.controlDr ?? ONE / 2) : ticks;
+    let dur = this.tick < t.stunUntil + R.controlDrWindow ? mul(ticks, src?.fx.controlDr ?? ONE / 2) : ticks;
+    if (t.b.controlTakenCut > 0) dur = Math.max(1, dur - mul(dur, t.b.controlTakenCut)); // Bách Thảo: bị khống chế ngắn hơn
     t.stunUntil = Math.max(t.stunUntil, this.tick + dur);
     if (t.channel && t.channel.interruptible) {
       if (t.fx.channelRefund) {
@@ -1064,7 +1065,7 @@ export class Battle {
       if (foeArtifacts && type === "bua_chu") this.reflectTalisman(u, t, dmg);
       // Phản đòn cận chiến: Phản Chấn Văn và chỉ số phản đòn (set Thiết Kỵ, dòng ẩn).
       const refl = (t.fx.meleeReflect ?? 0) + t.b.reflect;
-      if (refl > 0 && MELEE.includes(type) && u.curHp > 0) this.hurt(u, Math.max(1, mul(dmg, refl)));
+      if (refl > 0 && MELEE.includes(type) && u.curHp > 0) this.hurt(u, this.reflected(u, mul(dmg, refl)));
       if (u.b.manaDrain > 0 && t.mana > 0) {
         const m = Math.min(t.mana, mul(t.manaMax, u.b.manaDrain)); // hút mana: rút theo mana tối đa của mục tiêu
         t.mana -= m;
@@ -1090,6 +1091,12 @@ export class Battle {
     if (s.mod.sweepShield && swept >= from) this.addShield(u, u, mul(u.hp, s.mod.sweepShield * (swept - from + 1)));
     // Phong Lôi Phiến: diện rộng trúng đủ nhiều thì lần vận công kế tiếp nhanh gấp đôi.
     if (s.mod.bigAoeHaste && swept >= s.mod.bigAoeHaste) u.hasteAoe = true;
+  }
+
+  /** Sát thương phản đòn lên `u` sau phần giảm phản đòn nhận vào (Hấp Hồn); ít nhất 1. */
+  private reflected(u: Unit, dmg: number): number {
+    const cut = u.b.reflectTakenCut;
+    return Math.max(1, cut > 0 ? dmg - mul(dmg, cut) : dmg);
   }
 
   /** Số đồng đội hàng sau còn sống của đội `team`. */
@@ -1120,7 +1127,11 @@ export class Battle {
   private applyEffects(u: Unit, s: Slot, t: Unit, dmg: number, crit: boolean): void {
     const fx = s.fx;
     const tick = this.tick;
-    if (fx.root && tick >= t.controlImmuneUntil) t.rootUntil = Math.max(t.rootUntil, tick + this.controlTicks(u, fx.root));
+    if (fx.root && tick >= t.controlImmuneUntil) {
+      let rt = this.controlTicks(u, fx.root);
+      if (t.b.controlTakenCut > 0) rt = Math.max(1, rt - mul(rt, t.b.controlTakenCut));
+      t.rootUntil = Math.max(t.rootUntil, tick + rt);
+    }
     if (fx.slow) {
       t.slow = tick < t.slowUntil ? Math.max(t.slow, fx.slow) : fx.slow;
       t.slowUntil = Math.max(t.slowUntil, tick + fx.slowTicks);
@@ -1385,7 +1396,7 @@ export class Battle {
     const r = this.readyArtifact(t.team, "kinh", (o) => o === t || Math.abs(o.pos - t.pos) <= A.adjacentRange);
     if (!r) return;
     this.fire(r);
-    this.hurt(u, Math.max(1, mul(dmg, r.a.power)));
+    this.hurt(u, this.reflected(u, mul(dmg, r.a.power)));
   }
 
   /** Hồ lô: kẻ địch trong tầm vừa nhận khiên hộ thể thì thu một phần khiên đó về chủ nhân; mỗi lần hộ thể chỉ thu một mục tiêu. */
