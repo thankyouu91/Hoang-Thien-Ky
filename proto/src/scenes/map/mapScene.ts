@@ -14,6 +14,7 @@ import { MiniMap, OWNER_COLOR } from "../../dashboard/minimap.ts";
 import type { DashCtx } from "../../dashboard/shell.ts";
 import type { BanDoView, Go, PointOwner, PointType } from "../../dashboard/source.ts";
 import { loadLocationArt, pointArt } from "../../dashboard/art/sectScene.ts";
+import { tr } from "../../dashboard/i18n.ts";
 import { cd, closeSheet, esc, fmt, openSheet, toast } from "../../dashboard/ui.ts";
 import { FONT_DISPLAY, FONT_TEXT, loadCanvasFonts } from "../../theme/fonts.ts";
 import { drawFeatureNames, drawRiverNames } from "./labels.ts";
@@ -33,7 +34,7 @@ const PRIO_ZOOM = [0, 0.5, 0.9, 1.6];
 const ROAD_ZOOM = 1.2;
 /** Tên vùng hiện khi thu nhỏ dưới mức này. */
 const REGION_LABEL_ZOOM = 1.3;
-/** Chữ thay tên vùng cho khu đặc biệt khi thu nhỏ. */
+/** Chữ thay tên vùng cho khu đặc biệt khi thu nhỏ; vẽ qua tr() lúc vẽ (bảng tiếng Anh nạp sau khi module chạy). */
 const ZONE_TAG = "CẤM KHU";
 /** Sơn môn của tông NPC hay tông ở vùng khác: hiện hình và tên từ độ phóng này (dữ liệu để z/t của sơn môn trống). */
 const SECT_ZOOM = 1;
@@ -358,7 +359,7 @@ export class MapScene implements Scene {
         }
         // Sơn môn của mình, điểm đang bị đánh, điểm của sự kiện và chỗ mình đứng không bị lọc mất.
         if (hidden(p) && !mine && !own?.attacked && !alert && !(home && p.id === hereId)) continue;
-        const name = p.type === "son_mon" && own ? own.name : (p.name ?? POINT_NAMES[p.type]);
+        const name = p.type === "son_mon" && own ? tr(own.name) : (p.name ?? tr(POINT_NAMES[p.type]));
         const zz = w.types[p.type].hidden ? SECT_ZOOM : undefined;
         out.push(this.cand(w, r, p, p.type, name, p.x, p.y, { own, gate: home && gates.has(p.id), mine, here: home && p.id === hereId, alert, z: zz ?? zt?.z[p.id], t: zz ?? zt?.t[p.id] }));
       }
@@ -377,7 +378,7 @@ export class MapScene implements Scene {
           continue;
         }
         if (hidden(p)) continue;
-        const c = this.cand(w, zr, p, p.type, p.name ?? POINT_NAMES[p.type], p.x, p.y, { z: zt?.z[p.id], t: zt?.t[p.id] });
+        const c = this.cand(w, zr, p, p.type, p.name ?? tr(POINT_NAMES[p.type]), p.x, p.y, { z: zt?.z[p.id], t: zt?.t[p.id] });
         if (gates.has(p.id)) c.dyn = true;
         out.push({ ...c, zone: zn });
       }
@@ -434,7 +435,7 @@ export class MapScene implements Scene {
     const p = m.points[this.hereId(d)];
     const r = w.regions.find((k) => k.code === m.region.code)!;
     const own = d.owners[p.id];
-    const name = p.type === "son_mon" && own ? own.name : (p.name ?? POINT_NAMES[p.type]);
+    const name = p.type === "son_mon" && own ? tr(own.name) : (p.name ?? tr(POINT_NAMES[p.type]));
     this.herePoint = this.cand(w, r, p, p.type, name, p.x, p.y, { own, mine: p.id === d.map.sonMon });
     this.here.hidden = false;
     this.here.innerHTML = `<span class="txt"><small>${moving ? "Đang đi tới" : "Đang ở"} · ${esc(w.types[p.type].label)}</small><b>${esc(name)}</b></span>
@@ -465,7 +466,7 @@ export class MapScene implements Scene {
       if (c) this.openPoint(c);
       else {
         const r = this.world!.regions.find((k) => k.code === m.region.code)!;
-        this.openPoint(this.cand(this.world!, r, p, p.type, p.name ?? POINT_NAMES[p.type], p.x, p.y, { own: this.data.owners[p.id] }));
+        this.openPoint(this.cand(this.world!, r, p, p.type, p.name ?? tr(POINT_NAMES[p.type]), p.x, p.y, { own: this.data.owners[p.id] }));
       }
     } else if (g.at) this.flyTo(g.at.x, g.at.y, Math.max(this.camera.zoom, 1.4));
   }
@@ -616,7 +617,8 @@ export class MapScene implements Scene {
     const me = at && cam.toScreen(at.x, at.y, v);
     const meTip = me ? me.y - NODE_BIG / 2 - 2 : 0;
     ctx.font = `700 12px ${FONT}`;
-    const meHalf = Math.max(8, ctx.measureText(d.top.name).width / 2 + 3);
+    const meName = tr(d.top.name);
+    const meHalf = Math.max(8, ctx.measureText(meName).width / 2 + 3);
     // Chữ CẤM KHU của khu đặc biệt khi thu nhỏ giữ chỗ ngay sau thành chủ, như dấu của mình: lời cảnh báo không nhường
     // cho điểm. Chữ thu cho vừa ba phần tư bề ngang khu; vướng thành chủ thì dịch ngang hoặc lên xuống trong khu.
     const regionPx = Math.round(Math.min(20, 13 + z * 10));
@@ -630,10 +632,10 @@ export class MapScene implements Scene {
         if (!r) continue;
         let size = regionPx + 6;
         ctx.font = `700 ${size}px ${FONT_DISPLAY}`;
-        const fit = ((zn.bbox[2] - zn.bbox[0]) * z * 0.75) / ctx.measureText(ZONE_TAG).width;
+        const fit = ((zn.bbox[2] - zn.bbox[0]) * z * 0.75) / ctx.measureText(tr(ZONE_TAG)).width;
         if (fit < 1) size = Math.max(12, Math.floor(size * fit));
         ctx.font = `700 ${size}px ${FONT_DISPLAY}`;
-        const half = ctx.measureText(ZONE_TAG).width / 2;
+        const half = ctx.measureText(tr(ZONE_TAG)).width / 2;
         const s = cam.toScreen(r.x, r.y, v);
         const box = ([dx, dy]: number[]) => [s.x + dx - half, s.y + dy - size / 2, s.x + dx + half, s.y + dy + size / 2] as const;
         const shifts = [0, size * 1.3, -size * 1.3].flatMap((dy) => [0, -0.6, 0.6, -1.2, 1.2].map((k) => [k * half, dy]));
@@ -681,8 +683,8 @@ export class MapScene implements Scene {
       ctx.fillStyle = "#a3171b";
       for (const t of zoneTags) {
         ctx.font = `700 ${t.size}px ${FONT_DISPLAY}`;
-        ctx.strokeText(ZONE_TAG, t.x, t.y);
-        ctx.fillText(ZONE_TAG, t.x, t.y);
+        ctx.strokeText(tr(ZONE_TAG), t.x, t.y);
+        ctx.fillText(tr(ZONE_TAG), t.x, t.y);
       }
       ctx.font = `italic 700 ${px + 3}px ${FONT_DISPLAY}`;
       ctx.letterSpacing = "2px";
@@ -797,9 +799,9 @@ export class MapScene implements Scene {
       ctx.textBaseline = "bottom";
       ctx.lineWidth = 3;
       ctx.strokeStyle = HALO;
-      ctx.strokeText(d.top.name, me.x, meTip - 13);
+      ctx.strokeText(meName, me.x, meTip - 13);
       ctx.fillStyle = "#8a1f16";
-      ctx.fillText(d.top.name, me.x, meTip - 13);
+      ctx.fillText(meName, me.x, meTip - 13);
     }
   }
 

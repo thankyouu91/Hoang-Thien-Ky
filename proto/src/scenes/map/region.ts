@@ -1,6 +1,7 @@
 // Mục lục cả vị diện (data/maps/ha_vi_dien.json), file điểm của vùng (data/maps/ha_diem_<mã vùng>.json, định dạng bản 1
 // do tools/mapgen/diem.ts sinh) và ảnh nền. Toạ độ điểm là toạ độ bản đồ 1536 × 1024 chung cho cả vị diện, cũng là toạ độ
 // thế giới của màn bản đồ. Mỗi vùng là một chunk riêng, chỉ tải khi cần; ô ảnh nền là URL do Vite chép vào bản build.
+import { dichTen } from "../../dashboard/i18n.ts";
 import type { PointType } from "../../dashboard/source.ts";
 
 export interface RegionPoint {
@@ -122,11 +123,12 @@ let world: Promise<WorldMap> | undefined;
 let labels: Promise<MapLabels> | undefined;
 
 export function loadWorld(): Promise<WorldMap> {
-  return (world ??= WORLD_FILE["../../../../data/maps/ha_vi_dien.json"]());
+  // Chọn tiếng Anh thì tên vùng, điểm, nhãn loại dịch tại chỗ sau khi bảng nạp (dashboard/i18n.ts); code và id giữ nguyên.
+  return (world ??= dichTen(WORLD_FILE["../../../../data/maps/ha_vi_dien.json"]()));
 }
 
 export function loadLabels(): Promise<MapLabels> {
-  return (labels ??= LABEL_FILE["../../../../data/maps/ha_nhan.json"]());
+  return (labels ??= dichTen(LABEL_FILE["../../../../data/maps/ha_nhan.json"]()));
 }
 
 const cache = new Map<string, Promise<RegionMap>>();
@@ -136,7 +138,7 @@ export function loadRegion(code: string): Promise<RegionMap> {
   if (!p) {
     const load = POINT_FILES[`../../../../data/maps/ha_diem_${code}.json`];
     if (!load) return Promise.reject(new Error(`Không có file điểm của vùng ${code}`));
-    p = load();
+    p = dichTen(load());
     cache.set(code, p);
   }
   return p;
