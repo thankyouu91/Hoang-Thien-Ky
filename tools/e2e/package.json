@@ -1,0 +1,21 @@
+{
+  "name": "@ktlp/e2e",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Bài kiểm đầu-cuối Playwright: người chơi mới đi hết phần nhập môn (FTUE) trên bản build ở máy hoặc trên play.thienhoangky.fun",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:dien-thoai": "playwright test --project=dien-thoai",
+    "test:may-tinh": "playwright test --project=may-tinh",
+    "test:mang": "node chay-mang.ts",
+    "bao-cao": "playwright show-report ket-qua/bao-cao",
+    "cai-trinh-duyet": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  },
+  "engines": {
+    "node": ">=22.6"
+  }
+}
