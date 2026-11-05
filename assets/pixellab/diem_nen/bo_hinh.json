@@ -32,7 +32,15 @@
       },
       "moc": {
         "1": [
-          "diem_nen/van_moc_lam/mo_linh_thach"
+          "diem_nen/van_moc_lam/mo_linh_thach",
+          "diem_nen/mo_linh_thach/moc_1_2"
+        ],
+        "2": [
+          "diem_nen/mo_linh_thach/moc_2_1",
+          "diem_nen/mo_linh_thach/moc_2_2"
+        ],
+        "3": [
+          "diem_nen/mo_linh_thach/moc_3_1"
         ]
       },
       "thuy": {
@@ -314,7 +322,8 @@
       },
       "kim": {
         "0": [
-          "diem_nen/thien_kiem_nguyen/hang_di_thu"
+          "diem_nen/thien_kiem_nguyen/hang_di_thu",
+          "diem_nen/hang_di_thu/kim_0_2"
         ]
       },
       "moc": {
@@ -378,6 +387,17 @@
         ],
         "cao": [
           "diem_nen/cua_bi_canh/loi_cao_1"
+        ]
+      },
+      "kim": {
+        "thap": [
+          "diem_nen/cua_bi_canh/kim_thap_1"
+        ],
+        "vua": [
+          "diem_nen/cua_bi_canh/kim_vua_1"
+        ],
+        "cao": [
+          "diem_nen/cua_bi_canh/kim_cao_1"
         ]
       }
     },

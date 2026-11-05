@@ -25531,6 +25531,134 @@
       "created": "2026-11-05",
       "pixellab_id": "a9384661-ce86-40d6-b510-aaca2fcc7f30",
       "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/kim_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ kim (vùng Thiên Kiếm Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at cold dawn in Heavenly Sword Plains, a rugged highland of grey rock and silver grass, sword-shaped stone spires, pale silver clouds. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6bf8ca60-08d6-461c-a708-8a53a06076e9",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/kim_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ kim (vùng Thiên Kiếm Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at cold dawn in Heavenly Sword Plains, a rugged highland of grey rock and silver grass, sword-shaped stone spires, pale silver clouds. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f60d17b2-8aed-45c8-af3b-8c2e8c35a76c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/kim_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ kim (vùng Thiên Kiếm Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at cold dawn in Heavenly Sword Plains, a rugged highland of grey rock and silver grass, sword-shaped stone spires, pale silver clouds. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3106899c-b5c6-4d8e-8d5e-1d7c3cdf8446",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/moc_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "509130dd-a5e0-4ef8-a516-ca60596bb4de",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/kim_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ kim (vùng Thiên Kiếm Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at cold dawn in Heavenly Sword Plains, a rugged highland of grey rock and silver grass, sword-shaped stone spires, pale silver clouds. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b821ab30-b051-467f-a079-cf01947eb837",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/moc_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ef9dc2c1-55e9-439f-b854-55e61ea68305",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/moc_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3a49b0b8-fa5c-4245-8801-9af7717a2969",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/moc_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a4cfc025-5c7f-4159-9989-e1f1ecf41583",
+      "api": "REST v2 generate-image-v2"
     }
   ]
 }
