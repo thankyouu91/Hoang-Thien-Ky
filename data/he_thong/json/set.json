@@ -135,8 +135,8 @@
         {
           "so": 2,
           "loai": "chi_so",
-          "mo_ta": "Hồi máu nhận +6%; thời gian bị khống chế −35%; hồi 0,2% máu mỗi giây",
-          "tham_so": {"healTaken":60,"controlTakenCut":350,"hpRegen":2}
+          "mo_ta": "Hồi máu nhận +6%; thời gian bị khống chế −50%; hồi 0,2% máu mỗi giây",
+          "tham_so": {"healTaken":60,"controlTakenCut":500,"hpRegen":2}
         },
         {
           "so": 4,
@@ -215,7 +215,7 @@
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Giảm sát thương ngoại nhận 4%","tham_so":{"damageTakenCutOuter":40}},
+        {"so":2,"loai":"chi_so","mo_ta":"Giảm sát thương ngoại nhận 7%","tham_so":{"damageTakenCutOuter":70}},
         {
           "so": 4,
           "loai": "chi_so",

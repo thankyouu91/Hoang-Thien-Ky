@@ -31,6 +31,7 @@
 //   set_2j          cân 10 loại chiêu: Văn Uyên mốc 4 giảm mana thi triển 4,5% (Loại chiêu, hệ Thủy sửa bằng sua.ts)
 //   set_2k          set đồ 2.0 bước 4: Bàn Thạch 4, Lôi Trì 2, Bách Thảo 2, Băng Phách 4, Thiết Kỵ 2, Liên Kích mốc 2
 //   set_2l          set đồ 2.0 bước 5: Bàn Thạch 2, Băng Phách 2, Thiết Kỵ 2 (giảm sát thương ngoại), Liên Kích mốc 2
+//   set_2m          set đồ 2.0 bước 6: Thiết Kỵ 2 giảm sát thương ngoại 7%, Bách Thảo 2 bị khống chế −50%
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -1047,7 +1048,7 @@ const SET2_MOC: [string, number, string, string, string, string | null][] = [
   ["ngoc_tuy", 4, "chi_so", "Giảm mana thi triển 5%; giảm sát thương nội nhận 15%; công lực −3%", "manaCostCut: 50; damageTakenCutInner: 150; atk: -30", null],
   ["chu_thien", 2, "chi_so", "Bày trận nhanh 0,5 s; giảm sát thương nội nhận 2%", "bayTranTicks: -10; damageTakenCutInner: 20", null],
   ["chu_thien", 4, "hanh_vi", "Giảm sát thương nội nhận 8%; Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên", "chonViTri: dong_dich_nhat; damageTakenCutInner: 80", null],
-  ["bach_thao", 2, "chi_so", "Hồi máu nhận +6%; thời gian bị khống chế −35%; hồi 0,2% máu mỗi giây", "healTaken: 60; controlTakenCut: 350; hpRegen: 2", null],
+  ["bach_thao", 2, "chi_so", "Hồi máu nhận +6%; thời gian bị khống chế −50%; hồi 0,2% máu mỗi giây", "healTaken: 60; controlTakenCut: 500; hpRegen: 2", null],
   ["bach_thao", 4, "kinh_te", "Hồi thêm 0,1% máu mỗi giây (cả bộ 0,3%); mỏ dược +5%", "sanLuongMoDuoc: 50; hpRegen: 1", null],
   ["linh_tuyen", 2, "chi_so", "Hiệu quả hồi máu và khiên +4%", "healPower: 40", null],
   ["linh_tuyen", 4, "hanh_vi", "Hồi phục: hồi mana khi đang vận chỉ −10% thay −20%; thủ nội +2%", "hoiManaKhiVan: -100; defInner: 20", null],
@@ -1055,7 +1056,7 @@ const SET2_MOC: [string, number, string, string, string, string | null][] = [
   ["huyet_anh", 4, "hanh_vi", "Sát thương chí mạng +5%; Thân pháp chỉ lộ vị trí 2 s thay 3 s", "loViTriTicks: 40; critDamage: 50", null],
   ["co_tong", 2, "chi_so", "Hút mana: mỗi đòn rút 1% mana tối đa của mục tiêu", "manaDrain: 10", null],
   ["co_tong", 4, "hanh_vi", "Hồi chiêu pháp bảo −15%; mỗi lần pháp bảo kích hoạt hồi 5% mana", "hoiChieuPhapBao: -150; hoiManaPhapBao: 50", null],
-  ["thiet_ky", 2, "chi_so", "Giảm sát thương ngoại nhận 4%", "damageTakenCutOuter: 40", null],
+  ["thiet_ky", 2, "chi_so", "Giảm sát thương ngoại nhận 7%", "damageTakenCutOuter: 70", null],
   ["thiet_ky", 4, "chi_so", "Phản 30% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%", "reflect: 300; damageTakenCut: 10", null],
   ["bang_phach", 2, "chi_so", "Thời gian khống chế +20%; tốc đánh +3%", "controlTime: 200; attackSpeed: 30", null],
   ["bang_phach", 4, "hanh_vi", "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; khống chế trúng mục tiêu đang vận công hoặc bày trận thì hủy chiêu đó (vào hồi chiêu như đã dùng) và đốt 30% mana tối đa của mục tiêu; thủ nội +2%", "giamDanKhongChe: 750; huyVanCong: 1; dotMana: 300; defInner: 20", null],
@@ -1558,10 +1559,14 @@ const set2k: Step = (wb, log) => set2e(wb, log);
 
 const set2l: Step = (wb, log) => set2e(wb, log);
 
+// ---------- set đồ 2.0 lần 12: bước 6 (GDD tab Trang bị rev 89; đề xuất). Số mới ở SET2_MOC. ----------
+
+const set2m: Step = (wb, log) => set2e(wb, log);
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
-  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j, set_2k: set2k, set_2l: set2l,
+  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j, set_2k: set2k, set_2l: set2l, set_2m: set2m,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
