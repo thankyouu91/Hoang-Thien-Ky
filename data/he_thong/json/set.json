@@ -3,7 +3,7 @@
     "Set đồ dựa trên ấn bộ: ấn là vật phẩm khảm vào một dòng khảm đã kích hoạt, nên đúng luật 'thuộc tính chỉ hiện khi khảm ngọc' (chốt 2026-11-03). Kiểu món nào cũng mang được ấn bộ nào.",
     "Mốc 2/4/7: số món đang mặc có cùng ấn và còn độ bền trên 0. 3 món tính mốc 2, 5–6 món tính mốc 4.",
     "Mỗi món giữ tối đa 1 ấn bộ. Tối đa 3 bộ cùng lúc (2+2+2), 7 ô nên chỉ một bộ đạt mốc 7.",
-    "Hiệu ứng set không tăng theo cường hóa, độ hiếm hay cấp đồ; ấn bộ không có cấp nhưng có bậc lục → đỏ (bac_an): mốc 2 và 4 nhân he_so theo bậc thấp nhất trong các ấn đang tính cho bộ đó; số trong moc[] là ở bậc tím (set đồ 2.0, đề xuất).",
+    "Hiệu ứng set không tăng theo cường hóa, độ hiếm hay cấp đồ; ấn bộ không có cấp nhưng có bậc lục → đỏ (bac_an): mốc 2 và 4 nhân he_so theo bậc thấp nhất trong các ấn đang tính cho bộ đó; số trong moc[] là ở bậc tím (set đồ 2.0, người dùng duyệt 2026-11-05).",
     "Trần: quy đổi lực chiến mốc 2 không quá 1%, đủ mốc 4 không quá 3%, đủ mốc 7 không quá 6%, tính trong trần 35% của đồ. Hiệu ứng kinh tế của set cộng pháp khí không quá +10% mỗi loại sản lượng; tỷ lệ nén, cường hóa, luyện đan tính chung trần +15% của phù.",
     "Hiệu ứng 'mỗi trận' tính lại từ đầu mỗi trận mô phỏng; mọi chọn mục tiêu phải deterministic (hòa thì theo id).",
     "Đồ tím trở lên rơi ở bí cảnh có 30% đã khảm sẵn ấn bộ của bí cảnh đó ở một dòng khảm thêm. Ấn rời cũng rơi ở bí cảnh đó; tông môn giữ bí cảnh đổi được ấn bằng cống hiến.",

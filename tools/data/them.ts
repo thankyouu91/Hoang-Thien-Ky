@@ -33,6 +33,7 @@
 //   set_2l          set đồ 2.0 bước 5: Bàn Thạch 2, Băng Phách 2, Thiết Kỵ 2 (giảm sát thương ngoại), Liên Kích mốc 2
 //   set_2m          set đồ 2.0 bước 6: Thiết Kỵ 2 giảm sát thương ngoại 7%, Bách Thảo 2 bị khống chế −50%
 //   set_2_chot      set đồ 2.0 đã chốt (duyệt 2026-11-05): ô vàng của set đồ 2.0 sang xanh lá, giữ giá trị
+//   set_2_ghi_chu   3 ghi chú set đồ 2.0 (set.json bậc ấn, trang_bi.json áo giày +2,6%, ngoc.json binh_an) theo bản đã duyệt
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -1156,10 +1157,12 @@ const SET2_LUAT: [string, number][] = [
   ["trang_bi.json:luat.dongRen.heSoLoaiPhu", 0.15], ["trang_bi.json:luat.dongRen.toiDa.ha", 3], ["trang_bi.json:luat.dongRen.toiDa.trung", 3],
   ["trang_bi.json:luat.dongRen.toiDa.than", 5], ["trang_bi.json:luat.dongRen.toiDa.thanh", 5], ["trang_bi.json:luat.dongRen.doiDongKhiTinh", 2],
 ];
+/** Ghi chú áo, giày ở trang_bi.json (câu của phiên set đồ sau khi người dùng duyệt set đồ 2.0, 2026-11-05). */
+const GHI_CHU_AO_GIAY = "Tách thủ ngoại và thủ nội: người dùng chốt 2026-11-05. Chỉ số chính áo là thủ ngoại +2,6%, giày là thủ nội +2,6% (đã nhân ×0,85). Tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội. Loại sát thương của từng loại chiêu ở loai_chieu.json loai_sat_thuong.";
 const SET2_GHI_CHU: Record<string, [string, string][]> = {
   // [đầu câu cũ cần thay (trống: thêm mới), câu mới]
   "set.json": [
-    ["Hiệu ứng set không tăng theo", "Hiệu ứng set không tăng theo cường hóa, độ hiếm hay cấp đồ; ấn bộ không có cấp nhưng có bậc lục → đỏ (bac_an): mốc 2 và 4 nhân he_so theo bậc thấp nhất trong các ấn đang tính cho bộ đó; số trong moc[] là ở bậc tím (set đồ 2.0, đề xuất)."],
+    ["Hiệu ứng set không tăng theo", "Hiệu ứng set không tăng theo cường hóa, độ hiếm hay cấp đồ; ấn bộ không có cấp nhưng có bậc lục → đỏ (bac_an): mốc 2 và 4 nhân he_so theo bậc thấp nhất trong các ấn đang tính cho bộ đó; số trong moc[] là ở bậc tím (set đồ 2.0, người dùng duyệt 2026-11-05)."],
     ["3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn): ấn khóa", "Giao dịch theo bậc ấn (bac_an[].giao_dich): lục không bán lại trên chợ, lam và tím bán được, vàng và đỏ khóa vào nhân vật. 3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn) chỉ có ấn từ bậc luat.boThanTuBac. Món đã khảm bán kèm ấn nếu món đó và ấn đều bán được."],
     ["", "bo[].lo: lộ sức mạnh của bộ (ngoai_cong, noi_cong, thu_ngoai, thu_noi, hap_thu, phan_chan, khong_toc, kinh_te, khac_che), dùng cho binh bộ đồng lộ và bản đồ khắc lộ (GDD tab Trang bị phần 14)."],
     ["moc[].", "moc[].tham_so: mọi khóa chỉ số trong tham_so được áp như hiệu ứng chi_so, mốc loại nào cũng vậy; phần hành vi đi theo loai. Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal (hút máu theo sát thương), manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, damageTakenCutOuter, damageTakenCutInner (giảm sát thương ngoại, nội nhận; mỗi loại đòn tổng tối đa trang_bi.json luat.giamSatThuongNhanToiDa), reflect, controlTakenCut (giảm thời gian bị khống chế), reflectTakenCut (giảm sát thương phản đòn nhận vào); buaGiamMana, hoiManaPhapBao, huyVanCong và dotMana (Băng Phách 4), khienMau và khienTicks (Bàn Thạch 7) là hành vi mới."],
@@ -1169,13 +1172,13 @@ const SET2_GHI_CHU: Record<string, [string, string][]> = {
     ["", "bo_tron: bộ 7 món lục bán ở shop NPC, mỗi món khảm sẵn ấn bậc lục của bộ đó; 17 bộ, không có 3 bộ thần."],
   ],
   "trang_bi.json": [
-    ["", "Áo, giày (set đồ 2.0): tách phòng thủ thành thủ ngoại, thủ nội đã chốt 2026-11-05 (GDD mục 8), số vẫn là đề xuất. Chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội. Loại sát thương của từng loại chiêu ở loai_chieu.json loai_sat_thuong."],
+    ["", GHI_CHU_AO_GIAY],
     ["", "dong_ren: cường hóa lên nac mở 1 dòng rèn ở vi_dien; chọn 1 trong 4 loại phụ của ô (luyen_khi.json tay_luyen), giá trị luat.dongRen.heSoLoaiPhu của loại đó. Tối đa luat.dongRen.toiDa theo vị diện; đổi dòng tốn luat.dongRen.doiDongKhiTinh Khí Tinh; tụt nấc dưới mốc thì dòng tạm tắt."],
     ["", "dong_an: chỉ trên ô có co_dong_an (ngọc bội, đai). Mỗi dòng là 1 điều kiện (loai dieu_kien) + 1 hiệu ứng (hieu_ung), quay khi món rơi hoặc rèn ra; số dòng luat.dongAn.soDong theo độ hiếm. Hiện ??? tới lần đầu kích phát; Giám Định Phù (PH-CH-011) lộ trước điều kiện 1 dòng; tẩy ẩn quay lại hiệu ứng, giữ điều kiện. Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng ×luat.dongAn.songAnHeSo. Nhóm của điều kiện (nhom) nhân hiệu ứng theo he_so: tinh ×0,2, loai_tran ×0,25, trong_tran ×0,3; cùng lúc tối đa luat.dongAn.toiDaHieuLuc dòng có hiệu lực, chọn theo điểm trang bị sau hệ số."],
     ["", "diem: điểm trang bị cho mỗi `moi` (1% hoặc 0,1%) của chỉ số; điểm món là tổng các lớp, điểm nhân vật là 7 món cộng set. Chỉ để so sánh, gợi ý và lọc chợ, không dùng trong trận; phiên Sprint chỉnh bằng đo."],
   ],
   "ngoc.json": [
-    ["", "binh_an (set đồ 2.0, đề xuất): 6 binh ấn của binh bộ (set.json binh_bo), chỉ khảm vào chi_kham_vao, chiếm dòng khảm như ngọc, Ý châu, ấn bộ; bậc như ấn bộ (set.json bac_an)."],
+    ["", "binh_an (set đồ 2.0, người dùng duyệt 2026-11-05): 6 binh ấn của binh bộ (set.json binh_bo), chỉ khảm vào chi_kham_vao, chiếm dòng khảm như ngọc, Ý châu, ấn bộ; bậc như ấn bộ (set.json bac_an)."],
   ],
 };
 
@@ -1333,7 +1336,7 @@ const set2b: Step = (wb, log) => {
   const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), gh = (gs.cells[0] ?? []).map(norm);
   const nAt = gh.indexOf(gc.cols.find((c) => c.key === "noi_dung")!.header);
   const i = gs.cells.findIndex((r) => norm(r?.[nAt]) === "Áo, giày (set đồ 2.0, đề xuất, chờ duyệt ở mục 20 vì đổi công thức trận mục 8): chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội.");
-  if (i > 0) { wb.setCell(gc.sheet, i, nAt, { v: "Áo, giày (set đồ 2.0): tách phòng thủ thành thủ ngoại, thủ nội đã chốt 2026-11-05 (GDD mục 8), số vẫn là đề xuất. Chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội. Loại sát thương của từng loại chiêu ở loai_chieu.json loai_sat_thuong.", fill: "de_xuat" }); log.push("Ghi chú trang bị: áo, giày theo chốt tách thủ ngoại, thủ nội"); }
+  if (i > 0) { wb.setCell(gc.sheet, i, nAt, { v: GHI_CHU_AO_GIAY, fill: "de_xuat" }); log.push("Ghi chú trang bị: áo, giày theo chốt tách thủ ngoại, thủ nội"); }
 };
 
 // ---------- set đồ 2.0 lần 3: trang Ẩn văn ở Bảo Giám (GDD tab Trang bị rev 73, phần 14.5); chỉ số kèm gộp vào tham_so ----------
@@ -1633,10 +1636,31 @@ const set2Chot: Step = (wb, log) => {
   log.push(`Set đồ 2.0 đã chốt, ô vàng → xanh lá: ${tong.join(", ")}`);
 };
 
+// ---------- set đồ 2.0 đã chốt lần 2: 3 ghi chú bỏ chữ "đề xuất" (câu của phiên set đồ, 2026-11-05). Câu ở SET2_GHI_CHU,
+// GHI_CHU_AO_GIAY. ----------
+
+const set2GhiChu: Step = (wb, log) => {
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), h = (gs.cells[0] ?? []).map(norm);
+  const at = (key: string) => h.indexOf(gc.cols.find((c) => c.key === key)!.header);
+  const fAt = at("file"), nAt = at("noi_dung");
+  const sua: [string, string[], string][] = [
+    ["set.json", ["Hiệu ứng set không tăng theo"], SET2_GHI_CHU["set.json"].find(([k]) => k === "Hiệu ứng set không tăng theo")![1]],
+    ["trang_bi.json", ["Áo, giày (set đồ 2.0)", "Tách thủ ngoại và thủ nội"], GHI_CHU_AO_GIAY],
+    ["ngoc.json", ["binh_an (set đồ 2.0"], SET2_GHI_CHU["ngoc.json"].find(([, v]) => v.startsWith("binh_an ("))![1]],
+  ];
+  let n = 0;
+  for (const [file, starts, v] of sua) {
+    const k = gs.cells.findIndex((r, i) => i > 0 && norm(r?.[fAt]) === file && starts.some((st) => norm(r?.[nAt]).startsWith(st)));
+    if (k < 0) throw new Error(`Ghi chú trang bị: không có dòng ${file} "${starts[0]}…"`);
+    if (norm(gs.cells[k][nAt]) !== v) { wb.setCell(gc.sheet, k, nAt, { v, fill: "de_xuat" }); n++; }
+  }
+  log.push(`Ghi chú trang bị: ${n} câu set đồ 2.0 theo bản đã duyệt`);
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
-  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j, set_2k: set2k, set_2l: set2l, set_2m: set2m, set_2_chot: set2Chot,
+  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j, set_2k: set2k, set_2l: set2l, set_2m: set2m, set_2_chot: set2Chot, set_2_ghi_chu: set2GhiChu,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
