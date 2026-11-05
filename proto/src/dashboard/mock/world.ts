@@ -135,10 +135,19 @@ function sampleBag(): BagItem[] {
     boardPiece: kind === "ngoc" && element ? { loai: "ngoc", he: element, cap: Number(/\d+/.exec(gradeLabel)?.[0] ?? 1) } : undefined,
   });
   return [
-    gear({ slot: "vu_khi", name: "Đao Liệt Hỏa", plus: 2, sockets: 1, stats: { atk: 90 }, icon: "do/vu_khi/dao", rarity: "lam" }, "Đao rèn ở lò thành chủ."),
-    gear({ slot: "vu_khi", name: "Trượng Thanh Mộc", plus: 0, sockets: 2, stats: { atk: 105, mana: 40 }, icon: "do/vu_khi/truong", rarity: "tim" }, "Rơi ở bí cảnh Mộc."),
-    gear({ slot: "mu", name: "Nón Lá Tị Thủy", plus: 1, sockets: 1, stats: { hp: 700, def: 25 }, icon: "do/mu/non_la", rarity: "luc", code: "TB-MU-010" }, "Nón lá đan bằng cỏ linh."),
-    gear({ slot: "mu", name: "Ngọc Quan Tử Vân", plus: 3, sockets: 2, stats: { hp: 1200, def: 40 }, icon: "do/mu/ngoc_quan", art: "trang_bi/mu/25", rarity: "lam", code: "TB-MU-025" }, "Mũ ngọc của chân truyền."),
+    // Vũ khí đủ 10 khí hình (kiếm, đao, côn, thương, cung, phiến, bút, kỳ, cầm, tiêu), hình vẽ Canva theo danh_sach.json.
+    gear({ slot: "vu_khi", name: "Đao Hổ Khiếu", plus: 2, sockets: 1, stats: { atk: 90 }, art: "trang_bi/kiem/31", rarity: "lam", code: "TB-KI-031" }, "Đao rèn ở lò thành chủ."),
+    gear({ slot: "vu_khi", name: "Đao Hàn Nguyệt", plus: 1, sockets: 2, stats: { atk: 112 }, art: "trang_bi/kiem/51", rarity: "tim", code: "TB-KI-051" }, "Đao lạnh, chém quét mạnh."),
+    gear({ slot: "vu_khi", name: "Côn Kim Cang", plus: 0, sockets: 2, stats: { atk: 105, def: 20 }, art: "trang_bi/kiem/44", rarity: "tim", code: "TB-KI-044" }, "Rơi ở bí cảnh Mộc."),
+    gear({ slot: "vu_khi", name: "Thương Lôi Minh", plus: 0, sockets: 2, stats: { atk: 115 }, art: "trang_bi/kiem/43", rarity: "tim", code: "TB-KI-043" }, "Thương có vân sấm, hợp lối lướt tới."),
+    gear({ slot: "vu_khi", name: "Cung Xạ Nhật", plus: 0, sockets: 3, stats: { atk: 140 }, art: "trang_bi/kiem/54", rarity: "vang", code: "TB-KI-054" }, "Cung tầm xa của thần xạ."),
+    gear({ slot: "vu_khi", name: "Phiến Hàn Băng", plus: 0, sockets: 2, stats: { atk: 100, mana: 30 }, art: "trang_bi/kiem/46", rarity: "tim", code: "TB-KI-046" }, "Quạt pháp, đánh diện rộng."),
+    gear({ slot: "vu_khi", name: "Bút Phán Quan", plus: 0, sockets: 1, stats: { atk: 85, mana: 30 }, art: "trang_bi/kiem/36", rarity: "lam", code: "TB-KI-036" }, "Bút vẽ bùa chú."),
+    gear({ slot: "vu_khi", name: "Kỳ Ngũ Hành", plus: 0, sockets: 1, stats: { atk: 80, def: 15 }, art: "trang_bi/kiem/37", rarity: "lam", code: "TB-KI-037" }, "Cờ bày trận pháp."),
+    gear({ slot: "vu_khi", name: "Cầm Tiêu Vĩ", plus: 0, sockets: 2, stats: { atk: 95, mana: 40 }, art: "trang_bi/kiem/49", rarity: "tim", code: "TB-KI-049" }, "Đàn hồi phục, giải hiệu ứng xấu."),
+    gear({ slot: "vu_khi", name: "Tiêu Bích Ngọc", plus: 0, sockets: 1, stats: { atk: 85, mana: 25 }, art: "trang_bi/kiem/39", rarity: "lam", code: "TB-KI-039" }, "Tiêu khống chế bằng âm luật."),
+    gear({ slot: "mu", name: "Nón Lá Tị Thủy", plus: 1, sockets: 1, stats: { hp: 700, def: 25 }, art: "trang_bi/mu/10", rarity: "luc", code: "TB-MU-010" }, "Nón lá đan bằng cỏ linh."),
+    gear({ slot: "mu", name: "Ngọc Quan Tử Vân", plus: 3, sockets: 2, stats: { hp: 1200, def: 40 }, art: "trang_bi/mu/25", rarity: "lam", code: "TB-MU-025" }, "Mũ ngọc của chân truyền."),
     gear({ slot: "ao", name: "Giáp Huyền Thiết", plus: 0, sockets: 2, stats: { hp: 2400, def: 90 }, art: "trang_bi/ao/26", rarity: "lam", code: "TB-AO-026" }, "Giáp nặng, thủ cao."),
     gear({ slot: "dai", name: "Đai Lôi Văn", plus: 0, sockets: 1, stats: { hp: 500, def: 35 }, art: "trang_bi/dai/25", rarity: "lam", code: "TB-DA-025" }, "Đai thêu vân sấm."),
     gear({ slot: "giay", name: "Giày Đạp Vân", plus: 1, sockets: 1, stats: { hp: 600, def: 30 }, art: "trang_bi/giay/25", rarity: "lam", code: "TB-GI-025" }, "Giày nhẹ của thân pháp sư."),
@@ -411,9 +420,10 @@ export function createWorld(region: RegionMap, now: number): World {
 
   const gear: Partial<Record<GearSlot, GearItem>> = {
     // Tên, hình vẽ, độ hiếm và mã lấy từ assets/icon_ve/danh_sach.json; đồ đang mặc có đủ lam, tím, vàng để thấy màu nền.
-    // Kiếm Tử Điện và Ô Sa Lôi Văn chưa có hình vẽ nên giữ hình PixelLab. Ấn khảm: Lôi Trì 3 món, Bàn Thạch 2, Tụ Bảo 2.
-    vu_khi: { slot: "vu_khi", seal: "NG-AN-010", name: "Kiếm Tử Điện", plus: 8, durability: 76, durabilityMax: 100, sockets: 2, gems: [{ element: "loi", level: 3 }], stats: { atk: 120 }, icon: "do/vu_khi/kiem", rarity: "tim", code: "TB-KI-051" },
-    mu: { slot: "mu", seal: "NG-AN-003", name: "Ô Sa Lôi Văn", plus: 5, durability: 64, durabilityMax: 100, sockets: 1, gems: [], stats: { hp: 900, def: 30 }, icon: "do/mu/o_sa", rarity: "lam", code: "TB-MU-027" },
+    // Mọi món có hình vẽ Canva (art); vũ khí và mũ giữ icon PixelLab chỉ để ghép hình nhân vật (look.weapon, look.hat).
+    // Ấn khảm: Lôi Trì 3 món, Bàn Thạch 2, Tụ Bảo 2.
+    vu_khi: { slot: "vu_khi", seal: "NG-AN-010", name: "Kiếm Tử Vân", plus: 8, durability: 76, durabilityMax: 100, sockets: 2, gems: [{ element: "loi", level: 3 }], stats: { atk: 120 }, icon: "do/vu_khi/kiem", art: "trang_bi/kiem/42", rarity: "tim", code: "TB-KI-042" },
+    mu: { slot: "mu", seal: "NG-AN-003", name: "Ô Sa Lôi Văn", plus: 5, durability: 64, durabilityMax: 100, sockets: 1, gems: [], stats: { hp: 900, def: 30 }, icon: "do/mu/o_sa", art: "trang_bi/mu/27", rarity: "lam", code: "TB-MU-027" },
     ao: { slot: "ao", seal: "NG-AN-010", name: "Pháp Y Tinh Hà", plus: 6, durability: 58, durabilityMax: 98, sockets: 2, gems: [{ element: "kim", level: 2 }], stats: { hp: 1800, def: 60 }, art: "trang_bi/ao/41", rarity: "tim", code: "TB-AO-041" },
     dai: { slot: "dai", seal: "NG-AN-003", name: "Đai Hoàng Long", plus: 4, durability: 81, durabilityMax: 100, sockets: 1, gems: [], stats: { hp: 600, def: 40 }, art: "trang_bi/dai/53", rarity: "vang", code: "TB-DA-053" },
     bao_tay: { slot: "bao_tay", seal: "NG-AN-001", name: "Hộ Thủ Thiết Lân", plus: 2, durability: 88, durabilityMax: 100, sockets: 1, gems: [], stats: { atk: 20, def: 35 }, art: "trang_bi/bao_tay/25", rarity: "lam", code: "TB-BT-025" },
@@ -457,7 +467,7 @@ export function createWorld(region: RegionMap, now: number): World {
     tides: [{ title: "Yêu Triều tràn vào rìa Lôi Đình Cốc", startsAt: now - 15 * MIN, endsAt: now + 45 * MIN, maxRing: 0.15 }],
     jobs: [
       { kind: "xay", title: "Tàng Kinh Các lên cấp 6", detail: "Hàng xây ở sơn môn", startsAt: now - 2 * H, endsAt: now + 1 * H + 25 * MIN },
-      { kind: "ren", title: "Kiếm Tử Điện +8 → +9", detail: "Lò rèn thành chủ", startsAt: now - 20 * MIN, endsAt: now + 6 * MIN },
+      { kind: "ren", title: "Kiếm Tử Vân +8 → +9", detail: "Lò rèn thành chủ", startsAt: now - 20 * MIN, endsAt: now + 6 * MIN },
       { kind: "luyen_dan", title: "Hồi Khí Đan × 10", detail: "Luyện Đan Phòng", startsAt: now - 30 * MIN, endsAt: now + 42 * MIN },
       { kind: "be_quan", title: "Bế quan: Lôi Quang Liên Hoàn Quyết", detail: "Tầng 1 → 2", startsAt: now - 1 * H, endsAt: now + 3 * H },
     ],
