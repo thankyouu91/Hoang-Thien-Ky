@@ -71,7 +71,8 @@ export type ReplayEvent =
       /** Phẩm công pháp 1–10 (GDD mục 9); hiệu ứng chiêu càng cao phẩm càng nhiều hạt, càng sáng */
       grade?: number;
     }
-  | { tick: number; kind: "hit"; unit: number; src: number; amount: number; crit: boolean; hp: number }
+  /** `counter`: hệ chiêu khắc linh căn người trúng (hệ số khắc 1,5 trở lên, GDD mục 8), màn Trận vẽ số nổi hơn. */
+  | { tick: number; kind: "hit"; unit: number; src: number; amount: number; crit: boolean; hp: number; counter?: boolean }
   | { tick: number; kind: "heal"; unit: number; src: number; amount: number; hp: number }
   | { tick: number; kind: "mana"; unit: number; mana: number }
   | { tick: number; kind: "death"; unit: number }
@@ -97,6 +98,10 @@ export interface Replay {
   winner: "A" | "B" | "draw";
   /** Nền sân trong assets/pixellab/san_dau/ (vo_truong, cao_nguyen, mo_linh_thach); bỏ trống là võ trường. */
   arena?: string;
+  /** Tên hai bên (đội A, đội B), ví dụ tên tông môn và "Dị thú"; bỏ trống thì "Ta"/"Địch" theo `viewer`, không có nữa thì "Đội A"/"Đội B". */
+  teams?: [string, string];
+  /** Phía của người xem (0 đội A, 1 đội B): có thì hết trận hiện "Thắng"/"Thua" theo phía này. */
+  viewer?: 0 | 1;
 }
 
 /** Nguồn replay: hiện là replay giả trong src/mock, sau này là simulate() của @ktlp/sim. */

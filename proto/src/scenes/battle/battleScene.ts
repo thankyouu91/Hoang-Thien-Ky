@@ -17,6 +17,7 @@ import { FxLayer, type Point } from "../../hieu_ung/fx2d.ts";
 import { createSkillFx, type SkillFx } from "../../hieu_ung/index.ts";
 import { drawMotif } from "../../hieu_ung/motifs.ts";
 import { VfxLib } from "../../hieu_ung/vfx.ts";
+import { tr } from "../../dashboard/i18n.ts";
 
 const CELL = 64; // đơn vị thế giới mỗi ô sân
 const LANE = 60; // khoảng cách ngang giữa hai người cùng hàng
@@ -25,6 +26,8 @@ const TEAM_RING = ["#e6d8b8", "#b3261e"]; // đội A giấy dó, đội B ấn 
 const HP = "#7bc96f";
 const MANA = "#5aa9e6";
 const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
+const COUNTER_COLOR = "#ff8a3d"; // số sát thương của đòn khắc hệ
+const COUNTER_TIPS = 4; // mấy đòn khắc đầu trận có nhãn "Khắc ×1,5" (GDD mục 14, FTUE: thấy khắc chế hoạt động)
 const HEAVY_HIT = 0.05; // đòn từ 5% máu tối đa trở lên mới diễn hoạt ảnh trúng đòn
 const BADGE = 12; // cạnh dấu hệ đặt trước thanh máu, đơn vị thế giới
 const DEFAULT_ARENA = "vo_truong"; // nền sân khi replay không nói trận đánh ở đâu
@@ -82,6 +85,8 @@ export class BattleScene implements Scene {
   private lateral = new Map<number, number>();
   /** Mốc ra chiêu và trúng đòn nặng theo id, xếp tăng dần */
   private marks = new Map<number, { casts: number[]; hits: number[] }>();
+  /** Mấy đòn khắc hệ đầu trận, hiện kèm nhãn "Khắc ×1,5" */
+  private counterTips = new Set<object>();
   /** Ngoại hình ghép theo id (tạm theo đội và hàng khi replay chưa có) */
   private looks = new Map<number, Look>();
   /** Dáng đứng theo id: theo tài năng (tu_si/<tài năng>), tông chủ ngự kiếm (dangDung.ts) */
@@ -103,7 +108,12 @@ export class BattleScene implements Scene {
     this.source = this.sources[0];
     this.sprites = sprites;
     this.vfx = new VfxLib(sprites);
-    this.controls = new ReplayControls(this.sources.map((s) => s.label), (i) => this.load(this.sources[i]));
+    // Hết trận, nút "Tiếp tục" về màn đã mở trận (như nút Quay lại của thanh trên), không có thì về Động phủ.
+    const back = () => {
+      if (history.length > 1) history.back();
+      else location.hash = "#dong-phu";
+    };
+    this.controls = new ReplayControls(this.sources.map((s) => s.label), (i) => this.load(this.sources[i]), back);
     this.hud = this.controls.el;
   }
 
@@ -113,6 +123,8 @@ export class BattleScene implements Scene {
    */
   open(source: ReplaySource): void {
     if (!this.sources.includes(source)) this.sources.unshift(source);
+    // Trận mở cho người chơi: ẩn ô chọn nguồn (công cụ thử trận), hết trận có nút Tiếp tục.
+    this.controls.lock();
     this.controls.setSources(this.sources.map((s) => s.label), this.sources.indexOf(source));
     this.load(source);
   }
@@ -136,6 +148,7 @@ export class BattleScene implements Scene {
     this.player = null;
     this.error = "";
     this.controls.loading();
+    this.controls.ended(null);
     source.load().then(
       (replay) => {
         if (n !== this.loads) return;
@@ -146,6 +159,7 @@ export class BattleScene implements Scene {
         this.controls.bind(this.player);
         this.layoutLanes();
         this.buildMarks();
+        this.counterTips = new Set(this.index.hits.filter((h) => h.kind === "hit" && h.counter).slice(0, COUNTER_TIPS));
         this.looks = assignLooks(replay.units);
         this.dangs = assignDang(replay.units);
         this.luans = buildPhapLuan(replay.units, replay.events);
@@ -614,6 +628,7 @@ export class BattleScene implements Scene {
       let text = String(e.amount);
       let color = "#fbf6ec";
       let size = 13;
+      let tip = "";
       if (e.kind === "heal") {
         text = "+" + e.amount;
         color = HP;
@@ -621,34 +636,53 @@ export class BattleScene implements Scene {
         text = e.amount + "!";
         color = "#ffd34d";
         size = 17;
+      } else if (e.counter) {
+        // Đòn khắc hệ: số cam, to hơn; vài đòn đầu trận kèm nhãn để người mới thấy khắc chế hoạt động.
+        color = COUNTER_COLOR;
+        size = 16;
+        if (this.counterTips.has(e)) tip = tr("Khắc ×1,5");
       }
       ctx.globalAlpha = 1 - age * age;
       ctx.font = `bold ${size}px ${FONT_TEXT}`;
       ctx.strokeText(text, x, y);
       ctx.fillStyle = color;
       ctx.fillText(text, x, y);
+      if (tip) {
+        ctx.font = `bold 10px ${FONT_TEXT}`;
+        ctx.strokeText(tip, x, y - size + 2);
+        ctx.fillText(tip, x, y - size + 2);
+      }
     }
     ctx.globalAlpha = 1;
   }
 
-  /** Số người còn đứng mỗi đội, và kết quả khi hết trận. Vẽ theo toạ độ màn hình. */
+  /**
+   * Số người còn đứng mỗi bên, và kết quả khi hết trận (kèm nút Tiếp tục khi trận mở cho người chơi). Vẽ theo toạ độ
+   * màn hình. Tên hai bên lấy từ replay.teams, không có thì "Ta"/"Địch" theo replay.viewer, không có nữa thì "Đội A"/"Đội B".
+   */
   private drawScore(v: View, index: ReplayIndex, t: number, player: ReplayPlayer): void {
     const ctx = v.ctx;
+    const r = index.replay;
+    const names = (r.teams ?? (r.viewer === undefined ? ["Đội A", "Đội B"] : r.viewer === 0 ? ["Ta", "Địch"] : ["Địch", "Ta"])).map(tr);
     ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
     ctx.textBaseline = "top";
     ctx.textAlign = "center";
     ctx.font = `bold 14px ${FONT_TEXT}`;
     ctx.fillStyle = "#efe6d6";
-    ctx.fillText(`Đội A ${index.alive(0, t)}  ·  ${index.alive(1, t)} Đội B`, v.w / 2, 8);
-    if (t < index.replay.ticks || player.playing) return;
-    const w = index.replay.winner;
-    const text = w === "draw" ? "Hoà" : `Đội ${w} thắng`;
+    ctx.fillText(`${names[0]} ${index.alive(0, t)}  ·  ${index.alive(1, t)} ${names[1]}`, v.w / 2, 8);
+    const mid = (v.h - v.bottom) / 2;
+    const ended = t >= r.ticks && !player.playing;
+    this.controls.ended(ended ? mid + 30 : null);
+    if (!ended) return;
+    const w = r.winner;
+    const won = w !== "draw" && r.viewer !== undefined ? (w === "A") === (r.viewer === 0) : undefined;
+    const text = w === "draw" ? tr("Hoà") : won !== undefined ? tr(won ? "Thắng" : "Thua") : tr(`${w === "A" ? names[0] : names[1]} thắng`);
     ctx.font = `bold 32px ${FONT_DISPLAY}`;
     ctx.textBaseline = "middle";
     ctx.lineWidth = 6;
     ctx.strokeStyle = "rgba(0, 0, 0, 0.7)";
-    ctx.strokeText(text, v.w / 2, (v.h - v.bottom) / 2);
-    ctx.fillStyle = "#ffd34d";
-    ctx.fillText(text, v.w / 2, (v.h - v.bottom) / 2);
+    ctx.strokeText(text, v.w / 2, mid);
+    ctx.fillStyle = won === false ? "#e8e0d2" : "#ffd34d";
+    ctx.fillText(text, v.w / 2, mid);
   }
 }

@@ -4,10 +4,12 @@
 // Giới hạn vì sim chưa ghi từng đòn đánh:
 // - Nhiều đòn trúng một người trong cùng tick gộp thành một số; thiêu đốt không có người đánh.
 // - Không biết đòn nào chí mạng, và phần sát thương khiên hút không hiện thành số.
-import { Battle, BATTLE, TICKS_PER_SECOND, type BattleInput } from "@ktlp/sim";
+// - Đòn khắc hệ suy từ hệ chiêu của người đánh và linh căn người trúng (elementMultiplier), không tính phép thế thân.
+import { Battle, BATTLE, elementMultiplier, TICKS_PER_SECOND, type BattleInput, type Element } from "@ktlp/sim";
 import type { Replay, ReplayEvent, ReplaySource, ReplayUnit, StatusKind } from "./types.ts";
 
 const ONE = 1000; // mana trong sim tính theo phần nghìn
+const COUNTER = 1500; // hệ số khắc hệ trong sim (phần nghìn), từ mức này là đòn khắc
 
 /** Trạng thái có thời hạn trên Unit của sim (khiên xét riêng vì còn có thể vỡ sớm). */
 const UNTIL = [
@@ -56,8 +58,8 @@ export function replayFromSim(input: BattleInput): Replay {
     battle.step();
     for (const u of battle.units) if (armed.has(u.id) && !u.ultReady && u.curHp > 0) ultUsedAt.set(u.id, tick);
 
-    // Người đánh của từng mục tiêu trong tick này, để số sát thương lệch theo người đánh.
-    const hitBy = new Map<number, number>();
+    // Người đánh và hệ chiêu của từng mục tiêu trong tick này: số sát thương lệch theo người đánh, đòn khắc hiện nổi hơn.
+    const hitBy = new Map<number, { src: number; element: Element }>();
     for (; logged < battle.events.length; logged++) {
       const e = battle.events[logged];
       const slot = battle.units.find((u) => u.id === e.unitId)!.slots[e.slot];
@@ -69,7 +71,7 @@ export function replayFromSim(input: BattleInput): Replay {
         tick: e.tick, kind: "cast", unit: e.unitId, skill: slot.tech.type, element: slot.tech.element, targets: e.targets,
         ...zone, ...subs, ...(ult ? { ult } : {}), grade: slot.tech.grade,
       });
-      for (const t of e.targets) if (!hitBy.has(t)) hitBy.set(t, e.unitId);
+      for (const t of e.targets) if (!hitBy.has(t)) hitBy.set(t, { src: e.unitId, element: slot.tech.element });
     }
     for (const u of battle.units) if (u.channel) centers.set(u.id, u.channel.center);
 
@@ -78,11 +80,13 @@ export function replayFromSim(input: BattleInput): Replay {
       if (p.hp <= 0) return;
       if (u.pos !== p.pos) events.push({ tick, kind: "move", unit: u.id, pos: u.pos });
       const hp = Math.max(0, u.curHp);
+      const by = hitBy.get(u.id);
       if (hp < p.hp) {
-        events.push({ tick, kind: "hit", unit: u.id, src: hitBy.get(u.id) ?? u.id, amount: p.hp - hp, crit: false, hp });
+        const counter = !!by && elementMultiplier(by.element, u.element) >= COUNTER;
+        events.push({ tick, kind: "hit", unit: u.id, src: by?.src ?? u.id, amount: p.hp - hp, crit: false, hp, ...(counter ? { counter } : {}) });
         if (hp === 0) events.push({ tick, kind: "death", unit: u.id });
       } else if (hp > p.hp) {
-        events.push({ tick, kind: "heal", unit: u.id, src: hitBy.get(u.id) ?? u.id, amount: hp - p.hp, hp });
+        events.push({ tick, kind: "heal", unit: u.id, src: by?.src ?? u.id, amount: hp - p.hp, hp });
       }
       // Mana hồi đều mỗi tick nên chỉ ghi lúc tiêu (trước và sau khi trừ) và lúc vừa đầy; trình phát nội suy đoạn hồi.
       const regen = Math.min(u.manaMax, p.mana + u.regen);
@@ -116,7 +120,10 @@ export function replayFromSim(input: BattleInput): Replay {
   return { tps: TICKS_PER_SECOND, ticks: result.ticks, fieldLength: BATTLE.fieldLength, units, events, winner: result.winner };
 }
 
-/** Nguồn replay chạy trận thật từ một BattleInput dựng sẵn; `arena` chọn nền sân (ví dụ mo_linh_thach cho trận tranh mỏ). */
-export function simReplaySource(label: string, input: () => BattleInput, arena?: string): ReplaySource {
-  return { label, load: async () => ({ ...replayFromSim(input()), ...(arena ? { arena } : {}) }) };
+/**
+ * Nguồn replay chạy trận thật từ một BattleInput dựng sẵn; `arena` chọn nền sân (ví dụ mo_linh_thach cho trận tranh mỏ).
+ * `side`: tên hai bên và phía người xem, để màn Trận hiện "Ta"/"Địch" (hay tên tông môn) và "Thắng"/"Thua".
+ */
+export function simReplaySource(label: string, input: () => BattleInput, arena?: string, side?: Pick<Replay, "teams" | "viewer">): ReplaySource {
+  return { label, load: async () => ({ ...replayFromSim(input()), ...(arena ? { arena } : {}), ...side }) };
 }
