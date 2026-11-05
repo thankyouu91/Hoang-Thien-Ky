@@ -20,8 +20,6 @@ import {
 } from "../daoCoBan.ts";
 import { dangFor, dangHeadroom, dangLift, drawDang } from "../../scenes/battle/dangDung.ts";
 import { lookTheoTaiNang } from "../../scenes/battle/aoTaiNang.ts";
-import { lightRange, recolor, type AoSpec, type Rgb } from "../../scenes/battle/mauAo.ts";
-import MAU_HE from "../../../../assets/pixellab/nhan_vat/mau_he.json";
 import type { Look, ReplayUnit } from "../../replay/types.ts";
 import { drawPhapLuan, phapLuanExtent, trackLevel, type PhapLuanSpec } from "../../scenes/battle/phapLuan.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
@@ -96,46 +94,92 @@ function bigArtOf(body: string, outfit: string, onload: () => void): HTMLImageEl
   return undefined;
 }
 
+/** Bậc cảnh giới theo cấp (mốc đột phá 51, 101, 151, 201): 0 Luyện Khí, 1 Trúc Cơ, 2 Kết Đan, 3 Nguyên Anh, 4 Hóa Thần trở lên. */
+const bacCanhGioi = (level: number) => Math.min(4, Math.max(0, Math.floor((level - 1) / 50)));
+const LINH_KHI_TINH = matchMedia("(prefers-reduced-motion: reduce)");
+const rgba = (hex: string, a: number) => {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a.toFixed(3)})`;
+};
+
 /**
- * Hình lớn đổi màu áo theo hệ, cùng bảng mau_he.json và hàm recolor của trận (mauAo.ts): chuẩn hoá độ sáng trên chính
- * hình lớn. Tính một lần mỗi (thân, áo, hệ) rồi đệm; bộ áo hay hệ không có trong bảng thì giữ hình gốc.
+ * Linh khí quanh hình lớn theo cảnh giới (2026-11-05, người dùng: lên cảnh giới cao thì thêm hiệu ứng xung quanh), màu theo
+ * linh căn. Luyện Khí: không; Trúc Cơ: đốm linh khí bay lên; Kết Đan: thêm quầng sáng sau lưng; Nguyên Anh: thêm vòng sáng
+ * xoay ngang eo; Hóa Thần trở lên: đốm dày hơn và tia lóe. Lớp "sau" vẽ trước hình (quầng, nửa sau của vòng), lớp "truoc"
+ * vẽ sau hình (đốm, nửa trước của vòng). Giảm chuyển động thì đứng yên.
  */
-const bigTinted = new Map<string, HTMLCanvasElement | null>();
-function bigArtTinted(art: HTMLImageElement, outfit: string, key: string, he: string | undefined): CanvasImageSource {
-  const spec = (MAU_HE.ao as unknown as Record<string, AoSpec>)[outfit];
-  const tones = he ? (MAU_HE.he as unknown as Record<string, [Rgb, Rgb, Rgb]>)[he] : undefined;
-  if (!spec || !tones) return art;
-  const k = `${key}/${he}`;
-  let c = bigTinted.get(k);
-  if (c === undefined) {
-    c = null;
-    try {
-      const cv = document.createElement("canvas");
-      cv.width = art.naturalWidth;
-      cv.height = art.naturalHeight;
-      const ctx = cv.getContext("2d", { willReadFrequently: true });
-      if (ctx) {
-        ctx.drawImage(art, 0, 0);
-        const d = ctx.getImageData(0, 0, cv.width, cv.height);
-        const goc = d.data.slice();
-        const range = lightRange(d.data, spec);
-        if (range && recolor(d.data, spec, tones, range) > 0) {
-          // Hình lớn vẽ tóc và viền bằng đen ánh lam, lọt vào dải màu áo: giữ nguyên điểm gần đen (độ sáng dưới 0,09) để
-          // tóc, viền không bị nhuộm theo hệ; áo vẫn đổi màu ở các tông giữa và sáng.
-          for (let o = 0; o < goc.length; o += 4) {
-            const l = (Math.max(goc[o], goc[o + 1], goc[o + 2]) + Math.min(goc[o], goc[o + 1], goc[o + 2])) / 510;
-            if (l < 0.09) d.data.set(goc.subarray(o, o + 4), o);
-          }
-          ctx.putImageData(d, 0, 0);
-          c = cv;
-        }
-      }
-    } catch {
-      c = null;
-    }
-    bigTinted.set(k, c);
+function linhKhi(ctx: CanvasRenderingContext2D, level: number, he: string, cx: number, y0: number, dw: number, dh: number, t0: number, lop: "sau" | "truoc"): void {
+  const bac = bacCanhGioi(level);
+  if (bac < 1) return;
+  const t = LINH_KHI_TINH.matches ? 1.7 : t0;
+  ctx.save();
+  if (lop === "sau" && bac >= 2) {
+    const r = dw * (0.42 + 0.06 * bac) * (1 + 0.04 * Math.sin(t * 1.6));
+    const g = ctx.createRadialGradient(cx, y0 + dh * 0.45, 0, cx, y0 + dh * 0.45, r);
+    g.addColorStop(0, rgba(he, 0.1 + 0.05 * bac));
+    g.addColorStop(1, rgba(he, 0));
+    ctx.fillStyle = g;
+    ctx.fillRect(cx - r, y0 + dh * 0.45 - r, r * 2, r * 2);
   }
-  return c ?? art;
+  if (bac >= 3) {
+    // Vòng sáng ngang eo: nửa sau (trên) vẽ sau hình, nửa trước (dưới) vẽ trước hình
+    const ry = dh * 0.05;
+    const rx = dw * 0.46;
+    const yc = y0 + dh * 0.55;
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = rgba(he, 0.55);
+    ctx.shadowColor = he;
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    if (lop === "sau") ctx.ellipse(cx, yc, rx, ry, 0, Math.PI, Math.PI * 2);
+    else ctx.ellipse(cx, yc, rx, ry, 0, 0, Math.PI);
+    ctx.stroke();
+    // Đốm chạy trên vòng
+    for (let i = 0; i < 3; i++) {
+      const a = t * 1.2 + (i * Math.PI * 2) / 3;
+      const truoc = Math.sin(a) > 0;
+      if (truoc !== (lop === "truoc")) continue;
+      ctx.fillStyle = rgba("#ffffff", 0.9);
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(a) * rx, yc + Math.sin(a) * ry, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+  }
+  if (lop === "truoc") {
+    // Đốm linh khí bay lên quanh người
+    const n = 6 + bac * 5;
+    for (let i = 0; i < n; i++) {
+      const seed = (i * 0.618034) % 1;
+      const chu = 3.2 + seed * 2.4;
+      const p = (t / chu + seed) % 1;
+      const x = cx + (seed - 0.5) * dw * 1.05 + Math.sin(t * 1.3 + i) * 3;
+      const y = y0 + dh * (0.98 - p * 0.95);
+      const a = Math.sin(p * Math.PI) * (0.45 + 0.1 * bac);
+      const s = 1 + ((i * 7) % 3) * 0.6 + (bac >= 4 ? 0.5 : 0);
+      ctx.fillStyle = rgba(he, a);
+      ctx.fillRect(Math.round(x), Math.round(y), s, s);
+    }
+    if (bac >= 4) {
+      // Tia lóe ngắn, lúc ẩn lúc hiện
+      for (let i = 0; i < 3; i++) {
+        const k = Math.sin(t * 3.1 + i * 2.1);
+        if (k < 0.85) continue;
+        const a = i * 2.1 + Math.floor(t * 3.1 + i) * 1.7;
+        const x = cx + Math.cos(a) * dw * 0.45;
+        const y = y0 + dh * (0.35 + 0.25 * Math.sin(a));
+        ctx.strokeStyle = rgba("#ffffff", (k - 0.85) * 6);
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x - 4, y);
+        ctx.lineTo(x + 4, y);
+        ctx.moveTo(x, y - 4);
+        ctx.lineTo(x, y + 4);
+        ctx.stroke();
+      }
+    }
+  }
+  ctx.restore();
 }
 
 /**
@@ -746,7 +790,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     // Hình lớn vẽ sẵn (đạo bào, võ phục) thì dùng hình lớn; áo tài năng khác vẽ bằng dải trận có màu hệ và vũ khí.
     const art = bigArtOf(look.body, look.outfit, () => this.drawDoll());
     if (art) {
-      this.drawBig(ctx, art, v, w, h, t, look);
+      this.drawBig(ctx, art, v, w, h, t);
       return;
     }
     // Pháp luân (phapLuan.ts) theo công pháp mang vào trận đầu tiên và cấp: từ Trúc Cơ; lên cấp thì vòng lớn dần, đột phá
@@ -784,7 +828,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
    * Hình lớn lơ lửng: nhấp nhô chậm, bóng dưới đất nhỏ lại khi bay cao;
    * pháp luân (phapLuan.ts, từ Trúc Cơ) vẽ sau lưng ngang ngực như ở hình ghép.
    */
-  private drawBig(ctx: CanvasRenderingContext2D, art: HTMLImageElement, v: NhanVatView, w: number, h: number, t: number, look: Look): void {
+  private drawBig(ctx: CanvasRenderingContext2D, art: HTMLImageElement, v: NhanVatView, w: number, h: number, t: number): void {
     // Từ 1 lần trở lên phóng theo bậc nửa số nguyên cho điểm ảnh đều; nhỏ hơn thì theo đúng chỗ trống (điện thoại).
     const fit = Math.min((w - 4) / art.naturalWidth, (h - 12) / art.naturalHeight);
     const k = fit >= 1 ? Math.floor(fit * 2) / 2 : fit;
@@ -808,8 +852,12 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       drawPhapLuan(ctx, spec, { clock: t, ...trackLevel(this, v.level, t) }, 0, 0, 17);
       ctx.restore();
     }
+    const he = ELEMENT_STYLE[v.roots[0]]?.color ?? "#f2c230";
+    linhKhi(ctx, v.level, he, w / 2, y0, dw, dh, t, "sau");
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(bigArtTinted(art, look.outfit, `${look.body}/${look.outfit}`, look.tint), x0, y0, dw, dh);
+    // Hình lớn giữ màu vẽ gốc (2026-11-05, người dùng chê áo nhuộm theo hệ); hệ thấy qua linh khí, pháp luân, vòng hệ.
+    ctx.drawImage(art, x0, y0, dw, dh);
+    linhKhi(ctx, v.level, he, w / 2, y0, dw, dh, t, "truoc");
   }
 
   private drawGhost(): void {
@@ -831,7 +879,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     if (art) {
       const dh = h * 1.15;
       const dw = (dh * art.naturalWidth) / art.naturalHeight;
-      ctx.drawImage(bigArtTinted(art, look.outfit, `${look.body}/${look.outfit}`, look.tint), (w - dw) / 2, h * 0.02, dw, dh);
+      ctx.drawImage(art, (w - dw) / 2, h * 0.02, dw, dh);
       return;
     }
     const dang = dangFor(v.talent.id, v.sect.role === "tong_chu");
