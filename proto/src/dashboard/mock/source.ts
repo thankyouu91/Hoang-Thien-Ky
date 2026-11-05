@@ -77,6 +77,16 @@ function gearBagItem(uid: number, g: GearItem): BagItem {
 
 /** Thứ tự hệ trong mã vật phẩm của danh sách icon vẽ (TQ-HE-xxx, CP-HE-xxx; assets/icon_ve/danh_sach.json). */
 const ICON_ELEMENTS: Element[] = ["kim", "moc", "thuy", "hoa", "tho", "loi", "phong", "quang", "am_lanh", "cuc_duong", "cuc_am", "cuc_han"];
+/** Hình công pháp đã vẽ trong assets/icon_ve/cong_phap (chỉ lấy tên file, không nạp ảnh). */
+const CONG_PHAP_ART = new Set(Object.keys(import.meta.glob("../../../../assets/icon_ve/cong_phap/**/*.webp")).map((k) => k.replace(/^.*icon_ve\//, "").replace(/\.webp$/, "")));
+
+/** Hình công pháp: ba hệ là bộ ba theo chủ hệ, hai hệ là cặp theo thứ tự 12 hệ, một hệ là quyển thuần hệ; chưa vẽ thì lùi về quyển thuần hệ. */
+function techniqueArt(main: Element, subs: Element[]): string {
+  const pure = `cong_phap/${main}`;
+  const pair = () => [main, subs[0]].sort((a, b) => ICON_ELEMENTS.indexOf(a) - ICON_ELEMENTS.indexOf(b)).join("_");
+  const want = subs.length >= 2 ? `cong_phap/bo_ba/${main}` : subs.length === 1 ? `cong_phap/ghep/${pair()}` : pure;
+  return CONG_PHAP_ART.has(want) ? want : pure;
+}
 const elementCode = (prefix: string, e: Element) => `${prefix}-HE-${String(ICON_ELEMENTS.indexOf(e) + 1).padStart(3, "0")}`;
 
 /** Phẩm lọc của tàn quyển và công pháp: Phàm, Hoàng là hạ; Huyền là trung; từ Địa trở lên là cao (đề xuất). */
@@ -150,6 +160,7 @@ function techCard(t: Pick<SectTechnique, "name" | "main" | "subs" | "grade"> & {
     subElements: tech.subElements,
     type: tech.type,
     summary: `D ${Math.round(tech.damage / 1000)} · ${tech.targets} mục tiêu · hồi ${cd.toLocaleString("vi-VN")} s · ${tech.manaCost} mana`,
+    art: techniqueArt(tech.element, tech.subElements),
     ...extra,
   };
 }

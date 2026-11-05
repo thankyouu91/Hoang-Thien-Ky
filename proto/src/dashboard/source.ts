@@ -363,6 +363,11 @@ export interface TechniqueCard {
   frozen?: boolean;
   /** Mô tả ngắn từ chỉ số trận: sát thương, số mục tiêu, hồi chiêu. */
   summary: string;
+  /**
+   * Hình vẽ Canva (assets/icon_ve, mở bằng artUrl): bộ ba quyển theo chủ hệ, cặp ghép hai hệ, hay quyển thuần hệ; hình chưa
+   * vẽ thì là quyển thuần hệ của chủ hệ. Loại chiêu có hình riêng ở chieu/<loại>.
+   */
+  art?: string;
 }
 
 export interface ScrollCard {
