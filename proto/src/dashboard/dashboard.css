@@ -741,9 +741,33 @@ button.nv-row:hover { background: var(--c-sunken); }
 .pt-stage { position: relative; display: grid; grid-template-columns: 58px minmax(0, 1fr) 58px; align-items: center; gap: 6px; min-height: 262px; }
 /* Bóng pháp tướng: chính nhân vật phóng to, mực nâu, nhòe, mờ dần xuống chân */
 .pt-ghost { position: absolute; left: -6%; right: -6%; top: -44px; bottom: -10px; width: 112%; height: calc(100% + 54px); pointer-events: none; opacity: 0.17; filter: grayscale(1) sepia(0.6) contrast(0.85) blur(3px); -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent 92%); mask-image: linear-gradient(to bottom, #000 35%, transparent 92%); }
-/* Đạo đồ theo công pháp đang tu và cảnh giới: tranh mực nền trắng, nhân màu vào giấy nên nền biến mất; bóng nhân vật lui bớt */
-.pt-dao-do { position: absolute; left: 50%; top: -34px; height: calc(100% + 44px); width: auto; max-width: none; transform: translateX(-50%); pointer-events: none; user-select: none; mix-blend-mode: multiply; opacity: 0.5; -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); }
+/*
+ * Đạo đồ theo công pháp đang tu và cảnh giới (daoDoFx.ts): tranh mực nền trắng, nhân màu vào giấy nên nền biến mất.
+ * Mỗi bức (.dd) lộ qua mask tròn tâm (50 %, 48 %) bán kính --dd-r (108 % là lộ hết); lúc đột phá nhịp chạy --dd-r, vòng
+ * mực (.dd-ring) theo mép lộ và chấm mực ở tâm (.dd-dot). Lớp ngoài không transform, không opacity để .dd nhân màu thẳng
+ * với giấy bên dưới (một nhóm cô lập thì nền trắng của tranh sẽ hiện ra).
+ */
+@property --dd-r { syntax: "<percentage>"; inherits: false; initial-value: 108%; }
+.dd-fx { position: absolute; pointer-events: none; user-select: none; }
+.dd-fx .dd, .dd-fx .dd-ring { position: absolute; top: 0; left: 50%; height: 100%; aspect-ratio: 2 / 3; transform: translateX(-50%); }
+.dd-fx .dd { mix-blend-mode: multiply; -webkit-mask-image: radial-gradient(circle at 50% 48%, #000 calc(var(--dd-r) - 7%), transparent var(--dd-r)); mask-image: radial-gradient(circle at 50% 48%, #000 calc(var(--dd-r) - 7%), transparent var(--dd-r)); }
+.dd-fx .dd img { display: block; width: 100%; height: 100%; }
+.dd-fx .dd-ring { overflow: visible; fill: none; stroke: #2a2018; stroke-linecap: round; stroke-dasharray: 26 7 7 11; }
+.dd-fx .dd-ring circle { vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; transform: scale(0); opacity: 0; }
+.dd-fx .dd-dot { position: absolute; left: 50%; top: 48%; width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle, #1d140e 0 42%, rgba(29, 20, 14, 0.55) 58%, rgba(29, 20, 14, 0) 72%); transform: translate(-50%, -50%) scale(0); }
+/* Sân Pháp tướng: cao hơn sân một chút, mờ dần ở đáy; bóng nhân vật lui bớt */
+.pt-dao-do { left: 0; right: 0; top: -34px; bottom: -10px; }
+.pt-dao-do .dd { opacity: 0.5; }
+.pt-dao-do .dd img { -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); }
+.pt-dao-do .dd-ring { opacity: 0.6; }
 .pt-stage.has-dao-do .pt-ghost { opacity: 0.08; }
+/* Màn đột phá cả màn (capDo.ts): bức lớn sau tên cảnh giới, tâm trùng tâm tia sáng (45 %) */
+.cap-break .cap-dao-do { inset: 0; --dd-h: min(86vh, 128vw); }
+.cap-break .cap-dao-do .dd, .cap-break .cap-dao-do .dd-ring { top: calc(45% - var(--dd-h) * 0.48); height: var(--dd-h); }
+.cap-break .cap-dao-do .dd { opacity: 0.48; }
+.cap-break .cap-dao-do .dd-dot { top: 45%; width: 44px; height: 44px; }
+/* Quầng giấy sau khối chữ (tâm khối chữ ở giữa màn), hiện theo nhịp lắng để tên cảnh giới và dòng cấp nổi trên nét mực */
+.cap-break .cap-dao-do .dd-halo { position: absolute; left: 50%; top: 50%; width: min(640px, 100vw); height: 300px; transform: translate(-50%, -50%); background: radial-gradient(closest-side, rgba(255, 250, 236, 0.92), rgba(255, 250, 236, 0.7) 55%, rgba(255, 250, 236, 0)); opacity: 0; }
 /* Vòng 12 hệ (SVG) chỉ hiện khi bật */
 .pt-wheel { position: absolute; left: 50%; top: 50%; width: min(100%, 300px); transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: opacity 0.2s; }
 .pt-stage.wheel-on .pt-wheel { opacity: 0.85; }

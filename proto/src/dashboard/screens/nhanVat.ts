@@ -21,6 +21,7 @@ import {
 import { dangFor, dangHeadroom, dangLift, drawDang } from "../../scenes/battle/dangDung.ts";
 import { drawPhapLuan, phapLuanExtent, trackLevel, type PhapLuanSpec } from "../../scenes/battle/phapLuan.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
+import { daoDoHtml, daoDoManDotPha, daoDoReduced, daoDoSan, khiManDotPhaDong } from "../daoDoFx.ts";
 import { elementWheel } from "../elementWheel.ts";
 import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
 import { LuyenKhiPanel, type LkTab } from "./luyenKhiPanel.ts";
@@ -118,6 +119,9 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   private lk: LuyenKhiPanel;
   /** Công cụ xem thử: -1 là ô mở theo tiến độ thật (v.board.progress), số khác là chỉ số trong REALMS. */
   private realm = -1;
+  /** Đạo đồ lần vẽ trước (để biết vừa đột phá) và lượt chuyển bức ở sân: chờ màn đột phá đóng (`san`), rồi chạy. */
+  private ddSeen?: { ma?: string; canh: number };
+  private ddChuyen?: { from?: string; to: string; san: boolean; chay: boolean; el?: HTMLElement };
   /** Lớp cảnh three của Đạo Cơ Bàn, giữ qua các lần vẽ lại. */
   private ltLayer: HTMLElement;
   private ltLive: LiveMount | null = null;
@@ -181,6 +185,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
   }
 
   protected render(v: NhanVatView): void {
+    this.ddTrack(v);
     const tab = (id: NhanVatTab, label: string) => `<button type="button" role="tab" data-act="tab" data-tab="${id}" aria-selected="${this.tab === id}">${label}</button>`;
     this.page.innerHTML = `
       <section class="card nv">
@@ -213,6 +218,46 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     }
     cropIcons(this.page);
     this.drawDoll();
+    this.ddTry();
+  }
+
+  // ---- Đạo đồ lúc đột phá (daoDoFx.ts) ----------------------------------------------------------------------------
+
+  /** Cảnh giới tăng so với lần vẽ trước: chèn đạo đồ mới vào màn đột phá, hẹn chuyển bức ở sân khi màn đóng. */
+  private ddTrack(v: NhanVatView): void {
+    const canh = v.board.progress.canhGioi;
+    const ma = daoDoOf(v);
+    const prev = this.ddSeen;
+    this.ddSeen = { ma, canh };
+    if (!prev || canh <= prev.canh || !ma) return;
+    daoDoManDotPha(ma);
+    if (daoDoReduced() || !prev.ma || prev.ma === ma) return;
+    const ch = { from: prev.ma, to: ma, san: false, chay: false };
+    this.ddChuyen = ch;
+    khiManDotPhaDong(() => {
+      ch.san = true;
+      this.ddTry();
+    });
+  }
+
+  /**
+   * Màn đột phá đã đóng và sân Pháp tướng đang hiện: chạy nhịp sân (đang ở tab khác thì đợi lần vẽ sau). Màn tự đọc lại
+   * giữa chừng (đếm ngược xong…) thì lớp đang diễn được đặt lại vào chỗ lớp mới vẽ, để nhịp không bị cắt.
+   */
+  private ddTry(): void {
+    const ch = this.ddChuyen;
+    if (!ch || !ch.san) return;
+    const fx = this.page.querySelector<HTMLElement>(".pt-dao-do");
+    if (ch.chay) {
+      if (fx && ch.el && fx !== ch.el) fx.replaceWith(ch.el);
+      return;
+    }
+    if (!fx || !fx.getClientRects().length) return;
+    ch.chay = true;
+    ch.el = fx;
+    void daoDoSan(fx).finally(() => {
+      if (this.ddChuyen === ch) this.ddChuyen = undefined;
+    });
   }
 
   // ---- Cột trái: thông tin ---------------------------------------------------------------------------------------
@@ -276,7 +321,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         <button type="button" class="nv-tog" data-act="wheel" aria-pressed="${this.showWheel}">Vòng hệ</button></div>
       <div class="pt-stage${this.showWheel ? " wheel-on" : ""}${daoDo ? " has-dao-do" : ""}">
         <canvas class="pt-ghost" aria-hidden="true"></canvas>
-        ${daoDo ? `<img class="pt-dao-do" src="${artUrl(`dao_do/${daoDo}`)}" alt="" aria-hidden="true">` : ""}
+        ${daoDo ? daoDoHtml("pt-dao-do", daoDo, this.ddChuyen?.from, !!this.ddChuyen && !this.ddChuyen.chay) : ""}
         ${elementWheel(v.roots)}
         <canvas class="doll" aria-label="Hình nhân vật"></canvas>
         <div class="pt-gear left">${LEFT.map((s) => this.gearSlot(v, s)).join("")}</div>
