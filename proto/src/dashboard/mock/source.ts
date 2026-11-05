@@ -598,6 +598,8 @@ export class MockDashboardSource implements DashboardSource {
   async dongPhu(): Promise<DongPhuView> {
     const w = this.w;
     const now = this.now();
+    // Bế quan vừa xong chốt trước khi dựng thẻ Đang chạy (top() cũng chốt, nhưng gọi sau).
+    this.settleRetreats(now);
     const thanhChu = w.region.points.find((p) => p.type === "thanh_chu")!;
     // Hành trình đang đi: số chặng còn lại theo tỉ lệ thời gian của cả chuyến; điểm tới ở vùng khác thì bản đồ bay tới toạ độ.
     const dest = this.selfView(now).dest;
@@ -680,6 +682,7 @@ export class MockDashboardSource implements DashboardSource {
 
   async nhanVat(): Promise<NhanVatView> {
     const w = this.w;
+    this.settleRetreats(this.now());
     const me = this.me;
     const p = w.player;
     const base = baseStats(me.level);
