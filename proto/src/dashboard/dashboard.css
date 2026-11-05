@@ -775,7 +775,9 @@ button.nv-row:hover { background: var(--c-sunken); }
 .pt-slot.empty, .pt-tslot.empty, .pt-pet.empty { border: 1px dashed var(--c-line-2); background: color-mix(in srgb, var(--c-surface) 70%, transparent); }
 .pt-tech { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-2); }
 .pt-tslot { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 3px; min-height: 92px; padding: 8px 4px 6px; border: 1px solid color-mix(in srgb, var(--c, #a89a84) 55%, #a89a84); border-radius: 3px; background: color-mix(in srgb, var(--c, #fffaf0) 13%, #fffaf0); }
-.pt-tslot .type { width: 30px; height: 30px; image-rendering: pixelated; }
+.pt-tslot .type { width: 34px; height: 34px; image-rendering: pixelated; }
+/* Hình loại chiêu vẽ Canva (icon_ve/chieu): bóng đổ nhỏ hơn ở cỡ chip */
+.chip img.ve { width: 18px; height: 18px; filter: drop-shadow(0 0.5px 0.5px rgba(42, 32, 24, 0.3)); }
 .pt-tslot .els { display: flex; align-items: flex-end; gap: 1px; }
 .pt-tslot .els img { width: 15px; height: 15px; image-rendering: pixelated; }
 .pt-tslot .els img.sub { width: 11px; height: 11px; opacity: 0.85; }

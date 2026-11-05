@@ -152,7 +152,7 @@ export function elementChip(e: Element, withName = true): string {
 }
 
 export function skillChip(t: SkillType): string {
-  return `<span class="chip sk"><img src="${assetUrl(`chieu/${t}`)}" alt="" onerror="this.remove()">${esc(SKILL_NAME[t])}</span>`;
+  return `<span class="chip sk"><img class="ve" src="${artUrl(`chieu/${t}`)}" alt="" onerror="this.remove()">${esc(SKILL_NAME[t])}</span>`;
 }
 
 let toastTimer = 0;

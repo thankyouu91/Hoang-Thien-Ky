@@ -473,7 +473,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     if (!t) return `<button type="button" class="pt-tslot empty" data-act="tech" data-i="${i}" data-drop="tech:${i}"><span class="lbl">Ô ${i + 1}</span></button>`;
     const st = ELEMENT_STYLE[t.element];
     return `<button type="button" class="pt-tslot" data-act="tech" data-i="${i}" data-drop="tech:${i}" data-drag="tech:${i}" style="--c:${st.color}" aria-label="${esc(t.name)}">
-      <img class="type" src="${assetUrl(`chieu/${t.type}`)}" alt="">
+      <img class="type ve" src="${artUrl(`chieu/${t.type}`)}" alt="">
       <span class="els"><img src="${assetUrl(`he/${t.element}`)}" alt="${esc(st.name)}" title="Hệ chủ ${esc(st.name)}">${t.subElements.map((e) => `<img class="sub" src="${assetUrl(`he/${e}`)}" alt="" title="Hệ phụ ${esc(ELEMENT_STYLE[e].name)}">`).join("")}</span>
       <span class="name">${esc(t.name)}</span>
     </button>`;
