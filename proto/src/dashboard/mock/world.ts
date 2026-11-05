@@ -88,7 +88,7 @@ export interface World {
   jobs: Job[];
   buildings: Building[];
   travel: { from: number; to: number; startsAt: number; endsAt: number };
-  /** arena: nền sân PixelLab san_dau/<tên> của màn Trận; bỏ trống là võ trường. */
+  /** arena: bản đồ chiến trường "<vùng>/<bối cảnh>" (chien_truong/) hay sân san_dau/<tên> của màn Trận; bỏ trống là võ trường. */
   reports: { id: number; seed: number; title: string; at: number; arena?: string }[];
   mail: { id: number; from: string; title: string; body: string; unread: boolean }[];
   alliance: { joined: boolean; name: string; leader: string };
@@ -487,9 +487,9 @@ export function createWorld(region: RegionMap, now: number): World {
     // Đang đi từ thành chủ về sơn môn, còn 14 phút.
     travel: { from: thanhChu, to: sonMon, startsAt: now - 9 * MIN, endsAt: now + 14 * MIN },
     reports: [
-      { id: 1, seed: 11, title: "Thủ mỏ linh thạch trước Huyết Sát Môn", at: now - 2 * H, arena: "mo_linh_thach" },
-      { id: 2, seed: 2, title: "Hang dị thú cấp 58", at: now - 5 * H, arena: "cao_nguyen" },
-      { id: 3, seed: 3, title: "Tranh cửa bí cảnh 12:00", at: now - 9 * H },
+      { id: 1, seed: 11, title: "Thủ mỏ linh thạch trước Huyết Sát Môn", at: now - 2 * H, arena: `${REGION}/mo_linh_thach` },
+      { id: 2, seed: 2, title: "Hang dị thú cấp 58", at: now - 5 * H, arena: `${REGION}/hang_di_thu` },
+      { id: 3, seed: 3, title: "Tranh cửa bí cảnh 12:00", at: now - 9 * H, arena: `${REGION}/cua_bi_canh` },
     ],
     mail: [
       { id: 1, from: "Hệ thống", title: "Thưởng bí cảnh hôm qua", body: "Tông môn nhận 2 tàn quyển phẩm Phàm vào Tàng Kinh Các.", unread: true },

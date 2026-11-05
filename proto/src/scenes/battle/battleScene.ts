@@ -28,6 +28,22 @@ const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
 const HEAVY_HIT = 0.05; // đòn từ 5% máu tối đa trở lên mới diễn hoạt ảnh trúng đòn
 const BADGE = 12; // cạnh dấu hệ đặt trước thanh máu, đơn vị thế giới
 const DEFAULT_ARENA = "vo_truong"; // nền sân khi replay không nói trận đánh ở đâu
+
+/**
+ * Bản đồ chiến trường theo vùng (assets/pixellab/chien_truong/<vùng>/<bối cảnh>.png, replay.arena = "<vùng>/<bối cảnh>"):
+ * ảnh lớn nên không nằm trong bộ nạp Sprites, nạp khi trận cần. undefined khi chưa nạp xong hoặc chưa có hình.
+ */
+const battlefields = new Map<string, HTMLImageElement>();
+function battlefield(arena: string | undefined): HTMLImageElement | undefined {
+  if (!arena?.includes("/")) return undefined;
+  let img = battlefields.get(arena);
+  if (!img) {
+    img = new Image();
+    img.src = `${import.meta.env.BASE_URL}pixellab/chien_truong/${arena}.png`;
+    battlefields.set(arena, img);
+  }
+  return img.complete && img.naturalWidth > 0 ? img : undefined;
+}
 const THREE_ARENAS = new Set<string>(["vo_truong", "mo_linh_thach", "cao_nguyen"] satisfies ArenaKind[]); // sân có bản Three.js
 
 /** Số tick từ mốc gần nhất không sau t trong `marks` (xếp tăng dần) tới t; undefined nếu chưa có mốc nào. */
@@ -339,6 +355,38 @@ export class BattleScene implements Scene {
     return this.backdrop.layer;
   }
 
+  /** Sân san_dau/<tên> khi không có bản đồ chiến trường: "<vùng>/<bối cảnh>" lùi về sân cùng bối cảnh nếu có, không thì võ trường. */
+  private plainArena(): string {
+    const arena = this.index?.replay.arena ?? DEFAULT_ARENA;
+    if (!arena.includes("/")) return arena;
+    const ctx = arena.split("/")[1];
+    return this.sprites.get("san_dau/" + ctx) ? ctx : DEFAULT_ARENA;
+  }
+
+  /**
+   * Bản đồ chiến trường theo vùng: dải sân giữa ảnh trùng sân, cảnh của vùng phủ ra ngoài sân (ảnh cao gấp đôi bề ngang sân,
+   * rộng theo tỉ lệ ảnh) nên thu nhỏ hay màn rộng thì thấy cả khung cảnh. Ngoài sân phủ tối hơn để người nổi trên nền.
+   */
+  private drawBattlefield(ctx: CanvasRenderingContext2D, img: HTMLImageElement, r: Rect): void {
+    const len = this.vertical ? r.h : r.w;
+    const cross = this.vertical ? r.w : r.h;
+    const h = cross * 2;
+    const w = (h * img.naturalWidth) / img.naturalHeight;
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+    ctx.translate(r.x + r.w / 2, r.y + r.h / 2);
+    if (this.vertical) ctx.rotate(-Math.PI / 2);
+    ctx.drawImage(img, -w / 2, -h / 2, w, h);
+    ctx.fillStyle = "rgba(20, 17, 15, 0.45)";
+    ctx.fillRect(-w / 2, -h / 2, w, (h - cross) / 2);
+    ctx.fillRect(-w / 2, cross / 2, w, (h - cross) / 2);
+    ctx.fillRect(-w / 2, -cross / 2, (w - len) / 2, cross);
+    ctx.fillRect(len / 2, -cross / 2, (w - len) / 2, cross);
+    ctx.fillStyle = "rgba(20, 17, 15, 0.15)";
+    ctx.fillRect(-len / 2, -cross / 2, len, cross);
+    ctx.restore();
+  }
+
   // ---- vẽ ----
 
   private drawField(ctx: CanvasRenderingContext2D, fieldLength: number): void {
@@ -348,8 +396,10 @@ export class BattleScene implements Scene {
     // PixelLab (san_dau/<tên>, vẽ ngang theo chiều trục sân, màn đứng xoay 90 độ); chưa có hình nào thì nền tối.
     const backdrop = this.arenaBackdrop();
     const drawn = !!backdrop && backdrop.draw(ctx, performance.now() / 1000, !!this.vertical);
-    const bg = drawn ? undefined : this.sprites.get("san_dau/" + (this.index?.replay.arena ?? DEFAULT_ARENA));
-    if (bg) {
+    const map = drawn ? undefined : battlefield(this.index?.replay.arena);
+    const bg = drawn || map ? undefined : this.sprites.get("san_dau/" + this.plainArena());
+    if (map) this.drawBattlefield(ctx, map, r);
+    else if (bg) {
       ctx.imageSmoothingEnabled = false;
       if (this.vertical) {
         ctx.save();
@@ -368,7 +418,7 @@ export class BattleScene implements Scene {
       ctx.fillRect(r.x, r.y, r.w, r.h);
     }
     // Nền đã có ô hay vân để ước khoảng cách: chỉ kẻ ô khi chưa có nền, vạch giữa sân thì luôn giữ (mờ hơn khi có nền).
-    const plain = !drawn && !bg;
+    const plain = !drawn && !bg && !map;
     ctx.globalAlpha = plain ? 1 : 0.5;
     ctx.beginPath();
     for (let i = 0; i <= (plain ? cells : -1); i++) {
