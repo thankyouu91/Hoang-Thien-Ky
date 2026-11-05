@@ -28,7 +28,7 @@ import { icon, type IconName } from "../icons.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { BagItem, GearItem, GearSlot, ItemGrade, ItemKind, NhanVatView, Rarity, StatLine, TechniqueCard } from "../source.ts";
 import { REALM_TERM, term } from "../terms.ts";
-import { artUrl, assetUrl, cd, closeSheet, cropIcons, elementChip, esc, fmt, openSheet, pctText, ROLE_NAMES, skillChip, toast } from "../ui.ts";
+import { artUrl, assetUrl, cd, closeSheet, cropIcons, elementChip, esc, fmt, openSheet, pctText, ROLE_NAMES, skillChip, techCover, toast } from "../ui.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 
 export type NhanVatTab = "thong-tin" | "phap-tuong" | "dao-co" | "luyen-khi" | "tui";
@@ -473,8 +473,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     if (!t) return `<button type="button" class="pt-tslot empty" data-act="tech" data-i="${i}" data-drop="tech:${i}"><span class="lbl">Ô ${i + 1}</span></button>`;
     const st = ELEMENT_STYLE[t.element];
     return `<button type="button" class="pt-tslot" data-act="tech" data-i="${i}" data-drop="tech:${i}" data-drag="tech:${i}" style="--c:${st.color}" aria-label="${esc(t.name)}">
-      <img class="type ve" src="${artUrl(`chieu/${t.type}`)}" alt="">
-      <span class="els"><img src="${assetUrl(`he/${t.element}`)}" alt="${esc(st.name)}" title="Hệ chủ ${esc(st.name)}">${t.subElements.map((e) => `<img class="sub" src="${assetUrl(`he/${e}`)}" alt="" title="Hệ phụ ${esc(ELEMENT_STYLE[e].name)}">`).join("")}</span>
+      <img class="type ve" src="${artUrl(`chieu/${t.type}`)}" alt="" title="${esc(st.name)}">
+      ${techCover(t, "l")}
       <span class="name">${esc(t.name)}</span>
     </button>`;
   }
@@ -774,7 +774,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       t ? t.name : `Ô công pháp ${i + 1}`,
       `${t ? `<p>${elementChip(t.element)} ${t.subElements.map((e) => elementChip(e)).join(" ")} ${skillChip(t.type)}</p><p class="muted">${esc(t.gradeName)}${t.layer ? ` · tầng ${t.layer}` : ""} · ${esc(t.summary)}</p>` : `<p class="muted">Ô trống.</p>`}
        ${free.length ? `<h3>Đã học</h3><ul class="list">${free
-         .map((x) => `<li class="row">${elementChip(x.element, false)}<span class="grow"><b>${esc(x.name)}</b><span class="muted block">${esc(x.gradeName)} · ${esc(x.summary)}</span></span><button type="button" class="btn small" data-a="carry" data-id="${x.id}">Mang</button></li>`)
+         .map((x) => `<li class="row">${techCover(x, "s")}<span class="grow"><b>${esc(x.name)}</b><span class="muted block">${esc(x.gradeName)} · ${esc(x.summary)}</span></span><button type="button" class="btn small" data-a="carry" data-id="${x.id}">Mang</button></li>`)
          .join("")}</ul>` : ""}
        ${t ? `<div class="actions"><button type="button" data-a="off">Bỏ ra</button></div>` : ""}`,
     );

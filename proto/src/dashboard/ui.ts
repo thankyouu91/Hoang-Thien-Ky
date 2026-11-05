@@ -151,6 +151,18 @@ export function elementChip(e: Element, withName = true): string {
   return `<span class="chip el" style="--c:${st.color};--ink:${st.ink}"><img src="${assetUrl(`he/${e}`)}" alt="" onerror="this.remove()">${withName ? esc(st.name) : ""}</span>`;
 }
 
+/**
+ * Bìa công pháp vẽ Canva (TechniqueCard.art: bộ ba quyển, cặp ghép hai hệ, hay quyển thuần hệ; không có thì quyển thuần
+ * hệ chủ). Hệ phụ là huy hiệu tròn viền màu hệ ở góc dưới phải, vì hình cặp ghép và bộ ba chưa vẽ đủ (phiên icon gợi ý).
+ * Tên hệ ghi bằng chữ ở chỗ khác trên thẻ nên không chỉ dựa vào màu.
+ */
+export function techCover(t: { art?: string; element: Element; subElements?: Element[] }, size: "s" | "m" | "l" = "m"): string {
+  const subs = (t.subElements ?? [])
+    .map((e) => `<i style="--c:${ELEMENT_STYLE[e].color}" title="Hệ phụ ${esc(ELEMENT_STYLE[e].name)}"><img src="${assetUrl(`he/${e}`)}" alt="" onerror="this.remove()"></i>`)
+    .join("");
+  return `<span class="tech-art ${size}"><img class="ve" src="${artUrl(t.art ?? `cong_phap/${t.element}`)}" alt="" onerror="this.remove()">${subs ? `<span class="tech-sub">${subs}</span>` : ""}</span>`;
+}
+
 export function skillChip(t: SkillType): string {
   return `<span class="chip sk"><img class="ve" src="${artUrl(`chieu/${t}`)}" alt="" onerror="this.remove()">${esc(SKILL_NAME[t])}</span>`;
 }

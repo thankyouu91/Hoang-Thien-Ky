@@ -2,34 +2,28 @@
 // Tàng Kinh Các để ghép, từ trưởng lão trở lên. Mọi nút đi qua lệnh của @ktlp/rules (mang_vao_tran, hoc_cong_phap,
 // nop_tan_quyen, ghep_cong_phap, dat_bo_truyen_thu); bản xem trước khi ghép dùng chính hàm của rules.
 import { GRADE_NAMES, scrollKind, techniqueName, techniqueOf, VARIANT_NAMES } from "@ktlp/rules";
-import { TICKS_PER_SECOND, type Element } from "@ktlp/sim";
+import { TICKS_PER_SECOND } from "@ktlp/sim";
 import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { CongPhapView, ScrollCard, TechniqueCard } from "../source.ts";
 import { term } from "../terms.ts";
-import { assetUrl, closeSheet, esc, fmt, openSheet } from "../ui.ts";
+import { closeSheet, esc, fmt, openSheet, techCover } from "../ui.ts";
 
 export type CongPhapSection = "mang" | "truyen-thu" | "tui" | "tang-kinh";
 
-/** Icon hệ chủ (to) và hệ phụ (nhỏ); tên hệ ghi bằng chữ ở dòng dưới, nên không chỉ dựa vào màu (GDD mục 15). */
-function elementIcons(main: Element, subs: Element[] = []): string {
-  const img = (e: Element, cls = "") => `<img${cls} src="${assetUrl(`he/${e}`)}" alt="" title="${esc(ELEMENT_STYLE[e].name)}" onerror="this.remove()">`;
-  return `<span class="tech-els">${img(main)}${subs.map((e) => img(e, ` class="sub"`)).join("")}</span>`;
-}
-
-/** Một công pháp gọn ba dòng: tên · hệ, phẩm, loại chiêu, tầng · số liệu. */
+/** Một công pháp gọn ba dòng, bìa vẽ bên trái: tên · hệ, phẩm, loại chiêu, tầng · số liệu. */
 function techHtml(t: TechniqueCard): string {
   const els = [t.element, ...t.subElements].map((e) => ELEMENT_STYLE[e].name).join(" + ");
-  return `<span class="tech">
-    <span class="tech-top">${elementIcons(t.element, t.subElements)}<b>${esc(t.name)}</b>${t.layer ? `<span class="layer${t.frozen ? " frozen" : ""}">tầng ${t.layer}/10${t.frozen ? " · dừng" : ""}</span>` : ""}</span>
+  return `<span class="tech has-art">${techCover(t)}
+    <span class="tech-top"><b>${esc(t.name)}</b>${t.layer ? `<span class="layer${t.frozen ? " frozen" : ""}">tầng ${t.layer}/10${t.frozen ? " · dừng" : ""}</span>` : ""}</span>
     <span class="tech-meta">${esc(els)} · ${esc(t.gradeName)} · ${esc(SKILL_NAME[t.type])}</span>
     <span class="tech-sum">${esc(t.summary)}</span>
   </span>`;
 }
 
 function scrollHtml(s: ScrollCard): string {
-  return `<span class="tech">
-    <span class="tech-top">${elementIcons(s.element)}<b>${esc(s.name)}</b></span>
+  return `<span class="tech has-art">${techCover({ art: `tan_quyen/${s.element}`, element: s.element })}
+    <span class="tech-top"><b>${esc(s.name)}</b></span>
     <span class="tech-meta">${esc(ELEMENT_STYLE[s.element].name)} · ${esc(s.gradeName)} · ${esc(SKILL_NAME[s.type])} · ${VARIANT_NAMES[scrollKind(s.kind).variant]}</span>
   </span>`;
 }
