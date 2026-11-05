@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 867 món, đã vẽ 307, cần vẽ lại 0.
+Tổng 867 món, đã vẽ 331, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -90,16 +90,16 @@ Tổng 867 món, đã vẽ 307, cần vẽ lại 0.
 | TB-KI-058 | Kiếm Huyết Long | Đỏ | kiem | trang_bi/kiem/58.webp | ✓ |
 | TB-KI-059 | Đao Phần Thiên | Đỏ | dao | trang_bi/kiem/59.webp | ✓ |
 | TB-KI-060 | Phiến Hỗn Độn | Đỏ | phien | trang_bi/kiem/60.webp | ✓ |
-| TB-KI-061 | Thiên Vấn Kiếm | Đỏ | kiem | trang_bi/kiem/61.webp |  |
-| TB-KI-062 | Đoạn Nhạc Đao | Đỏ | dao | trang_bi/kiem/62.webp |  |
-| TB-KI-063 | Lạc Tinh Cung | Đỏ | cung | trang_bi/kiem/63.webp |  |
-| TB-KI-064 | Phong Lôi Phiến | Đỏ | phien | trang_bi/kiem/64.webp |  |
-| TB-KI-065 | Bất Động Côn | Đỏ | con | trang_bi/kiem/65.webp |  |
-| TB-KI-066 | Tạo Hóa Bút | Đỏ | but | trang_bi/kiem/66.webp |  |
-| TB-KI-067 | Tinh La Kỳ | Đỏ | ky | trang_bi/kiem/67.webp |  |
-| TB-KI-068 | Vọng Nguyệt Cầm | Đỏ | cam | trang_bi/kiem/68.webp |  |
-| TB-KI-069 | Ngọc Lâu Tiêu | Đỏ | tieu | trang_bi/kiem/69.webp |  |
-| TB-KI-070 | Phá Thiên Thương | Đỏ | thuong | trang_bi/kiem/70.webp |  |
+| TB-KI-061 | Thiên Vấn Kiếm | Đỏ | kiem | trang_bi/kiem/61.webp | ✓ |
+| TB-KI-062 | Đoạn Nhạc Đao | Đỏ | dao | trang_bi/kiem/62.webp | ✓ |
+| TB-KI-063 | Lạc Tinh Cung | Đỏ | cung | trang_bi/kiem/63.webp | ✓ |
+| TB-KI-064 | Phong Lôi Phiến | Đỏ | phien | trang_bi/kiem/64.webp | ✓ |
+| TB-KI-065 | Bất Động Côn | Đỏ | con | trang_bi/kiem/65.webp | ✓ |
+| TB-KI-066 | Tạo Hóa Bút | Đỏ | but | trang_bi/kiem/66.webp | ✓ |
+| TB-KI-067 | Tinh La Kỳ | Đỏ | ky | trang_bi/kiem/67.webp | ✓ |
+| TB-KI-068 | Vọng Nguyệt Cầm | Đỏ | cam | trang_bi/kiem/68.webp | ✓ |
+| TB-KI-069 | Ngọc Lâu Tiêu | Đỏ | tieu | trang_bi/kiem/69.webp | ✓ |
+| TB-KI-070 | Phá Thiên Thương | Đỏ | thuong | trang_bi/kiem/70.webp | ✓ |
 
 ## Trang bị · Mũ (60)
 
@@ -846,9 +846,9 @@ Tổng 867 món, đã vẽ 307, cần vẽ lại 0.
 | CP-GH-064 | Công pháp ghép Cực dương–Cực âm | cong_phap/ghep/cuc_duong_cuc_am.webp |  |
 | CP-GH-065 | Công pháp ghép Cực dương–Cực hàn | cong_phap/ghep/cuc_duong_cuc_han.webp |  |
 | CP-GH-066 | Công pháp ghép Cực âm–Cực hàn | cong_phap/ghep/cuc_am_cuc_han.webp |  |
-| CP-BO-001 | Bộ ba quyển chủ hệ Kim | cong_phap/bo_ba/kim.webp |  |
-| CP-BO-002 | Bộ ba quyển chủ hệ Mộc | cong_phap/bo_ba/moc.webp |  |
-| CP-BO-003 | Bộ ba quyển chủ hệ Thủy | cong_phap/bo_ba/thuy.webp |  |
+| CP-BO-001 | Bộ ba quyển chủ hệ Kim | cong_phap/bo_ba/kim.webp | ✓ |
+| CP-BO-002 | Bộ ba quyển chủ hệ Mộc | cong_phap/bo_ba/moc.webp | ✓ |
+| CP-BO-003 | Bộ ba quyển chủ hệ Thủy | cong_phap/bo_ba/thuy.webp | ✓ |
 | CP-BO-004 | Bộ ba quyển chủ hệ Hỏa | cong_phap/bo_ba/hoa.webp |  |
 | CP-BO-005 | Bộ ba quyển chủ hệ Thổ | cong_phap/bo_ba/tho.webp |  |
 | CP-BO-006 | Bộ ba quyển chủ hệ Lôi | cong_phap/bo_ba/loi.webp |  |
@@ -863,14 +863,14 @@ Tổng 867 món, đã vẽ 307, cần vẽ lại 0.
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
-| VK-TN-001 | Quyền giáp (Tu thể) | vu_khi_tai_nang/quyen_giap.webp |  |
-| VK-TN-002 | Pháp trượng (Tu pháp) | vu_khi_tai_nang/phap_truong.webp |  |
-| VK-TN-003 | Trận bàn (Tu trận) | vu_khi_tai_nang/tran_ban.webp |  |
-| VK-TN-004 | Hồ lô (Tu đan) | vu_khi_tai_nang/ho_lo.webp |  |
-| VK-TN-005 | Song chủy thủ (Sát thủ) | vu_khi_tai_nang/song_chuy_thu.webp |  |
-| VK-TN-006 | Búa rèn (Tu rèn) | vu_khi_tai_nang/bua_ren.webp |  |
-| VK-TN-007 | Liềm hái thuốc (Tu dược) | vu_khi_tai_nang/liem_hai_thuoc.webp |  |
-| VK-TN-008 | Bàn tính (Tu kim tiền) | vu_khi_tai_nang/ban_tinh.webp |  |
+| VK-TN-001 | Quyền giáp (Tu thể) | vu_khi_tai_nang/quyen_giap.webp | ✓ |
+| VK-TN-002 | Pháp trượng (Tu pháp) | vu_khi_tai_nang/phap_truong.webp | ✓ |
+| VK-TN-003 | Trận bàn (Tu trận) | vu_khi_tai_nang/tran_ban.webp | ✓ |
+| VK-TN-004 | Hồ lô (Tu đan) | vu_khi_tai_nang/ho_lo.webp | ✓ |
+| VK-TN-005 | Song chủy thủ (Sát thủ) | vu_khi_tai_nang/song_chuy_thu.webp | ✓ |
+| VK-TN-006 | Búa rèn (Tu rèn) | vu_khi_tai_nang/bua_ren.webp | ✓ |
+| VK-TN-007 | Liềm hái thuốc (Tu dược) | vu_khi_tai_nang/liem_hai_thuoc.webp | ✓ |
+| VK-TN-008 | Bàn tính (Tu kim tiền) | vu_khi_tai_nang/ban_tinh.webp | ✓ |
 
 ## Loại chiêu (10)
 
@@ -1061,9 +1061,9 @@ Tổng 867 món, đã vẽ 307, cần vẽ lại 0.
 
 | Mã | Tên | Độ hiếm | File | Hình |
 |---|---|---|---|---|
-| PK-CR-001 | Thiết Chùy | Lục | phap_khi/chuy_ren/01.webp |  |
-| PK-CR-002 | Huyền Thiết Chùy | Lam | phap_khi/chuy_ren/02.webp |  |
-| PK-CR-003 | Bách Luyện Chùy | Tím | phap_khi/chuy_ren/03.webp |  |
+| PK-CR-001 | Thiết Chùy | Lục | phap_khi/chuy_ren/01.webp | ✓ |
+| PK-CR-002 | Huyền Thiết Chùy | Lam | phap_khi/chuy_ren/02.webp | ✓ |
+| PK-CR-003 | Bách Luyện Chùy | Tím | phap_khi/chuy_ren/03.webp | ✓ |
 
 ## Pháp khí · Liềm (3)
 
