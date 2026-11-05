@@ -4,7 +4,7 @@
 // Tranh vẽ Canva thu nhỏ còn 320 px (hiện ~160 px, đủ nét ở màn dpr 2), nén có mất chất lượng 80.
 // Chạy lại khi đổi danh sách: npm.cmd run hinh (dev và build tự chạy). Ảnh đã xuất mà nguồn không đổi thì bỏ qua.
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
@@ -13,6 +13,7 @@ const WEB = fileURLToPath(new URL("..", import.meta.url));
 const ASSETS = join(WEB, "..", "assets");
 const OUT = join(WEB, "public", "hinh");
 const PL = join(ASSETS, "pixellab");
+const BRAND = join(ASSETS, "brand");
 const IV = join(ASSETS, "icon_ve");
 
 const HE = {
@@ -141,7 +142,7 @@ function bam(buf, kieu) {
 async function xuat(a, camCu) {
   const dich = join(OUT, a.out);
   const goc = readFileSync(a.src);
-  const h = bam(goc, a.kieu + "|2");
+  const h = bam(goc, a.kieu + "|2|" + (a.rong ?? ""));
   const cu = camCu[a.out];
   if (cu && cu.bam === h && existsSync(dich)) return { ...cu };
   mkdirSync(dirname(dich), { recursive: true });
@@ -149,6 +150,7 @@ async function xuat(a, camCu) {
   if (a.kieu === "pix") img = img.webp({ lossless: true, effort: 6 });
   else if (a.kieu === "ve") img = img.resize({ width: 320, withoutEnlargement: true }).webp({ quality: 80, effort: 6 });
   else if (a.kieu === "chup") img = img.resize({ width: 600, withoutEnlargement: true }).webp({ quality: 80, effort: 6 });
+  else if (a.kieu === "brand") img = img.resize({ width: a.rong, withoutEnlargement: true }).webp({ quality: 88, alphaQuality: 92, effort: 6 });
   else img = img.resize({ width: 360, withoutEnlargement: true }).webp({ quality: 78, effort: 6 });
   const info = await img.toFile(dich);
   return { bam: h, w: info.width, h: info.height, kb: Math.round(info.size / 102.4) / 10 };
@@ -185,6 +187,9 @@ for (const g of nhom()) {
 const RIENG = [
   { src: join(PL, "nhan_vat", "nu_manh", "dao_bao", "dung_lo_lung.png"), out: "rieng/tu_si_lo_lung.webp", kieu: "pix", ten: "Tu sĩ lơ lửng" },
   { src: join(IV, "cong_phap", "ghep", "loi_quang.webp"), out: "rieng/cong_phap_loi_quang.webp", kieu: "ve", ten: "Lôi Quang Liên Hoàn Quyết" },
+  // Dấu ấn Thiên Hoang Ký (assets/brand, tab icon Canva) thay ô đỏ chữ Hán: logo đầu trang, ấn lớn đầu trang chủ, trang cổng.
+  { src: join(BRAND, "dau_an_256.png"), out: "brand/dau_an_96.webp", kieu: "brand", rong: 96, ten: "Dấu ấn nhỏ" },
+  { src: join(BRAND, "dau_an.png"), out: "brand/dau_an_256.webp", kieu: "brand", rong: 256, ten: "Dấu ấn" },
 ];
 const rieng = [];
 for (const a of RIENG) {
@@ -194,6 +199,10 @@ for (const a of RIENG) {
   rieng.push({ file: a.out, ten: a.ten, phu: "", kieu: a.kieu, w: r.w, h: r.h, bam: r.bam, kb: r.kb });
 }
 ketQua.push({ id: "rieng", ten: "Riêng", mo_ta: "Không hiện trong thư viện.", nguon: "PixelLab", anh: rieng });
+
+// Favicon vẽ sẵn ở assets/brand (16 và 32 px): chép nguyên.
+mkdirSync(join(OUT, "brand"), { recursive: true });
+for (const f of ["favicon.ico", "favicon-32.png", "favicon-16.png"]) copyFileSync(join(BRAND, f), join(OUT, "brand", f));
 
 writeFileSync(camPath, JSON.stringify({ ghi_chu: "Sinh bởi scripts/hinh.mjs, đừng sửa tay.", nhom: ketQua }, null, 1) + "\n");
 console.log(`hinh: ${so} ảnh, ${(tong / 1024).toFixed(0)} KB trong public/hinh`);

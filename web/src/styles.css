@@ -131,25 +131,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 }
 .hieu { display: inline-flex; align-items: center; gap: 10px; margin-right: auto; color: var(--c-ink); text-decoration: none; }
 .hieu-ten { font: 700 21px/1 var(--font-display); letter-spacing: 0.01em; }
-/* Ấn triện 天荒記 nhỏ: ba chữ xếp như dấu son vuông. */
-.an-nho {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  width: 30px;
-  height: 30px;
-  padding: 2px;
-  border-radius: 3px;
-  background: var(--c-accent);
-  color: var(--c-on-accent);
-  font: 600 10px/1 var(--font-han);
-  box-shadow: inset 0 0 0 1px rgba(255, 248, 239, 0.6);
-  transform: rotate(-3deg);
-}
-.an-nho span { display: grid; place-items: center; }
-.an-nho span:nth-child(1) { grid-area: 1 / 2; }
-.an-nho span:nth-child(2) { grid-area: 2 / 2; }
-.an-nho span:nth-child(3) { grid-area: 1 / 1 / 3 / 2; font-size: 13px; }
+/* Dấu ấn Thiên Hoang Ký (assets/brand): dấu son tròn đặt thẳng trên nền kem, không lót nền, không khung. */
+.an-nho { display: block; width: 36px; height: 36px; }
 
 .mo-muc {
   display: inline-grid;
@@ -298,32 +281,20 @@ html:not(.co-js) .mo-muc { display: none; }
   box-shadow: inset 0 0 0 1px var(--c-frame-soft);
   background: rgba(255, 250, 240, 0.7);
 }
-.an-lon {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 10px 8px;
-  border-radius: 4px;
-  background: var(--c-accent);
-  color: var(--c-on-accent);
-  font: 600 26px/1.05 var(--font-han);
-  box-shadow: inset 0 0 0 2px var(--c-accent), inset 0 0 0 3.5px rgba(255, 248, 239, 0.6), 0 6px 18px rgba(138, 31, 22, 0.25);
-  transform: rotate(-2deg);
-}
+.an-lon { display: block; width: 128px; height: 128px; margin: 0 auto; transform: rotate(-4deg); }
 .dau-tranh h1 { margin: 16px 0 6px; font-size: clamp(42px, 11.4vw, 104px); line-height: 1; letter-spacing: 0.01em; white-space: nowrap; }
 .cau-dau { margin: 0 0 18px; color: var(--c-accent-ink); font: italic 700 clamp(20px, 5vw, 27px)/1.3 var(--font-display); }
 .gioi-thieu { max-width: 54ch; margin: 0 auto 26px; color: var(--c-ink-2); font-size: 16.5px; }
 .hang-nut { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 20px; }
-.ghi-nho { margin: 14px 0 0; color: var(--c-ink-3); font-size: 13.5px; }
+.ghi-nho { margin: 14px 0 0; color: var(--c-ink-2); font-size: 13.5px; text-shadow: 0 0 4px var(--c-bg), 0 0 10px var(--c-bg), 0 0 18px var(--c-bg); }
 /* Điện thoại: chữ dồn lên trên, nửa dưới để cảnh núi; chữ giới thiệu đặt trên lớp giấy mờ cho dễ đọc. */
 @media (max-width: 819px) {
   .dau-tranh { align-items: start; padding-top: 28px; }
-  .an-lon { font-size: 22px; padding: 8px 6px; }
+  .an-lon { width: 104px; height: 104px; }
   .gioi-thieu { padding: 6px 10px; background: rgba(246, 239, 223, 0.72); box-shadow: 0 0 24px 16px rgba(246, 239, 223, 0.72); }
 }
 @media (min-width: 820px) {
-  .an-lon { font-size: 30px; }
+  .an-lon { width: 144px; height: 144px; }
   .gioi-thieu { font-size: 18px; }
 }
 

@@ -33,6 +33,7 @@ Không có: nạp tiền, tải app, thu email hay số điện thoại. Không 
 - **Hình:** `scripts/hinh.mjs` chọn hình trong `assets/pixellab`, `assets/icon_ve` và `web/anh-chup/`, xuất WebP vào `public/hinh/` (không commit) và ghi `src/hinh.json` (cỡ, chú thích, mã băm). Hình pixel giữ cỡ gốc, nén không mất, phóng bằng `image-rendering: pixelated`; tranh vẽ thu còn 320 px. Mọi `<img>` có `width`/`height` và `loading="lazy"`. Hiện 142 hình, khoảng 2 MB tổng, trang nào cũng chỉ tải hình đang thấy.
 - **Ảnh chụp prototype:** `node scripts/chup.mjs` (cần `npm.cmd run dev:proto` ở gốc repo, cổng 5173, và Chrome hoặc Edge) chụp 6 màn ở khung 390 × 844 vào `web/anh-chup/*.webp` (có commit).
 - **Cảnh đầu trang chủ:** `mountScene(..., "son_thuy", { tone: "giay", linhKhi: true })` của `proto/src/three/` (phiên Three.js giữ, web không sửa thư mục đó). Chunk three khoảng 176 kB gzip, chỉ nạp ở trang chủ khi máy có WebGL2. Không có WebGL (thử bằng `?nowebgl`) thì giữ tranh SVG tĩnh trong HTML. Ra khỏi màn hình thì canvas ẩn để renderer ngừng vẽ.
+- Dấu ấn: `assets/brand` (dấu son tròn, tab icon Canva, thay ô đỏ chữ Hán người dùng chê), `scripts/hinh.mjs` xuất `hinh/brand/dau_an_96.webp` (logo đầu trang), `dau_an_256.webp` (đầu trang chủ, trang cổng) và chép favicon.
 - Chữ: Lora và Cormorant Garamond từ `@fontsource` (đủ dấu tiếng Việt, trình duyệt chỉ tải phần chữ cần). Token màu chép từ `proto/src/dashboard/tokens.css` (nền kem, khung đỏ mảnh, đỏ son ấn triện).
 
 ```
