@@ -10,9 +10,11 @@
 //   Mã link mời không ghi vào repo (repo public): chỉ truyền qua biến môi trường, xem chay-mang.ts.
 import { defineConfig, devices } from "@playwright/test";
 
-const URL_MANG = process.env.E2E_URL?.replace(/\/$/, "");
+const URL_NGOAI = process.env.E2E_URL?.replace(/\/$/, "");
+// E2E_URL trỏ vào máy này (ví dụ máy chủ xem trước đang chạy sẵn) thì không cần link mời và không tự build.
+const URL_MANG = URL_NGOAI && !/^https?:\/\/(127\.0\.0\.1|localhost)(:|\/|$)/.test(URL_NGOAI) ? URL_NGOAI : undefined;
 const CONG = 4183;
-const BASE = URL_MANG ?? `http://127.0.0.1:${CONG}`;
+const BASE = URL_NGOAI ?? `http://127.0.0.1:${CONG}`;
 const THU_MUC_BUILD = "../tools/e2e/.ban-build";
 const VITE = "node ../node_modules/vite/bin/vite.js";
 
@@ -42,7 +44,7 @@ export default defineConfig({
     ["json", { outputFile: "ket-qua/ket-qua.json" }],
   ],
   globalSetup: URL_MANG ? "./mo-cong.ts" : undefined,
-  webServer: URL_MANG
+  webServer: URL_NGOAI
     ? undefined
     : {
         command:
