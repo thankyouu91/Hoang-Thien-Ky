@@ -83,6 +83,17 @@ function bigArtOf(body: string, outfit: string, onload: () => void): HTMLImageEl
   return undefined;
 }
 
+/**
+ * Đạo đồ (Canva, 2026-11-05): tranh mực theo hệ chính của công pháp đang tu, mỗi cảnh giới Luyện Khí → Hóa Thần một bức,
+ * hiện mờ sau hình nhân vật; từ Luyện Hư trở lên giữ bức Hóa Thần. Ảnh ở assets/icon_ve/dao_do/<hệ>/<cấp>.webp.
+ */
+const DAO_DO = new Set(Object.keys(import.meta.glob("../../../../assets/icon_ve/dao_do/*/*.webp")).map((k) => k.replace(/^.*dao_do\//, "").replace(/\.webp$/, "")));
+function daoDoOf(v: NhanVatView): string | undefined {
+  const e = v.loadout.find((x) => !!x)?.element ?? v.roots[0];
+  const ma = `${e}/${Math.max(1, Math.min(5, v.board.progress.canhGioi))}`;
+  return DAO_DO.has(ma) ? ma : undefined;
+}
+
 export class NhanVatScene extends PageScene<NhanVatView> {
   private tab: NhanVatTab = "phap-tuong";
   private kind: ItemKind | "all" = "all";
@@ -259,11 +270,13 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       .join("")}</div>`;
     if (this.center === "dao-co") return this.banView(v, switcher);
     if (this.center === "luyen-khi") return this.lk.view(v, switcher);
+    const daoDo = daoDoOf(v);
     return `
       <div class="nv-sub">${switcher}<span class="nv-roots">${esc(v.roots.map((e) => ELEMENT_STYLE[e].name).join(", "))} linh căn</span>
         <button type="button" class="nv-tog" data-act="wheel" aria-pressed="${this.showWheel}">Vòng hệ</button></div>
-      <div class="pt-stage${this.showWheel ? " wheel-on" : ""}">
+      <div class="pt-stage${this.showWheel ? " wheel-on" : ""}${daoDo ? " has-dao-do" : ""}">
         <canvas class="pt-ghost" aria-hidden="true"></canvas>
+        ${daoDo ? `<img class="pt-dao-do" src="${artUrl(`dao_do/${daoDo}`)}" alt="" aria-hidden="true">` : ""}
         ${elementWheel(v.roots)}
         <canvas class="doll" aria-label="Hình nhân vật"></canvas>
         <div class="pt-gear left">${LEFT.map((s) => this.gearSlot(v, s)).join("")}</div>

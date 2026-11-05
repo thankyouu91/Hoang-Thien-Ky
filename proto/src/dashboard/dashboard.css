@@ -741,6 +741,9 @@ button.nv-row:hover { background: var(--c-sunken); }
 .pt-stage { position: relative; display: grid; grid-template-columns: 58px minmax(0, 1fr) 58px; align-items: center; gap: 6px; min-height: 262px; }
 /* Bóng pháp tướng: chính nhân vật phóng to, mực nâu, nhòe, mờ dần xuống chân */
 .pt-ghost { position: absolute; left: -6%; right: -6%; top: -44px; bottom: -10px; width: 112%; height: calc(100% + 54px); pointer-events: none; opacity: 0.17; filter: grayscale(1) sepia(0.6) contrast(0.85) blur(3px); -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent 92%); mask-image: linear-gradient(to bottom, #000 35%, transparent 92%); }
+/* Đạo đồ theo công pháp đang tu và cảnh giới: tranh mực nền trắng, nhân màu vào giấy nên nền biến mất; bóng nhân vật lui bớt */
+.pt-dao-do { position: absolute; left: 50%; top: -34px; height: calc(100% + 44px); width: auto; max-width: none; transform: translateX(-50%); pointer-events: none; user-select: none; mix-blend-mode: multiply; opacity: 0.5; -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); }
+.pt-stage.has-dao-do .pt-ghost { opacity: 0.08; }
 /* Vòng 12 hệ (SVG) chỉ hiện khi bật */
 .pt-wheel { position: absolute; left: 50%; top: 50%; width: min(100%, 300px); transform: translate(-50%, -50%); pointer-events: none; opacity: 0; transition: opacity 0.2s; }
 .pt-stage.wheel-on .pt-wheel { opacity: 0.85; }
