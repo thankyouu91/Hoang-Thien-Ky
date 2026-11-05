@@ -6,7 +6,8 @@ import { TICKS_PER_SECOND } from "@ktlp/sim";
 import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
 import { enableDrag, type DragControl, type DropAction } from "../keoTha.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
-import type { CongPhapView, ScrollCard, TechniqueCard } from "../source.ts";
+import type { CongPhapView, DiemLuyenView, ScrollCard, TechniqueCard } from "../source.ts";
+import "./congPhapTang.css";
 import { term } from "../terms.ts";
 import { closeSheet, esc, fmt, openSheet, techCover } from "../ui.ts";
 
@@ -20,6 +21,70 @@ function techHtml(t: TechniqueCard): string {
     <span class="tech-meta">${esc(els)} · ${esc(t.gradeName)} · ${esc(SKILL_NAME[t.type])}</span>
     <span class="tech-sum">${esc(t.summary)}</span>
   </span>`;
+}
+
+const pct = (permille: number) => `${(permille / 10).toLocaleString("vi-VN")}%`;
+const sec = (s: number) => `${s.toLocaleString("vi-VN", { maximumFractionDigits: 2 })} s`;
+
+/**
+ * Chi tiết một công pháp đã học (GDD mục 6, số ở tang_cong_phap.json qua nguồn): điểm tăng theo tầng, điểm luyện công pháp
+ * (đang có, giá tầng kế, nút luyện) và điểm cộng khi nhân vật lên cấp.
+ */
+function tangHtml(t: TechniqueCard, d: DiemLuyenView | undefined, congHien: number): string {
+  const g = t.tang;
+  if (!g) return "";
+  const layer = t.layer ?? 1;
+  const n = g.rows.length;
+  const pips = g.rows.map((r) => `<i class="${r.tang <= layer ? "on" : ""}"></i>`).join("");
+  const stat = g.rows
+    .map((r, i) => {
+      const prev = g.rows[i - 1];
+      const moc = (k: "hoiChieu" | "mana") => (prev && r[k] > prev[k] ? ` class="moc"` : "");
+      return `<tr class="${r.tang === layer ? "now" : r.tang < layer ? "done" : ""}">
+        <td>${r.tang === n ? `${r.tang} <small>đại thành</small>` : r.tang}</td>
+        <td>${r.uyLuc ? `+${pct(r.uyLuc)}` : "—"}</td>
+        <td>${r.damage}</td>
+        <td${moc("hoiChieu")}>${sec(r.cooldownS)}</td>
+        <td${moc("mana")}>${r.manaCost}</td></tr>`;
+    })
+    .join("");
+  const cost = g.rows
+    .filter((r) => r.tang > 1)
+    .map((r) => `<tr class="${r.tang <= layer ? "done" : r.tang === layer + 1 ? "now" : ""}"><td>${r.tang}</td><td>${fmt(r.diemLuyen)}</td><td>${r.congHien ? fmt(r.congHien) : "—"}</td></tr>`)
+    .join("");
+  const next = g.next;
+  const up = next
+    ? `<button type="button" class="wide seal" data-up="${t.id}"${next.thieu ? " disabled" : ""}>Luyện lên tầng ${next.tang}</button>
+       ${next.thieu ? `<p class="cp-thieu">${esc(next.thieu)}</p>` : ""}`
+    : `<p class="cp-du">Đã đại thành, đủ ${n} tầng.</p>`;
+  const lvl = d
+    ? `<h3 class="cp-h">Điểm cộng khi lên cấp</h3>
+       <dl class="cp-kv">
+         <div><dt>Mỗi lần lên cấp</dt><dd><span><b>+${fmt(d.moiCap)}</b> điểm luyện công pháp</span></dd></div>
+         <div><dt>Nhân vật mỗi cấp</dt><dd>+${fmt(d.moiCapChiSo.hp)} máu · +${fmt(d.moiCapChiSo.atk)} công · +${fmt(d.moiCapChiSo.def)} thủ</dd></div>
+         <div><dt>Cấp kế</dt><dd>${d.dotPha ? `Cấp ${d.level} là cấp cuối cảnh giới, cần Đột phá` : `Cấp ${d.level + 1}: còn ${fmt(Math.max(0, d.expNext - d.exp))} tu vi`}</dd></div>
+       </dl>`
+    : "";
+  return `<div class="cp-tang">
+      <div class="cp-tang-top"><span class="cp-pips" aria-label="Tầng ${layer}/${n}">${pips}</span><b class="layer">Tầng ${layer}/${n}${t.frozen ? " · dừng" : ""}</b></div>
+      <h3 class="cp-h">Điểm tăng theo tầng</h3>
+      <table class="cp-tbl">
+        <thead><tr><th>Tầng</th><th>Uy lực</th><th>D</th><th>Hồi chiêu</th><th>Mana</th></tr></thead>
+        <tbody>${stat}</tbody>
+      </table>
+      <p class="note">Uy lực cộng vào sát thương, lượng hồi và khiên. Số đề xuất, chờ duyệt.</p>
+      <h3 class="cp-h">Điểm luyện công pháp</h3>
+      <dl class="cp-kv">
+        <div><dt>Đang có</dt><dd><span><b>${fmt(d?.co ?? 0)}</b> điểm luyện</span> · <span><b>${fmt(congHien)}</b> cống hiến</span></dd></div>
+        ${next ? `<div><dt>Lên tầng ${next.tang} cần</dt><dd><span><b>${fmt(next.diemLuyen)}</b> điểm luyện</span> · <span><b>${fmt(next.congHien)}</b> cống hiến</span></dd></div>` : ""}
+      </dl>
+      ${up}
+      <p class="note">Điểm luyện có được mỗi lần nhân vật lên cấp, dùng chung cho mọi công pháp đã học. Cống hiến có được khi nộp tàn quyển, khai mỏ, hiến tế linh thạch và chiến đấu.</p>
+      <details class="fold cp-gia"><summary>Giá từng tầng</summary>
+        <table class="cp-tbl"><thead><tr><th>Tầng</th><th>Điểm luyện</th><th>Cống hiến</th></tr></thead><tbody>${cost}</tbody></table>
+      </details>
+      ${lvl}
+    </div>`;
 }
 
 function scrollHtml(s: ScrollCard): string {
@@ -61,9 +126,10 @@ export class CongPhapScene extends PageScene<CongPhapView> {
           .join("")}</ol>
         <div class="drop-zone cp-bo" data-drop="bo">Thả vào đây để bỏ khỏi trận</div>
         <p class="note">Thứ tự là thứ tự ưu tiên ra chiêu trong trận. Kéo giữa các ô để đổi thứ tự.</p>
+        ${v.diemLuyen ? `<p class="cp-diem"><span>Điểm luyện công pháp <b>${fmt(v.diemLuyen.co)}</b></span><span class="muted">+${fmt(v.diemLuyen.moiCap)} mỗi lần lên cấp · chạm công pháp để xem tầng</span></p>` : ""}
         <details class="fold"${v.loadout.some((t) => !t) && v.learned.length ? " open" : ""}>
           <summary>Đã học <span class="right">${v.learned.length}</span></summary>
-          <ul class="list">${v.learned.map((t) => `<li class="row" data-drag="hoc:${t.id}">${techHtml(t)}${v.loadout.some((x) => x?.id === t.id) ? `<span class="pick-tag">Ô ${v.loadout.findIndex((x) => x?.id === t.id) + 1}</span>` : ""}</li>`).join("") || `<li class="empty-note">Chưa học công pháp nào.</li>`}</ul>
+          <ul class="list">${v.learned.map((t) => `<li class="row cp-hoc" data-act="detail" data-id="${t.id}" data-drag="hoc:${t.id}">${techHtml(t)}${v.loadout.some((x) => x?.id === t.id) ? `<span class="pick-tag">Ô ${v.loadout.findIndex((x) => x?.id === t.id) + 1}</span>` : ""}</li>`).join("") || `<li class="empty-note">Chưa học công pháp nào.</li>`}</ul>
           ${v.learned.length ? `<p class="drag-hint">Kéo công pháp lên một ô để mang vào trận${matchMedia("(pointer: coarse)").matches ? " (giữ tay một chút rồi kéo)" : ""}.</p>` : ""}
         </details>
       </section>`;
@@ -145,23 +211,57 @@ export class CongPhapScene extends PageScene<CongPhapView> {
     const v = this.data;
     if (!v || this.dnd.justDropped()) return;
     if (name === "slot") this.pickForSlot(v, Number(el.dataset.i));
+    else if (name === "detail") this.openDetail(Number(el.dataset.id));
     else if (name === "learn") void this.send({ type: "hoc_cong_phap", techniqueId: Number(el.dataset.id) });
     else if (name === "deposit") void this.send({ type: "nop_tan_quyen", scrollUid: Number(el.dataset.uid) });
     else if (name === "compose") this.openCompose(v);
     else if (name === "edit-transmission") this.openTransmission(v);
   }
 
-  /** Chọn công pháp đã học cho một ô; công pháp đang ở ô khác thì đổi chỗ. */
+  /** Luyện lên tầng kế rồi mở lại bảng (dữ liệu mới sau khi send đọc lại màn). */
+  private async levelUp(id: number, reopen: () => void): Promise<void> {
+    const r = await this.send({ type: "len_tang_cong_phap", techniqueId: id });
+    if (r.ok) reopen();
+  }
+
+  /** Chi tiết một công pháp đã học: điểm tăng theo tầng, điểm luyện, điểm cộng khi lên cấp. */
+  private openDetail(id: number): void {
+    const v = this.data;
+    const t = v?.learned.find((x) => x.id === id);
+    if (!v || !t) return;
+    const body = openSheet(t.name, `<div class="cp-tang-card">${techHtml(t)}</div>${tangHtml(t, v.diemLuyen, v.contribution)}`);
+    body.addEventListener("click", (e) => {
+      const up = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-up]");
+      if (up && !up.disabled) {
+        up.disabled = true;
+        void this.levelUp(id, () => this.openDetail(id));
+      }
+    });
+  }
+
+  /**
+   * Một ô mang vào trận: ô đã có công pháp thì trên cùng là chi tiết tầng của nó (điểm tăng, điểm luyện, điểm cộng khi lên
+   * cấp); dưới là danh sách để đổi công pháp, công pháp đang ở ô khác thì đổi chỗ.
+   */
   private pickForSlot(v: CongPhapView, i: number): void {
     const current = v.loadout.map((t) => t?.id ?? null);
+    const inSlot = v.loadout[i];
+    const detail = inSlot ? tangHtml(v.learned.find((x) => x.id === inSlot.id) ?? inSlot, v.diemLuyen, v.contribution) : "";
     const body = openSheet(
       `Ô ${i + 1}`,
-      `<ul class="list">${v.learned
+      `${inSlot ? `<div class="cp-tang-card">${techHtml(inSlot)}</div>${detail}<h3 class="cp-h">Đổi công pháp cho ô này</h3>` : ""}
+       <ul class="list">${v.learned
         .map((t) => `<li><button type="button" class="row${current[i] === t.id ? " picked" : ""}" data-pick="${t.id}">${techHtml(t)}${current.includes(t.id) ? `<span class="pick-tag">Ô ${current.indexOf(t.id) + 1}</span>` : ""}</button></li>`)
         .join("")}</ul>
        ${current[i] !== null ? `<button type="button" class="wide" data-pick="none">Bỏ khỏi ô này</button>` : ""}`,
     );
     body.addEventListener("click", (e) => {
+      const up = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-up]");
+      if (up && !up.disabled) {
+        up.disabled = true;
+        void this.levelUp(Number(up.dataset.up), () => this.data && this.pickForSlot(this.data, i));
+        return;
+      }
       const pick = (e.target as HTMLElement).closest<HTMLElement>("[data-pick]")?.dataset.pick;
       if (!pick) return;
       const next = [...current];

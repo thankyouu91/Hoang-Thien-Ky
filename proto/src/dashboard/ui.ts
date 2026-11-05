@@ -245,6 +245,12 @@ export const ERROR_TEXT: Record<string, string> = {
   tui_day: "Túi đầy, cần trống một ô.",
   chua_du_cap: "Chưa đủ cấp để học phẩm này.",
   ngoai_mon_gioi_han: "Ngoại môn chỉ học tối đa 2 công pháp phẩm Phàm hoặc Hoàng.",
+  // Lên tầng công pháp (lệnh len_tang_cong_phap)
+  chua_hoc: "Chưa học công pháp này.",
+  cong_phap_dung_tang: "Công pháp đang dừng tầng vì đã rời tông.",
+  da_toi_tang: "Công pháp đã đủ 10 tầng.",
+  thieu_diem_luyen: "Chưa đủ điểm luyện công pháp. Lên cấp để có thêm.",
+  thieu_cong_hien: "Chưa đủ cống hiến để lên tầng này.",
   da_hoc: "Đã học công pháp này.",
   vuot_so_cong_phap: "Chỉ mang được 4 công pháp.",
   vuot_so_suat: "Bộ truyền thụ đã đủ suất.",

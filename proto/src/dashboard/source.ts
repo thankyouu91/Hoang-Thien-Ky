@@ -468,6 +468,44 @@ export interface TechniqueCard {
    * vẽ thì là quyển thuần hệ của chủ hệ. Loại chiêu có hình riêng ở chieu/<loại>.
    */
   art?: string;
+  /** Chỉ công pháp đã học: bảng tầng và giá lên tầng kế (tangCongPhap.ts, số ở tang_cong_phap.json). */
+  tang?: TangCongPhapView;
+}
+
+/** Một tầng của công pháp: chỉ số trận ở tầng đó và giá lên tới tầng đó (GDD mục 6; số đề xuất 2026-11-05). */
+export interface TangCongPhapRow {
+  tang: number;
+  /** Phần nghìn cộng dồn so với tầng 1: uy lực cộng, hồi chiêu và mana giảm. */
+  uyLuc: number;
+  hoiChieu: number;
+  mana: number;
+  /** Chỉ số trận ở tầng này: D (đã chia 1000), hồi chiêu giây, mana. */
+  damage: number;
+  cooldownS: number;
+  manaCost: number;
+  /** Giá lên tới tầng này từ tầng ngay dưới. */
+  diemLuyen: number;
+  congHien: number;
+}
+
+export interface TangCongPhapView {
+  rows: TangCongPhapRow[];
+  /** Tầng kế và lý do chưa lên được (thiếu điểm, thiếu cống hiến, đang dừng tầng); không có là đã đủ 10 tầng. */
+  next?: { tang: number; diemLuyen: number; congHien: number; thieu?: string };
+}
+
+/** Điểm luyện công pháp của nhân vật và phần cộng mỗi lần lên cấp. */
+export interface DiemLuyenView {
+  /** Quỹ chung cho mọi công pháp đã học. */
+  co: number;
+  moiCap: number;
+  level: number;
+  /** Tu vi đang có và cần để lên cấp kế; `dotPha` là đang ở cấp cuối cảnh giới, phải đột phá. */
+  exp: number;
+  expNext: number;
+  dotPha: boolean;
+  /** Nhân vật mỗi cấp (UNIT_CURVE): máu, công, thủ. */
+  moiCapChiSo: { hp: number; atk: number; def: number };
 }
 
 export interface ScrollCard {
@@ -494,6 +532,8 @@ export interface CongPhapView extends Stamped {
   contribution: number;
   can: { ghep: boolean; truyenThu: boolean };
   maxSubs: number;
+  /** Điểm luyện công pháp (lên tầng) và điểm cộng khi lên cấp; nguồn chưa có thì màn ẩn phần này. */
+  diemLuyen?: DiemLuyenView;
 }
 
 export interface AllianceSect {
@@ -578,6 +618,8 @@ export type DashboardCommand =
   | { type: "dat_bo_truyen_thu"; techniqueIds: number[] }
   | { type: "hoc_cong_phap"; techniqueId: number }
   | { type: "mang_vao_tran"; techniqueIds: number[] }
+  /** Lên một tầng cho công pháp đã học: tốn điểm luyện và cống hiến theo tang_cong_phap.json (lệnh rules len_tang_cong_phap). */
+  | { type: "len_tang_cong_phap"; techniqueId: number }
   /** Mặc một món trang bị trong túi; món đang ở ô đó về túi. */
   | { type: "mac_do"; uid: number }
   /** Tháo món ở một ô về túi; túi đầy thì không tháo được. */

@@ -1,0 +1,41 @@
+/* Chi tiết tầng công pháp (screens/congPhap.ts › tangHtml): điểm tăng theo tầng, điểm luyện, điểm cộng khi lên cấp.
+   Tách khỏi dashboard.css để không đụng phần các phiên giao diện khác đang sửa; dùng chung token ở tokens.css. */
+
+.cp-diem { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin: var(--sp-2) 0 0; padding: 6px 10px; border: 1px solid var(--c-frame-soft); border-radius: var(--r-sm); background: var(--c-surface); font-size: var(--fs-sm); }
+.cp-diem b { color: var(--c-accent-ink); font-size: var(--fs-md); font-variant-numeric: tabular-nums; }
+.cp-diem .muted { font-size: var(--fs-xs); }
+.list .row.cp-hoc { cursor: pointer; }
+.list .row.cp-hoc:hover { background: var(--c-accent-soft); }
+
+.cp-tang-card { display: flex; margin: 0 0 var(--sp-2); padding: var(--sp-2) var(--sp-3); border-radius: var(--r-sm); background: var(--c-accent-soft); }
+.cp-tang { display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--sp-2); }
+.cp-tang-top { display: flex; align-items: center; gap: 10px; }
+.cp-tang-top .layer { color: var(--c-accent-ink); font-size: var(--fs-md); }
+.cp-pips { display: inline-flex; flex: 1; gap: 3px; }
+.cp-pips i { flex: 1; max-width: 22px; height: 8px; border: 1px solid var(--c-frame-soft); background: var(--c-surface); }
+.cp-pips i.on { border-color: var(--c-accent-ink); background: var(--c-accent-ink); }
+
+#sheet .cp-h, .cp-h { margin: var(--sp-3) 0 2px; padding-bottom: 3px; border-bottom: 1px solid var(--c-frame-soft); color: var(--c-accent-ink); font-family: var(--font-serif); font-size: var(--fs-md); font-weight: 600; }
+
+.cp-tbl { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+.cp-tbl th { padding: 4px 6px; border-bottom: 1px solid var(--c-line-2); color: var(--c-ink-3); font-size: var(--fs-xs); font-weight: 600; text-align: right; }
+.cp-tbl td { padding: 3px 6px; border-bottom: 1px solid var(--c-line); text-align: right; white-space: nowrap; }
+.cp-tbl th:first-child, .cp-tbl td:first-child { text-align: left; }
+.cp-tbl td small { color: var(--c-ink-3); font-size: 11px; }
+.cp-tbl tr.done td { color: var(--c-ink-3); }
+.cp-tbl tr.now td { background: var(--c-accent-soft); color: var(--c-accent-ink); font-weight: 700; }
+.cp-tbl td.moc { color: var(--c-ok); font-weight: 700; }
+.cp-tbl tr.done td.moc { color: var(--c-ink-3); }
+
+.cp-kv { display: flex; flex-direction: column; gap: 3px; margin: 0; font-size: var(--fs-sm); }
+.cp-kv > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.cp-kv dt { flex: 0 0 9.5em; color: var(--c-ink-3); }
+.cp-kv dd { flex: 1; min-width: 0; margin: 0; font-variant-numeric: tabular-nums; }
+.cp-kv b { color: var(--c-accent-ink); }
+
+.cp-tang .note { margin: 2px 0 0; color: var(--c-ink-3); font-size: var(--fs-xs); line-height: 1.45; }
+.cp-tang > .wide { margin-top: 4px; }
+.cp-thieu { margin: 0; color: var(--c-warn); font-size: var(--fs-sm); font-weight: 600; }
+.cp-du { margin: 4px 0 0; color: var(--c-ok); font-weight: 700; }
+.cp-gia { margin-top: 2px; }
+.cp-gia > summary { font-size: var(--fs-sm); }

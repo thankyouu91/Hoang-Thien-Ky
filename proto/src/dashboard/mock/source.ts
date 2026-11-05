@@ -1,9 +1,9 @@
 // Nguồn đọc gộp chạy ngay trong trang (chưa có server giả). Mỗi lệnh đọc dựng đủ các thẻ của một màn từ World,
 // kèm mốc giờ server; lệnh ghi đi qua apply() của @ktlp/rules khi luật đã có, phần còn lại sửa World trực tiếp.
 import {
-  apply, bacHeSo, BINH_AN_O, binhBoOf, boardCell, boardCellOpen, diemTrangBi, DONG_REN, gearStats, ghepAn, GRADE_NAMES, kieuInfo, loadoutTechniques,
-  maxInlayLines, RULES,
-  scrollKind, setLo, techniqueOf, transmissionSlots,
+  apply, bacHeSo, BINH_AN_O, binhBoOf, boardCell, boardCellOpen, DIEM_LUYEN_MOI_CAP, diemTrangBi, DONG_REN, gearStats, ghepAn, GRADE_NAMES, kieuInfo,
+  layerCost, loadoutTechniques, maxInlayLines, RULES,
+  scrollKind, setLo, TECHNIQUE_LAYERS, techniqueOf, trainingPoints, transmissionSlots,
   type Bac, type BoardPiece, type Command, type EquipItem, type GearStats, type InlayLine, type LearnedTechnique, type Progress, type Role,
   type SectTechnique,
 } from "@ktlp/rules";
@@ -26,9 +26,10 @@ import { destOf, legsOf, minutesPerStage, planTrip, startFrom, whereAt } from ".
 import { RETREAT_HOURS } from "../source.ts";
 import type {
   BagItem, BanDoView, BinhBoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, ForgeLineView, GearItem, GearSlot, Go,
-  HiddenLineView, LienMinhView, LuyenKhiView, MiniMapView, MountView, NhanVatView, ScrollCard, SetMilestone, SetView, StatLine, StatSource, TechniqueCard,
-  TodoCard, TongMonView, TopBarView,
+  HiddenLineView, LienMinhView, LuyenKhiView, MiniMapView, MountView, NhanVatView, ScrollCard, SetMilestone, SetView, StatLine, StatSource,
+  TangCongPhapView, TechniqueCard, TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
+import { statsAt, tangRows } from "../tangCongPhap.ts";
 import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.ts";
 import {
   createWorld, npcSects, pieceBagItem, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, samePiece, todayAt, type DongAnRaw, type NpcSect, type World, type WorldGear,
@@ -297,9 +298,15 @@ function sectRow(level: number) {
   return CAP_TONG_MON[Math.max(0, Math.min(CAP_TONG_MON.length - 1, level - 1))];
 }
 
+/** Dòng tóm tắt chỉ số trận ở một tầng (tầng 1 là chỉ số gốc của công thức). */
+function techSummary(tech: Technique, layer = 1): string {
+  const s = statsAt(tech, layer);
+  const cd = s.cooldownTicks / TICKS_PER_SECOND;
+  return `D ${Math.round(s.damage / 1000)} · ${tech.targets} mục tiêu · hồi ${cd.toLocaleString("vi-VN")} s · ${s.manaCost} mana`;
+}
+
 function techCard(t: Pick<SectTechnique, "name" | "main" | "subs" | "grade"> & { id: number }, extra: Partial<TechniqueCard> = {}): TechniqueCard {
   const tech: Technique = techniqueOf(t);
-  const cd = tech.cooldownTicks / TICKS_PER_SECOND;
   return {
     id: t.id,
     name: t.name,
@@ -308,7 +315,7 @@ function techCard(t: Pick<SectTechnique, "name" | "main" | "subs" | "grade"> & {
     element: tech.element,
     subElements: tech.subElements,
     type: tech.type,
-    summary: `D ${Math.round(tech.damage / 1000)} · ${tech.targets} mục tiêu · hồi ${cd.toLocaleString("vi-VN")} s · ${tech.manaCost} mana`,
+    summary: techSummary(tech),
     art: techniqueArt(tech.element, tech.subElements),
     ...extra,
   };
@@ -328,8 +335,33 @@ function scrollCard(s: { uid: number; kind: string; grade: number }): ScrollCard
   };
 }
 
-function learnedCard(l: LearnedTechnique): TechniqueCard {
-  return techCard({ ...l, id: l.techniqueId }, { layer: l.layer, frozen: l.frozen });
+/**
+ * Công pháp đã học: tóm tắt theo tầng đang có (cùng số rules.loadoutTechniques đưa vào trận). Có `quy` (điểm luyện đang có,
+ * cống hiến) thì kèm bảng tầng và giá lên tầng kế cho màn Công pháp.
+ */
+function learnedCard(l: LearnedTechnique, quy?: { diemLuyen: number; congHien: number }): TechniqueCard {
+  const tech = techniqueOf(l);
+  return techCard({ ...l, id: l.techniqueId }, {
+    layer: l.layer,
+    frozen: l.frozen,
+    summary: techSummary(tech, l.layer),
+    ...(quy ? { tang: tangView(l, tech, quy) } : {}),
+  });
+}
+
+/** Bảng 10 tầng của một công pháp (chỉ số trận và giá theo phẩm) và tầng kế, kèm lý do chưa lên được. */
+function tangView(l: LearnedTechnique, tech: Technique, quy: { diemLuyen: number; congHien: number }): TangCongPhapView {
+  const rows = tangRows(tech, l.grade, TICKS_PER_SECOND);
+  if (l.layer >= TECHNIQUE_LAYERS) return { rows };
+  const gia = layerCost(l.layer + 1, l.grade);
+  const thieu = l.frozen
+    ? "Đang dừng tầng vì đã rời tông"
+    : quy.diemLuyen < gia.diemLuyen
+      ? `Thiếu ${gia.diemLuyen - quy.diemLuyen} điểm luyện`
+      : quy.congHien < gia.congHien
+        ? `Thiếu ${gia.congHien - quy.congHien} cống hiến`
+        : undefined;
+  return { rows, next: { tang: l.layer + 1, ...gia, thieu } };
 }
 
 export class MockDashboardSource implements DashboardSource {
@@ -794,7 +826,7 @@ export class MockDashboardSource implements DashboardSource {
     const byId = (id: number) => me.learned.find((l) => l.techniqueId === id)!;
     const loadout: (TechniqueCard | null)[] = [];
     for (let i = 0; i < RULES.loadoutSize; i++) loadout.push(me.loadout[i] !== undefined ? learnedCard(byId(me.loadout[i])) : null);
-    const learned = me.learned.map(learnedCard);
+    const learned = me.learned.map((l) => learnedCard(l));
     const items: BagItem[] = [
       ...p.bag.map((it) => (it.gear ? { ...it, gear: gearView(it.gear, 0, me.level, p.roots) } : it)),
       ...me.bag.map((sc): BagItem => {
@@ -940,15 +972,28 @@ export class MockDashboardSource implements DashboardSource {
     const sect = this.sect;
     const role = me.role;
     const byId = (id: number) => me.learned.find((l) => l.techniqueId === id)!;
+    // Điểm luyện công pháp: quỹ chung suy từ cấp và tầng đã lên (tangCongPhap.ts); thẻ đã học kèm bảng tầng và giá tầng kế.
+    const quy = { diemLuyen: trainingPoints(me), congHien: me.contribution };
     const loadout: (TechniqueCard | null)[] = [];
-    for (let i = 0; i < RULES.loadoutSize; i++) loadout.push(me.loadout[i] !== undefined ? learnedCard(byId(me.loadout[i])) : null);
+    for (let i = 0; i < RULES.loadoutSize; i++) loadout.push(me.loadout[i] !== undefined ? learnedCard(byId(me.loadout[i]), quy) : null);
     const fromSect = me.learned.filter((l) => l.sectId === SECT).length;
+    const lv = baseStats(me.level);
+    const lv1 = baseStats(me.level + 1);
     return {
       serverNow: this.now(),
       top: this.top(),
       viewerRole: role,
       loadout,
-      learned: me.learned.map(learnedCard),
+      learned: me.learned.map((l) => learnedCard(l, quy)),
+      diemLuyen: {
+        co: quy.diemLuyen,
+        moiCap: DIEM_LUYEN_MOI_CAP,
+        level: me.level,
+        exp: this.w.player.exp,
+        expNext: expToNext(me.level),
+        dotPha: me.level === breakLevelOf(me.level),
+        moiCapChiSo: { hp: lv1.hp - lv.hp, atk: lv1.atk - lv.atk, def: lv1.def - lv.def },
+      },
       transmission: sect.transmission.map((id) => {
         const t = sect.techniques.find((x) => x.id === id)!;
         const learned = me.learned.some((l) => l.techniqueId === id);
@@ -1465,6 +1510,11 @@ export class MockDashboardSource implements DashboardSource {
       case "mang_vao_tran": {
         const r = rule({ type: "mang_vao_tran", actor: PLAYER, techniqueIds: cmd.techniqueIds });
         return r.ok ? { ok: true, message: `Mang ${cmd.techniqueIds.length}/${RULES.loadoutSize} công pháp vào trận` } : r;
+      }
+      case "len_tang_cong_phap": {
+        const r = rule({ type: "len_tang_cong_phap", actor: PLAYER, techniqueId: cmd.techniqueId });
+        const l = this.me.learned.find((x) => x.techniqueId === cmd.techniqueId);
+        return r.ok && l ? { ok: true, message: `${l.name} lên tầng ${l.layer}` } : r;
       }
       case "cho_xuat_su": {
         const r = rule({ type: "cho_xuat_su", actor: PLAYER, memberId: cmd.memberId });
