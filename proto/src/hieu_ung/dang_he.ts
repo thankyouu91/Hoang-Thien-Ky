@@ -130,7 +130,7 @@ function hoaLong(x: Ctx, s: Shot): boolean {
     const d = dir(src0, dst);
     const at = (q: number): [number, number, number] => {
       const wave = Math.sin(q * Math.PI * 2.5 + ti) * 11 * Math.sin(Math.PI * Math.min(1, q * 1.2));
-      return [src0.x + (dst.x - src0.x) * q - d.y * wave, src0.y + (dst.y - src0.y) * q + d.x * wave, BODY_Z + 8 + Math.sin(Math.PI * q) * 20];
+      return [src0.x + (dst.x - src0.x) * q - d.y * wave, src0.y + (dst.y - src0.y) * q + d.x * wave, BODY_Z + 8 + 4 * q * (1 - q) * 20];
     };
     if (t >= launch && t < c.tick) {
       const q = (t - launch) / (c.tick - launch);

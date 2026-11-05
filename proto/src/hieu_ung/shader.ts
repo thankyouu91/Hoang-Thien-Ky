@@ -242,10 +242,24 @@ void main() {
     float fall = 1.0 - smoothstep(0.0, 1.0, r);
     a = ray * fall * fall + vP.w * exp(-r * r * 16.0);
     rgb = mix(rgb, vec3(1.0), clamp(vP.w * exp(-r * r * 9.0), 0.0, 1.0));
-  } else {
+  } else if (kind < 8.5) {
     // SHADE: phủ tối trừ quanh tâm
     float d = length(u * vS);
     a = smoothstep(vP.x, vP.y, d);
+  } else {
+    // BURST: khung va chạm (impact frame), sao gai sắc cạnh không mờ; gai dài ngắn lệch nhau theo seed, có thể khoét lỗ
+    // giữa thành vành gai; viền trắng ở mép trong khi q.y > 0.
+    float r = length(u);
+    float f = (atan(u.y, u.x) / TAU + 0.5) * vP.x + vP.y;
+    float id = mod(floor(f), max(vP.x, 1.0));
+    float tri = 1.0 - abs(2.0 * fract(f) - 1.0);
+    float tip = 1.0 - vP.w * h11(id + vQ.x * 17.0);
+    float rr = mix(vQ.z, tip, pow(tri, 2.2));
+    float pxn = px / max(min(vS.x, vS.y), 1e-3) * 1.2;
+    a = 1.0 - smoothstep(rr - pxn, rr + pxn, r);
+    if (vP.z > 0.0) a *= smoothstep(vP.z * rr - pxn, vP.z * rr + pxn, r);
+    float rim = smoothstep(rr - pxn - 0.16 * vQ.y, rr - pxn, r);
+    rgb = mix(rgb, vec3(1.0), rim * vQ.y);
   }
 
   a = clamp(a, 0.0, 1.0) * vC.a;

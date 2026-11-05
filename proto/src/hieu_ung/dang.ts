@@ -291,11 +291,11 @@ function dauLau(x: Ctx, s: Shot): boolean {
       const wob = Math.sin(q * Math.PI * 3 + ti) * 7 * Math.sin(Math.PI * q);
       const px = src0.x + (dst.x - src0.x) * q - d.y * wob;
       const py = src0.y + (dst.y - src0.y) * q + d.x * wob;
-      const pz = BODY_Z + 6 + Math.sin(Math.PI * q) * 14;
+      const pz = BODY_Z + 6 + 4 * q * (1 - q) * 14;
       for (let k = 1; k <= 3; k++) {
         const qq = Math.max(0, q - k * 0.07);
         const w2 = Math.sin(qq * Math.PI * 3 + ti) * 7 * Math.sin(Math.PI * qq);
-        motif(e, L.AIR, "am_lanh", src0.x + (dst.x - src0.x) * qq - d.y * w2, src0.y + (dst.y - src0.y) * qq + d.x * w2, BODY_Z + 6 + Math.sin(Math.PI * qq) * 14, 6 - k, 0, r.main.glow, (0.8 - k * 0.18) * r.bright, 0.5);
+        motif(e, L.AIR, "am_lanh", src0.x + (dst.x - src0.x) * qq - d.y * w2, src0.y + (dst.y - src0.y) * qq + d.x * w2, BODY_Z + 6 + 4 * qq * (1 - qq) * 14, 6 - k, 0, r.main.glow, (0.8 - k * 0.18) * r.bright, 0.5);
         sprite(e, L.AIR, CELL.smoke, src0.x + (dst.x - src0.x) * qq, src0.y + (dst.y - src0.y) * qq, BODY_Z + 4, 8 + k * 2, 6 + k, 0, r.main.deep, 0.35 * r.bright, 0);
       }
       sprite(e, L.AIR, CELL.skull, px, py, pz, big, big, Math.sin(t * 0.5 + ti) * 0.25, skullCol, r.bright, 0.15, 0.2);
@@ -537,7 +537,7 @@ function tienDong(x: Ctx, s: Shot): boolean {
         const flip = Math.abs(Math.cos(t * 0.9 + k * 1.3 + ti));
         const px = src0.x + (dst.x - src0.x) * qq;
         const py = src0.y + (dst.y - src0.y) * qq;
-        const pz = BODY_Z + 4 + Math.sin(Math.PI * qq) * 16 + Math.sin(qq * 20 + k) * 2;
+        const pz = BODY_Z + 4 + 4 * qq * (1 - qq) * 16 + Math.sin(qq * 20 + k) * 2;
         sprite(e, L.AIR, CELL.coin, px, py, pz, 5 * flip + 0.8, 5, 0, WHITE, r.bright, 0.1, 0.3);
       }
     }

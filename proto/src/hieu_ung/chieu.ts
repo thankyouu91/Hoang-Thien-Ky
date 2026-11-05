@@ -9,10 +9,14 @@ import { BODY_Z, castSeed, HEAD_Z, aim, type Ctx } from "./ctx.ts";
 import { CELL, COLORS, DANGER, GOLD, GOLD_DEEP, L, mix, SEAL, WHITE, type RGB } from "./emit.ts";
 import { count, type Recipe } from "./recipe.ts";
 import type { Cast, FxInput, Point } from "./types.ts";
-import { dir, flightSeconds, impact, trail, windup, type Shot } from "./chung.ts";
-import { drawDang, dangTimeline } from "./dang.ts";
 import {
-  arc, beam, bolt, clamp01, dome, easeBack, easeIn, easeOut, glow, groundGlow, motif, pulse, ramp, rays, ring, rnd,
+  dir, flightPath, flightSeconds, frameTick, holdOf, impact, impactFrame, impactFrameAt, NO_CONTACT, stoppedCtx, trail,
+  windup, type Shot,
+} from "./chung.ts";
+import { drawDang, dangTimeline } from "./dang.ts";
+import { ease, FPS, gravityArc, IMPACT_FRAMES, smear } from "./nhip.ts";
+import {
+  arc, beam, blob, bolt, clamp01, dome, easeBack, easeIn, easeOut, glow, groundGlow, motif, pulse, ramp, rays, ring, rnd,
   rune, shade, sprite, sym,
 } from "./ve.ts";
 
@@ -23,12 +27,17 @@ export const LOOK_AHEAD = 170;
 export const LOOK_BACK = 50;
 
 /** Vẽ đủ bốn pha (trừ trạng thái) của một lần ra chiêu ở thời điểm x.t. */
-export function drawCast(x: Ctx, c: Cast, r: Recipe): void {
-  const src = x.foot(c.unit);
+export function drawCast(x0: Ctx, c: Cast, r: Recipe): void {
+  const src = x0.foot(c.unit);
   if (!src) return;
-  const target = aim(x, c, c.tick) ?? { x: src.x + 1, y: src.y };
+  const target = aim(x0, c, c.tick) ?? { x: src.x + 1, y: src.y };
   const face = dir(src, target);
-  const s: Shot = { c, r, seed: castSeed(c) ^ r.seed, src, face, S: (sec) => x.f.life(sec * r.pace) };
+  const s: Shot = {
+    c, r, seed: castSeed(c) ^ r.seed, src, face, S: (sec) => x0.f.life(sec * r.pace), hold: holdOf(c, r), contact: !NO_CONTACT.has(c.skill),
+  };
+  // Khựng khi chạm (DONG_TAC.md): sau lúc chạm mọi hình của lần ra chiêu chạy theo thời điểm đã khựng, nên vệt chém,
+  // vòng nổ, nét hệ cùng đứng yên vài khung rồi mới bung; khung va chạm đếm theo thời điểm thật.
+  const x = stoppedCtx(x0, s);
   // Dáng chiêu đặc trưng (đao khí, kiếm trận, mưa kiếm, đầu lâu, huyết tuyến…) thay hình gốc của loại chiêu ở pha 1–3.
   if (r.dang && drawDang(x, s, r.dang)) {
     if (c.ult) ultimate(x, s);
@@ -116,6 +125,8 @@ export function castTimeline(f: Pick<FxInput, "index" | "life">, c: Cast, r: Rec
     tl.windup = Math.min(tl.windup, hit - f.life(0.9));
     tl.settle = Math.max(tl.settle, hit + f.life(1.4));
   }
+  // Pha 3 dài thêm đúng phần khung va chạm và khựng.
+  if (!NO_CONTACT.has(c.skill)) tl.settle += f.life((IMPACT_FRAMES + holdOf(c, r)) / FPS);
   return tl;
 }
 
@@ -134,18 +145,19 @@ function melee(x: Ctx, s: Shot): void {
     const d = dir(s.src, p);
     const flip = rnd(s.seed, 1) < 0.5 ? 1 : -1;
     const ang = Math.atan2(d.y, d.x) + flip * (0.5 + 0.3 * rnd(s.seed, 2));
-    const head = easeOut(q * 1.8);
-    const tail = easeIn(q);
+    // Đầu vệt vụt (whip), đuôi đuổi theo đường cong chậm hơn (đuôi lấy từ chính đường chém, không hiện sớm);
+    // vệt hệ phụ trễ một nhịp (overlap). Tới lúc chạm thì cả vệt khựng lại theo thời điểm đã khựng.
     const R = 22 * r.impact;
     for (let i = 0; i < r.streaks; i++) {
       const dq = i * 0.12;
-      const hh = clamp01(easeOut((q - dq) * 1.8));
-      if (hh <= 0) continue;
-      arc(e, L.AIR, p.x - d.x * 10, p.y - d.y * 10, BODY_Z + 2, R + i * 5, ang - flip * 1.25, flip * 2.5, hh, clamp01(easeIn(q - dq)), (i ? 3 : 7) * r.impact, r.main.glow, r.bright, 0.7, 0.9);
+      const hh = ease.whip((q - dq) * 1.8);
+      if (q - dq <= 0) continue;
+      arc(e, L.AIR, p.x - d.x * 10, p.y - d.y * 10, BODY_Z + 2, R + i * 5, ang - flip * 1.25, flip * 2.5, hh, ease.inOut(q - dq), (i ? 3 : 7) * r.impact, r.main.glow, r.bright, 0.7, 0.9);
     }
-    if (r.subs.length) arc(e, L.AIR, p.x - d.x * 10, p.y - d.y * 10, BODY_Z + 2, R - 5, ang - flip * 1.25, flip * 2.5, head, tail, 2.5, r.trail.glow, 0.9 * r.bright, 1, 0.3);
+    const lag = q - 0.08;
+    if (r.subs.length && lag > 0) arc(e, L.AIR, p.x - d.x * 10, p.y - d.y * 10, BODY_Z + 2, R - 5, ang - flip * 1.25, flip * 2.5, ease.whip(lag * 1.8), ease.inOut(lag), 2.5, r.trail.glow, 0.9 * r.bright, 1, 0.3);
   }
-  for (const tid of c.targets) impact(x, s, tid, (t - c.tick) / s.S(0.35));
+  for (const tid of c.targets) impact(x, s, tid, 0.35);
 }
 
 // ---- cận chiến quét: cung chém rộng ------------------------------------------------------------------------------
@@ -173,16 +185,16 @@ function sweep(x: Ctx, s: Shot): void {
     // Bán kính theo khoảng cách tới giữa các mục tiêu, để cung quét chạm tới người đứng trước mặt.
     const aimP = aim(x, c, c.tick);
     const reach = aimP ? Math.min(90, Math.max(42, 0.85 * Math.hypot(aimP.x - src.x, aimP.y - src.y))) : 50;
-    const R = reach * (0.75 + 0.35 * easeOut(q)) * r.impact;
+    const R = reach * (0.75 + 0.35 * ease.whip(q)) * r.impact;
     for (let i = 0; i <= r.streaks; i++) {
       const dq = i * 0.1;
-      const head = clamp01(easeOut((q - dq) * 2));
-      if (head <= 0) continue;
+      if (q - dq <= 0) continue;
+      const head = ease.whip((q - dq) * 2);
       const col = i ? r.trail.glow : r.main.glow;
-      arc(e, L.AIR, src.x, src.y, BODY_Z - 4, R - i * 8, ang - 1.3, 2.6, head, clamp01(easeIn(q - dq) * 1.1), (i ? 4 : 12) * r.impact, col, Math.min(1, r.bright * 1.25) * (i ? 0.7 : 1), 0.6, 0.8, 0.7);
+      arc(e, L.AIR, src.x, src.y, BODY_Z - 4, R - i * 8, ang - 1.3, 2.6, head, clamp01(ease.inOut(q - dq) * 1.1), (i ? 4 : 12) * r.impact, col, Math.min(1, r.bright * 1.25) * (i ? 0.7 : 1), 0.6, 0.8, 0.7);
     }
   }
-  for (const id of c.targets) impact(x, s, id, (t - c.tick) / s.S(0.32), 0.8, 0.8);
+  for (const id of c.targets) impact(x, s, id, 0.32, 0.8, 0.8);
 }
 
 // ---- tầm xa, khống chế, bùa chú: đạn bay ------------------------------------------------------------------------
@@ -201,18 +213,24 @@ function projectile(x: Ctx, s: Shot): void {
     const flight = Math.max(1, s.S(flightSeconds(c.skill, cells)));
     const launch = c.tick - flight;
     firstLaunch = Math.min(firstLaunch, launch);
-    if (t < launch || t >= c.tick + s.S(0.5)) continue;
+    if (t < launch || t >= c.tick + s.S(0.6)) continue;
     const src0 = x.foot(c.unit, launch) ?? s.src;
     const d = dir(src0, dst);
     const sx = src0.x + d.x * 10;
     const sy = src0.y + d.y * 10;
     const bump = c.skill === "bua_chu" ? 30 : c.skill === "khong_che" ? 8 : 12;
-    const pt = (q: number): [number, number, number] => [sx + (dst.x - sx) * q, sy + (dst.y - sy) * q, BODY_Z + 4 - 4 * q + Math.sin(Math.PI * q) * bump];
+    // Cung trọng lực từ tay tới thân mục tiêu (DONG_TAC.md: không bay thẳng).
+    const pt = flightPath(sx, sy, BODY_Z + 4, dst.x, dst.y, BODY_Z, bump);
     if (t < c.tick) {
       const q = (t - launch) / flight;
       const [hx, hy, hz] = pt(q);
       const [px, py, pz] = pt(Math.max(0, q - 0.03));
       const vang = Math.atan2(hy - hz - (py - pz), hx - px);
+      // Kéo dài đầu đạn theo tốc độ (smear), bề ngang co lại; vụt ra khỏi tay: 2 khung đầu có chớp nòng.
+      const F = frameTick(x);
+      const st = smear((Math.hypot(dst.x - sx, dst.y - sy) / flight) * F);
+      const lf = Math.floor((t - launch) / F);
+      if (lf < IMPACT_FRAMES) impactFrame(x, s, sx, sy, BODY_Z + 4, 7 * r.impact, lf, s.seed ^ (id * 31), L.AIR, 5 * r.impact);
       if (c.skill === "bua_chu") {
         // Lá bùa xoay, bóng mờ phía sau, tàn lửa hệ.
         for (let k = 2; k >= 0; k--) {
@@ -263,10 +281,12 @@ function projectile(x: Ctx, s: Shot): void {
         } else {
           trail(x, s, P, qq, r.smooth ? 0.45 : 0.32, lanes > 1 ? 2.2 : 3.4 * r.impact, r.bright);
         }
-        if (r.el === "kim") sprite(e, L.AIR, CELL.sword, ax, ay, az, 13 * r.impact, 13 * r.impact, vang, WHITE, r.bright, 0.4, 0.4);
-        else if (r.smooth) glow(e, L.AIR, ax, ay, az, 13, r.main.glow, r.bright, 0.7, 0.8, 0.4);
-        else sprite(e, L.AIR, CELL.spark, ax, ay, az, (lanes > 1 ? 10 : 15) * r.impact, (lanes > 1 ? 3 : 5) * r.impact, vang, r.main.glow, r.bright, 1, 1);
-        glow(e, L.AIR, ax, ay, az, 10, r.main.glow, 0.7 * r.bright, 1, 0.6);
+        // Phi kiếm giữ dáng (chỉ dài ra chút), cầu khí và tia khí kéo dài hẳn theo tốc độ.
+        const sl = 1 + 0.25 * (st.len - 1);
+        if (r.el === "kim") sprite(e, L.AIR, CELL.sword, ax, ay, az, 13 * r.impact * sl, 13 * r.impact / Math.sqrt(sl), vang, WHITE, r.bright, 0.4, 0.4);
+        else if (r.smooth) blob(e, L.AIR, ax, ay, az, 13 * st.len ** 0.5, 13 * st.wid ** 0.5, vang, r.main.glow, r.bright, 0.7, 0.8, 0.4);
+        else sprite(e, L.AIR, CELL.spark, ax, ay, az, (lanes > 1 ? 7 : 10) * r.impact * st.len, (lanes > 1 ? 3 : 5) * r.impact * st.wid, vang, r.main.glow, r.bright, 1, 1);
+        blob(e, L.AIR, ax, ay, az, 10 * st.len ** 0.5, 10 * st.wid, vang, r.main.glow, 0.7 * r.bright, 1, 0.6);
       }
       // hạt hệ phụ rơi khỏi đuôi
       for (let k = 0; k < count(r, 2); k++) {
@@ -274,16 +294,20 @@ function projectile(x: Ctx, s: Shot): void {
         if (qq <= 0) continue;
         const [ax, ay, az] = pt(qq);
         const el = r.subs[k % Math.max(1, r.subs.length)] ?? r.el;
-        motif(e, L.AIR, el, ax, ay, az - (q - qq) * 20, 4, qq * 8, COLORS[el].glow, r.bright * (1 - (q - qq) * 2), 0.5);
+        motif(e, L.AIR, el, ax, ay, az - 90 * (q - qq) ** 2, 4, qq * 8, COLORS[el].glow, r.bright * (1 - (q - qq) * 2), 0.5);
       }
     }
-    // Pha 3
-    const a = (t - c.tick) / s.S(c.skill === "bua_chu" ? 0.55 : 0.35);
-    if (a >= 0 && a < 1) {
+    // Pha 3 (t đã khựng: ấn son, vòng xích đứng yên lúc khựng; trong 2 khung va chạm chỉ có khung va chạm)
+    const dur = c.skill === "bua_chu" ? 0.55 : 0.35;
+    const a = (t - c.tick) / s.S(dur);
+    if (a >= 0 && a < 1 && impactFrameAt(x, s) < 0) {
       if (c.skill === "bua_chu") seal(x, s, dst, a);
-      if (c.skill === "khong_che") ring(e, L.BODY, dst.x, dst.y, 30 * (1 - easeOut(a)) + 14, (30 * (1 - easeOut(a)) + 14) * 0.5, mix(r.main.glow, WHITE, 0.4), r.bright * (1 - a), { width: 3, z: BODY_Z, dashes: 12, duty: 0.7, add: 0.5 });
-      impact(x, s, id, a, c.skill === "bua_chu" ? 1.3 : 1);
+      if (c.skill === "khong_che") {
+        const cl = ease.whip(a / 0.5);
+        ring(e, L.BODY, dst.x, dst.y, 30 * (1 - cl) + 14, (30 * (1 - cl) + 14) * 0.5, mix(r.main.glow, WHITE, 0.4), r.bright * (a < 0.6 ? 1 : (1 - a) / 0.4), { width: 3, z: BODY_Z, dashes: 12, duty: 0.7, add: 0.5 });
+      }
     }
+    impact(x, s, id, dur, c.skill === "bua_chu" ? 1.3 : 1);
   }
   if (Number.isFinite(firstLaunch)) {
     const w = s.S(c.skill === "bua_chu" ? 0.35 : c.skill === "khong_che" ? 0.25 : 0.18);
@@ -324,12 +348,13 @@ function area(x: Ctx, s: Shot): void {
   // Nhiều vùng chồng nhau thì mỗi vùng trong hơn, để vẫn thấy thanh máu, số sát thương bên dưới.
   const B = r.bright * x.zoneK;
   if (c.center === undefined || !c.radius) {
-    for (const id of c.targets) impact(x, s, id, (t - c.tick) / s.S(0.45));
+    for (const id of c.targets) impact(x, s, id, 0.45);
     return;
   }
   const z = x.f.zone(c.center, c.radius);
   const zy = z.y + x.f.size / 2;
   const start = c.start ?? c.tick - s.S(1);
+  const fr = impactFrameAt(x, s);
   // Pha 1: vòng báo trước trên đất, phủ dần theo tiến độ vận công; người ra chiêu tụ lực.
   if (t >= start && t < c.tick) {
     const q = (t - start) / Math.max(1, c.tick - start);
@@ -340,27 +365,37 @@ function area(x: Ctx, s: Shot): void {
     windup(x, s, start, c.tick, 1.2);
     glow(e, L.AIR, src.x, src.y, HEAD_Z + 6, 10 + 14 * q, r.main.glow, (0.3 + 0.6 * q) * B, 1, 0.6);
   }
-  // Pha 2: cầu khí bay vòng từ người ra chiêu xuống tâm vùng.
+  // Pha 2: cầu khí bay theo cung trọng lực từ tay người ra chiêu xuống tâm vùng, kéo dài theo hướng rơi; vệt kéo lấy
+  // đúng các điểm cầu khí đã đi qua.
   const fl = s.S(0.3);
   if (t >= c.tick - fl && t < c.tick) {
     const q = (t - (c.tick - fl)) / fl;
-    const h = HEAD_Z + 6 + 90 * Math.sin(Math.PI * q) * (1 - q * 0.4);
-    const px = src.x + (z.x - src.x) * q;
-    const py = src.y + (zy - src.y) * q;
-    const pz = h * (1 - q) + 0 * q;
-    glow(e, L.AIR, px, py, pz, 18 * r.impact, r.main.glow, B, 1, 1);
+    const pt = (u: number) => gravityArc(src.x, src.y, HEAD_Z + 6, z.x, zy, 0, u, 90);
+    const [px, py, pz] = pt(q);
+    const [bx, by, bz] = pt(Math.max(0, q - 0.04));
+    const vx = px - bx;
+    const vy = py - pz - (by - bz);
+    const st = smear((Math.hypot(vx, vy) / (0.04 * fl)) * frameTick(x));
+    blob(e, L.AIR, px, py, pz, 18 * r.impact * st.len ** 0.6, 18 * r.impact * st.wid, Math.atan2(vy, vx), r.main.glow, B, 1, 1);
     for (let k = 1; k <= 4; k++) {
-      const qq = Math.max(0, q - k * 0.06);
-      const hh = HEAD_Z + 6 + 90 * Math.sin(Math.PI * qq) * (1 - qq * 0.4);
-      glow(e, L.AIR, src.x + (z.x - src.x) * qq, src.y + (zy - src.y) * qq, hh * (1 - qq), 12 - k * 2, k % 2 ? r.trail.glow : r.main.glow, (0.6 - k * 0.12) * B, 1, 0.3);
+      const qq = q - k * 0.06;
+      if (qq <= 0) break;
+      const [tx, ty, tz] = pt(qq);
+      glow(e, L.AIR, tx, ty, tz, 12 - k * 2, k % 2 ? r.trail.glow : r.main.glow, (0.6 - k * 0.12) * B, 1, 0.3);
     }
   }
-  // Pha 3: chớp, sóng xung kích, mảnh hệ văng lên khắp vùng.
+  // Pha 3: khung va chạm trên đất (người đứng trong vùng in bóng lên nền), khựng, rồi sóng xung kích và mảnh hệ văng
+  // lên theo cung trọng lực khắp vùng.
   const a = (t - c.tick) / s.S(0.6);
-  if (a >= 0 && a < 1) {
-    groundGlow(e, L.GROUND, z.x, zy, z.rx * 1.1, z.ry * 1.1, r.main.glow, 0.45 * B * pulse(a, 0.06), 0.8);
-    ring(e, L.GROUND, z.x, zy, z.rx * (0.3 + 0.85 * easeOut(a)) * r.impact, z.ry * (0.3 + 0.85 * easeOut(a)) * r.impact, r.main.glow, B * (1 - a) ** 2, { width: 8 * (1 - a) + 1, halo: 0.6, add: 0.85 });
-    if (r.subs.length) ring(e, L.GROUND, z.x, zy, z.rx * (0.2 + 0.7 * easeOut(a)), z.ry * (0.2 + 0.7 * easeOut(a)), r.trail.glow, 0.8 * B * (1 - a) ** 2, { width: 4 * (1 - a) + 1, add: 0.9 });
+  if (fr >= 0) {
+    const k = Math.min(0.85, 0.7 * r.impact);
+    impactFrame(x, s, z.x, zy, 0, z.rx * k, fr, s.seed, L.GROUND, z.ry * k, undefined, true);
+  } else if (a >= 0 && a < 1) {
+    const w = ease.whip(a);
+    const end = a < 0.6 ? 1 : 1 - (a - 0.6) / 0.4;
+    ring(e, L.GROUND, z.x, zy, z.rx * (0.3 + 0.85 * w) * r.impact, z.ry * (0.3 + 0.85 * w) * r.impact, r.main.glow, B * end, { width: 8 * (1 - a) ** 1.5 + 1, halo: 0.6, add: 0.6 });
+    const lag = clamp01(a - 0.06);
+    if (r.subs.length && lag > 0) ring(e, L.GROUND, z.x, zy, z.rx * (0.2 + 0.7 * ease.whip(lag)), z.ry * (0.2 + 0.7 * ease.whip(lag)), r.trail.glow, 0.8 * B * end, { width: 4 * (1 - lag) ** 1.5 + 1, add: 0.7 });
     const n = count(r, 14);
     for (let i = 0; i < n; i++) {
       const ang = rnd(s.seed, 600 + i) * TAU;
@@ -370,11 +405,11 @@ function area(x: Ctx, s: Shot): void {
       const up = 50 * (0.5 + rnd(s.seed, 620 + i));
       const h = up * a * (1.2 - a);
       const el = i % 4 === 3 && r.subs[0] ? r.subs[0] : r.el;
-      motif(e, L.AIR, el, px, py, h + 2, 5 + 3 * rnd(s.seed, 630 + i), a * 6 + ang, COLORS[el].glow, B * (1 - a), 0.6);
+      motif(e, L.AIR, el, px, py, h + 2, (5 + 3 * rnd(s.seed, 630 + i)) * (1 - a * 0.6), a * 6 + ang, COLORS[el].glow, B * end, 0.6);
     }
-    if (r.tier >= 2) rays(e, L.GROUND, z.x, zy, 0, Math.max(z.rx, z.ry), r.main.glow, 0.5 * B * pulse(a, 0.1), 12, a, 12, 0.3, z.ry / Math.max(z.rx, z.ry));
+    if (r.tier >= 2) rays(e, L.GROUND, z.x, zy, 0, Math.max(z.rx, z.ry) * (1 - ease.inOut(a / 0.5)), r.main.glow, 0.5 * B, 12, a, 12, 0.3, z.ry / Math.max(z.rx, z.ry));
   }
-  for (const id of c.targets) impact(x, s, id, (t - c.tick) / s.S(0.45), 0.8, 0.7);
+  for (const id of c.targets) impact(x, s, id, 0.45, 0.8, 0.7);
 }
 
 // ---- trận pháp: trận đồ xoay trên đất, cột sáng khi kích, tuyệt sát -----------------------------------------------
@@ -384,7 +419,7 @@ function formation(x: Ctx, s: Shot): void {
   const { c, r, src } = s;
   const B = r.bright * x.zoneK;
   if (c.center === undefined || !c.radius) {
-    for (const id of c.targets) impact(x, s, id, (t - c.tick) / s.S(0.5));
+    for (const id of c.targets) impact(x, s, id, 0.5);
     return;
   }
   const z = x.f.zone(c.center, c.radius);
@@ -441,12 +476,16 @@ function formation(x: Ctx, s: Shot): void {
   }
   // Pha 3: cột sáng lớn giữa trận, cột sáng trên từng mục tiêu, chữ Trận; tuyệt sát trên ai bị hạ đúng lúc kích.
   const a = (t - c.tick) / s.S(0.9);
-  if (a >= 0 && a < 1) {
-    const grow = easeOut(a / 0.2);
+  const fr = impactFrameAt(x, s);
+  // Kích trận: khung va chạm giữa trận (trên đất), rồi cột sáng vụt lên (whip) trong lúc chữ Trận nảy ra (settle).
+  if (fr >= 0) impactFrame(x, s, z.x, zy, 0, z.rx * 0.9, fr, s.seed, L.GROUND, z.ry * 0.9, undefined, true);
+  else if (a >= 0 && a < 1) {
+    const grow = ease.whip(a / 0.25);
     const fade = 1 - ramp(a, 0.4, 1);
     beam(e, L.AIR, z.x, zy, 0, z.x, zy, 260 * grow, 16 * r.impact, r.main.glow, fade * B, 0, 1, 0.7, 0.3, 0.6);
-    glow(e, L.AIR, z.x, zy, 30, 70 * r.impact, r.main.glow, pulse(a, 0.06) * B, 1, 0.8);
-    sprite(e, L.AIR, CELL.glyphPhong, z.x, zy, 90 + 20 * a, 20, 20, 0, mix(r.main.glow, WHITE, 0.5), pulse(a, 0.15) * B, 0.4, 0.2);
+    glow(e, L.AIR, z.x, zy, 30, 70 * r.impact * (1 - ease.inOut(a / 0.3)), r.main.glow, B, 1, 0.8);
+    const pop = ease.settle(a / 0.3);
+    sprite(e, L.AIR, CELL.glyphPhong, z.x, zy, 90 + 20 * a, 20 * pop, 20 * pop, 0, mix(r.main.glow, WHITE, 0.5), fade * B, 0.4, 0.2);
     for (const id of c.targets) {
       const p = x.foot(id, c.tick);
       if (!p) continue;
@@ -455,7 +494,7 @@ function formation(x: Ctx, s: Shot): void {
       if (ut && ut.death === c.tick) execution(x, s, p, a);
     }
   }
-  for (const id of c.targets) impact(x, s, id, (t - c.tick) / s.S(0.5), 1.1, 0.8);
+  for (const id of c.targets) impact(x, s, id, 0.5, 1.1, 0.8);
 }
 
 /** Tuyệt sát: chém chéo đỏ thẫm, chữ Tuyệt đè lên mục tiêu. */
@@ -590,19 +629,19 @@ function dash(x: Ctx, s: Shot): void {
     }
     sprite(e, L.GROUND, CELL.smoke, before.x, before.y, 4, 16 + 10 * a, 9 + 4 * a, ang, WHITE, 0.4 * (1 - a), 0);
   }
-  // Pha 3: chém chữ thập ở mục tiêu.
+  // Pha 3: chém chữ thập ở mục tiêu; nhát đầu bắt đầu ngay trước lúc chạm nên khựng giữa nhát, nhát sau đuổi theo.
   const id = c.targets[0];
   const p = id !== undefined ? x.foot(id, c.tick) : null;
-  const b = (t - c.tick) / s.S(0.3);
+  const b = (t - (c.tick - s.S(0.05))) / s.S(0.32);
   if (p && b >= 0 && b < 1) {
     const ang = Math.atan2(p.y - after.y, p.x - after.x);
     for (const sgn of [1, -1]) {
       const tq = clamp01(b * 1.4 - (sgn < 0 ? 0.25 : 0));
       if (tq <= 0) continue;
-      arc(e, L.AIR, p.x, p.y, BODY_Z, 22 * r.impact, ang + sgn * 0.8 - 1.2, 2.4, easeOut(tq * 1.6), easeIn(tq), 6 * r.impact, sgn > 0 ? r.main.glow : r.trail.glow, r.bright, 0.7, 0.9);
+      arc(e, L.AIR, p.x, p.y, BODY_Z, 22 * r.impact, ang + sgn * 0.8 - 1.2, 2.4, ease.whip(tq * 1.6), ease.inOut(tq), 6 * r.impact, sgn > 0 ? r.main.glow : r.trail.glow, r.bright, 0.7, 0.9);
     }
   }
-  if (id !== undefined) impact(x, s, id, b, 1.1);
+  if (id !== undefined) impact(x, s, id, 0.3, 1.1);
 }
 
 // ---- chiêu cuối tông chủ -------------------------------------------------------------------------------------------
@@ -631,13 +670,17 @@ function ultimate(x: Ctx, s: Shot): void {
     }
     return;
   }
-  // Bùng: chớp vàng, tia toả, sóng xung kích quét sân, cột sáng trời; kiếm quang giáng xuống từng mục tiêu.
+  // Bùng: khung va chạm vàng rồi mực (thay chớp trắng mờ dần), khựng lâu, rồi tia toả, sóng xung kích quét sân, cột
+  // sáng trời; kiếm quang giáng xuống từng mục tiêu, mỗi nhát có khung va chạm riêng.
   const a = (t - c.tick) / dur;
   shade(e, L.GROUND, src.x, src.y, 0, 2000, 0.42 * (1 - easeOut(a / 0.5)), 60 + 300 * a, 220 + 400 * a);
-  // Chớp vàng ngắn (tắt hẳn sau khoảng 0,3 s) để không trắng xoá cả sân.
-  glow(e, L.AIR, src.x, src.y, BODY_Z, 150, mix(gold, WHITE, 0.15), pulse(a, 0.03) ** 2.5 * 0.7, 1, 0.15);
-  rays(e, L.AIR, src.x, src.y, BODY_Z, 300, gold, 0.6 * (1 - a) ** 1.5, 14, a * 0.8, 14, 0.5);
-  const wave = easeOut(a);
+  const fr = impactFrameAt(x, s);
+  if (fr >= 0) {
+    impactFrame(x, s, src.x, src.y, BODY_Z, 64, fr, s.seed ^ 77, L.AIR, 48, gold);
+    return;
+  }
+  rays(e, L.AIR, src.x, src.y, BODY_Z, 300 * (0.55 + 0.45 * ease.whip(a / 0.3)), gold, 0.6 * (a < 0.4 ? 1 : (1 - a) / 0.6) ** 1.5, 14, a * 0.8, 14, 0.5);
+  const wave = ease.whip(a);
   ring(e, L.GROUND, src.x, src.y, 40 + 420 * wave, (40 + 420 * wave) * 0.45, gold, 1 - a, { width: 10 * (1 - a) + 2, halo: 0.8, add: 0.9 });
   ring(e, L.GROUND, src.x, src.y, 30 + 300 * wave, (30 + 300 * wave) * 0.45, r.main.glow, 0.8 * (1 - a), { width: 5 * (1 - a) + 1, add: 0.9 });
   beam(e, L.AIR, src.x, src.y, 0, src.x, src.y, 520, 26 * (1 - 0.6 * a), gold, 1 - a, 0, 1, 0.7, 0.3, 0.6);
@@ -648,10 +691,14 @@ function ultimate(x: Ctx, s: Shot): void {
     const fall = easeIn(a / 0.22);
     if (a < 0.22) beam(e, L.AIR, p.x, p.y, 300, p.x, p.y, 300 - 300 * fall, 7, gold, 0.3, 1, 1, 0.9, 0.3, 0.4);
     const hit = clamp01((a - 0.2) / 0.5);
-    if (hit > 0 && hit < 1) {
-      glow(e, L.AIR, p.x, p.y, BODY_Z, 36 * easeOut(hit) + 10, mix(gold, WHITE, 0.25), 0.7 * pulse(hit, 0.06), 1, 0.4);
-      ring(e, L.GROUND, p.x, p.y, 10 + 50 * easeOut(hit), (10 + 50 * easeOut(hit)) * 0.4, gold, 1 - hit, { width: 4 * (1 - hit) + 1, halo: 0.5 });
-      sprite(e, L.AIR, CELL.sword, p.x, p.y, BODY_Z + 30 - 26 * easeOut(hit / 0.2), 22, 22, -Math.PI / 2, mix(gold, WHITE, 0.5), 1 - hit, 0.5, 0.6);
+    const hf = Math.floor((t - c.tick - 0.2 * dur) / frameTick(x));
+    if (hf >= 0 && hf < IMPACT_FRAMES) impactFrame(x, s, p.x, p.y, BODY_Z, 22, hf, s.seed ^ (id * 13), L.AIR, 17, gold);
+    else if (hit > 0 && hit < 1) {
+      const core = 1 - ease.inOut(hit / 0.3);
+      if (core > 0) blob(e, L.AIR, p.x, p.y, BODY_Z, 30 * core, 22 * core, 0, mix(gold, WHITE, 0.25), 0.8, 1, 0.4);
+      const w = ease.whip(hit);
+      ring(e, L.GROUND, p.x, p.y, 10 + 50 * w, (10 + 50 * w) * 0.4, gold, hit < 0.6 ? 1 : (1 - hit) / 0.4, { width: 4 * (1 - hit) ** 1.5 + 1, halo: 0.5 });
+      sprite(e, L.AIR, CELL.sword, p.x, p.y, BODY_Z + 30 - 26 * ease.whip(hit / 0.2), 22, 22, -Math.PI / 2, mix(gold, WHITE, 0.5), 1 - hit, 0.5, 0.6);
     }
   }
   const n = count(r, 24);

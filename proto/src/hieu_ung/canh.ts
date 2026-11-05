@@ -3,7 +3,9 @@
 import { between, type ReplayIndex } from "../replay/timeline.ts";
 import { assignLooks } from "../scenes/battle/character.ts";
 import { drawCast, LOOK_AHEAD, LOOK_BACK } from "./chieu.ts";
+import { MAX_STOP } from "./chung.ts";
 import { makeCtx } from "./ctx.ts";
+import { FPS } from "./nhip.ts";
 import type { Emitter } from "./emit.ts";
 import { statusFx } from "./he.ts";
 import { recipeOf, setCrowd } from "./recipe.ts";
@@ -38,11 +40,14 @@ export function emitFrame(e: Emitter, f: FxInput): void {
   const fadeOut = f.life(0.3);
   const track = statusTrack(f.index, f.statuses);
   for (const s of activeAt(track, f.t, fadeOut)) statusFx(x, s, fadeIn, fadeOut);
-  const casts = between(f.index.casts, f.t - LOOK_BACK, f.t + LOOK_AHEAD);
+  // Nhìn lại thêm phần khựng dài nhất (khung va chạm, khựng) để pha 3 không bị cắt ở ×4.
+  const casts = between(f.index.casts, f.t - LOOK_BACK - f.life(MAX_STOP / FPS), f.t + LOOK_AHEAD);
   // Đông chiêu thì giảm số hạt mỗi chiêu (hình dạng chính giữ nguyên): đếm chiêu có pha chạm trúng quanh t.
+  // Pha chạm trúng kéo dài thêm phần khựng nên nhìn lại xa hơn.
   const near = f.life(0.4);
+  const back = near + f.life(MAX_STOP / FPS);
   let busy = 0;
-  for (const c of casts) if (Math.abs(c.tick - f.t) <= near) busy++;
+  for (const c of casts) if (c.tick - f.t <= near && f.t - c.tick <= back) busy++;
   setCrowd(Math.min(1, Math.max(0.3, 24 / Math.max(1, busy))));
   // Vòng diện rộng, trận đồ đang hiện ở t (từ lúc vận, bày trận tới hết pha nổ): nhiều thì mỗi cái mờ đi.
   let zones = 0;

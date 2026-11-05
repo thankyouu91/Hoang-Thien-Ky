@@ -9,6 +9,7 @@
 // Cùng một công pháp thì công thức và seed giống hệt, nên lúc nào cũng ra đúng một hình.
 import { autoDang, fits, type Dang, type Persona } from "./dang_chon.ts";
 import { COLORS, type ElementColors } from "./emit.ts";
+import { HIT_STOP_FRAMES } from "./nhip.ts";
 import { hash } from "./ve.ts";
 import type { ElementId, SkillId } from "../replay/types.ts";
 import type { Cast } from "./types.ts";
@@ -63,6 +64,8 @@ export interface Recipe {
   bright: number;
   /** Bậc trang trí thêm theo phẩm: 0 (1–3), 1 (4–6), 2 (7–9), 3 (10) */
   tier: number;
+  /** Số khung khựng khi chạm ở 30 khung/giây (nhip.ts): Bạo khựng lâu, Tốc và Bền ngắn */
+  hold: number;
   /** Seed riêng của công thức (lệch góc chém, chọn hạt) */
   seed: number;
 }
@@ -107,6 +110,7 @@ export function recipe(s: FxStyle): Recipe {
     density: 0.55 + 0.09 * grade,
     bright: 0.74 + 0.034 * grade,
     tier: grade >= 10 ? 3 : grade >= 7 ? 2 : grade >= 4 ? 1 : 0,
+    hold: variant === "bao" ? 8 : variant === "toc" ? 3 : variant === "ben" ? 4 : HIT_STOP_FRAMES,
     seed: hash(h),
   };
   cache.set(key, r);

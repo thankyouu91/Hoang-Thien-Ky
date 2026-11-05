@@ -19,6 +19,11 @@ export interface Ctx {
   alive(id: number, time?: number): boolean;
   /** Hệ số độ sáng của vòng, trận đồ trên đất khi nhiều chiêu diện rộng, trận pháp chồng nhau (1 khi chỉ một) */
   zoneK: number;
+  /**
+   * Thời điểm phát thật khi `t` là thời điểm đã khựng (chung.ts stopped): hình đánh sau lúc chạm đứng yên trong lúc khựng,
+   * còn khung va chạm đếm theo thời điểm thật. Không có thì bằng t.
+   */
+  raw?: number;
 }
 
 export function makeCtx(e: Emitter, f: FxInput): Ctx {

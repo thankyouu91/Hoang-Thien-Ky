@@ -149,6 +149,26 @@ export function rays(e: Emitter, layer: Layer, x: number, y: number, z: number, 
   e.p(layer, o, n, phase, sharp, core);
 }
 
+/**
+ * Khung va chạm (impact frame): sao gai sắc cạnh, nửa trục rx, ry (bè ngang khi bẹt). spikes: số gai; jag: độ lệch dài
+ * ngắn giữa các gai 0..1; hole > 0 khoét giữa thành vành gai; valley: chân gai (0 gai nhọn sâu, 1 thành đĩa); rim: viền
+ * trắng mép trong. Mặc định hòa màu thường để tương phản rõ trên nền sân sáng.
+ */
+export function burst(
+  e: Emitter, layer: Layer, x: number, y: number, z: number, rx: number, ry: number, rot: number, c: RGB, a: number,
+  opt: { spikes?: number; phase?: number; hole?: number; jag?: number; seed?: number; rim?: number; valley?: number; add?: number } = {},
+): void {
+  const o = e.quad(layer, K.BURST, x, y, z, rx, ry, rot, c, a, opt.add ?? 0);
+  e.p(layer, o, opt.spikes ?? 9, opt.phase ?? 0, opt.hole ?? 0, opt.jag ?? 0.35);
+  e.q(layer, o, (opt.seed ?? 0) % 997, opt.rim ?? 0, opt.valley ?? 0.4);
+}
+
+/** Quầng elip xoay được (co giãn theo hướng bay: dài theo hướng, dẹt bề ngang). */
+export function blob(e: Emitter, layer: Layer, x: number, y: number, z: number, rx: number, ry: number, rot: number, c: RGB, a: number, add = 1, core = 0, hard = 0): void {
+  const o = e.quad(layer, K.GLOW, x, y, z, rx, ry, rot, c, a, add);
+  e.p(layer, o, hard, core);
+}
+
 /** Phủ tối cả vùng nhìn trừ quanh (x, y); size: nửa cạnh tấm phủ (đủ trùm màn hình). */
 export function shade(e: Emitter, layer: Layer, x: number, y: number, z: number, size: number, a: number, inner: number, outer: number): void {
   const o = e.quad(layer, K.SHADE, x, y, z, size, size, 0, [0.02, 0.01, 0.03], a, 0);

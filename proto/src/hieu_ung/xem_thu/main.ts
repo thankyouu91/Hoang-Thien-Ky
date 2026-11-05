@@ -12,6 +12,8 @@ import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
 import { GRADE_NAMES, scrollKind, VARIANT_NAMES } from "@ktlp/rules";
 import MAU from "../../../../data/he_thong/json/cong_phap_mau.json" with { type: "json" };
 import { castTimeline, type CastTimeline } from "../chieu.ts";
+import { holdOf, NO_CONTACT } from "../chung.ts";
+import { FPS, IMPACT_FRAMES } from "../nhip.ts";
 import type { SkillFx } from "../index.ts";
 import { DANG, DANG_FOR, DANG_NAME, type Dang } from "../dang_chon.ts";
 import { recipe, recipeOf, VARIANTS, type FxStyle, type Variant } from "../recipe.ts";
@@ -150,7 +152,8 @@ panel.innerHTML = `
     <label><input type="checkbox" id="xt-ult"> Chiêu cuối</label>
     <label><input type="checkbox" id="xt-cu"> 2D cũ</label>
     <label><input type="checkbox" id="xt-lap"> Lặp</label>
-    <button id="xt-film">Ảnh 4 pha</button>
+    <button id="xt-film">Ảnh nhịp</button>
+    <button id="xt-soi">Soi từng khung</button>
     <span class="info" id="xt-info"></span>
   </div>
   <div class="phase" id="xt-phase"><span>1 Khởi chiêu</span><span>2 Đường bay</span><span>3 Chạm trúng</span><span>4 Trạng thái</span></div>`;
@@ -268,44 +271,116 @@ function timeline(): CastTimeline | null {
   return castTimeline({ index, life: (s) => Math.min(2 * tps, s * tps * player.speed) }, c, recipeOf(c));
 }
 
-/**
- * Tấm ảnh các pha: mỗi hàng một bản (2D cũ, Three.js), mỗi cột một mốc (giữa khởi chiêu, đường bay, chạm trúng, giữa
- * pha chạm trúng, trạng thái). Vẽ đồng bộ từng khung bằng chính màn Trận, cắt vùng dưới bảng chọn.
- */
-function film(rows: ("old" | "new")[] = ["old", "new"], only?: number[], title?: string): HTMLCanvasElement | null {
+/** Nhịp của lần ra chiêu trong trận mẫu (DONG_TAC.md): tick mỗi khung 30 khung/giây, số khung khựng, có phải đòn chạm. */
+function beats(): { F: number; hold: number; contact: boolean; tl: CastTimeline } | null {
   const player = inner.player;
+  const c = inner.index?.casts[0];
   const tl = timeline();
-  if (!player || !tl) return null;
+  if (!player || !c || !tl) return null;
+  const tps = player.tps;
+  return { F: Math.min(2 * tps, (1 / FPS) * tps * player.speed), hold: holdOf(c, recipeOf(c)), contact: !NO_CONTACT.has(c.skill), tl };
+}
+
+/** Tên nhịp ở thời điểm tt (tick). */
+function beatAt(tt: number): string {
+  const b = beats();
+  if (!b) return "";
+  const { F, hold, contact, tl } = b;
+  if (tt < tl.windup) return "chờ";
+  if (tt < tl.travel) return "tụ lực";
+  if (tt < tl.hit) return tt < tl.travel + 4 * F ? "vụt" : "bay";
+  const n = (tt - tl.hit) / F;
+  if (contact && n < IMPACT_FRAMES) return "va chạm";
+  if (contact && n < IMPACT_FRAMES + hold) return "khựng";
+  if (tt < tl.settle - 0.35 * (tl.settle - tl.hit - (contact ? (IMPACT_FRAMES + hold) * F : 0))) return "bung";
+  return tt < tl.settle ? "lắng" : "trạng thái";
+}
+
+/**
+ * Vùng cắt ảnh (px CSS): ôm mọi người trong trận mẫu (hay chỉ người ra chiêu và mục tiêu khi `tight`), chừa chỗ cho hiệu
+ * ứng bay cao.
+ */
+function cropRect(tight = false): { sx: number; sy: number; sw: number; sh: number } {
   const v = app.view;
-  const gl = document.querySelector<HTMLCanvasElement>(".ktlp-hieu-ung canvas");
-  // Pane ẩn thì rAF thưa: tự vẽ một khung để màn Trận chọn chiều sân, rồi khung camera nếu chưa.
-  battle.draw(v);
-  if (!framed) {
-    framed = true;
-    frameCamera();
-  }
-  // Vùng cắt: ôm mọi người trong trận mẫu (toạ độ màn hình px CSS), chừa chỗ cho hiệu ứng bay cao.
-  const pts = current.units.map((u) => {
+  const c = inner.index?.casts[0];
+  const ids = tight && c ? [c.unit, ...c.targets] : current.units.map((u) => u.id);
+  const pts = current.units.filter((u) => ids.includes(u.id)).map((u) => {
     const p = inner.place(u.pos, inner.lat(u.id));
     return battle.camera.toScreen(p.x, p.y, v);
   });
   const top = panel.getBoundingClientRect().bottom;
-  const sx = Math.max(0, Math.min(...pts.map((p) => p.x)) - 70);
-  const sy = Math.max(top, Math.min(...pts.map((p) => p.y)) - 110);
-  const sw = Math.min(v.w, Math.max(...pts.map((p) => p.x)) + 70) - sx;
-  const sh = Math.min(v.h - v.bottom, Math.max(...pts.map((p) => p.y)) + 60) - sy;
+  // Cắt sát nhưng không nhỏ hơn khoảng 4 × 5 ô người (cận chiến hai người đứng sát nhau).
+  const minW = tight ? 190 : 0;
+  const minH = tight ? 230 : 0;
+  let x0 = Math.min(...pts.map((p) => p.x)) - (tight ? 46 : 70);
+  let x1 = Math.max(...pts.map((p) => p.x)) + (tight ? 46 : 70);
+  let y0 = Math.min(...pts.map((p) => p.y)) - (tight ? 80 : 110);
+  let y1 = Math.max(...pts.map((p) => p.y)) + (tight ? 40 : 60);
+  if (x1 - x0 < minW) [x0, x1] = [(x0 + x1 - minW) / 2, (x0 + x1 + minW) / 2];
+  if (y1 - y0 < minH) [y0, y1] = [(y0 + y1 - minH) / 2, (y0 + y1 + minH) / 2];
+  const sx = Math.max(0, x0);
+  const sy = Math.max(top, y0);
+  const sw = Math.min(v.w, x1) - sx;
+  const sh = Math.min(v.h - v.bottom, y1) - sy;
+  return { sx, sy, sw, sh };
+}
+
+/** Vẽ đồng bộ màn Trận ở tick tt rồi dán vùng cắt vào ô (dx, dy, cw, ch) của tấm ảnh. */
+function shoot(o: CanvasRenderingContext2D, tt: number, row: "old" | "new", rc: ReturnType<typeof cropRect>, dx: number, dy: number, cw: number, ch: number): void {
+  const player = inner.player!;
+  const v = app.view;
+  const gl = document.querySelector<HTMLCanvasElement>(".ktlp-hieu-ung canvas");
+  player.seek(tt);
+  for (let pass = 0; pass < 2; pass++) {
+    const ctx = v.ctx;
+    ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
+    ctx.fillStyle = "#14110f";
+    ctx.fillRect(0, 0, v.w, v.h);
+    battle.draw(v);
+  }
+  o.drawImage(canvas, rc.sx * v.dpr, rc.sy * v.dpr, rc.sw * v.dpr, rc.sh * v.dpr, dx, dy, cw, ch);
+  if (row === "new" && gl && inner.fx3d?.active) {
+    const s = gl.width / v.w;
+    o.drawImage(gl, rc.sx * s, rc.sy * s, rc.sw * s, rc.sh * s, dx, dy, cw, ch);
+  }
+}
+
+/** Chuẩn bị chụp: pane ẩn thì rAF thưa, tự vẽ một khung để màn Trận chọn chiều sân, rồi khung camera nếu chưa. */
+function readyToShoot(): void {
+  battle.draw(app.view);
+  if (!framed) {
+    framed = true;
+    frameCamera();
+  }
+}
+
+/**
+ * Tấm ảnh các nhịp (mỗi nhịp một ảnh, DONG_TAC.md): mỗi hàng một bản (2D cũ, Three.js), mỗi cột một mốc: tụ lực, bay,
+ * khung va chạm, khựng, bung, trạng thái. Vẽ đồng bộ từng khung bằng chính màn Trận, cắt vùng dưới bảng chọn.
+ */
+function film(rows: ("old" | "new")[] = ["old", "new"], only?: number[], title?: string): HTMLCanvasElement | null {
+  const player = inner.player;
+  const b = beats();
+  if (!player || !b) return null;
+  const { tl, F, hold, contact } = b;
+  const v = app.view;
+  readyToShoot();
+  // Một bản (chỉ Three.js) thì cắt sát người ra chiêu và mục tiêu.
+  const { sx, sy, sw, sh } = cropRect(rows.length === 1);
   // Pha 4 chụp ở khoảng 60% thời hạn trạng thái dài nhất của trận mẫu (sau pha chạm trúng nếu trạng thái ngắn).
   const untils = (current.events as unknown as { kind: string; until?: number }[]).filter((e) => e.kind === "status").map((e) => e.until ?? 0);
   const linger = untils.length ? Math.max(tl.settle + 2, tl.hit + 0.6 * (Math.max(...untils) - tl.hit)) : tl.settle + 8;
+  const stop = contact ? (IMPACT_FRAMES + hold) * F : 0;
   const times = [
     tl.windup + 0.7 * (tl.travel - tl.windup),
     tl.travel + 0.55 * (tl.hit - tl.travel),
-    tl.hit + 0.6,
-    tl.hit + 0.45 * (tl.settle - tl.hit),
+    tl.hit + 0.5 * F,
+    tl.hit + (IMPACT_FRAMES + hold / 2) * F,
+    tl.hit + stop + 0.3 * (tl.settle - tl.hit - stop),
     Math.min(linger, current.ticks - 2),
   ];
-  const allLabels = ["1 Khởi chiêu", "2 Đường bay", "3 Chạm trúng", "3 Chạm trúng (giữa)", "4 Trạng thái"];
-  const pickIdx = only ?? [0, 1, 2, 3, 4];
+  const allLabels = ["1 Tụ lực", "2 Đường bay", "3 Khung va chạm", "3 Khựng", "3 Bung", "4 Trạng thái"];
+  const pickIdx = only ?? [0, 1, 2, 3, 4, 5];
   const labels = pickIdx.map((i) => allLabels[i]);
   const allTimes = times.slice();
   times.length = 0;
@@ -335,29 +410,64 @@ function film(rows: ("old" | "new")[] = ["old", "new"], only?: number[], title?:
   rows.forEach((row, ri) => {
     inner.fx3d?.show(row === "new");
     times.forEach((tt, ci) => {
-      player.seek(tt);
-      for (let pass = 0; pass < 2; pass++) {
-        const ctx = v.ctx;
-        ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
-        ctx.fillStyle = "#14110f";
-        ctx.fillRect(0, 0, v.w, v.h);
-        battle.draw(v);
-      }
       const cell = only ? ri * only.length + ci : rows.length === 1 ? ci : ci * rows.length + ri;
       const dx = (cell % cols) * (cw + 4);
       const top0 = Math.floor(cell / cols) * (ch + head) + cap;
       const dy = top0 + head;
-      o.drawImage(canvas, sx * v.dpr, sy * v.dpr, sw * v.dpr, sh * v.dpr, dx, dy, cw, ch);
-      if (row === "new" && gl && inner.fx3d?.active) {
-        const s = gl.width / v.w;
-        o.drawImage(gl, sx * s, sy * s, sw * s, sh * s, dx, dy, cw, ch);
-      }
+      shoot(o, tt, row, { sx, sy, sw, sh }, dx, dy, cw, ch);
       o.fillStyle = "#efe6d6";
       o.font = "bold 22px system-ui, sans-serif";
       o.textBaseline = "top";
       o.fillText(`${row === "new" ? "Three.js" : "2D cũ"} · ${labels[ci]}`, dx + 6, top0 + 2);
     });
   });
+  inner.fx3d?.show(!pick.old);
+  player.seek(was.t);
+  player.playing = was.playing;
+  return out;
+}
+
+/**
+ * Soi từng khung (DONG_TAC.md: soi mọi khung rồi mới dựng): mọi khung 30 khung/giây của bản Three.js, từ `from` khung
+ * trước lúc chạm (mặc định đầu khởi chiêu, tối đa 18 khung) tới hết pha chạm trúng; mỗi ô ghi số khung tính từ lúc chạm và
+ * nhịp (tụ lực, vụt, bay, va chạm, khựng, bung, lắng).
+ */
+function probe(opt: { from?: number; to?: number; cols?: number; tight?: boolean } = {}): HTMLCanvasElement | null {
+  const player = inner.player;
+  const b = beats();
+  if (!player || !b) return null;
+  const { tl, F } = b;
+  const v = app.view;
+  readyToShoot();
+  const rc = cropRect(opt.tight ?? true);
+  const n0 = opt.from ?? Math.max(-18, Math.floor((tl.windup - tl.hit) / F));
+  const n1 = opt.to ?? Math.ceil((tl.settle - tl.hit) / F);
+  const cols = opt.cols ?? 6;
+  const cw = Math.round((v.w * 2) / cols) - 4;
+  const ch = Math.round((rc.sh * cw) / rc.sw);
+  const head = 20;
+  const n = n1 - n0 + 1;
+  const out = document.createElement("canvas");
+  out.width = (cw + 4) * cols;
+  out.height = (ch + head) * Math.ceil(n / cols);
+  const o = out.getContext("2d")!;
+  o.fillStyle = "#14110f";
+  o.fillRect(0, 0, out.width, out.height);
+  const was = { t: player.t, playing: player.playing };
+  player.playing = false;
+  inner.fx3d?.show(true);
+  for (let i = 0; i < n; i++) {
+    const k = n0 + i;
+    const tt = tl.hit + k * F + 0.01;
+    const dx = (i % cols) * (cw + 4);
+    const top0 = Math.floor(i / cols) * (ch + head);
+    shoot(o, tt, "new", rc, dx, top0 + head, cw, ch);
+    const beat = beatAt(tt);
+    o.fillStyle = beat === "va chạm" ? "#ff5a4f" : beat === "khựng" ? "#ffd34d" : "#efe6d6";
+    o.font = "bold 15px system-ui, sans-serif";
+    o.textBaseline = "top";
+    o.fillText(`${k > 0 ? "+" : ""}${k} · ${beat}`, dx + 4, top0 + 2);
+  }
   inner.fx3d?.show(!pick.old);
   player.seek(was.t);
   player.playing = was.playing;
@@ -413,6 +523,7 @@ function showFilm(rows?: ("old" | "new")[], canvasIn?: HTMLCanvasElement | null)
   document.body.append(wrap);
 }
 $("xt-film").onclick = () => showFilm();
+$("xt-soi").onclick = () => showFilm(undefined, probe());
 
 /** Đổi lựa chọn rồi chờ trận mẫu mới nạp xong (dùng từ console khi chụp ảnh). */
 async function go(p: Partial<Pick>): Promise<void> {
@@ -427,4 +538,4 @@ window.addEventListener("hashchange", () => {
   pick = next;
   reload();
 });
-Object.assign(window, { xemThu: { battle, app, inner, sampleReplay, film, showFilm, timeline, showcase, go, sheet, styleOf: () => styleOf(pick) } });
+Object.assign(window, { xemThu: { battle, app, inner, sampleReplay, film, probe, beatAt, showFilm, timeline, showcase, go, sheet, styleOf: () => styleOf(pick) } });

@@ -17,6 +17,7 @@ export const K = {
   RUNE: 6, // trận đồ, ấn; p = (góc xoay, phần đã sáng 0..1, kiểu, 0), q = (độ sáng, 0, 0, 0)
   RAYS: 7, // tia toả; p = (số tia, pha, độ nhọn, lõi)
   SHADE: 8, // phủ tối cả màn trừ quanh tâm; p = (bán kính sáng, bán kính tối hẳn, 0, 0)
+  BURST: 9, // khung va chạm: sao gai sắc cạnh; p = (số gai, pha, lỗ giữa 0..1, độ lệch gai), q = (seed, viền trắng, chân gai 0..1, 0)
 } as const;
 export type Kind = (typeof K)[keyof typeof K];
 

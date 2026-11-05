@@ -121,13 +121,15 @@ Dữ liệu từ replay:
 - Không sửa `packages/sim`; cần thêm dữ liệu sự kiện thì nhắn phiên giữ sim.
 - Hạt dùng instancing; đông chiêu thì giảm số hạt mỗi chiêu (`setCrowd`), hình chính giữ nguyên.
 - Nhiều vòng diện rộng, trận đồ cùng hiện thì mỗi cái mờ theo 1/√n (`Ctx.zoneK`), vòng nổ tắt nhanh hơn, để vẫn đọc được thanh máu và số (góp ý của proto-shell 2026-11-04).
+- Chuyển động theo luật ở [DONG_TAC.md](DONG_TAC.md) (người dùng gửi công thức 2026-11-05): nhịp 30 khung/giây, tụ lực lùi đà, cung trọng lực, trễ nhịp, co giãn theo tốc độ, khung va chạm rồi khựng thay cho chớp mờ dần.
 
 ## Trang xem thử
 
 Chạy dev, mở `/src/hieu_ung/xem_thu/index.html`:
 - chọn một trong 300 công pháp mẫu, đổi phẩm, biến thể, hệ phụ, bật chiêu cuối;
 - bật "2D cũ" để so với bản trước;
-- "Ảnh 4 pha" dựng tấm ảnh các mốc pha;
+- "Ảnh nhịp" dựng tấm ảnh mỗi nhịp một ảnh: tụ lực, đường bay, khung va chạm, khựng, bung, trạng thái;
+- "Soi từng khung" dựng mọi khung 30 khung/giây quanh lúc chạm, ghi số khung và nhịp;
 - nút ◀ ▶ chạy qua 12 chiêu tiêu biểu: mỗi hệ một chiêu, phủ đủ 10 loại chiêu.
 
 ## Đo (máy dev, 2026-11-04)

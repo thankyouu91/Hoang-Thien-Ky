@@ -7,8 +7,11 @@ import { ELEMENT_IDS, SKILL_IDS, type ElementId, type Replay, type SkillId } fro
 import { ReplayIndex } from "../replay/timeline.ts";
 import { emitFrame } from "./canh.ts";
 import { castTimeline } from "./chieu.ts";
+import { makeCtx } from "./ctx.ts";
 import { Emitter, STRIDE } from "./emit.ts";
+import { statusFx } from "./he.ts";
 import { recipe, recipeOf } from "./recipe.ts";
+import { activeAt, statusTrack } from "./trang_thai.ts";
 import type { FxInput } from "./types.ts";
 import { sampleReplay } from "./xem_thu/mau.ts";
 
@@ -97,9 +100,17 @@ test("trạng thái kéo dài (pha 4) có hình: đóng băng, tê liệt, trói
     const index = new ReplayIndex(sampleReplay({ skill, element, grade: 3 }));
     const c = index.casts[0];
     const tl = castTimeline({ index, life: (s) => Math.min(40, s * 20) }, c, recipeOf(c));
-    // Sau pha chạm trúng, chỉ còn trạng thái.
-    const t = Math.min(tl.settle + 1, c.tick + 9);
-    emitFrame(e, input(index, Math.max(t, tl.settle + 0.5)));
+    // Sau pha chạm trúng (đã gồm khựng) nếu trạng thái còn; trạng thái ngắn hơn pha chạm (choáng Lôi) thì ngay trước khi
+    // hết. Chỉ vẽ phần trạng thái để chắc hình đến từ pha 4.
+    let until = Infinity;
+    for (const ev of index.replay.events) if (ev.kind === "status") until = Math.min(until, ev.until);
+    const t = Math.min(tl.settle + 0.5, until - 1);
+    const f = input(index, t);
+    const spans = activeAt(statusTrack(index), t, f.life(0.3));
+    assert.ok(spans.length > 0, `${skill} ${element}: không có trạng thái ở t = ${t}`);
+    e.reset();
+    const x = makeCtx(e, f);
+    for (const s of spans) statusFx(x, s, f.life(0.15), f.life(0.3));
     assert.ok(e.total > 0, `${skill} ${element}: không có hình trạng thái`);
   }
 });
@@ -250,4 +261,97 @@ test("chọn dáng tự động theo tài năng, vũ khí, hệ (đề xuất)",
   // Dáng ép không hợp loại chiêu thì bỏ, vẽ hình gốc.
   assert.equal(recipe({ skill: "hoi_phuc", element: "quang", dang: "mua_kiem" }).dang, null);
   assert.equal(recipe({ skill: "dien_rong", element: "kim", dang: null }).dang, null);
+});
+
+// ---- luật chuyển động (DONG_TAC.md): dò từng luật trên bộ đệm ----------------------------------------------------
+
+/** Các tấm của bộ đệm: lớp, loại, độ sáng màu, alpha. */
+function quads(e: Emitter): { layer: number; kind: number; lum: number; a: number; add: number }[] {
+  const out: { layer: number; kind: number; lum: number; a: number; add: number }[] = [];
+  for (let l = 0; l < e.count.length; l++) {
+    const d = e.data[l];
+    for (let i = 0; i < e.count[l]; i++) {
+      const o = i * STRIDE;
+      out.push({ layer: l, kind: d[o + 7], lum: 0.3 * d[o + 8] + 0.59 * d[o + 9] + 0.11 * d[o + 10], a: d[o + 11], add: d[o + 6] });
+    }
+  }
+  return out;
+}
+
+test("luật: easing có tên đúng dáng; khựng; cung trọng lực là parabol; kéo dài giữ diện tích", async () => {
+  const { ease, gravityArc, hitStop, smear } = await import("./nhip.ts");
+  // tụ lực: lùi (âm) rồi mới tới 1; vụt: bứt rất nhanh; lắng: vượt quá 1 rồi về
+  assert.ok(Math.min(...[0.2, 0.3, 0.4, 0.5].map(ease.anticipate)) < -0.05);
+  assert.ok(Math.abs(ease.anticipate(1) - 1) < 1e-9);
+  assert.ok(ease.whip(0.25) > 0.8 && ease.whip(1) === 1);
+  assert.ok(Math.max(...[0.5, 0.6, 0.7, 0.8].map(ease.settle)) > 1.05);
+  assert.ok(Math.abs(ease.settle(1) - 1) < 1e-9);
+  assert.ok(Math.abs(ease.inOut(0.3) + ease.inOut(0.7) - 1) < 1e-9);
+  // khựng: trước lúc chạm giữ nguyên, trong lúc khựng đứng yên ở 0, sau đó trễ đúng phần khựng
+  assert.equal(hitStop(-2, 5), -2);
+  assert.equal(hitStop(3, 5), 0);
+  assert.equal(hitStop(8, 5), 3);
+  // parabol: sai phân bậc hai của độ cao không đổi, đỉnh ở giữa đường
+  const z = [0, 0.25, 0.5, 0.75, 1].map((q) => gravityArc(0, 0, 4, 100, 0, 0, q, 20)[2]);
+  const d2 = [z[2] - 2 * z[1] + z[0], z[3] - 2 * z[2] + z[1], z[4] - 2 * z[3] + z[2]];
+  assert.ok(Math.abs(d2[0] - d2[1]) < 1e-9 && Math.abs(d2[1] - d2[2]) < 1e-9 && d2[0] < 0);
+  assert.equal(gravityArc(0, 0, 4, 100, 0, 0, 0.5, 20)[2], 22);
+  // kéo dài: đứng yên thì không đổi, nhanh thì dài ra (tối đa 3), diện tích len × wid² giữ nguyên
+  assert.deepEqual(smear(0), { len: 1, wid: 1 });
+  const s = smear(100);
+  assert.equal(s.len, 3);
+  assert.ok(Math.abs(s.len * s.wid * s.wid - 1) < 1e-9);
+});
+
+test("luật: lúc chạm là khung va chạm sắc cạnh (khung 0 sáng, khung 1 mực), không phải chớp mờ dần", () => {
+  const skills: SkillId[] = ["can_don", "can_quet", "tam_xa", "khong_che", "bua_chu", "dien_rong", "tran_phap", "than_phap"];
+  const e = new Emitter();
+  for (const skill of skills) {
+    for (const element of ["hoa", "thuy", "kim"] as ElementId[]) {
+      const index = new ReplayIndex(sampleReplay({ skill, element, grade: 3, dang: null }));
+      const c = index.casts[0];
+      const f = input(index, c.tick);
+      const F = f.life(1 / 30);
+      emitFrame(e, input(index, c.tick + 0.3 * F));
+      const b0 = quads(e).filter((q) => q.kind === 9);
+      assert.ok(b0.length > 0, `${skill} ${element}: khung 0 không có khung va chạm`);
+      assert.ok(b0.every((q) => q.a >= 0.75 && q.add === 0), `${skill} ${element}: khung va chạm phải đậm, hoà màu thường`);
+      assert.ok(b0.some((q) => q.lum > 0.6), `${skill} ${element}: khung 0 phải có phần sáng`);
+      emitFrame(e, input(index, c.tick + 1.3 * F));
+      const b1 = quads(e).filter((q) => q.kind === 9);
+      assert.ok(b1.some((q) => q.lum < 0.25), `${skill} ${element}: khung 1 phải có vành mực đậm`);
+      // hết khung va chạm thì không còn khung va chạm cỡ lớn
+      emitFrame(e, input(index, c.tick + (2.5 + 5) * F));
+      assert.ok(quads(e).filter((q) => q.kind === 9 && q.lum < 0.25).length === 0, `${skill} ${element}: vành mực phải tắt sau khung 1`);
+    }
+  }
+  // hộ thể, hồi phục không chạm: không khung va chạm
+  for (const skill of ["ho_the", "hoi_phuc"] as SkillId[]) {
+    const index = new ReplayIndex(sampleReplay({ skill, element: "moc", grade: 3, dang: null }));
+    const c = index.casts[0];
+    emitFrame(e, input(index, c.tick + 0.2));
+    assert.equal(quads(e).filter((q) => q.kind === 9).length, 0, `${skill}: không được có khung va chạm`);
+  }
+});
+
+test("luật: trong lúc khựng hình đứng yên, hết khựng mới bung; pha 3 dài thêm đúng phần khựng", () => {
+  const e = new Emitter();
+  for (const [skill, variant, hold] of [["can_don", undefined, 5], ["can_quet", "bao", 8], ["tam_xa", "toc", 3], ["dien_rong", undefined, 5]] as const) {
+    // Kim không hệ phụ: không có trạng thái (pha 4 không khựng), nên mọi tấm là của lần ra chiêu.
+    const index = new ReplayIndex(sampleReplay({ skill, element: "kim", grade: 3, variant, dang: null }));
+    const c = index.casts[0];
+    const r = recipeOf(c);
+    assert.equal(r.hold, hold);
+    const F = input(index, c.tick).life(1 / 30);
+    emitFrame(e, input(index, c.tick + (2 + 0.3) * F));
+    const a = snap(e);
+    emitFrame(e, input(index, c.tick + (2 + hold - 0.3) * F));
+    assert.equal(snap(e), a, `${skill}: hình phải đứng yên suốt lúc khựng`);
+    emitFrame(e, input(index, c.tick + (2 + hold + 2) * F));
+    assert.notEqual(snap(e), a, `${skill}: hết khựng phải bung`);
+    // mốc hết pha 3 dài thêm (2 + hold) khung
+    const life = (s: number) => Math.min(40, s * 20);
+    const tl = castTimeline({ index, life }, c, r);
+    assert.ok(tl.settle - c.tick >= life((2 + hold) / 30), `${skill}: pha 3 phải gồm khựng`);
+  }
 });
