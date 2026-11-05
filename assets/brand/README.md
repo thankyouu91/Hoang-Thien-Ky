@@ -13,6 +13,8 @@ Bản chọn là dấu tròn: ngọn núi dưới trăng khuyết và mặt tr�
 
 | File | Cỡ | Dùng cho |
 |---|---|---|
+| `dau_an_1024.png` | 1024 | Bản lớn nền trong suốt (xuất lại từ Canva ở 1024 px) |
+| `discord_icon.png` | 1024 | Biểu tượng máy chủ Discord: ấn trên nền kem đặc, chừa lề cho khung tròn của Discord |
 | `dau_an.webp`, `dau_an.png` | 512 | Màn đăng nhập, cổng link mời |
 | `dau_an_256.png` | 256 | Thẻ, banner nhỏ |
 | `dau_an_128.png` | 128 | Nút, góc trang |

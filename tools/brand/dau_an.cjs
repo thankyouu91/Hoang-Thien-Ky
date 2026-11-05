@@ -106,6 +106,16 @@ async function main() {
   fs.writeFileSync(path.join(RA, "favicon-16.png"), f16);
   fs.writeFileSync(path.join(RA, "favicon.png"), f32);
   fs.writeFileSync(path.join(RA, "favicon.ico"), ico([[16, f16], [32, f32]]));
+  // Bản lớn 1024 (xuất lại trang Canva ở 1024 px, lưu là <chọn>_1024.png): ảnh trong suốt, và biểu tượng Discord nền kem
+  // (Discord cắt tròn biểu tượng; nền đặc giữ màu son đúng trên nền tối của Discord).
+  const lon = path.join(nguon, chon + "_1024.png");
+  if (fs.existsSync(lon)) {
+    const t1024 = await coDo(await trongSuot(lon), 1024);
+    fs.writeFileSync(path.join(RA, "dau_an_1024.png"), t1024);
+    await sharp({ create: { width: 1024, height: 1024, channels: 4, background: KEM } })
+      .composite([{ input: await coDo(t1024, 880), left: 72, top: 72 }]).flatten({ background: KEM })
+      .png({ compressionLevel: 9 }).toFile(path.join(RA, "discord_icon.png"));
+  }
 
   // Ảnh ghép so sánh: 3 cột × 2 hàng, mỗi ô khung đỏ mảnh trên nền kem; hàng dưới là bản chọn ở các cỡ nhỏ.
   const O = 360, DAU = 250, cot = 3, hang = Math.ceil(ds.length / cot), CAO = O * hang + 200;
