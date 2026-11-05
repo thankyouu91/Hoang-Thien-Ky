@@ -65,7 +65,7 @@
   },
   "tien_to_ma": {
     "TB": "Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu; KI 061–070 là danh khí)",
-    "NG": "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ)",
+    "NG": "Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; BA binh ấn; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ)",
     "TQ": "Tàn quyển (HE; số = thứ tự hệ)",
     "CP": "Công pháp (HE thuần hệ, số = thứ tự hệ; GH ghép 2 hệ, số = thứ tự cặp hệ; BO bộ 3 quyển, số = thứ tự chủ hệ)",
     "LT": "Linh thạch (PH: phẩm)",
@@ -112,9 +112,9 @@
     }
   ],
   "so_luong": {
-    "tong": 867,
+    "tong": 874,
     "uu_tien_1": 126,
-    "uu_tien_2": 740,
+    "uu_tien_2": 747,
     "uu_tien_3": 1
   },
   "icon": [
@@ -6648,6 +6648,15 @@
       "mo_ta": "a yellow paper talisman with red cinnabar seal patterns (no readable text) wrapped around a small folded piece of armor, a faint protective bronze glow"
     },
     {
+      "ma_vp": "PH-CH-011",
+      "ma": "phu/giam_dinh",
+      "nhom": "phu",
+      "ten": "Giám Định Phù",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/vat_pham.json (phu)",
+      "mo_ta": "a pale violet paper talisman with silver seal patterns (no readable text) and a glowing eye-shaped sigil at its center, casting a beam of soft light onto a small jade pendant behind it that reveals faint hidden glowing veins inside the jade"
+    },
+    {
       "ma_vp": "DA-DD-005",
       "ma": "dan/hoi_xuan_dan",
       "nhom": "dan",
@@ -9020,6 +9029,66 @@
       "uu_tien": 2,
       "nguon": "data/he_thong/json/ngoc.json (an_bo)",
       "mo_ta": "a small square spirit seal stamp carved from black and crimson jade, its knob carved as a swirling chaos vortex, chaotic black-red glow"
+    },
+    {
+      "ma_vp": "NG-BA-001",
+      "ma": "binh_an/bao_kich",
+      "nhom": "binh_an",
+      "ten": "Binh Ấn Bạo Kích",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (binh_an)",
+      "mo_ta": "a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a fierce roaring tiger head with bared fangs, crimson-red and orange glow",
+      "ghi_chu": "Bậc ấn là thuộc tính từng viên, tô viền bằng UI"
+    },
+    {
+      "ma_vp": "NG-BA-002",
+      "ma": "binh_an/xuyen_pha",
+      "nhom": "binh_an",
+      "ten": "Binh Ấn Xuyên Phá",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (binh_an)",
+      "mo_ta": "a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a spear tip piercing through a round shield, cold steel-blue glow",
+      "ghi_chu": "Bậc ấn là thuộc tính từng viên, tô viền bằng UI"
+    },
+    {
+      "ma_vp": "NG-BA-003",
+      "ma": "binh_an/lien_kich",
+      "nhom": "binh_an",
+      "ten": "Binh Ấn Liên Kích",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (binh_an)",
+      "mo_ta": "a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as twin crossed swords trailing curved motion arcs, bright pale-gold glow",
+      "ghi_chu": "Bậc ấn là thuộc tính từng viên, tô viền bằng UI"
+    },
+    {
+      "ma_vp": "NG-BA-004",
+      "ma": "binh_an/phap_nguyen",
+      "nhom": "binh_an",
+      "ten": "Binh Ấn Pháp Nguyên",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (binh_an)",
+      "mo_ta": "a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a lotus flower cradling a swirling spirit orb, deep sapphire-blue glow",
+      "ghi_chu": "Bậc ấn là thuộc tính từng viên, tô viền bằng UI"
+    },
+    {
+      "ma_vp": "NG-BA-005",
+      "ma": "binh_an/hap_hon",
+      "nhom": "binh_an",
+      "ten": "Binh Ấn Hấp Hồn",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (binh_an)",
+      "mo_ta": "a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a coiled serpent with a glowing soul wisp in its jaws, blood-red and violet glow",
+      "ghi_chu": "Bậc ấn là thuộc tính từng viên, tô viền bằng UI"
+    },
+    {
+      "ma_vp": "NG-BA-006",
+      "ma": "binh_an/tran_thu",
+      "nhom": "binh_an",
+      "ten": "Binh Ấn Trấn Thủ",
+      "uu_tien": 2,
+      "nguon": "data/he_thong/json/ngoc.json (binh_an)",
+      "mo_ta": "a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a sacred tortoise bearing a round shield on its shell, earthy jade-green and bronze glow",
+      "ghi_chu": "Bậc ấn là thuộc tính từng viên, tô viền bằng UI"
     },
     {
       "ma_vp": "NL-DP-001",

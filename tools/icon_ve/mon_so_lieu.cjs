@@ -1,4 +1,4 @@
-// Món mới lấy từ số liệu của phiên set đồ (data/he_thong/json): phù, đan, nguyên liệu, pháp bảo, pháp khí, Ý châu, ấn bộ.
+// Món mới lấy từ số liệu của phiên set đồ (data/he_thong/json): phù, đan, nguyên liệu, pháp bảo, pháp khí, Ý châu, ấn bộ, binh ấn.
 // Mã ma_vp lấy đúng từ số liệu. Lời mô tả hình tiếng Anh viết ở đây theo mẫu từng loại; tên lấy từ số liệu.
 const path = require("path");
 const J = f => require(path.resolve(__dirname, "../../data/he_thong/json", f + ".json"));
@@ -26,6 +26,8 @@ function monSoLieu(HE) {
     "PH-CH-008": "a yellow paper talisman with red cinnabar seal patterns (no readable text), above it a small glowing gemstone lifting free from an empty ring-shaped socket drawn in light",
     "PH-CH-009": "a pale blue paper talisman with silver seal patterns (no readable text), a glowing wisp of light flowing in an arc out of it like a migrating soul",
     "PH-CH-010": "a yellow paper talisman with red cinnabar seal patterns (no readable text) wrapped around a small folded piece of armor, a faint protective bronze glow",
+    // Giám Định Phù (Set đồ 2.0, ghi chú chung set-2.md 3.5): soi lộ dòng ẩn của ngọc bội, đai.
+    "PH-CH-011": "a pale violet paper talisman with silver seal patterns (no readable text) and a glowing eye-shaped sigil at its center, casting a beam of soft light onto a small jade pendant behind it that reveals faint hidden glowing veins inside the jade",
   };
   for (const p of J("vat_pham").phu) if (PHU[p.ma_vp])
     add({ ma_vp: p.ma_vp, ma: `phu/${slug(p.ten).replace(/_phu$/, "")}`, ten: p.ten, nguon: "data/he_thong/json/vat_pham.json (phu)", mo_ta: PHU[p.ma_vp] });
@@ -237,6 +239,24 @@ function monSoLieu(HE) {
     if (!h || !NUM[a.bo]) throw new Error("Ấn bộ thiếu " + a.ma_vp);
     add({ ma_vp: a.ma_vp, ma: `an_bo/${a.bo}`, ten: a.ten, nguon: "data/he_thong/json/ngoc.json (an_bo)",
       mo_ta: `a small square spirit seal stamp carved from ${h.mau} jade, its knob carved as ${NUM[a.bo]}, ${h.tt} glow` });
+  }
+
+  // Binh ấn (Set đồ 2.0, set-2.md 3.4): cùng dáng con dấu vuông như ấn bộ nhưng là ấn chiến đúc đồng, khảm vào vũ khí, bao tay, ngọc bội.
+  // Bậc ấn (lục tới đỏ) tô viền bằng UI, không vẽ riêng.
+  const BINH = {
+    bao_kich: ["a fierce roaring tiger head with bared fangs", "crimson-red and orange"],
+    xuyen_pha: ["a spear tip piercing through a round shield", "cold steel-blue"],
+    lien_kich: ["twin crossed swords trailing curved motion arcs", "bright pale-gold"],
+    phap_nguyen: ["a lotus flower cradling a swirling spirit orb", "deep sapphire-blue"],
+    hap_hon: ["a coiled serpent with a glowing soul wisp in its jaws", "blood-red and violet"],
+    tran_thu: ["a sacred tortoise bearing a round shield on its shell", "earthy jade-green and bronze"],
+  };
+  for (const b of ng.binh_an || []) {
+    if (!BINH[b.binh_bo]) throw new Error("Binh ấn thiếu " + b.ma_vp);
+    const [num, mau] = BINH[b.binh_bo];
+    add({ ma_vp: b.ma_vp, ma: `binh_an/${b.binh_bo}`, ten: b.ten, nguon: "data/he_thong/json/ngoc.json (binh_an)",
+      mo_ta: `a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as ${num}, ${mau} glow`,
+      ghi_chu: "Bậc ấn là thuộc tính từng viên, tô viền bằng UI" });
   }
 
   // Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13; phiên set đồ báo 2026-11-04, ghi chú chung luyen-khi.md).

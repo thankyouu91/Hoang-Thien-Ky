@@ -2,6 +2,72 @@
   "ghi_chu": [],
   "assets": [
     {
+      "ma_vp": "NG-BA-001",
+      "file": "binh_an/bao_kich.webp",
+      "ten": "Binh Ấn Bạo Kích",
+      "description": "Game inventory item icon: a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a fierce roaring tiger head with bared fangs, crimson-red and orange glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHaAtHPHU4",
+      "canva_media_tach_nen": "MAHaAkiHR10",
+      "canva_design": "DAHaAl7aYjo trang 29",
+      "created": "2026-11-05"
+    },
+    {
+      "ma_vp": "NG-BA-005",
+      "file": "binh_an/hap_hon.webp",
+      "ten": "Binh Ấn Hấp Hồn",
+      "description": "Game inventory item icon: a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a coiled serpent with a glowing soul wisp in its jaws, blood-red and violet glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHaAjRCbq8",
+      "canva_media_tach_nen": "MAHaAvvoAnA",
+      "canva_design": "DAHaAl7aYjo trang 33",
+      "created": "2026-11-05"
+    },
+    {
+      "ma_vp": "NG-BA-003",
+      "file": "binh_an/lien_kich.webp",
+      "ten": "Binh Ấn Liên Kích",
+      "description": "Game inventory item icon: a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as twin crossed swords trailing curved motion arcs, bright pale-gold glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHaAkWk0dk",
+      "canva_media_tach_nen": "MAHaAqDQB7k",
+      "canva_design": "DAHaAl7aYjo trang 31",
+      "created": "2026-11-05"
+    },
+    {
+      "ma_vp": "NG-BA-004",
+      "file": "binh_an/phap_nguyen.webp",
+      "ten": "Binh Ấn Pháp Nguyên",
+      "description": "Game inventory item icon: a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a lotus flower cradling a swirling spirit orb, deep sapphire-blue glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHaAk6p29U",
+      "canva_media_tach_nen": "MAHaAvTyHIA",
+      "canva_design": "DAHaAl7aYjo trang 32",
+      "created": "2026-11-05"
+    },
+    {
+      "ma_vp": "NG-BA-006",
+      "file": "binh_an/tran_thu.webp",
+      "ten": "Binh Ấn Trấn Thủ",
+      "description": "Game inventory item icon: a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a sacred tortoise bearing a round shield on its shell, earthy jade-green and bronze glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHaAnGcw0A",
+      "canva_media_tach_nen": "MAHaAnK_fIg",
+      "canva_design": "DAHaAl7aYjo trang 34",
+      "created": "2026-11-05"
+    },
+    {
+      "ma_vp": "NG-BA-002",
+      "file": "binh_an/xuyen_pha.webp",
+      "ten": "Binh Ấn Xuyên Phá",
+      "description": "Game inventory item icon: a small square war seal stamp cast in dark bronze with blackened iron edges and engraved weapon motifs on its sides, its knob sculpted as a spear tip piercing through a round shield, cold steel-blue glow. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHaAo8YsNE",
+      "canva_media_tach_nen": "MAHaAi0ivjs",
+      "canva_design": "DAHaAl7aYjo trang 30",
+      "created": "2026-11-05"
+    },
+    {
       "ma_vp": "CT-LO-006",
       "file": "chieu/bua_chu.webp",
       "ten": "Bùa chú",
@@ -1454,6 +1520,17 @@
       "canva_media_tach_nen": "MAHZ17Mzw9E",
       "canva_design": "DAHZ1iamT_w trang 17",
       "created": "2026-11-03"
+    },
+    {
+      "ma_vp": "PH-CH-011",
+      "file": "phu/giam_dinh.webp",
+      "ten": "Giám Định Phù",
+      "description": "Game inventory item icon: a pale violet paper talisman with silver seal patterns (no readable text) and a glowing eye-shaped sigil at its center, casting a beam of soft light onto a small jade pendant behind it that reveals faint hidden glowing veins inside the jade. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no frame.",
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → xuất PNG 512 nền trong → webp q88",
+      "canva_media_goc": "MAHaAgMXqEw",
+      "canva_media_tach_nen": "MAHaArw1ffw",
+      "canva_design": "DAHaAl7aYjo trang 35",
+      "created": "2026-11-05"
     },
     {
       "ma_vp": "PH-CH-004",

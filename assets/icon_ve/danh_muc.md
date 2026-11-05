@@ -2,12 +2,12 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 867 món, đã vẽ 406, cần vẽ lại 0.
+Tổng 874 món, đã vẽ 413, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
 | TB | Trang bị (KI kiếm, MU mũ, AO áo, DA đai, BT bao tay, GI giày, NB ngọc bội; số = số kiểu; KI 061–070 là danh khí) |
-| NG | Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ) |
+| NG | Ngọc (KH ngọc khảm, số = thứ tự hệ 1–12; YC Ý châu; AN ấn bộ; BA binh ấn; SH song hệ ngọc; PH Ngọc Phách theo thứ tự hệ) |
 | TQ | Tàn quyển (HE; số = thứ tự hệ) |
 | CP | Công pháp (HE thuần hệ, số = thứ tự hệ; GH ghép 2 hệ, số = thứ tự cặp hệ; BO bộ 3 quyển, số = thứ tự chủ hệ) |
 | LT | Linh thạch (PH: phẩm) |
@@ -707,7 +707,7 @@ Tổng 867 món, đã vẽ 406, cần vẽ lại 0.
 | LD-TH-002 | Phá Cảnh Đơn (thú) | linh_don/pha_canh_don.webp |  |
 | LD-TH-003 | Hồi Linh Đơn | linh_don/hoi_linh_don.webp |  |
 
-## Phù chú (10)
+## Phù chú (11)
 
 | Mã | Tên | File | Hình |
 |---|---|---|---|
@@ -721,6 +721,7 @@ Tổng 867 món, đã vẽ 406, cần vẽ lại 0.
 | PH-CH-008 | Thoát Khảm Phù | phu/thoat_kham.webp |  |
 | PH-CH-009 | Di Hồn Phù | phu/di_hon.webp |  |
 | PH-CH-010 | Hộ Khí Phù | phu/ho_khi.webp |  |
+| PH-CH-011 | Giám Định Phù | phu/giam_dinh.webp | ✓ |
 
 ## Trứng thú (2)
 
@@ -1120,6 +1121,17 @@ Tổng 867 món, đã vẽ 406, cần vẽ lại 0.
 | NG-AN-018 | Ấn Chu Thiên | an_bo/chu_thien.webp |  |
 | NG-AN-019 | Ấn Phá Quân | an_bo/pha_quan.webp |  |
 | NG-AN-020 | Ấn Hỗn Độn | an_bo/hon_don.webp |  |
+
+## Binh ấn (6)
+
+| Mã | Tên | File | Hình |
+|---|---|---|---|
+| NG-BA-001 | Binh Ấn Bạo Kích | binh_an/bao_kich.webp | ✓ |
+| NG-BA-002 | Binh Ấn Xuyên Phá | binh_an/xuyen_pha.webp | ✓ |
+| NG-BA-003 | Binh Ấn Liên Kích | binh_an/lien_kich.webp | ✓ |
+| NG-BA-004 | Binh Ấn Pháp Nguyên | binh_an/phap_nguyen.webp | ✓ |
+| NG-BA-005 | Binh Ấn Hấp Hồn | binh_an/hap_hon.webp | ✓ |
+| NG-BA-006 | Binh Ấn Trấn Thủ | binh_an/tran_thu.webp | ✓ |
 
 ## Ngọc Phách (12)
 
