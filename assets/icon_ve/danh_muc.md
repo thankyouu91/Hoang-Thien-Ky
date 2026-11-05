@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 867 món, đã vẽ 331, cần vẽ lại 0.
+Tổng 867 món, đã vẽ 355, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -780,29 +780,29 @@ Tổng 867 món, đã vẽ 331, cần vẽ lại 0.
 | CP-HE-010 | Công pháp hệ Cực dương | cong_phap/cuc_duong.webp | ✓ |
 | CP-HE-011 | Công pháp hệ Cực âm | cong_phap/cuc_am.webp | ✓ |
 | CP-HE-012 | Công pháp hệ Cực hàn | cong_phap/cuc_han.webp | ✓ |
-| CP-GH-001 | Công pháp ghép Kim–Mộc | cong_phap/ghep/kim_moc.webp |  |
-| CP-GH-002 | Công pháp ghép Kim–Thủy | cong_phap/ghep/kim_thuy.webp |  |
-| CP-GH-003 | Công pháp ghép Kim–Hỏa | cong_phap/ghep/kim_hoa.webp |  |
-| CP-GH-004 | Công pháp ghép Kim–Thổ | cong_phap/ghep/kim_tho.webp |  |
-| CP-GH-005 | Công pháp ghép Kim–Lôi | cong_phap/ghep/kim_loi.webp |  |
-| CP-GH-006 | Công pháp ghép Kim–Phong | cong_phap/ghep/kim_phong.webp |  |
-| CP-GH-007 | Công pháp ghép Kim–Quang | cong_phap/ghep/kim_quang.webp |  |
-| CP-GH-008 | Công pháp ghép Kim–Âm lãnh | cong_phap/ghep/kim_am_lanh.webp |  |
-| CP-GH-009 | Công pháp ghép Kim–Cực dương | cong_phap/ghep/kim_cuc_duong.webp |  |
-| CP-GH-010 | Công pháp ghép Kim–Cực âm | cong_phap/ghep/kim_cuc_am.webp |  |
-| CP-GH-011 | Công pháp ghép Kim–Cực hàn | cong_phap/ghep/kim_cuc_han.webp |  |
-| CP-GH-012 | Công pháp ghép Mộc–Thủy | cong_phap/ghep/moc_thuy.webp |  |
-| CP-GH-013 | Công pháp ghép Mộc–Hỏa | cong_phap/ghep/moc_hoa.webp |  |
-| CP-GH-014 | Công pháp ghép Mộc–Thổ | cong_phap/ghep/moc_tho.webp |  |
-| CP-GH-015 | Công pháp ghép Mộc–Lôi | cong_phap/ghep/moc_loi.webp |  |
-| CP-GH-016 | Công pháp ghép Mộc–Phong | cong_phap/ghep/moc_phong.webp |  |
-| CP-GH-017 | Công pháp ghép Mộc–Quang | cong_phap/ghep/moc_quang.webp |  |
-| CP-GH-018 | Công pháp ghép Mộc–Âm lãnh | cong_phap/ghep/moc_am_lanh.webp |  |
-| CP-GH-019 | Công pháp ghép Mộc–Cực dương | cong_phap/ghep/moc_cuc_duong.webp |  |
-| CP-GH-020 | Công pháp ghép Mộc–Cực âm | cong_phap/ghep/moc_cuc_am.webp |  |
-| CP-GH-021 | Công pháp ghép Mộc–Cực hàn | cong_phap/ghep/moc_cuc_han.webp |  |
-| CP-GH-022 | Công pháp ghép Thủy–Hỏa | cong_phap/ghep/thuy_hoa.webp |  |
-| CP-GH-023 | Công pháp ghép Thủy–Thổ | cong_phap/ghep/thuy_tho.webp |  |
+| CP-GH-001 | Công pháp ghép Kim–Mộc | cong_phap/ghep/kim_moc.webp | ✓ |
+| CP-GH-002 | Công pháp ghép Kim–Thủy | cong_phap/ghep/kim_thuy.webp | ✓ |
+| CP-GH-003 | Công pháp ghép Kim–Hỏa | cong_phap/ghep/kim_hoa.webp | ✓ |
+| CP-GH-004 | Công pháp ghép Kim–Thổ | cong_phap/ghep/kim_tho.webp | ✓ |
+| CP-GH-005 | Công pháp ghép Kim–Lôi | cong_phap/ghep/kim_loi.webp | ✓ |
+| CP-GH-006 | Công pháp ghép Kim–Phong | cong_phap/ghep/kim_phong.webp | ✓ |
+| CP-GH-007 | Công pháp ghép Kim–Quang | cong_phap/ghep/kim_quang.webp | ✓ |
+| CP-GH-008 | Công pháp ghép Kim–Âm lãnh | cong_phap/ghep/kim_am_lanh.webp | ✓ |
+| CP-GH-009 | Công pháp ghép Kim–Cực dương | cong_phap/ghep/kim_cuc_duong.webp | ✓ |
+| CP-GH-010 | Công pháp ghép Kim–Cực âm | cong_phap/ghep/kim_cuc_am.webp | ✓ |
+| CP-GH-011 | Công pháp ghép Kim–Cực hàn | cong_phap/ghep/kim_cuc_han.webp | ✓ |
+| CP-GH-012 | Công pháp ghép Mộc–Thủy | cong_phap/ghep/moc_thuy.webp | ✓ |
+| CP-GH-013 | Công pháp ghép Mộc–Hỏa | cong_phap/ghep/moc_hoa.webp | ✓ |
+| CP-GH-014 | Công pháp ghép Mộc–Thổ | cong_phap/ghep/moc_tho.webp | ✓ |
+| CP-GH-015 | Công pháp ghép Mộc–Lôi | cong_phap/ghep/moc_loi.webp | ✓ |
+| CP-GH-016 | Công pháp ghép Mộc–Phong | cong_phap/ghep/moc_phong.webp | ✓ |
+| CP-GH-017 | Công pháp ghép Mộc–Quang | cong_phap/ghep/moc_quang.webp | ✓ |
+| CP-GH-018 | Công pháp ghép Mộc–Âm lãnh | cong_phap/ghep/moc_am_lanh.webp | ✓ |
+| CP-GH-019 | Công pháp ghép Mộc–Cực dương | cong_phap/ghep/moc_cuc_duong.webp | ✓ |
+| CP-GH-020 | Công pháp ghép Mộc–Cực âm | cong_phap/ghep/moc_cuc_am.webp | ✓ |
+| CP-GH-021 | Công pháp ghép Mộc–Cực hàn | cong_phap/ghep/moc_cuc_han.webp | ✓ |
+| CP-GH-022 | Công pháp ghép Thủy–Hỏa | cong_phap/ghep/thuy_hoa.webp | ✓ |
+| CP-GH-023 | Công pháp ghép Thủy–Thổ | cong_phap/ghep/thuy_tho.webp | ✓ |
 | CP-GH-024 | Công pháp ghép Thủy–Lôi | cong_phap/ghep/thuy_loi.webp |  |
 | CP-GH-025 | Công pháp ghép Thủy–Phong | cong_phap/ghep/thuy_phong.webp |  |
 | CP-GH-026 | Công pháp ghép Thủy–Quang | cong_phap/ghep/thuy_quang.webp |  |
@@ -825,7 +825,7 @@ Tổng 867 món, đã vẽ 331, cần vẽ lại 0.
 | CP-GH-043 | Công pháp ghép Thổ–Cực dương | cong_phap/ghep/tho_cuc_duong.webp |  |
 | CP-GH-044 | Công pháp ghép Thổ–Cực âm | cong_phap/ghep/tho_cuc_am.webp |  |
 | CP-GH-045 | Công pháp ghép Thổ–Cực hàn | cong_phap/ghep/tho_cuc_han.webp |  |
-| CP-GH-046 | Công pháp ghép Lôi–Phong | cong_phap/ghep/loi_phong.webp |  |
+| CP-GH-046 | Công pháp ghép Lôi–Phong | cong_phap/ghep/loi_phong.webp | ✓ |
 | CP-GH-047 | Công pháp ghép Lôi–Quang | cong_phap/ghep/loi_quang.webp |  |
 | CP-GH-048 | Công pháp ghép Lôi–Âm lãnh | cong_phap/ghep/loi_am_lanh.webp |  |
 | CP-GH-049 | Công pháp ghép Lôi–Cực dương | cong_phap/ghep/loi_cuc_duong.webp |  |
