@@ -137,9 +137,29 @@ async function api(req: Request, env: EnvGame, ctx: ExecutionContext, path: stri
   return DUONG.includes(path) ? loi(405, "sai_phuong_thuc") : loi(404, "khong_co");
 }
 
+/** Thư mục file tĩnh công khai (khớp các mẫu "!/…" của run_worker_first trong wrangler.jsonc). */
+const TINH_CONG_KHAI = /^\/(assets|pixellab|icon_ve|brand)\//;
+/** Đường dẫn trỏ tới một file (có đuôi), khác với đường dẫn trang. */
+const CO_DUOI = /\/[^/]+\.[a-z0-9]{1,8}$/i;
+
+/**
+ * File tĩnh không còn (vd chunk JS của bản trước sau khi deploy) phải trả 404 thật, không trả trang HTML dự phòng:
+ * trình duyệt nhận HTML cho một file .js thì import() treo ở "Đang tải…" (lỗi D-CHUNK). Phía trình duyệt tự tải lại trang
+ * khi gặp lỗi tải chunk (proto-shell).
+ */
+function khongCoFile(): Response {
+  return new Response("Không có file này.", { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } });
+}
+
 /** Trang HTML của game: không để trình duyệt hay proxy giữ bản đã qua cổng. */
 async function phucVuTrang(req: Request, env: EnvGame): Promise<Response> {
-  const r = await env.ASSETS.fetch(req);
+  const url = new URL(req.url);
+  let r = await env.ASSETS.fetch(req);
+  if (r.status === 404) {
+    if (CO_DUOI.test(url.pathname)) return khongCoFile();
+    // Đường dẫn trang không có file (SPA): trả index.html. not_found_handling = "none" nên Worker tự làm việc này.
+    r = await env.ASSETS.fetch(new Request(new URL("/", url), req));
+  }
   if (!(r.headers.get("Content-Type") ?? "").includes("text/html")) return r;
   const out = new Response(r.body, r);
   out.headers.set("Cache-Control", "private, no-cache");
@@ -157,6 +177,12 @@ export default {
       // Trình duyệt tự xin /favicon.ico (cả ở trang cổng lẫn trong game): trả favicon dấu ấn, không qua cổng.
       if (path === "/favicon.ico") return env.ASSETS.fetch(new Request(new URL("/brand/favicon.ico", req.url), req));
       if (path.startsWith("/moi/")) return await nhanLoiMoi(req, env, path.slice(5).replace(/\/+$/, ""));
+      // File tĩnh công khai lọt vào Worker (thường chỉ khi file không còn): trả file hoặc 404 thật, không qua cổng,
+      // để chunk cũ không bao giờ nhận về trang HTML.
+      if (TINH_CONG_KHAI.test(path)) {
+        const r = await env.ASSETS.fetch(req);
+        return r.status === 404 ? khongCoFile() : r;
+      }
 
       const nguoi = await nguoiCuaCookie(req, env.DB);
       if (!nguoi) return laApi ? loi(401, "chua_co_loi_moi", "Cần mở link mời trước.") : trangCanLinkMoi();

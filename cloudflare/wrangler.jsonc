@@ -14,7 +14,8 @@
   "assets": {
     "directory": "../proto/dist",
     "binding": "ASSETS",
-    "not_found_handling": "single-page-application",
+    // Không trả index.html cho mọi đường dẫn thiếu file: file tĩnh không còn phải ra 404 (lỗi D-CHUNK); Worker tự trả index.html cho đường dẫn trang.
+    "not_found_handling": "none",
     // Mọi đường dẫn qua cổng link mời của Worker, trừ file tĩnh có mã băm, hình và dấu ấn/favicon (phục vụ thẳng, không tốn lượt request).
     "run_worker_first": ["/*", "!/assets/*", "!/pixellab/*", "!/icon_ve/*", "!/brand/*"]
   },
