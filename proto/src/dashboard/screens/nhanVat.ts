@@ -117,8 +117,15 @@ function bigArtTinted(art: HTMLImageElement, outfit: string, key: string, he: st
       if (ctx) {
         ctx.drawImage(art, 0, 0);
         const d = ctx.getImageData(0, 0, cv.width, cv.height);
+        const goc = d.data.slice();
         const range = lightRange(d.data, spec);
         if (range && recolor(d.data, spec, tones, range) > 0) {
+          // Hình lớn vẽ tóc và viền bằng đen ánh lam, lọt vào dải màu áo: giữ nguyên điểm gần đen (độ sáng dưới 0,09) để
+          // tóc, viền không bị nhuộm theo hệ; áo vẫn đổi màu ở các tông giữa và sáng.
+          for (let o = 0; o < goc.length; o += 4) {
+            const l = (Math.max(goc[o], goc[o + 1], goc[o + 2]) + Math.min(goc[o], goc[o + 1], goc[o + 2])) / 510;
+            if (l < 0.09) d.data.set(goc.subarray(o, o + 4), o);
+          }
           ctx.putImageData(d, 0, 0);
           c = cv;
         }
