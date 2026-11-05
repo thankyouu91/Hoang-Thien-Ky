@@ -26,6 +26,7 @@
 //   set_2e          cân lộ bước 1 sau lần đo 2: mốc 2, 4, 7 của 8 bộ, 5 binh bộ, hệ số nhóm dòng ẩn, bỏ ràng buộc Băng Phách 7
 //   set_2f          cân khắc bước 2: 7 mốc set, Hấp Hồn mốc 3, điểm controlTakenCut và reflectTakenCut
 //   set_2g          set đồ 2.0 bước 3: Bàn Thạch 2/4, Ngọc Tủy 2/4, Thiết Kỵ 4, Bách Thảo 2/4, Hấp Hồn mốc 3
+//   set_2h          set đồ 2.0 lần chỉnh cuối: Bàn Thạch 4, Ngọc Tủy 4, binh bộ Trấn Thủ
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -1036,9 +1037,9 @@ const SET2_MOC: [string, number, string, string, string, string | null][] = [
   ["do_kiep", 2, "chi_so", "Kháng Lôi +4%", "khangLoi: 40", null],
   ["do_kiep", 4, "hanh_vi", "Bùa chú giảm mana thi triển 15%; lần Bùa chú cuối cùng mỗi trận không tốn mana", "buaGiamMana: 150; buaCuoiMienMana: 1", null],
   ["ban_thach", 2, "chi_so", "Máu +2%", "hp: 20", null],
-  ["ban_thach", 4, "chi_so", "Giảm sát thương ngoại nhận 12%; hồi 0,1% máu mỗi giây", "damageTakenCutOuter: 120; hpRegen: 1", null],
+  ["ban_thach", 4, "chi_so", "Giảm sát thương ngoại nhận 10%; hồi 0,1% máu mỗi giây", "damageTakenCutOuter: 100; hpRegen: 1", null],
   ["ngoc_tuy", 2, "chi_so", "Thủ nội +2%", "defInner: 20", null],
-  ["ngoc_tuy", 4, "chi_so", "Giảm mana thi triển 5%; giảm sát thương nội nhận 18%; công lực −3%", "manaCostCut: 50; damageTakenCutInner: 180; atk: -30", null],
+  ["ngoc_tuy", 4, "chi_so", "Giảm mana thi triển 5%; giảm sát thương nội nhận 15%; công lực −3%", "manaCostCut: 50; damageTakenCutInner: 150; atk: -30", null],
   ["chu_thien", 2, "chi_so", "Bày trận nhanh hơn 0,5 s; giảm sát thương nội nhận 4%", "bayTranTicks: -10; damageTakenCutInner: 40", null],
   ["chu_thien", 4, "hanh_vi", "Giảm sát thương nội nhận 8%; Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên", "chonViTri: dong_dich_nhat; damageTakenCutInner: 80", null],
   ["bach_thao", 2, "chi_so", "Hồi máu nhận +6%; thời gian bị khống chế −30%; hồi 0,2% máu mỗi giây", "healTaken: 60; controlTakenCut: 300; hpRegen: 2", null],
@@ -1080,7 +1081,7 @@ const SET2_BINH: [string, string, string, string, string, string, string][] = [
   ["lien_kich", "Liên Kích", "ngoai_cong", "Tốc đánh +4%", "attackSpeed: 40", "Giảm hồi chiêu 3%", "cooldownCut: 30"],
   ["phap_nguyen", "Pháp Nguyên", "noi_cong", "Giảm mana thi triển 4%", "manaCostCut: 40", "Sát thương chiêu nội +2,5%", "innerDamage: 25"],
   ["hap_hon", "Hấp Hồn", "hap_thu", "Hút máu +1,5%", "lifesteal: 15", "Hút mana 0,5% mỗi đòn; sát thương phản đòn nhận vào −60%", "manaDrain: 5; reflectTakenCut: 600"],
-  ["tran_thu", "Trấn Thủ", "thu_ngoai, thu_noi, phan_chan", "Khiên nhận +5%", "khienNhan: 50", "Thủ ngoại +3%; thủ nội +3%", "defOuter: 30; defInner: 30"],
+  ["tran_thu", "Trấn Thủ", "thu_ngoai, thu_noi, phan_chan", "Khiên nhận +3%", "khienNhan: 30", "Thủ ngoại +1,5%; thủ nội +1,5%", "defOuter: 15; defInner: 15"],
 ];
 /** Dòng ẩn: mã, nội dung, tham số (đơn vị code). */
 const SET2_DK: [string, string, string][] = [
@@ -1531,10 +1532,14 @@ const set2f: Step = (wb, log) => set2e(wb, log);
 
 const set2g: Step = (wb, log) => set2e(wb, log);
 
+// ---------- set đồ 2.0 lần 8: lần chỉnh cuối (GDD tab Trang bị rev 81; đề xuất). Số mới nằm ở SET2_MOC, SET2_BINH. ----------
+
+const set2h: Step = (wb, log) => set2e(wb, log);
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
-  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g,
+  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

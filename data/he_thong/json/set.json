@@ -167,8 +167,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Giảm sát thương ngoại nhận 12%; hồi 0,1% máu mỗi giây",
-          "tham_so": {"damageTakenCutOuter":120,"hpRegen":1}
+          "mo_ta": "Giảm sát thương ngoại nhận 10%; hồi 0,1% máu mỗi giây",
+          "tham_so": {"damageTakenCutOuter":100,"hpRegen":1}
         },
         {
           "so": 7,
@@ -271,8 +271,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Giảm mana thi triển 5%; giảm sát thương nội nhận 18%; công lực −3%",
-          "tham_so": {"manaCostCut":50,"damageTakenCutInner":180,"atk":-30}
+          "mo_ta": "Giảm mana thi triển 5%; giảm sát thương nội nhận 15%; công lực −3%",
+          "tham_so": {"manaCostCut":50,"damageTakenCutInner":150,"atk":-30}
         },
         {
           "so": 7,
@@ -666,8 +666,8 @@
       "ten": "Trấn Thủ",
       "lo": ["thu_ngoai","thu_noi","phan_chan"],
       "an": "NG-BA-006",
-      "moc_2": {"mo_ta":"Khiên nhận +5%","tham_so":{"khienNhan":50}},
-      "moc_3": {"mo_ta":"Thủ ngoại +3%; thủ nội +3%","tham_so":{"defOuter":30,"defInner":30}}
+      "moc_2": {"mo_ta":"Khiên nhận +3%","tham_so":{"khienNhan":30}},
+      "moc_3": {"mo_ta":"Thủ ngoại +1,5%; thủ nội +1,5%","tham_so":{"defOuter":15,"defInner":15}}
     }
   ],
   "bo_tron": [
