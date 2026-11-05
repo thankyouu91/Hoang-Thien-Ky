@@ -4,8 +4,8 @@ import { expect, test } from "@playwright/test";
 import { buocHienTai, capHienTai, chuVietConSot, dangNhap, lamTheoHuongDan, MayAnh, moGame, ngaySinhTuoi, soThu } from "./nguoi-choi.ts";
 
 // Tên riêng giữ tiếng Việt ở bản EN: tên game và tên công pháp ("Lôi Kim Châm Quyết"…).
-const TEN_RIENG = [/Thiên Hoang Ký/g, /(p{Lu}p{Ll}*s){1,4}Quyết/gu];
-const VIET = /[ăâđêôơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]|(tu vi|khi xong|linh thach)/i;
+const TEN_RIENG = [/Thiên Hoang Ký/g, /(\p{Lu}\p{Ll}*\s){1,4}Quyết/gu];
+const VIET = /[ăâđêôơưạảấầẩẫậắằẳẵặẹẻẽếềểễệỉịọỏốồổỗộớờởỡợụủứừửữựỳỵỷỹ]|\b(tu vi|khi xong|linh thach)\b/i;
 
 test("đi hết nhập môn bằng tiếng Anh", async ({ page }, info) => {
   const anh = new MayAnh(page, info, "tieng-anh");
