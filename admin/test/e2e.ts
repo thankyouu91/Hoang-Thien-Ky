@@ -33,7 +33,7 @@ const mig = spawnSync(WR, ["d1", "migrations", "apply", "thienhoangky", "--local
 assert.equal(mig.status, 0, mig.stdout + mig.stderr);
 
 // Team domain ghi kèm https:// như trên dashboard Zero Trust: Worker phải tự bỏ scheme.
-const vars = { ACCESS_TEAM_DOMAIN: `https://${TEAM}/`, ACCESS_AUD: AUD, ADMIN_GOC: "goc@example.com", ACCESS_CERTS_URL: certs };
+const vars = { ACCESS_TEAM_DOMAIN: `https://${TEAM}/`, ACCESS_AUD: AUD, ADMIN_GOC: "goc@example.com", ACCESS_CERTS_URL: certs, GAME_ORIGIN: "https://choi.thienhoangky.fun/" };
 const dev = spawn(WR, ["dev", "--port", String(PORT), "--ip", "127.0.0.1", "--persist-to", STATE, ...Object.entries(vars).flatMap(([a, b]) => ["--var", `${a}:${b}`])], {
   shell: true,
   env: ENV,
@@ -211,12 +211,13 @@ try {
     }
   });
   let ma = "";
-  await kiem("Admin tạo link mời: mã ngẫu nhiên 12 ký tự, link đúng tên miền", async () => {
+  await kiem("Admin tạo link mời: mã ngẫu nhiên 12 ký tự, link ghép từ GAME_ORIGIN", async () => {
     const r = await goi("POST", "/api/loi-moi", { jwt: GOC, body: { ten: "Discord đợt 1", toi_da: 2, het_han: now + 7 * NGAY } });
     assert.equal(r.status, 200, JSON.stringify(r.data));
     ma = r.data.ma;
     assert.match(ma, /^[a-z2-9]{12}$/);
-    assert.equal(r.data.link, `https://thienhoangky.fun/moi/${ma}`);
+    assert.equal(r.data.link, `https://choi.thienhoangky.fun/moi/${ma}`);
+    assert.equal((await goi("GET", "/api/nguoi-choi", { jwt: GOC })).data.link_goc, "https://choi.thienhoangky.fun/moi/");
   });
   await kiem("người chơi thử vào bằng link (giả Worker game ghi) → danh sách thật, không lộ the_hash", async () => {
     sql(

@@ -13,6 +13,8 @@ export interface Env {
   ADMIN_GOC: string;
   /** Chỉ cho test cục bộ: lấy khóa JWKS từ địa chỉ khác (máy chủ khóa giả). Không đặt khi deploy. */
   ACCESS_CERTS_URL?: string;
+  /** Nơi chạy game, ví dụ "https://thienhoangky.fun" (hoặc "https://choi.thienhoangky.fun" nếu dời). Link mời = GAME_ORIGIN/moi/<ma>. */
+  GAME_ORIGIN?: string;
   /** Đồng bộ Access Group quản trị (không bắt buộc). CF_API_TOKEN là secret. */
   CF_ACCOUNT_ID?: string;
   CF_API_TOKEN?: string;
@@ -22,6 +24,12 @@ export interface Env {
 /** Team domain không có scheme và dấu / cuối: "https://x.cloudflareaccess.com/" → "x.cloudflareaccess.com". */
 export function teamDomain(env: Env): string {
   return (env.ACCESS_TEAM_DOMAIN ?? "").trim().replace(/^https?:\/\//, "").replace(/\/+$/, "");
+}
+
+/** Gốc link mời, luôn kết thúc bằng "/moi/". Thiếu GAME_ORIGIN thì dùng tên miền game hiện tại. */
+export function linkGoc(env: Env): string {
+  const goc = (env.GAME_ORIGIN ?? "").trim().replace(/\/+$/, "") || "https://thienhoangky.fun";
+  return `${goc}/moi/`;
 }
 
 export function dsAdminGoc(env: Env): string[] {

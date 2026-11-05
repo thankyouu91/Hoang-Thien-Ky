@@ -29,7 +29,9 @@
   "vars": {
     "ACCESS_TEAM_DOMAIN": "jolly-water-a8bd.cloudflareaccess.com",
     "ACCESS_AUD": "",
-    "ADMIN_GOC": ""
+    "ADMIN_GOC": "",
+    // Nơi chạy game: link mời là GAME_ORIGIN + "/moi/<ma>". Dời game sang tên miền khác thì chỉ đổi dòng này rồi deploy.
+    "GAME_ORIGIN": "https://thienhoangky.fun"
   },
   // Log do Worker tự ghi (không có email). Tắt invocation log để header JWT và đường dẫn không vào Workers Logs.
   "observability": { "enabled": true, "logs": { "invocation_logs": false } }

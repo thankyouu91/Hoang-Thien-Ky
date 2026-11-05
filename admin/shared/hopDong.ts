@@ -101,7 +101,8 @@ export interface DsSuKien {
 // Người chơi thử vào bằng link mời https://thienhoangky.fun/moi/<ma>, không qua Access và không có email
 // (cloudflare/migrations/0002_link_moi.sql, docs/api.md).
 
-export const LINK_MOI_GOC = "https://thienhoangky.fun/moi/";
+// Gốc link (ví dụ "https://thienhoangky.fun/moi/") do server trả trong DsNguoiChoi.link_goc, lấy từ biến GAME_ORIGIN của Worker
+// admin, để dời game sang tên miền khác (như choi.thienhoangky.fun) chỉ cần đổi wrangler.jsonc.
 
 /** mo: còn dùng được; tat: Admin tắt; het_luot: đủ toi_da; het_han: quá het_han. */
 export type TrangThaiLink = "mo" | "tat" | "het_luot" | "het_han";
@@ -137,6 +138,8 @@ export interface NguoiChoi {
 
 export interface DsNguoiChoi {
   nguon: Nguon;
+  /** Gốc link mời, kết thúc bằng "/moi/": link đầy đủ = link_goc + ma. */
+  link_goc: string;
   link: LoiMoi[];
   dong: NguoiChoi[];
 }

@@ -155,7 +155,7 @@ function linkTu(r: Record<string, unknown>, now: number): LoiMoi {
 }
 
 /** Link mời và người chơi thử (kèm ghi chú nội bộ và số phản hồi). Bảng game chưa có thì trả mẫu, nguon = "mau". */
-export async function dsNguoiChoi(db: D1Database, now = Date.now()): Promise<DsNguoiChoi> {
+export async function dsNguoiChoi(db: D1Database, now = Date.now()): Promise<Omit<DsNguoiChoi, "link_goc">> {
   try {
     const [link, nguoi, gc, ph] = await db.batch([
       db.prepare("SELECT ma, ten, toi_da, da_dung, het_han, tat, tao_boi, tao_luc, sua_boi, sua_luc FROM loi_moi ORDER BY tao_luc DESC"),
@@ -359,7 +359,7 @@ function phanHoiMau(): PhanHoiGoc[] {
 const ID_MAU = Array.from({ length: 24 }, (_, i) => "mau" + ((i + 1) * 2654435761).toString(36).slice(-7).padStart(7, "0"));
 
 /** Link và người chơi mẫu (chỉ đọc). Ghi chú nội bộ vẫn đọc từ bảng thật qt_ghi_chu_nguoi_choi. */
-async function nguoiChoiMau(db: D1Database, now: number): Promise<DsNguoiChoi> {
+async function nguoiChoiMau(db: D1Database, now: number): Promise<Omit<DsNguoiChoi, "link_goc">> {
   const r = rng(11);
   const ngay = 86400 * 1000;
   const link: LoiMoi[] = [

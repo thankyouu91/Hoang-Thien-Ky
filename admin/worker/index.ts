@@ -5,11 +5,10 @@
 // Người chơi thử không có email: họ vào bằng link mời, nhận diện bằng mã nguoi_choi_thu.id.
 
 import type { DongVaiTro, LichSuCauHinh, MucThongBao, NhatKy, ThamSo, ThongBao, Toi, TrangThaiPhanHoi, VaiTro } from "../shared/hopDong.ts";
-import { LINK_MOI_GOC } from "../shared/hopDong.ts";
 import { THAM_SO, kiemGiaTri } from "./cauHinh.ts";
 import { dongBo, emailQuanTri, trangThai } from "./dongBoAccess.ts";
 import type { Env } from "./env.ts";
-import { dsAdminGoc, teamDomain } from "./env.ts";
+import { dsAdminGoc, linkGoc, teamDomain } from "./env.ts";
 import { defaultKeyLoader, certsUrl, isEmail, normalizeEmail, verifyAccessJwt } from "./jwt.ts";
 import { coPhanHoi, dsNguoiChoi, dsPhanHoi, dsSuKien, thieuBang, tongQuan } from "./nguonGame.ts";
 
@@ -198,7 +197,7 @@ const routes: Record<string, Handler> = {
 
   // -- Người chơi thử và link mời --
   // Xem: cả hai vai trò. Tạo, sửa, tắt link và khóa người chơi: chỉ Admin (đổi ai được vào game). Ghi chú: cả hai.
-  "GET /api/nguoi-choi": async ({ env }) => json(await dsNguoiChoi(env.DB)),
+  "GET /api/nguoi-choi": async ({ env }) => json({ ...(await dsNguoiChoi(env.DB)), link_goc: linkGoc(env) }),
   "POST /api/loi-moi": async ({ req, env, n }) => {
     canAdmin(n);
     const b = await than(req);
@@ -212,7 +211,7 @@ const routes: Record<string, Handler> = {
         .run(),
     );
     await ghiNhatKy(env, n, "loi_moi.tao", ma, { ten: l.ten, toi_da: l.toi_da, het_han: l.het_han });
-    return json({ ma, link: LINK_MOI_GOC + ma });
+    return json({ ma, link: linkGoc(env) + ma });
   },
   "POST /api/loi-moi/sua": async ({ req, env, n }) => {
     canAdmin(n);

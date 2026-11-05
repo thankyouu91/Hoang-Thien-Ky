@@ -3,7 +3,6 @@
 // ghi chú, khóa). Khóa ghi thẳng nguoi_choi_thu.khoa: Worker game chặn ngay ở yêu cầu kế tiếp.
 
 import type { DsNguoiChoi, LoiMoi, NguoiChoi, TrangThaiLink } from "../../shared/hopDong.ts";
-import { LINK_MOI_GOC } from "../../shared/hopDong.ts";
 import { api } from "../api.ts";
 import { chipNguon, esc, fromLocalInput, gio, hopThoai, toLocalInput, toast, truoc, voiNut, xacNhan } from "../ui.ts";
 import type { Man } from "./man.ts";
@@ -84,7 +83,7 @@ export const manNguoiChoi: Man = {
       const box = el.querySelector<HTMLElement>("#link")!;
       const dangMo = ds.link.filter((l) => l.trang_thai === "mo").length;
       box.innerHTML = `<h2>Link mời <span class="right">${dangMo}/${ds.link.length} đang mở</span></h2>
-        <div class="items">${ds.link.map((l) => theLink(l, laAdmin, ds.dong.filter((n) => n.ma_moi === l.ma).length)).join("") || `<div class="empty">${laAdmin ? "Chưa có link nào. Tạo link ở khung bên cạnh." : "Chưa có link nào."}</div>`}</div>`;
+        <div class="items">${ds.link.map((l) => theLink(l, ds.link_goc, laAdmin, ds.dong.filter((n) => n.ma_moi === l.ma).length)).join("") || `<div class="empty">${laAdmin ? "Chưa có link nào. Tạo link ở khung bên cạnh." : "Chưa có link nào."}</div>`}</div>`;
     };
 
     const veBang = () => {
@@ -128,7 +127,7 @@ export const manNguoiChoi: Man = {
       const ma = b.closest<HTMLElement>("[data-ma]")?.dataset.ma;
       const l = ds.link.find((x) => x.ma === ma);
       if (l) {
-        if (b.matches("[data-chep]")) return chep(LINK_MOI_GOC + l.ma, "Đã chép link mời.");
+        if (b.matches("[data-chep]")) return chep(ds.link_goc + l.ma, "Đã chép link mời.");
         if (b.matches("[data-loc-link]")) {
           theoLink = l.ma;
           veBang();
@@ -189,13 +188,13 @@ export const manNguoiChoi: Man = {
   },
 };
 
-function theLink(l: LoiMoi, laAdmin: boolean, soNguoi: number): string {
+function theLink(l: LoiMoi, goc: string, laAdmin: boolean, soNguoi: number): string {
   const [tt, chip] = TEN_TT[l.trang_thai];
   const luot = l.toi_da === null ? `${l.da_dung} lượt · không giới hạn` : `${l.da_dung}/${l.toi_da} lượt`;
   const pct = l.toi_da ? Math.min(100, (l.da_dung / l.toi_da) * 100) : 0;
   return `<article class="item" data-ma="${esc(l.ma)}" ${l.trang_thai === "mo" ? "" : 'style="opacity:.75"'}>
     <header><span class="chip ${chip}">${tt}</span><b style="color:var(--c-ink);font-size:var(--fs-md)">${esc(l.ten)}</b><span class="right">${esc(luot)}</span></header>
-    <div class="btns" style="flex-wrap:nowrap"><code class="grow" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(LINK_MOI_GOC + l.ma)}</code><button class="btn small" type="button" data-chep>Chép link</button></div>
+    <div class="btns" style="flex-wrap:nowrap"><code class="grow" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(goc + l.ma)}</code><button class="btn small" type="button" data-chep>Chép link</button></div>
     ${l.toi_da ? `<div class="hbars" style="margin-top:6px"><div class="r" style="grid-template-columns:1fr"><span class="track"><i style="width:${pct}%"></i></span></div></div>` : ""}
     <p class="note">${l.het_han ? `Hết hạn ${gio(l.het_han)}` : "Không hết hạn"} · tạo bởi ${esc(l.tao_boi)} lúc ${gio(l.tao_luc)}${l.sua_boi ? ` · sửa bởi ${esc(l.sua_boi)} lúc ${gio(l.sua_luc)}` : ""}</p>
     <div class="btns" style="margin-top:var(--sp-2)">
