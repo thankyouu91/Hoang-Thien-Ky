@@ -1,0 +1,26 @@
+{
+  "name": "@ktlp/web",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Thiên Hoang Ký — website thienhoangky.fun (trang tĩnh Vite nhiều trang, Worker thienhoangky-web có cổng link mời)",
+  "type": "module",
+  "scripts": {
+    "hinh": "node scripts/hinh.mjs",
+    "dev": "node scripts/hinh.mjs && vite --host",
+    "build": "node scripts/hinh.mjs && vite build",
+    "preview": "vite preview --host",
+    "test": "node --test test/*.test.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.trang.json",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20261104.1",
+    "@fontsource-variable/lora": "5.3.0",
+    "@fontsource/cormorant-garamond": "5.3.0",
+    "@types/node": "24.19.2",
+    "sharp": "0.35.5",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "wrangler": "4.157.0"
+  }
+}

@@ -1,0 +1,39 @@
+// Worker `thienhoangky-web`: website https://thienhoangky.fun (trang tĩnh dist/ + cổng link mời + POST /api/gop-y).
+// Game ở choi.thienhoangky.fun (Worker `thienhoangky`, cloudflare/), admin ở admin.thienhoangky.fun (admin/).
+// Hướng dẫn: web/README.md. Không chạy `wrangler d1 migrations apply --remote` trong thư mục này: migration game do cloudflare/ giữ.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "thienhoangky-web",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  // Chỉ một đường vào là tên miền (có cổng): tắt *.workers.dev và URL xem trước của từng phiên bản.
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "thienhoangky.fun", "custom_domain": true }],
+  // Trước khi đẩy: xuất hình (scripts/hinh.mjs) rồi vite build ra dist/.
+  "build": { "command": "npm run build" },
+  "assets": {
+    "directory": "dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Mọi trang qua cổng của Worker, trừ JS/CSS có mã băm và hình (phục vụ thẳng, không tốn lượt request).
+    "run_worker_first": ["/*", "!/assets/*", "!/hinh/*"]
+  },
+  "vars": {
+    // "1" sau khi có giấy phép G1 và được phép quảng cáo: trang mở cho mọi người (góp ý vẫn cần link mời).
+    "CONG_KHAI": "0",
+    "CHOI_URL": "https://choi.thienhoangky.fun"
+  },
+  // D1 chung với game: chỉ đọc nguoi_choi_thu, ghi phan_hoi (góp ý). migrations_dir trỏ sang game để chạy thử ở máy (--local).
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "thienhoangky",
+      "database_id": "aa2c1b16-661a-4df8-94a3-37ee20cc0f5e",
+      "migrations_dir": "../cloudflare/migrations"
+    }
+  ],
+  // Tắt invocation log để cookie và đường dẫn không vào Workers Logs.
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+}

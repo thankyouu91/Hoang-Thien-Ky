@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <!--#mo-->
+    <title>Góp ý · Thiên Hoang Ký</title>
+    <meta name="description" content="Gửi góp ý hoặc báo lỗi cho Thiên Hoang Ký.">
+  </head>
+  <body>
+    <!--#dau-->
+    <main id="noi-dung">
+      <header class="dau-trang">
+        <p class="the-han" aria-hidden="true">進言</p>
+        <h1>Góp ý</h1>
+        <p class="dan">
+          Bạn thấy lỗi, thấy chỗ khó hiểu, hay có điều thích và không thích? Viết vài dòng ở đây. Không cần để lại tên, email
+          hay số điện thoại; góp ý gắn với mã chơi thử ngẫu nhiên của trình duyệt này.
+        </p>
+      </header>
+      <section class="khoi" aria-label="Form góp ý" style="padding-top: 24px">
+        <form class="form-gop-y giay" data-gop-y novalidate>
+          <fieldset>
+            <legend>Loại</legend>
+            <div class="chon-loai">
+              <label><input type="radio" name="loai" value="gop_y" checked><span>Góp ý</span></label>
+              <label><input type="radio" name="loai" value="loi"><span>Báo lỗi</span></label>
+              <label><input type="radio" name="loai" value="khac"><span>Khác</span></label>
+            </div>
+          </fieldset>
+          <div>
+            <label class="nhan" for="noi-dung-gop-y">Nội dung</label>
+            <textarea id="noi-dung-gop-y" name="noi_dung" maxlength="2000" required placeholder="Ví dụ: ở màn bản đồ, chạm vào mỏ thì bảng thông tin che mất nút Đi tới."></textarea>
+            <p class="dem-chu" data-dem aria-live="polite"></p>
+          </div>
+          <p class="bao" data-bao role="status" hidden></p>
+          <div><button class="nut" type="submit">Gửi góp ý</button></div>
+          <noscript><p class="bao loi">Cần bật JavaScript để gửi góp ý.</p></noscript>
+        </form>
+        <p class="ghi-chu" style="margin-top: 22px">
+          Đang chơi thì có thể góp ý ngay trong game. Muốn tra cứu thế giới và cách chơi thì xem <a href="https://wiki.thienhoangky.fun/">wiki</a>.
+        </p>
+      </section>
+    </main>
+    <!--#chan-->
+  </body>
+</html>
