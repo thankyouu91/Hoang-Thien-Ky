@@ -109,6 +109,8 @@ export const LOAI_CHIEU: TableDef = {
     c("dong_minh", "Nhắm đồng minh", "bool", "code", { json: "ally", width: 9 }),
     c("hau_to", "Hậu tố tên tàn quyển", "text", "de_xuat", { json: "suffix", width: 12 }),
     c("luat", "Luật đánh đổi", "text", "gdd", { json: "rule", width: 60 }),
+    // Set đồ 2.0 (người dùng duyệt tách thủ ngoại, thủ nội 2026-11-05): đòn ngoại giảm theo thủ ngoại, đòn nội theo thủ nội
+    c("loai_sat_thuong", "Loại sát thương (ngoai, noi; trống: không gây)", "text", "gdd", { json: "loai_sat_thuong", nullable: true, width: 12 }),
   ],
 };
 

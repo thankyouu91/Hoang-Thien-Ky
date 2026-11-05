@@ -3,7 +3,7 @@
 //   Cần xem: chỗ dữ liệu khác code đang chạy (code chưa đọc JSON), khác mốc trong GDD, hoặc Excel chưa tính lại công thức.
 import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, ROOT_BUFFS, GRADE_POW, LINH_EFFECT_POWER,
-  SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES, BASE_CRIT_PER_MILLE, RESIST_CAP, COUNTER_FLOOR,
+  SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES, BASE_CRIT_PER_MILLE, RESIST_CAP, COUNTER_FLOOR, DAMAGE_KIND, HIDDEN_RULES,
   elementMultiplier, comboRelation, composeTechnique, mul, ONE, type Element, type SkillType, type Variant,
 } from "@ktlp/sim";
 import { existsSync, readFileSync } from "node:fs";
@@ -477,6 +477,18 @@ export function kiem(d: Any, raw: Raw): Report {
   cmp("cong_phap.baseCrit", ts.cong_phap?.baseCrit, BASE_CRIT_PER_MILLE);
   cmp("cong_phap.resistCap", ts.cong_phap?.resistCap, RESIST_CAP);
   cmp("cong_phap.counterFloor", ts.cong_phap?.counterFloor, COUNTER_FLOOR);
+  // Set đồ 2.0: loại sát thương theo loại chiêu, ngưỡng dòng ẩn
+  if (SKILL_TYPES.some((t) => lc[t] && "loai_sat_thuong" in lc[t])) for (const t of SKILL_TYPES) {
+    const f = lc[t]?.loai_sat_thuong ?? null, c = DAMAGE_KIND[t] ?? null;
+    if (f !== c) diff.push(`Loại chiêu ${t}.loai_sat_thuong: file ${f}, code ${c}`);
+  }
+  const dongAn = (d["trang_bi.json"]?.dong_an ?? []) as Any[];
+  const nguong = (k: string) => dongAn.find((x) => x.tham_so && typeof x.tham_so[k] === "number")?.tham_so[k];
+  if (dongAn.length) {
+    cmp("Dòng ẩn mauDuoi (HIDDEN_RULES.lowHpBelow)", nguong("mauDuoi"), HIDDEN_RULES.lowHpBelow);
+    cmp("Dòng ẩn truocTicks (HIDDEN_RULES.openingTicks)", nguong("truocTicks"), HIDDEN_RULES.openingTicks);
+    cmp("Dòng ẩn sauTicks (HIDDEN_RULES.lateTicks)", nguong("sauTicks"), HIDDEN_RULES.lateTicks);
+  }
   if (diff.length) warnings.push(`Khác số đang chạy trong packages/sim (${diff.length} chỗ): ${diff.join("; ")}`);
   else notes.push("Loại chiêu, biến thể, hệ, tham số trận đấu: khớp số đang chạy trong packages/sim");
 

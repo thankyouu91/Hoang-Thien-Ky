@@ -19,6 +19,7 @@
 //                   nhóm thu_cuoi của Tham số; Tẩy Tủy Đơn ở Linh đơn
 //   set_2           set đồ 2.0 (set-2.md phần 7): Bậc ấn, Hợp bộ, Binh bộ, Binh ấn, Bộ trọn, Dòng rèn, Dòng ẩn, Điểm trang bị;
 //                   cột Lộ, Chỉ số kèm, Có dòng ẩn; mốc 2, 4 của 16 bộ; áo, giày thủ ngoại, thủ nội; luật, ghi chú
+//   set_2b          cột Loại sát thương ở Loại chiêu (khớp sim DAMAGE_KIND); ghi chú áo, giày theo chốt tách 2026-11-05
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -1119,7 +1120,7 @@ const SET2_GHI_CHU: Record<string, [string, string][]> = {
     ["", "bo_tron: bộ 7 món lục bán ở shop NPC, mỗi món khảm sẵn ấn bậc lục của bộ đó; 17 bộ, không có 3 bộ thần."],
   ],
   "trang_bi.json": [
-    ["", "Áo, giày (set đồ 2.0, đề xuất, chờ duyệt ở mục 20 vì đổi công thức trận mục 8): chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội."],
+    ["", "Áo, giày (set đồ 2.0): tách phòng thủ thành thủ ngoại, thủ nội đã chốt 2026-11-05 (GDD mục 8), số vẫn là đề xuất. Chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội. Loại sát thương của từng loại chiêu ở loai_chieu.json loai_sat_thuong."],
     ["", "dong_ren: cường hóa lên nac mở 1 dòng rèn ở vi_dien; chọn 1 trong 4 loại phụ của ô (luyen_khi.json tay_luyen), giá trị luat.dongRen.heSoLoaiPhu của loại đó. Tối đa luat.dongRen.toiDa theo vị diện; đổi dòng tốn luat.dongRen.doiDongKhiTinh Khí Tinh; tụt nấc dưới mốc thì dòng tạm tắt."],
     ["", "dong_an: chỉ trên ô có co_dong_an (ngọc bội, đai). Mỗi dòng là 1 điều kiện (loai dieu_kien) + 1 hiệu ứng (hieu_ung), quay khi món rơi hoặc rèn ra; số dòng luat.dongAn.soDong theo độ hiếm. Hiện ??? tới lần đầu kích phát; Giám Định Phù (PH-CH-011) lộ trước điều kiện 1 dòng; tẩy ẩn quay lại hiệu ứng, giữ điều kiện. Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng ×luat.dongAn.songAnHeSo."],
     ["", "diem: điểm trang bị cho mỗi `moi` (1% hoặc 0,1%) của chỉ số; điểm món là tổng các lớp, điểm nhân vật là 7 món cộng set. Chỉ để so sánh, gợi ý và lọc chợ, không dùng trong trận; phiên Sprint chỉnh bằng đo."],
@@ -1273,10 +1274,31 @@ const set2: Step = (wb, log) => {
   }
 };
 
+/** Set đồ 2.0 lần 2: loại sát thương theo loại chiêu (như sim DAMAGE_KIND); ghi chú áo, giày theo chốt tách thủ ngoại, thủ nội. */
+const SET2_LOAI_ST: Record<string, "ngoai" | "noi" | null> = {
+  can_don: "ngoai", can_quet: "ngoai", than_phap: "ngoai", tam_xa: "ngoai", ho_the: "ngoai",
+  dien_rong: "noi", bua_chu: "noi", tran_phap: "noi", khong_che: "noi", hoi_phuc: null,
+};
+const set2b: Step = (wb, log) => {
+  const lc = B.LOAI_CHIEU, col = lc.cols.find((c) => c.key === "loai_sat_thuong")!, h = (wb.sheet(lc.sheet).cells[0] ?? []).map(norm);
+  const idAt = h.indexOf(lc.cols.find((c) => c.key === "ma")!.header);
+  if (h.indexOf(col.header) < 0) {
+    wb.addColumn(lc.sheet, { v: col.header, fill: "tieu_de", bold: true, wrap: true }, (r, row) => {
+      const v = r > 0 ? SET2_LOAI_ST[norm(row[idAt])] : undefined;
+      return v ? { v, fill: "gdd" } : null;
+    }, col.width);
+    log.push("Loại chiêu: thêm cột Loại sát thương");
+  }
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), gh = (gs.cells[0] ?? []).map(norm);
+  const nAt = gh.indexOf(gc.cols.find((c) => c.key === "noi_dung")!.header);
+  const i = gs.cells.findIndex((r) => norm(r?.[nAt]) === "Áo, giày (set đồ 2.0, đề xuất, chờ duyệt ở mục 20 vì đổi công thức trận mục 8): chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội.");
+  if (i > 0) { wb.setCell(gc.sheet, i, nAt, { v: "Áo, giày (set đồ 2.0): tách phòng thủ thành thủ ngoại, thủ nội đã chốt 2026-11-05 (GDD mục 8), số vẫn là đề xuất. Chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội. Loại sát thương của từng loại chiêu ở loai_chieu.json loai_sat_thuong.", fill: "de_xuat" }); log.push("Ghi chú trang bị: áo, giày theo chốt tách thủ ngoại, thủ nội"); }
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
-  thu_phat_trien: thuPhatTrien, set_2: set2,
+  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
