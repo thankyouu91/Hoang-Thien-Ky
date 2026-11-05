@@ -47,7 +47,7 @@ document.head.insertAdjacentHTML(
 );
 
 document.body.innerHTML = `
-  <div id="stage"><div id="title">Khai Tông Lập Phái</div><div id="card"><h1>Động phủ</h1><p>Chữ trên thẻ giấy phải đọc được trên mọi cảnh nền.</p></div></div>
+  <div id="stage"><div id="title">Thiên Hoang Ký</div><div id="card"><h1>Động phủ</h1><p>Chữ trên thẻ giấy phải đọc được trên mọi cảnh nền.</p></div></div>
   <div id="grid" hidden></div>
   <div id="bar">
     <button data-mode="dong">Động</button><button data-mode="nuong">Nướng</button><button data-mode="nen">Ảnh nền</button><button data-mode="san">Sân đấu</button><button data-mode="tran">Trận</button><button data-mode="tai_nang">Tài năng</button><button data-mode="nhip">Nhịp</button><button data-mode="do">Đo</button>

@@ -1,6 +1,6 @@
-# Khai Tông Lập Phái — mã nguồn
+# Thiên Hoang Ký — mã nguồn
 
-Game mobile chiến lược tông môn dạng dashboard, có yếu tố nhập vai tu tiên. Thiết kế đầy đủ nằm trong GDD (`C:\Project\GDD\Khai_Tong_Lap_Phai_GDD.md`, bản gốc trên Claude Docs).
+Game mobile chiến lược tông môn dạng dashboard, có yếu tố nhập vai tu tiên. Tên chính thức chốt ngày 2026-11-05; tên tạm trước đó là Khai Tông Lập Phái, nên thư mục, gói `@ktlp/*` và repo vẫn mang tên cũ. Thiết kế đầy đủ nằm trong GDD (`C:\Project\GDD\Khai_Tong_Lap_Phai_GDD.md`, bản gốc trên Claude Docs).
 
 ## Cấu trúc
 

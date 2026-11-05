@@ -16,7 +16,7 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
     <span class="age-badge" title="Nhãn phân loại độ tuổi">${esc(ageLabel)}</span>
     <header class="login-brand">
       <span class="login-seal" aria-hidden="true"><span>開</span><span>宗</span><span>立</span><span>派</span></span>
-      <h1>Khai Tông Lập Phái</h1>
+      <h1>Thiên Hoang Ký</h1>
       <p class="tag">Lập tông, giữ mỏ, ghép công pháp.</p>
     </header>
     <form class="login-card" novalidate></form>
