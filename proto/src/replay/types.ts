@@ -33,6 +33,8 @@ export interface ReplayUnit {
   sprite?: string;
   /** Ngoại hình ghép: thân, áo, đồ; chưa có thì trình xem tự chọn theo hàng đứng. */
   look?: Look;
+  /** Cấp nhân vật (GDD mục 6–7), để vẽ theo cảnh giới; replay giả có thể bỏ trống. */
+  level?: number;
 }
 
 /** Ngoại hình nhân vật ghép từ thân và từng món đồ (ghi chú chung pixellab-tu-si.md). */

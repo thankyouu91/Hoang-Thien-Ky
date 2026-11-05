@@ -31,6 +31,7 @@ export function replayFromSim(input: BattleInput): Replay {
       manaMax: u.manaMax / ONE,
       pos: u.pos,
       sprite: talent ? "tu_si/" + talent : undefined,
+      level: spec.level,
     };
   });
 
