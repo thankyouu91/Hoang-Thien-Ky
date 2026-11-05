@@ -32,13 +32,14 @@
 //   set_2k          set đồ 2.0 bước 4: Bàn Thạch 4, Lôi Trì 2, Bách Thảo 2, Băng Phách 4, Thiết Kỵ 2, Liên Kích mốc 2
 //   set_2l          set đồ 2.0 bước 5: Bàn Thạch 2, Băng Phách 2, Thiết Kỵ 2 (giảm sát thương ngoại), Liên Kích mốc 2
 //   set_2m          set đồ 2.0 bước 6: Thiết Kỵ 2 giảm sát thương ngoại 7%, Bách Thảo 2 bị khống chế −50%
+//   set_2_chot      set đồ 2.0 đã chốt (duyệt 2026-11-05): ô vàng của set đồ 2.0 sang xanh lá, giữ giá trị
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { ARTIFACT_RULES } from "@ktlp/sim";
 import {
   unzip, zip, readFiles, sheetParts, cellXml, rowXml, worksheetXml, esc, colName, StyleBook,
-  type Cell, type SheetIn, type SheetOut, type Value,
+  type Cell, type Fill, type SheetIn, type SheetOut, type Value,
 } from "./xlsx.ts";
 import { patchCell } from "./sua.ts";
 import { recalcFiles } from "./tinh.ts";
@@ -164,6 +165,19 @@ export class Workbook {
   setCell(sheet: string, r: number, col: number, c: Cell): void {
     const part = this.part(sheet);
     this.put(part, patchCell(this.text(part), r + 1, col, () => cellXml(r, col, c, this.styleOf, sheet) || `<c r="${colName(col)}${r + 1}"/>`));
+  }
+
+  /** Đổi nền một ô (dòng `r`, cột `col` đếm từ 0) từ màu `from` sang `to`, giữ giá trị và định dạng. Ô không có hoặc khác màu thì bỏ qua. */
+  recolor(sheet: string, r: number, col: number, from: Fill, to: Exclude<Fill, "none">): boolean {
+    const part = this.part(sheet), xml = this.text(part);
+    const m = new RegExp(`<c\\b[^>]*?\\br="${colName(col)}${r + 1}"[^>]*?(?=/?>)`).exec(xml);
+    if (!m) return false;
+    const open = m[0], s = Number(/\bs="(\d+)"/.exec(open)?.[1] ?? 0);
+    if (this.styles.fillOfXf(s) !== from) return false;
+    const ns = this.styles.withFill(s, to);
+    const next = /\bs="\d+"/.test(open) ? open.replace(/\bs="\d+"/, `s="${ns}"`) : `${open} s="${ns}"`;
+    this.put(part, xml.slice(0, m.index) + next + xml.slice(m.index + open.length));
+    return true;
   }
 
   /** Thêm sheet ngay sau sheet `after`. */
@@ -1563,10 +1577,66 @@ const set2l: Step = (wb, log) => set2e(wb, log);
 
 const set2m: Step = (wb, log) => set2e(wb, log);
 
+// ---------- set đồ 2.0 đã chốt: người dùng duyệt 2026-11-05 ("Duyệt cả hai": set đồ 2.0, luật bậc ấn và nguồn rơi), bộ số sau
+// 8af29c6. Ô vàng (đề xuất) do các bước set_2 … set_2m viết đổi sang xanh lá (đã chốt); ô mã (xanh dương) và ô cũ giữ màu.
+// Số đổi sau này các bước ghi lại màu vàng như mọi đề xuất mới. ----------
+
+const set2Chot: Step = (wb, log) => {
+  const def = (sheet: string) => partDef(sheet);
+  const col = (sheet: string, key: string) => {
+    const h = def(sheet).cols.find((c) => c.key === key)?.header, i = (wb.sheet(sheet).cells[0] ?? []).map(norm).indexOf(h ?? "");
+    if (i < 0) throw new Error(`${sheet}: không có cột ${key}`);
+    return i;
+  };
+  const tong: string[] = [];
+  /** Vàng → xanh lá ở các dòng `pick` chọn và các cột `keys` (bỏ trống: mọi cột của dòng tiêu đề). */
+  const chot = (sheet: string, pick: (row: Value[]) => boolean, keys?: string[]) => {
+    const s = wb.sheet(sheet);
+    const cols = keys ? keys.map((k) => col(sheet, k)) : s.cells[0].map((_, i) => i);
+    let rows = 0, n = 0;
+    s.cells.forEach((row, r) => {
+      if (r === 0 || !pick(row ?? [])) return;
+      rows++;
+      for (const c of cols) if (wb.recolor(sheet, r, c, "de_xuat", "gdd")) n++;
+    });
+    if (!rows) throw new Error(`${sheet}: không có dòng nào để đổi màu`);
+    tong.push(`${sheet} ${n}`);
+  };
+  const v = (sheet: string, key: string) => { const i = col(sheet, key); return (row: Value[]) => norm(row[i]); };
+  const all = () => true;
+
+  // 8 sheet mới của set đồ 2.0: cả sheet
+  for (const sheet of ["Bậc ấn", "Hợp bộ", "Binh bộ", "Binh ấn", "Bộ trọn", "Dòng rèn", "Dòng ẩn", "Điểm trang bị"]) chot(sheet, all);
+  // Set mốc: mốc 2, 4 của 16 bộ (loại, mô tả, tham số); mốc 7 Bàn Thạch, Băng Phách đổi ở lần cân lộ (mô tả, tham số)
+  const bo = v("Set mốc", "bo"), so = v("Set mốc", "so");
+  const moc24 = new Set(SET2_MOC.map(([b, s]) => `${b} ${s}`)), moc7 = new Set(SET2_MOC7.map(([b]) => `${b} 7`));
+  chot("Set mốc", (r) => moc24.has(`${bo(r)} ${so(r)}`), ["loai", "mo_ta", "tham_so"]);
+  chot("Set mốc", (r) => moc7.has(`${bo(r)} ${so(r)}`), ["mo_ta", "tham_so"]);
+  // Set: cột Lộ; ràng buộc mốc 7 Băng Phách bỏ ở lần cân lộ
+  const setId = v("Set", "id");
+  chot("Set", all, ["lo"]);
+  chot("Set", (r) => setId(r) === "bang_phach", ["rang_buoc"]);
+  // Ô trang bị: chỉ số chính áo (thủ ngoại), giày (thủ nội); cột Có dòng ẩn. Tẩy luyện loại 4 của áo, giày
+  const oId = v("Ô trang bị", "id");
+  chot("Ô trang bị", (r) => ["ao", "giay"].includes(oId(r)), ["chinh_stat", "chinh_ten", "chinh_gia_tri"]);
+  chot("Ô trang bị", all, ["co_dong_an"]);
+  const tlO = v("Tẩy luyện", "o"), tlL = v("Tẩy luyện", "loai");
+  chot("Tẩy luyện", (r) => ["ao", "giay"].includes(tlO(r)) && tlL(r) === "4", ["stat", "ten"]);
+  // Ấn bộ 3 bộ thần: bán ở chợ theo bậc ấn
+  const anMa = v("Ấn bộ", "ma_vp");
+  chot("Ấn bộ", (r) => ["NG-AN-018", "NG-AN-019", "NG-AN-020"].includes(anMa(r)), ["ban_cho"]);
+  // Giám Định Phù; 14 trang Ẩn văn ở Bảo Giám; luật set đồ 2.0 ở Luật trang bị
+  const phMa = v("Phù", "ma_vp"), bgMa = v("Bảo Giám", "ma"), luat = new Set(SET2_LUAT.map(([k]) => k));
+  chot("Phù", (r) => phMa(r) === "PH-CH-011");
+  chot("Bảo Giám", (r) => bgMa(r).startsWith("BG-AV-"));
+  chot("Luật trang bị", (r) => luat.has(norm(r[0])));
+  log.push(`Set đồ 2.0 đã chốt, ô vàng → xanh lá: ${tong.join(", ")}`);
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
-  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j, set_2k: set2k, set_2l: set2l, set_2m: set2m,
+  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j, set_2k: set2k, set_2l: set2l, set_2m: set2m, set_2_chot: set2Chot,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

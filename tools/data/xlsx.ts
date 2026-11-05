@@ -209,6 +209,29 @@ export class StyleBook {
     const fillId = !c.fill || c.fill === "none" ? 0 : this.fillOf(FILL_COLORS[c.fill]);
     return this.findOrAdd("cellXfs", /<xf\b[^>]*?(?:\/>|>[\s\S]*?<\/xf>)/g, xfXml(numFmtId, fontId, fillId, !!c.wrap));
   }
+  /** Tên màu nền của kiểu ô `xf` theo FILL_COLORS: "none" khi không nền, undefined khi màu không thuộc bảng. */
+  fillOfXf(xf: number): Fill | undefined {
+    const xfs = [...(this.block("cellXfs")?.[1] ?? "").matchAll(/<xf\b[^>]*?(?:\/>|>[\s\S]*?<\/xf>)/g)].map((m) => m[0]);
+    const fid = Number(/\bfillId="(\d+)"/.exec(xfs[xf] ?? "")?.[1] ?? 0);
+    const fill = [...(this.block("fills")?.[1] ?? "").matchAll(/<fill>[\s\S]*?<\/fill>|<fill\/>/g)].map((m) => m[0])[fid] ?? "";
+    const rgb = /\brgb="FF([0-9A-Fa-f]{6})"/.exec(fill)?.[1]?.toUpperCase();
+    if (!rgb) return "none";
+    return (Object.keys(FILL_COLORS) as Exclude<Fill, "none">[]).find((k) => FILL_COLORS[k] === rgb);
+  }
+  /** Chỉ số kiểu ô giống `xf` (định dạng số, chữ đậm, xuống dòng) nhưng nền màu `fill`; chưa có thì thêm. */
+  withFill(xf: number, fill: Exclude<Fill, "none">): number {
+    const item = /<xf\b[^>]*?(?:\/>|>[\s\S]*?<\/xf>)/g;
+    const xfs = [...(this.block("cellXfs")?.[1] ?? "").matchAll(item)].map((m) => m[0]);
+    const base = xfs[xf] ?? xfs[0];
+    const fid = this.fillOf(FILL_COLORS[fill]);
+    const num = (a: string) => Number(new RegExp(`\\b${a}="(\\d+)"`).exec(base)?.[1] ?? 0);
+    const wrap = /wrapText="1"/.test(base);
+    // Kiểu do xfXml dựng thì dựng lại cùng cách (dùng lại được kiểu có sẵn); kiểu Excel tự lưu thì chỉ thay fillId
+    let want = base === xfXml(num("numFmtId"), num("fontId"), num("fillId"), wrap) ? xfXml(num("numFmtId"), num("fontId"), fid, wrap)
+      : /\bfillId="\d+"/.test(base) ? base.replace(/\bfillId="\d+"/, `fillId="${fid}"`) : base.replace("<xf ", `<xf fillId="${fid}" `);
+    if (!/\bapplyFill=/.test(want)) want = want.replace("<xf ", '<xf applyFill="1" ');
+    return this.findOrAdd("cellXfs", item, want);
+  }
   private block(name: string): RegExpExecArray | null {
     return new RegExp(`<${name}\\b[^>]*?(?:/>|>([\\s\\S]*?)</${name}>)`).exec(this.xml);
   }
