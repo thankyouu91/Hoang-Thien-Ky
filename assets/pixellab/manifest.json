@@ -38100,6 +38100,66 @@
       "created": "2026-11-05",
       "pixellab_id": "93ed95ef-327f-4f44-a6a2-58b5fea4e3c5",
       "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1f0e7c53-dfcf-4f4b-ae7d-c3bde6be53a0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "084bfb03-15ad-4a33-ab09-228d0b9aefa8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/hang_thu_hoang.png",
+      "description": "Bản đồ chiến trường hang_thu_hoang của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/hang_thu_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a beast king's lair, colossal bones and a giant horned skull along the edges, huge claw-torn rocks. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "abece9f7-88bb-456f-a1fa-82e9d2befc6c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "babf8f98-c335-4a8e-9d9d-949e724bdc58",
+      "api": "REST v2 generate-image-v2"
     }
   ]
 }
