@@ -582,13 +582,13 @@ export class MockDashboardSource implements DashboardSource {
         const c = scrollCard(sc);
         return {
           uid: c.uid, kind: "tan_quyen", name: c.name, grade: techGrade(c.grade), gradeLabel: c.gradeName, count: 1, element: c.element,
-          icon: `chieu/${c.type}`, art: `tan_quyen/${c.element}`, code: elementCode("TQ", c.element), detail: `Nộp ở Tàng Kinh Các được ${c.contribution} cống hiến.`,
+          art: `tan_quyen/${c.element}`, code: elementCode("TQ", c.element), detail: `Nộp ở Tàng Kinh Các được ${c.contribution} cống hiến.`,
         };
       }),
       ...learned
         .filter((t) => !me.loadout.includes(t.id))
-        // Công pháp chưa có hình vẽ (cong_phap/<hệ> trong danh sách icon), giữ hình loại chiêu PixelLab.
-        .map((t): BagItem => ({ uid: LEARNED_UID + t.id, kind: "cong_phap", name: t.name, grade: techGrade(t.grade), gradeLabel: t.gradeName, count: 1, element: t.element, icon: `chieu/${t.type}`, code: elementCode("CP", t.element), detail: t.summary, technique: t })),
+        // Hình công pháp vẽ Canva theo hệ (TechniqueCard.art); loại chiêu hiện ở chip icon_ve/chieu/<loại> trên màn.
+        .map((t): BagItem => ({ uid: LEARNED_UID + t.id, kind: "cong_phap", name: t.name, grade: techGrade(t.grade), gradeLabel: t.gradeName, count: 1, element: t.element, art: t.art, code: elementCode("CP", t.element), detail: t.summary, technique: t })),
     ];
     return {
       serverNow: now,
