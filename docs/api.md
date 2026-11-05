@@ -7,7 +7,7 @@ Hợp đồng giữa game (`proto/`), Worker game (`cloudflare/`) và Admin Dash
 | Hostname | Worker | Cách vào | Nội dung |
 |---|---|---|---|
 | `play.thienhoangky.fun` | `thienhoangky` (`cloudflare/wrangler.jsonc`) | Link mời `https://play.thienhoangky.fun/moi/<ma>` cấp cookie | Bản build `proto/dist`, `/api/*` bên dưới |
-| `thienhoangky.fun` | `thienhoangky-web` (`web/`) | Cùng cookie link mời (đọc `nguoi_choi_thu`); `/moi/*` chuyển 302 sang `play.` | Website (trang chủ) |
+| `thienhoangky.fun` | `thienhoangky-web` (`web/`) | Cùng cookie link mời (đọc `nguoi_choi_thu`); `/moi/*` chuyển 302 sang `play.` | Website (trang chủ); `POST /api/gop-y` ghi vào `phan_hoi` |
 | `wiki.thienhoangky.fun` | `thienhoangky-wiki` (`wiki/`) | Cùng cookie link mời | Wiki |
 | `admin.thienhoangky.fun` | `thienhoangky-admin` (`admin/wrangler.jsonc`) | Cloudflare Access, mã một lần gửi qua email | Admin Dashboard, `/api/*` của admin (`admin/shared/hopDong.ts`) |
 | `www.thienhoangky.fun` | `thienhoangky-www` (`cloudflare/wrangler.www.jsonc`) | — | 301 về `https://thienhoangky.fun` |
@@ -154,7 +154,7 @@ Bảng game nằm trong `cloudflare/migrations/`. Thời gian lưu bằng mili g
 | `loi_moi` | `ma` PK, `ten`, `toi_da` (NULL = không giới hạn), `da_dung`, `het_han` (ms, NULL = không hết hạn), `tat` 0\|1, `tao_boi`, `tao_luc`, `sua_boi`, `sua_luc` | Admin tạo, sửa, tắt. Game chỉ tăng `da_dung`. |
 | `nguoi_choi_thu` | `id` PK (10 ký tự), `the_hash` (không hiện ra ngoài), `ma_moi`, `lan_dau`, `lan_cuoi`, `so_phien`, `khoa` 0\|1, `ly_do_khoa`, `sua_boi`, `sua_luc` | Game tạo và cập nhật `lan_cuoi`, `so_phien`. Admin chỉ ghi `khoa`, `ly_do_khoa`, `sua_*`. |
 | `su_kien` | `id`, `loai`, `an_danh`, `phien`, `luc`, `nhan_luc`, `du_lieu` (JSON), `phien_ban` | Game. Không có mã người chơi; retention và FTUE tính theo `an_danh` (theo máy). |
-| `phan_hoi` | `id`, `nguoi_choi` (= `nguoi_choi_thu.id`), `loai`, `noi_dung`, `man`, `lien_he`, `thiet_bi`, `phien_ban`, `luc` | Game. Trạng thái xử lý nằm ở `qt_phan_hoi_xu_ly`, với `phan_hoi_id = CAST(id AS TEXT)`. |
+| `phan_hoi` | `id`, `nguoi_choi` (= `nguoi_choi_thu.id`), `loai`, `noi_dung`, `man`, `lien_he`, `thiet_bi`, `phien_ban`, `luc` | Game (`/api/phan-hoi`) và website (`/api/gop-y`: `man` bắt đầu bằng `website`, `phien_ban = 'web'`, `lien_he` NULL, cùng giới hạn 30/24 giờ). Trạng thái xử lý nằm ở `qt_phan_hoi_xu_ly`, với `phan_hoi_id = CAST(id AS TEXT)`. |
 
 Bảng `qt_*` (`admin/migrations/`) giữ vai trò, nhật ký, cấu hình, thông báo, xử lý phản hồi. Worker game chỉ đọc `qt_thong_bao` và `qt_cau_hinh`; nếu chưa có hai bảng này thì dùng mặc định, không lỗi.
 
@@ -164,3 +164,4 @@ Bảng `qt_*` (`admin/migrations/`) giữ vai trò, nhật ký, cấu hình, th�
 
 - Muốn thêm cột hoặc bảng game: nhắn tab deploy để thêm một migration mới vào `cloudflare/migrations/`. Không sửa migration đã chạy.
 - Muốn thêm sự kiện: thêm vào bảng trên và vào `LOAI_SU_KIEN`. Worker không cần deploy lại.
+- Website (`web/`) dùng chung `docThe`, `bamThe` (`cloudflare/src/moi.ts`), `kiemPhanHoi`, `GIOI_HAN` (`kiem.ts`), `kiemGhi`, `docJson` (`http.ts`). Đổi chữ ký các hàm này thì báo tab website.
