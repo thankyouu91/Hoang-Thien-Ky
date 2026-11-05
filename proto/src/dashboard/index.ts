@@ -93,7 +93,7 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
     if (!src) {
       const b = await ctx.source.battle(id);
       if (!b) return toast("Không tìm thấy trận này", true);
-      src = simReplaySource(b.label, () => b.input, b.arena);
+      src = simReplaySource(b.label, () => b.input, b.arena, { teams: b.teams, viewer: b.viewer });
       replays.set(id, src);
     }
     battle.open(src);

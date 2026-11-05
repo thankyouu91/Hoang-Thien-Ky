@@ -624,7 +624,10 @@ export interface DashboardSource {
   banDo(): Promise<BanDoView>;
   /** Thư đầy đủ, mở từ thẻ Tin báo; đánh dấu đã đọc. */
   mail(id: number): Promise<{ from: string; title: string; body: string } | undefined>;
-  /** Đầu vào trận của một chiến báo để màn Trận phát lại (nhật ký lệnh, GDD mục 16). */
-  battle(id: number): Promise<{ label: string; input: BattleInput; arena?: string } | undefined>;
+  /**
+   * Đầu vào trận của một chiến báo để màn Trận phát lại (nhật ký lệnh, GDD mục 16). `teams`: tên đội A, đội B (tông môn,
+   * "Dị thú"); `viewer`: đội của người xem, để màn Trận hiện Ta/Địch và Thắng/Thua thay Đội A/Đội B.
+   */
+  battle(id: number): Promise<{ label: string; input: BattleInput; arena?: string; teams?: [string, string]; viewer?: 0 | 1 } | undefined>;
   send(cmd: DashboardCommand): Promise<CommandResult>;
 }

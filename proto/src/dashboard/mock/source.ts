@@ -612,10 +612,14 @@ export class MockDashboardSource implements DashboardSource {
     return m && { from: m.from, title: m.title, body: m.body };
   }
 
-  /** Chiến báo mẫu dùng đội hình mẫu của màn Trận (mock/sampleBattle.ts) với seed riêng. */
-  async battle(id: number): Promise<{ label: string; input: BattleInput; arena?: string } | undefined> {
+  /** Chiến báo mẫu dùng đội hình mẫu của màn Trận (mock/sampleBattle.ts) với seed riêng; tông mình là đội A. */
+  async battle(
+    id: number,
+  ): Promise<{ label: string; input: BattleInput; arena?: string; teams?: [string, string]; viewer?: 0 | 1 } | undefined> {
     const r = this.w.reports.find((x) => x.id === id);
-    return r && { label: `Chiến báo · ${r.title}`, input: sampleBattle(r.seed), arena: r.arena };
+    if (!r) return undefined;
+    const b = { label: `Chiến báo · ${r.title}`, input: sampleBattle(r.seed), arena: r.arena, viewer: 0 as const };
+    return r.vs ? { ...b, teams: [this.w.sect.name, r.vs] } : b;
   }
 
   async nhanVat(): Promise<NhanVatView> {

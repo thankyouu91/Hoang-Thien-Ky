@@ -101,8 +101,11 @@ export interface World {
   jobs: Job[];
   buildings: Building[];
   travel: { from: number; to: number; startsAt: number; endsAt: number };
-  /** arena: bản đồ chiến trường "<vùng>/<bối cảnh>" (chien_truong/) hay sân san_dau/<tên> của màn Trận; bỏ trống là võ trường. */
-  reports: { id: number; seed: number; title: string; at: number; arena?: string }[];
+  /**
+   * arena: bản đồ chiến trường "<vùng>/<bối cảnh>" (chien_truong/) hay sân san_dau/<tên> của màn Trận; bỏ trống là võ trường.
+   * vs: tên bên kia (tông môn, "Dị thú"); tông mình luôn là đội A của trận mẫu. Bỏ trống thì màn Trận hiện Ta/Địch.
+   */
+  reports: { id: number; seed: number; title: string; at: number; arena?: string; vs?: string }[];
   mail: { id: number; from: string; title: string; body: string; unread: boolean }[];
   alliance: { joined: boolean; name: string; leader: string };
   chat: { id: number; from: string; text: string; at: number; reported?: boolean }[];
@@ -517,9 +520,9 @@ export function createWorld(region: RegionMap, now: number): World {
     // Đang đi từ thành chủ về sơn môn, còn 14 phút.
     travel: { from: thanhChu, to: sonMon, startsAt: now - 9 * MIN, endsAt: now + 14 * MIN },
     reports: [
-      { id: 1, seed: 11, title: "Thủ mỏ linh thạch trước Huyết Sát Môn", at: now - 2 * H, arena: `${REGION}/mo_linh_thach` },
-      { id: 2, seed: 2, title: "Hang dị thú cấp 58", at: now - 5 * H, arena: `${REGION}/hang_di_thu` },
-      { id: 3, seed: 3, title: "Tranh cửa bí cảnh 12:00", at: now - 9 * H, arena: `${REGION}/cua_bi_canh` },
+      { id: 1, seed: 11, title: "Thủ mỏ linh thạch trước Huyết Sát Môn", at: now - 2 * H, arena: `${REGION}/mo_linh_thach`, vs: "Huyết Sát Môn" },
+      { id: 2, seed: 2, title: "Hang dị thú cấp 58", at: now - 5 * H, arena: `${REGION}/hang_di_thu`, vs: "Dị thú" },
+      { id: 3, seed: 3, title: "Tranh cửa bí cảnh 12:00", at: now - 9 * H, arena: `${REGION}/cua_bi_canh`, vs: "Thanh Phong Các" },
     ],
     mail: [
       { id: 1, from: "Hệ thống", title: "Thưởng bí cảnh hôm qua", body: "Tông môn nhận 2 tàn quyển phẩm Phàm vào Tàng Kinh Các.", unread: true },
