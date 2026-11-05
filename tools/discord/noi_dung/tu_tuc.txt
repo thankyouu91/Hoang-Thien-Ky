@@ -1,0 +1,41 @@
+# Từ tục tiếng Việt cho AutoMod (mỗi dòng một từ hoặc cụm; dòng bắt đầu bằng # bị bỏ qua).
+# Khớp nguyên từ, không phân biệt hoa thường. Tránh từ có nghĩa thường khi bỏ dấu
+# (ví dụ "lon", "cac", "buoi", "deo", "dm" = nhắn riêng) để không chặn nhầm.
+địt
+đjt
+djt
+đ!t
+địt mẹ
+dit me
+dit mẹ
+dit con me
+đụ
+đụ má
+đụ mẹ
+du ma
+du me
+đù má
+lồn
+l0n
+loz
+cặc
+buồi
+đéo
+đĩ
+con đĩ
+đĩ điếm
+điếm
+óc chó
+con mẹ mày
+thằng chó
+đm
+đmm
+dmm
+đcm
+dcm
+vcl
+vkl
+vcc
+clm
+cmm
+cml

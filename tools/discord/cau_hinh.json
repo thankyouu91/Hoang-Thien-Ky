@@ -1,0 +1,315 @@
+{
+  "_ghi_chu": "Cấu hình máy chủ Discord Thiên Hoang Ký. Không chứa bí mật. Vai trò xếp từ cao xuống thấp. Khóa '@everyone' là vai trò mặc định; khóa '@bot' là vai trò của bot (script tự thêm vào mọi kênh). Xem README.md.",
+  "may_chu": {
+    "ten": "Thiên Hoang Ký",
+    "mo_ta": "Cộng đồng game chiến lược tông môn tiên hiệp Thiên Hoang Ký. Máy chủ kín, vào bằng link mời.",
+    "ngon_ngu": "vi",
+    "muc_xac_minh": 2,
+    "loc_noi_dung": 2,
+    "thong_bao_mac_dinh": 1,
+    "kenh_luat": "luat",
+    "kenh_cap_nhat_cong_dong": "kiem_duyet",
+    "kenh_canh_bao_an_toan": "kiem_duyet",
+    "kenh_he_thong": "chung",
+    "co_kenh_he_thong": ["SUPPRESS_PREMIUM_SUBSCRIPTIONS", "SUPPRESS_GUILD_REMINDER_NOTIFICATIONS"],
+    "bo_quyen_everyone": ["MENTION_EVERYONE", "CREATE_INSTANT_INVITE"],
+    "kenh_link_moi": "luat",
+    "bieu_tuong": "assets/brand/discord_icon.png"
+  },
+  "quyen_bot": [
+    "CREATE_INSTANT_INVITE", "KICK_MEMBERS", "BAN_MEMBERS", "MANAGE_CHANNELS", "MANAGE_GUILD",
+    "ADD_REACTIONS", "VIEW_AUDIT_LOG", "VIEW_CHANNEL", "SEND_MESSAGES", "MANAGE_MESSAGES",
+    "EMBED_LINKS", "ATTACH_FILES", "READ_MESSAGE_HISTORY", "MENTION_EVERYONE", "CONNECT", "SPEAK",
+    "MANAGE_NICKNAMES", "MANAGE_ROLES", "MANAGE_WEBHOOKS", "MANAGE_THREADS", "CREATE_PUBLIC_THREADS",
+    "CREATE_PRIVATE_THREADS", "SEND_MESSAGES_IN_THREADS", "MODERATE_MEMBERS", "PIN_MESSAGES"
+  ],
+  "quyen_kenh_cua_bot": ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY", "EMBED_LINKS", "ATTACH_FILES", "CONNECT"],
+  "vai_tro": [
+    {
+      "khoa": "ban_quan_tri",
+      "ten": "Ban quản trị",
+      "mau": "#B23A2E",
+      "hien_rieng": true,
+      "nhac_duoc": false,
+      "quyen": [
+        "MANAGE_GUILD", "MANAGE_ROLES", "MANAGE_CHANNELS", "MANAGE_WEBHOOKS", "BAN_MEMBERS",
+        "KICK_MEMBERS", "MODERATE_MEMBERS", "MANAGE_MESSAGES", "MANAGE_THREADS", "PIN_MESSAGES",
+        "MENTION_EVERYONE", "CREATE_INSTANT_INVITE", "MANAGE_NICKNAMES", "VIEW_AUDIT_LOG"
+      ]
+    },
+    {
+      "khoa": "van_hanh",
+      "ten": "Vận hành",
+      "mau": "#C9962B",
+      "hien_rieng": true,
+      "nhac_duoc": true,
+      "quyen": [
+        "KICK_MEMBERS", "MODERATE_MEMBERS", "MANAGE_MESSAGES", "MANAGE_THREADS", "PIN_MESSAGES",
+        "MENTION_EVERYONE", "CREATE_INSTANT_INVITE", "MANAGE_NICKNAMES", "VIEW_AUDIT_LOG"
+      ]
+    },
+    {
+      "khoa": "choi_thu",
+      "ten": "Người chơi thử",
+      "mau": "#2E8B74",
+      "hien_rieng": true,
+      "nhac_duoc": false,
+      "quyen": []
+    },
+    {
+      "khoa": "thanh_vien",
+      "ten": "Thành viên",
+      "mau": "#9C8B74",
+      "hien_rieng": false,
+      "nhac_duoc": false,
+      "quyen": []
+    }
+  ],
+  "link_moi": {
+    "thanh_vien": ["thanh_vien"],
+    "choi_thu": ["choi_thu", "thanh_vien"]
+  },
+  "nhom_quyen": {
+    "chi_doc": {
+      "cho": ["VIEW_CHANNEL", "READ_MESSAGE_HISTORY", "ADD_REACTIONS"],
+      "cam": ["SEND_MESSAGES", "SEND_MESSAGES_IN_THREADS", "CREATE_PUBLIC_THREADS", "CREATE_PRIVATE_THREADS"]
+    },
+    "duoc_dang": {
+      "cho": ["VIEW_CHANNEL", "SEND_MESSAGES", "SEND_MESSAGES_IN_THREADS", "EMBED_LINKS", "ATTACH_FILES"]
+    },
+    "an": { "cam": ["VIEW_CHANNEL"] },
+    "thay": { "cho": ["VIEW_CHANNEL"] }
+  },
+  "danh_muc": [
+    {
+      "khoa": "dm_thong_tin",
+      "ten": "Thông tin",
+      "quyen": { "@everyone": "chi_doc", "ban_quan_tri": "duoc_dang", "van_hanh": "duoc_dang" },
+      "kenh": [
+        {
+          "khoa": "luat",
+          "ten": "📜luật",
+          "loai": "text",
+          "chu_de": "Luật máy chủ. Đọc trước khi tham gia.",
+          "nhan": "rules",
+          "ten_cu": ["rules", "luật", "quy-tắc", "quy-định"],
+          "tin": "noi_dung/luat.md",
+          "ghim": true
+        },
+        {
+          "khoa": "thong_bao",
+          "ten": "📢thông-báo",
+          "loai": "text",
+          "chu_de": "Tin chính thức từ đội phát triển. Chỉ Ban quản trị và Vận hành đăng."
+        },
+        {
+          "khoa": "gioi_thieu",
+          "ten": "🗺️giới-thiệu",
+          "loai": "text",
+          "chu_de": "Thiên Hoang Ký là gì: bối cảnh, lối chơi, tinh thần của game.",
+          "tin": "noi_dung/gioi_thieu.md",
+          "ghim": true
+        },
+        {
+          "khoa": "devlog",
+          "ten": "📓devlog",
+          "loai": "text",
+          "chu_de": "Nhật ký phát triển: game đang làm gì, vừa có gì mới."
+        }
+      ]
+    },
+    {
+      "khoa": "dm_dien_dan",
+      "ten": "Diễn đàn",
+      "quyen": { "@everyone": "an", "thanh_vien": "thay", "choi_thu": "thay", "van_hanh": "thay", "ban_quan_tri": "thay" },
+      "kenh": [
+        {
+          "khoa": "hoi_dap",
+          "ten": "❓hỏi-đáp",
+          "loai": "forum",
+          "chu_de": "Hỏi về cách chơi, tài khoản, link mời.\n\n• Một câu hỏi một bài, tiêu đề nói rõ điều bạn cần.\n• Tìm bài cũ trước khi hỏi, có khi đã có người trả lời.\n• Được giải đáp rồi thì bấm 👍 cho câu trả lời giúp được bạn.",
+          "the": []
+        },
+        {
+          "khoa": "gop_y",
+          "ten": "🐞góp-ý-và-báo-lỗi",
+          "loai": "forum",
+          "chu_de": "Một lỗi hoặc một ý tưởng một bài, và chọn thẻ phù hợp.\n\nBáo lỗi nên ghi:\n• Bạn đang ở màn nào, làm gì thì lỗi.\n• Bạn thấy gì, và lẽ ra phải thấy gì.\n• Điện thoại hay máy tính, trình duyệt gì.\n• Ảnh chụp hoặc clip nếu có.\n\nVận hành gắn thẻ \"đã xử lý\" khi xong.",
+          "bat_buoc_the": true,
+          "the": [
+            { "ten": "lỗi", "emoji": "🐛" },
+            { "ten": "đề xuất", "emoji": "💡" },
+            { "ten": "cân bằng", "emoji": "📊" },
+            { "ten": "giao diện", "emoji": "🎨" },
+            { "ten": "nhiệm vụ", "emoji": "📜" },
+            { "ten": "đã xử lý", "emoji": "✅", "chi_quan_tri": true }
+          ]
+        },
+        {
+          "khoa": "tuyen_nguoi",
+          "ten": "🏯tông-môn-tuyển-người",
+          "loai": "forum",
+          "chu_de": "Tông môn tìm đệ tử, người chơi tìm tông môn.\n\nNên ghi: tên tông môn, vùng, phe (Chính, Tà hay Trung lập), giờ hay chơi, và bạn đang tìm ai.\n\nKhông đăng link mời vào game ở đây.",
+          "the": []
+        },
+        {
+          "khoa": "chien_thuat",
+          "ten": "⚔️chiến-thuật-công-pháp",
+          "loai": "forum",
+          "chu_de": "Bàn đội hình, ghép tàn quyển, khắc chế giữa các hệ, công pháp.\n\nChọn thẻ hệ liên quan để người khác dễ tìm. Chia sẻ thoải mái, tranh luận văn minh.",
+          "the": [
+            { "ten": "Kim", "emoji": "🪙" },
+            { "ten": "Mộc", "emoji": "🌿" },
+            { "ten": "Thủy", "emoji": "💧" },
+            { "ten": "Hỏa", "emoji": "🔥" },
+            { "ten": "Thổ", "emoji": "🪨" },
+            { "ten": "Lôi", "emoji": "⚡" },
+            { "ten": "Phong", "emoji": "🍃" },
+            { "ten": "Quang", "emoji": "✨" },
+            { "ten": "Âm lãnh", "emoji": "🌑" },
+            { "ten": "Cực dương", "emoji": "🌞" },
+            { "ten": "Cực âm", "emoji": "🌘" },
+            { "ten": "Cực hàn", "emoji": "🧊" }
+          ]
+        }
+      ]
+    },
+    {
+      "khoa": "dm_choi_thu",
+      "ten": "Chơi thử",
+      "quyen": { "@everyone": "an", "choi_thu": "thay", "van_hanh": "thay", "ban_quan_tri": "thay" },
+      "kenh": [
+        {
+          "khoa": "phong_choi_thu",
+          "ten": "🧪phòng-chơi-thử",
+          "loai": "text",
+          "chu_de": "Dành riêng cho người chơi thử. Link mời vào game chỉ gửi riêng, không đăng ở kênh khác.",
+          "tin": "noi_dung/choi_thu.md",
+          "ghim": true
+        }
+      ]
+    },
+    {
+      "khoa": "dm_tro_chuyen",
+      "ten": "Trò chuyện",
+      "nhan_cha_cua": "chung",
+      "ten_cu": ["Text Channels", "Kênh Chat", "Kênh chat", "Kênh văn bản", "Kênh Văn Bản"],
+      "quyen": { "@everyone": "an", "thanh_vien": "thay", "choi_thu": "thay", "van_hanh": "thay", "ban_quan_tri": "thay" },
+      "kenh": [
+        {
+          "khoa": "chung",
+          "ten": "💬chung",
+          "loai": "text",
+          "chu_de": "Trò chuyện chung về Thiên Hoang Ký.",
+          "nhan": "system",
+          "ten_cu": ["general", "chung", "chat-chung"],
+          "tin": "noi_dung/chao.md",
+          "ghim": true
+        },
+        {
+          "khoa": "ngoai_le",
+          "ten": "🎐ngoài-lề",
+          "loai": "text",
+          "chu_de": "Chuyện ngoài game: truyện, phim, đời sống. Vẫn giữ luật máy chủ."
+        },
+        {
+          "khoa": "khoe_hinh",
+          "ten": "📸khoe-hình",
+          "loai": "text",
+          "chu_de": "Khoe ảnh chụp tông môn, bản đồ, trận đấu, tranh vẽ về game.",
+          "cham": 10
+        }
+      ]
+    },
+    {
+      "khoa": "dm_thoai",
+      "ten": "Thoại",
+      "nhan_cha_cua": "thoai_1",
+      "ten_cu": ["Voice Channels", "Kênh Thoại", "Kênh thoại"],
+      "quyen": { "@everyone": "an", "thanh_vien": "thay", "choi_thu": "thay", "van_hanh": "thay", "ban_quan_tri": "thay" },
+      "kenh": [
+        { "khoa": "thoai_1", "ten": "🍵 Trà thất", "loai": "voice", "nhan": "voice_dau", "ten_cu": ["General", "Chung"] },
+        { "khoa": "thoai_2", "ten": "⚔️ Cùng chơi", "loai": "voice" }
+      ]
+    },
+    {
+      "khoa": "dm_quan_tri",
+      "ten": "Quản trị",
+      "quyen": { "@everyone": "an", "van_hanh": "thay", "ban_quan_tri": "thay" },
+      "kenh": [
+        {
+          "khoa": "kiem_duyet",
+          "ten": "🛡️kiểm-duyệt",
+          "loai": "text",
+          "chu_de": "AutoMod báo vi phạm ở đây. Discord gửi thông báo cho máy chủ cộng đồng vào đây.",
+          "nhan": "updates",
+          "ten_cu": ["moderator-only", "mod-only", "chỉ-dành-cho-người-kiểm-duyệt"]
+        },
+        {
+          "khoa": "ban_viec",
+          "ten": "📝bàn-việc",
+          "loai": "text",
+          "chu_de": "Ban quản trị và Vận hành bàn việc."
+        }
+      ]
+    }
+  ],
+  "automod": [
+    {
+      "khoa": "tuc_viet",
+      "ten": "Chặn từ ngữ tục (tiếng Việt)",
+      "loai": "KEYWORD",
+      "tu_khoa_tep": "noi_dung/tu_tuc.txt",
+      "chan": "Tin nhắn có từ ngữ không phù hợp với luật máy chủ.",
+      "bao_kenh": "kiem_duyet"
+    },
+    {
+      "khoa": "tuc_san",
+      "ten": "Chặn từ tục, gợi dục, lăng mạ (bộ có sẵn)",
+      "loai": "KEYWORD_PRESET",
+      "bo_co_san": ["PROFANITY", "SEXUAL_CONTENT", "SLURS"],
+      "chan": "Tin nhắn có từ ngữ không phù hợp với luật máy chủ.",
+      "bao_kenh": "kiem_duyet"
+    },
+    {
+      "khoa": "spam",
+      "ten": "Chặn tin nghi spam",
+      "loai": "SPAM",
+      "chan": "Tin nhắn bị chặn vì giống spam.",
+      "bao_kenh": "kiem_duyet"
+    },
+    {
+      "khoa": "link_spam",
+      "ten": "Chặn link mời máy chủ khác và link rút gọn",
+      "loai": "KEYWORD",
+      "tu_khoa": ["free nitro", "nitro free", "nitro miễn phí", "tặng nitro"],
+      "regex": [
+        "(?i)(discord\\.gg|discord(app)?\\.com/invite|dsc\\.gg|discord\\.me|discord\\.io|invite\\.gg)/\\S+",
+        "(?i)\\b(bit\\.ly|tinyurl\\.com|cutt\\.ly|t\\.co|goo\\.gl|is\\.gd|shorturl\\.at|rb\\.gy|tiny\\.cc|ow\\.ly|s\\.id|t\\.me|zalo\\.me/g)/\\S+"
+      ],
+      "chan": "Không gửi link mời máy chủ khác, link rút gọn hay link nhóm ngoài.",
+      "bao_kenh": "kiem_duyet",
+      "mien_vai_tro": ["ban_quan_tri", "van_hanh"]
+    },
+    {
+      "khoa": "link_moi_game",
+      "ten": "Không đăng link mời chơi thử ở kênh công khai",
+      "loai": "KEYWORD",
+      "regex": ["(?i)thienhoangky\\.fun/moi/[A-Za-z0-9_-]+"],
+      "chan": "Link mời chơi thử chỉ gửi riêng, không đăng ở kênh chung.",
+      "bao_kenh": "kiem_duyet",
+      "mien_kenh": ["phong_choi_thu", "kiem_duyet", "ban_viec"]
+    },
+    {
+      "khoa": "nhac_hang_loat",
+      "ten": "Chặn nhắc tên hàng loạt",
+      "loai": "MENTION_SPAM",
+      "gioi_han_nhac": 5,
+      "chong_dot_kich": true,
+      "chan": "Không nhắc tên quá nhiều người trong một tin.",
+      "bao_kenh": "kiem_duyet",
+      "khoa_tam_giay": 600,
+      "mien_vai_tro": ["ban_quan_tri", "van_hanh"]
+    }
+  ]
+}
