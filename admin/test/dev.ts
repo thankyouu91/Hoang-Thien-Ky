@@ -49,7 +49,8 @@ mkdirSync(".wrangler", { recursive: true });
 writeFileSync(".wrangler/tai-khoan-thu.sql", sql);
 d1(["execute", "thienhoangky", "--local", "--file", ".wrangler/tai-khoan-thu.sql"]);
 
-chay(bin("wrangler"), ["dev", "--port", "8788", "--ip", "127.0.0.1"]);
+// Cục bộ không có Cloudflare Access: ghi đè hai biến Access của wrangler.jsonc thành rỗng (chỉ dùng mật khẩu).
+chay(bin("wrangler"), ["dev", "--port", "8788", "--ip", "127.0.0.1", "--var", "ACCESS_TEAM_DOMAIN:", "--var", "ACCESS_AUD:"]);
 for (let i = 0; i < 120; i++) {
   await new Promise((r) => setTimeout(r, 500));
   if (await fetch("http://127.0.0.1:8788/api/toi").then(() => true, () => false)) break;

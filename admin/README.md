@@ -2,7 +2,9 @@
 
 Trang quản trị cho admin và ban vận hành của bản chơi thử (Cửa 1), chạy ở **https://admin.thienhoangky.fun**.
 
-- **Admin và vận hành** đăng nhập bằng **tên đăng nhập và mật khẩu**. Người dùng chốt cách này ngày 2026-11-05, thay cho Cloudflare Access theo email.
+- **Admin và vận hành** qua **hai lớp** (người dùng chốt ngày 2026-11-05):
+  1. **Cloudflare Access:** ứng dụng "Thiên Hoang Ký – quản trị", nhận mã một lần gửi qua email; email phải có trong Access group "THK quan tri".
+  2. **Tên đăng nhập và mật khẩu** của admin, với vai trò Admin hoặc Vận hành.
 - **Người chơi thử** vào game bằng **link mời** `https://play.thienhoangky.fun/moi/<mã>`, không có tài khoản.
 
 | Thư mục, file | Việc |
@@ -12,7 +14,7 @@ Trang quản trị cho admin và ban vận hành của bản chơi thử (Cửa 
 | `shared/hopDong.ts` | Hợp đồng dữ liệu giữa giao diện và API, nhãn sự kiện `LOAI_SU_KIEN`, 8 bước FTUE, mốc GDD mục 19 |
 | `migrations/` | Bảng `qt_*` trong D1 `thienhoangky` (dùng chung với Worker game), bảng theo dõi riêng `d1_migrations_qt` |
 | `scripts/tao-tai-khoan.ts` | Tạo tài khoản đầu tiên, hoặc đặt lại mật khẩu khi không còn Admin nào vào được |
-| `test/` | `jwt.test.ts` (lớp Access tùy chọn), `e2e.ts` (Worker thật trong wrangler dev, 57 phép kiểm), `dev.ts` (chạy thử trên máy) |
+| `test/` | `jwt.test.ts` (xác minh JWT Access), `e2e.ts` (Worker thật trong wrangler dev, 57 phép kiểm), `dev.ts` (chạy thử trên máy, tắt lớp Access) |
 
 Bảng game (`loi_moi`, `nguoi_choi_thu`, `su_kien`, `phan_hoi`) và Worker game do `cloudflare/` giữ. Hợp đồng chung nằm ở `docs/api.md`.
 
@@ -31,7 +33,7 @@ Bảng game (`loi_moi`, `nguoi_choi_thu`, `su_kien`, `phan_hoi`) và Worker game
 | Nhật ký quản trị | ✓ | ✓ |
 | Tự đổi mật khẩu của mình | ✓ | ✓ |
 
-Quyền chặn ở server: mỗi yêu cầu, Worker tìm phiên theo cookie rồi lấy vai trò của tài khoản trong D1. Giao diện chỉ ẩn nút cho gọn; gõ thẳng đường dẫn hay gọi API vẫn nhận 403.
+Quyền chặn ở server: mỗi yêu cầu, Worker kiểm JWT của Access, tìm phiên theo cookie, rồi lấy vai trò của tài khoản trong D1. Giao diện chỉ ẩn nút cho gọn; gõ thẳng đường dẫn hay gọi API vẫn nhận 403.
 
 ## Lần đăng nhập đầu: tài khoản `admin`
 
@@ -43,7 +45,7 @@ node scripts/tao-tai-khoan.ts admin admin --ghi <file mật khẩu>   # sinh .tm
 npx.cmd wrangler d1 execute thienhoangky --remote --file .tmp/tai-khoan-admin.sql
 ```
 
-1. Mở https://admin.thienhoangky.fun và đăng nhập `admin` bằng mật khẩu tạm.
+1. Mở https://admin.thienhoangky.fun. Access hỏi email: nhập votranlong91@gmail.com rồi nhập mã 6 số gửi về hộp thư (thư từ `noreply@notify.cloudflare.com`, có khi rơi vào spam). Sau đó đăng nhập `admin` bằng mật khẩu tạm.
 2. Trang bắt đổi mật khẩu ngay: ít nhất 12 ký tự, không chứa tên đăng nhập. Một câu dài dễ nhớ là tốt.
 3. Đổi xong thì xóa file mật khẩu tạm.
 
@@ -51,9 +53,14 @@ npx.cmd wrangler d1 execute thienhoangky --remote --file .tmp/tai-khoan-admin.sq
 
 ## Thêm Admin hoặc Vận hành
 
-1. Admin vào **Tài khoản → Tạo tài khoản**: nhập tên đăng nhập (3–32 ký tự: chữ thường không dấu, số, `.` `_` `-`), chọn **Vận hành** hoặc **Admin**.
-2. Màn hiện **mật khẩu tạm một lần duy nhất**. Gửi cho người nhận qua kênh riêng, không dán vào nhóm chat chung.
-3. Người nhận đăng nhập và phải đặt mật khẩu của mình trước khi dùng các màn khác.
+Mỗi người cần hai thứ: **email trong Access** và **một tài khoản trong admin**.
+
+1. **Cho email qua cổng Access.** Vào Zero Trust (one.dash.cloudflare.com) → Access controls → Access groups → **THK quan tri** → Include → Emails → thêm email → Save. Zero Trust Free cho tối đa 50 người.
+2. **Tạo tài khoản.** Admin vào **Tài khoản → Tạo tài khoản**: nhập tên đăng nhập (3–32 ký tự: chữ thường không dấu, số, `.` `_` `-`), chọn **Vận hành** hoặc **Admin**.
+3. Màn hiện **mật khẩu tạm một lần duy nhất**. Gửi cho người nhận qua kênh riêng, không dán vào nhóm chat chung.
+4. Người nhận mở admin.thienhoangky.fun, nhập email nhận mã Access, đăng nhập bằng mật khẩu tạm, rồi phải đặt mật khẩu của mình trước khi dùng các màn khác.
+
+**Thu quyền** một người: khóa hoặc xóa tài khoản ở màn Tài khoản (có hiệu lực ngay), rồi bỏ email khỏi group THK quan tri.
 
 Trên màn Tài khoản còn có:
 - **đổi vai trò**: có hiệu lực ngay từ yêu cầu kế tiếp của người đó;
@@ -114,7 +121,11 @@ SELECT khoa, gia_tri FROM qt_cau_hinh;   -- gia_tri là JSON
 - **Không có địa chỉ phụ:** `workers_dev: false` và `preview_urls: false`, chỉ vào được qua admin.thienhoangky.fun.
 - **Log:** Workers Logs tắt invocation log. Worker không log mật khẩu, mã phiên hay thân yêu cầu. "Liên hệ" trong phản hồi do người chơi tự để lại, và chỉ người có vai trò mới thấy.
 - **"Xem như Vận hành"** (Admin bật ở thanh bên): giao diện gửi header `X-Xem-Nhu: van_hanh`, và server hạ quyền cho các yêu cầu đó. Header chỉ hạ quyền, không bao giờ nâng. Dùng để thử việc chặn mà không cần tài khoản thứ hai.
-- **Lớp Cloudflare Access bên ngoài (không bắt buộc):** đặt cả `ACCESS_TEAM_DOMAIN` và `ACCESS_AUD` trong `wrangler.jsonc`. Khi đó mọi yêu cầu, kể cả trang đăng nhập, phải qua Access trước, rồi mới tới mật khẩu. Đặt thiếu một trong hai thì Worker trả 503, không chạy với cấu hình nửa vời.
+- **Lớp Cloudflare Access bên ngoài (đang bật):** `ACCESS_TEAM_DOMAIN` và `ACCESS_AUD` trong `wrangler.jsonc` là của ứng dụng "Thiên Hoang Ký – quản trị".
+  - Mọi yêu cầu, kể cả trang đăng nhập và file tĩnh, phải mang JWT Access hợp lệ: chữ ký RS256 theo khóa của team, đúng `aud` của ứng dụng admin, đúng `iss`, còn hạn.
+  - Worker kiểm lại JWT này dù Access đã chặn ở biên, nên đường vào nào lách được Access cũng không qua được.
+  - Đặt thiếu một trong hai biến thì Worker trả 503, không chạy với cấu hình nửa vời.
+  - Muốn bỏ lớp này: xóa hai biến rồi deploy lại, sau đó xóa ứng dụng Access. Làm ngược thứ tự thì mọi yêu cầu bị 401 trong lúc chờ.
 
 ## Chạy ở máy
 
@@ -126,7 +137,7 @@ node test/dev.ts --bang-game # chạy thêm migration game để thử tạo lin
 npm.cmd test                 # test JWT, build, rồi e2e trên wrangler dev
 ```
 
-`test/dev.ts` chạy Worker thật bằng wrangler dev với D1 cục bộ, rồi chạy Vite (Vite chuyển `/api` sang wrangler). Lần đầu nó tạo hai tài khoản thử **chỉ có trong D1 cục bộ**:
+`test/dev.ts` chạy Worker thật bằng wrangler dev với D1 cục bộ (ghi đè hai biến Access thành rỗng, vì máy dev không có Access), rồi chạy Vite (Vite chuyển `/api` sang wrangler). Lần đầu nó tạo hai tài khoản thử **chỉ có trong D1 cục bộ**:
 - `admin` (Admin) và `vanhanh` (Vận hành);
 - mật khẩu chung `mat-khau-thu-cuc-bo`.
 
@@ -146,7 +157,7 @@ Trước khi có tài khoản, trang chỉ hiện màn đăng nhập, và mọi 
 
 ## Đã chọn và vì sao
 
-- **Tên + mật khẩu thay Access theo email:** người dùng chốt ngày 2026-11-05. Lớp Access vẫn bật lại được bằng hai biến, nếu muốn thêm một cổng bên ngoài.
+- **Hai lớp, Access ngoài rồi mật khẩu trong:** người dùng chốt ngày 2026-11-05 ("tên đăng nhập admin", rồi "Giữ Access"). Access chặn người lạ ngay ở biên. Mật khẩu tách vai trò Admin và Vận hành, và cho phép khóa từng tài khoản ngay lập tức.
 - **PBKDF2 30.000 vòng, không phải 100.000:**
   - gói Workers Free cho 10 ms CPU mỗi yêu cầu;
   - đo trên máy dev, 30.000 vòng mất khoảng 5 ms, còn 100.000 vòng mất khoảng 16 ms;

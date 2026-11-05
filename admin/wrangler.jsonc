@@ -28,11 +28,12 @@
   ],
   "vars": {
     // Nơi chạy game: link mời là GAME_ORIGIN + "/moi/<ma>". Dời game sang tên miền khác thì chỉ đổi dòng này rồi deploy.
-    "GAME_ORIGIN": "https://play.thienhoangky.fun"
-    // Đăng nhập bằng tên + mật khẩu (worker/taiKhoan.ts). Nếu giữ ứng dụng Access "Thiên Hoang Ký – quản trị" làm lớp ngoài
-    // thì bỏ chú thích hai dòng dưới để Worker kiểm cả JWT (xóa ứng dụng Access thì phải bỏ hai dòng này, không thì 401):
-    // "ACCESS_TEAM_DOMAIN": "jolly-water-a8bd.cloudflareaccess.com",
-    // "ACCESS_AUD": "8845cb2cdf92bb8fbe412aff4968092b4a6800f594bb53831b46abe8a092c505"
+    "GAME_ORIGIN": "https://play.thienhoangky.fun",
+    // Hai lớp (người dùng chốt 2026-11-05 "Giữ Access"): ứng dụng Access "Thiên Hoang Ký – quản trị" (mã email, group "THK quan tri")
+    // chặn ở biên, Worker kiểm lại JWT của ứng dụng đó, rồi mới tới đăng nhập tên + mật khẩu (worker/taiKhoan.ts).
+    // Xóa ứng dụng Access thì phải xóa hai dòng này, không thì mọi yêu cầu bị 401. Chạy cục bộ và test tự ghi đè thành rỗng.
+    "ACCESS_TEAM_DOMAIN": "jolly-water-a8bd.cloudflareaccess.com",
+    "ACCESS_AUD": "8845cb2cdf92bb8fbe412aff4968092b4a6800f594bb53831b46abe8a092c505"
   },
   // Log do Worker tự ghi (không có mật khẩu, mã phiên). Tắt invocation log để header và đường dẫn không vào Workers Logs.
   "observability": { "enabled": true, "logs": { "invocation_logs": false } }

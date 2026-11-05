@@ -111,7 +111,8 @@ const MK_ADMIN = "đường lên Thiên Hoang còn xa 2026";
 const MK_VAN = "mây trắng ngang núi Thanh Vân";
 const MATKHAU_DA_THAY: string[] = [TAM_DAU, MK_ADMIN, MK_VAN];
 
-const w = chayWorker(PORT, { GAME_ORIGIN: "https://choi.thienhoangky.fun/" });
+// Tắt lớp Access của wrangler.jsonc cho phần kiểm mật khẩu; lớp Access kiểm riêng ở cuối với khóa giả.
+const w = chayWorker(PORT, { GAME_ORIGIN: "https://choi.thienhoangky.fun/", ACCESS_TEAM_DOMAIN: "", ACCESS_AUD: "" });
 try {
   await doiLen(BASE);
 
