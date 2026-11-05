@@ -184,7 +184,7 @@ export class DongPhuScene extends PageScene<DongPhuView> {
     const body = openSheet(
       v.city.name,
       `${art ? `<div class="loc-hero pix" style="background-image:url('${art}')" role="img" aria-label="${esc(v.city.name)}"></div>` : ""}<ul class="list">${v.city.facilities
-        .map((f) => `<li class="row"><span class="grow"><b>${esc(f)}</b><span class="muted block">Có ở khối MVP (chợ, kho, lò rèn: M6)</span></span></li>`)
+        .map((f) => `<li class="row"><span class="grow"><b>${esc(f)}</b><span class="muted block">Sắp có ở bản sau</span></span></li>`)
         .join("")}</ul>
        <button type="button" class="wide" data-map>Xem thành chủ trên bản đồ</button>`,
     );

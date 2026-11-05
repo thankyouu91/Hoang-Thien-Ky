@@ -84,7 +84,7 @@ function pickCrew(k: number, nv: NhanVatView, members: SectMember[], done: () =>
   const pool = members.filter((m) => !m.npc && !taken.has(m.id)).sort((a, b) => Number(b.name === nv.name) - Number(a.name === nv.name) || Number(b.online) - Number(a.online) || b.level - a.level);
   const body = openSheet(
     k === 0 ? "Mời chủ lò" : `Mời hộ lô ${k}`,
-    `<p class="muted">${k === 0 ? "Chủ lò phải có tài năng Tu rèn; nguồn đọc chưa có tài năng của thành viên khác nên prototype chưa lọc." : "Thành viên cùng tông, đang online thì vào lò ngay."}</p>
+    `<p class="muted">${k === 0 ? "Chủ lò phải có tài năng Tu rèn." : "Thành viên cùng tông, đang online thì vào lò ngay."}</p>
      <ul class="list">${pool
        .map((m) => `<li><button type="button" class="row" data-id="${m.id}"><span class="online${m.online ? " on" : ""}" aria-hidden="true"></span><span class="grow"><b>${esc(m.name)}${m.name === nv.name ? " (bạn)" : ""}</b><span class="muted block">${ROLE_NAMES[m.role]} · cấp ${m.level}${m.online ? "" : " · offline"}${m.name === nv.name ? ` · ${esc(nv.talent.name)}` : ""}</span></span></button></li>`)
        .join("")}</ul>

@@ -178,6 +178,14 @@ export function skillChip(t: SkillType): string {
 
 let toastTimer = 0;
 /** Thông báo ngắn ở trên thanh dưới. */
+/** Việc chưa mở ở bản chơi thử: một câu chung cho người chơi, không nhắc tên khối việc nội bộ (M3…M6, Sprint). */
+export function sapCo(what: string): void {
+  toast(`${what} sắp có ở bản sau.`);
+}
+
+/** Nhãn "Sắp có" trên nút của việc chưa mở; nút thêm lớp sap-co cho mờ đi (bấm vẫn được, để nghe câu sapCo). */
+export const SAP_CO = `<span class="sap-co-tag">Sắp có</span>`;
+
 export function toast(text: string, bad = false): void {
   let el = document.getElementById("toast");
   if (!el) {

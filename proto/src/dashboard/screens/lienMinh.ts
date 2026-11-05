@@ -4,7 +4,7 @@
 import { MiniMap } from "../minimap.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { LienMinhView } from "../source.ts";
-import { agoText, cd, clockText, esc, toast } from "../ui.ts";
+import { agoText, cd, clockText, esc, SAP_CO, sapCo } from "../ui.ts";
 
 export class LienMinhScene extends PageScene<LienMinhView> {
   private mini: MiniMap;
@@ -70,7 +70,7 @@ export class LienMinhScene extends PageScene<LienMinhView> {
         <section class="card">
           <h2>Chưa có liên minh</h2>
           <p class="muted">Liên minh tối đa 5 tông môn cùng vị diện. Xin vào từ tông môn cấp ${v.joinLevel}, lập từ cấp ${v.createLevel}.</p>
-          ${v.can.lienMinh ? `<button type="button" class="wide" data-act="create" ${canCreate ? "" : "disabled"}>Lập liên minh</button>` : ""}
+          ${v.can.lienMinh ? `<button type="button" class="wide" data-act="create" ${canCreate ? "" : "disabled"}>Lập liên minh ${SAP_CO}</button>` : ""}
         </section>
       </div>
     </div>`;
@@ -82,7 +82,7 @@ export class LienMinhScene extends PageScene<LienMinhView> {
     const head = `<section class="card al-head">
         <h1>${esc(a.name)}</h1>
         <p class="sub">Minh chủ ${esc(a.leader)} · ${a.sects.length}/5 tông môn cùng vị diện</p>
-        ${v.can.lienMinh ? `<div class="btns compact"><button type="button" class="btn small" data-act="invite" ${a.sects.length >= 5 ? "disabled" : ""}>Mời tông môn</button><button type="button" class="btn small" data-act="declare">Tuyên chiến</button><button type="button" class="btn small" data-act="leave">Rời liên minh</button></div>` : ""}
+        ${v.can.lienMinh ? `<div class="btns compact"><button type="button" class="btn small" data-act="invite" ${a.sects.length >= 5 ? "disabled" : ""}>Mời tông môn ${SAP_CO}</button><button type="button" class="btn small" data-act="declare">Tuyên chiến ${SAP_CO}</button><button type="button" class="btn small" data-act="leave">Rời liên minh ${SAP_CO}</button></div>` : ""}
       </section>`;
     const sects = `<section class="card">
         <h2>Tông môn thành viên <span class="right">${a.sects.length} / 5</span></h2>
@@ -103,9 +103,9 @@ export class LienMinhScene extends PageScene<LienMinhView> {
     const help = `<section class="card primary">
         <h2>Xin hộ chiến <span class="right">${a.helpRequests.length}</span></h2>
         <ul class="list">${a.helpRequests
-          .map((h) => `<li class="row"><span class="grow"><b>${esc(h.from)}</b><span class="muted block">${esc(h.point)} · ${agoText(now, h.at)}</span></span><button type="button" class="seal small" data-act="help">Hộ chiến</button></li>`)
+          .map((h) => `<li class="row"><span class="grow"><b>${esc(h.from)}</b><span class="muted block">${esc(h.point)} · ${agoText(now, h.at)}</span></span><button type="button" class="seal small" data-act="help">Hộ chiến ${SAP_CO}</button></li>`)
           .join("") || `<li class="empty-note">Không ai đang xin hộ chiến.</li>`}</ul>
-        <button type="button" class="wide" data-act="ask-help">Xin hộ chiến cho tông mình</button>
+        <button type="button" class="wide" data-act="ask-help">Xin hộ chiến cho tông mình ${SAP_CO}</button>
       </section>`;
     const boss = `<section class="card">
         <h2>Boss liên minh <span class="right">${esc(a.boss.days)}</span></h2>
@@ -144,11 +144,11 @@ export class LienMinhScene extends PageScene<LienMinhView> {
       case "invite":
       case "leave":
       case "declare":
-        toast("Lập, mời, rời liên minh và tuyên chiến có ở khối M5.");
+        sapCo("Lập, mời, rời liên minh và tuyên chiến");
         break;
       case "help":
       case "ask-help":
-        toast("Hộ chiến có ở khối M5.");
+        sapCo("Hộ chiến");
         break;
     }
   }

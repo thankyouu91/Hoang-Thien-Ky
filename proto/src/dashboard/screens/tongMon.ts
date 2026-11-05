@@ -9,7 +9,7 @@ import { PageScene, type DashCtx } from "../shell.ts";
 import type { NhanVatView, TongMonView } from "../source.ts";
 import { forgeHtml, openDanhKhi } from "./forge.ts";
 import { term } from "../terms.ts";
-import { assetUrl, cd, closeSheet, esc, fmt, openSheet, ROLE_NAMES, toast } from "../ui.ts";
+import { assetUrl, cd, closeSheet, esc, fmt, openSheet, ROLE_NAMES, SAP_CO, sapCo, toast } from "../ui.ts";
 
 export type TongMonTab = "tong-quan" | "son-mon" | "thanh-vien" | "chien-su";
 
@@ -175,7 +175,7 @@ export class TongMonScene extends PageScene<TongMonView> {
               <span class="art" style="background-image:url('${art.url}')"></span><span><span class="loc-name">${esc(b.name)}</span><span class="lv">${lv}</span></span></button>`;
           })
           .join("")}</div>
-        <p class="note">Cảnh 2D công trình dựng theo mẫu Watabou ở Sprint 5. Mô hình có hình PixelLab thì dùng hình đó, chưa có thì dùng hình vẽ bằng code.</p>
+
       </section>`;
   }
 
@@ -195,7 +195,7 @@ export class TongMonScene extends PageScene<TongMonView> {
          ${busy ? `<dt>Đang lên cấp ${b.level + 1}</dt><dd>còn ${cd(b.upgradingUntil!)}</dd>` : ""}
          ${b.locked ? `<dt>Điều kiện</dt><dd>${esc(b.locked)}</dd>` : ""}
        </dl>
-       ${v.can.xay && !busy && !b.locked ? `<div class="actions"><button type="button" class="seal" data-a="build">${b.level === 0 ? "Xây" : `Nâng lên cấp ${b.level + 1}`}</button></div>` : ""}
+       ${v.can.xay && !busy && !b.locked ? `<div class="actions"><button type="button" class="seal" data-a="build">${b.level === 0 ? "Xây" : `Nâng lên cấp ${b.level + 1}`} ${SAP_CO}</button></div>` : ""}
        ${id === "luyen_khi_cac" ? `<div class="lk-forge"><p class="muted">Đang đọc lò danh khí…</p></div>` : ""}`,
     );
     // Luyện Khí Các: lò danh khí cần túi của người chơi (phôi, đồ phổ), nên đọc thêm màn Nhân vật.
@@ -208,7 +208,7 @@ export class TongMonScene extends PageScene<TongMonView> {
       });
     body.addEventListener("click", (e) => {
       const t = e.target as HTMLElement;
-      if (t.closest("[data-a=build]")) toast("Hàng xây và nâng công trình có ở Sprint 5.");
+      if (t.closest("[data-a=build]")) sapCo("Xây và nâng công trình");
       const dk = t.closest<HTMLElement>("[data-a=dk]");
       if (dk && nv)
         openDanhKhi(Number(dk.dataset.i), b.level, nv, v.members, {
@@ -255,7 +255,7 @@ export class TongMonScene extends PageScene<TongMonView> {
       <section class="card">
         <h2>Chiến sự</h2>
         <ul class="list">${rows.join("") || `<li class="empty-note">Không có chiến sự.</li>`}</ul>
-        ${v.can.tuyenChien ? `<button type="button" class="wide seal" data-act="declare">Tuyên chiến</button>` : `<p class="note">Chỉ tông chủ và phó tông chủ tuyên chiến được (tông môn từ cấp 30).</p>`}
+        ${v.can.tuyenChien ? `<button type="button" class="wide seal" data-act="declare">Tuyên chiến ${SAP_CO}</button>` : `<p class="note">Chỉ tông chủ và phó tông chủ tuyên chiến được (tông môn từ cấp 30).</p>`}
       </section>`;
   }
 
@@ -301,7 +301,7 @@ export class TongMonScene extends PageScene<TongMonView> {
         this.openLocation(v, id);
         break;
       case "declare":
-        toast("Tuyên chiến có ở khối M5.");
+        sapCo("Tuyên chiến");
         break;
     }
   }

@@ -31,9 +31,9 @@ import { LuyenKhiPanel, type LkTab } from "./luyenKhiPanel.ts";
 import { icon, type IconName } from "../icons.ts";
 import { enableDrag, type DragControl, type DropAction } from "../keoTha.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
-import type { BagItem, GearItem, GearSlot, ItemGrade, ItemKind, NhanVatView, Rarity, StatLine, TechniqueCard } from "../source.ts";
+import { RETREAT_HOURS, type BagItem, type GearItem, type GearSlot, type ItemGrade, type ItemKind, type NhanVatView, type Rarity, type StatLine, type TechniqueCard } from "../source.ts";
 import { REALM_TERM, term } from "../terms.ts";
-import { artUrl, assetUrl, cd, closeSheet, cropIcons, elementChip, esc, fmt, heArt, openSheet, pctText, ROLE_NAMES, skillChip, techCover, toast } from "../ui.ts";
+import { artUrl, assetUrl, cd, closeSheet, cropIcons, elementChip, esc, fmt, heArt, openSheet, pctText, ROLE_NAMES, SAP_CO, sapCo, skillChip, techCover, toast } from "../ui.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 
 export type NhanVatTab = "thong-tin" | "phap-tuong" | "dao-co" | "luyen-khi" | "tui";
@@ -644,7 +644,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         : `<span class="muted">Ấn bậc ${BAC_TEN[bac]} không ghép lên được.</span>`) + this.khamButtons(it, v);
     } else if (it.kind === "tan_quyen") act = `<button type="button" class="seal" data-act="deposit" data-uid="${it.uid}">Nộp Tàng Kinh Các</button>`;
     else if (it.kind === "ngoc") act = `${this.khamButtons(it, v)}${isBinhAn(it) ? "" : `<button type="button" class="btn small" data-act="goto-lk" data-lk="ngoc">Hợp, điểm hóa</button>`}`;
-    else act = `<button type="button" class="btn small" data-act="use" data-uid="${it.uid}">Dùng</button>`;
+    else act = `<button type="button" class="btn small sap-co" data-act="use" data-uid="${it.uid}">Dùng ${SAP_CO}</button>`;
     return `${head}${body}<div class="actions">${act}</div>`;
   }
 
@@ -804,7 +804,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     else if (name === "cultivation") this.openCultivation(v);
     else if (name === "main") {
       if (v.cultivation.canBreak) void this.send({ type: "dot_pha" });
-      else toast("Bế quan có ở khối M4; prototype chưa làm.");
+      else this.openRetreat(v);
     } else if (name === "dev_cap") void this.send({ type: "dev_len_cap", levels: 1 });
     // Tới cấp cuối cảnh giới và đầy tu vi của cấp đó (thêm một cấp nữa; tu vi dừng ở mức đủ để Đột phá).
     else if (name === "dev_dot_pha") void this.send({ type: "dev_len_cap", levels: v.cultivation.breakAt.level - v.level + 1 });
@@ -829,7 +829,23 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     else if (name === "kham") void this.send({ type: "kham", uid, slot: el.dataset.slot as GearSlot });
     else if (name === "carry") void this.carry(v, Number(el.dataset.id), v.loadout.findIndex((t) => !t));
     else if (name === "deposit") void this.send({ type: "nop_tan_quyen", scrollUid: uid });
-    else if (name === "use") toast("Dùng đan, phù và ấp trứng có ở khối M6; prototype chưa làm.");
+    else if (name === "use") sapCo("Dùng đan, phù và ấp trứng");
+  }
+
+  /** Bế quan (GDD mục 14: nút lớn ở Thông tin): chọn 1 hay 8 giờ, xong cộng tu vi theo tốc độ bế quan. */
+  private openRetreat(v: NhanVatView): void {
+    const c = v.cultivation;
+    const body = openSheet(
+      "Bế quan",
+      `<p>Mỗi giờ bế quan được <b>${fmt(c.perHour)}</b> tu vi. Tới cấp cuối cảnh giới thì tu vi dừng ở mức đủ để Đột phá.</p>
+       <div class="actions">${RETREAT_HOURS.map((g, i) => `<button type="button" class="${i === 0 ? "seal" : "btn"}" data-gio="${g}">Bế quan ${g} giờ · +${fmt(c.perHour * g)}</button>`).join("")}</div>`,
+    );
+    body.addEventListener("click", (e) => {
+      const g = (e.target as HTMLElement).closest<HTMLElement>("[data-gio]")?.dataset.gio;
+      if (!g) return;
+      closeSheet();
+      void this.send({ type: "be_quan", gio: Number(g) });
+    });
   }
 
   /** Mở mục Luyện khí ở một phần (từ bảng ô trang bị, chi tiết ngọc). */
@@ -887,7 +903,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
        ${spare.length ? `<h3>Trong túi</h3><ul class="list">${spare
          .map((it) => `<li class="row"><span class="bag-cell ${tone(it)}">${this.itemIcon(it)}</span><span class="grow"><b>${esc(it.name)}</b><span class="muted block">${it.rarity ? RARITY_NAMES[it.rarity] : esc(it.gradeLabel)} · +${it.gear!.plus}</span></span><button type="button" class="btn small" data-a="wear" data-uid="${it.uid}">Mặc</button></li>`)
          .join("")}</ul>` : ""}
-       ${g ? `<div class="actions"><button type="button" data-a="off">Tháo về túi</button><button type="button" data-a="ren">Rèn</button><button type="button" data-a="tay">Tẩy luyện</button>${hasKhiLinh(g.rarity) ? `<button type="button" data-a="kl">Khí linh</button>` : ""}</div>` : ""}`,
+       ${g ? `<div class="actions"><button type="button" data-a="off">Tháo về túi</button><button type="button" class="sap-co" data-a="ren">Rèn ${SAP_CO}</button><button type="button" data-a="tay">Tẩy luyện</button>${hasKhiLinh(g.rarity) ? `<button type="button" data-a="kl">Khí linh</button>` : ""}</div>` : ""}`,
     );
     cropIcons(body);
     body.addEventListener("click", (e) => {
@@ -900,7 +916,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       else if (a.dataset.a === "off") void this.send({ type: "thao_do", slot });
       else if (a.dataset.a === "tay") this.gotoLk("tay-luyen", slot);
       else if (a.dataset.a === "kl") this.gotoLk("khi-linh", slot);
-      else toast("Rèn, sửa, khảm có ở khối MVP M6; prototype chưa làm.");
+      else sapCo("Rèn, sửa đồ");
     });
   }
 

@@ -65,6 +65,8 @@ export interface Job {
   detail: string;
   startsAt: number;
   endsAt: number;
+  /** Bế quan bằng lệnh be_quan: tu vi cộng khi xong (việc bế quan có sẵn của bản mẫu không có). */
+  exp?: number;
 }
 
 export interface World {

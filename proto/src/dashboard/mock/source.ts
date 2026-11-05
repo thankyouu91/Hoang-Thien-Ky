@@ -23,6 +23,7 @@ import NHIEM_VU from "../../../../data/nhiem_vu/ha_nhiem_vu.json";
 import { sampleBattle } from "../../mock/sampleBattle.ts";
 import { loadRegion, loadWorld, POINT_NAMES, routeIds, stagesFrom } from "../../scenes/map/region.ts";
 import { destOf, legsOf, minutesPerStage, planTrip, startFrom, whereAt } from "./hanhTrinh.ts";
+import { RETREAT_HOURS } from "../source.ts";
 import type {
   BagItem, BanDoView, BinhBoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, ForgeLineView, GearItem, GearSlot, Go,
   HiddenLineView, LienMinhView, LuyenKhiView, MiniMapView, MountView, NhanVatView, ScrollCard, SetMilestone, SetView, StatLine, StatSource, TechniqueCard,
@@ -430,7 +431,27 @@ export class MockDashboardSource implements DashboardSource {
     return this.w.rules.sects[SECT];
   }
 
+  /** Tốc độ bế quan: 1/RETREAT_HOURS_PER_LEVEL kinh nghiệm cấp mỗi giờ, nhân linh khí, cộng linh tuyền của tông. */
+  protected retreatPerHour(): number {
+    const base = Math.round(expToNext(this.me.level) / RETREAT_HOURS_PER_LEVEL);
+    const spring = this.w.held.some((h) => h.type === "linh_tuyen") ? Math.round(base * LINH_KHI_HA * SPRING_BONUS) : 0;
+    return base * LINH_KHI_HA + spring;
+  }
+
+  /** Bế quan bằng lệnh đã xong: cộng tu vi (dừng ở mốc đột phá như gainExp), bỏ việc, gửi thư. Gọi ở mỗi lần đọc (top). */
+  protected settleRetreats(now: number): void {
+    const w = this.w;
+    const done = w.jobs.filter((j) => j.kind === "be_quan" && j.exp !== undefined && j.endsAt <= now);
+    if (!done.length) return;
+    w.jobs = w.jobs.filter((j) => !done.includes(j));
+    for (const j of done) {
+      this.gainExp(j.exp!);
+      w.mail.unshift({ id: Math.max(0, ...w.mail.map((m) => m.id)) + 1, from: "Động phủ", title: "Bế quan xong", body: `Bế quan xong, +${j.exp} tu vi.`, unread: true });
+    }
+  }
+
   protected top(): TopBarView {
+    this.settleRetreats(this.now());
     const p = this.w.player;
     return {
       name: p.name,
@@ -1328,6 +1349,13 @@ export class MockDashboardSource implements DashboardSource {
         w.travel = { from: first.from, to: last.to, startsAt: first.startsAt, endsAt: last.endsAt, name, stages: plan.stages, ...(homeOnly ? {} : { legs: plan.legs }) };
         const mins = Math.round((last.endsAt - now) / 60_000);
         return { ok: true, message: `Lên đường tới ${name}: ${plan.stages} chặng, khoảng ${mins} phút` };
+      }
+      case "be_quan": {
+        if (!RETREAT_HOURS.includes(cmd.gio)) return { ok: false, error: "lenh_khong_hop_le" };
+        if (w.jobs.some((j) => j.kind === "be_quan" && j.endsAt > now)) return { ok: false, error: "dang_be_quan" };
+        const exp = this.retreatPerHour() * cmd.gio;
+        w.jobs.push({ kind: "be_quan", title: "Bế quan", detail: `+${exp} tu vi khi xong`, startsAt: now, endsAt: now + cmd.gio * H, exp });
+        return { ok: true, message: `Bắt đầu bế quan ${cmd.gio} giờ, xong được ${exp} tu vi` };
       }
       case "toi_ngay": {
         // Bản thử: dời cả chuyến về trước cho đoạn cuối xong đúng lúc này.

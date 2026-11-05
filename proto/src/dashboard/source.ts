@@ -565,6 +565,9 @@ export interface BanDoView extends Stamped {
   can: { chiem: boolean; tuyenChien: boolean };
 }
 
+/** Bế quan chọn được 1 hoặc 8 giờ (đề xuất, cùng mốc với bản người mới moi/ftue.ts). */
+export const RETREAT_HOURS = [1, 8];
+
 export type DashboardCommand =
   | { type: "thu_mo" }
   | { type: "hien_te"; amount: number }
@@ -622,6 +625,8 @@ export type DashboardCommand =
   | { type: "di_toi"; region: string; pointId: number }
   /** Chỉ bản thử: tới nơi ngay để chơi thử nhanh (máy chủ thật không có; GDD chỉ có Phù độn thổ về thành chủ). */
   | { type: "toi_ngay" }
+  /** Bế quan `gio` giờ (1 hoặc 8, như bản người mới): xong thì cộng tu vi theo tốc độ bế quan (cultivation.perHour). */
+  | { type: "be_quan"; gio: number }
   /**
    * Khảm một viên trong túi vào món đang mặc ở ô `slot`: ngọc hệ vào dòng trống; ấn bộ, binh ấn (chỉ vũ khí, bao tay, ngọc
    * bội) mỗi món một viên, đã có thì viên cũ về túi.

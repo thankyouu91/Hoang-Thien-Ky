@@ -1179,6 +1179,9 @@ body.is-dragging, body.is-dragging * { cursor: grabbing !important; -webkit-user
 }
 .drag-tip.no { background: var(--c-accent); color: var(--c-on-accent); }
 .drag-hint { margin: 6px 0 0; color: var(--c-ink-3); font-size: 12px; }
+/* Nút việc chưa mở ở bản chơi thử: mờ, nhãn "Sắp có" (ui.ts SAP_CO); bấm thì câu chung "… sắp có ở bản sau." */
+.sap-co { opacity: 0.62; }
+.sap-co-tag { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px; background: var(--c-sunken); color: var(--c-ink-3); font-size: 11px; font-weight: 600; line-height: 18px; vertical-align: middle; }
 /* Vùng thả chỉ hiện khi đang kéo (ví dụ "Bỏ khỏi trận" ở màn Công pháp). */
 .drop-zone { display: none; margin: var(--sp-2) 0; padding: 12px; border: 2px dashed var(--c-line-2); border-radius: var(--r-sm); color: var(--c-ink-2); text-align: center; font-weight: 600; }
 body.is-dragging .drop-zone { display: block; }
