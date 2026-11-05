@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 867 món, đã vẽ 379, cần vẽ lại 0.
+Tổng 867 món, đã vẽ 406, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -828,36 +828,36 @@ Tổng 867 món, đã vẽ 379, cần vẽ lại 0.
 | CP-GH-046 | Công pháp ghép Lôi–Phong | cong_phap/ghep/loi_phong.webp | ✓ |
 | CP-GH-047 | Công pháp ghép Lôi–Quang | cong_phap/ghep/loi_quang.webp | ✓ |
 | CP-GH-048 | Công pháp ghép Lôi–Âm lãnh | cong_phap/ghep/loi_am_lanh.webp | ✓ |
-| CP-GH-049 | Công pháp ghép Lôi–Cực dương | cong_phap/ghep/loi_cuc_duong.webp |  |
-| CP-GH-050 | Công pháp ghép Lôi–Cực âm | cong_phap/ghep/loi_cuc_am.webp |  |
-| CP-GH-051 | Công pháp ghép Lôi–Cực hàn | cong_phap/ghep/loi_cuc_han.webp |  |
-| CP-GH-052 | Công pháp ghép Phong–Quang | cong_phap/ghep/phong_quang.webp |  |
-| CP-GH-053 | Công pháp ghép Phong–Âm lãnh | cong_phap/ghep/phong_am_lanh.webp |  |
-| CP-GH-054 | Công pháp ghép Phong–Cực dương | cong_phap/ghep/phong_cuc_duong.webp |  |
-| CP-GH-055 | Công pháp ghép Phong–Cực âm | cong_phap/ghep/phong_cuc_am.webp |  |
-| CP-GH-056 | Công pháp ghép Phong–Cực hàn | cong_phap/ghep/phong_cuc_han.webp |  |
-| CP-GH-057 | Công pháp ghép Quang–Âm lãnh | cong_phap/ghep/quang_am_lanh.webp |  |
-| CP-GH-058 | Công pháp ghép Quang–Cực dương | cong_phap/ghep/quang_cuc_duong.webp |  |
-| CP-GH-059 | Công pháp ghép Quang–Cực âm | cong_phap/ghep/quang_cuc_am.webp |  |
-| CP-GH-060 | Công pháp ghép Quang–Cực hàn | cong_phap/ghep/quang_cuc_han.webp |  |
-| CP-GH-061 | Công pháp ghép Âm lãnh–Cực dương | cong_phap/ghep/am_lanh_cuc_duong.webp |  |
-| CP-GH-062 | Công pháp ghép Âm lãnh–Cực âm | cong_phap/ghep/am_lanh_cuc_am.webp |  |
-| CP-GH-063 | Công pháp ghép Âm lãnh–Cực hàn | cong_phap/ghep/am_lanh_cuc_han.webp |  |
-| CP-GH-064 | Công pháp ghép Cực dương–Cực âm | cong_phap/ghep/cuc_duong_cuc_am.webp |  |
-| CP-GH-065 | Công pháp ghép Cực dương–Cực hàn | cong_phap/ghep/cuc_duong_cuc_han.webp |  |
-| CP-GH-066 | Công pháp ghép Cực âm–Cực hàn | cong_phap/ghep/cuc_am_cuc_han.webp |  |
+| CP-GH-049 | Công pháp ghép Lôi–Cực dương | cong_phap/ghep/loi_cuc_duong.webp | ✓ |
+| CP-GH-050 | Công pháp ghép Lôi–Cực âm | cong_phap/ghep/loi_cuc_am.webp | ✓ |
+| CP-GH-051 | Công pháp ghép Lôi–Cực hàn | cong_phap/ghep/loi_cuc_han.webp | ✓ |
+| CP-GH-052 | Công pháp ghép Phong–Quang | cong_phap/ghep/phong_quang.webp | ✓ |
+| CP-GH-053 | Công pháp ghép Phong–Âm lãnh | cong_phap/ghep/phong_am_lanh.webp | ✓ |
+| CP-GH-054 | Công pháp ghép Phong–Cực dương | cong_phap/ghep/phong_cuc_duong.webp | ✓ |
+| CP-GH-055 | Công pháp ghép Phong–Cực âm | cong_phap/ghep/phong_cuc_am.webp | ✓ |
+| CP-GH-056 | Công pháp ghép Phong–Cực hàn | cong_phap/ghep/phong_cuc_han.webp | ✓ |
+| CP-GH-057 | Công pháp ghép Quang–Âm lãnh | cong_phap/ghep/quang_am_lanh.webp | ✓ |
+| CP-GH-058 | Công pháp ghép Quang–Cực dương | cong_phap/ghep/quang_cuc_duong.webp | ✓ |
+| CP-GH-059 | Công pháp ghép Quang–Cực âm | cong_phap/ghep/quang_cuc_am.webp | ✓ |
+| CP-GH-060 | Công pháp ghép Quang–Cực hàn | cong_phap/ghep/quang_cuc_han.webp | ✓ |
+| CP-GH-061 | Công pháp ghép Âm lãnh–Cực dương | cong_phap/ghep/am_lanh_cuc_duong.webp | ✓ |
+| CP-GH-062 | Công pháp ghép Âm lãnh–Cực âm | cong_phap/ghep/am_lanh_cuc_am.webp | ✓ |
+| CP-GH-063 | Công pháp ghép Âm lãnh–Cực hàn | cong_phap/ghep/am_lanh_cuc_han.webp | ✓ |
+| CP-GH-064 | Công pháp ghép Cực dương–Cực âm | cong_phap/ghep/cuc_duong_cuc_am.webp | ✓ |
+| CP-GH-065 | Công pháp ghép Cực dương–Cực hàn | cong_phap/ghep/cuc_duong_cuc_han.webp | ✓ |
+| CP-GH-066 | Công pháp ghép Cực âm–Cực hàn | cong_phap/ghep/cuc_am_cuc_han.webp | ✓ |
 | CP-BO-001 | Bộ ba quyển chủ hệ Kim | cong_phap/bo_ba/kim.webp | ✓ |
 | CP-BO-002 | Bộ ba quyển chủ hệ Mộc | cong_phap/bo_ba/moc.webp | ✓ |
 | CP-BO-003 | Bộ ba quyển chủ hệ Thủy | cong_phap/bo_ba/thuy.webp | ✓ |
-| CP-BO-004 | Bộ ba quyển chủ hệ Hỏa | cong_phap/bo_ba/hoa.webp |  |
-| CP-BO-005 | Bộ ba quyển chủ hệ Thổ | cong_phap/bo_ba/tho.webp |  |
-| CP-BO-006 | Bộ ba quyển chủ hệ Lôi | cong_phap/bo_ba/loi.webp |  |
-| CP-BO-007 | Bộ ba quyển chủ hệ Phong | cong_phap/bo_ba/phong.webp |  |
-| CP-BO-008 | Bộ ba quyển chủ hệ Quang | cong_phap/bo_ba/quang.webp |  |
-| CP-BO-009 | Bộ ba quyển chủ hệ Âm lãnh | cong_phap/bo_ba/am_lanh.webp |  |
-| CP-BO-010 | Bộ ba quyển chủ hệ Cực dương | cong_phap/bo_ba/cuc_duong.webp |  |
-| CP-BO-011 | Bộ ba quyển chủ hệ Cực âm | cong_phap/bo_ba/cuc_am.webp |  |
-| CP-BO-012 | Bộ ba quyển chủ hệ Cực hàn | cong_phap/bo_ba/cuc_han.webp |  |
+| CP-BO-004 | Bộ ba quyển chủ hệ Hỏa | cong_phap/bo_ba/hoa.webp | ✓ |
+| CP-BO-005 | Bộ ba quyển chủ hệ Thổ | cong_phap/bo_ba/tho.webp | ✓ |
+| CP-BO-006 | Bộ ba quyển chủ hệ Lôi | cong_phap/bo_ba/loi.webp | ✓ |
+| CP-BO-007 | Bộ ba quyển chủ hệ Phong | cong_phap/bo_ba/phong.webp | ✓ |
+| CP-BO-008 | Bộ ba quyển chủ hệ Quang | cong_phap/bo_ba/quang.webp | ✓ |
+| CP-BO-009 | Bộ ba quyển chủ hệ Âm lãnh | cong_phap/bo_ba/am_lanh.webp | ✓ |
+| CP-BO-010 | Bộ ba quyển chủ hệ Cực dương | cong_phap/bo_ba/cuc_duong.webp | ✓ |
+| CP-BO-011 | Bộ ba quyển chủ hệ Cực âm | cong_phap/bo_ba/cuc_am.webp | ✓ |
+| CP-BO-012 | Bộ ba quyển chủ hệ Cực hàn | cong_phap/bo_ba/cuc_han.webp | ✓ |
 
 ## Vũ khí theo tài năng (8)
 

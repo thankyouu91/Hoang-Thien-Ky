@@ -199,7 +199,7 @@ for (const [[ia, ta, ma, ka, sa], [ib, tb, mb, kb, sb]] of CAP_HE)
     "Dùng cho công pháp có đúng 2 hệ, bất kể hệ nào là chủ quyển");
 for (const [id, ten, mau, kh, tt] of HE)
   add(`cong_phap/bo_ba/${id}`, `Bộ ba quyển chủ hệ ${ten}`, 2, "Ghép công pháp 3 quyển, cấp tông môn 100 (data/he_thong/json/cong_phap_mau.json)",
-    `a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume with a ${mau} silk cover and ${kh} emblem glowing ${tt}, the two lower volumes in plain pale cream silk, a soft mystical glow around the set`,
+    `a bound set of three ancient cultivation manuals stacked and tied together with a carved jade clasp and a silk cord, the top volume covered in ${mau} silk with ${kh} emblem glowing ${tt}, the two lower volumes in plain pale cream silk, a soft mystical glow around the set`,
     "Công pháp 3 hệ: hình theo hệ chủ quyển; hai phụ hệ hiện bằng huy hiệu hệ (màu mau_he) đặt trên hình ở UI");
 
 // 14. Vũ khí theo tài năng: hình khi cầm trên người (GDD mục 6), không phải hình trong túi.
