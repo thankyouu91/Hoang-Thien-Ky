@@ -135,8 +135,8 @@
         {
           "so": 2,
           "loai": "chi_so",
-          "mo_ta": "Hồi máu nhận +6%; thời gian bị khống chế −30%; hồi 0,2% máu mỗi giây",
-          "tham_so": {"healTaken":60,"controlTakenCut":300,"hpRegen":2}
+          "mo_ta": "Hồi máu nhận +6%; thời gian bị khống chế −35%; hồi 0,2% máu mỗi giây",
+          "tham_so": {"healTaken":60,"controlTakenCut":350,"hpRegen":2}
         },
         {
           "so": 4,
@@ -167,8 +167,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Giảm sát thương ngoại nhận 10%; hồi 0,1% máu mỗi giây",
-          "tham_so": {"damageTakenCutOuter":100,"hpRegen":1}
+          "mo_ta": "Giảm sát thương ngoại nhận 13%; hồi 0,1% máu mỗi giây",
+          "tham_so": {"damageTakenCutOuter":130,"hpRegen":1}
         },
         {
           "so": 7,
@@ -215,7 +215,7 @@
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Giảm sát thương nhận 3%","tham_so":{"damageTakenCut":30}},
+        {"so":2,"loai":"chi_so","mo_ta":"Giảm sát thương nhận 4%","tham_so":{"damageTakenCut":40}},
         {
           "so": 4,
           "loai": "chi_so",
@@ -323,8 +323,8 @@
         {
           "so": 4,
           "loai": "hanh_vi",
-          "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; khống chế trúng mục tiêu đang vận công hoặc bày trận thì hủy chiêu đó (vào hồi chiêu như đã dùng) và đốt 20% mana tối đa của mục tiêu; thủ nội +2%",
-          "tham_so": {"giamDanKhongChe":750,"huyVanCong":1,"dotMana":200,"defInner":20}
+          "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; khống chế trúng mục tiêu đang vận công hoặc bày trận thì hủy chiêu đó (vào hồi chiêu như đã dùng) và đốt 30% mana tối đa của mục tiêu; thủ nội +2%",
+          "tham_so": {"giamDanKhongChe":750,"huyVanCong":1,"dotMana":300,"defInner":20}
         },
         {
           "so": 7,
@@ -345,7 +345,7 @@
       "than": false,
       "rang_buoc": "Mốc 7 cần ít nhất 1 công pháp hệ chủ Lôi hoặc Kim",
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Chí mạng +2%","tham_so":{"critBonus":20}},
+        {"so":2,"loai":"chi_so","mo_ta":"Chí mạng +3%","tham_so":{"critBonus":30}},
         {
           "so": 4,
           "loai": "chi_so",
@@ -639,7 +639,7 @@
       "ten": "Liên Kích",
       "lo": ["ngoai_cong"],
       "an": "NG-BA-003",
-      "moc_2": {"mo_ta":"Tốc đánh +4%","tham_so":{"attackSpeed":40}},
+      "moc_2": {"mo_ta":"Tốc đánh +3%","tham_so":{"attackSpeed":30}},
       "moc_3": {"mo_ta":"Giảm hồi chiêu 3%","tham_so":{"cooldownCut":30}}
     },
     {

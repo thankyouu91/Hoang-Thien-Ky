@@ -29,6 +29,7 @@
 //   set_2h          set đồ 2.0 lần chỉnh cuối: Bàn Thạch 4, Ngọc Tủy 4, binh bộ Trấn Thủ
 //   set_2i          Bàn Thạch mốc 2 máu +1,5%, Chu Thiên mốc 2 giảm sát thương nội nhận 2%
 //   set_2j          cân 10 loại chiêu: Văn Uyên mốc 4 giảm mana thi triển 4,5% (Loại chiêu, hệ Thủy sửa bằng sua.ts)
+//   set_2k          set đồ 2.0 bước 4: Bàn Thạch 4, Lôi Trì 2, Bách Thảo 2, Băng Phách 4, Thiết Kỵ 2, Liên Kích mốc 2
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -1029,7 +1030,7 @@ const SET2_LO: Record<string, string> = {
 const SET2_MOC: [string, number, string, string, string, string | null][] = [
   ["van_kiem", 2, "chi_so", "Công lực +3%", "atk: 30", null],
   ["van_kiem", 4, "hanh_vi", "Xuyên giáp +4%; Cận chiến đơn đánh mục tiêu dưới 30% máu +15% sát thương", "nguongMau: 300; satThuong: 150; xuyenGiap: 40", null],
-  ["loi_tri", 2, "chi_so", "Chí mạng +2%", "critBonus: 20", null],
+  ["loi_tri", 2, "chi_so", "Chí mạng +3%", "critBonus: 30", null],
   ["loi_tri", 4, "chi_so", "Sát thương chí mạng +8%; tê liệt khi chí mạng (Lôi) +0,25 s", "critDamage: 80; teLietTicks: 5", null],
   ["liep_thu", 2, "chi_so", "Tốc đánh +3%", "attackSpeed: 30", null],
   ["liep_thu", 4, "chi_so", "Chí mạng +2%; sát thương lên dị thú và boss PvE +8%", "critBonus: 20; satThuongPvE: 80", null],
@@ -1040,12 +1041,12 @@ const SET2_MOC: [string, number, string, string, string, string | null][] = [
   ["do_kiep", 2, "chi_so", "Kháng Lôi +4%", "khangLoi: 40", null],
   ["do_kiep", 4, "hanh_vi", "Bùa chú giảm mana thi triển 15%; lần Bùa chú cuối cùng mỗi trận không tốn mana", "buaGiamMana: 150; buaCuoiMienMana: 1", null],
   ["ban_thach", 2, "chi_so", "Máu +1,5%", "hp: 15", null],
-  ["ban_thach", 4, "chi_so", "Giảm sát thương ngoại nhận 10%; hồi 0,1% máu mỗi giây", "damageTakenCutOuter: 100; hpRegen: 1", null],
+  ["ban_thach", 4, "chi_so", "Giảm sát thương ngoại nhận 13%; hồi 0,1% máu mỗi giây", "damageTakenCutOuter: 130; hpRegen: 1", null],
   ["ngoc_tuy", 2, "chi_so", "Thủ nội +2%", "defInner: 20", null],
   ["ngoc_tuy", 4, "chi_so", "Giảm mana thi triển 5%; giảm sát thương nội nhận 15%; công lực −3%", "manaCostCut: 50; damageTakenCutInner: 150; atk: -30", null],
   ["chu_thien", 2, "chi_so", "Bày trận nhanh 0,5 s; giảm sát thương nội nhận 2%", "bayTranTicks: -10; damageTakenCutInner: 20", null],
   ["chu_thien", 4, "hanh_vi", "Giảm sát thương nội nhận 8%; Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên", "chonViTri: dong_dich_nhat; damageTakenCutInner: 80", null],
-  ["bach_thao", 2, "chi_so", "Hồi máu nhận +6%; thời gian bị khống chế −30%; hồi 0,2% máu mỗi giây", "healTaken: 60; controlTakenCut: 300; hpRegen: 2", null],
+  ["bach_thao", 2, "chi_so", "Hồi máu nhận +6%; thời gian bị khống chế −35%; hồi 0,2% máu mỗi giây", "healTaken: 60; controlTakenCut: 350; hpRegen: 2", null],
   ["bach_thao", 4, "kinh_te", "Hồi thêm 0,1% máu mỗi giây (cả bộ 0,3%); mỏ dược +5%", "sanLuongMoDuoc: 50; hpRegen: 1", null],
   ["linh_tuyen", 2, "chi_so", "Hiệu quả hồi máu và khiên +4%", "healPower: 40", null],
   ["linh_tuyen", 4, "hanh_vi", "Hồi phục: hồi mana khi đang vận chỉ −10% thay −20%; thủ nội +2%", "hoiManaKhiVan: -100; defInner: 20", null],
@@ -1053,10 +1054,10 @@ const SET2_MOC: [string, number, string, string, string, string | null][] = [
   ["huyet_anh", 4, "hanh_vi", "Sát thương chí mạng +5%; Thân pháp chỉ lộ vị trí 2 s thay 3 s", "loViTriTicks: 40; critDamage: 50", null],
   ["co_tong", 2, "chi_so", "Hút mana: mỗi đòn rút 1% mana tối đa của mục tiêu", "manaDrain: 10", null],
   ["co_tong", 4, "hanh_vi", "Hồi chiêu pháp bảo −15%; mỗi lần pháp bảo kích hoạt hồi 5% mana", "hoiChieuPhapBao: -150; hoiManaPhapBao: 50", null],
-  ["thiet_ky", 2, "chi_so", "Giảm sát thương nhận 3%", "damageTakenCut: 30", null],
+  ["thiet_ky", 2, "chi_so", "Giảm sát thương nhận 4%", "damageTakenCut: 40", null],
   ["thiet_ky", 4, "chi_so", "Phản 30% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%", "reflect: 300; damageTakenCut: 10", null],
   ["bang_phach", 2, "chi_so", "Thời gian khống chế +20%", "controlTime: 200", null],
-  ["bang_phach", 4, "hanh_vi", "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; khống chế trúng mục tiêu đang vận công hoặc bày trận thì hủy chiêu đó (vào hồi chiêu như đã dùng) và đốt 20% mana tối đa của mục tiêu; thủ nội +2%", "giamDanKhongChe: 750; huyVanCong: 1; dotMana: 200; defInner: 20", null],
+  ["bang_phach", 4, "hanh_vi", "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; khống chế trúng mục tiêu đang vận công hoặc bày trận thì hủy chiêu đó (vào hồi chiêu như đã dùng) và đốt 30% mana tối đa của mục tiêu; thủ nội +2%", "giamDanKhongChe: 750; huyVanCong: 1; dotMana: 300; defInner: 20", null],
   ["hon_don", 2, "chi_so", "Kháng mọi hệ +2%", "khangMoiHe: 20", null],
   ["hon_don", 4, "khac_che", "Trúng đòn của hệ khắc mình thì hệ số ×1,5 giảm còn ×1,4", "heSoBiKhac: 1400", null],
 ];
@@ -1081,7 +1082,7 @@ const SET2_HOP: [string, number, number | null, string][] = [
 const SET2_BINH: [string, string, string, string, string, string, string][] = [
   ["bao_kich", "Bạo Kích", "ngoai_cong", "Chí mạng +2%", "critBonus: 20", "Sát thương chí mạng +10%", "critDamage: 100"],
   ["xuyen_pha", "Xuyên Phá", "ngoai_cong", "Xuyên giáp +3%", "xuyenGiap: 30", "Xuyên kháng +3%; xuyên giáp thêm +2%", "resistPen: 30; xuyenGiap: 20"],
-  ["lien_kich", "Liên Kích", "ngoai_cong", "Tốc đánh +4%", "attackSpeed: 40", "Giảm hồi chiêu 3%", "cooldownCut: 30"],
+  ["lien_kich", "Liên Kích", "ngoai_cong", "Tốc đánh +3%", "attackSpeed: 30", "Giảm hồi chiêu 3%", "cooldownCut: 30"],
   ["phap_nguyen", "Pháp Nguyên", "noi_cong", "Giảm mana thi triển 4%", "manaCostCut: 40", "Sát thương chiêu nội +2,5%", "innerDamage: 25"],
   ["hap_hon", "Hấp Hồn", "hap_thu", "Hút máu +1,5%", "lifesteal: 15", "Hút mana 0,5% mỗi đòn; sát thương phản đòn nhận vào −60%", "manaDrain: 5; reflectTakenCut: 600"],
   ["tran_thu", "Trấn Thủ", "thu_ngoai, thu_noi, phan_chan", "Khiên nhận +3%", "khienNhan: 30", "Thủ ngoại +1,5%; thủ nội +1,5%", "defOuter: 15; defInner: 15"],
@@ -1548,10 +1549,14 @@ const set2i: Step = (wb, log) => set2e(wb, log);
 
 const set2j: Step = (wb, log) => set2e(wb, log);
 
+// ---------- set đồ 2.0 lần 10: bước 4 (GDD tab Trang bị rev 87; đề xuất). Số mới ở SET2_MOC, SET2_BINH. ----------
+
+const set2k: Step = (wb, log) => set2e(wb, log);
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
-  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j,
+  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j, set_2k: set2k,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
