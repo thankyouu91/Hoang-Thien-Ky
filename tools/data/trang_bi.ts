@@ -179,6 +179,39 @@ export const PARTS: PartDef[] = [
     c("tang", "Tầng", "int", { width: 6 }), c("linh_luc", "Linh lực tối đa (cộng dồn)", "pct", { width: 11 }),
     c("hoi_chieu", "Hồi chiêu (cộng dồn)", "pct", { width: 10 }), c("khi_tinh", "Khí Tinh lên tầng này", "int", { width: 10 }),
   ]),
+  // Thú: tăng trưởng, bổ trợ, phát triển (GDD tab cùng tên, 2026-11-05; mọi số là đề xuất). Luật số ở nhóm thu_cuoi của sheet Tham số.
+  T("Thú tư chất", "thu_phat_trien.json", "tu_chat", "sao", [
+    c("sao", "Sao", "int", { width: 6 }), c("ten", "Tên", "text", { width: 9 }),
+    c("ty_le", "Tỷ lệ ra khi thuần phục, nở trứng", "pct", { width: 11 }),
+    c("tu_vi", "Tu vi nhận (hệ số)", "mul", { width: 10 }), c("o_thien_phu", "Số ô thiên phú", "int", { width: 9 }),
+  ]),
+  T("Thú tu vi", "thu_phat_trien.json", "tu_vi", "tang", [
+    c("tang", "Tầng", "int", { width: 6 }), c("canh_gioi", "Đại cảnh giới", "int", { width: 8 }),
+    c("tu_vi", "Tu vi lên tầng này", "int", { width: 10 }), c("tich_luy", "Tu vi tích lũy", "int", { width: 11 }),
+    c("thu_kiep", "Qua thú kiếp", "bool", { width: 8 }),
+  ]),
+  T("Thú kỹ", "thu_phat_trien.json", "thu_ky", "he", [
+    c("he", "Hệ", "text", { width: 9 }), c("ten", "Thú kỹ", "text", { width: 22 }),
+    c("muc_tieu", "Mục tiêu (chu, dong_doi_it_mau, dong_doi_bi_hieu_ung, dich_gan_nhat)", "text", { width: 16 }),
+    c("hieu_ung", "Hiệu ứng (khóa)", "text", { width: 12 }), c("tac_dung", "Tác dụng", "text", { width: 50 }),
+    c("cap_1", "Cấp 1", "qty", { unitCol: "don_vi", width: 8 }), c("cap_2", "Cấp 2", "qty", { unitCol: "don_vi", width: 8 }),
+    c("cap_3", "Cấp 3", "qty", { unitCol: "don_vi", width: 8 }), c("cap_4", "Cấp 4", "qty", { unitCol: "don_vi", width: 8 }),
+    c("don_vi", "Đơn vị", "unit", { width: 8 }), c("thoi_gian", "Kéo dài", "sec", { nullable: true, width: 8 }),
+  ]),
+  T("Thú huyết mạch", "thu_phat_trien.json", "huyet_mach", "ma", [
+    c("ma", "Mã", "text", { width: 11 }), c("ten", "Huyết mạch", "text", { width: 12 }),
+    c("he_so", "Hiệu lực thú kỹ (hệ số)", "mul", { width: 10 }), c("them_muc_tieu", "Thêm mục tiêu", "int", { width: 8 }),
+    c("hoi_chieu", "Hồi thú kỹ (trống: như luật)", "sec", { nullable: true, width: 10 }),
+    c("tac_dung", "Thay đổi thú kỹ", "text", { width: 50 }), c("hop_voi", "Hợp với", "text", { width: 30 }),
+  ]),
+  T("Thú thiên phú", "thu_phat_trien.json", "thien_phu", "ma_vp", [
+    c("ma_vp", "Mã Thú Quyết", "text"), c("ten", "Thiên phú", "text", { width: 12 }),
+    c("nhom", "Nhóm (thu_ky, chi_so, ngoai)", "text", { width: 9 }), c("hieu_ung", "Hiệu ứng (khóa)", "text", { width: 15 }),
+    c("tac_dung", "Tác dụng", "text", { width: 50 }),
+    c("bac_1", "Bậc 1", "qty", { unitCol: "don_vi", width: 8 }), c("bac_2", "Bậc 2", "qty", { unitCol: "don_vi", width: 8 }),
+    c("don_vi", "Đơn vị", "unit", { width: 8 }),
+    c("tinh_khi", "Tính khi (ho_chu, ca_5, thu_cuoi, cong_thanh, luon, luyen_hoa)", "text", { width: 14 }), nguon,
+  ]),
   T("Luật trang bị", "", "", "khoa", [
     c("khoa", "Khóa (file:đường dẫn)", "text", { width: 40 }), c("ten", "Tên", "text", { width: 45, json: false }),
     c("gia_tri", "Giá trị", "qty", { unitCol: "kieu", width: 10 }), c("kieu", "Kiểu", "text", { width: 8 }),
@@ -206,6 +239,7 @@ const TOP_ORDER: Record<string, string[]> = {
   "vat_pham.json": ["ghi_chu", "phu", "dan", "nguyen_lieu"],
   "dao_co_ban.json": ["ghi_chu", "o", "cong_huong", "mach", "luat"],
   "luyen_khi.json": ["ghi_chu", "tay_luyen", "khi_linh", "khi_van", "phan_giai", "danh_khi", "bao_giam", "te_luyen_tang", "luat"],
+  "thu_phat_trien.json": ["ghi_chu", "tu_chat", "tu_vi", "thu_ky", "huyet_mach", "thien_phu"],
 };
 export const TB_FILES = Object.keys(TOP_ORDER);
 

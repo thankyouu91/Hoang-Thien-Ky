@@ -15,6 +15,8 @@
 //   luyen_khi_5     xóa dòng luật khiVanTinhToiDa (code thôi đọc), bỏ câu nhắc nó trong ghi chú khi_van
 //   luyen_khi_6     Hộ Mệnh 1,8%, Ý danh khí ×1,0, ngân sách khí văn khiVanTranLucChien 2% (lần đo 2)
 //   luyen_khi_7     ghi chú song hệ: Bảo Ngọc Phù tiêu 1 tấm mỗi lần dùng, đậu hay không cũng mất
+//   thu_phat_trien  thú: 5 sheet tư chất, tu vi, thú kỹ, huyết mạch, thiên phú sau Linh đơn → thu_phat_trien.json; luật ở
+//                   nhóm thu_cuoi của Tham số; Tẩy Tủy Đơn ở Linh đơn
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -861,9 +863,132 @@ const luyenKhi7: Step = (wb, log) => {
   } else log.push("Ghi chú trang bị: song hệ đã có câu Bảo Ngọc Phù, bỏ qua");
 };
 
+// ---------- thú: tăng trưởng, bổ trợ, phát triển (GDD tab cùng tên, 2026-11-05; mọi số là đề xuất) ----------
+
+/** Khóa luật thú mới ở nhóm thu_cuoi (dòng đầy đủ ở noi_dung.ts PARAMS_EXTRA). */
+const THU_PT_KEYS = [
+  "supportPets", "supportFirstTicks", "supportCooldownTicks", "supportPowerTarget", "fourSymbolsExtraTargets", "pillTuVi",
+  "pillLowerRealmShare", "ownerTuViPerDay", "growthDaysTarget", "aptitudeRerollPerDay", "aptitudeRerollPillLevel", "nestMinAptitude",
+  "fourSymbolsAptitude", "talentStatSameMax", "talentTier2Realm", "bloodlineRealm", "bloodlineSwapPillLevel",
+];
+/** Tư chất: sao, tên, tỷ lệ ra, hệ số tu vi, số ô thiên phú. */
+const THU_TU_CHAT: [number, string, number, number, number][] = [
+  [1, "Hạ", 0.40, 0.8, 1], [2, "Trung", 0.30, 0.9, 1], [3, "Thượng", 0.18, 1.0, 2], [4, "Cực", 0.09, 1.1, 2], [5, "Tuyệt", 0.03, 1.2, 3],
+];
+/** Tu vi lên tầng n: G × (1 + 0,05 × (t − 1)), G theo đại cảnh giới, t là vị trí tầng trong đại cảnh giới (1–20). */
+const THU_TU_VI_G = [400, 1200, 2000, 3000];
+/** Thú kỹ: hệ, tên, mục tiêu, khóa hiệu ứng, tác dụng, cấp 1–4 (đơn vị hiển thị), đơn vị, kéo dài (giây, null: tức thời). */
+const THU_KY: Record<string, [string, string, string, string, number[], string, number | null]> = {
+  kim: ["Kim Phong Hộ Chủ", "chu", "armorPen", "Chủ xuyên giáp thêm", [0.04, 0.06, 0.08, 0.10], "%", 4],
+  moc: ["Thanh Mộc Hồi Xuân", "dong_doi_it_mau", "heal", "Đồng đội ít máu nhất (theo %) hồi theo máu tối đa của người đó", [0.008, 0.012, 0.016, 0.02], "%", null],
+  thuy: ["Tĩnh Thủy Dưỡng Nguyên", "chu", "mana", "Chủ hồi mana theo mana tối đa", [0.04, 0.06, 0.08, 0.10], "%", null],
+  hoa: ["Hỏa Linh Trợ Uy", "chu", "damage", "Chủ gây thêm sát thương", [0.024, 0.036, 0.048, 0.06], "%", 4],
+  tho: ["Hậu Thổ Hộ Thuẫn", "chu", "shield", "Chủ nhận khiên theo máu tối đa của chủ", [0.008, 0.012, 0.016, 0.02], "%", null],
+  loi: ["Lôi Động Cửu Tiêu", "chu", "attackSpeed", "Chủ đánh nhanh hơn", [0.06, 0.09, 0.12, 0.15], "%", 4],
+  phong: ["Ngự Phong Tật Hành", "chu", "cooldown", "Mọi công pháp đang hồi của chủ hồi nhanh thêm", [0.3, 0.4, 0.55, 0.7], "giây", null],
+  quang: ["Thánh Quang Tịnh Thể", "dong_doi_bi_hieu_ung", "cleanseHeal", "Giải 1 hiệu ứng xấu (khống chế, thiêu, độc, giảm hồi máu) trên đồng đội đang bị; người đó hồi theo máu tối đa", [0.004, 0.006, 0.008, 0.01], "%", null],
+  am_lanh: ["U Ảnh Phệ Huyết", "chu", "lifesteal", "Chủ hút máu thêm", [0.024, 0.036, 0.048, 0.06], "%", 4],
+  cuc_duong: ["Liệt Dương Phá Pháp", "chu", "resistPen", "Chủ xuyên kháng thêm", [0.04, 0.06, 0.08, 0.10], "%", 4],
+  cuc_am: ["Phệ Hồn Đoạn Sinh", "dich_gan_nhat", "healCut", "Kẻ địch gần chủ nhất nhận ít hồi máu hơn", [0.2, 0.3, 0.4, 0.5], "%", 3],
+  cuc_han: ["Hàn Sương Ngưng Bộ", "dich_gan_nhat", "slow", "Kẻ địch gần chủ nhất chậm lại; không cộng với làm chậm của hệ Thủy, lấy mức mạnh hơn", [0.12, 0.18, 0.24, 0.3], "%", 2],
+};
+/** Huyết mạch: mã, tên, hệ số hiệu lực, thêm mục tiêu, hồi (giây, null: như luật), thay đổi, hợp với. */
+const THU_HUYET_MACH: [string, string, number, number, number | null, string, string][] = [
+  ["chuyen_tam", "Chuyên Tâm", 1.3, 0, null, "Hiệu lực ×1,3, giữ 1 mục tiêu", "Một người gánh, đánh bí cảnh một mình"],
+  ["quang_bo", "Quảng Bố", 0.65, 1, null, "Thêm 1 mục tiêu (đồng đội gần chủ nhất, hoặc kẻ địch thứ hai), hiệu lực mỗi mục tiêu ×0,65", "Party, chiến tranh"],
+  ["cap_toc", "Cấp Tốc", 0.9, 0, 7, "Hồi 7 s thay vì 10 s, hiệu lực ×0,9; trận 30 s ra 4 lần", "Trận ngắn, đội cần giải khống chế sớm"],
+];
+/** Thiên phú: mã Thú Quyết, tên, nhóm, khóa hiệu ứng, tác dụng, bậc 1, bậc 2, đơn vị, tính khi. */
+const THU_THIEN_PHU: [string, string, string, string, string, number, number, string, string][] = [
+  ["TH-TQ-001", "Cường Kỹ", "thu_ky", "thuKyHieuLuc", "Hiệu lực thú kỹ tăng", 0.10, 0.20, "%", "ho_chu"],
+  ["TH-TQ-002", "Tốc Kỹ", "thu_ky", "thuKyHoiNhanh", "Thú kỹ hồi nhanh hơn", 0.5, 1, "giây", "ho_chu"],
+  ["TH-TQ-003", "Tiên Phát", "thu_ky", "thuKyLanDauSom", "Lần đầu ra thú kỹ sớm hơn", 1, 2, "giây", "ho_chu"],
+  ["TH-TQ-004", "Hộ Chủ", "thu_ky", "hoChuNguongMau", "Lần đầu mỗi trận chủ dưới ngưỡng máu này, thú kỹ ra ngay", 0.30, 0.40, "%", "ho_chu"],
+  ["TH-TQ-005", "Thú Uy", "chi_so", "atk", "Chủ cộng công", 0.003, 0.006, "%", "ca_5"],
+  ["TH-TQ-006", "Linh Giáp", "chi_so", "def", "Chủ cộng phòng", 0.003, 0.006, "%", "ca_5"],
+  ["TH-TQ-007", "Linh Nguyên", "chi_so", "hp", "Chủ cộng máu", 0.003, 0.006, "%", "ca_5"],
+  ["TH-TQ-008", "Truy Phong", "ngoai", "tocDoHanhTrinh", "Tốc độ hành trình tăng", 0.05, 0.10, "%", "thu_cuoi"],
+  ["TH-TQ-009", "Linh Giác", "ngoai", "suKienGiam", "Xác suất gặp sự kiện mỗi chặng giảm", 0.05, 0.10, "%", "thu_cuoi"],
+  ["TH-TQ-010", "Phá Thành", "ngoai", "phaTran", "Sức phá trận của linh thú công thành tăng", 0.05, 0.10, "%", "cong_thanh"],
+  ["TH-TQ-011", "Dưỡng Tính", "ngoai", "tuVi", "Tu vi thú này nhận tăng", 0.05, 0.10, "%", "luon"],
+  ["TH-TQ-012", "Độ Kiếp", "ngoai", "thuKiep", "Tỷ lệ thú kiếp của thú này tăng, trong trần 80%", 0.03, 0.06, "%", "luon"],
+  ["TH-TQ-013", "Tầm Bảo", "ngoai", "danThuRoi", "Thú Lâm rơi đan thú tăng, chung trần rơi ở mục 12", 0.05, 0.10, "%", "ho_chu"],
+  ["TH-TQ-014", "Tụ Linh", "ngoai", "luyenHoaThem", "Luyện hóa thú này trả thêm Dưỡng Linh Đơn", 0.10, 0.20, "%", "luyen_hoa"],
+];
+const GHI_CHU_THU_PT = [
+  "Thú: tăng trưởng, bổ trợ, phát triển (GDD tab cùng tên, 2026-11-05; mọi số là đề xuất). Lớp này nằm trên hệ thú ở thu_cuoi.json, thu_canh_gioi.json, thu_kich_phat.json, linh_don.json; luật số ở tham_so.json thu_cuoi (support*, pill*, aptitude*, talent*, bloodline*, growthDaysTarget).",
+  "tu_chat: ty_le phần nghìn, tổng 1000; tu_vi là hệ số ×1000 nhân mọi tu vi thú nhận; tư chất không đổi chỉ số ở cùng tầng. Tẩy Tủy Đơn (linh_don.json tay_tuy) tung lại theo ty_le, chỉ nhận khi ra cao hơn.",
+  "tu_vi: tu_vi là tu vi lên tầng đó từ tầng trước, tich_luy cộng dồn từ tầng 1. Công thức G × (1 + 0,05 × (t − 1)), G = 400 / 1200 / 2000 / 3000 theo đại cảnh giới, t là vị trí tầng trong đại cảnh giới. thu_kiep: vào tầng đó phải qua thú kiếp như thu_canh_gioi.json.",
+  "thu_ky: cap_1…cap_4 theo đại cảnh giới của thú, đơn vị ở don_vi (phan_nghin: theo máu tối đa, mana tối đa hoặc chỉ số của mục tiêu; tick: giảm hồi chiêu); thoi_gian tick, null là tức thời hoặc khiên giữ tới khi vỡ. Lần đầu ra ở supportFirstTicks, hồi supportCooldownTicks; không tốn mana, không bị cắt, thú hộ chủ đứng ngoài sân.",
+  "huyet_mach: he_so nhân hiệu lực thú kỹ; them_muc_tieu thêm mục tiêu cùng loại (đồng đội gần chủ nhất hoặc kẻ địch thứ hai); hoi_chieu thay supportCooldownTicks khi có. Thức tỉnh khi vào đại cảnh giới bloodlineRealm; đổi tốn 1 Phá Cảnh Đơn cấp bloodlineSwapPillLevel.",
+  "thien_phu: ma_vp là mã cuốn Thú Quyết; bac_1, bac_2 theo don_vi. Nhóm thu_ky chỉ tính ở thú hộ chủ; chi_so tính trên 5 thú, mỗi tên tối đa talentStatSameMax thú, trong trần powerCap; bậc 2 từ đại cảnh giới talentTier2Realm. Truyền thừa: luyện hóa một thú thì chuyển 1 thiên phú, giữ bậc, sang thú khác của chủ.",
+];
+
+const thuPhatTrien: Step = (wb, log) => {
+  const dx = (v: string | number | null) => ({ v, src: "de_xuat" as const });
+  const tuVi = Array.from({ length: 80 }, (_, i) => {
+    const n = i + 1, r = Math.ceil(n / 20), t = n - 20 * (r - 1);
+    return { n, r, cost: n === 1 ? 0 : THU_TU_VI_G[r - 1] * (1 + 0.05 * (t - 1)) };
+  });
+  let sum = 0;
+  const sheets: [string, Record<string, unknown>[]][] = [
+    ["Thú tư chất", THU_TU_CHAT.map(([sao, ten, ty_le, tu_vi, o_thien_phu]) => ({ sao, ten, ty_le, tu_vi, o_thien_phu }))],
+    ["Thú tu vi", tuVi.map(({ n, r, cost }) => ({ tang: n, canh_gioi: r, tu_vi: Math.round(cost), tich_luy: (sum += Math.round(cost)), thu_kiep: [21, 41, 61].includes(n) ? "có" : "không" }))],
+    ["Thú kỹ", N.ELEMENT_ORDER.map((he) => {
+      const [ten, muc_tieu, hieu_ung, tac_dung, cap, don_vi, thoi_gian] = THU_KY[he];
+      return { he, ten, muc_tieu, hieu_ung, tac_dung, cap_1: cap[0], cap_2: cap[1], cap_3: cap[2], cap_4: cap[3], don_vi, thoi_gian };
+    })],
+    ["Thú huyết mạch", THU_HUYET_MACH.map(([ma, ten, he_so, them_muc_tieu, hoi_chieu, tac_dung, hop_voi]) => ({ ma, ten, he_so, them_muc_tieu, hoi_chieu, tac_dung, hop_voi }))],
+    ["Thú thiên phú", THU_THIEN_PHU.map(([ma_vp, ten, nhom, hieu_ung, tac_dung, bac_1, bac_2, don_vi, tinh_khi]) => ({
+      ma_vp, ten, nhom, hieu_ung, tac_dung, bac_1, bac_2, don_vi, tinh_khi, nguon: nhom === "ngoai" ? "thu_lam" : "yeu_thu_sao_huyet, yeu_trieu",
+    }))],
+  ];
+  let after = "Linh đơn";
+  for (const [name, rows] of sheets) {
+    if (wb.names().includes(name)) log.push(`${name}: sheet đã có, bỏ qua`);
+    else { wb.addSheet(table(partDef(name), rows as Record<string, string | number | null>[]), after); log.push(`${name}: thêm sheet ${rows.length} dòng`); }
+    after = name;
+  }
+
+  // Luật thú ở nhóm thu_cuoi của sheet Tham số, ngay sau dòng thu_cuoi cuối
+  const ts = B.PARAMS.sheet, s = wb.sheet(ts), h = (s.cells[0] ?? []).map(norm);
+  const gAt = h.indexOf("Nhóm"), kAt = h.indexOf("Khóa");
+  const have = new Set(s.cells.map((r) => norm(r?.[kAt])));
+  const add = N.PARAMS_EXTRA.filter((p) => p[0] === "thu_cuoi" && THU_PT_KEYS.includes(p[1]) && !have.has(p[1]));
+  if (add.length) {
+    const last = s.cells.reduce((a, r, i) => (norm(r?.[gAt]) === "thu_cuoi" ? i : a), -1);
+    if (last < 0) throw new Error("Tham số: không có nhóm thu_cuoi");
+    wb.insertRows(ts, last + 1, add.map((p) => paramCells(...p)));
+  }
+  log.push(`Tham số: chèn ${add.length} luật thú vào nhóm thu_cuoi`);
+
+  // Tẩy Tủy Đơn ở sheet Linh đơn
+  const ld = B.LINH_DON, ls = wb.sheet(ld.sheet), idAt = (ls.cells[0] ?? []).map(norm).indexOf(ld.cols.find((c) => c.key === "ma")!.header);
+  if (!ls.cells.some((r) => norm(r?.[idAt]) === "tay_tuy")) {
+    wb.appendRows(ld.sheet, tableRows(ld, [{
+      ma: "tay_tuy", ten: dx("Tẩy Tủy Đơn"), cap: dx("5"), cong_dung: dx("Tung lại tư chất thú, chỉ nhận khi ra cao hơn; mỗi thú 1 viên mỗi ngày"),
+      nguyen_lieu: dx("Đan thú phẩm Huyền trở lên, dược liệu hiếm"), cho: dx("Bán được"),
+    }] as unknown as Record<string, string | number | null>[]));
+    log.push("Linh đơn: thêm Tẩy Tủy Đơn");
+  }
+
+  // Ghi chú của thu_phat_trien.json và dòng giới thiệu ở sheet Ghi chú
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet);
+  const fAt = (gs.cells[0] ?? []).map(norm).indexOf(gc.cols.find((c) => c.key === "file")!.header);
+  if (!gs.cells.some((r) => norm(r?.[fAt]) === "thu_phat_trien.json")) {
+    wb.appendRows(gc.sheet, tableRows(gc, GHI_CHU_THU_PT.map((noi_dung, i) => ({ file: "thu_phat_trien.json", stt: i + 1, noi_dung }))));
+    log.push(`Ghi chú trang bị: thêm ${GHI_CHU_THU_PT.length} dòng`);
+  }
+  const intro = "Thú tư chất … Thú thiên phú (5 sheet)";
+  if (!wb.sheet(B.NOTE_SHEET).cells.some((r) => norm(r?.[0]) === intro)) {
+    wb.appendRows(B.NOTE_SHEET, [[{ v: intro, bold: true }, { v: "Thú: tăng trưởng, bổ trợ, phát triển (GDD tab cùng tên): tư chất, tu vi 80 tầng, thú kỹ của thú hộ chủ theo hệ, huyết mạch ở Hóa Hình, thiên phú học từ Thú Quyết; mọi số là đề xuất. Xuất ra thu_phat_trien.json; luật ở nhóm thu_cuoi của Tham số; Tẩy Tủy Đơn ở Linh đơn" }]]);
+  }
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
+  thu_phat_trien: thuPhatTrien,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

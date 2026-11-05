@@ -22,5 +22,13 @@
     "use": "Chữa thú bị thương ngay",
     "materials": "Dược liệu",
     "market": "Bán được"
+  },
+  "tay_tuy": {
+    "id": "tay_tuy",
+    "name": "Tẩy Tủy Đơn",
+    "levels": "5",
+    "use": "Tung lại tư chất thú, chỉ nhận khi ra cao hơn; mỗi thú 1 viên mỗi ngày",
+    "materials": "Đan thú phẩm Huyền trở lên, dược liệu hiếm",
+    "market": "Bán được"
   }
 }

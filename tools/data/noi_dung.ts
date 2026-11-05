@@ -340,6 +340,24 @@ export const PARAMS_EXTRA: [string, string, string, number | string, string, str
   ["thu_cuoi", "waterSpeedMul", "Thủy thú qua sông, bến đò (hệ số)", 2, "hệ số", "6", "gdd"],
   ["thu_cuoi", "escortSpeed", "Hộ tống đỉnh vô chủ: tốc độ thường", 0.50, "%", "6, 12", "gdd"],
   ["thu_cuoi", "escortSpeedBeasts", "Hộ tống có 5 tẩu thú từ Hóa Hình", 0.75, "%", "6", "gdd"],
+  // Thú: tăng trưởng, bổ trợ, phát triển (GDD tab cùng tên, 2026-11-05; đề xuất)
+  ["thu_cuoi", "supportPets", "Thú hộ chủ: số con ra thú kỹ trong trận", 1, "số", "", "de_xuat"],
+  ["thu_cuoi", "supportFirstTicks", "Thú kỹ: lần đầu ra ở giây", 5, "giây", "", "de_xuat"],
+  ["thu_cuoi", "supportCooldownTicks", "Thú kỹ: hồi", 10, "giây", "", "de_xuat"],
+  ["thu_cuoi", "supportPowerTarget", "Thú kỹ cấp 4: mục tiêu lực chiến tối đa (đo bằng tools/balance)", 0.02, "%", "", "de_xuat"],
+  ["thu_cuoi", "fourSymbolsExtraTargets", "Tứ Tượng: thú kỹ thêm số đồng đội gần chủ nhất", 1, "số", "", "de_xuat"],
+  ["thu_cuoi", "pillTuVi", "Dưỡng Linh Đơn đúng cấp: tu vi mỗi viên", 100, "số", "", "de_xuat"],
+  ["thu_cuoi", "pillLowerRealmShare", "Dưỡng Linh Đơn thấp hơn đại cảnh giới của thú: còn", 0.5, "%", "", "de_xuat"],
+  ["thu_cuoi", "ownerTuViPerDay", "Mục tiêu cân bằng: tu vi thú nhận từ kinh nghiệm chủ mỗi ngày ở Hạ vị", 200, "số", "", "de_xuat"],
+  ["thu_cuoi", "growthDaysTarget", "Mục tiêu: số ngày nuôi đều để thú 3 sao vào Thông Thiên ở Hạ vị", 90, "số", "6", "de_xuat"],
+  ["thu_cuoi", "aptitudeRerollPerDay", "Tẩy Tủy Đơn: mỗi thú tối đa số viên mỗi ngày", 1, "số", "", "de_xuat"],
+  ["thu_cuoi", "aptitudeRerollPillLevel", "Tẩy Tủy Đơn: cấp linh đơn", 5, "số", "", "de_xuat"],
+  ["thu_cuoi", "nestMinAptitude", "Thú nở từ trứng Yêu Thú Sào Huyệt: tư chất tối thiểu (sao)", 3, "số", "", "de_xuat"],
+  ["thu_cuoi", "fourSymbolsAptitude", "Tứ Tượng: tư chất (sao)", 5, "số", "", "de_xuat"],
+  ["thu_cuoi", "talentStatSameMax", "Thiên phú chỉ số cùng tên: tính tối đa số thú", 2, "số", "", "de_xuat"],
+  ["thu_cuoi", "talentTier2Realm", "Thiên phú bậc 2: từ đại cảnh giới", 3, "số", "", "de_xuat"],
+  ["thu_cuoi", "bloodlineRealm", "Huyết mạch thức tỉnh: khi vào đại cảnh giới", 3, "số", "", "de_xuat"],
+  ["thu_cuoi", "bloodlineSwapPillLevel", "Đổi huyết mạch: tốn 1 Phá Cảnh Đơn cấp", 6, "số", "", "de_xuat"],
 ];
 
 /** Mô tả tham số lấy từ code: [khóa, tên, kiểu, mục GDD (trống = chỉ có trong code), nguồn]. */

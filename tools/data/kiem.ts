@@ -210,7 +210,7 @@ export function kiem(d: Any, raw: Raw): Report {
   if (d["trang_bi.json"]) {
     const tb = d["trang_bi.json"], ngoc = d["ngoc.json"], set = d["set.json"], pb = d["phap_bao.json"], pk = d["phap_khi.json"], vp = d["vat_pham.json"];
     const codes = [
-      ...tb.kieu, ...ngoc.he, ...ngoc.y_chau, ...ngoc.an_bo, ...(ngoc.song_he ?? []), ...(ngoc.phach ?? []), ...pb.mon, ...pb.tran_giao, ...pk.mon, ...vp.phu, ...vp.dan, ...vp.nguyen_lieu,
+      ...tb.kieu, ...ngoc.he, ...ngoc.y_chau, ...ngoc.an_bo, ...(ngoc.song_he ?? []), ...(ngoc.phach ?? []), ...(d["thu_phat_trien.json"]?.thien_phu ?? []), ...pb.mon, ...pb.tran_giao, ...pk.mon, ...vp.phu, ...vp.dan, ...vp.nguyen_lieu,
     ].map((x: Any) => x.ma_vp);
     const dup = codes.filter((x, i) => codes.indexOf(x) !== i);
     if (dup.length) errors.push(`Trang bị: mã vật phẩm trùng ${[...new Set(dup)].slice(0, 8).join(", ")}`);
@@ -357,6 +357,55 @@ export function kiem(d: Any, raw: Raw): Report {
     }
     if (bad.length) errors.push(`Luyện khí: ${bad.join("; ")}`);
     else notes.push(`Luyện khí: tẩy luyện ${lk.tay_luyen.length} dòng (loại 1 khớp chỉ số phụ mặc định), khí linh ${lk.khi_linh.length - 1} cấp, ${lk.khi_van.length} khí văn, ${phachHe.length} Phách, ${lk.danh_khi.length} danh khí, ${lk.bao_giam.length} trang Bảo Giám`);
+  }
+
+  // Thú: tư chất đủ 100%, tu vi cộng dồn đúng và đủ ngày nuôi, 12 hệ đủ thú kỹ, 3 huyết mạch cân nhau, thiên phú hợp lệ
+  const tpt = d["thu_phat_trien.json"];
+  if (tpt) {
+    const tc = d["tham_so.json"].thu_cuoi ?? {}, bad: string[] = [], warn: string[] = [];
+    const need = ["supportPets", "supportFirstTicks", "supportCooldownTicks", "pillTuVi", "ownerTuViPerDay", "growthDaysTarget", "dailyPillMax", "bloodlineRealm"];
+    const miss = need.filter((k) => typeof tc[k] !== "number");
+    if (miss.length) bad.push(`tham_so.json thu_cuoi thiếu ${miss.join(", ")}`);
+    const chat = tpt.tu_chat as Any[];
+    if (chat.map((x) => x.sao).join(",") !== "1,2,3,4,5") bad.push("tư chất cần đúng 5 sao 1–5");
+    const sumTy = chat.reduce((a, x) => a + x.ty_le, 0);
+    if (sumTy !== 1000) bad.push(`tỷ lệ tư chất tổng ${sumTy / 10}%, cần 100%`);
+    if (chat.some((x, i) => i > 0 && !(x.tu_vi > chat[i - 1].tu_vi && x.o_thien_phu >= chat[i - 1].o_thien_phu))) bad.push("tư chất: hệ số tu vi phải tăng, số ô thiên phú không giảm");
+    const tv = tpt.tu_vi as Any[], realms = d["thu_canh_gioi.json"] as Any[];
+    let acc = 0;
+    if (tv.length !== 80) bad.push(`tu vi: ${tv.length} tầng, cần 80`);
+    for (const [i, x] of tv.entries()) {
+      acc += x.tu_vi;
+      if (x.tang !== i + 1 || x.tich_luy !== acc) bad.push(`tu vi tầng ${x.tang}: tích lũy ${x.tich_luy}, cộng dồn ra ${acc}`);
+      const r = realms.find((c) => x.tang >= c.fromStage && x.tang <= c.toStage);
+      if (!r || r.realm !== x.canh_gioi) bad.push(`tu vi tầng ${x.tang}: đại cảnh giới ${x.canh_gioi} khác thu_canh_gioi.json`);
+      if (x.thu_kiep !== realms.some((c) => c.fromStage === x.tang && c.realm > 1)) bad.push(`tu vi tầng ${x.tang}: cột thú kiếp sai`);
+    }
+    const daily = tc.dailyPillMax * tc.pillTuVi + tc.ownerTuViPerDay;
+    const toTop = tv.find((x) => x.tang === realms[realms.length - 1]?.fromStage)?.tich_luy ?? 0;
+    const days = Math.round((toTop / daily) * 10) / 10;
+    if (Math.abs(days - tc.growthDaysTarget) > tc.growthDaysTarget * 0.1) warn.push(`thú 3 sao vào Thông Thiên sau ${days} ngày, mục tiêu ${tc.growthDaysTarget}`);
+    const ky = tpt.thu_ky as Any[];
+    const targets = new Set(["chu", "dong_doi_it_mau", "dong_doi_bi_hieu_ung", "dich_gan_nhat"]);
+    if (ELEMENTS.some((e) => ky.filter((k) => k.he === e).length !== 1) || ky.length !== ELEMENTS.length) bad.push("thú kỹ: cần đúng 1 dòng mỗi hệ, đủ 12 hệ");
+    for (const k of ky) {
+      if (!(k.cap_1 < k.cap_2 && k.cap_2 < k.cap_3 && k.cap_3 < k.cap_4)) bad.push(`thú kỹ ${k.he}: cấp 1–4 phải tăng dần`);
+      if (!targets.has(k.muc_tieu)) bad.push(`thú kỹ ${k.he}: mục tiêu lạ ${k.muc_tieu}`);
+    }
+    const eff = (tpt.huyet_mach as Any[]).map((h) => [h.ma, (h.he_so / 1000) * (1 + h.them_muc_tieu) * (tc.supportCooldownTicks / (h.hoi_chieu ?? tc.supportCooldownTicks))] as const);
+    const lo = Math.min(...eff.map((e) => e[1])), hi = Math.max(...eff.map((e) => e[1]));
+    if (hi > lo * 1.15) warn.push(`huyết mạch lệch nhau quá 15%: ${eff.map(([m, v]) => `${m} ×${v.toFixed(2)}`).join(", ")}`);
+    const tp = tpt.thien_phu as Any[];
+    if (new Set(tp.map((x) => x.ma_vp)).size !== tp.length) bad.push("thiên phú: mã Thú Quyết trùng");
+    for (const x of tp) {
+      if (!(x.bac_2 > x.bac_1)) bad.push(`${x.ma_vp}: bậc 2 phải lớn hơn bậc 1`);
+      if (!["thu_ky", "chi_so", "ngoai"].includes(x.nhom)) bad.push(`${x.ma_vp}: nhóm lạ ${x.nhom}`);
+      if (!["ho_chu", "ca_5", "thu_cuoi", "cong_thanh", "luon", "luyen_hoa"].includes(x.tinh_khi)) bad.push(`${x.ma_vp}: tính khi lạ ${x.tinh_khi}`);
+    }
+    if (!d["linh_don.json"]?.tay_tuy) bad.push("linh_don.json thiếu Tẩy Tủy Đơn (tay_tuy)");
+    if (bad.length) errors.push(`Thú tăng trưởng: ${bad.join("; ")}`);
+    else notes.push(`Thú tăng trưởng: tư chất 5 sao đủ 100%, tu vi 80 tầng (thú 3 sao vào Thông Thiên sau ${days} ngày), ${ky.length} thú kỹ, ${eff.length} huyết mạch (×${lo.toFixed(2)}–×${hi.toFixed(2)}), ${tp.length} thiên phú`);
+    for (const w of warn) warnings.push(`Thú tăng trưởng: ${w}`);
   }
 
   // Chỗ khác code đang chạy (code chưa đọc JSON thì phải sửa tay theo file)
