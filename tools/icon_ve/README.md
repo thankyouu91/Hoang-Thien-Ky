@@ -10,6 +10,8 @@ Icon vật phẩm và giao diện vẽ bằng Canva theo phong cách tranh vẽ 
 - `tao_lo.cjs` và `xu_ly.cjs` tải PNG 512 px xuất từ Canva, đổi sang webp q88, rồi thêm một dòng manifest cho mỗi món.
 - `ghep.cjs` ghép ảnh xem trước từ webp trong repo.
 - `thu_muc.cjs` chỉ ra thư mục Canva cho từng ảnh gốc.
+- `lo_tiep.cjs` in lô kế tiếp: các món ưu tiên 2 chưa vẽ. `ops.cjs` sinh lệnh `add_page`, `insert_fill` cho một lô, và xếp lại `nhat_ky.tsv`, `tach.tsv` theo `lo.tsv`. `lay_url.cjs` lấy URL xuất ra từ transcript phiên.
+- `dem.cjs` và `DEM.md`: tác vụ lịch vẽ ban đêm, chạy 22:00–6:00, mỗi 10 phút một lần. Mỗi lần làm tiếp một lô; có khóa chống chạy chồng và nhớ cooldown của Canva.
 
 `xu_ly.cjs` và `ghep.cjs` cần `sharp`. Cài vào một thư mục tạm ngoài repo (`npm.cmd i sharp`), rồi chạy với `NODE_PATH` trỏ tới `node_modules` của thư mục đó.
 
