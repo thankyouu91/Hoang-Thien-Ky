@@ -124,7 +124,7 @@ export class TongMonScene extends PageScene<TongMonView> {
         <ul class="list">${t.held
           .map(
             (h) => `<li><button type="button" class="row" data-act="point" data-id="${h.pointId}">
-              ${thumb(pointArt(v.sect.region, h.type))}<span class="grow"><b>${POINT_NAMES[h.type]}</b>${h.level ? ` <span class="muted">cấp ${h.level}</span>` : ""}${h.attacked ? `<span class="bad block sub">${esc(h.attacked.by)} đang đánh, còn ${cd(h.attacked.endsAt)}</span>` : ""}</span>
+              ${thumb(pointArt(v.sect.region, h.type, { id: h.pointId, level: h.level }))}<span class="grow"><b>${POINT_NAMES[h.type]}</b>${h.level ? ` <span class="muted">cấp ${h.level}</span>` : ""}${h.attacked ? `<span class="bad block sub">${esc(h.attacked.by)} đang đánh, còn ${cd(h.attacked.endsAt)}</span>` : ""}</span>
               <span class="muted nowrap">${h.level ? `${fmt(h.perHour)}/giờ` : ""}</span>${chev}</button></li>`,
           )
           .join("")}</ul>
