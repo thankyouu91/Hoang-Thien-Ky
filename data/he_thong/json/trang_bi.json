@@ -7,7 +7,7 @@
     "Trần: trang bị, ngọc, cường hóa và set cộng lại không quá khoảng 35% lực chiến (mục 13). Phiên Sprint chỉnh số tuyệt đối bằng công cụ cân bằng; ở đây chỉ là tỷ lệ giữa các ô.",
     "Áo, giày (set đồ 2.0): tách phòng thủ thành thủ ngoại, thủ nội đã chốt 2026-11-05 (GDD mục 8), số vẫn là đề xuất. Chỉ số chính áo là thủ ngoại +3%, giày là thủ nội +3%; tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội. Loại sát thương của từng loại chiêu ở loai_chieu.json loai_sat_thuong.",
     "dong_ren: cường hóa lên nac mở 1 dòng rèn ở vi_dien; chọn 1 trong 4 loại phụ của ô (luyen_khi.json tay_luyen), giá trị luat.dongRen.heSoLoaiPhu của loại đó. Tối đa luat.dongRen.toiDa theo vị diện; đổi dòng tốn luat.dongRen.doiDongKhiTinh Khí Tinh; tụt nấc dưới mốc thì dòng tạm tắt.",
-    "dong_an: chỉ trên ô có co_dong_an (ngọc bội, đai). Mỗi dòng là 1 điều kiện (loai dieu_kien) + 1 hiệu ứng (hieu_ung), quay khi món rơi hoặc rèn ra; số dòng luat.dongAn.soDong theo độ hiếm. Hiện ??? tới lần đầu kích phát; Giám Định Phù (PH-CH-011) lộ trước điều kiện 1 dòng; tẩy ẩn quay lại hiệu ứng, giữ điều kiện. Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng ×luat.dongAn.songAnHeSo. Nhóm của điều kiện (nhom) nhân hiệu ứng theo he_so: tinh ×0,2, loai_tran ×0,5, trong_tran ×1,0; cùng lúc tối đa luat.dongAn.toiDaHieuLuc dòng có hiệu lực, chọn theo điểm trang bị sau hệ số.",
+    "dong_an: chỉ trên ô có co_dong_an (ngọc bội, đai). Mỗi dòng là 1 điều kiện (loai dieu_kien) + 1 hiệu ứng (hieu_ung), quay khi món rơi hoặc rèn ra; số dòng luat.dongAn.soDong theo độ hiếm. Hiện ??? tới lần đầu kích phát; Giám Định Phù (PH-CH-011) lộ trước điều kiện 1 dòng; tẩy ẩn quay lại hiệu ứng, giữ điều kiện. Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng ×luat.dongAn.songAnHeSo. Nhóm của điều kiện (nhom) nhân hiệu ứng theo he_so: tinh ×0,2, loai_tran ×0,25, trong_tran ×0,3; cùng lúc tối đa luat.dongAn.toiDaHieuLuc dòng có hiệu lực, chọn theo điểm trang bị sau hệ số.",
     "diem: điểm trang bị cho mỗi `moi` (1% hoặc 0,1%) của chỉ số; điểm món là tổng các lớp, điểm nhân vật là 7 món cộng set. Chỉ để so sánh, gợi ý và lọc chợ, không dùng trong trận; phiên Sprint chỉnh bằng đo.",
     "Chỉ số chính, phụ của 7 ô và 4 loại tẩy luyện (luyen_khi.json tay_luyen) đã hạ ×0,85 theo trần 35% chia lại của set đồ 2.0 (phiên Sprint đo 2026-11-05), làm tròn về số nguyên gần nhất, 0,5 làm tròn lên; dòng rèn lấy theo bảng tẩy luyện này."
   ],
@@ -4477,7 +4477,7 @@
       "noi_dung": "Trận PvE (dị thú, boss)",
       "tham_so": {"tran":"pve"},
       "nhom": "loai_tran",
-      "he_so": 500
+      "he_so": 250
     },
     {
       "ma": "DN-DK-005",
@@ -4485,7 +4485,7 @@
       "noi_dung": "Trận chiến tranh địa bàn",
       "tham_so": {"tran":"chien_tranh"},
       "nhom": "loai_tran",
-      "he_so": 500
+      "he_so": 250
     },
     {
       "ma": "DN-DK-006",
@@ -4493,7 +4493,7 @@
       "noi_dung": "Máu dưới 50%",
       "tham_so": {"mauDuoi":500},
       "nhom": "trong_tran",
-      "he_so": 1000
+      "he_so": 300
     },
     {
       "ma": "DN-DK-007",
@@ -4501,7 +4501,7 @@
       "noi_dung": "10 giây đầu trận",
       "tham_so": {"truocTicks":200},
       "nhom": "trong_tran",
-      "he_so": 1000
+      "he_so": 300
     },
     {
       "ma": "DN-DK-008",
@@ -4509,7 +4509,7 @@
       "noi_dung": "Sau giây thứ 30",
       "tham_so": {"sauTicks":600},
       "nhom": "trong_tran",
-      "he_so": 1000
+      "he_so": 300
     },
     {
       "ma": "DN-DK-009",
@@ -4534,7 +4534,7 @@
       "noi_dung": "Đội địch có hệ khắc linh căn mình",
       "tham_so": {"dichKhacLinhCan":true},
       "nhom": "loai_tran",
-      "he_so": 500
+      "he_so": 250
     },
     {"ma":"DN-HU-001","loai":"hieu_ung","noi_dung":"Công lực +3%","tham_so":{"atk":30}},
     {"ma":"DN-HU-002","loai":"hieu_ung","noi_dung":"Thủ ngoại +4%","tham_so":{"defOuter":40}},
