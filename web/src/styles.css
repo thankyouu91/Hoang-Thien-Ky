@@ -4,10 +4,13 @@
    @media (min-width) mở rộng dần. Thứ tự: token · nền · đầu trang · trang chủ · các trang · thư viện · chân trang · hộp xem lớn. */
 @import "@fontsource-variable/lora/wght.css";
 @import "@fontsource-variable/lora/wght-italic.css";
-/* Chữ kiểu tiên hiệp (người dùng chốt 2026-11-05): Prata cho tiêu đề (nét thanh đậm, chỉ có weight 400),
-   Water Brush cho tên game và câu thơ (bút lông). Cả hai đủ dấu tiếng Việt, nạp từ @fontsource. */
+/* Chữ kiểu tiên hiệp (người dùng chốt 2026-11-05): Prata cho tiêu đề (nét thanh đậm, chỉ có weight 400);
+   tên game theo mẫu thư pháp August người dùng gửi → Great Vibes (bút sắt nghiêng, nét thanh đậm, chữ nối —
+   cùng kiểu, giấy phép OFL; không dùng font Agustus Việt hóa vì giấy phép không rõ); câu thơ tròn → Itim.
+   Đều đủ dấu tiếng Việt, nạp từ @fontsource. */
 @import "@fontsource/prata/index.css";
-@import "@fontsource/water-brush/index.css";
+@import "@fontsource/great-vibes/index.css";
+@import "@fontsource/itim/index.css";
 
 :root {
   --c-bg: #f6efdf;
@@ -43,7 +46,8 @@
 
   --font: "Lora Variable", Cambria, "Times New Roman", serif;
   --font-display: "Prata", "Lora Variable", Cambria, serif;
-  --font-but: "Water Brush", "Segoe Script", cursive;
+  --font-but: "Great Vibes", "Segoe Script", cursive;
+  --font-tron: "Itim", "Segoe UI", sans-serif;
   --font-han: "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
 
   --gutter: 16px;
@@ -284,19 +288,21 @@ html:not(.co-js) .mo-muc { display: none; }
   background: rgba(255, 250, 240, 0.7);
 }
 .an-lon { display: block; width: 128px; height: 128px; margin: 0 auto; transform: rotate(-4deg); }
-.dau-tranh h1 { margin: 10px 0 0; font: 400 clamp(54px, 14vw, 118px)/1.05 var(--font-but); letter-spacing: 0.015em; white-space: nowrap; text-wrap: nowrap; }
+.dau-tranh h1 { margin: 6px 0 0; font: 400 clamp(56px, 14.6vw, 126px)/1.2 var(--font-but); letter-spacing: 0; white-space: nowrap; text-wrap: nowrap; }
 /* Câu thơ lục bát dưới tên game, nét bút lông, mực nâu. */
 .cau-tho {
-  margin: 4px 0 26px;
+  margin: 2px 0 26px;
   color: var(--c-ink-2);
-  font: 400 clamp(23px, 6vw, 34px)/1.35 var(--font-but);
-  letter-spacing: 0.02em;
+  font: 400 clamp(17.5px, 4.6vw, 24px)/1.5 var(--font-tron);
+  letter-spacing: 0.01em;
   text-shadow: 0 0 10px rgba(246, 239, 223, 0.9);
 }
 .hang-nut { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 20px; }
 .ghi-nho { margin: 14px 0 0; color: var(--c-ink-2); font-size: 13.5px; text-shadow: 0 0 4px var(--c-bg), 0 0 10px var(--c-bg), 0 0 18px var(--c-bg); }
 @media (max-width: 819px) {
   .an-lon { width: 104px; height: 104px; }
+  /* Great Vibes có nét vung dài: khung hẹp phải hạ cỡ kẻo "Ký" tràn mép. */
+  .dau-tranh h1 { font-size: clamp(38px, 10.6vw, 126px); }
 }
 @media (min-width: 820px) {
   .an-lon { width: 144px; height: 144px; margin: 0; }
@@ -369,7 +375,7 @@ html:not(.co-js) .mo-muc { display: none; }
   display: inline-block;
   margin: 0;
   color: var(--c-accent-ink);
-  font: 400 clamp(34px, 8.5vw, 60px)/1.2 var(--font-but);
+  font: 400 clamp(36px, 9vw, 64px)/1.3 var(--font-but);
 }
 @media (min-width: 720px) {
   .cau-lon p::before, .cau-lon p::after { content: ""; display: inline-block; width: 36px; height: 1px; margin: 0 18px; vertical-align: middle; background: var(--c-frame); }
