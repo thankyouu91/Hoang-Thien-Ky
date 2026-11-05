@@ -34138,6 +34138,2310 @@
       },
       "created": "2026-11-05",
       "pixellab_id": "36ab7409-7091-4e47-ab48-3959decdfd4d"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/moc_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d3464ca6-3e05-4aab-98d5-87ccbe524aee",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/moc_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ba0b8f81-1478-4a4e-8fd5-697a4ea5cb1b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/moc_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "67204ebc-e04f-48eb-9182-36fa71f665c9",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/moc_3_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 1, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "172565e3-024e-417f-bb6a-462dba1e2b57",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/moc_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "31d819ea-39ab-4bc5-a242-62537e4dcee2",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/moc_3_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e228ef71-ba20-4895-83c3-84b128444264",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/moc_1_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2cc77756-e09e-4e9d-81c2-6b845efacbbd",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/moc_2_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3f6402f2-67f7-4ce6-8d70-21dff47f9763",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/moc_2_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 1, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "431d9f69-0844-4dad-a0b6-9a4cbf7a3cb2",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/moc_3_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a040ab36-795e-44b4-b8d3-704a219174a3",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/moc_3_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 1, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b51a9ae2-e403-4cf9-9579-d64fa66d801d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/moc_0_2.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "32e66f37-4c12-4be6-9a98-66c6a7ae4d54",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/moc_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "9242e8f3-c1fb-40a2-b701-68b6ccbbf863",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/moc_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7ac97542-b3fd-4ee0-a044-7a1d08ccf1aa",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/moc_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "10c91240-37c1-42fa-86bb-98f68ff7f352",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/moc_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ moc (vùng Vạn Mộc Lâm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a misty green morning in Ten Thousand Trees Forest, an ancient dense forest of giant trees, moss and ferns, shafts of green light through the canopy. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e31ee4a1-6ab3-4017-890b-d120661afdcb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/thuy_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "53f7c76a-e10c-4fd6-b785-c64fcca580cd",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/thuy_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fadcc3f7-b0d2-4706-aa88-00e3d0fe511e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/thuy_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3ece7fdb-f531-482a-8fcf-bc0ae8059e49",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/thuy_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5f2dfcf5-0feb-42a5-8bd7-8014a4a843b4",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/thuy_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "142a936c-a01b-446a-a088-2ef87d37ab90",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/thuy_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "70193d19-0a4b-46ad-a6de-c109f9e1b1d2",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/thuy_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "023317e1-a10e-4059-92ec-72fbec759e99",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/thuy_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a351bbbf-47df-487d-a8e9-352a8e110d06",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/thuy_1_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d817d375-73c9-4671-b658-5ee9507d1bff",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/thuy_3_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 1, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1c8c37bc-fd13-4090-bddf-609e582f7855",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/thuy_3_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4efa71bf-4817-491f-a262-1aa8870049cb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/thuy_2_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 1, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b79e5706-79c3-43b8-80ad-1630625633ef",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/thuy_2_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "21037a19-9cb5-4edf-9a6f-0a12355bb704",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/thuy_3_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 1, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5db77b7a-8b8a-4391-89ad-d5bdfb9bf3a9",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/thuy_3_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7b0c8abd-d727-47d3-b159-2b87eea15e12",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/thuy_0_2.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1601d58f-031d-4ea3-9704-ee9283b73a04",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/thuy_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "55ee190f-d61d-45df-a856-367d03e3bb53",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/thuy_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1d45beb8-dda4-4cff-b075-79452cd084eb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/thuy_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fb3b7113-707e-425e-829d-25777cc9fb6f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/thuy_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ thuy (vùng Bích Ba Hải), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at deep blue twilight in Jade Wave Lakes, a land of wide blue lakes and rivers, wet reeds, waterfalls and drifting mist over the water. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "10cbd7a4-b402-4268-83f8-324dabf81ac7",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hoa_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ba5c8509-84f2-4e63-ad19-6fe8b686a684",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hoa_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4b88a089-bff0-4e43-b6d9-918c9b77e61f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hoa_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d6c523e6-089c-4fde-b578-1e3b3a20d2de",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hoa_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6686aa5f-26af-4a9e-9dcf-0baca8a18724",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hoa_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a2b8adac-238b-4134-a7ca-ba02b6e1cb06",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hoa_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6426b089-ee75-424d-b692-277e1bc9984b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/hoa_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5a5d5f66-4501-4ad6-b6e7-47c194c856c8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hoa_3_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 1, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fd2abd8d-9e4d-40ed-88c0-6a73093a8a08",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hoa_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "233a1c4e-ea82-4735-a177-be99b8d1e54c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hoa_1_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "61e21f75-e398-4558-9476-7497aaa4718c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/hoa_3_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "145838c3-955a-46d5-8b41-9d26bada10fc",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hoa_2_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 1, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "64c6f7c4-b891-42fe-ba9b-653f184b85d3",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hoa_3_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 1, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1d6fa4b0-ff10-48e3-b35f-b5e1d4ec4bff",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hoa_2_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f4dfaf75-1abf-4bb1-930c-c52aa722303f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/hoa_3_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5b102166-4557-4fdf-b945-e442a4ada7a0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/hoa_0_2.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4a2f05e0-75e4-460a-bd97-284548f1e152",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/hoa_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a67e0bdd-71e7-4a5a-aece-c3765a74a878",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/hoa_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "101b8765-621d-4e3d-999d-8d98bad84868",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/hoa_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "44881a3b-df97-47b8-ba3e-8dc46a6b1734",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/hoa_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ hoa (vùng Xích Viêm Sơn), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a red smoky night in Crimson Flame Mountains, volcanic mountains with glowing lava streams, black rock and drifting embers under a dark red sky. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b57a2bf5-085c-434e-8840-4f529a4cb551",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/tho_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "eb03ab6b-144d-488e-a961-ad4384c46123",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/tho_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "295e44d8-5499-45d0-b1e4-45c21816e5a9",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/tho_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6653282b-5cb1-418a-b98a-1ab09c1ff92f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/tho_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d6fa4a9c-b634-4d24-b14f-a2e4768f9e37",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/tho_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "db2dd210-836a-4e5c-88f1-68f3afc263b7",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/tho_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "51ffe113-37d1-4eaa-8a8d-c3f8b781115d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/tho_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "eb086a34-4c38-46c8-aefd-aafe369e3e5a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/tho_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "af3d4492-7fd5-4127-a079-f7ee4f3c4bf6",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/tho_3_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6503d1d7-b669-4b56-b288-4d83ac0e684c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/tho_3_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 1, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "10501d36-a5a8-4145-8a2d-f6d5d4738db2",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/tho_2_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 1, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f5709ac4-3c77-463c-83b9-022d747214f5",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/tho_1_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "dad793d7-07a2-4550-80b0-c935c1d0a221",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/tho_2_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "45c14d5c-1c12-4331-898b-7618b503cee1",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/tho_3_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 1, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0cd972ad-d96e-4ecf-b7d6-82c1413ad7d4",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/tho_0_2.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fbbdc72b-d781-4fd9-af92-eedda3ec1572",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/tho_3_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1f1a1b50-63c6-463c-bcf7-58ca2bcb3d48",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/tho_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6db35bc6-f64a-49d3-92dd-66e41754172c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/tho_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f22c3d51-6fd3-4d49-b23c-395652728bdc",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/tho_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5c482b65-6cb8-4eb0-ae8d-3db102ea814e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/tho_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ tho (vùng Hậu Thổ Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at an amber sunset in Deep Earth Plateau, a vast plateau of yellow earth, sandstone mesas and canyons, dusty golden haze. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e9ea6122-25f9-4299-be05-4a2d5b7626db",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/phong_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6a0185d6-e046-478b-9e62-4524804cc318",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/phong_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "500d74b5-4e03-4abb-9ea4-4671452f6441",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/phong_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "8314b848-0f74-4119-a6d4-dd86250be4f8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/phong_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3d9c1f3b-660b-4e60-a8b2-ceb5a718380c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/phong_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d8b10ff3-37e0-43fb-8d86-7f9f96e5389c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/phong_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1a15a35a-da21-499b-9942-f9a7776b6809",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/phong_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2fdb2074-7ad3-4fbe-aa1e-fca75e4b097f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/phong_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3fe25d5e-437a-4204-8560-d5debbf2f3d2",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/phong_3_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7cc1ff63-0c4f-4fdd-bdc3-f0e66f0a8ff2",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/phong_3_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 1, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fae9ad14-2e96-4058-908e-616319696103",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/phong_1_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ea653ab3-5e1c-4539-9d4e-f7807845b410",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/phong_2_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 1, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "47ee6c68-439b-43e0-b88a-9de1c1f77875",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/phong_3_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 1, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e2ab5979-70e3-45a1-81b2-75bb5d303ede",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/phong_2_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "17c42fa5-625c-4077-823e-44737ef4aa80",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/phong_3_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "067e63fc-8a1f-4a4a-b1da-fb73e6ad9287",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/phong_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7869ca13-95ed-460d-9f4d-888bbaf7cc79",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/phong_0_2.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 2, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "61357d2b-1e77-4343-b665-ddc52d2ae16d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/phong_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "435baf5e-df1b-418a-979a-19eb26fa0bdd",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/phong_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "065a3502-19dc-4bfc-89e8-893561044e08",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/phong_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ phong (vùng Cuồng Phong Nguyên), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene under a bright windy teal sky in Raging Wind Steppe, rolling grassy steppes bending in strong wind, scattered rocks and swirling clouds. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3a2c62bb-6575-4821-b31a-d3b09ca339bb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/quang_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d922102c-177b-415f-a1bc-c0a80d29b192",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/quang_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "56b2e9f2-1e4a-47d5-af6c-9eabce6c5762",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/quang_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "13f32935-f82c-4be9-b6cf-a7bcd0becf43",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/quang_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "bc8a1a36-32f3-4794-a83f-edb2ef6a759b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/quang_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0d3d0ce9-1a21-4c86-a533-f56fbcbfed7e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/quang_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1761e481-ee28-4aee-a3c8-2cd452cbf5e1",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/quang_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6a61dcb2-70b4-443f-80f1-3ce75abafabb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/quang_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "86f83ac6-ba40-4f10-a78e-e8f51013b1ae",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/quang_3_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 1, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2d673d38-180b-4503-bccc-a64c31195e4a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/quang_1_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "da69300e-41ae-427a-bdc8-dd3161b85633",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/quang_3_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ced5cbe1-12f9-4a5c-9fac-4d454abda029",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/quang_2_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 1, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fa1b0af9-a6ef-4e32-9f31-d5a1c3b73e65",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/quang_3_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1b2dacde-b1ef-4486-806a-bf49fa4a3312",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/quang_3_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 1, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3954ba70-a234-4bc7-a8f7-220cbb64231f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/quang_2_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1b67c825-2ef6-42b4-9566-414f10a88c04",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/quang_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f73ea32c-3a1d-4b80-b1c0-aeedf77c7717",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/quang_0_2.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "97ede437-0cf3-4ce1-8ccd-9f41579311bb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/quang_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4171d0d7-ea68-4eda-b3e9-d058f80f6f31",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/quang_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "dbc8ebf0-bbc8-4086-b309-be73c0cb0b85",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/am_lanh_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0bfd687c-d6ec-4f5a-bb97-f0d56cc18896",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/am_lanh_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "12b5514b-1987-403a-88d0-1e4fc0a35424",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/quang_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ quang (vùng Diệu Quang Đài), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene in bright golden daylight in Radiant Light Heights, high white cliffs and golden meadows bathed in holy light, sun rays through soft clouds. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "02bb4fb9-b969-4671-b555-db729e2f4302",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/am_lanh_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a75bdf61-dd49-47e4-a084-1eede629e237",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/am_lanh_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1371cb0e-c255-4bf7-9753-3af45c187a96",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/am_lanh_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "8779ef68-23bc-4490-959d-4d9f9b62b33e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/am_lanh_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "281c8139-0c52-4cbd-8044-3b469897b948",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/am_lanh_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6719c2d4-96a0-4709-8746-15d4b3bd29d0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/am_lanh_3_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 1, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "467080ee-aa64-4df1-9ef5-13186d0cd903",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/am_lanh_3_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 3, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a large ore mining camp, many shafts and wooden platforms on the mountainside, a stone smelting furnace with glowing molten metal, a big wooden crane and heaps of ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7c79ea35-1952-47a3-9327-2c6f78843a0c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/am_lanh_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "29a3918d-7c12-4232-bae7-c22a0f3b1ba6",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/am_lanh_2_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "613f513d-43dc-4f39-87e1-aa6326dc63c7",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/am_lanh_1_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 1, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a small hidden herb glade among old twisted trees, a few softly glowing spirit herbs and mushrooms, a tiny thatched shelter. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3023e721-a2b1-4979-8060-0525f54bee1d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/am_lanh_3_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 1, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "dec126f8-af75-4668-b353-f885b29ef0c6",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/am_lanh_2_1.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 2, dáng 1, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a tended medicinal herb garden, neat rows of softly glowing spirit herbs and rare flowers, a small thatched herbalist hut and drying racks.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4410b4d9-8e3a-4d0b-94f3-140833e3e63d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/hang_di_thu/am_lanh_0_2.png",
+      "description": "Hình nền điểm Hang dị thú (hang_di_thu), bậc 0, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a huge jagged cave entrance like a monster's open jaws in a rocky hillside, large bones and a horned skull on the ground, deep claw marks, two big glowing red eyes in the darkness. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3c4c9bd4-7119-439d-970a-8925cb1ee6a3",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_duoc/am_lanh_3_2.png",
+      "description": "Hình nền điểm Mỏ dược (mo_duoc), bậc 3, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a grand spirit herb valley, terraced fields of glowing spirit herbs and flowers, small greenhouse pavilions, a herbalist hall and a clear stream. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c6c4203c-255e-484c-8eef-c4e244183cd0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/linh_tuyen/am_lanh_0_2.png",
+      "description": "Hình nền điểm Linh tuyền (linh_tuyen), bậc 0, dáng 2, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a sacred spirit spring, a softly glowing pool of clear water among mossy rocks with mist rising from it, a small stone shrine beside it. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "809de12a-643e-4241-b7e1-bd283ebfaa3f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/am_lanh_thap_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc thap, dáng 1, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a small ancient carved stone gateway to a secret realm on a hill, a swirling glowing blue portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 24,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4e2c1741-ce59-4b50-be3f-67776d31eaee",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/am_lanh_cao_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc cao, dáng 1, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a colossal ancient gateway of black stone to a secret realm, a swirling glowing crimson red portal inside the arch, heavy chains, floating rune stones and crackling lightning around it.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "be9698ec-2a3d-4547-bb0f-cffaaa4d80c8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/cua_bi_canh/am_lanh_vua_1.png",
+      "description": "Hình nền điểm Cửa bí cảnh (cua_bi_canh), bậc vua, dáng 1, hệ am_lanh (vùng U Minh Đầm), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene on a cold grey-blue night in Netherworld Marsh, a gloomy swamp of dead trees and black water, drifting green ghost fires and cold mist. No people, no text, no UI. Main subject in the center foreground: a tall ancient carved stone gateway to a secret realm with two stone guardian statues, a swirling glowing golden portal inside the arch, carved runes on the pillars.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d9dffd71-9a3e-4576-bdc6-afc926b650b0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_duong_1_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 1, dáng 2, hệ cuc_duong (vùng Liệt Dương Mạc), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset in Scorching Sun Desert, a burning desert of orange dunes and sun-bleached rocks under a huge setting sun. No people, no text, no UI. Main subject in the center foreground: a small newly opened spirit stone mine, a single narrow tunnel in a rocky slope with a few glowing crystal veins, a simple wooden frame and one mine cart. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7ec7923e-33b8-47ca-b0fe-9230d89213f2",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_duong_2_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 1, hệ cuc_duong (vùng Liệt Dương Mạc), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset in Scorching Sun Desert, a burning desert of orange dunes and sun-bleached rocks under a huge setting sun. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "29ef0be9-3819-4ee8-ba9d-01d2bc987c4d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_duong_2_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 2, dáng 2, hệ cuc_duong (vùng Liệt Dương Mạc), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset in Scorching Sun Desert, a burning desert of orange dunes and sun-bleached rocks under a huge setting sun. No people, no text, no UI. Main subject in the center foreground: a busy spirit stone mine, several tunnels in the cliff with wooden scaffolding and walkways, glowing crystal veins, mine carts on rails and a wooden watchtower. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "746a5329-fd6d-4bd6-ab5b-f1da04d754ad",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_duong_3_1.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 1, hệ cuc_duong (vùng Liệt Dương Mạc), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset in Scorching Sun Desert, a burning desert of orange dunes and sun-bleached rocks under a huge setting sun. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 23,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b29a37bc-c2eb-47a0-976e-7ffaf261aefb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_linh_thach/cuc_duong_3_2.png",
+      "description": "Hình nền điểm Mỏ linh thạch (mo_linh_thach), bậc 3, dáng 2, hệ cuc_duong (vùng Liệt Dương Mạc), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset in Scorching Sun Desert, a burning desert of orange dunes and sun-bleached rocks under a huge setting sun. No people, no text, no UI. Main subject in the center foreground: a great fortified spirit stone mine complex, a huge excavated cliff full of glowing crystal veins, many tunnels and tiered wooden platforms, a guarded stone gate with banners, a big wooden crane and heaps of crystal ore. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 36,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c5e917de-69ed-46cc-a254-1a536ad9cfda",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/cuc_duong_1_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 1, dáng 2, hệ cuc_duong (vùng Liệt Dương Mạc), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset in Scorching Sun Desert, a burning desert of orange dunes and sun-bleached rocks under a huge setting sun. No people, no text, no UI. Main subject in the center foreground: a small ore mine, a dark mine shaft in a steep slope with a simple wooden frame, a pile of dark iron ore and a hand-pulled bucket. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 34,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3081ce6d-d2d6-42d4-96ad-696bb7780802",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/cuc_duong_2_2.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 2, hệ cuc_duong (vùng Liệt Dương Mạc), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset in Scorching Sun Desert, a burning desert of orange dunes and sun-bleached rocks under a huge setting sun. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets. Seen from across a deep ravine, a waterfall falling nearby.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 35,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "297e8ced-9bf8-43e2-ba64-4f081c5ac582",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "diem_nen/mo_quang/cuc_duong_2_1.png",
+      "description": "Hình nền điểm Mỏ quặng (mo_quang), bậc 2, dáng 1, hệ cuc_duong (vùng Liệt Dương Mạc), dùng ở thẻ điểm trên bản đồ tranh, danh sách Lãnh thổ và thẻ Thành chủ. Chọn theo diem_nen/bo_hinh.json, cùng quy tắc bậc và dáng với đảo nổi.",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Pixel art game background, wide landscape scene at a blazing orange sunset in Scorching Sun Desert, a burning desert of orange dunes and sun-bleached rocks under a huge setting sun. No people, no text, no UI. Main subject in the center foreground: an ore mine on a mountainside, wooden scaffolding around two mine shafts, piles of dark iron ore, a wooden pulley crane and buckets.",
+        "width": 320,
+        "height": 192,
+        "no_background": false,
+        "seed": 22,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b0e6af91-a965-40e4-b036-b22c9c3d7dd6",
+      "api": "REST v2 generate-image-v2"
     }
   ]
 }
