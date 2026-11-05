@@ -274,4 +274,14 @@ export const ERROR_TEXT: Record<string, string> = {
   khong_thay_dong: "Không thấy dòng ẩn này.",
   thieu_giam_dinh_phu: "Hết Giám Định Phù.",
   an_chua_lo: "Hiệu ứng chưa lộ: dòng phải kích phát một lần mới tẩy được.",
+  // Khảm bằng kéo thả (lệnh kham)
+  chua_mac_do: "Ô này chưa mặc đồ.",
+  khong_kham_duoc: "Món này không khảm được.",
+  het_dong_kham: "Món này đã hết dòng khảm.",
+  binh_an_sai_o: "Binh ấn chỉ khảm vào vũ khí, bao tay, ngọc bội.",
+  // Đi lại trên bản đồ (mapScene giữ lời riêng; đây cho nơi khác gửi cùng lệnh)
+  da_o_day: "Bạn đang ở đây rồi.",
+  khong_co_duong: "Không có đường tới điểm này.",
+  khong_thay_diem: "Không tìm thấy điểm này.",
+  khong_dang_di: "Không có hành trình nào đang đi.",
 };
