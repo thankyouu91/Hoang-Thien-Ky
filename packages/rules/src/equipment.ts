@@ -17,8 +17,13 @@ import { GEAR } from "./config.ts";
 import { boardBonus, machBetween, resonanceSideEffects, type BoardResult, type BoardSetup } from "./board.ts";
 import { addSetBehavior, emptySetFxAcc, setMilestoneAllowed } from "./setfx.ts";
 import {
-  LUYEN_KHI, canHaveKhiLinh, danhKhiOf, danhVanMod, khiLinhBonus, khiVanFx, khiVanInfo, khiVanSlots, phuRow, scaleSkillMod,
+  LUYEN_KHI, canHaveKhiLinh, danhKhiOf, danhVanMod, khiLinhBonus, khiLinhLevel, khiVanFx, khiVanInfo, khiVanSlots, phuRow, scaleSkillMod,
 } from "./luyen_khi.ts";
+import {
+  BAC_BO_THAN, BINH_AN_O, DONG_AN_O, DONG_AN_SO, DONG_LO, DONG_REN, SONG_AN,
+  bacHeSo, bacMoc7, bacTu, binhBoOf, dongAnDk, dongAnHu, heSoMoc2, setFactors, setLo, setThan, tuongSinh, type Bac, type SetFactor,
+} from "./set2.ts";
+import type { HiddenLine } from "@ktlp/sim";
 
 export type SlotId = "vu_khi" | "mu" | "ao" | "dai" | "bao_tay" | "giay" | "ngoc_boi";
 export type RarityId = "luc" | "lam" | "tim" | "vang" | "do";
@@ -30,7 +35,8 @@ export type InlayLine =
   | { loai: "ngoc"; he: Element; cap: number }
   | { loai: "song_he"; he: [Element, Element]; cap: number }
   | { loai: "phach"; ma: string }
-  | { loai: "an"; ma: string }
+  | { loai: "an"; ma: string; bac?: Bac } // bậc ấn, không ghi là tím
+  | { loai: "binh_an"; ma: string; bac?: Bac } // binh bộ, chỉ 3 ô công
   | { loai: "y_chau"; ma: string }
   | null;
 
@@ -45,6 +51,8 @@ export interface EquipItem {
   phu?: number; // loại chỉ số phụ 1–4 sau tẩy luyện; không ghi là loại 1 (mặc định)
   khiLinhKn?: number; // kinh nghiệm khí linh (món từ tím); cấp tính theo luyen_khi.json
   khiVan?: string[]; // khí văn đã chọn ở các ô mở theo cấp khí linh
+  ren?: number[]; // dòng rèn: loại chỉ số phụ 1–4 chọn ở mỗi mốc rèn (+10, +20, …); dòng tắt khi nấc dưới mốc
+  dongAn?: { dk: string; hu: string }[]; // dòng ẩn của ngọc bội, đai: điều kiện DN-DK, hiệu ứng DN-HU
 }
 
 /** Một hiệu ứng set như trong set.json. */
@@ -57,7 +65,18 @@ export interface ActiveSet {
   hieuUng: SetEffect[];
   /** Mốc đã đạt nhưng chưa đủ ràng buộc (ví dụ Lôi Trì mốc 7 cần công pháp hệ chủ Lôi hoặc Kim), nên không có tác dụng. */
   thieuDieuKien?: number[];
+  /** Bậc thấp nhất trong các ấn đang tính cho bộ (đồ và bàn); hệ số mốc 2, 4 theo bậc này. */
+  bac: Bac;
+  /** Đủ 7 món nhưng có ấn dưới bậc mốc 7 (tím) nên chỉ tính tới mốc 4. */
+  moc7ThieuBac?: boolean;
+  /** Hệ số đã nhân vào mốc 2 (bậc × hợp bộ hoặc cộng hưởng × bị khắc) và mốc 4 (bậc), phần nghìn. */
+  heSo2: number;
+  heSo4: number;
+  hopBo: SetFactor;
 }
+
+/** Binh bộ đang kích: 2 hoặc 3 binh ấn cùng bộ trên ô công. */
+export interface ActiveBinhBo { bo: string; mon: number; moc: number; bac: Bac; dongLo: boolean }
 
 /** Tổng cộng của bộ đồ đang mặc. hp, atk, def, manaMax là số cộng thẳng; bonuses theo phần nghìn như UnitBonuses. */
 export interface GearStats {
@@ -82,6 +101,11 @@ export interface GearStats {
   khiVan: Record<string, number>;
   /** Khí văn đang kích (có tác dụng): tối đa luat.khiVanKichToiDa khí văn khác nhau; các ô còn lại để sưu tầm. */
   khiVanKich: string[];
+  /** Binh bộ đang kích, nếu có (mỗi người 1 binh bộ: 3 ô công). */
+  binhBo?: ActiveBinhBo;
+  /** Dòng ẩn đưa vào trận (sim UnitSpec.hidden): điều kiện tĩnh đã xét, song ẩn đã nhân. `hiddenSource` cùng thứ tự: món và vị trí dòng. */
+  hidden: HiddenLine[];
+  hiddenSource: { kieu: string; dong: number }[];
 }
 
 /** Số khí văn kích tối đa (luyen_khi.json luat.khiVanKichToiDa; khi dữ liệu chưa có khóa thì lấy 3 theo GDD phần 13). */
@@ -125,10 +149,20 @@ for (const b of SET.bo as unknown as SetRow[]) {
 const SET_STAT: Record<string, BuffStat> = {
   healTaken: "healTaken", healPower: "healPower", controlTime: "controlTime", critBonus: "critBonus", critDamage: "critDamage",
   khienNhan: "shieldTaken", satThuongPvE: "monsterDamage", xuyenGiap: "armorPen", teLietTicks: "paralyzeTicks", bayTranTicks: "formationTicks",
+  // Set đồ 2.0 (tab Trang bị, phần 14): khóa trùng tên chỉ số trận.
+  defOuter: "defOuter", defInner: "defInner", manaCostCut: "manaCostCut", manaDrain: "manaDrain", reflect: "reflect",
+  damageTakenCut: "damageTakenCut", hpRegen: "hpRegen", innerDamage: "innerDamage", lifestealFlat: "lifestealFlat",
+  attackSpeed: "attackSpeed", cooldownCut: "cooldownCut", resistPen: "resistPen", armorPen: "armorPen", shieldTaken: "shieldTaken",
+  monsterDamage: "monsterDamage",
+  // "Hút máu +x%" của set, binh bộ (Huyết Ảnh, Hấp Hồn): hút theo sát thương gây ra; khác lifesteal của sim (tăng hút máu Cực âm).
+  lifesteal: "lifestealFlat",
 };
 const SET_RESIST: Record<string, Element[]> = { khangLoi: ["loi"], khangMoiHe: ELEMENTS.slice() };
 const SET_OUTSIDE = ["hoiChieuKichPhat", "kichPhat", "linhLucPhapBao", "danTuDung"];
 const has = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
+
+/** Khóa chỉ số trận (cộng thẳng, chỉ số trận, kháng) của set. */
+const isBattleStat = (key: string): boolean => FLAT.indexOf(key) >= 0 || has(SET_STAT, key) || has(SET_RESIST, key);
 
 /** Khóa chỉ số của set có chỗ áp không: trong trận, kháng, hoặc ngoài trận. */
 export function isKnownSetStat(key: string): boolean {
@@ -175,6 +209,7 @@ function validate(item: EquipItem): void {
   for (const ma of vans) if (khiVanInfo(ma).nhom !== slot.ngoc) throw new Error(`${item.kieu}: khí văn ${ma} không thuộc ô ${slot.ngoc}`);
   const danhKhi = danhKhiOf(item.kieu) !== null;
   let seals = 0;
+  let binh = 0;
   let yChau = 0;
   for (const line of item.kham) {
     if (line && (line.loai === "ngoc" || line.loai === "song_he") && (line.cap < 1 || line.cap > GEM_VALUE.length)) throw new Error(`${item.kieu}: ngọc cấp ${line.cap} sai`);
@@ -188,7 +223,15 @@ function validate(item: EquipItem): void {
     if (line && line.loai === "y_chau" && danhKhi) throw new Error(`${item.kieu}: danh khí đã có sẵn Ý, không khảm thêm Ý châu`);
     if (line && line.loai === "an") {
       if (!has(SEAL_SET, line.ma)) throw new Error(`${item.kieu}: không có ấn bộ ${line.ma}`);
+      bacHeSo(line.bac ?? "tim");
+      if (setThan(SEAL_SET[line.ma]) && !bacTu(line.bac ?? "tim", BAC_BO_THAN)) throw new Error(`${item.kieu}: ấn bộ thần chỉ có từ ${BAC_BO_THAN}`);
       seals++;
+    }
+    if (line && line.loai === "binh_an") {
+      binhBoOf(line.ma);
+      bacHeSo(line.bac ?? "tim");
+      if (BINH_AN_O.indexOf(info.o) < 0) throw new Error(`${item.kieu}: binh ấn chỉ khảm vào vũ khí, bao tay, ngọc bội`);
+      binh++;
     }
     if (line && line.loai === "y_chau") {
       if (!has(Y_CHAU, line.ma)) throw new Error(`${item.kieu}: không có Ý châu ${line.ma}`);
@@ -197,6 +240,17 @@ function validate(item: EquipItem): void {
     }
   }
   if (seals > 1) throw new Error(`${item.kieu}: mỗi món giữ tối đa 1 ấn bộ`);
+  if (binh > 1) throw new Error(`${item.kieu}: mỗi món giữ tối đa 1 binh ấn`);
+  const ren = item.ren ?? [];
+  if (ren.length > DONG_REN.moc.length) throw new Error(`${item.kieu}: quá số dòng rèn`);
+  for (const loai of ren) phuRow(info.o, loai);
+  const an = item.dongAn ?? [];
+  if (an.length > 0 && DONG_AN_O.indexOf(info.o) < 0) throw new Error(`${item.kieu}: dòng ẩn chỉ có ở ngọc bội, đai`);
+  if (an.length > (DONG_AN_SO[info.doHiem] ?? 0)) throw new Error(`${item.kieu}: đồ ${info.doHiem} có tối đa ${DONG_AN_SO[info.doHiem] ?? 0} dòng ẩn`);
+  for (const x of an) {
+    dongAnDk(x.dk);
+    dongAnHu(x.hu);
+  }
   if (yChau > GEAR.maxYChau) throw new Error(`${item.kieu}: mỗi vũ khí khảm tối đa ${GEAR.maxYChau} Ý châu`);
 }
 
@@ -264,7 +318,11 @@ export function gearStats(
 ): GearStats {
   const out: GearStats = {
     hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {}, khiVan: {}, khiVanKich: [],
+    hidden: [], hiddenSource: [],
   };
+  const sealBac: Record<string, Bac[]> = {}; // id bộ → bậc các ấn đang tính
+  const binhBac: Record<string, Bac[]> = {}; // id binh bộ → bậc các binh ấn
+  const trangSuc: EquipItem[] = []; // ngọc bội, đai còn độ bền có dòng ẩn
   const used: string[] = [];
   const pieces: Record<string, number> = {}; // id bộ → số món còn độ bền mang ấn bộ đó
   const gemDamage: Partial<Record<Element, number>> = {}; // tổng thô từ ngọc ô công, trước trần mềm
@@ -279,13 +337,26 @@ export function gearStats(
     if (item.doBen <= 0) continue;
     const slot = SLOTS[info.o];
     const factor = itemFactor(item);
-    for (const part of [slot.chinh, phuRow(info.o, item.phu ?? 1)]) {
+    // Dòng rèn: mỗi mốc rèn đã đạt cộng thêm loại phụ đã chọn, giá trị DONG_REN.tyLe của loại đó.
+    const parts = [slot.chinh, phuRow(info.o, item.phu ?? 1)];
+    (item.ren ?? []).forEach((loai, i) => {
+      if (item.nac < DONG_REN.moc[i]) return;
+      const r = phuRow(info.o, loai);
+      parts.push({ stat: r.stat, gia_tri: mul(r.gia_tri, DONG_REN.tyLe) });
+    });
+    for (const part of parts) {
       const v = statAmount(part.stat, part.gia_tri, factor, level);
       if (FLAT.indexOf(part.stat) >= 0) out[part.stat as "hp" | "atk" | "def" | "manaMax"] += v;
       else out.bonuses[part.stat as BuffStat] = (out.bonuses[part.stat as BuffStat] ?? 0) + v;
     }
+    if ((item.dongAn ?? []).length > 0) trangSuc.push(item);
     for (const line of item.kham) {
-      if (line && line.loai === "an") pieces[SEAL_SET[line.ma]] = (pieces[SEAL_SET[line.ma]] ?? 0) + 1;
+      if (line && line.loai === "an") {
+        const bo = SEAL_SET[line.ma];
+        pieces[bo] = (pieces[bo] ?? 0) + 1;
+        (sealBac[bo] ??= []).push(line.bac ?? "tim");
+      }
+      if (line && line.loai === "binh_an") (binhBac[line.ma] ??= []).push(line.bac ?? "tim");
       if (line && line.loai === "y_chau") {
         const y = yChauMod(line.ma);
         out.skillMods[y.loai] = y.mod;
@@ -315,25 +386,95 @@ export function gearStats(
   for (const e of Object.keys(gemDamage) as Element[]) out.elementDamage[e] = softCap(gemDamage[e] ?? 0, t.satThuongMem, phachCap[e] ?? t.satThuongToiDa);
   for (const e of Object.keys(gemResist) as Element[]) out.resist[e] = softCap(gemResist[e] ?? 0, t.khangMem, t.khangToiDa);
   // Bàn chỉ thêm món cho bộ đã có ít nhất 2 món trên đồ, nên vẫn tối đa 3 bộ cùng mở (7 ô, mỗi món tối đa 1 ấn).
+  const gearPieces: Record<string, number> = { ...pieces };
   let heSo: Record<string, number> = {};
   if (board) {
     out.board = boardBonus(board, pieces);
     for (const bo of Object.keys(out.board.monThem)) pieces[bo] += out.board.monThem[bo];
     heSo = out.board.heSo;
+    // Ấn trên bàn đang tính cho bộ cũng vào bậc thấp nhất.
+    for (const ma of out.board.thong) {
+      const p = board.cells[ma];
+      if (p && p.loai === "an" && (out.board.monThem[SEAL_SET[p.ma]] ?? 0) > 0) (sealBac[SEAL_SET[p.ma]] ??= []).push(p.bac ?? "tim");
+    }
   }
+  // Hợp bộ: hệ số mốc 2 theo quan hệ hệ ấn giữa các bộ đang kích; cộng hưởng trên bàn thay nếu cao hơn; bị khắc ×0,8.
+  const activeSets = Object.keys(pieces).sort().filter((bo) => setTier(pieces[bo]) > 0);
+  const hop = setFactors(activeSets, heSo);
+  if (hop.manaMax) out.manaMax += statAmount("manaMax", hop.manaMax, ONE, level);
   const acc = emptySetFxAcc();
-  for (const bo of Object.keys(pieces).sort()) {
-    const moc = setTier(pieces[bo]);
-    if (moc === 0) continue;
-    const reached = SETS[bo].moc.filter((m) => m.so <= moc).map((m) => (m.so === SETS_FIRST_TIER && heSo[bo] ? scaleEffect(m, heSo[bo]) : m));
+  for (const bo of activeSets) {
+    let moc = setTier(pieces[bo]);
+    const bacs = sealBac[bo] ?? [];
+    let bac: Bac = "do";
+    for (const b of bacs) if (bacHeSo(b) < bacHeSo(bac)) bac = b;
+    const moc7ThieuBac = moc === 7 && bacs.some((b) => !bacMoc7(b));
+    if (moc7ThieuBac) moc = 4;
+    const heSo2 = heSoMoc2(bacHeSo(bac), hop.heSo[bo]);
+    const heSo4 = bacHeSo(bac);
+    const reached = SETS[bo].moc.filter((m) => m.so <= moc).map((m) => {
+      if (m.so === SETS_FIRST_TIER && heSo2 !== ONE) return scaleEffect(m, heSo2);
+      if (m.so === 4 && heSo4 !== ONE) return scaleEffect(m, heSo4);
+      return m;
+    });
     const hieuUng = reached.filter((m) => setMilestoneAllowed(bo, m.so, mainElements));
-    const set: ActiveSet = { bo, mon: pieces[bo], moc, hieuUng };
+    const set: ActiveSet = { bo, mon: pieces[bo], moc, hieuUng, bac, heSo2, heSo4, hopBo: hop.heSo[bo] };
+    if (moc7ThieuBac) set.moc7ThieuBac = true;
     if (hieuUng.length < reached.length) set.thieuDieuKien = reached.filter((m) => hieuUng.indexOf(m) < 0).map((m) => m.so);
     out.sets.push(set);
     for (const m of hieuUng) {
-      if (m.loai === "chi_so") addSetStats(out, bo, m.tham_so, level);
-      else if (m.loai === "hanh_vi" || m.loai === "khac_che") addSetBehavior(acc, bo, m.so, m.tham_so as Record<string, number | boolean | string>);
+      if (m.loai === "chi_so") {
+        addSetStats(out, bo, m.tham_so, level);
+        continue;
+      }
+      // Mốc vừa có chỉ số vừa có hành vi (set đồ 2.0): khóa chỉ số trận áp như chi_so, phần còn lại theo loại của mốc.
+      const stats: Record<string, number | boolean> = {};
+      for (const k of Object.keys(m.tham_so)) if (isBattleStat(k)) stats[k] = m.tham_so[k];
+      if (Object.keys(stats).length > 0) addSetStats(out, bo, stats, level);
+      if (m.loai === "hanh_vi" || m.loai === "khac_che") addSetBehavior(acc, bo, m.so, m.tham_so as Record<string, number | boolean | string>);
     }
+  }
+  // Binh bộ: 2 hoặc 3 binh ấn cùng bộ; mốc 3 ×DONG_LO khi cùng lộ với một ấn bộ đang kích.
+  for (const ma of Object.keys(binhBac).sort()) {
+    const bacs = binhBac[ma];
+    if (bacs.length < 2) continue;
+    const row = binhBoOf(ma);
+    const id = row.id;
+    let bac: Bac = "do";
+    for (const b of bacs) if (bacHeSo(b) < bacHeSo(bac)) bac = b;
+    const dongLo = activeSets.some((bo) => setLo(bo).some((l) => row.lo.indexOf(l) >= 0));
+    const moc = bacs.length >= 3 ? 3 : 2;
+    for (const m of row.moc) {
+      if (m.so > moc) continue;
+      let h = bacHeSo(bac);
+      if (m.so === 3 && dongLo) h = mul(h, DONG_LO);
+      addSetStats(out, id, h === ONE ? m.tham_so : scaleEffect({ so: m.so, loai: "chi_so", mo_ta: "", tham_so: m.tham_so }, h).tham_so, level);
+    }
+    out.binhBo = { bo: id, mon: bacs.length, moc, bac, dongLo };
+  }
+  // Dòng ẩn: điều kiện tĩnh xét ở đây (đúng thì "always", sai thì không vào trận); song ẩn ×1,5.
+  const dkOf = (o: string) => trangSuc.filter((x) => kieuInfo(x.kieu).o === o).flatMap((x) => (x.dongAn ?? []).map((d) => d.dk));
+  const nb = dkOf("ngoc_boi"), dai = dkOf("dai");
+  for (const item of trangSuc) {
+    (item.dongAn ?? []).forEach((d, dong) => {
+      const c = dongAnDk(d.dk);
+      const gems: Element[] = [];
+      for (const line of item.kham) {
+        if (line && line.loai === "ngoc") gems.push(line.he);
+        if (line && line.loai === "song_he") gems.push(line.he[0], line.he[1]);
+      }
+      let ok = true;
+      if (c.loai === "bo") ok = Object.keys(gearPieces).some((bo) => gearPieces[bo] >= c.mon);
+      else if (c.loai === "ngocSinh") ok = gems.some((a, i) => gems.some((b, j) => j > i && tuongSinh(a, b)));
+      else if (c.loai === "linhCanNgoc") ok = gems.some((e) => roots.indexOf(e) >= 0);
+      else if (c.loai === "khiLinh") ok = khiLinhLevel(item.khiLinhKn ?? 0) >= c.cap;
+      if (!ok) return;
+      const cond: HiddenLine["cond"] = c.loai === "tran" ? c.cond : "always";
+      const hu = dongAnHu(d.hu);
+      const song = nb.indexOf(d.dk) >= 0 && dai.indexOf(d.dk) >= 0;
+      out.hidden.push({ cond, stat: hu.stat, value: song ? mul(hu.giaTri, SONG_AN) : hu.giaTri });
+      out.hiddenSource.push({ kieu: item.kieu, dong });
+    });
   }
   // Ý châu (và Ý của danh khí) đứng trước set nếu cùng loại chiêu có cùng khóa.
   for (const t of Object.keys(acc.mods) as SkillType[]) out.skillMods[t] = { ...acc.mods[t], ...out.skillMods[t] };
@@ -405,8 +546,10 @@ export function withGear(spec: UnitSpec, items: EquipItem[], board?: BoardSetup,
   for (const e of Object.keys(g.resist) as Element[]) resist[e] = (resist[e] ?? 0) + (g.resist[e] ?? 0);
   const elementDamage: Partial<Record<Element, number>> = { ...spec.elementDamage };
   for (const e of Object.keys(g.elementDamage) as Element[]) elementDamage[e] = (elementDamage[e] ?? 0) + (g.elementDamage[e] ?? 0);
+  const hidden = g.hidden.length > 0 ? { hidden: [...(spec.hidden ?? []), ...g.hidden] } : {};
   return {
     ...spec,
+    ...hidden,
     hp: spec.hp + g.hp,
     atk: spec.atk + g.atk,
     def: spec.def + g.def,

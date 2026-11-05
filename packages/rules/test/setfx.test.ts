@@ -26,22 +26,27 @@ test("mọi hiệu ứng hành vi và khắc chế trong set.json đều có cá
   }
 });
 
-test("Văn Uyên 7 món: mốc 4 hoàn hồi chiêu, mốc 7 diện rộng đầu không vận công; cống hiến để ngoài trận", () => {
+test("Văn Uyên 7 món: mốc 4 giảm mana thi triển, sát thương chiêu nội; mốc 7 diện rộng đầu không vận công; cống hiến để ngoài trận", () => {
   const g = gearStats(sealed(Array(7).fill("NG-AN-006")), LV, []);
-  assert.deepEqual(g.setFx, { channelRefund: 500, instantFirstAoe: true });
+  const m4 = SET.bo.find((b) => b.id === "van_uyen")!.moc[1].tham_so as Record<string, number>;
+  assert.deepEqual(g.setFx, { instantFirstAoe: true });
+  assert.deepEqual([g.bonuses.manaCostCut, g.bonuses.innerDamage], [m4.manaCostCut, m4.innerDamage]);
   assert.equal(g.outside.congHienNopQuyen, 50);
 });
 
 test("Vạn Kiếm 7 món vào cận chiến đơn; Liệp Thú gộp với Cung Ý ở tầm xa", () => {
   assert.deepEqual(gearStats(sealed(Array(7).fill("NG-AN-017")), LV, []).skillMods.can_don, { lowHpBelow: 300, lowHpBonus: 150, qiCycleTicks: 100, qiDamage: 300 });
   const g = gearStats(sealed(Array(4).fill("NG-AN-004"), [{ loai: "y_chau", ma: "NG-YC-003" }]), LV, []);
-  assert.deepEqual(g.skillMods.tam_xa, { pick: "lowest_hp", rangeBonus: 1000 });
+  assert.deepEqual(g.skillMods.tam_xa, { rangeBonus: 1000 }); // Liệp Thú mốc 4 (set đồ 2.0) là chỉ số, không đổi cách chọn mục tiêu
+  assert.equal(g.bonuses.monsterDamage, (SET.bo.find((b) => b.id === "liep_thu")!.moc[1].tham_so as Record<string, number>).satThuongPvE);
 });
 
-test("Ngọc Tủy mốc 4: kháng +6% mọi hệ đang khắc linh căn chính; mốc 7 kháng hệ địch nhiều nhất (sim tính đầu trận)", () => {
+test("Ngọc Tủy mốc 4: mana, giảm mana thi triển, công lực giảm; mốc 7 kháng hệ địch nhiều nhất (sim tính đầu trận)", () => {
   const g = gearStats(sealed(Array(7).fill("NG-AN-007")), LV, ["moc"]);
-  assert.equal(g.resist.kim, 60); // Kim khắc Mộc
-  assert.equal(g.resist.thuy, undefined);
+  const m4 = SET.bo.find((b) => b.id === "ngoc_tuy")!.moc[1].tham_so as Record<string, number>;
+  assert.equal(g.bonuses.manaCostCut, m4.manaCostCut);
+  assert.ok(m4.atk < 0);
+  assert.equal(g.resist.kim, undefined);
   assert.equal(g.setFx.resistTopEnemy, 80);
 });
 
@@ -62,7 +67,10 @@ test("Linh Tuyền, Bàn Thạch vào setFx; phần bế quan, khai khoáng đ�
   assert.deepEqual([lt.setFx.healerRegenPenalty, lt.setFx.resetHealOnFall, lt.outside.beQuan], [-100, 1, 50]);
   const bt = gearStats(sealed(Array(7).fill("NG-AN-003")), LV, []);
   const m7 = SET.bo.find((b) => b.id === "ban_thach")!.moc.find((m) => m.so === 7)!.tham_so as Record<string, number>;
-  assert.deepEqual([bt.setFx.guardSelfShield, bt.setFx.petrifyBelow, bt.setFx.petrifyTicks, bt.outside.khaiKhoang], [500, m7.nguongMau, m7.hoaDaTicks, m7.khaiKhoang]);
+  const m4 = SET.bo.find((b) => b.id === "ban_thach")!.moc[1].tham_so as Record<string, number>;
+  const bare = gearStats(sealed(Array(7).fill("NG-AN-003")).map((it) => ({ ...it, kham: [] })), LV, []);
+  assert.deepEqual([bt.bonuses.defOuter! - (bare.bonuses.defOuter ?? 0), bt.bonuses.hpRegen], [m4.defOuter, m4.hpRegen]); // áo cũng có thủ ngoại
+  assert.deepEqual([bt.setFx.petrifyBelow, bt.setFx.petrifyTicks, bt.outside.khaiKhoang], [m7.nguongMau, m7.hoaDaTicks, m7.khaiKhoang]);
 });
 
 test("Cổ Tông 7 món: pháp bảo thêm 1 lần (tối đa 3, không quá linh lực), hồi chiêu −15% trong trận", async () => {

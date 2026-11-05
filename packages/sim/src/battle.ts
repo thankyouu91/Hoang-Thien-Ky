@@ -81,6 +81,7 @@ export interface SetFx {
   counterCap?: number; // Hỗn Độn: hệ số khắc hệ lên người mặc không quá chừng này
   decoyTicks?: number; // Hỗn Độn: bao nhiêu tick đầu trận bị đánh tính theo `UnitSpec.decoyElement`
   artifactCooldownCut?: number; // Cổ Tông: hồi chiêu pháp bảo giảm chừng này
+  artifactMana?: number; // Cổ Tông: mỗi lần pháp bảo của người mặc kích hoạt thì hồi chừng này mana tối đa
   artifactExtraUses?: number; // Cổ Tông: pháp bảo thêm lần mỗi trận, không quá `artifactMaxUses`
   artifactMaxUses?: number;
   // Khí văn (luyện khí, tab Trang bị phần 13); rules đã nhân theo số lần tính (tối đa 2):
@@ -377,10 +378,10 @@ function makeUnit(spec: UnitSpec, team: 0 | 1): Unit {
   const slots: Slot[] = spec.techniques.map((tech) => {
     const s = SKILL_SPECS[tech.type];
     const cooldown = slotCooldown(tech, b);
-    // Set đồ chỉ làm mạnh hiệu ứng hệ công pháp đã có: tê liệt của Lôi, xuyên giáp của Kim.
+    // Tê liệt khi chí mạng chỉ có ở Lôi nên set chỉ cộng vào công pháp Lôi.
     const fx = techniqueFx(tech);
     if (fx.paralyze) fx.paralyze += b.paralyzeTicks;
-    if (fx.armorPen) fx.armorPen += b.armorPen;
+    fx.armorPen += b.armorPen; // set đồ 2.0: xuyên giáp là chỉ số chung, cộng cả vào xuyên giáp sẵn có của Kim
     const mod = spec.skillMods?.[tech.type] ?? {};
     // Không công pháp nào tốn hơn mana tối đa chuẩn, để ghép đối cực (mana ×1,5) không tạo chiêu không bao giờ ra được (đề xuất).
     const baseCost = mul(Math.min(tech.manaCost, BATTLE.manaMax), mod.manaCost ?? ONE) * ONE;
@@ -759,7 +760,7 @@ export class Battle {
     // Phiên: trận của địch bày xong thì yếu đi (sim không có trận kéo dài, nên "ngắn lại" là giảm sát thương), mục tiêu đầu không bị tuyệt sát.
     const flag = formation && targets.length > 0 && this.hasArtifacts[1 - u.team] ? this.readyArtifact(1 - u.team, "phien_co") : null;
     if (flag) {
-      this.fire(flag.a);
+      this.fire(flag);
       opts.guarded = targets.map((t) => t.id);
       opts.guardCut = flag.a.power;
       opts.noExecute = targets[0].id;
@@ -823,7 +824,7 @@ export class Battle {
     const opts: StrikeOpts = { scale: this.formationBond(members.length), guarded: lc.guarded, guardCut: lc.guardCut };
     const flag = targets.length > 0 && this.hasArtifacts[1 - lead.team] ? this.readyArtifact(1 - lead.team, "phien_co") : null;
     if (flag) {
-      this.fire(flag.a);
+      this.fire(flag);
       opts.guarded = targets.map((t) => t.id);
       opts.guardCut = flag.a.power;
       opts.noExecute = targets[0].id;
@@ -1186,7 +1187,7 @@ export class Battle {
     if (skill && this.hasArtifacts[1 - src.team] && a * ONE >= t.hp * A.dinhHealOfMax) {
       const r = this.readyArtifact(1 - src.team, "dinh");
       if (r) {
-        this.fire(r.a);
+        this.fire(r);
         a -= mul(a, r.a.power);
       }
     }
@@ -1236,7 +1237,7 @@ export class Battle {
   private dash(u: Unit, s: Slot, t: Unit): void {
     u.pos = clamp(t.pos + (u.pos < t.pos ? -R.dashStandOff : R.dashStandOff), 0, BATTLE.fieldLength);
     const seal = t.row === 1 && this.hasArtifacts[t.team] ? this.readyArtifact(t.team, "an") : null;
-    if (seal) this.fire(seal.a);
+    if (seal) this.fire(seal);
     this.strike(u, s, [t], this.takeUlt(u), R.dashCritBonus, false, seal ? { scale: A.anDashDamage } : {});
     u.exposedUntil = this.tick + (s.mod.exposedTicks ?? R.exposedTicks); // Huyết Ảnh: lộ vị trí ngắn hơn
     if (s.mod.dashPierceNext) u.nextPierce = s.mod.dashPierceNext; // Phá Thiên Thương: đòn kế tiếp xuyên khiên
@@ -1259,9 +1260,11 @@ export class Battle {
     return null;
   }
 
-  private fire(a: ArtifactState): void {
-    a.used++;
-    a.readyTick = this.tick + a.cooldownTicks;
+  private fire(r: { o: Unit; a: ArtifactState }): void {
+    r.a.used++;
+    r.a.readyTick = this.tick + r.a.cooldownTicks;
+    const o = r.o;
+    if (o.fx.artifactMana) o.mana = Math.min(o.manaMax, o.mana + mul(o.manaMax, o.fx.artifactMana)); // Cổ Tông mốc 4
   }
 
   /** Chuông: từ 2 đồng đội đang bị choáng thì giải khống chế cả đội (choáng, trói chân) và cho miễn khống chế. */
@@ -1271,7 +1274,7 @@ export class Battle {
     if (held < A.chuongMinControlled) return;
     const r = this.readyArtifact(team, "chuong");
     if (!r) return;
-    this.fire(r.a);
+    this.fire(r);
     for (const x of this.teams[team]) {
       if (x.curHp <= 0) continue;
       x.stunUntil = Math.min(x.stunUntil, this.tick);
@@ -1284,7 +1287,7 @@ export class Battle {
   private raiseTower(ch: Channel, team: number): void {
     const r = this.readyArtifact(team, "thap");
     if (!r) return;
-    this.fire(r.a);
+    this.fire(r);
     const list = this.teams[team].filter((x) => x.curHp > 0);
     list.sort((a, b) => Math.abs(a.pos - ch.center) - Math.abs(b.pos - ch.center) || a.id - b.id);
     ch.guarded = list.slice(0, A.thapAllies).map((x) => x.id);
@@ -1299,7 +1302,7 @@ export class Battle {
       if (near.length < A.luanMinEnemies) continue;
       const r = this.readyArtifact(t.team, "luan", (o) => o === t);
       if (!r) continue;
-      this.fire(r.a);
+      this.fire(r);
       for (const e of near) {
         const dir = e.pos > t.pos ? 1 : e.pos < t.pos ? -1 : e.team === 1 ? 1 : -1;
         e.pos = clamp(e.pos + dir * r.a.power, 0, BATTLE.fieldLength);
@@ -1314,7 +1317,7 @@ export class Battle {
     if (type === "can_don" && crit && t.row === 0) {
       const r = this.readyArtifact(t.team, "thuan");
       if (r) {
-        this.fire(r.a);
+        this.fire(r);
         return Math.max(1, dmg - mul(dmg, r.a.power));
       }
     } else if (type === "tam_xa" && t.row === 1) {
@@ -1328,7 +1331,7 @@ export class Battle {
       }
       const r = this.readyArtifact(t.team, "chau");
       if (r) {
-        this.fire(r.a);
+        this.fire(r);
         r.a.charges = A.chauHits;
       }
     }
@@ -1340,7 +1343,7 @@ export class Battle {
     if (u.curHp <= 0) return;
     const r = this.readyArtifact(t.team, "kinh", (o) => o === t || Math.abs(o.pos - t.pos) <= A.adjacentRange);
     if (!r) return;
-    this.fire(r.a);
+    this.fire(r);
     this.hurt(u, Math.max(1, mul(dmg, r.a.power)));
   }
 
@@ -1350,7 +1353,7 @@ export class Battle {
       if (t.shield <= 0) continue;
       const r = this.readyArtifact(1 - t.team, "ho_lo", (o) => Math.abs(o.pos - t.pos) <= A.nearRange);
       if (!r) continue;
-      this.fire(r.a);
+      this.fire(r);
       const taken = mul(t.shield, r.a.power);
       t.shield -= taken;
       const got = mul(taken, ONE + r.o.b.shieldTaken);

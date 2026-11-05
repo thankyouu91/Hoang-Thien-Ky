@@ -31,24 +31,16 @@ const outside = (a: SetFxAcc, k: string, v: number) => {
 /** Cách đổi theo "bộ:mốc". */
 const HANDLERS: Record<string, (key: string, p: Params, a: SetFxAcc) => void> = {
   "bach_thao:7": (k, p, a) => { a.setFx.cleanseHealCut = num(k, p, "tayGiamHoiMau"); },
-  "ban_thach:4": (k, p, a) => { a.setFx.guardSelfShield = num(k, p, "heSoKhienThem"); },
   "ban_thach:7": (k, p, a) => {
     a.setFx.petrifyBelow = num(k, p, "nguongMau");
     a.setFx.petrifyTicks = num(k, p, "hoaDaTicks");
     outside(a, "khaiKhoang", num(k, p, "khaiKhoang"));
   },
-  "liep_thu:4": (k, p, a) => {
-    if (p.chonMucTieu !== "mau_thap_nhat") throw new Error(`Set ${k}: chưa biết chọn mục tiêu ${p.chonMucTieu}`);
-    mod(a, "tam_xa").pick = "lowest_hp";
-  },
-  "thiet_ky:4": (k, p, a) => { mod(a, "can_quet").firstTargetBonus = num(k, p, "mucTieuDau"); },
   "thiet_ky:7": (k, p, a) => { a.setFx.frontAoeCut = num(k, p, "giamDienRong"); },
-  "van_uyen:4": (k, p, a) => { a.setFx.channelRefund = num(k, p, "hoanHoiChieu"); },
   "van_uyen:7": (k, p, a) => {
     a.setFx.instantFirstAoe = num(k, p, "boVanCongLanDau") > 0;
     outside(a, "congHienNopQuyen", num(k, p, "congHienNopQuyen"));
   },
-  "ngoc_tuy:4": (k, p, a) => { a.resistVsCounters += num(k, p, "khangHeKhacMinh"); },
   "ngoc_tuy:7": (k, p, a) => { a.setFx.resistTopEnemy = num(k, p, "khangHeDichNhieuNhat"); },
   "linh_tuyen:4": (k, p, a) => { a.setFx.healerRegenPenalty = num(k, p, "hoiManaKhiVan"); },
   "linh_tuyen:7": (k, p, a) => {
@@ -61,14 +53,21 @@ const HANDLERS: Record<string, (key: string, p: Params, a: SetFxAcc) => void> = 
     a.setFx.bounceCrit = num(k, p, "thuTuChiMang");
     a.setFx.bounceDamage = num(k, p, "heSoNay");
   },
-  "co_tong:4": (k, p, a) => { a.setFx.artifactCooldownCut = -num(k, p, "hoiChieuPhapBao"); },
+  "co_tong:4": (k, p, a) => {
+    a.setFx.artifactCooldownCut = -num(k, p, "hoiChieuPhapBao");
+    a.setFx.artifactMana = num(k, p, "hoiManaPhapBao");
+  },
   "co_tong:7": (k, p, a) => {
     a.setFx.artifactExtraUses = num(k, p, "themLanPhapBao");
     a.setFx.artifactMaxUses = num(k, p, "toiDa");
   },
   "huyet_anh:4": (k, p, a) => { mod(a, "than_phap").exposedTicks = num(k, p, "loViTriTicks"); },
   "huyet_anh:7": (k, p, a) => { a.setFx.stealthOnDashKill = num(k, p, "anThanTicks"); },
-  "do_kiep:4": (k, p, a) => { mod(a, "bua_chu").lastUseFree = num(k, p, "buaCuoiMienMana") > 0; },
+  "do_kiep:4": (k, p, a) => {
+    const m = mod(a, "bua_chu");
+    m.manaCost = 1000 - num(k, p, "buaGiamMana");
+    m.lastUseFree = num(k, p, "buaCuoiMienMana") > 0;
+  },
   "van_kiem:4": (k, p, a) => {
     const m = mod(a, "can_don");
     m.lowHpBelow = num(k, p, "nguongMau");

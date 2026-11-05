@@ -5,6 +5,7 @@ import {
   type BoardPiece, type BoardSetup, type EquipItem, type Progress,
 } from "../src/index.ts";
 import DAO from "../../../data/he_thong/json/dao_co_ban.json" with { type: "json" };
+import SET from "../../../data/he_thong/json/set.json" with { type: "json" };
 
 // Đạo Cơ Bàn (GDD tab Trang bị, phần 8; dao_co_ban.json). Ấn: 001 Tụ Bảo (Kim), 003 Bàn Thạch (Thổ), 015 Huyết Ảnh (Cực âm),
 // 017 Vạn Kiếm (Kim), 019 Phá Quân (Cực dương), 020 Hỗn Độn (không hệ).
@@ -20,6 +21,8 @@ const sealed = (...seals: string[]): EquipItem[] =>
 const LV = 100;
 /** Mana tối đa Âm Dương trừ, theo dao_co_ban.json (phần nghìn của mana chuẩn 300). */
 const AM_DUONG_MANA = Math.trunc((300 * (DAO.cong_huong.find((c) => c.mach === "cuc") as { manaMax: number }).manaMax) / 1000);
+/** Mana tối đa hợp bộ Đối cực trừ (set.json hop_bo). */
+const HOP_CUC_MANA = Math.trunc((300 * ((SET as unknown as { hop_bo: { quan_he: string; mana_max?: number }[] }).hop_bo.find((h) => h.quan_he === "doi_cuc")!.mana_max ?? 0)) / 1000);
 
 test("bàn 19 ô, ô tâm kề 6 ô; quan hệ hệ ra loại mạch, không hệ là trung", () => {
   assert.equal(DAO.o.length, 19);
@@ -73,8 +76,9 @@ test("Đồng Khí (Thuần): mốc 2 ×1,25 cho cả hai bộ, làm tròn về 
   const g = gearStats(items, LV, [], board({ O: an("NG-AN-017"), T1: an("NG-AN-001") }));
   assert.deepEqual(g.board!.congHuong, [{ a: "tu_bao", b: "van_kiem", mach: "thuan", ten: "Đồng Khí", he: "kim" }]);
   assert.deepEqual(g.board!.heSo, { tu_bao: 1250, van_kiem: 1250 });
-  // Vạn Kiếm công lực +2% → +2,5% chỉ số chuẩn (500 × 2,5% = 12); Tụ Bảo thuế chợ −10 ×1,25 = −12,5 → −12.
-  assert.equal(g.atk - plain.atk, 12 - 10);
+  // Vạn Kiếm công lực +2% → +2,5% chỉ số chuẩn (500 × 2,5% = 12); không bàn là hợp bộ Thuần ×1,1 (11).
+  // Tụ Bảo thuế chợ −10 ×1,25 = −12,5 → −12.
+  assert.equal(g.atk - plain.atk, 12 - 11);
   assert.deepEqual(g.sets.find((s) => s.bo === "tu_bao")!.hieuUng[0].tham_so, { thueCho: -12 });
   assert.equal(g.resist.kim, 30);
 });
@@ -82,13 +86,17 @@ test("Đồng Khí (Thuần): mốc 2 ×1,25 cho cả hai bộ, làm tròn về 
 test("Tương Dưỡng (Sinh) ×1,5; Âm Dương (Cực) ×2 và giảm mana tối đa; mốc 4 và 7 không đổi", () => {
   const sinh = gearStats(sealed("NG-AN-003", "NG-AN-003", "NG-AN-001", "NG-AN-001"), LV, [], board({ O: an("NG-AN-003"), T1: an("NG-AN-001") }));
   assert.equal(sinh.board!.congHuong[0].ten, "Tương Dưỡng");
-  assert.equal(sinh.bonuses.shieldTaken, 90); // Bàn Thạch khiên nhận +6% → +9%
+  const bt2 = (SET.bo.find((b) => b.id === "ban_thach")!.moc[0].tham_so as Record<string, number>).hp;
+  assert.equal(sinh.sets.find((s) => s.bo === "ban_thach")!.hieuUng[0].tham_so.hp, Math.trunc((bt2 * 1500) / 1000)); // ×1,5
   const items = sealed("NG-AN-019", "NG-AN-019", "NG-AN-015", "NG-AN-015");
+  const bare = gearStats(items.map((it) => ({ ...it, kham: [] })), LV, []);
   const plain = gearStats(items, LV, []);
   const cuc = gearStats(items, LV, [], board({ O: an("NG-AN-019"), T1: an("NG-AN-015") }));
   assert.equal(cuc.board!.congHuong[0].ten, "Âm Dương");
-  assert.equal(cuc.bonuses.critDamage! - plain.bonuses.critDamage!, 100 - 50); // Huyết Ảnh sát thương chí mạng +5% → +10%
-  assert.equal(cuc.manaMax - plain.manaMax, AM_DUONG_MANA); // phần nghìn của mana chuẩn 300
+  // Huyết Ảnh hút máu +1,5%: trên bàn Âm Dương ×2; không bàn là hợp bộ Đối cực ×1,3.
+  assert.deepEqual([cuc.bonuses.lifestealFlat, plain.bonuses.lifestealFlat], [30, 19]);
+  // Mana tối đa −2%: Âm Dương trên bàn thay hợp bộ Đối cực, cùng một lần cho cặp.
+  assert.deepEqual([cuc.manaMax - bare.manaMax, plain.manaMax - bare.manaMax], [AM_DUONG_MANA, HOP_CUC_MANA]);
   // Mốc 4 của Huyết Ảnh (4 món: 2 trên đồ + 2 trên bàn) không nhân.
   const four = gearStats(items, LV, [], board({ O: an("NG-AN-015"), T4: an("NG-AN-015"), T1: an("NG-AN-019") }));
   const moc4 = (g: ReturnType<typeof gearStats>) => g.sets.find((s) => s.bo === "huyet_anh")!.hieuUng.find((m) => m.so === 4);
@@ -102,8 +110,8 @@ test("mỗi bộ lấy cộng hưởng mạnh nhất; tác dụng phụ tính m�
   const g = gearStats(items, LV, [], board({ O: an("NG-AN-015"), T1: an("NG-AN-019"), T4: an("NG-AN-017") }));
   assert.deepEqual(g.board!.heSo, { huyet_anh: 2000, van_kiem: 1500, pha_quan: 2000 });
   assert.deepEqual(g.board!.congHuong.map((c) => [c.a, c.b, c.ten]), [["huyet_anh", "pha_quan", "Âm Dương"], ["huyet_anh", "van_kiem", "Tương Dưỡng"]]);
-  const plain = gearStats(items, LV, []);
-  assert.equal(g.manaMax - plain.manaMax, AM_DUONG_MANA); // một cặp Âm Dương
+  const bare = gearStats(items.map((it) => ({ ...it, kham: [] })), LV, []);
+  assert.equal(g.manaMax - bare.manaMax, AM_DUONG_MANA); // một cặp Âm Dương; bàn thay hợp bộ nên không trừ thêm
 });
 
 test("ấn không thông hoặc bộ chưa kích thì không cộng hưởng", () => {

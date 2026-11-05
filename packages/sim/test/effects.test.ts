@@ -225,11 +225,11 @@ test("khiên nhận được: khiên Thổ 5% máu × 1,06", () => {
   assert.equal(get(b, 1).shield, 1060);
 });
 
-test("set chỉ làm mạnh hiệu ứng hệ đã có: tê liệt Lôi +5 tick, xuyên giáp Kim +3%", () => {
+test("tê liệt của set chỉ cộng vào Lôi; xuyên giáp của đồ cộng vào mọi công pháp (set đồ 2.0)", () => {
   const bonuses = { paralyzeTicks: 5, armorPen: 30 };
   const b = new Battle({ seed: 1, teamA: [unit(1, 0, [tech("can_don", "loi"), tech("can_don", "kim")], { bonuses })], teamB: [inert(101)] });
   const [loi, kim] = get(b, 1).slots;
-  assert.deepEqual([loi.fx.paralyze, loi.fx.armorPen], [15, 0]);
+  assert.deepEqual([loi.fx.paralyze, loi.fx.armorPen], [15, 30]);
   assert.deepEqual([kim.fx.paralyze, kim.fx.armorPen], [0, 130]);
 });
 

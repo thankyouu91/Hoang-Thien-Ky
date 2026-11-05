@@ -13,7 +13,7 @@ export type ViDien = "ha" | "trung" | "than" | "thanh";
 /** Chỗ nhân vật đang đứng: vị diện, cấp trong vị diện (Thần vực trở lên không còn cấp), số thứ tự cảnh giới 1 Luyện Khí … 9 Độ Kiếp. */
 export interface Progress { viDien: ViDien; cap: number; canhGioi: number }
 /** Một viên trên bàn: ấn bộ, hoặc ngọc hệ (ngọc trên bàn không cộng chỉ số, chỉ mang hệ để dẫn mạch). */
-export type BoardPiece = { loai: "an"; ma: string } | { loai: "ngoc"; he: Element; cap: number };
+export type BoardPiece = { loai: "an"; ma: string; bac?: "luc" | "lam" | "tim" | "vang" | "do" } | { loai: "ngoc"; he: Element; cap: number };
 /** Bàn của một nhân vật: mã ô → viên đặt ở đó; ô trống thì không ghi. */
 export interface BoardSetup { cells: Record<string, BoardPiece>; progress: Progress }
 export type MachKind = "thuan" | "sinh" | "cuc";

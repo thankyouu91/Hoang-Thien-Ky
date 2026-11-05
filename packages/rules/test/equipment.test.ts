@@ -51,7 +51,7 @@ test("mũ: máu theo chỉ số chuẩn, mana theo mana tối đa chuẩn", () =
 
 test("độ bền 0 thì món không cộng gì, kể cả ngọc", () => {
   const g = gearStats([item("TB-KI-001", { doBen: 0, kham: [gem("kim", 5)] })], LV, []);
-  assert.deepEqual(g, { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {}, khiVan: {}, khiVanKich: [] });
+  assert.deepEqual(g, { hp: 0, atk: 0, def: 0, manaMax: 0, bonuses: {}, resist: {}, elementDamage: {}, sets: [], outside: {}, skillMods: {}, setFx: {}, khiVan: {}, khiVanKich: [], hidden: [], hiddenSource: [] });
 });
 
 test("ngọc: ô công cộng sát thương hệ, ô thủ cộng kháng hệ, trùng linh căn ×1,2", () => {
@@ -94,14 +94,17 @@ test("món sai thì báo lỗi: trùng ô, nấc, thưởng bí cảnh, cấp ng
   assert.throws(() => gearStats([item("TB-KI-001", { kham: [gem("kim", 11)] })], LV, []));
 });
 
-test("bộ đỏ +30 rơi bí cảnh đủ 7 ô: công lực, máu, phòng thủ mỗi thứ cộng khoảng 18–20%", () => {
+test("bộ đỏ +30 rơi bí cảnh đủ 7 ô: công lực, máu mỗi thứ cộng khoảng 18–20%; áo thủ ngoại, giày thủ nội bằng nhau", () => {
   const full = ["TB-KI-058", "TB-MU-058", "TB-AO-058", "TB-DA-058", "TB-BT-058", "TB-GI-058", "TB-NB-058"].map((k) => item(k, { nac: 30, biCanh: 80, dongThem: 2 }));
   const g = gearStats(full, LV, []);
   const s = baseStats(LV);
-  for (const [name, add, base] of [["công lực", g.atk, s.atk], ["máu", g.hp, s.hp], ["phòng thủ", g.def, s.def]] as const) {
+  for (const [name, add, base] of [["công lực", g.atk, s.atk], ["máu", g.hp, s.hp]] as const) {
     const pct = Math.round((add * 1000) / base);
     assert.ok(pct >= 180 && pct <= 200, `${name} +${pct / 10}%`);
   }
+  // Set đồ 2.0: chỉ số chính áo là thủ ngoại, giày là thủ nội (phần nghìn trên phòng thủ, nhân hệ số món).
+  assert.equal(g.bonuses.defOuter, g.bonuses.defInner);
+  assert.ok(g.bonuses.defOuter! >= 90 && g.bonuses.defOuter! <= 100, `thủ ngoại +${g.bonuses.defOuter! / 10}%`);
 });
 
 test("áp bộ đồ vào đơn vị trong trận", () => {
@@ -142,10 +145,12 @@ test("Vạn Kiếm 2 món: công lực +2% chỉ số chuẩn theo cấp, không
   assert.deepEqual(setBonuses(broken), {});
 });
 
-test("Lôi Trì 5 món là mốc 4: chí mạng +2%, tê liệt +5 tick, xuyên giáp +3%", () => {
+test("Lôi Trì 5 món là mốc 4: chí mạng ở mốc 2, sát thương chí mạng và tê liệt ở mốc 4", () => {
   const items = sealed(...Array(5).fill("NG-AN-010"));
   assert.deepEqual(gearStats(items, LV, []).sets.map((s) => [s.bo, s.mon, s.moc, s.hieuUng.length]), [["loi_tri", 5, 4, 2]]);
-  assert.deepEqual(setBonuses(items), { critBonus: 20, paralyzeTicks: 5, armorPen: 30 });
+  const moc = SET.bo.find((b) => b.id === "loi_tri")!.moc as { so: number; tham_so: Record<string, number> }[];
+  const [m2, m4] = [moc[0].tham_so, moc[1].tham_so];
+  assert.deepEqual(setBonuses(items), { critBonus: m2.critBonus, critDamage: m4.critDamage, paralyzeTicks: m4.teLietTicks });
 });
 
 test("kháng từ set cộng với kháng từ ngọc; Hỗn Độn kháng mọi hệ", () => {
@@ -161,7 +166,8 @@ test("kháng từ set cộng với kháng từ ngọc; Hỗn Độn kháng mọi
 test("chỉ số ngoài trận để riêng; bộ chỉ có hiệu ứng kinh tế vẫn được liệt kê", () => {
   const items = sealed("NG-AN-011", "NG-AN-011", "NG-AN-011", "NG-AN-011", "NG-AN-001", "NG-AN-001");
   const g = gearStats(items, LV, []);
-  assert.deepEqual(g.outside, { hoiChieuKichPhat: -50, kichPhat: 100 });
+  // Tụ Bảo (Kim) khắc Ngự Thú (Mộc): mốc 2 của Ngự Thú ×0,8 (hợp bộ tương khắc).
+  assert.deepEqual(g.outside, { hoiChieuKichPhat: -40, kichPhat: 100 });
   assert.deepEqual(setBonuses(items), {});
   assert.deepEqual(g.sets.map((s) => [s.bo, s.moc]), [["ngu_thu", 4], ["tu_bao", 2]]);
 });
@@ -169,7 +175,8 @@ test("chỉ số ngoài trận để riêng; bộ chỉ có hiệu ứng kinh t�
 test("ba bộ cùng mở 2+2+3; mỗi món tối đa 1 ấn, ấn phải có trong danh mục", () => {
   const items = sealed("NG-AN-017", "NG-AN-017", "NG-AN-005", "NG-AN-005", "NG-AN-008", "NG-AN-008", "NG-AN-008");
   assert.deepEqual(gearStats(items, LV, []).sets.map((s) => [s.bo, s.moc]), [["linh_tuyen", 2], ["thiet_ky", 2], ["van_kiem", 2]]);
-  assert.deepEqual(setBonuses(items), { atk: 10, def: 15, healPower: 40 });
+  // Hợp bộ: Vạn Kiếm (Kim) và Linh Tuyền (Thủy) tương sinh ×1,2; Thiết Kỵ (Phong) cũng ×1,2 nhưng bị Kim khắc ×0,8.
+  assert.deepEqual(setBonuses(items), { atk: 12, healPower: 48, damageTakenCut: 19 });
   const twoSeals = item("TB-KI-058", { kham: [seal("NG-AN-017"), seal("NG-AN-005")] });
   assert.throws(() => gearStats([twoSeals], LV, []));
   assert.throws(() => gearStats([item("TB-KI-001", { kham: [seal("NG-AN-999")] })], LV, []));
