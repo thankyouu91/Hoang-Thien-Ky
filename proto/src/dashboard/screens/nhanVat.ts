@@ -581,7 +581,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const ext = spec ? phapLuanExtent(spec) : 0;
     // Thu người cho vừa vòng nhưng không nhỏ hơn 78% cỡ cũ; vòng Nguyên Anh, Hóa Thần (nhất là có lông vũ tông chủ) được
     // chạm mép canvas ở chóp lông vũ và quầng ngoài, người vẫn nằm gọn.
-    const base = Math.min(2.6, (h - 14) / (72 + dangHeadroom(dang)));
+    // Màn rộng có sân Pháp tướng cao 350 px (dashboard.css) nên cho phóng tới 4,2; điện thoại giữ 2,6.
+    const base = Math.min(matchMedia(WIDE).matches ? 4.2 : 2.6, (h - 14) / (72 + dangHeadroom(dang)));
     const fit = ext ? Math.min((w / 2 - 3) / ext, (h - 12) / (43 + ext)) : base;
     const scale = Math.min(base, Math.max(fit, base * 0.78));
     const k = 1 - Math.min(0.45, (dangLift(dang, "dung", t) * scale) / 60);
