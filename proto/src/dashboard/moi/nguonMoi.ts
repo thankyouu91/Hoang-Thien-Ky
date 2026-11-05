@@ -32,7 +32,7 @@ Object.assign(ERROR_TEXT, {
 });
 
 /** Lệnh thử chỉ dùng ở bản mẫu; người chơi thật không dùng được (nút cũng ẩn bằng moi.css). */
-const DEV_CMDS = new Set(["dev_len_cap", "dev_chuc_vi", "dev_lien_minh", "dev_mo_hinh"]);
+const laLenhThu = (type: string) => type.startsWith("dev_");
 /** Lệnh cần đã vào tông (mock không tự chặn). */
 const CAN_TONG = new Set(["thu_mo", "hien_te", "chat", "duyet_don", "xin_vao_lien_minh"]);
 
@@ -194,7 +194,7 @@ export class NguonMoi extends MockDashboardSource {
   }
 
   override async send(cmd: DashboardCommand): Promise<CommandResult> {
-    if (DEV_CMDS.has(cmd.type)) return { ok: false, error: "chi_ban_mau" };
+    if (laLenhThu(cmd.type)) return { ok: false, error: "chi_ban_mau" };
     if (CAN_TONG.has(cmd.type) && !this.daVaoTong) return { ok: false, error: "chua_vao_tong" };
     const r = await super.send(cmd);
     if (r.ok) {

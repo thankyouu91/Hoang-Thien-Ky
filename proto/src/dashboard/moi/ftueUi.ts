@@ -7,7 +7,7 @@ import type { Element, SkillType } from "@ktlp/sim";
 import TAI_NANG from "../../../../data/he_thong/json/tai_nang.json";
 import type { AuthSource } from "../auth.ts";
 import type { Nav } from "../shell.ts";
-import { artUrl, assetUrl, clockText, closeSheet, durationText, elementChip, esc, openSheet, skillChip, toast } from "../ui.ts";
+import { artUrl, assetUrl, clockText, heArt, closeSheet, durationText, elementChip, esc, openSheet, skillChip, toast } from "../ui.ts";
 import type { FtueChiTiet, NguonTheoTaiKhoan } from "./nguonMoi.ts";
 import { AO, tenNgauNhien, THAN, type Ao, type Than } from "./theGioiMoi.ts";
 import { GIO_BE_QUAN, TEN_HE } from "./ftue.ts";
@@ -369,7 +369,7 @@ function manGieoQue(ct: FtueChiTiet, xong: (look: { body: Than; outfit: Ao }, na
         <img class="gq-bia" src="${artUrl("bia_tam_dao/bia")}" alt="">
         ${els.map((e, i) => {
           const a = (i / els.length) * Math.PI * 2 - Math.PI / 2;
-          return `<span class="gq-he" data-he="${e}" style="left:calc(50% + ${Math.round(Math.cos(a) * R)}px);top:calc(50% + ${Math.round(Math.sin(a) * R)}px)"><img src="${artUrl(`bia_tam_dao/he/${e}`)}" alt=""><i>${esc(TEN_HE[e])}</i></span>`;
+          return `<span class="gq-he" data-he="${e}" style="left:calc(50% + ${Math.round(Math.cos(a) * R)}px);top:calc(50% + ${Math.round(Math.sin(a) * R)}px)"><img src="${heArt(e)}" alt=""><i>${esc(TEN_HE[e])}</i></span>`;
         }).join("")}
       </div>
       <ul class="gq-tai" aria-hidden="true">${Object.values(TALENTS).map((t) => `<li data-tai="${t.id}">${esc(t.name)}</li>`).join("")}</ul>
@@ -400,7 +400,7 @@ function manGieoQue(ct: FtueChiTiet, xong: (look: { body: Than; outfit: Ao }, na
     const kq = wrap.querySelector<HTMLElement>(".gq-kq")!;
     kq.hidden = false;
     kq.innerHTML = `
-      <p class="gq-goc"><span class="moi-nho">Linh căn</span> ${que.roots.map((e) => `<b><img src="${artUrl(`bia_tam_dao/he/${e}`)}" alt="">${esc(TEN_HE[e])}</b>`).join(" ")}</p>
+      <p class="gq-goc"><span class="moi-nho">Linh căn</span> ${que.roots.map((e) => `<b><img src="${heArt(e)}" alt="">${esc(TEN_HE[e])}</b>`).join(" ")}</p>
       <p><span class="moi-nho">Tài năng</span> <b>${esc(t.name)}</b></p>
       <p class="moi-nho">${esc(t.combat)}</p>
       <p class="moi-nho">Luyện công pháp có hệ trùng linh căn thì nhận buff của hệ đó.</p>`;
