@@ -2,7 +2,7 @@
 // Bản đầu là MockDashboardSource dựng trạng thái mẫu bằng chính lệnh của @ktlp/rules; Sprint 5 thay bằng
 // server giả trong Web Worker với cùng các hàm này, nên các màn không phải sửa.
 import type { BattleInput, Element, SkillType } from "@ktlp/sim";
-import type { BoardPiece, Progress, Role, RuleError } from "@ktlp/rules";
+import type { Bac, BoardPiece, Progress, Role, RuleError } from "@ktlp/rules";
 import type { LocationId, SectModel } from "./art/sectScene.ts";
 
 /** Mốc giờ server (ms) gửi kèm mọi lệnh đọc; đồng hồ đếm ngược ở client tự đếm từ mốc này. */
@@ -135,6 +135,20 @@ export interface GearItem {
   name: string;
   /** Ấn bộ khảm trên món (ma_vp NG-AN-…): món còn độ bền thì tính một món cho bộ của ấn. */
   seal?: string;
+  /** Bậc ấn bộ (set đồ 2.0, set.json bac_an); không ghi là tím. Mốc 2, 4 của bộ nhân theo bậc thấp nhất, mốc 7 cần cả 7 ấn từ tím. */
+  sealTier?: Bac;
+  /** Binh ấn (NG-BA-…, chỉ vũ khí, bao tay, ngọc bội) và bậc; chiếm một dòng khảm như ấn bộ. */
+  binhAn?: { ma: string; tier: Bac };
+  /**
+   * Dòng ẩn của ngọc bội, đai (số dòng theo độ hiếm, trang_bi.json luat.dongAn.soDong). Mã và chữ chỉ có khi đã lộ: điều
+   * kiện lộ sau Giám Định Phù hoặc lần kích phát đầu, hiệu ứng lộ sau lần kích phát đầu. `songAn`: ngọc bội và đai có cùng
+   * điều kiện đã lộ, cả hai hiệu ứng ×1,25.
+   */
+  hiddenLines?: HiddenLineView[];
+  /** Dòng rèn đã mở (mỗi mốc +10, +20, +30 ở Hạ vị); `on` false khi nấc tụt dưới mốc. */
+  forgeLines?: ForgeLineView[];
+  /** Điểm trang bị của riêng món (diemTrangBi của @ktlp/rules, không tính set); nguồn điền cho đồ đang mặc và đồ trong túi. */
+  score?: number;
   plus: number; // nấc cường hóa
   durability: number;
   durabilityMax: number;
@@ -150,6 +164,68 @@ export interface GearItem {
   rarity: Rarity;
   /** Mã vật phẩm cố định (ma_vp trong assets/icon_ve/danh_sach.json), ví dụ "TB-AO-026". */
   code?: string;
+}
+
+/** Một dòng ẩn trên ngọc bội hoặc đai (xem GearItem.hiddenLines). */
+export interface HiddenLineView {
+  /** Mã điều kiện DN-DK-… và chữ; null khi chưa lộ (hiện ???). */
+  dk: string | null;
+  dkText?: string;
+  /** Mã hiệu ứng DN-HU-… và chữ; null tới lần kích phát đầu. */
+  hu: string | null;
+  huText?: string;
+  songAn?: boolean;
+}
+
+/** Một dòng rèn: loại chỉ số phụ đã chọn ở mốc `at`, giá trị như dòng chỉ số (`unit` "" là cộng thẳng, "‰" là phần nghìn). */
+export interface ForgeLineView {
+  at: number;
+  stat: string;
+  label: string;
+  value: number;
+  unit: "" | "‰";
+  on: boolean;
+}
+
+/** Một mốc của bộ: `lock` cho biết vì sao mốc đã đủ món mà chưa có tác dụng (bậc ấn dưới tím ở mốc 7, ràng buộc của bộ). */
+export interface SetMilestone {
+  at: number;
+  on: boolean;
+  text: string;
+  lock?: "bac" | "dieu_kien";
+}
+
+/** Một bộ đang có món trên người (set đồ 2.0, GDD tab Trang bị phần 14). */
+export interface SetView {
+  id: string;
+  name: string;
+  /** Số món đang tính: đồ còn độ bền và món thêm từ Đạo Cơ Bàn. */
+  pieces: number;
+  /** Bậc thấp nhất trong các ấn đang tính. */
+  tier: Bac;
+  /** Hệ số mốc 2 (bậc × hợp bộ hoặc cộng hưởng × bị khắc) và mốc 4 (bậc), phần nghìn; chữ trong `milestones` là số ở bậc tím. */
+  factor: number;
+  factor4: number;
+  /** Lộ sức mạnh (ngoai_cong, thu_noi, …). */
+  lo: string[];
+  /**
+   * Quan hệ đang nhân vào mốc 2: `hop` là hợp bộ với `with` (`quanHe`: thuan, tuong_sinh, tuong_hop, doi_cuc), `ban` là cộng
+   * hưởng trên Đạo Cơ Bàn mạnh hơn hợp bộ, `khac` là bị bộ `with` khắc (×0,8).
+   */
+  relations: { with: string; kind: "hop" | "ban" | "khac"; quanHe?: string }[];
+  milestones: SetMilestone[];
+}
+
+/** Binh bộ trên 3 ô công (mỗi người 1 binh bộ). */
+export interface BinhBoView {
+  id: string;
+  name: string;
+  pieces: number;
+  tier: Bac;
+  lo: string[];
+  /** Cùng lộ với một bộ đang kích: mốc 3 ×1,2. */
+  dongLo: boolean;
+  milestones: SetMilestone[];
 }
 
 /** Một dòng nguồn của chỉ số; `value` cùng đơn vị với chỉ số. */
@@ -249,6 +325,12 @@ export interface NhanVatView extends Stamped {
   board: { cells: Record<string, BoardPiece>; gearSets: Record<string, number>; progress: Progress };
   /** Luyện khí sau cấp tối đa (GDD tab Trang bị phần 13; đặc tả luyen-khi.md, số đề xuất). Mở theo board.progress. */
   luyenKhi: LuyenKhiView;
+  /** Các bộ có món trên người, bộ đang kích trước (set đồ 2.0); bộ 1 món có mọi mốc tắt. */
+  sets: SetView[];
+  /** Binh bộ của binh ấn trên ô công, nếu có món nào mang binh ấn. */
+  binhBo?: BinhBoView;
+  /** Điểm trang bị của nhân vật: 7 món cộng set, binh bộ, dòng ẩn tĩnh (diemTrangBi). */
+  score: number;
 }
 
 /** Một ô đồ đang mặc ở Luyện khí. */
@@ -280,6 +362,8 @@ export interface LuyenKhiView {
   owned: string[];
   /** Đồ phổ danh khí đang có (NL-DP-…). */
   doPho: string[];
+  /** Cặp dòng ẩn đã lộ cả hai (sau lần kích phát đầu), dạng "DN-DK-001|DN-HU-004"; trang Ẩn văn của Bảo Giám đếm các cặp này. */
+  anVanLo: string[];
   /** Trang tuần của Bảo Giám. */
   week: { text: string; have: number; need: number; thuong: string; endsAt: number };
 }
@@ -509,6 +593,12 @@ export type DashboardCommand =
   | { type: "diem_hoa_phach"; gem: string }
   /** Khai lò danh khí ở Luyện Khí Các: `nguoi` là 4 thành viên (chủ lò Tu rèn trước, rồi 3 hộ lô). */
   | { type: "khai_lo_danh_khi"; ma: string; nguoi: string[] }
+  /** Ghép 3 ấn bộ cùng bộ cùng bậc trong chồng túi `uid` thành 1 ấn bậc trên (chỉ lục lên lam, lam lên tím). */
+  | { type: "ghep_an"; uid: number }
+  /** Dùng 1 Giám Định Phù lộ điều kiện dòng ẩn `i` của ô (ngọc bội, đai); bỏ `i` là dòng đầu chưa lộ. */
+  | { type: "giam_dinh"; slot: GearSlot; i?: number }
+  /** Tẩy ẩn: quay lại hiệu ứng dòng ẩn `i` đã lộ, giữ điều kiện (3 Linh Văn Thạch); hiệu ứng mới hiện ngay. */
+  | { type: "tay_an"; slot: GearSlot; i: number }
   /** Chọn thú cưỡi trong 5 ô thú (GDD mục 6). */
   | { type: "cuoi_thu"; index: number }
   | { type: "chat"; text: string }

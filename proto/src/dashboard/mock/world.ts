@@ -2,7 +2,7 @@
 // Phần tông môn, tàn quyển, công pháp dựng bằng chính lệnh của @ktlp/rules qua apply(); phần luật chưa có
 // (mỏ, hành trình, trang bị, thú cưỡi, liên minh) là dữ liệu tạm ở đây, số lấy từ data/he_thong/json.
 // Tên người, tên tông môn và số lượng là tự đặt cho bản mẫu.
-import { addMember, addSect, apply, emptyState, type BoardPiece, type Command, type GameState, type Role } from "@ktlp/rules";
+import { addMember, addSect, apply, emptyState, type Bac, type BoardPiece, type Command, type GameState, type Role } from "@ktlp/rules";
 import type { Element } from "@ktlp/sim";
 import type { SectModel } from "../art/sectScene.ts";
 import type { BagItem, Building, GearItem, GearSlot, LuyenKhiSlot, LuyenKhiView, PointType, Rarity } from "../source.ts";
@@ -22,6 +22,19 @@ const NPC_SHARE = 0.3;
 
 const H = 3600_000;
 const MIN = 60_000;
+
+/**
+ * Dòng ẩn thật của một món (ngọc bội, đai): `lo` là phần người chơi đã thấy ("an" chưa lộ, "dk" đã lộ điều kiện, "het" đã
+ * kích phát nên lộ cả hai). Nguồn chỉ gửi phần đã lộ (GearItem.hiddenLines).
+ */
+export interface DongAnRaw { dk: string; hu: string; lo: "an" | "dk" | "het" }
+
+/** Món trong trạng thái mẫu: món của màn kèm phần chỉ server giữ (dòng ẩn thật, loại phụ chọn ở mỗi mốc rèn). */
+export interface WorldGear extends GearItem {
+  dongAn?: DongAnRaw[];
+  /** Dòng rèn: loại chỉ số phụ 1–4 chọn ở mỗi mốc +10, +20, +30 (như EquipItem.ren). */
+  ren?: number[];
+}
 
 export interface HeldPoint {
   pointId: number;
@@ -66,7 +79,7 @@ export interface World {
     linhThach: number;
     tienNgoc: number;
     satNghiep: number;
-    gear: Partial<Record<GearSlot, GearItem>>;
+    gear: Partial<Record<GearSlot, WorldGear>>;
     mounts: (string | null)[];
     /** Ô của thú đang cưỡi. */
     riding: number;
@@ -107,7 +120,11 @@ const SEALS = NGOC.an_bo as { ma_vp: string; ten: string; bo: string }[];
 export function pieceBagItem(uid: number, piece: BoardPiece, count = 1): BagItem {
   if (piece.loai === "an") {
     const a = SEALS.find((x) => x.ma_vp === piece.ma)!;
-    return { uid, kind: "ngoc", name: a.ten, grade: "trung", gradeLabel: "Ấn bộ", count, code: a.ma_vp, detail: "Khảm vào đồ hoặc đặt lên Đạo Cơ Bàn: tính thêm một món cho bộ.", boardPiece: piece };
+    const bac: Bac = piece.bac ?? "tim";
+    return {
+      uid, kind: "ngoc", name: a.ten, grade: RARITY_GRADE[bac], gradeLabel: `Ấn bộ ${RARITY_LABEL[bac]}`, count, code: a.ma_vp, rarity: bac,
+      detail: "Khảm vào đồ hoặc đặt lên Đạo Cơ Bàn: tính thêm một món cho bộ. Ba viên cùng bộ cùng bậc lục hoặc lam ghép thành một viên bậc trên.", boardPiece: piece,
+    };
   }
   const g = GEMS.find((x) => x.he === piece.he)!;
   return {
@@ -118,13 +135,13 @@ export function pieceBagItem(uid: number, piece: BoardPiece, count = 1): BagItem
 
 /** Hai viên cùng loại (để gộp chồng trong túi). */
 export function samePiece(a: BoardPiece, b: BoardPiece): boolean {
-  return a.loai === "an" ? b.loai === "an" && a.ma === b.ma : b.loai === "ngoc" && a.he === b.he && a.cap === b.cap;
+  return a.loai === "an" ? b.loai === "an" && a.ma === b.ma && (a.bac ?? "tim") === (b.bac ?? "tim") : b.loai === "ngoc" && a.he === b.he && a.cap === b.cap;
 }
 
 /** Túi mẫu: đồ dự phòng, ngọc, ấn bộ, đan, nguyên liệu, phù và một trứng thú; uid từ 10.000 để khỏi trùng uid tàn quyển. */
 function sampleBag(): BagItem[] {
   let uid = 10_000;
-  const gear = (g: Omit<GearItem, "durability" | "durabilityMax" | "gems"> & { durability?: number }, detail: string): BagItem => ({
+  const gear = (g: Omit<WorldGear, "durability" | "durabilityMax" | "gems"> & { durability?: number }, detail: string): BagItem => ({
     uid: uid++, kind: "trang_bi", name: g.name, grade: RARITY_GRADE[g.rarity], gradeLabel: RARITY_LABEL[g.rarity],
     count: 1, icon: g.icon, art: g.art, rarity: g.rarity, code: g.code, detail, gear: { durability: 100, durabilityMax: 100, gems: [], ...g },
   });
@@ -149,7 +166,7 @@ function sampleBag(): BagItem[] {
     gear({ slot: "mu", name: "Nón Lá Tị Thủy", plus: 1, sockets: 1, stats: { hp: 700, def: 25 }, art: "trang_bi/mu/10", rarity: "luc", code: "TB-MU-010" }, "Nón lá đan bằng cỏ linh."),
     gear({ slot: "mu", name: "Ngọc Quan Tử Vân", plus: 3, sockets: 2, stats: { hp: 1200, def: 40 }, art: "trang_bi/mu/25", rarity: "lam", code: "TB-MU-025" }, "Mũ ngọc của chân truyền."),
     gear({ slot: "ao", name: "Giáp Huyền Thiết", plus: 0, sockets: 2, stats: { hp: 2400, def: 90 }, art: "trang_bi/ao/26", rarity: "lam", code: "TB-AO-026" }, "Giáp nặng, thủ cao."),
-    gear({ slot: "dai", name: "Đai Lôi Văn", plus: 0, sockets: 1, stats: { hp: 500, def: 35 }, art: "trang_bi/dai/25", rarity: "lam", code: "TB-DA-025" }, "Đai thêu vân sấm."),
+    gear({ slot: "dai", name: "Đai Lôi Văn", plus: 0, sockets: 1, stats: { hp: 500, def: 35 }, art: "trang_bi/dai/25", rarity: "lam", code: "TB-DA-025", dongAn: [{ dk: "DN-DK-010", hu: "DN-HU-007", lo: "an" }] }, "Đai thêu vân sấm."),
     gear({ slot: "giay", name: "Giày Đạp Vân", plus: 1, sockets: 1, stats: { hp: 600, def: 30 }, art: "trang_bi/giay/25", rarity: "lam", code: "TB-GI-025" }, "Giày nhẹ của thân pháp sư."),
     gear({ slot: "vu_khi", name: "Kiếm Huyết Long", plus: 0, sockets: 3, stats: { atk: 160 }, art: "trang_bi/kiem/58", rarity: "do", code: "TB-KI-058" }, "Thần vật rơi ở bí cảnh cao."),
     item("ngoc", "Ngọc Lôi", "trung", "Cấp 2", 3, "Khảm vào dòng đã kích hoạt: tăng sát thương hoặc kháng Lôi.", "ngoc/loi", "NG-KH-006", "loi"),
@@ -158,9 +175,12 @@ function sampleBag(): BagItem[] {
     item("ngoc", "Ngọc Thủy", "ha", "Cấp 1", 2, "Ba viên cùng hệ cùng cấp nén thành một viên cấp trên.", "ngoc/thuy", "NG-KH-003", "thuy"),
     item("ngoc", "Ngọc Thổ", "trung", "Cấp 2", 2, "Khảm vào dòng đã kích hoạt, hoặc đặt lên Đạo Cơ Bàn để dẫn mạch.", "ngoc/tho", "NG-KH-005", "tho"),
     // Ấn bộ: Bàn Thạch (Thổ) và Tụ Bảo (Kim) có 2 món trên đồ nên đặt lên bàn thì thêm món; Bách Thảo (Mộc) khắc Thổ.
-    pieceBagItem(uid++, { loai: "an", ma: "NG-AN-003" }),
-    pieceBagItem(uid++, { loai: "an", ma: "NG-AN-001" }),
-    pieceBagItem(uid++, { loai: "an", ma: "NG-AN-002" }),
+    // Bàn Thạch lam đủ 3 viên để thử ghép lên tím (ghep_an).
+    pieceBagItem(uid++, { loai: "an", ma: "NG-AN-003", bac: "lam" }, 3),
+    pieceBagItem(uid++, { loai: "an", ma: "NG-AN-001", bac: "luc" }),
+    pieceBagItem(uid++, { loai: "an", ma: "NG-AN-002", bac: "lam" }),
+    item("ngoc", "Binh Ấn Liên Kích", "ha", "Binh ấn Lam", 1, "Khảm vào vũ khí, bao tay hoặc ngọc bội: 2 và 3 binh ấn cùng bộ mở mốc của binh bộ.", "binh_an/lien_kich", "NG-BA-003"),
+    item("phu", "Giám Định Phù", "trung", "Phù", 2, "Lộ trước điều kiện kích phát của 1 dòng ẩn trên ngọc bội hoặc đai.", "phu/giam_dinh", "PH-CH-011"),
     item("dan", "Hồi Khí Đan", "ha", "Đan dược", 10, "Hồi mana trong trận.", "dan/dan_duoc_hoi_mana", "DA-DD-002"),
     item("dan", "Bổ Huyết Đan", "ha", "Đan dược", 6, "Hồi máu trong trận.", "dan/dan_duoc_hoi_mau", "DA-DD-001"),
     item("dan", "Tụ Linh Đan", "trung", "Linh đan", 2, "Tăng tốc tu luyện khi bế quan.", "dan/linh_dan_tu_luyen", "DA-LD-003"),
@@ -208,7 +228,7 @@ function sampleLuyenKhi(gear: Partial<Record<GearSlot, GearItem>>, bag: BagItem[
   return {
     khiTinh: 46,
     khiTinhKhoa: 18,
-    linhVanThach: 3,
+    linhVanThach: 9,
     vanThiet: 2,
     slots,
     gems: [
@@ -222,6 +242,8 @@ function sampleLuyenKhi(gear: Partial<Record<GearSlot, GearItem>>, bag: BagItem[
     phach: [],
     owned: [...owned],
     doPho: [doPhoCode(0)],
+    // Cặp đã lộ trên đồ đang mặc và vài cặp từ đồ cũ (đã phân giải).
+    anVanLo: ["DN-DK-006|DN-HU-005", "DN-DK-006|DN-HU-009", "DN-DK-002|DN-HU-001", "DN-DK-007|DN-HU-010", "DN-DK-003|DN-HU-004"],
     week: { text: "Mặc 3 món khí hình Cầm khác nhau trong tuần", have: 1, need: 3, thuong: "Linh Văn Thạch", endsAt: now + 3 * 86_400_000 + 5 * 3_600_000 },
   };
 }
@@ -420,17 +442,23 @@ export function createWorld(region: RegionMap, now: number): World {
     m7: "Lâm Mặc", m8: "Cố Tiểu Vũ", m9: "Phương Hạo", m10: "Tiểu Bảo", n1: "Đệ tử NPC Giáp", n2: "Đệ tử NPC Ất", n3: "Đệ tử NPC Bính",
   };
 
-  const gear: Partial<Record<GearSlot, GearItem>> = {
+  const gear: Partial<Record<GearSlot, WorldGear>> = {
     // Tên, hình vẽ, độ hiếm và mã lấy từ assets/icon_ve/danh_sach.json; đồ đang mặc có đủ lam, tím, vàng để thấy màu nền.
     // Mọi món có hình vẽ Canva (art); vũ khí và mũ giữ icon PixelLab chỉ để ghép hình nhân vật (look.weapon, look.hat).
-    // Ấn khảm: Lôi Trì 3 món, Bàn Thạch 2, Tụ Bảo 2.
-    vu_khi: { slot: "vu_khi", seal: "NG-AN-010", name: "Kiếm Tử Vân", plus: 8, durability: 76, durabilityMax: 100, sockets: 2, gems: [{ element: "loi", level: 3 }], stats: { atk: 120 }, icon: "do/vu_khi/kiem", art: "trang_bi/kiem/42", rarity: "tim", code: "TB-KI-042" },
-    mu: { slot: "mu", seal: "NG-AN-003", name: "Ô Sa Lôi Văn", plus: 5, durability: 64, durabilityMax: 100, sockets: 1, gems: [], stats: { hp: 900, def: 30 }, icon: "do/mu/o_sa", art: "trang_bi/mu/27", rarity: "lam", code: "TB-MU-027" },
-    ao: { slot: "ao", seal: "NG-AN-010", name: "Pháp Y Tinh Hà", plus: 6, durability: 58, durabilityMax: 98, sockets: 2, gems: [{ element: "kim", level: 2 }], stats: { hp: 1800, def: 60 }, art: "trang_bi/ao/41", rarity: "tim", code: "TB-AO-041" },
-    dai: { slot: "dai", seal: "NG-AN-003", name: "Đai Hoàng Long", plus: 4, durability: 81, durabilityMax: 100, sockets: 1, gems: [], stats: { hp: 600, def: 40 }, art: "trang_bi/dai/53", rarity: "vang", code: "TB-DA-053" },
-    bao_tay: { slot: "bao_tay", seal: "NG-AN-001", name: "Hộ Thủ Thiết Lân", plus: 2, durability: 88, durabilityMax: 100, sockets: 1, gems: [], stats: { atk: 20, def: 35 }, art: "trang_bi/bao_tay/25", rarity: "lam", code: "TB-BT-025" },
-    giay: { slot: "giay", seal: "NG-AN-001", name: "Ngoa Tinh Tú", plus: 3, durability: 14, durabilityMax: 100, sockets: 0, gems: [], stats: { hp: 400, def: 25 }, art: "trang_bi/giay/42", rarity: "tim", code: "TB-GI-042" },
-    ngoc_boi: { slot: "ngoc_boi", seal: "NG-AN-010", name: "Bội Long Phượng", plus: 2, durability: 92, durabilityMax: 100, sockets: 3, gems: [{ element: "loi", level: 2 }, { element: "hoa", level: 1 }], stats: { atk: 40, mana: 30 }, art: "trang_bi/ngoc_boi/53", rarity: "vang", code: "TB-NB-053" },
+    // Ấn khảm (set đồ 2.0): Lôi Trì 3 món, bậc thấp nhất tím; Bàn Thạch 2 món lam; Tụ Bảo 2 món lục. Binh ấn Bạo Kích trên
+    // bao tay và ngọc bội (binh bộ 2 món, cùng lộ ngoại công với Lôi Trì). Vũ khí +12 có dòng rèn +10 đang bật; mũ tụt về +5
+    // nên dòng rèn +10 tạm tắt. Ngọc bội và đai vàng mỗi món 3 dòng ẩn, dòng đầu cùng điều kiện (song ẩn).
+    vu_khi: { slot: "vu_khi", seal: "NG-AN-010", sealTier: "tim", ren: [2], name: "Kiếm Tử Vân", plus: 12, durability: 76, durabilityMax: 100, sockets: 2, gems: [{ element: "loi", level: 3 }], stats: { atk: 120 }, icon: "do/vu_khi/kiem", art: "trang_bi/kiem/42", rarity: "tim", code: "TB-KI-042" },
+    mu: { slot: "mu", seal: "NG-AN-003", sealTier: "lam", ren: [3], name: "Ô Sa Lôi Văn", plus: 5, durability: 64, durabilityMax: 100, sockets: 1, gems: [], stats: { hp: 900, def: 30 }, icon: "do/mu/o_sa", art: "trang_bi/mu/27", rarity: "lam", code: "TB-MU-027" },
+    ao: { slot: "ao", seal: "NG-AN-010", sealTier: "tim", name: "Pháp Y Tinh Hà", plus: 6, durability: 58, durabilityMax: 98, sockets: 2, gems: [{ element: "kim", level: 2 }], stats: { hp: 1800, def: 60 }, art: "trang_bi/ao/41", rarity: "tim", code: "TB-AO-041" },
+    dai: {
+      slot: "dai", seal: "NG-AN-003", sealTier: "lam", name: "Đai Hoàng Long",
+      dongAn: [{ dk: "DN-DK-006", hu: "DN-HU-009", lo: "het" }, { dk: "DN-DK-009", hu: "DN-HU-002", lo: "an" }, { dk: "DN-DK-012", hu: "DN-HU-012", lo: "an" }], plus: 4, durability: 81, durabilityMax: 100, sockets: 1, gems: [], stats: { hp: 600, def: 40 }, art: "trang_bi/dai/53", rarity: "vang", code: "TB-DA-053" },
+    bao_tay: { slot: "bao_tay", seal: "NG-AN-001", sealTier: "luc", binhAn: { ma: "NG-BA-001", tier: "lam" }, name: "Hộ Thủ Thiết Lân", plus: 2, durability: 88, durabilityMax: 100, sockets: 2, gems: [], stats: { atk: 20, def: 35 }, art: "trang_bi/bao_tay/25", rarity: "lam", code: "TB-BT-025" },
+    giay: { slot: "giay", seal: "NG-AN-001", sealTier: "luc", name: "Ngoa Tinh Tú", plus: 3, durability: 14, durabilityMax: 100, sockets: 0, gems: [], stats: { hp: 400, def: 25 }, art: "trang_bi/giay/42", rarity: "tim", code: "TB-GI-042" },
+    ngoc_boi: {
+      slot: "ngoc_boi", seal: "NG-AN-010", sealTier: "vang", binhAn: { ma: "NG-BA-001", tier: "tim" }, name: "Bội Long Phượng", plus: 2, durability: 92, durabilityMax: 100, sockets: 3, gems: [{ element: "loi", level: 2 }],
+      dongAn: [{ dk: "DN-DK-006", hu: "DN-HU-005", lo: "het" }, { dk: "DN-DK-004", hu: "DN-HU-001", lo: "dk" }, { dk: "DN-DK-001", hu: "DN-HU-004", lo: "an" }], stats: { atk: 40, mana: 30 }, art: "trang_bi/ngoc_boi/53", rarity: "vang", code: "TB-NB-053" },
   };
   const bag = sampleBag();
   return {

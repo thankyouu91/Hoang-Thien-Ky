@@ -1,8 +1,10 @@
 // Nguồn đọc gộp chạy ngay trong trang (chưa có server giả). Mỗi lệnh đọc dựng đủ các thẻ của một màn từ World,
 // kèm mốc giờ server; lệnh ghi đi qua apply() của @ktlp/rules khi luật đã có, phần còn lại sửa World trực tiếp.
 import {
-  apply, boardCell, boardCellOpen, GRADE_NAMES, loadoutTechniques, RULES, scrollKind, techniqueOf, transmissionSlots,
-  type BoardPiece, type Command, type LearnedTechnique, type Progress, type Role, type SectTechnique,
+  apply, bacHeSo, binhBoOf, boardCell, boardCellOpen, diemTrangBi, DONG_REN, gearStats, ghepAn, GRADE_NAMES, kieuInfo, loadoutTechniques, RULES,
+  scrollKind, setLo, techniqueOf, transmissionSlots,
+  type Bac, type BoardPiece, type Command, type EquipItem, type GearStats, type InlayLine, type LearnedTechnique, type Progress, type Role,
+  type SectTechnique,
 } from "@ktlp/rules";
 import {
   BASE_CRIT_PER_MILLE, baseStats, BATTLE, maxGradeAtLevel, simulate, TICKS_PER_SECOND, unitBonuses,
@@ -20,12 +22,18 @@ import NHIEM_VU from "../../../../data/nhiem_vu/ha_nhiem_vu.json";
 import { sampleBattle } from "../../mock/sampleBattle.ts";
 import { loadRegion, loadWorld, POINT_NAMES, stagesFrom } from "../../scenes/map/region.ts";
 import type {
-  BagItem, BanDoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, GearItem, GearSlot, Go, LienMinhView, LuyenKhiView,
-  MiniMapView, MountView, NhanVatView, ScrollCard, StatLine, StatSource, TechniqueCard, TodoCard, TongMonView, TopBarView,
+  BagItem, BanDoView, BinhBoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, ForgeLineView, GearItem, GearSlot, Go,
+  HiddenLineView, LienMinhView, LuyenKhiView, MiniMapView, MountView, NhanVatView, ScrollCard, SetMilestone, SetView, StatLine, StatSource, TechniqueCard,
+  TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
 import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.ts";
-import { createWorld, npcSects, pieceBagItem, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, samePiece, todayAt, type NpcSect, type World } from "./world.ts";
+import {
+  createWorld, npcSects, pieceBagItem, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, samePiece, todayAt, type DongAnRaw, type NpcSect, type World, type WorldGear,
+} from "./world.ts";
 import NGOC from "../../../../data/he_thong/json/ngoc.json";
+import SET from "../../../../data/he_thong/json/set.json";
+import TO_HOP from "../../../../data/he_thong/json/to_hop.json";
+import TRANG_BI from "../../../../data/he_thong/json/trang_bi.json";
 import {
   addExp, canDecompose, DANH_KHI, DANH_KHI_COST, doPhoCode, hasKhiLinh, khiHinhOf, khiTinhOf, KL_MAX, KL_PER_KHI_TINH, LO_MIN, loRate, PHACH_FROM,
   PHACH_KHI_TINH, PHACH_RATE, phachCode, phachName, reached, REROLL_KHI_TINH, rerollStone, rerollSub, rollOffer, SONG_HE_FROM, SONG_HE_LOSE, SONG_HE_PHU,
@@ -108,6 +116,143 @@ function gearSets(gear: World["player"]["gear"]): Record<string, number> {
   const out: Record<string, number> = {};
   for (const g of Object.values(gear)) if (g?.seal && g.durability > 0) out[SEAL_SET[g.seal]] = (out[SEAL_SET[g.seal]] ?? 0) + 1;
   return out;
+}
+
+// ---- Set đồ 2.0 (GDD tab Trang bị phần 14): mọi số tính bằng gearStats, diemTrangBi của @ktlp/rules ----------------------
+
+const DONG_AN = TRANG_BI.dong_an as { ma: string; loai: string; noi_dung: string }[];
+const DONG_AN_TEXT: Record<string, string> = Object.fromEntries(DONG_AN.map((d) => [d.ma, d.noi_dung]));
+const DONG_AN_HU = DONG_AN.filter((d) => d.loai === "hieu_ung").map((d) => d.ma);
+const TAY_AN_LVT = (TRANG_BI.luat as { dongAn: { tayAnLinhVanThach: number } }).dongAn.tayAnLinhVanThach;
+const GHEP_AN_SO = (SET.luat as { ghepAnSo: number }).ghepAnSo;
+/** Mã Giám Định Phù (vat_pham.json). */
+const GIAM_DINH_PHU = "PH-CH-011";
+const SET_ROW: Record<string, { ten: string; moc: { so: number; mo_ta: string }[] }> = Object.fromEntries(
+  (SET.bo as unknown as { id: string; ten: string; moc: { so: number; mo_ta: string }[] }[]).map((b) => [b.id, b]),
+);
+const BINH_ROW: Record<string, { moc_2: { mo_ta: string }; moc_3: { mo_ta: string } }> = Object.fromEntries(
+  (SET.binh_bo as unknown as { id: string; moc_2: { mo_ta: string }; moc_3: { mo_ta: string } }[]).map((b) => [b.id, b]),
+);
+const SET_HE: Record<string, string | null> = Object.fromEntries((NGOC.an_bo as { bo: string; he: string | null }[]).map((a) => [a.bo, a.he]));
+const RELATION = TO_HOP.relation as Record<string, Record<string, string>>;
+/** Quan hệ hệ ấn giữa hai bộ (như set2.ts của @ktlp/rules); Hỗn Độn không hệ là trung tính. */
+const quanHe = (a: string, b: string): string => {
+  const x = SET_HE[a], y = SET_HE[b];
+  return x && y ? RELATION[x][y] : "trung_tinh";
+};
+const kieuOk = (code?: string): code is string => {
+  if (!code) return false;
+  try {
+    kieuInfo(code);
+    return true;
+  } catch {
+    return false;
+  }
+};
+const minBac = (bacs: Bac[]): Bac => bacs.reduce<Bac>((m, b) => (bacHeSo(b) < bacHeSo(m) ? b : m), "do");
+
+/** Món của trạng thái mẫu đổi sang EquipItem của @ktlp/rules; `sub` là loại phụ 0–3 của ô (luyenKhi.slots). */
+function toEquip(g: WorldGear, sub = 0): EquipItem {
+  const kham: InlayLine[] = g.gems.map((x): InlayLine => ({ loai: "ngoc", he: x.element, cap: x.level }));
+  if (g.seal) kham.push({ loai: "an", ma: g.seal, bac: g.sealTier });
+  if (g.binhAn) kham.push({ loai: "binh_an", ma: g.binhAn.ma, bac: g.binhAn.tier });
+  return {
+    kieu: g.code!, nac: g.plus, doBen: g.durability, biCanh: 0, dongThem: 0, kham, phu: sub + 1, ren: g.ren,
+    dongAn: g.dongAn?.map((d) => ({ dk: d.dk, hu: d.hu })),
+  };
+}
+
+/** Dòng ẩn phần đã lộ; `pair` là dòng ẩn của món kia (ngọc bội với đai) để báo song ẩn khi cả hai điều kiện đã lộ. */
+function hiddenView(lines: DongAnRaw[], pair?: DongAnRaw[]): HiddenLineView[] {
+  return lines.map((l) => {
+    const dk = l.lo !== "an";
+    const hu = l.lo === "het";
+    const v: HiddenLineView = { dk: dk ? l.dk : null, hu: hu ? l.hu : null };
+    if (dk) v.dkText = DONG_AN_TEXT[l.dk];
+    if (hu) v.huText = DONG_AN_TEXT[l.hu];
+    if (dk && (pair ?? []).some((o) => o.lo !== "an" && o.dk === l.dk)) v.songAn = true;
+    return v;
+  });
+}
+
+/** Dòng rèn: giá trị là phần gearStats thêm vào khi bật dòng đó (tính ở nấc đủ mốc, nên dòng tạm tắt vẫn có số). */
+function forgeView(g: WorldGear, sub: number, level: number, roots: Element[]): ForgeLineView[] {
+  const ren = g.ren ?? [];
+  return ren.map((loai, i) => {
+    const at = DONG_REN.moc[i];
+    const row = SUB[g.slot][loai - 1];
+    const base = { ...toEquip(g, sub), nac: Math.max(g.plus, at) };
+    const a = gearStats([{ ...base, ren: ren.slice(0, i + 1) }], level, roots);
+    const b = gearStats([{ ...base, ren: ren.slice(0, i) }], level, roots);
+    const key = row.stat === "lifesteal" ? "lifestealFlat" : row.stat;
+    const flat = key === "hp" || key === "atk" || key === "def" || key === "manaMax";
+    const bonus = (x: GearStats) => x.bonuses[key as keyof GearStats["bonuses"]] ?? 0;
+    const value = flat ? a[key] - b[key] : bonus(a) - bonus(b);
+    return { at, stat: row.stat, label: row.ten, value, unit: flat ? "" : "‰", on: g.plus >= at };
+  });
+}
+
+/**
+ * Món như màn thấy: bỏ phần chỉ server giữ (dòng ẩn thật, mã dòng rèn), thêm dòng ẩn đã lộ, dòng rèn, điểm riêng món.
+ * Mã kiểu không có trong trang_bi.json (danh khí của bản mẫu) thì không có điểm và dòng rèn.
+ */
+function gearView(g: WorldGear, sub: number, level: number, roots: Element[], pair?: DongAnRaw[]): GearItem {
+  const { dongAn, ren, ...v } = g;
+  const out: GearItem = { ...v, gems: g.gems.map((x) => ({ ...x })) };
+  if (dongAn?.length) out.hiddenLines = hiddenView(dongAn, pair);
+  if (!kieuOk(g.code)) return out;
+  if (ren?.length) out.forgeLines = forgeView(g, sub, level, roots);
+  out.score = diemTrangBi(gearStats([toEquip(g, sub)], level, roots), level);
+  return out;
+}
+
+/** Bộ có món trên người: bộ đang kích theo gearStats (bậc, hệ số, mốc), bộ 1 món thì mọi mốc tắt. */
+function setViews(gs: GearStats, gear: World["player"]["gear"]): SetView[] {
+  const bacs: Record<string, Bac[]> = {};
+  for (const g of Object.values(gear)) if (g?.seal && g.durability > 0) (bacs[SEAL_SET[g.seal]] ??= []).push(g.sealTier ?? "tim");
+  const active = gs.sets.map((a) => a.bo);
+  const out: SetView[] = gs.sets.map((a) => {
+    const relations: SetView["relations"] = [];
+    if (a.hopBo.nguon === "ban") {
+      const r = gs.board?.congHuong.find((c) => c.a === a.bo || c.b === a.bo);
+      if (r) relations.push({ with: r.a === a.bo ? r.b : r.a, kind: "ban", quanHe: r.mach });
+    } else if (a.hopBo.nguon) {
+      const w = active.find((b) => b !== a.bo && quanHe(a.bo, b) === a.hopBo.nguon);
+      if (w) relations.push({ with: w, kind: "hop", quanHe: a.hopBo.nguon });
+    }
+    if (a.hopBo.biKhac) relations.push({ with: a.hopBo.biKhac, kind: "khac" });
+    const milestones = SET_ROW[a.bo].moc.map((m): SetMilestone => {
+      const reached = a.mon >= m.so;
+      const lock = !reached ? undefined : m.so === 7 && a.moc7ThieuBac ? "bac" : a.thieuDieuKien?.includes(m.so) ? "dieu_kien" : undefined;
+      return lock ? { at: m.so, on: false, text: m.mo_ta, lock } : { at: m.so, on: reached, text: m.mo_ta };
+    });
+    return { id: a.bo, name: SET_ROW[a.bo].ten, pieces: a.mon, tier: a.bac, factor: a.heSo2, factor4: a.heSo4, lo: setLo(a.bo), relations, milestones };
+  });
+  for (const [bo, list] of Object.entries(bacs)) {
+    if (active.includes(bo)) continue;
+    const tier = minBac(list);
+    out.push({
+      id: bo, name: SET_ROW[bo].ten, pieces: list.length, tier, factor: bacHeSo(tier), factor4: bacHeSo(tier), lo: setLo(bo), relations: [],
+      milestones: SET_ROW[bo].moc.map((m) => ({ at: m.so, on: false, text: m.mo_ta })),
+    });
+  }
+  return out;
+}
+
+/** Binh bộ trên ô công: bộ có nhiều binh ấn nhất (mỗi người 1 binh bộ); đồng lộ xét với bộ đang kích. */
+function binhBoView(gs: GearStats, gear: World["player"]["gear"]): BinhBoView | undefined {
+  const by: Record<string, Bac[]> = {};
+  for (const g of Object.values(gear)) if (g?.binhAn && g.durability > 0) (by[g.binhAn.ma] ??= []).push(g.binhAn.tier);
+  const ma = Object.keys(by).sort((a, b) => by[b].length - by[a].length || a.localeCompare(b))[0];
+  if (!ma) return undefined;
+  const row = binhBoOf(ma);
+  const n = by[ma].length;
+  const dongLo = gs.binhBo?.bo === row.id ? gs.binhBo.dongLo : gs.sets.some((a) => setLo(a.bo).some((l) => row.lo.includes(l)));
+  const text = BINH_ROW[row.id];
+  return {
+    id: row.id, name: row.ten, pieces: n, tier: minBac(by[ma]), lo: row.lo, dongLo,
+    milestones: [{ at: 2, on: n >= 2, text: text.moc_2.mo_ta }, { at: 3, on: n >= 3, text: text.moc_3.mo_ta }],
+  };
 }
 
 /** Tiến độ cho Đạo Cơ Bàn: Hạ vị, cấp và số thứ tự cảnh giới (1 Luyện Khí … 5 Hóa Thần, cùng mốc với realmOf). */
@@ -231,6 +376,7 @@ export class MockDashboardSource implements DashboardSource {
       phach: [...lk.phach],
       owned: [...owned],
       doPho: [...lk.doPho],
+      anVanLo: [...lk.anVanLo],
       week: { ...lk.week },
     };
   }
@@ -513,10 +659,20 @@ export class MockDashboardSource implements DashboardSource {
       { label: "Tài năng", value: pct(base.hp, fromTalent.hp) }, { label: "Buff linh căn", value: pct(base.hp, fromRoot.hp) },
     ]);
     const atk = line("atk", "Công lực", "", [{ label: "Gốc theo cấp", value: base.atk }, { label: "Đồ", value: gear.atk }, { label: "Thú", value: mount.atk }]);
-    const def = line("def", "Phòng thủ", "", [
+    const defSources: StatSource[] = [
       { label: "Gốc theo cấp", value: base.def }, { label: "Đồ", value: gear.def }, { label: "Thú", value: mount.def },
       { label: "Tài năng", value: pct(base.def, fromTalent.def) }, { label: "Buff linh căn", value: pct(base.def, fromRoot.def) },
-    ]);
+    ];
+    // Phòng thủ chung chỉ còn trong main (trường def của UnitSpec); bảng chỉ số tách thủ ngoại, thủ nội (set đồ 2.0): cùng
+    // phòng thủ gốc, cộng phần nghìn defOuter, defInner của set, dòng phụ, dòng rèn như sim.
+    const def = line("def", "Phòng thủ", "", defSources);
+    const sub = (s: GearSlot) => p.luyenKhi.slots[s]?.sub ?? 0;
+    const worn = (Object.values(p.gear) as WorldGear[]).filter((g) => g && kieuOk(g.code));
+    const gs = gearStats(
+      worn.map((g) => toEquip(g, sub(g.slot))), me.level, p.roots, { cells: p.board, progress: progressOf(me.level) }, techs.map((t) => t.element),
+    );
+    const defOuter = line("defOuter", "Thủ ngoại", "", [...defSources, { label: "Set, dòng phụ, dòng rèn", value: pct(def.value, gs.bonuses.defOuter ?? 0) }]);
+    const defInner = line("defInner", "Thủ nội", "", [...defSources, { label: "Set, dòng phụ, dòng rèn", value: pct(def.value, gs.bonuses.defInner ?? 0) }]);
     const mana = line("mana", "Mana", "", [
       { label: "Gốc theo cấp", value: BATTLE.manaMax }, { label: "Đồ", value: gear.mana },
       { label: "Tài năng", value: pct(BATTLE.manaMax, fromTalent.manaMax) }, { label: "Buff linh căn", value: pct(BATTLE.manaMax, fromRoot.manaMax) },
@@ -524,7 +680,7 @@ export class MockDashboardSource implements DashboardSource {
     const permille = (id: string, label: string, baseValue: number, key: keyof typeof fromRoot): StatLine =>
       line(id, label, "‰", [{ label: "Gốc theo cấp", value: baseValue }, { label: "Tài năng", value: fromTalent[key] }, { label: "Buff linh căn", value: fromRoot[key] }]);
     const stats: StatLine[] = [
-      hp, atk, def, mana,
+      hp, atk, defOuter, defInner, mana,
       permille("crit", "Chí mạng", BASE_CRIT_PER_MILLE, "critBonus"),
       permille("critDamage", "Sát thương chí mạng", BATTLE.critDamage, "critDamage"),
       permille("attackSpeed", "Tốc đánh", 0, "attackSpeed"),
@@ -577,7 +733,7 @@ export class MockDashboardSource implements DashboardSource {
     for (let i = 0; i < RULES.loadoutSize; i++) loadout.push(me.loadout[i] !== undefined ? learnedCard(byId(me.loadout[i])) : null);
     const learned = me.learned.map(learnedCard);
     const items: BagItem[] = [
-      ...p.bag,
+      ...p.bag.map((it) => (it.gear ? { ...it, gear: gearView(it.gear, 0, me.level, p.roots) } : it)),
       ...me.bag.map((sc): BagItem => {
         const c = scrollCard(sc);
         return {
@@ -625,7 +781,14 @@ export class MockDashboardSource implements DashboardSource {
           { id: "thu", label: "Thú", value: Math.round(mountP), cap: MOUNT_CAP },
         ],
       },
-      gear: p.gear,
+      gear: Object.fromEntries(
+        (Object.entries(p.gear) as [GearSlot, WorldGear][]).map(([s, g]) => [
+          s, gearView(g, sub(s), me.level, p.roots, s === "ngoc_boi" ? p.gear.dai?.dongAn : s === "dai" ? p.gear.ngoc_boi?.dongAn : undefined),
+        ]),
+      ),
+      sets: setViews(gs, p.gear),
+      binhBo: binhBoView(gs, p.gear),
+      score: diemTrangBi(gs, me.level),
       main: [hp, atk, def, mana],
       stats,
       mounts: mountViews,
@@ -1052,6 +1215,57 @@ export class MockDashboardSource implements DashboardSource {
         lk.doPho.splice(lk.doPho.indexOf(doPhoCode(i)), 1);
         if (!lk.owned.includes(d.ma)) lk.owned.push(d.ma);
         return { ok: true, message: `Luyện thành ${d.ten}` };
+      }
+      case "ghep_an": {
+        const p = w.player;
+        const it = p.bag.find((x) => x.uid === cmd.uid);
+        if (!it) return { ok: false, error: "khong_thay_mon" };
+        const pc = it.boardPiece;
+        if (!pc || pc.loai !== "an") return { ok: false, error: "khong_phai_an" };
+        if (it.count < GHEP_AN_SO) return { ok: false, error: "an_khong_du" };
+        let next: Bac;
+        try {
+          next = ghepAn(pc.bac ?? "tim", GHEP_AN_SO);
+        } catch {
+          return { ok: false, error: "an_khong_ghep_len" };
+        }
+        const up: BoardPiece = { loai: "an", ma: pc.ma, bac: next };
+        // Chồng cũ còn viên mà chưa có chồng bậc trên thì cần thêm một ô túi.
+        if (it.count > GHEP_AN_SO && !this.pieceStack(up) && this.bagFull()) return { ok: false, error: "tui_day" };
+        it.count -= GHEP_AN_SO;
+        if (it.count === 0) p.bag.splice(p.bag.indexOf(it), 1);
+        this.pieceToBag(up);
+        return { ok: true, message: `Ghép thành ${pieceBagItem(0, up).name} bậc ${RARITY_LABEL[next]}` };
+      }
+      case "giam_dinh": {
+        const p = w.player;
+        const lines = p.gear[cmd.slot]?.dongAn ?? [];
+        if (!lines.length) return { ok: false, error: "khong_co_dong_an" };
+        const i = cmd.i ?? lines.findIndex((l) => l.lo === "an");
+        if (i < 0) return { ok: false, error: "da_lo" };
+        const l = lines[i];
+        if (!l) return { ok: false, error: "khong_thay_dong" };
+        if (l.lo !== "an") return { ok: false, error: "da_lo" };
+        const phu = p.bag.find((x) => x.code === GIAM_DINH_PHU && x.count > 0);
+        if (!phu) return { ok: false, error: "thieu_giam_dinh_phu" };
+        if (--phu.count === 0) p.bag.splice(p.bag.indexOf(phu), 1);
+        l.lo = "dk";
+        return { ok: true, message: `Điều kiện lộ: ${DONG_AN_TEXT[l.dk]}` };
+      }
+      case "tay_an": {
+        // Chỉ tẩy dòng đã kích phát (hiệu ứng đã lộ); hiệu ứng mới hiện ngay nên cặp mới vào sổ Ẩn văn (đề xuất).
+        const p = w.player;
+        const l = p.gear[cmd.slot]?.dongAn?.[cmd.i];
+        if (!l) return { ok: false, error: "khong_thay_dong" };
+        if (l.lo !== "het") return { ok: false, error: "an_chua_lo" };
+        const lk = p.luyenKhi;
+        if (lk.linhVanThach < TAY_AN_LVT) return { ok: false, error: "khong_du_linh_van_thach" };
+        lk.linhVanThach -= TAY_AN_LVT;
+        const others = DONG_AN_HU.filter((h) => h !== l.hu);
+        l.hu = others[Math.floor(Math.random() * others.length)];
+        const pair = `${l.dk}|${l.hu}`;
+        if (!lk.anVanLo.includes(pair)) lk.anVanLo.push(pair);
+        return { ok: true, message: `Hiệu ứng mới: ${DONG_AN_TEXT[l.hu]}` };
       }
       case "dat_vien": {
         const p = w.player;
