@@ -2,7 +2,7 @@
 
 Sinh từ `danh_sach.json`, đừng sửa tay. Mã (`ma_vp`) cố định: không đổi, không dùng lại; món mới nhận số kế tiếp. Độ hiếm trang bị là màu nền ô trên UI (lục < lam < tím < vàng < đỏ), số kiểu mỗi độ hiếm là đề xuất. Cột Hình: ✓ là đã vẽ; "vẽ lại" là hình cũ của món đã đổi tên hoặc đổi khí hình.
 
-Tổng 867 món, đã vẽ 355, cần vẽ lại 0.
+Tổng 867 món, đã vẽ 379, cần vẽ lại 0.
 
 | Tiền tố | Nghĩa |
 |---|---|
@@ -803,31 +803,31 @@ Tổng 867 món, đã vẽ 355, cần vẽ lại 0.
 | CP-GH-021 | Công pháp ghép Mộc–Cực hàn | cong_phap/ghep/moc_cuc_han.webp | ✓ |
 | CP-GH-022 | Công pháp ghép Thủy–Hỏa | cong_phap/ghep/thuy_hoa.webp | ✓ |
 | CP-GH-023 | Công pháp ghép Thủy–Thổ | cong_phap/ghep/thuy_tho.webp | ✓ |
-| CP-GH-024 | Công pháp ghép Thủy–Lôi | cong_phap/ghep/thuy_loi.webp |  |
-| CP-GH-025 | Công pháp ghép Thủy–Phong | cong_phap/ghep/thuy_phong.webp |  |
-| CP-GH-026 | Công pháp ghép Thủy–Quang | cong_phap/ghep/thuy_quang.webp |  |
-| CP-GH-027 | Công pháp ghép Thủy–Âm lãnh | cong_phap/ghep/thuy_am_lanh.webp |  |
-| CP-GH-028 | Công pháp ghép Thủy–Cực dương | cong_phap/ghep/thuy_cuc_duong.webp |  |
-| CP-GH-029 | Công pháp ghép Thủy–Cực âm | cong_phap/ghep/thuy_cuc_am.webp |  |
-| CP-GH-030 | Công pháp ghép Thủy–Cực hàn | cong_phap/ghep/thuy_cuc_han.webp |  |
-| CP-GH-031 | Công pháp ghép Hỏa–Thổ | cong_phap/ghep/hoa_tho.webp |  |
-| CP-GH-032 | Công pháp ghép Hỏa–Lôi | cong_phap/ghep/hoa_loi.webp |  |
-| CP-GH-033 | Công pháp ghép Hỏa–Phong | cong_phap/ghep/hoa_phong.webp |  |
-| CP-GH-034 | Công pháp ghép Hỏa–Quang | cong_phap/ghep/hoa_quang.webp |  |
-| CP-GH-035 | Công pháp ghép Hỏa–Âm lãnh | cong_phap/ghep/hoa_am_lanh.webp |  |
-| CP-GH-036 | Công pháp ghép Hỏa–Cực dương | cong_phap/ghep/hoa_cuc_duong.webp |  |
-| CP-GH-037 | Công pháp ghép Hỏa–Cực âm | cong_phap/ghep/hoa_cuc_am.webp |  |
-| CP-GH-038 | Công pháp ghép Hỏa–Cực hàn | cong_phap/ghep/hoa_cuc_han.webp |  |
-| CP-GH-039 | Công pháp ghép Thổ–Lôi | cong_phap/ghep/tho_loi.webp |  |
-| CP-GH-040 | Công pháp ghép Thổ–Phong | cong_phap/ghep/tho_phong.webp |  |
-| CP-GH-041 | Công pháp ghép Thổ–Quang | cong_phap/ghep/tho_quang.webp |  |
-| CP-GH-042 | Công pháp ghép Thổ–Âm lãnh | cong_phap/ghep/tho_am_lanh.webp |  |
-| CP-GH-043 | Công pháp ghép Thổ–Cực dương | cong_phap/ghep/tho_cuc_duong.webp |  |
-| CP-GH-044 | Công pháp ghép Thổ–Cực âm | cong_phap/ghep/tho_cuc_am.webp |  |
-| CP-GH-045 | Công pháp ghép Thổ–Cực hàn | cong_phap/ghep/tho_cuc_han.webp |  |
+| CP-GH-024 | Công pháp ghép Thủy–Lôi | cong_phap/ghep/thuy_loi.webp | ✓ |
+| CP-GH-025 | Công pháp ghép Thủy–Phong | cong_phap/ghep/thuy_phong.webp | ✓ |
+| CP-GH-026 | Công pháp ghép Thủy–Quang | cong_phap/ghep/thuy_quang.webp | ✓ |
+| CP-GH-027 | Công pháp ghép Thủy–Âm lãnh | cong_phap/ghep/thuy_am_lanh.webp | ✓ |
+| CP-GH-028 | Công pháp ghép Thủy–Cực dương | cong_phap/ghep/thuy_cuc_duong.webp | ✓ |
+| CP-GH-029 | Công pháp ghép Thủy–Cực âm | cong_phap/ghep/thuy_cuc_am.webp | ✓ |
+| CP-GH-030 | Công pháp ghép Thủy–Cực hàn | cong_phap/ghep/thuy_cuc_han.webp | ✓ |
+| CP-GH-031 | Công pháp ghép Hỏa–Thổ | cong_phap/ghep/hoa_tho.webp | ✓ |
+| CP-GH-032 | Công pháp ghép Hỏa–Lôi | cong_phap/ghep/hoa_loi.webp | ✓ |
+| CP-GH-033 | Công pháp ghép Hỏa–Phong | cong_phap/ghep/hoa_phong.webp | ✓ |
+| CP-GH-034 | Công pháp ghép Hỏa–Quang | cong_phap/ghep/hoa_quang.webp | ✓ |
+| CP-GH-035 | Công pháp ghép Hỏa–Âm lãnh | cong_phap/ghep/hoa_am_lanh.webp | ✓ |
+| CP-GH-036 | Công pháp ghép Hỏa–Cực dương | cong_phap/ghep/hoa_cuc_duong.webp | ✓ |
+| CP-GH-037 | Công pháp ghép Hỏa–Cực âm | cong_phap/ghep/hoa_cuc_am.webp | ✓ |
+| CP-GH-038 | Công pháp ghép Hỏa–Cực hàn | cong_phap/ghep/hoa_cuc_han.webp | ✓ |
+| CP-GH-039 | Công pháp ghép Thổ–Lôi | cong_phap/ghep/tho_loi.webp | ✓ |
+| CP-GH-040 | Công pháp ghép Thổ–Phong | cong_phap/ghep/tho_phong.webp | ✓ |
+| CP-GH-041 | Công pháp ghép Thổ–Quang | cong_phap/ghep/tho_quang.webp | ✓ |
+| CP-GH-042 | Công pháp ghép Thổ–Âm lãnh | cong_phap/ghep/tho_am_lanh.webp | ✓ |
+| CP-GH-043 | Công pháp ghép Thổ–Cực dương | cong_phap/ghep/tho_cuc_duong.webp | ✓ |
+| CP-GH-044 | Công pháp ghép Thổ–Cực âm | cong_phap/ghep/tho_cuc_am.webp | ✓ |
+| CP-GH-045 | Công pháp ghép Thổ–Cực hàn | cong_phap/ghep/tho_cuc_han.webp | ✓ |
 | CP-GH-046 | Công pháp ghép Lôi–Phong | cong_phap/ghep/loi_phong.webp | ✓ |
-| CP-GH-047 | Công pháp ghép Lôi–Quang | cong_phap/ghep/loi_quang.webp |  |
-| CP-GH-048 | Công pháp ghép Lôi–Âm lãnh | cong_phap/ghep/loi_am_lanh.webp |  |
+| CP-GH-047 | Công pháp ghép Lôi–Quang | cong_phap/ghep/loi_quang.webp | ✓ |
+| CP-GH-048 | Công pháp ghép Lôi–Âm lãnh | cong_phap/ghep/loi_am_lanh.webp | ✓ |
 | CP-GH-049 | Công pháp ghép Lôi–Cực dương | cong_phap/ghep/loi_cuc_duong.webp |  |
 | CP-GH-050 | Công pháp ghép Lôi–Cực âm | cong_phap/ghep/loi_cuc_am.webp |  |
 | CP-GH-051 | Công pháp ghép Lôi–Cực hàn | cong_phap/ghep/loi_cuc_han.webp |  |
