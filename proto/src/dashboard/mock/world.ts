@@ -322,6 +322,8 @@ export interface NpcSect {
   level: number;
 }
 
+// Tiếng Anh dịch tên tông NPC lúc chạy theo từ điển âm tiết dashboard/i18n/am_tiet.json: thêm âm tiết hay hậu tố mới
+// vào ba bảng dưới thì thêm nghĩa vào file đó.
 const NPC_HEAD = ["Thanh", "Huyền", "Tử", "Kim", "Ngọc", "Vân", "Thiên", "Bích", "Huyết", "Hàn", "Liệt", "Lưu", "Tinh", "Nguyệt", "Phong", "Thủy", "Hỏa", "Mộc", "Thạch", "Linh", "Vạn", "Cửu", "Bạch", "Hắc", "Xích", "Thương", "Vô", "Lạc", "Tuyết", "Kiếm"];
 const NPC_TAIL = ["Vân", "Hà", "Sơn", "Kiếm", "Tuyết", "Lâm", "Nguyệt", "Dương", "Tiêu", "Hư", "Diệp", "Tâm", "Hồ", "Uyên", "Châu", "Long", "Hạc", "Tùng", "Liên", "Nhạn"];
 const NPC_KIND = ["Môn", "Tông", "Các", "Cung", "Phái", "Điện", "Cốc", "Phong", "Đài", "Lâu", "Trang", "Viện"];
