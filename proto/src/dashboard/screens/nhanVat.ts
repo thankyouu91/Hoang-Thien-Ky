@@ -19,7 +19,7 @@ import {
   axialToXY, bonusOf, CELLS, CENTER, cellOpen, cellOpensAt, drawOf, hexSize, LINK_NAMES, onOpenCells, pieceName, REALMS, RESONANCE, sealSet, setLines, setName, type BanDraw,
 } from "../daoCoBan.ts";
 import { dangFor, dangHeadroom, dangLift, drawDang } from "../../scenes/battle/dangDung.ts";
-import { phapLuanExtent, trackLevel, type PhapLuanSpec } from "../../scenes/battle/phapLuan.ts";
+import { drawPhapLuan, phapLuanExtent, trackLevel, type PhapLuanSpec } from "../../scenes/battle/phapLuan.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { elementWheel } from "../elementWheel.ts";
 import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
@@ -65,6 +65,23 @@ function statText(s: StatLine, v = s.value): string {
 
 /** Ô kéo thả: "item:<uid>" món trong túi, "gear:<ô>" món đang mặc, "tech:<i>" ô công pháp. */
 type DragRef = string;
+
+/**
+ * Hình nhân vật lớn vẽ bằng PixelLab (2026-11-05, người dùng chê hình ghép 64 px phóng to): một bức mỗi thân và bộ áo,
+ * dáng lơ lửng, lưu ở assets/pixellab/nhan_vat/<thân>/<áo>/lon.png. Chưa có thì Pháp tướng vẽ hình ghép như cũ.
+ */
+const bigArt = new Map<string, HTMLImageElement | null>();
+function bigArtOf(body: string, outfit: string, onload: () => void): HTMLImageElement | undefined {
+  const key = `${body}/${outfit}`;
+  const got = bigArt.get(key);
+  if (got !== undefined) return got && got.complete && got.naturalWidth ? got : undefined;
+  const img = new Image();
+  img.onload = onload;
+  img.onerror = () => bigArt.set(key, null);
+  img.src = assetUrl(`nhan_vat/${key}/lon`);
+  bigArt.set(key, img);
+  return undefined;
+}
 
 export class NhanVatScene extends PageScene<NhanVatView> {
   private tab: NhanVatTab = "phap-tuong";
@@ -571,6 +588,11 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     // Dáng đứng theo tài năng (tông chủ ngự kiếm); dáng bay chừa chỗ phía trên, bóng nhỏ và nhạt đi theo độ nhấc.
     const dang = dangFor(v.talent.id, v.sect.role === "tong_chu");
     const t = performance.now() / 1000;
+    const art = bigArtOf(v.look.body, v.look.outfit, () => this.drawDoll());
+    if (art) {
+      this.drawBig(ctx, art, v, w, h, t);
+      return;
+    }
     // Pháp luân (phapLuan.ts) theo công pháp mang vào trận đầu tiên và cấp: từ Trúc Cơ; lên cấp thì vòng lớn dần, đột phá
     // thì diễn thiên kiếp. Người thu lại để vòng nằm gọn trong canvas (tâm vòng cao khoảng 43 px ảnh trên chân).
     const tech = v.loadout.find((x) => !!x);
@@ -602,6 +624,38 @@ export class NhanVatScene extends PageScene<NhanVatView> {
    * Bóng pháp tướng: chính nhân vật phóng to gần bằng cột, chân chìm dưới đáy; CSS nhuộm mực nâu, làm nhòe và mờ dần.
    * Vẽ ở 1 điểm ảnh CSS (đằng nào cũng nhòe) và cùng khung hoạt ảnh với tu sĩ, như cái bóng thở theo.
    */
+  /**
+   * Hình lớn lơ lửng: nhấp nhô chậm, bóng dưới đất nhỏ lại khi bay cao;
+   * pháp luân (phapLuan.ts, từ Trúc Cơ) vẽ sau lưng ngang ngực như ở hình ghép.
+   */
+  private drawBig(ctx: CanvasRenderingContext2D, art: HTMLImageElement, v: NhanVatView, w: number, h: number, t: number): void {
+    // Từ 1 lần trở lên phóng theo bậc nửa số nguyên cho điểm ảnh đều; nhỏ hơn thì theo đúng chỗ trống (điện thoại).
+    const fit = Math.min((w - 4) / art.naturalWidth, (h - 12) / art.naturalHeight);
+    const k = fit >= 1 ? Math.floor(fit * 2) / 2 : fit;
+    const dw = art.naturalWidth * k;
+    const dh = art.naturalHeight * k;
+    const bob = Math.sin(t * 1.4) * 3;
+    const x0 = Math.round((w - dw) / 2);
+    const y0 = Math.round(h - dh - 10 + bob);
+    const near = 0.75 + 0.25 * ((3 - bob) / 6);
+    ctx.fillStyle = `rgba(42, 29, 20, ${0.18 * near})`;
+    ctx.beginPath();
+    ctx.ellipse(w / 2, h - 6, dw * 0.24 * near, 4 * near, 0, 0, Math.PI * 2);
+    ctx.fill();
+    const tech = v.loadout.find((x) => !!x);
+    if (tech) {
+      const spec: PhapLuanSpec = { element: tech.element, sub: tech.subElements[0], type: tech.type, grade: tech.grade, level: v.level, leader: v.sect.role === "tong_chu" };
+      const unit = dh / 84;
+      ctx.save();
+      ctx.translate(w / 2, y0 + dh * 0.34);
+      ctx.scale(unit, unit);
+      drawPhapLuan(ctx, spec, { clock: t, ...trackLevel(this, v.level, t) }, 0, 0, 17);
+      ctx.restore();
+    }
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(art, x0, y0, dw, dh);
+  }
+
   private drawGhost(): void {
     const c = this.ghost;
     const v = this.data;
@@ -616,6 +670,13 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     const ctx = c.getContext("2d")!;
     ctx.clearRect(0, 0, w, h);
     ctx.imageSmoothingEnabled = true;
+    const art = bigArtOf(v.look.body, v.look.outfit, () => this.drawDoll());
+    if (art) {
+      const dh = h * 1.15;
+      const dw = (dh * art.naturalWidth) / art.naturalHeight;
+      ctx.drawImage(art, (w - dw) / 2, h * 0.02, dw, dh);
+      return;
+    }
     const look = { body: v.look.body, outfit: v.look.outfit, hat: v.look.hat, weapon: v.look.weapon };
     const dang = dangFor(v.talent.id, v.sect.role === "tong_chu");
     const scale = (h * 1.18) / 72;
