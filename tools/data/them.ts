@@ -28,6 +28,7 @@
 //   set_2g          set đồ 2.0 bước 3: Bàn Thạch 2/4, Ngọc Tủy 2/4, Thiết Kỵ 4, Bách Thảo 2/4, Hấp Hồn mốc 3
 //   set_2h          set đồ 2.0 lần chỉnh cuối: Bàn Thạch 4, Ngọc Tủy 4, binh bộ Trấn Thủ
 //   set_2i          Bàn Thạch mốc 2 máu +1,5%, Chu Thiên mốc 2 giảm sát thương nội nhận 2%
+//   set_2j          cân 10 loại chiêu: Văn Uyên mốc 4 giảm mana thi triển 4,5% (Loại chiêu, hệ Thủy sửa bằng sua.ts)
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -441,8 +442,9 @@ const HOP_TRAN: Record<string, number> = { formationJoinRange: 2000, formationBo
  */
 const hopTran: Step = (wb, log) => {
   const lc = B.LOAI_CHIEU, lh = (k: string) => lc.cols.find((c) => c.key === k)!.header;
-  wb.setCell(lc.sheet, ...locate(wb, lc.sheet, lh("ma"), "tran_phap", lh("k")), { v: 6, fill: "gdd" });
-  log.push("Loại chiêu: tran_phap k ×6,0");
+  // Số hiện hành: k ×4,3 theo cân 10 loại chiêu (người dùng duyệt 2026-11-05; trước là ×6,0 đã chốt 2026-11-04)
+  wb.setCell(lc.sheet, ...locate(wb, lc.sheet, lh("ma"), "tran_phap", lh("k")), { v: 4.3, fill: "de_xuat" });
+  log.push("Loại chiêu: tran_phap k ×4,3");
   chenSkillRules(wb, log, HOP_TRAN, "hợp trận");
 };
 
@@ -1034,7 +1036,7 @@ const SET2_MOC: [string, number, string, string, string, string | null][] = [
   ["pha_quan", 2, "ho_tran", "Xuyên giáp +2%; sát thương lên trận nhãn và hộ trận +5%", "satThuongHoTran: 50; xuyenGiap: 20", null],
   ["pha_quan", 4, "ho_tran", "Đòn phá trận đầu tiên mỗi trận công thành ×1,5", "heSoDonDau: 1500", null],
   ["van_uyen", 2, "chi_so", "Mana tối đa +4%", "manaMax: 40", null],
-  ["van_uyen", 4, "chi_so", "Giảm mana thi triển 6%; sát thương chiêu nội +2%", "manaCostCut: 60; innerDamage: 20", null],
+  ["van_uyen", 4, "chi_so", "Giảm mana thi triển 4,5%; sát thương chiêu nội +2%", "manaCostCut: 45; innerDamage: 20", null],
   ["do_kiep", 2, "chi_so", "Kháng Lôi +4%", "khangLoi: 40", null],
   ["do_kiep", 4, "hanh_vi", "Bùa chú giảm mana thi triển 15%; lần Bùa chú cuối cùng mỗi trận không tốn mana", "buaGiamMana: 150; buaCuoiMienMana: 1", null],
   ["ban_thach", 2, "chi_so", "Máu +1,5%", "hp: 15", null],
@@ -1541,10 +1543,15 @@ const set2h: Step = (wb, log) => set2e(wb, log);
 
 const set2i: Step = (wb, log) => set2e(wb, log);
 
+// ---------- cân 10 loại chiêu (phiên cân bằng loại chiêu, người dùng duyệt 2026-11-05): Văn Uyên mốc 4. Số mới ở SET2_MOC. ----------
+// Loại chiêu (diện rộng, bùa chú, trận pháp, khống chế) và hệ Thủy sửa bằng sua.ts.
+
+const set2j: Step = (wb, log) => set2e(wb, log);
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
-  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i,
+  thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

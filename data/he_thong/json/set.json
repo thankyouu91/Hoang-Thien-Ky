@@ -245,8 +245,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Giảm mana thi triển 6%; sát thương chiêu nội +2%",
-          "tham_so": {"manaCostCut":60,"innerDamage":20}
+          "mo_ta": "Giảm mana thi triển 4,5%; sát thương chiêu nội +2%",
+          "tham_so": {"manaCostCut":45,"innerDamage":20}
         },
         {
           "so": 7,
