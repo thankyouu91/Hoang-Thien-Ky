@@ -17,13 +17,25 @@ interface Mau {
   sym: boolean;
 }
 
+/** Từ điển âm tiết (i18n/am_tiet.json) cho tên ghép "âm tiết + âm tiết + hậu tố" (tên bản đồ, tông NPC). */
+export interface AmTiet {
+  am: Record<string, string>;
+  hau_to: Record<string, string>;
+}
+
 export class BoTra {
   private exact = new Map<string, string>();
   private mau: Mau[] = [];
+  private am?: AmTiet;
+  private hauToSap: string[] = [];
   readonly thieu = new Map<string, number>();
   readonly thieuPhan = new Map<string, number>();
 
-  constructor(d: Record<string, string>) {
+  constructor(d: Record<string, string>, amTiet?: AmTiet) {
+    if (amTiet) {
+      this.am = amTiet;
+      this.hauToSap = Object.keys(amTiet.hau_to).sort((a, b) => b.split(" ").length - a.split(" ").length);
+    }
     for (const [k, v] of Object.entries(d)) {
       if (!k.includes("{}")) {
         this.exact.set(norm(k), v);
@@ -38,9 +50,25 @@ export class BoTra {
     this.mau.sort((a, b) => b.lit - a.lit);
   }
 
-  /** Nên thử dịch chuỗi này không (có chữ Việt có dấu, hoặc là khóa cố định như "Thua"). */
+  /** Nên thử dịch chuỗi này không (có chữ Việt có dấu, là khóa cố định như "Thua", hoặc tên ghép như "Ma Linh Quan"). */
   can(s: string): boolean {
-    return VI_CHAR.test(s) || this.exact.has(norm(s));
+    const c = norm(s);
+    return VI_CHAR.test(c) || this.exact.has(c) || this.ghep(c) !== undefined;
+  }
+
+  /** Tên ghép theo khuôn: đúng hai âm tiết có trong từ điển rồi một hậu tố ("Lôi Hạc Động" → "Thunder Crane Cave"). */
+  private ghep(core: string): string | undefined {
+    const am = this.am;
+    if (!am) return undefined;
+    const w = core.split(" ");
+    if (w.length < 3 || w.length > 4) return undefined;
+    for (const h of this.hauToSap) {
+      if (w.length !== h.split(" ").length + 2 || w.slice(2).join(" ") !== h) continue;
+      const a = am.am[w[0]];
+      const b = am.am[w[1]];
+      if (a && b) return `${a} ${b} ${am.hau_to[h]}`;
+    }
+    return undefined;
   }
 
   /** Dịch, giữ khoảng trắng đầu và cuối; không dịch được thì trả nguyên. */
@@ -68,6 +96,8 @@ export class BoTra {
       let i = 0;
       return p.out.replace(/\{(\d*)\}/g, (_x, n: string) => g[n ? Number(n) - 1 : i++] ?? "");
     }
+    const ten = this.ghep(core);
+    if (ten !== undefined) return ten;
     // Đoạn chữ nối tiếp phần tử trước hoặc sau bằng dấu "·" ("· 10 đấu 10 · 2 giờ trước").
     if (core.startsWith("· ")) {
       const t = this.core(core.slice(2), depth + 1);

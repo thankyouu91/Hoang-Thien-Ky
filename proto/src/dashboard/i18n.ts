@@ -4,7 +4,7 @@
 // nên không phải sửa từng màn và dịch được cả phần do phiên khác viết (màn đột phá, thông báo, chữ lấy từ nguồn dữ liệu).
 // Thuộc tính aria-label, title, placeholder, alt, data-done cũng dịch. Chưa dịch: chữ vẽ trên canvas (tên địa danh trên
 // bản đồ, nhãn trong cảnh three). Soát độ phủ: window.__i18n.thieu() trả các chuỗi có chữ Việt đã hiện mà chưa có trong bảng.
-import { BoTra } from "./i18nTra.ts";
+import { BoTra, type AmTiet } from "./i18nTra.ts";
 
 export type Lang = "vi" | "en";
 
@@ -93,8 +93,8 @@ export function translateTree(n: Node): void {
   for (let c = el.firstChild; c; c = c.nextSibling) translateTree(c);
 }
 
-function start(d: Record<string, string>): void {
-  bo = new BoTra(d);
+function start(d: Record<string, string>, am?: AmTiet): void {
+  bo = new BoTra(d, am);
   document.documentElement.lang = "en";
   document.title = tr(document.title);
   translateTree(document.body);
@@ -137,12 +137,13 @@ export function dichTen<T>(p: Promise<T>): Promise<T> {
 
 /**
  * Nạp xong bảng tiếng Anh và dịch trang (hoặc ngay nếu đang tiếng Việt). Hai bảng: en.json (giao diện, nội dung) và
- * en_ban_do.json (tên trên bản đồ, sinh bằng tools/i18n/ten_ban_do.cjs); bảng chính thắng khi trùng khóa.
+ * en_ban_do.json (tên trên bản đồ, sinh bằng tools/i18n/ten_ban_do.cjs), bảng chính thắng khi trùng khóa; cùng từ điển âm
+ * tiết am_tiet.json để tên ghép chưa có trong bảng (tông NPC, điểm bản đồ mới) vẫn dịch được.
  */
 export const i18nReady: Promise<void> =
   cur === "en"
-    ? Promise.all([import("./i18n/en_ban_do.json"), import("./i18n/en.json")]).then(
-        ([bd, en]) => start({ ...(bd.default as Record<string, string>), ...(en.default as Record<string, string>) }),
+    ? Promise.all([import("./i18n/en_ban_do.json"), import("./i18n/en.json"), import("./i18n/am_tiet.json")]).then(
+        ([bd, en, am]) => start({ ...(bd.default as Record<string, string>), ...(en.default as Record<string, string>) }, am.default as AmTiet),
         () => undefined,
       )
     : Promise.resolve();

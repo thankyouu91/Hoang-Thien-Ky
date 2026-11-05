@@ -3,7 +3,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import EN_JSON from "./i18n/en.json" with { type: "json" };
 import EN_BD from "./i18n/en_ban_do.json" with { type: "json" };
-import { BoTra } from "./i18nTra.ts";
+import AM_TIET from "./i18n/am_tiet.json" with { type: "json" };
+import { BoTra, type AmTiet } from "./i18nTra.ts";
 
 const EN = EN_JSON as Record<string, string>;
 
@@ -55,6 +56,18 @@ test("tên bản đồ: đủ nghĩa, không còn chữ Việt, bảng chính th
   assert.equal(b.tr("Hạc Huyền Thiết Sơn"), "Crane Profound Iron Mountain");
   assert.equal(b.tr("Lôi Đình Cốc"), "Thunderclap Valley");
   assert.equal(b.tr("Thần vực 3"), "Divine Domain 3");
+});
+
+test("tên ghép lúc chạy: tông NPC, tên không dấu, không đụng chuỗi giao diện thường", () => {
+  const b = new BoTra(EN, AM_TIET as AmTiet);
+  assert.equal(b.tr("Liệt Lâm Đài"), "Fierce Forest Terrace");
+  assert.ok(b.can("Ma Linh Quan"));
+  assert.equal(b.tr("Ma Linh Quan"), "Demon Spirit Pass");
+  assert.equal(b.tr("Thanh Phong Các"), EN["Thanh Phong Các"]);
+  // Chuỗi không dấu không phải tên ghép (âm tiết lạ) thì không đụng tới.
+  assert.ok(!b.can("Xin chao ban"));
+  assert.equal(b.tr("Xin chao ban"), "Xin chao ban");
+  assert.equal(b.tr("Lăng Vân"), "Lăng Vân");
 });
 
 test("bảng thật: vài nhãn chính", () => {
