@@ -12,12 +12,19 @@ import type {
   TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
 import { ERROR_TEXT } from "../ui.ts";
+import { tr } from "../i18n.ts";
 import {
   biCanhKe, BUOC_FTUE, buocHienTai, chotBeQuan, danhDauXong, lamBeQuan, lamChiemMo, lamChonVung, lamDatNhac, lamGhepTanThu, lamGiaNhap, lamGieoQue, lamTaoHinh, lamThuChieu,
   nhiemVuKe, TEN_HE, themMon, thuongCua, xemTruocTanThu, type BuocView, type KetQua,
 } from "./ftue.ts";
 import { docTienDo, donBanCu, ghiTienDo, xoaTienDo } from "./luu.ts";
 import { CAP_LAP_TONG, hatGiongMoi, heBiKhac, PLAYER, SECT, taoTheGioiMoi, VUNG_DATA, VUNG_MO, type MoiState } from "./theGioiMoi.ts";
+
+/**
+ * Nối các phần của một lời báo bằng " · ", dịch từng phần trước khi nối (bản tiếng Anh): bộ dịch áp mẫu cho cả câu trước
+ * khi tách, nên một mẫu chung như "Ghép được {}" hay "{} cấp {}" sẽ nuốt cả các phần sau.
+ */
+const noi = (parts: (string | undefined)[]): string => parts.filter((p): p is string => !!p).map(tr).join(" · ");
 
 if (PLAYER !== MOCK_PLAYER || SECT !== MOCK_SECT || !VUNG_MO.includes(MOCK_REGION)) throw new Error("moi/theGioiMoi.ts lệch mã với mock/world.ts");
 
@@ -202,7 +209,7 @@ export class NguonMoi extends MockDashboardSource {
       // 0.6 phần 2: thu mỏ lần đầu sau khi chiếm.
       if (cmd.type === "thu_mo" && this.moi.daChiemMo) {
         const t = this.xong("chinh.0.6");
-        if (t) msg = [msg, t].filter(Boolean).join(" · ");
+        if (t) msg = noi([msg, t]);
       }
       if (cmd.type === "ghep_cong_phap") ghi("ghep_cong_phap", { pham: this.sect.techniques[this.sect.techniques.length - 1]?.grade });
       this.luu();
@@ -219,9 +226,9 @@ export class NguonMoi extends MockDashboardSource {
     if (!r) return undefined;
     const parts: string[] = [];
     if (r.exp) {
-      const lv = this.me.level;
+      // Lên cấp đã có hiệu ứng ở thanh trên (capDo.ts); câu thưởng không nhắc lại, để bộ dịch không gặp mẫu chung "{} cấp {}".
       this.gainExp(r.exp);
-      parts.push(`+${r.exp} tu vi${this.me.level > lv ? `, lên cấp ${this.me.level}` : ""}`);
+      parts.push(`+${r.exp} tu vi`);
     }
     if (r.linhThach) {
       this.w.player.linhThach += r.linhThach;
@@ -231,7 +238,7 @@ export class NguonMoi extends MockDashboardSource {
     ghi("ftue_buoc", { buoc: BUOC_FTUE[id] });
     this.luu();
     // Nối bằng " · " để lớp dịch tiếng Anh dịch từng phần (i18nTra).
-    return parts.join(" · ");
+    return noi(parts);
   }
 
   ftue(): FtueView {
@@ -251,13 +258,11 @@ export class NguonMoi extends MockDashboardSource {
 
   /** Hết giờ bế quan thì cộng tu vi và gửi thư báo; gọi trước mỗi lệnh đọc (NguonTheoTaiKhoan). */
   chotBeQuan(): void {
-    const lv = this.me.level;
     const exp = chotBeQuan(this.w, this.moi, this.now());
     if (!exp) return;
     this.gainExp(exp);
     const id = Math.max(0, ...this.w.mail.map((m) => m.id)) + 1;
-    const len = this.me.level > lv ? ` · lên cấp ${this.me.level}` : "";
-    this.w.mail.unshift({ id, from: "Động phủ", title: "Bế quan xong", body: `Bế quan xong, +${exp} tu vi${len}`, unread: true });
+    this.w.mail.unshift({ id, from: "Động phủ", title: "Bế quan xong", body: `Bế quan xong, +${exp} tu vi`, unread: true });
     this.luu();
   }
 
@@ -306,7 +311,7 @@ export class NguonMoi extends MockDashboardSource {
     const done = (id: string, r: KetQua & { battleId?: number; at?: number }) => {
       if (!r.ok) return r;
       const t = this.xong(id);
-      return { ...r, message: [r.message, t].filter(Boolean).join(" · ") };
+      return { ...r, message: noi([r.message, t]) };
     };
     switch (viec) {
       case "chon_vung": {

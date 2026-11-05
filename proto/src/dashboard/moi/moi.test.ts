@@ -181,3 +181,11 @@ test("bế quan sau chương 0: cộng tu vi khi hết giờ, chỉ một lượ
   assert.ok(!w.jobs.some((j) => j.kind === "be_quan"));
   assert.equal(moi.beQuan, undefined);
 });
+
+test("bế quan không trừ tu vi khi mốc kết thúc trước mốc bắt đầu (đồng hồ máy bị lùi)", () => {
+  const { w } = diHetChuoi(777);
+  const { moi } = taoTheGioiMoi(777, REGION, NOW);
+  moi.beQuan = { batDau: NOW, ketThuc: NOW - 3600_000, moiGio: 114 };
+  assert.equal(chotBeQuan(w, moi, NOW), 0);
+  assert.equal(moi.beQuan, undefined);
+});

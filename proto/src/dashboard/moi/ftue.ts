@@ -330,5 +330,6 @@ export function chotBeQuan(w: World, moi: MoiState, now: number): number {
   if (!b || now < b.ketThuc) return 0;
   moi.beQuan = undefined;
   w.jobs = w.jobs.filter((j) => !(j.kind === "be_quan" && j.endsAt === b.ketThuc));
-  return Math.round((b.moiGio * (b.ketThuc - b.batDau)) / 3600_000);
+  // Kẹp không âm: đồng hồ máy bị lùi (hay bản lưu bị sửa) thì không trừ tu vi.
+  return Math.max(0, Math.round((b.moiGio * (b.ketThuc - b.batDau)) / 3600_000));
 }
