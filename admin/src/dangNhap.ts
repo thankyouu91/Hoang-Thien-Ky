@@ -1,11 +1,11 @@
 // Màn đăng nhập (tên + mật khẩu) và màn đổi mật khẩu (bắt buộc ở lần đầu, hoặc tự đổi từ thanh bên).
-// Cùng tấm giấy khung đỏ mảnh với các màn khác; dấu triện 天荒 như dashboard game.
+// Cùng tấm giấy khung đỏ mảnh với các màn khác; dấu ấn son của Thiên Hoang Ký (assets/brand, không chữ).
 
 import type { Toi } from "../shared/hopDong.ts";
 import { api } from "./api.ts";
 import { esc, hopThoai, toast } from "./ui.ts";
 
-const DAU = `<span class="an lon" aria-hidden="true">天荒</span>`;
+const DAU = `<img class="an lon" src="/dau_an_256.png" alt="" width="64" height="64">`;
 
 export function veDangNhap(app: HTMLElement, xong: (t: Toi) => void, bao?: string): void {
   app.innerHTML = `<div class="dang-nhap"><form class="panel form" novalidate>

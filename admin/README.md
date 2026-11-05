@@ -132,7 +132,7 @@ SELECT khoa, gia_tri FROM qt_cau_hinh;   -- gia_tri là JSON
 ```
 cd admin
 npm.cmd install
-npm.cmd run dev              # http://127.0.0.1:5180; số liệu game là mẫu
+npm.cmd run dev              # mở http://localhost:5180 (không dùng 127.0.0.1: Chrome bỏ cookie Secure); số liệu game là mẫu
 node test/dev.ts --bang-game # chạy thêm migration game để thử tạo link mời, khóa thật
 npm.cmd test                 # test JWT, build, rồi e2e trên wrangler dev
 ```

@@ -40,7 +40,7 @@ function veKhung(): void {
     <button class="link" type="button" data-dang-xuat>Đăng xuất</button></div>`;
   app.innerHTML = `
     <aside class="rail">
-      <a class="brand" href="#/tong-quan"><span class="an" aria-hidden="true">天荒</span><span><b>Thiên Hoang Ký</b><small>Quản trị · chơi thử kín</small></span></a>
+      <a class="brand" href="#/tong-quan"><img class="an" src="/dau_an_128.png" alt="" width="36" height="36"><span><b>Thiên Hoang Ký</b><small>Quản trị · chơi thử kín</small></span></a>
       <nav class="menu" aria-label="Màn quản trị">
         ${MAN.map(
           (m) =>

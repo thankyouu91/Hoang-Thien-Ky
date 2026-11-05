@@ -4,7 +4,7 @@
 //   vanhanh / mat-khau-thu-cuc-bo   (Vận hành)
 //   node test/dev.ts               → số liệu game là dữ liệu mẫu
 //   node test/dev.ts --bang-game   → chạy thêm migration game (../cloudflare/migrations) để thử tạo link mời, khóa thật
-// Mở http://127.0.0.1:5180
+// Mở http://localhost:5180 (Chrome không giữ cookie Secure __Host-qt trên http://127.0.0.1, chỉ giữ trên localhost)
 
 import { spawn, spawnSync } from "node:child_process";
 import type { ChildProcess } from "node:child_process";
