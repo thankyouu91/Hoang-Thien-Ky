@@ -309,18 +309,19 @@ function manGieoQue(ct: FtueChiTiet, xong: (look: { body: Than; outfit: Ao }, na
   wrap.setAttribute("aria-modal", "true");
   wrap.setAttribute("aria-label", "Bia Tầm Đạo");
   const els = Object.keys(TEN_HE) as Element[];
-  const R = 112;
+  // Bia và 12 nút hệ vẽ Canva (assets/icon_ve/bia_tam_dao, manifest.json cùng thư mục); vòng tròn bán kính R quanh bia.
+  const R = 122;
   wrap.innerHTML = `
     <div class="gq-khung">
       <button type="button" class="icon-btn gq-dong" aria-label="Đóng">×</button>
       <h2>Bia Tầm Đạo</h2>
       <p class="gq-loi">Đặt tay lên bia. Quẻ cho bạn linh căn và một tài năng.</p>
       <div class="gq-vong" aria-hidden="true">
+        <img class="gq-bia" src="${artUrl("bia_tam_dao/bia")}" alt="">
         ${els.map((e, i) => {
           const a = (i / els.length) * Math.PI * 2 - Math.PI / 2;
-          return `<span class="gq-he" data-he="${e}" style="left:calc(50% + ${Math.round(Math.cos(a) * R)}px);top:calc(50% + ${Math.round(Math.sin(a) * R)}px)">${elementChip(e, false)}</span>`;
+          return `<span class="gq-he" data-he="${e}" style="left:calc(50% + ${Math.round(Math.cos(a) * R)}px);top:calc(50% + ${Math.round(Math.sin(a) * R)}px)"><img src="${artUrl(`bia_tam_dao/he/${e}`)}" alt=""><i>${esc(TEN_HE[e])}</i></span>`;
         }).join("")}
-        <div class="gq-bia"><span class="gq-van"></span></div>
       </div>
       <ul class="gq-tai" aria-hidden="true">${Object.values(TALENTS).map((t) => `<li data-tai="${t.id}">${esc(t.name)}</li>`).join("")}</ul>
       <div class="gq-kq" hidden></div>
@@ -350,7 +351,7 @@ function manGieoQue(ct: FtueChiTiet, xong: (look: { body: Than; outfit: Ao }, na
     const kq = wrap.querySelector<HTMLElement>(".gq-kq")!;
     kq.hidden = false;
     kq.innerHTML = `
-      <p><span class="moi-nho">Linh căn</span> ${que.roots.map((e) => elementChip(e)).join(" ")}</p>
+      <p class="gq-goc"><span class="moi-nho">Linh căn</span> ${que.roots.map((e) => `<b><img src="${artUrl(`bia_tam_dao/he/${e}`)}" alt="">${esc(TEN_HE[e])}</b>`).join(" ")}</p>
       <p><span class="moi-nho">Tài năng</span> <b>${esc(t.name)}</b></p>
       <p class="moi-nho">${esc(t.combat)}</p>
       <p class="moi-nho">Luyện công pháp có hệ trùng linh căn thì nhận buff của hệ đó.</p>`;
