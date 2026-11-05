@@ -206,24 +206,25 @@ export async function thanhTrenOnDinh(page: Page): Promise<{ cap: number; lt: nu
 
 /** Trong màn Trận: chọn tốc độ nhanh nhất, chờ phát hết (thanh tua tới cuối), rồi Quay lại như người chơi. */
 async function xemHetTran(page: Page, anh: MayAnh, toiDaGiay = 120): Promise<void> {
+  // Như người mới: xem vài giây đầu ở ×1 (lúc nhãn "Khắc ×1,5" hiện), chụp, rồi mới tua nhanh nhất.
+  await page.waitForTimeout(2500);
+  await anh.chup("dang-xem-tran");
   const nhanh = page.locator("[data-speed]").last();
   if (await nhanh.isVisible()) await nhanh.click();
   const het = Date.now() + toiDaGiay * 1000;
-  let daChup = false;
   while (Date.now() < het) {
     const xong = await page.evaluate(() => {
       const s = document.querySelector<HTMLInputElement>("input.seek");
       return !!s && !s.disabled && Number(s.max) > 1 && Number(s.value) >= Number(s.max) - 1;
     });
-    if (!daChup && Date.now() > het - toiDaGiay * 1000 + 3000) {
-      await anh.chup("dang-xem-tran");
-      daChup = true;
-    }
     if (xong) break;
     await page.waitForTimeout(500);
   }
   await anh.chup("het-tran");
-  await page.locator("#topbar .back").click();
+  // Hết trận: người chơi bấm nút to "Tiếp tục" giữa màn (07dff22); bản cũ chưa có thì dùng "Quay lại" trên thanh trên.
+  const tiep = page.locator("button.next:visible");
+  if (await tiep.waitFor({ state: "visible", timeout: 3000 }).then(() => true, () => false)) await tiep.click();
+  else await page.locator("#topbar .back").click();
   await expect(page, "Quay lại từ màn Trận").not.toHaveURL(/#tran$/);
 }
 
