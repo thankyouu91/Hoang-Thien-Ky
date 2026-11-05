@@ -36442,6 +36442,1664 @@
       "created": "2026-11-05",
       "pixellab_id": "b0e6af91-a965-40e4-b036-b22c9c3d7dd6",
       "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/thien_kiem_nguyen/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Thiên Kiếm Nguyên (thien_kiem_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"thien_kiem_nguyen/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: grey stone ground and silver grass, sword-shaped stone shards stuck in the earth. Along the top and bottom edges: white rock outcrops and rusted giant swords planted in the ground. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "9daece27-f405-46d1-a0e1-28b9b8459a68",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/thien_kiem_nguyen/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Thiên Kiếm Nguyên (thien_kiem_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"thien_kiem_nguyen/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: grey stone ground and silver grass, sword-shaped stone shards stuck in the earth. Along the top and bottom edges: white rock outcrops and rusted giant swords planted in the ground. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a96aaf1b-fbd1-4dfb-b59f-e39b34bbab3a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/thien_kiem_nguyen/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Thiên Kiếm Nguyên (thien_kiem_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"thien_kiem_nguyen/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: grey stone ground and silver grass, sword-shaped stone shards stuck in the earth. Along the top and bottom edges: white rock outcrops and rusted giant swords planted in the ground. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e84c0492-f0af-4b7d-a2cb-9882594ed1bb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/thien_kiem_nguyen/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Thiên Kiếm Nguyên (thien_kiem_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"thien_kiem_nguyen/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: grey stone ground and silver grass, sword-shaped stone shards stuck in the earth. Along the top and bottom edges: white rock outcrops and rusted giant swords planted in the ground. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a0ff8bb0-6538-4500-bc99-7d0c884fe0de",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/thien_kiem_nguyen/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Thiên Kiếm Nguyên (thien_kiem_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"thien_kiem_nguyen/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: grey stone ground and silver grass, sword-shaped stone shards stuck in the earth. Along the top and bottom edges: white rock outcrops and rusted giant swords planted in the ground. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b49cfac5-f0de-4718-adcb-4c58decd595a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/thien_kiem_nguyen/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Thiên Kiếm Nguyên (thien_kiem_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"thien_kiem_nguyen/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: grey stone ground and silver grass, sword-shaped stone shards stuck in the earth. Along the top and bottom edges: white rock outcrops and rusted giant swords planted in the ground. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e00f64c4-ab7c-4206-8d63-f0a085808bdb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/thien_kiem_nguyen/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Thiên Kiếm Nguyên (thien_kiem_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"thien_kiem_nguyen/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: grey stone ground and silver grass, sword-shaped stone shards stuck in the earth. Along the top and bottom edges: white rock outcrops and rusted giant swords planted in the ground. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e5249983-6062-4c87-96f8-73f2a5f38631",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/thien_kiem_nguyen/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Thiên Kiếm Nguyên (thien_kiem_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"thien_kiem_nguyen/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: grey stone ground and silver grass, sword-shaped stone shards stuck in the earth. Along the top and bottom edges: white rock outcrops and rusted giant swords planted in the ground. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "12211fde-869d-47a1-903c-1bca4bb7d9a5",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_moc_lam/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Vạn Mộc Lâm (van_moc_lam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_moc_lam/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: mossy forest floor with ferns, roots and fallen leaves. Along the top and bottom edges: giant tree trunks, dense green canopy edges and glowing mushrooms. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f8609328-2da8-40d4-bd5d-e11843ef0a39",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/thien_kiem_nguyen/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Thiên Kiếm Nguyên (thien_kiem_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"thien_kiem_nguyen/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: grey stone ground and silver grass, sword-shaped stone shards stuck in the earth. Along the top and bottom edges: white rock outcrops and rusted giant swords planted in the ground. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/thien_kiem_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "85cab809-a91f-464b-94eb-21c102d7c08b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_moc_lam/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Vạn Mộc Lâm (van_moc_lam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_moc_lam/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: mossy forest floor with ferns, roots and fallen leaves. Along the top and bottom edges: giant tree trunks, dense green canopy edges and glowing mushrooms. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a210b644-0731-4380-b8d3-78013f282c6f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_moc_lam/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Vạn Mộc Lâm (van_moc_lam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_moc_lam/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: mossy forest floor with ferns, roots and fallen leaves. Along the top and bottom edges: giant tree trunks, dense green canopy edges and glowing mushrooms. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "98c3ebe1-dce2-4b03-a568-4437671f3d80",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_moc_lam/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Vạn Mộc Lâm (van_moc_lam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_moc_lam/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: mossy forest floor with ferns, roots and fallen leaves. Along the top and bottom edges: giant tree trunks, dense green canopy edges and glowing mushrooms. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a375a0ac-badb-4e33-8da9-378d55d745fe",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_moc_lam/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Vạn Mộc Lâm (van_moc_lam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_moc_lam/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: mossy forest floor with ferns, roots and fallen leaves. Along the top and bottom edges: giant tree trunks, dense green canopy edges and glowing mushrooms. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "89843de1-6cd8-4352-a51b-5082fdb8ed0d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_moc_lam/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Vạn Mộc Lâm (van_moc_lam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_moc_lam/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: mossy forest floor with ferns, roots and fallen leaves. Along the top and bottom edges: giant tree trunks, dense green canopy edges and glowing mushrooms. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0a1f1a57-9604-45a9-b2d8-fe336348830b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_moc_lam/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Vạn Mộc Lâm (van_moc_lam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_moc_lam/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: mossy forest floor with ferns, roots and fallen leaves. Along the top and bottom edges: giant tree trunks, dense green canopy edges and glowing mushrooms. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3641e3ba-55be-4c1f-b9e8-5b75911dbf31",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_moc_lam/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Vạn Mộc Lâm (van_moc_lam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_moc_lam/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: mossy forest floor with ferns, roots and fallen leaves. Along the top and bottom edges: giant tree trunks, dense green canopy edges and glowing mushrooms. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7579f8db-7f36-42fb-ad03-c3555beece52",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_moc_lam/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Vạn Mộc Lâm (van_moc_lam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_moc_lam/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: mossy forest floor with ferns, roots and fallen leaves. Along the top and bottom edges: giant tree trunks, dense green canopy edges and glowing mushrooms. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_moc_lam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "962615e9-e40c-47d1-9c0a-ba76e855d984",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/bich_ba_hai/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Bích Ba Hải (bich_ba_hai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"bich_ba_hai/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: wet sand and smooth pebbles with shallow tide pools. Along the top and bottom edges: blue water lapping at the edges, reeds and wet boulders. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5008b5e8-a454-4f07-ba3b-05f4d33ed036",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/bich_ba_hai/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Bích Ba Hải (bich_ba_hai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"bich_ba_hai/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: wet sand and smooth pebbles with shallow tide pools. Along the top and bottom edges: blue water lapping at the edges, reeds and wet boulders. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "af7fcf42-87a9-4950-8e3c-4b303e849597",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/bich_ba_hai/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Bích Ba Hải (bich_ba_hai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"bich_ba_hai/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: wet sand and smooth pebbles with shallow tide pools. Along the top and bottom edges: blue water lapping at the edges, reeds and wet boulders. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4937cb51-eae7-4702-bb92-c4d0b6637f3d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/bich_ba_hai/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Bích Ba Hải (bich_ba_hai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"bich_ba_hai/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: wet sand and smooth pebbles with shallow tide pools. Along the top and bottom edges: blue water lapping at the edges, reeds and wet boulders. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e372a0db-e420-41bb-8761-4d15cfd68d9f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/bich_ba_hai/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Bích Ba Hải (bich_ba_hai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"bich_ba_hai/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: wet sand and smooth pebbles with shallow tide pools. Along the top and bottom edges: blue water lapping at the edges, reeds and wet boulders. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "71d4927c-9800-40b4-b2e0-a6a55dbba95b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/bich_ba_hai/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Bích Ba Hải (bich_ba_hai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"bich_ba_hai/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: wet sand and smooth pebbles with shallow tide pools. Along the top and bottom edges: blue water lapping at the edges, reeds and wet boulders. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "15cf24f7-a473-49bd-932d-e5ded7f1f7c1",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/bich_ba_hai/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Bích Ba Hải (bich_ba_hai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"bich_ba_hai/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: wet sand and smooth pebbles with shallow tide pools. Along the top and bottom edges: blue water lapping at the edges, reeds and wet boulders. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "037eb63f-cc15-476c-b791-438ee8802958",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/bich_ba_hai/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Bích Ba Hải (bich_ba_hai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"bich_ba_hai/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: wet sand and smooth pebbles with shallow tide pools. Along the top and bottom edges: blue water lapping at the edges, reeds and wet boulders. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "53de7d12-ea6c-4970-9c42-e2f9e229b757",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/bich_ba_hai/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Bích Ba Hải (bich_ba_hai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"bich_ba_hai/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: wet sand and smooth pebbles with shallow tide pools. Along the top and bottom edges: blue water lapping at the edges, reeds and wet boulders. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/bich_ba_hai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "cb5a0f5c-aa6e-4dce-abec-16c08d77d5b0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/xich_viem_son/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Xích Viêm Sơn (xich_viem_son), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"xich_viem_son/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: cracked black volcanic rock with glowing orange lava seams and ash. Along the top and bottom edges: rivers of glowing lava and smoking basalt cliffs. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "cc438100-b338-4d0f-99d3-d09aa1a1e02b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/xich_viem_son/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Xích Viêm Sơn (xich_viem_son), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"xich_viem_son/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: cracked black volcanic rock with glowing orange lava seams and ash. Along the top and bottom edges: rivers of glowing lava and smoking basalt cliffs. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d1279bab-fe61-4a58-8c98-139f95aa9d5a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/xich_viem_son/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Xích Viêm Sơn (xich_viem_son), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"xich_viem_son/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: cracked black volcanic rock with glowing orange lava seams and ash. Along the top and bottom edges: rivers of glowing lava and smoking basalt cliffs. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fabd66d5-e526-46f4-b0aa-59614a58e39d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/xich_viem_son/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Xích Viêm Sơn (xich_viem_son), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"xich_viem_son/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: cracked black volcanic rock with glowing orange lava seams and ash. Along the top and bottom edges: rivers of glowing lava and smoking basalt cliffs. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "aac69437-0628-4d6a-8712-6088589f4369",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/xich_viem_son/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Xích Viêm Sơn (xich_viem_son), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"xich_viem_son/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: cracked black volcanic rock with glowing orange lava seams and ash. Along the top and bottom edges: rivers of glowing lava and smoking basalt cliffs. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "16666d8a-d8e2-4627-baf2-0c3a2920aa12",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/xich_viem_son/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Xích Viêm Sơn (xich_viem_son), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"xich_viem_son/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: cracked black volcanic rock with glowing orange lava seams and ash. Along the top and bottom edges: rivers of glowing lava and smoking basalt cliffs. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c0e3c752-0d8c-495a-8dae-9586499752fa",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/xich_viem_son/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Xích Viêm Sơn (xich_viem_son), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"xich_viem_son/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: cracked black volcanic rock with glowing orange lava seams and ash. Along the top and bottom edges: rivers of glowing lava and smoking basalt cliffs. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "8fdb6b0c-6076-40d2-bb30-f90938fa7c73",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/xich_viem_son/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Xích Viêm Sơn (xich_viem_son), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"xich_viem_son/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: cracked black volcanic rock with glowing orange lava seams and ash. Along the top and bottom edges: rivers of glowing lava and smoking basalt cliffs. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ed89fcc9-f06e-406d-be46-be3f5491320a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/xich_viem_son/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Xích Viêm Sơn (xich_viem_son), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"xich_viem_son/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: cracked black volcanic rock with glowing orange lava seams and ash. Along the top and bottom edges: rivers of glowing lava and smoking basalt cliffs. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/xich_viem_son/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1231721f-b1bc-4f3b-81bc-c649c203ce2a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/hau_tho_nguyen/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Hậu Thổ Nguyên (hau_tho_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"hau_tho_nguyen/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed yellow earth and sandstone slabs with dry grass tufts. Along the top and bottom edges: sandstone mesas, canyon walls and terraced earth. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "799f09e7-6972-41c0-917d-644221c2a86c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/hau_tho_nguyen/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Hậu Thổ Nguyên (hau_tho_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"hau_tho_nguyen/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed yellow earth and sandstone slabs with dry grass tufts. Along the top and bottom edges: sandstone mesas, canyon walls and terraced earth. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5e8dae1a-4273-4264-b009-c4b5245f271e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/hau_tho_nguyen/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Hậu Thổ Nguyên (hau_tho_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"hau_tho_nguyen/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed yellow earth and sandstone slabs with dry grass tufts. Along the top and bottom edges: sandstone mesas, canyon walls and terraced earth. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5e561e88-442b-4b4e-8e74-0cd18cf66487",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/hau_tho_nguyen/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Hậu Thổ Nguyên (hau_tho_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"hau_tho_nguyen/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed yellow earth and sandstone slabs with dry grass tufts. Along the top and bottom edges: sandstone mesas, canyon walls and terraced earth. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "01b26b14-9fb2-4972-889c-b778911fc87a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/hau_tho_nguyen/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Hậu Thổ Nguyên (hau_tho_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"hau_tho_nguyen/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed yellow earth and sandstone slabs with dry grass tufts. Along the top and bottom edges: sandstone mesas, canyon walls and terraced earth. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "cca6f834-8997-4273-a11d-80b0be45a898",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/hau_tho_nguyen/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Hậu Thổ Nguyên (hau_tho_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"hau_tho_nguyen/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed yellow earth and sandstone slabs with dry grass tufts. Along the top and bottom edges: sandstone mesas, canyon walls and terraced earth. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2c2e2df6-f780-4d79-a55f-af87e9423e3c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/hau_tho_nguyen/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Hậu Thổ Nguyên (hau_tho_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"hau_tho_nguyen/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed yellow earth and sandstone slabs with dry grass tufts. Along the top and bottom edges: sandstone mesas, canyon walls and terraced earth. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0ca4b967-759e-4b1e-b6b5-21c18b38879f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/hau_tho_nguyen/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Hậu Thổ Nguyên (hau_tho_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"hau_tho_nguyen/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed yellow earth and sandstone slabs with dry grass tufts. Along the top and bottom edges: sandstone mesas, canyon walls and terraced earth. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a6ae3ca5-c22b-4158-8154-2ca039a295c8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuong_phong_nguyen/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Cuồng Phong Nguyên (cuong_phong_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuong_phong_nguyen/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: windswept steppe grass bending in one direction, scattered stones. Along the top and bottom edges: rolling grassy hills, wind-bent trees and fluttering prayer flags. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "f629ac18-d89e-47bf-906a-4a643b6c89db",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/hau_tho_nguyen/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Hậu Thổ Nguyên (hau_tho_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"hau_tho_nguyen/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed yellow earth and sandstone slabs with dry grass tufts. Along the top and bottom edges: sandstone mesas, canyon walls and terraced earth. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/hau_tho_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e72b725c-3a05-4f2c-945b-83584722e2bf",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuong_phong_nguyen/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Cuồng Phong Nguyên (cuong_phong_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuong_phong_nguyen/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: windswept steppe grass bending in one direction, scattered stones. Along the top and bottom edges: rolling grassy hills, wind-bent trees and fluttering prayer flags. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "1b9967d9-9326-44e5-aa7b-a56f97369edd",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuong_phong_nguyen/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Cuồng Phong Nguyên (cuong_phong_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuong_phong_nguyen/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: windswept steppe grass bending in one direction, scattered stones. Along the top and bottom edges: rolling grassy hills, wind-bent trees and fluttering prayer flags. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "24bd7865-3db3-40ad-893c-a000a7c7c1ba",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuong_phong_nguyen/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Cuồng Phong Nguyên (cuong_phong_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuong_phong_nguyen/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: windswept steppe grass bending in one direction, scattered stones. Along the top and bottom edges: rolling grassy hills, wind-bent trees and fluttering prayer flags. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e8b96a7e-bfaf-4022-982d-e1546249b9d3",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuong_phong_nguyen/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Cuồng Phong Nguyên (cuong_phong_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuong_phong_nguyen/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: windswept steppe grass bending in one direction, scattered stones. Along the top and bottom edges: rolling grassy hills, wind-bent trees and fluttering prayer flags. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b79f3636-4234-499b-ab6b-361454872e22",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuong_phong_nguyen/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Cuồng Phong Nguyên (cuong_phong_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuong_phong_nguyen/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: windswept steppe grass bending in one direction, scattered stones. Along the top and bottom edges: rolling grassy hills, wind-bent trees and fluttering prayer flags. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "39441b30-5317-4b57-9010-da58ada46c66",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuong_phong_nguyen/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Cuồng Phong Nguyên (cuong_phong_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuong_phong_nguyen/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: windswept steppe grass bending in one direction, scattered stones. Along the top and bottom edges: rolling grassy hills, wind-bent trees and fluttering prayer flags. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0dce9d82-47a6-4bea-9f82-fdb01813552b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuong_phong_nguyen/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Cuồng Phong Nguyên (cuong_phong_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuong_phong_nguyen/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: windswept steppe grass bending in one direction, scattered stones. Along the top and bottom edges: rolling grassy hills, wind-bent trees and fluttering prayer flags. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "55513815-1a2f-48b3-9519-ab8bf3700ede",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/dieu_quang_dai/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Diệu Quang Đài (dieu_quang_dai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"dieu_quang_dai/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: white stone ground with golden flower meadows and sunlit marble tiles. Along the top and bottom edges: white cliffs, golden trees and pillars of soft light. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "2b51fa29-d682-4754-82e2-72b8ad62eaa4",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuong_phong_nguyen/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Cuồng Phong Nguyên (cuong_phong_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuong_phong_nguyen/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: windswept steppe grass bending in one direction, scattered stones. Along the top and bottom edges: rolling grassy hills, wind-bent trees and fluttering prayer flags. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuong_phong_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "24ad5f78-346c-44cf-b738-d0ff1feb9be7",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/dieu_quang_dai/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Diệu Quang Đài (dieu_quang_dai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"dieu_quang_dai/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: white stone ground with golden flower meadows and sunlit marble tiles. Along the top and bottom edges: white cliffs, golden trees and pillars of soft light. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "37000af8-162a-4b84-831d-9cb9b65baebb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/dieu_quang_dai/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Diệu Quang Đài (dieu_quang_dai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"dieu_quang_dai/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: white stone ground with golden flower meadows and sunlit marble tiles. Along the top and bottom edges: white cliffs, golden trees and pillars of soft light. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "795487c3-2014-4e94-bff2-4dcacfdac4b8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/dieu_quang_dai/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Diệu Quang Đài (dieu_quang_dai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"dieu_quang_dai/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: white stone ground with golden flower meadows and sunlit marble tiles. Along the top and bottom edges: white cliffs, golden trees and pillars of soft light. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "9d442ee6-4aac-4665-acc2-713c59e003b4",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/dieu_quang_dai/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Diệu Quang Đài (dieu_quang_dai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"dieu_quang_dai/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: white stone ground with golden flower meadows and sunlit marble tiles. Along the top and bottom edges: white cliffs, golden trees and pillars of soft light. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "24ee4475-bd67-401b-9c26-d01882fed23e",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/dieu_quang_dai/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Diệu Quang Đài (dieu_quang_dai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"dieu_quang_dai/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: white stone ground with golden flower meadows and sunlit marble tiles. Along the top and bottom edges: white cliffs, golden trees and pillars of soft light. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "baf96f98-738d-4707-8c44-2aa70fa64606",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/dieu_quang_dai/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Diệu Quang Đài (dieu_quang_dai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"dieu_quang_dai/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: white stone ground with golden flower meadows and sunlit marble tiles. Along the top and bottom edges: white cliffs, golden trees and pillars of soft light. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b6297fd8-618a-4f6c-a46d-c69d5cdd39f7",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/dieu_quang_dai/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Diệu Quang Đài (dieu_quang_dai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"dieu_quang_dai/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: white stone ground with golden flower meadows and sunlit marble tiles. Along the top and bottom edges: white cliffs, golden trees and pillars of soft light. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5d11d7a3-351e-4a6f-91e3-6e29f5aa0adb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/u_minh_dam/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng U Minh Đầm (u_minh_dam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"u_minh_dam/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: boggy black mud, dead grass and shallow dark water with ghostly green lights. Along the top and bottom edges: dead twisted trees, black water and drifting green ghost-fire wisps. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "9eca087d-524e-4728-81bd-21596a066178",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/dieu_quang_dai/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Diệu Quang Đài (dieu_quang_dai), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"dieu_quang_dai/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: white stone ground with golden flower meadows and sunlit marble tiles. Along the top and bottom edges: white cliffs, golden trees and pillars of soft light. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/dieu_quang_dai/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3844be07-3c58-4aec-85d4-a1e97256c219",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/u_minh_dam/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng U Minh Đầm (u_minh_dam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"u_minh_dam/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: boggy black mud, dead grass and shallow dark water with ghostly green lights. Along the top and bottom edges: dead twisted trees, black water and drifting green ghost-fire wisps. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "38115cd5-d685-4a9e-822d-8ee253177f9d",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/u_minh_dam/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng U Minh Đầm (u_minh_dam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"u_minh_dam/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: boggy black mud, dead grass and shallow dark water with ghostly green lights. Along the top and bottom edges: dead twisted trees, black water and drifting green ghost-fire wisps. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e1484521-3e5d-4ced-81d9-a25b6d3eefd0",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/u_minh_dam/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng U Minh Đầm (u_minh_dam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"u_minh_dam/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: boggy black mud, dead grass and shallow dark water with ghostly green lights. Along the top and bottom edges: dead twisted trees, black water and drifting green ghost-fire wisps. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "5184fcf9-7f27-4905-9edc-870dfce56776",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/u_minh_dam/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng U Minh Đầm (u_minh_dam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"u_minh_dam/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: boggy black mud, dead grass and shallow dark water with ghostly green lights. Along the top and bottom edges: dead twisted trees, black water and drifting green ghost-fire wisps. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "738f5964-d5de-4872-af76-c25a86a3e76b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/u_minh_dam/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng U Minh Đầm (u_minh_dam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"u_minh_dam/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: boggy black mud, dead grass and shallow dark water with ghostly green lights. Along the top and bottom edges: dead twisted trees, black water and drifting green ghost-fire wisps. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e4f07d9e-9141-4bc7-96ce-f7354bf12142",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/u_minh_dam/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng U Minh Đầm (u_minh_dam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"u_minh_dam/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: boggy black mud, dead grass and shallow dark water with ghostly green lights. Along the top and bottom edges: dead twisted trees, black water and drifting green ghost-fire wisps. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "63cc3a89-816c-4fb0-9b1b-dafc27eff3c8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/u_minh_dam/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng U Minh Đầm (u_minh_dam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"u_minh_dam/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: boggy black mud, dead grass and shallow dark water with ghostly green lights. Along the top and bottom edges: dead twisted trees, black water and drifting green ghost-fire wisps. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d6e2f1fa-b7e5-4f32-aec3-628b0b093256",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/liet_duong_mac/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Liệt Dương Mạc (liet_duong_mac), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"liet_duong_mac/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: orange desert sand with ripples and sun-bleached stones. Along the top and bottom edges: orange dunes, bleached bones and sun-scorched rocks. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d29de2d4-35bb-4fc5-9d31-345c55612c73",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/liet_duong_mac/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Liệt Dương Mạc (liet_duong_mac), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"liet_duong_mac/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: orange desert sand with ripples and sun-bleached stones. Along the top and bottom edges: orange dunes, bleached bones and sun-scorched rocks. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c146e35d-c537-4364-8d17-5fa3f14d6470",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/liet_duong_mac/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Liệt Dương Mạc (liet_duong_mac), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"liet_duong_mac/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: orange desert sand with ripples and sun-bleached stones. Along the top and bottom edges: orange dunes, bleached bones and sun-scorched rocks. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fc8c569d-943f-49bb-be78-06bcc9348f11",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/liet_duong_mac/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Liệt Dương Mạc (liet_duong_mac), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"liet_duong_mac/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: orange desert sand with ripples and sun-bleached stones. Along the top and bottom edges: orange dunes, bleached bones and sun-scorched rocks. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "32a02ce2-aa49-4d26-95b5-57e09c8c294a",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/u_minh_dam/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng U Minh Đầm (u_minh_dam), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"u_minh_dam/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: boggy black mud, dead grass and shallow dark water with ghostly green lights. Along the top and bottom edges: dead twisted trees, black water and drifting green ghost-fire wisps. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/u_minh_dam/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3d4dbc8b-e571-45cd-8f10-5556f30df9f4",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/liet_duong_mac/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Liệt Dương Mạc (liet_duong_mac), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"liet_duong_mac/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: orange desert sand with ripples and sun-bleached stones. Along the top and bottom edges: orange dunes, bleached bones and sun-scorched rocks. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "e696be7e-e960-48cd-abe6-c3be2d3326c9",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/liet_duong_mac/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Liệt Dương Mạc (liet_duong_mac), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"liet_duong_mac/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: orange desert sand with ripples and sun-bleached stones. Along the top and bottom edges: orange dunes, bleached bones and sun-scorched rocks. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "8cf55930-c827-4cff-8a53-4b4de22c3489",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/liet_duong_mac/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Liệt Dương Mạc (liet_duong_mac), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"liet_duong_mac/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: orange desert sand with ripples and sun-bleached stones. Along the top and bottom edges: orange dunes, bleached bones and sun-scorched rocks. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "8e2854d8-5825-42c4-b498-ee99e0a79781",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/liet_duong_mac/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Liệt Dương Mạc (liet_duong_mac), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"liet_duong_mac/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: orange desert sand with ripples and sun-bleached stones. Along the top and bottom edges: orange dunes, bleached bones and sun-scorched rocks. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6e43bacb-e802-40f5-a147-6b2f83eb4720",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/liet_duong_mac/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Liệt Dương Mạc (liet_duong_mac), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"liet_duong_mac/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: orange desert sand with ripples and sun-bleached stones. Along the top and bottom edges: orange dunes, bleached bones and sun-scorched rocks. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/liet_duong_mac/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c943a5dc-4e27-4b50-af72-2315da901a71",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuu_u_uyen/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Cửu U Uyên (cuu_u_uyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuu_u_uyen/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: black stone ground with violet mist and cracks glowing faintly. Along the top and bottom edges: bottomless dark chasms and black stone pillars wrapped in violet mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ea9786cb-05a5-408c-bdab-199c18785e8f",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuu_u_uyen/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Cửu U Uyên (cuu_u_uyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuu_u_uyen/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: black stone ground with violet mist and cracks glowing faintly. Along the top and bottom edges: bottomless dark chasms and black stone pillars wrapped in violet mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "6a2b0ee0-35d7-4546-8315-469ca8a5b2b6",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuu_u_uyen/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Cửu U Uyên (cuu_u_uyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuu_u_uyen/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: black stone ground with violet mist and cracks glowing faintly. Along the top and bottom edges: bottomless dark chasms and black stone pillars wrapped in violet mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "739a39ed-ceda-4aaa-bcec-8c975dddf68b",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuu_u_uyen/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Cửu U Uyên (cuu_u_uyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuu_u_uyen/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: black stone ground with violet mist and cracks glowing faintly. Along the top and bottom edges: bottomless dark chasms and black stone pillars wrapped in violet mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7632aee8-b5c5-4d98-82d2-69383984ac03",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuu_u_uyen/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Cửu U Uyên (cuu_u_uyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuu_u_uyen/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: black stone ground with violet mist and cracks glowing faintly. Along the top and bottom edges: bottomless dark chasms and black stone pillars wrapped in violet mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c8c9f29a-2a08-495c-9537-89f2438672d4",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuu_u_uyen/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Cửu U Uyên (cuu_u_uyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuu_u_uyen/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: black stone ground with violet mist and cracks glowing faintly. Along the top and bottom edges: bottomless dark chasms and black stone pillars wrapped in violet mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "c8cb2de5-f273-4416-89c5-ed23db3a6c24",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuu_u_uyen/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Cửu U Uyên (cuu_u_uyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuu_u_uyen/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: black stone ground with violet mist and cracks glowing faintly. Along the top and bottom edges: bottomless dark chasms and black stone pillars wrapped in violet mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "862bc0e0-73d9-4f50-a271-c9eaa7aff036",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuu_u_uyen/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Cửu U Uyên (cuu_u_uyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuu_u_uyen/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: black stone ground with violet mist and cracks glowing faintly. Along the top and bottom edges: bottomless dark chasms and black stone pillars wrapped in violet mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d2418c08-ba88-4dbb-9706-b6591ac41b66",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cuu_u_uyen/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Cửu U Uyên (cuu_u_uyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cuu_u_uyen/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: black stone ground with violet mist and cracks glowing faintly. Along the top and bottom edges: bottomless dark chasms and black stone pillars wrapped in violet mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/cuu_u_uyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "b311c276-3985-4a39-96d3-de011ea5c9e8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_nien_bang_nguyen/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Vạn Niên Băng Nguyên (van_nien_bang_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_nien_bang_nguyen/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed snow and blue ice with frost cracks. Along the top and bottom edges: frozen pine trees, ice cliffs and snowdrifts. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "70f7f8b3-99f3-44d4-9198-db6f6ea3d3a1",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_nien_bang_nguyen/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Vạn Niên Băng Nguyên (van_nien_bang_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_nien_bang_nguyen/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed snow and blue ice with frost cracks. Along the top and bottom edges: frozen pine trees, ice cliffs and snowdrifts. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "343c1cba-e304-4218-8b4e-42f227ac9201",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_nien_bang_nguyen/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Vạn Niên Băng Nguyên (van_nien_bang_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_nien_bang_nguyen/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed snow and blue ice with frost cracks. Along the top and bottom edges: frozen pine trees, ice cliffs and snowdrifts. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0453d8c9-1e5a-4af8-8e53-88fe267c892c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_nien_bang_nguyen/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Vạn Niên Băng Nguyên (van_nien_bang_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_nien_bang_nguyen/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed snow and blue ice with frost cracks. Along the top and bottom edges: frozen pine trees, ice cliffs and snowdrifts. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "7b1fb0d6-8cf2-4f80-901e-ea6570d58591",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_nien_bang_nguyen/ben_do.png",
+      "description": "Bản đồ chiến trường ben_do của vùng Vạn Niên Băng Nguyên (van_nien_bang_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_nien_bang_nguyen/ben_do\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A river ferry landing, a wide riverbank with wooden docks and moored boats, the river along the bottom edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed snow and blue ice with frost cracks. Along the top and bottom edges: frozen pine trees, ice cliffs and snowdrifts. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "fe8bf18e-545c-49e2-a581-781a50c0b587",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_nien_bang_nguyen/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Vạn Niên Băng Nguyên (van_nien_bang_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_nien_bang_nguyen/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed snow and blue ice with frost cracks. Along the top and bottom edges: frozen pine trees, ice cliffs and snowdrifts. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "0d0ddc8b-ef46-487c-8f68-01f306085e45",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_nien_bang_nguyen/hang_di_thu.png",
+      "description": "Bản đồ chiến trường hang_di_thu của vùng Vạn Niên Băng Nguyên (van_nien_bang_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_nien_bang_nguyen/hang_di_thu\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The floor of a great monster den, scattered bones and claw marks, rocky cave walls along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed snow and blue ice with frost cracks. Along the top and bottom edges: frozen pine trees, ice cliffs and snowdrifts. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "4390d88f-1ce2-41ec-80b3-f05da4cffa51",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/van_nien_bang_nguyen/son_mon.png",
+      "description": "Bản đồ chiến trường son_mon của vùng Vạn Niên Băng Nguyên (van_nien_bang_nguyen), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"van_nien_bang_nguyen/son_mon\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The stone plaza before a cultivation sect's mountain gate during a siege, a grand gate with walls along the top edge, banners and broken barricades. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: packed snow and blue ice with frost cracks. Along the top and bottom edges: frozen pine trees, ice cliffs and snowdrifts. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7,
+        "target_palette": "bảng màu diem_nen/van_nien_bang_nguyen/…"
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "ab7dae2f-72ba-4f57-ba49-e84cbf9c53fb",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/dong_hoang.png",
+      "description": "Bản đồ chiến trường dong_hoang của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/dong_hoang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An open wild battlefield of the region. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "cc465d19-b1b5-4014-8975-57bd82ad54b8",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/mo_quang.png",
+      "description": "Bản đồ chiến trường mo_quang của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/mo_quang\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. An ore mine yard, piles of dark iron ore, wooden scaffolding and mine shafts along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "d5a20457-5b4d-42b1-8050-b901183b73a3",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/mo_linh_thach.png",
+      "description": "Bản đồ chiến trường mo_linh_thach của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/mo_linh_thach\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit stone mine yard, glowing crystal clusters and ore carts along the edges, mine tunnel entrances at the top edge. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "3e467d78-7294-4def-84b6-f94a81785175",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/mo_duoc.png",
+      "description": "Bản đồ chiến trường mo_duoc của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/mo_duoc\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A spirit herb field, rows of softly glowing herbs and a small herb hut along the edges. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "a102161d-2189-44db-87f8-22d67e8027a6",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/deo.png",
+      "description": "Bản đồ chiến trường deo của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/deo\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. A mountain pass road, a wide stone road running across the middle between towering cliffs at the top and bottom edges, a small gatehouse at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "04645d82-303a-43b9-9b50-f401f514851c",
+      "api": "REST v2 generate-image-v2"
+    },
+    {
+      "file": "chien_truong/cam_khu/cua_bi_canh.png",
+      "description": "Bản đồ chiến trường cua_bi_canh của vùng Linh Hải Cấm Khu (cam_khu), nhìn từ trên xuống: dải sân ngang giữa ảnh, cảnh vùng dọc hai mép. Nền màn Trận khi trận diễn ra ở loại điểm đó trong vùng (replay.arena = \"cam_khu/cua_bi_canh\").",
+      "tool": "create_image_pro",
+      "params": {
+        "description": "Top-down bird's-eye view battle map for a xianxia game, wide landscape format. The courtyard of ancient ruins before a secret realm gate, broken carved pillars along the edges and a glowing portal arch at one end. A broad open flat strip of ground runs horizontally across the middle of the image for the battle: shattered rock ground with chaotic multicolored cracks and floating pebbles. Along the top and bottom edges: broken floating rocks, ancient ruins and swirling multicolored chaotic mist. No people, no text, no UI, no grid lines.",
+        "width": 688,
+        "height": 384,
+        "no_background": false,
+        "seed": 7
+      },
+      "created": "2026-11-05",
+      "pixellab_id": "93ed95ef-327f-4f44-a6a2-58b5fea4e3c5",
+      "api": "REST v2 generate-image-v2"
     }
   ]
 }
