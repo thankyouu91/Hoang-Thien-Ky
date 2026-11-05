@@ -1174,7 +1174,13 @@ b.g-cao { color: #6d3a8e; }
 #login .login-art.live { height: 100%; }
 #login .login-art.live svg { display: none; }
 #login > :not(.login-art) { position: relative; }
-#login .age-badge { align-self: flex-end; padding: 1px 6px; border: 1px solid var(--c-line-2); border-radius: 4px; background: var(--c-surface); color: var(--c-ink-2); font-size: 12px; font-weight: 700; }
+#login .login-top { display: flex; align-self: stretch; justify-content: flex-end; align-items: center; gap: 10px; }
+/* Nút đổi ngôn ngữ VI · EN (i18n.ts): hai ô nhỏ viền mảnh, ô đang chọn nền son */
+.lang-sw { display: inline-flex; border: 1px solid var(--c-line-2); border-radius: 4px; overflow: hidden; background: var(--c-surface); }
+.lang-sw button { min-width: 34px; min-height: 26px; padding: 0 8px; border: 0; background: none; color: var(--c-ink-2); font: 700 12px/1 var(--font); letter-spacing: 0.06em; cursor: pointer; }
+.lang-sw button + button { border-left: 1px solid var(--c-line-2); }
+.lang-sw button[aria-pressed="true"] { background: var(--c-accent); color: var(--c-on-accent); }
+#login .age-badge { padding: 1px 6px; border: 1px solid var(--c-line-2); border-radius: 4px; background: var(--c-surface); color: var(--c-ink-2); font-size: 12px; font-weight: 700; }
 .login-brand { margin: 5vh 0 auto; text-align: center; }
 /* Dấu ấn triện 天荒記 (Thiên Hoang Ký): lối khắc ba chữ, cột phải 天荒 từ trên xuống, cột trái chữ 記 kéo cao bằng hai ô */
 .login-seal {

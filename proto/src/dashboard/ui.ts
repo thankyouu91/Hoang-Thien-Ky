@@ -2,18 +2,21 @@
 import type { Element, SkillType } from "@ktlp/sim";
 import { ELEMENT_STYLE, SKILL_NAME } from "../theme/elements.ts";
 import { icon } from "./icons.ts";
+// Lớp dịch tự chạy khi được nạp (mọi màn đều nạp ui.ts): đang chọn tiếng Anh thì dịch chữ hiện trên trang.
+import { lang, locale } from "./i18n.ts";
 
 export function esc(s: unknown): string {
   return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }
 
+/** Số nguyên theo ngôn ngữ: "3.280" (vi), "3,280" (en). */
 export function fmt(n: number): string {
-  return Number.isFinite(n) ? Math.round(n).toLocaleString("vi-VN") : "∞";
+  return Number.isFinite(n) ? Math.round(n).toLocaleString(locale()) : "∞";
 }
 
-/** Phần nghìn ra phần trăm, một chữ số lẻ: 85 → "8,5%". */
+/** Phần nghìn ra phần trăm, một chữ số lẻ: 85 → "8,5%" (vi), "8.5%" (en). */
 export function pctText(perMille: number): string {
-  return `${(perMille / 10).toLocaleString("vi-VN", { maximumFractionDigits: 1 })}%`;
+  return `${(perMille / 10).toLocaleString(locale(), { maximumFractionDigits: 1 })}%`;
 }
 
 export function clockText(t: number): string {
@@ -21,24 +24,27 @@ export function clockText(t: number): string {
   return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
-/** "1 giờ 25 phút", "6 phút", "42 giây". */
+/** "1 giờ 25 phút", "6 phút", "42 giây"; tiếng Anh "1h 25m", "6m", "42s" (viết thẳng, không qua bảng, vì đếm mỗi giây). */
 export function durationText(ms: number): string {
+  const en = lang() === "en";
   const s = Math.max(0, Math.ceil(ms / 1000));
-  if (s < 60) return `${s} giây`;
+  if (s < 60) return en ? `${s}s` : `${s} giây`;
   const m = Math.ceil(s / 60);
-  if (m < 60) return `${m} phút`;
+  if (m < 60) return en ? `${m}m` : `${m} phút`;
   const h = Math.floor(m / 60);
   const r = m % 60;
-  if (h < 24) return r ? `${h} giờ ${r} phút` : `${h} giờ`;
-  return `${Math.floor(h / 24)} ngày ${h % 24} giờ`;
+  if (h < 24) return en ? (r ? `${h}h ${r}m` : `${h}h`) : r ? `${h} giờ ${r} phút` : `${h} giờ`;
+  return en ? `${Math.floor(h / 24)}d ${h % 24}h` : `${Math.floor(h / 24)} ngày ${h % 24} giờ`;
 }
 
-/** "vừa xong", "18 phút trước", "2 giờ trước", "3 ngày trước". */
+/** "vừa xong", "18 phút trước", "2 giờ trước", "3 ngày trước"; tiếng Anh "just now", "18m ago"… */
 export function agoText(now: number, t: number): string {
+  const en = lang() === "en";
   const m = Math.floor((now - t) / 60_000);
-  if (m < 1) return "vừa xong";
-  if (m < 60) return `${m} phút trước`;
+  if (m < 1) return en ? "just now" : "vừa xong";
+  if (m < 60) return en ? `${m}m ago` : `${m} phút trước`;
   const h = Math.floor(m / 60);
+  if (en) return h < 24 ? `${h}h ago` : `${Math.floor(h / 24)}d ago`;
   return h < 24 ? `${h} giờ trước` : `${Math.floor(h / 24)} ngày trước`;
 }
 

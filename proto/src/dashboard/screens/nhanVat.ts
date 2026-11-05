@@ -22,6 +22,7 @@ import { dangFor, dangHeadroom, dangLift, drawDang } from "../../scenes/battle/d
 import { drawPhapLuan, phapLuanExtent, trackLevel, type PhapLuanSpec } from "../../scenes/battle/phapLuan.ts";
 import { ADULT_AGE, ageOn, GUARDIAN_AGE } from "../auth.ts";
 import { daoDoHtml, daoDoManDotPha, daoDoReduced, daoDoSan, khiManDotPhaDong } from "../daoDoFx.ts";
+import { lang, langSwitch, setLang, type Lang } from "../i18n.ts";
 import { elementWheel } from "../elementWheel.ts";
 import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
 import { LuyenKhiPanel, type LkTab } from "./luyenKhiPanel.ts";
@@ -298,6 +299,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
       ${s ? group("Tài khoản", `
         ${row("Số điện thoại", esc(s.phoneMasked))}
         ${row("Nhóm tuổi", age < GUARDIAN_AGE ? "Dưới 16, có giám hộ" : age < ADULT_AGE ? "Dưới 18" : "Từ 18")}
+        ${row("Ngôn ngữ", langSwitch())}
         <button type="button" class="btn small nv-logout" data-act="logout">${icon("logout")} Đăng xuất</button>`, false) : ""}
       <button type="button" class="seal nv-main" data-act="main"${c.retreat && !c.canBreak ? " disabled" : ""}>${c.canBreak ? "Đột phá" : c.retreat ? "Đang bế quan" : "Bế quan"}</button>`;
   }
@@ -769,6 +771,8 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     else if (name === "logout") {
       this.ctx.auth.logout();
       location.reload();
+    } else if (name === "lang") {
+      if (el.dataset.lang !== lang()) setLang(el.dataset.lang as Lang);
     } else if (name === "stat") this.openStat(v.stats.find((s) => s.id === el.dataset.stat)!);
     else if (name === "cultivation") this.openCultivation(v);
     else if (name === "main") {

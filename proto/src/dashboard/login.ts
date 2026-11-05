@@ -4,6 +4,7 @@
 import { mountScene } from "../three/index.ts";
 import { inkwashSvg } from "./art/inkwash.ts";
 import { ageOn, GUARDIAN_AGE, maskPhone, normalizePhone, type AuthSource } from "./auth.ts";
+import { bindLangSwitch, langSwitch } from "./i18n.ts";
 import { esc } from "./ui.ts";
 
 type Step = { kind: "phone" } | { kind: "otp"; phone: string; resendAfter: number; devCode?: string } | { kind: "profile"; phone: string };
@@ -13,7 +14,7 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
   root.id = "login";
   root.innerHTML = `
     <div class="login-art">${inkwashSvg("#f6efdf")}</div>
-    <span class="age-badge" title="Nhãn phân loại độ tuổi">${esc(ageLabel)}</span>
+    <div class="login-top">${langSwitch()}<span class="age-badge" title="Nhãn phân loại độ tuổi">${esc(ageLabel)}</span></div>
     <header class="login-brand">
       <span class="login-seal" aria-hidden="true"><span>天</span><span>荒</span><span class="tall">記</span></span>
       <h1>Thiên Hoang Ký</h1>
@@ -22,6 +23,7 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
     <form class="login-card" novalidate></form>
     <footer class="login-foot">Chơi quá 180 phút một ngày sẽ ảnh hưởng xấu đến sức khỏe.</footer>`;
   document.body.append(root);
+  bindLangSwitch(root);
   const art = root.querySelector<HTMLElement>(".login-art")!;
   const scene = mountScene(art, "son_thuy", { tone: "giay", linhKhi: true });
   void scene.ready.then((ok) => art.classList.toggle("live", ok));
