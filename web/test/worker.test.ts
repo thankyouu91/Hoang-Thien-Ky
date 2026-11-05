@@ -56,7 +56,7 @@ const assets = {
 
 async function env(extra: Partial<EnvWeb> = {}) {
   const { db, phanHoi } = await taoDb();
-  return { e: { ASSETS: assets, DB: db, CONG_KHAI: "0", CHOI_URL: "https://choi.thienhoangky.fun", ...extra } as EnvWeb, phanHoi };
+  return { e: { ASSETS: assets, DB: db, CONG_KHAI: "0", CHOI_URL: "https://play.thienhoangky.fun", ...extra } as EnvWeb, phanHoi };
 }
 
 const goi = (e: EnvWeb, path: string, init: RequestInit & { the?: string } = {}) => {
@@ -71,7 +71,7 @@ test("chưa có cookie: trang HTML trả 403 trang cần link mời, không lộ
   assert.equal(r.status, 403);
   const t = await r.text();
   assert.match(t, /người được mời/);
-  assert.match(t, /choi\.thienhoangky\.fun\/moi\//);
+  assert.match(t, /play\.thienhoangky\.fun\/moi\//);
   assert.doesNotMatch(t, /<title>trang<\/title>/);
   assert.equal(r.headers.get("Cache-Control"), "no-store");
 });
@@ -117,7 +117,7 @@ test("/moi/<ma> trên tên gốc chuyển sang game, giữ đường dẫn", asy
   const { e } = await env();
   const r = await goi(e, "/moi/dot-1-abc?x=1");
   assert.equal(r.status, 302);
-  assert.equal(r.headers.get("Location"), "https://choi.thienhoangky.fun/moi/dot-1-abc?x=1");
+  assert.equal(r.headers.get("Location"), "https://play.thienhoangky.fun/moi/dot-1-abc?x=1");
 });
 
 test("góp ý: ghi phan_hoi với man website, không có liên hệ", async () => {

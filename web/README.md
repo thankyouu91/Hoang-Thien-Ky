@@ -6,7 +6,8 @@ Website giới thiệu Thiên Hoang Ký. Kín như game: chỉ trình duyệt đ
 |---|---|---|
 | `thienhoangky.fun` | Website (Worker `thienhoangky-web`) | `web/` |
 | `www.thienhoangky.fun` | 301 về tên gốc (Worker `thienhoangky-www`) | `cloudflare/wrangler.www.jsonc` |
-| `choi.thienhoangky.fun` | Game, cấp cookie link mời (Worker `thienhoangky`) | `cloudflare/` |
+| `play.thienhoangky.fun` | Game, cấp cookie link mời (Worker `thienhoangky`) | `cloudflare/` |
+| `choi.thienhoangky.fun` | 301 sang `play.` (tên cũ, Worker `thienhoangky-www`) | `cloudflare/` |
 | `wiki.thienhoangky.fun` | Wiki | tab wiki |
 | `admin.thienhoangky.fun` | Admin Dashboard, sau Cloudflare Access | `admin/` |
 
@@ -48,7 +49,7 @@ npm.cmd run typecheck
 `worker/index.ts` (Worker `thienhoangky-web`, cấu hình `wrangler.jsonc`):
 
 - Mọi trang HTML và `/api/gop-y` cần cookie `thk_moi` hợp lệ: Worker băm SHA-256 rồi tra `nguoi_choi_thu` trong D1 `thienhoangky` (chung với game). Thiếu cookie: trang "dành cho người được mời" (403). Bị khóa ở Admin: trang khóa (403).
-- Cookie do game cấp ở `choi.thienhoangky.fun/moi/<ma>`. Để tên gốc đọc được, cookie phải có `Domain=thienhoangky.fun` (việc của Worker game, `cloudflare/src/moi.ts`). `/moi/*` gõ vào tên gốc thì 302 sang game.
+- Cookie do game cấp ở `play.thienhoangky.fun/moi/<ma>` với `Domain=thienhoangky.fun` (`datCookie` trong `cloudflare/src/moi.ts`), nên tên gốc và wiki đọc được cùng cookie. `/moi/*` gõ vào tên gốc thì 302 sang game.
 - `/assets/*` (JS, CSS, font có mã băm) và `/hinh/*` phục vụ thẳng, không chạy Worker, không tốn lượt request.
 - Trang đã qua cổng: `Cache-Control: private, no-cache`, `X-Robots-Tag: noindex, nofollow`; `robots.txt` chặn mọi máy tìm kiếm.
 - Dùng chung hàm với Worker game: `cloudflare/src/moi.ts` (đọc, băm cookie), `kiem.ts` (kiểm phản hồi), `http.ts` (JSON, chặn ghi từ trang khác).
@@ -76,7 +77,7 @@ npm.cmd ci
 npx.cmd wrangler deploy                                       # tự chạy npm run build, gắn tên miền thienhoangky.fun
 ```
 
-Thứ tự gắn tên miền: Worker game phải chuyển sang `choi.thienhoangky.fun` trước, rồi mới deploy web (cả hai không cùng giữ `thienhoangky.fun` được). Cổng nằm trong Worker, nên ngay lần deploy đầu tên gốc đã kín.
+Tên gốc `thienhoangky.fun` do Worker web giữ; game đã chuyển sang `play.` (2026-11-05), nên hai Worker không tranh tên miền. Cổng nằm trong Worker, nên ngay lần deploy đầu tên gốc đã kín.
 
 ## Mở công khai sau khi có G1
 

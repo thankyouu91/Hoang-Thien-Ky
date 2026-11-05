@@ -1,5 +1,5 @@
 // Worker `thienhoangky-web`: website https://thienhoangky.fun (trang tĩnh dist/ + cổng link mời + POST /api/gop-y).
-// Game ở choi.thienhoangky.fun (Worker `thienhoangky`, cloudflare/), admin ở admin.thienhoangky.fun (admin/).
+// Game ở play.thienhoangky.fun (Worker `thienhoangky`, cloudflare/), admin ở admin.thienhoangky.fun (admin/).
 // Hướng dẫn: web/README.md. Không chạy `wrangler d1 migrations apply --remote` trong thư mục này: migration game do cloudflare/ giữ.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
@@ -23,7 +23,7 @@
   "vars": {
     // "1" sau khi có giấy phép G1 và được phép quảng cáo: trang mở cho mọi người (góp ý vẫn cần link mời).
     "CONG_KHAI": "0",
-    "CHOI_URL": "https://choi.thienhoangky.fun"
+    "CHOI_URL": "https://play.thienhoangky.fun"
   },
   // D1 chung với game: chỉ đọc nguoi_choi_thu, ghi phan_hoi (góp ý). migrations_dir trỏ sang game để chạy thử ở máy (--local).
   "d1_databases": [

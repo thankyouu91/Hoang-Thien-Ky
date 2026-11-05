@@ -1,6 +1,6 @@
 // Worker `thienhoangky-web` ở https://thienhoangky.fun: website của game (trang tĩnh trong dist/).
 // Website kín như game, vì chưa có giấy phép G1 thì chưa được quảng cáo game (Nghị định 147): chỉ trình duyệt đã mở link mời
-// của bản chơi thử (cookie thk_moi, cấp ở choi.thienhoangky.fun/moi/<ma> với Domain=thienhoangky.fun) mới xem được.
+// của bản chơi thử (cookie thk_moi, cấp ở play.thienhoangky.fun/moi/<ma> với Domain=thienhoangky.fun) mới xem được.
 // Cùng một bảng nguoi_choi_thu với Worker game, nên khóa người chơi ở Admin thì cũng khóa website.
 //
 //   HTML, /api/gop-y  — kiểm cookie thk_moi trong D1 (chỉ đọc nguoi_choi_thu; /api/gop-y ghi phan_hoi như API game).
@@ -19,7 +19,7 @@ export interface EnvWeb {
   DB: D1Database;
   /** "1": mở công khai, không kiểm cookie với trang HTML (góp ý vẫn cần cookie). */
   CONG_KHAI?: string;
-  /** Gốc của game, mặc định https://choi.thienhoangky.fun. */
+  /** Gốc của game, mặc định https://play.thienhoangky.fun. */
   CHOI_URL?: string;
 }
 
@@ -64,7 +64,7 @@ export default {
   async fetch(req: Request, env: EnvWeb): Promise<Response> {
     const url = new URL(req.url);
     const path = url.pathname;
-    const choi = (env.CHOI_URL ?? "https://choi.thienhoangky.fun").replace(/\/+$/, "");
+    const choi = (env.CHOI_URL ?? "https://play.thienhoangky.fun").replace(/\/+$/, "");
     const congKhai = env.CONG_KHAI === "1";
     const api = path.startsWith("/api/");
     try {
