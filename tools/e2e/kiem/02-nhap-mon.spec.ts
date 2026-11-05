@@ -61,7 +61,10 @@ test("người mới đi hết nhập môn từ cấp 1 tới cấp 5", async ({
   expect(cap, "hết nhập môn (2.500 kinh nghiệm) phải lên cấp 5").toBeGreaterThanOrEqual(5);
   const the = page.locator(THE_FTUE);
   await expect(the, "thẻ báo đã xong 15 phút đầu").toBeVisible();
-  await expect.soft(the, "thẻ đã xong chỉ tới nhiệm vụ kế (chơi tiếp, không ngõ cụt)").toContainText(/Nhiệm vụ kế|Next quest/i);
+  // Không ngõ cụt: thẻ đã xong cho làm tiếp ngay (bế quan, từ 4fe2fcb) hoặc chỉ tới nhiệm vụ kế.
+  await expect
+    .soft(the.locator('[data-f="be_quan"]').first().or(the.getByText(/Nhiệm vụ kế|Next quest/i)).first(), "thẻ đã xong có việc làm tiếp (bế quan hoặc nhiệm vụ kế)")
+    .toBeVisible();
   await anh.chup("het-nhap-mon");
 
   // Bước 8: thẻ Lịch hôm nay hiện giờ bí cảnh gần nhất.
