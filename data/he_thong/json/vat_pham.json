@@ -80,6 +80,13 @@
       "mo_ta": "Lần chết kế tiếp, đồ đang mặc không mất độ bền",
       "nguon": ["cho"],
       "moi": true
+    },
+    {
+      "ma_vp": "PH-CH-011",
+      "ten": "Giám Định Phù",
+      "mo_ta": "Lộ trước điều kiện kích phát của 1 dòng ẩn trên ngọc bội hoặc đai",
+      "nguon": ["cho"],
+      "moi": true
     }
   ],
   "dan": [

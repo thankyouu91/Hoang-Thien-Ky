@@ -32,6 +32,20 @@ export const PARTS: PartDef[] = [
     c("phu_gia_tri", "Chỉ số phụ (theo chỉ số chuẩn cùng cấp)", "pct", { json: "phu.gia_tri" }),
     c("ngoc", "Ô ngọc (cong: công, thu: thủ)", "text"), c("hien_tren_nguoi", "Hiện trên người", "bool"),
     c("cong_thuc_ren", "Công thức rèn (khóa: số lượng)", "kv", { width: 40 }),
+    c("co_dong_an", "Có dòng ẩn (trang sức)", "bool", { optional: true, width: 9 }),
+  ]),
+  // Set đồ 2.0 (GDD tab Trang bị phần 14, rev 71; đề xuất): dòng rèn, dòng ẩn của trang sức, điểm trang bị
+  T("Dòng rèn", "trang_bi.json", "dong_ren", "so", [
+    c("so", "Dòng rèn", "int", { width: 7 }), c("nac", "Mở ở cường hóa +", "int", { width: 9 }),
+    c("vi_dien", "Mở ở vị diện", "list", { width: 22 }),
+  ]),
+  T("Dòng ẩn", "trang_bi.json", "dong_an", "ma", [
+    c("ma", "Mã", "text", { width: 11 }), c("loai", "Loại (dieu_kien, hieu_ung)", "text", { width: 10 }),
+    c("noi_dung", "Nội dung", "text", { width: 45 }), c("tham_so", "Tham số (đơn vị code)", "kv", { width: 30 }),
+  ]),
+  T("Điểm trang bị", "trang_bi.json", "diem", "stat", [
+    c("stat", "Chỉ số (khóa)", "text", { width: 14 }), c("ten", "Tên", "text", { width: 26 }),
+    c("diem", "Điểm", "int", { width: 7 }), c("moi", "Mỗi", "pct", { width: 7 }),
   ]),
   T("Kiểu trang bị", "trang_bi.json", "kieu", "ma_vp", [
     c("ma_vp", "Mã vật phẩm", "text"), c("o", "Ô", "text"), c("so", "Số", "int"), c("ten", "Tên", "text", { width: 22 }),
@@ -62,14 +76,43 @@ export const PARTS: PartDef[] = [
     c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text"), c("bo", "Bộ", "text"),
     c("he", "Hệ ấn (trống: không hệ)", "text", { nullable: true }), c("ban_cho", "Bán ở chợ", "bool"), nguon,
   ]),
+  T("Binh ấn", "ngoc.json", "binh_an", "ma_vp", [
+    c("ma_vp", "Mã vật phẩm", "text"), c("ten", "Tên", "text", { width: 18 }), c("binh_bo", "Binh bộ", "text", { width: 12 }),
+    c("chi_kham_vao", "Chỉ khảm vào", "list", { width: 24 }), nguon,
+  ]),
   T("Set", "set.json", "bo", "id", [
     c("id", "Mã bộ", "text"), c("ten", "Tên", "text"), c("nguon", "Bí cảnh ra ấn", "text", { width: 20 }), c("chu_de", "Chủ đề", "text"),
     c("gan_voi", "Gắn với", "kv", { width: 30 }), c("than", "Bộ thần", "bool"),
     c("rang_buoc", "Ràng buộc", "text", { nullable: true, width: 40 }), c("an", "Ấn bộ", "text"),
+    c("lo", "Lộ sức mạnh", "text", { optional: true, width: 12 }),
   ]),
   T("Set mốc", "set.json", "", "bo", [
     c("bo", "Mã bộ", "text"), c("so", "Số món", "int"), c("loai", "Loại hiệu ứng", "text"),
     c("mo_ta", "Mô tả", "text", { width: 60 }), c("tham_so", "Tham số (đơn vị code)", "kv", { width: 50 }),
+    c("chi_so_kem", "Chỉ số kèm hiệu ứng (đơn vị code)", "kv", { optional: true, width: 30 }),
+  ]),
+  T("Bậc ấn", "set.json", "bac_an", "ma", [
+    c("ma", "Mã (độ hiếm)", "text", { width: 8 }), c("ten", "Tên", "text", { width: 7 }), c("bac", "Bậc", "int", { width: 5 }),
+    c("he_so", "Hệ số mốc 2, 4", "mul", { width: 9 }), c("tinh_moc_7", "Tính cho mốc 7", "bool", { width: 9 }),
+    c("ghep_len", "Ghép 3 thành 1 lên bậc trên", "bool", { width: 10 }),
+    c("giao_dich", "Giao dịch (khong_ban_lai, ban_duoc, khoa)", "text", { width: 13 }), c("nguon", "Nguồn", "text", { width: 50 }),
+  ]),
+  T("Hợp bộ", "set.json", "hop_bo", "quan_he", [
+    c("quan_he", "Quan hệ hai ấn (mã)", "text", { width: 12 }), c("ten", "Tên", "text", { width: 11 }),
+    c("he_so", "Mốc 2 nhân", "mul", { width: 9 }), c("mana_max", "Mana tối đa", "pct", { optional: true, width: 9 }),
+    c("mo_ta", "Ghi chú", "text", { width: 60 }),
+  ]),
+  T("Binh bộ", "set.json", "binh_bo", "id", [
+    c("id", "Mã binh bộ", "text", { width: 12 }), c("ten", "Tên", "text", { width: 11 }), c("lo", "Lộ", "list", { width: 20 }),
+    c("an", "Binh ấn", "text", { width: 11 }),
+    c("moc_2_mo_ta", "Mốc 2 (2 món)", "text", { json: "moc_2.mo_ta", width: 30 }),
+    c("moc_2_tham_so", "Mốc 2: tham số (đơn vị code)", "kv", { json: "moc_2.tham_so", width: 24 }),
+    c("moc_3_mo_ta", "Mốc 3 (đủ 3 món)", "text", { json: "moc_3.mo_ta", width: 34 }),
+    c("moc_3_tham_so", "Mốc 3: tham số (đơn vị code)", "kv", { json: "moc_3.tham_so", width: 28 }),
+  ]),
+  T("Bộ trọn", "set.json", "bo_tron", "ma_vp", [
+    c("ma_vp", "Mã vật phẩm", "text"), c("bo", "Bộ", "text", { width: 12 }), c("ten", "Tên", "text", { width: 22 }),
+    c("bac", "Bậc ấn", "text", { width: 7 }), c("so_mon", "Số món", "int", { width: 6 }), moTa, nguon,
   ]),
   // Đạo Cơ Bàn: bàn ô lục giác đặt ấn bộ và ngọc hệ để tính thêm món set và cộng hưởng (GDD tab Trang bị phần 8, rev 28)
   T("Đạo Cơ Bàn", "dao_co_ban.json", "o", "ma", [
@@ -230,10 +273,10 @@ export const MACH_INFO: Record<string, [string, string]> = {
 
 /** Thứ tự khóa cấp đầu của từng file, như data/trang_bi. */
 const TOP_ORDER: Record<string, string[]> = {
-  "trang_bi.json": ["ghi_chu", "do_hiem", "o", "kieu"],
+  "trang_bi.json": ["ghi_chu", "do_hiem", "o", "kieu", "dong_ren", "dong_an", "diem", "luat"],
   "vu_khi.json": ["ghi_chu", "khi_hinh", "hinh_khi_cam"],
-  "ngoc.json": ["ghi_chu", "he", "cap", "tran", "song_he", "phach", "y_chau", "an_bo"],
-  "set.json": ["ghi_chu", "moc", "tran", "ty_le_kham_san_tim_tro_len", "bo"],
+  "ngoc.json": ["ghi_chu", "he", "cap", "tran", "song_he", "phach", "y_chau", "an_bo", "binh_an"],
+  "set.json": ["ghi_chu", "moc", "tran", "ty_le_kham_san_tim_tro_len", "bac_an", "hop_bo", "bo", "binh_bo", "bo_tron", "luat"],
   "phap_bao.json": ["ghi_chu", "o", "loai", "mon", "tran_giao"],
   "phap_khi.json": ["ghi_chu", "o", "mon"],
   "vat_pham.json": ["ghi_chu", "phu", "dan", "nguyen_lieu"],
@@ -255,6 +298,27 @@ export const LUAT: [string, string, string][] = [
   ["set.json:tran.kinhTeToiDa", "Kinh tế từ đồ tối đa mỗi loại", "%"],
   ["set.json:tran.tyLeChungTranPhu", "Tỷ lệ cộng từ đồ chung trần với phù", "%"],
   ["set.json:ty_le_kham_san_tim_tro_len", "Đồ từ tím trở lên rơi ra đã khảm sẵn ấn", "%"],
+  // Set đồ 2.0 (GDD tab Trang bị phần 14, đề xuất)
+  ["set.json:luat.ghepAnSo", "Ghép ấn: số ấn cùng bộ cùng bậc thành 1 ấn bậc trên", "số"],
+  ["set.json:luat.boThanTuBac", "3 bộ thần: ấn chỉ có từ bậc (3 là tím)", "số"],
+  ["set.json:luat.binhBoMoiNguoi", "Binh bộ: mỗi người kích tối đa", "số"],
+  ["set.json:luat.binhBoMoc[0]", "Binh bộ: mốc thứ nhất (số món)", "số"],
+  ["set.json:luat.binhBoMoc[1]", "Binh bộ: mốc thứ hai (số món)", "số"],
+  ["set.json:luat.binhBoDongLoHeSo", "Binh bộ cùng lộ với một ấn bộ đang kích: mốc 3 nhân", "hệ số"],
+  ["trang_bi.json:luat.dongAn.soDong.lam", "Dòng ẩn trên trang sức lam", "số"],
+  ["trang_bi.json:luat.dongAn.soDong.tim", "Dòng ẩn trên trang sức tím", "số"],
+  ["trang_bi.json:luat.dongAn.soDong.vang", "Dòng ẩn trên trang sức vàng", "số"],
+  ["trang_bi.json:luat.dongAn.soDong.do", "Dòng ẩn trên trang sức đỏ", "số"],
+  ["trang_bi.json:luat.dongAn.songAnHeSo", "Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng nhân", "hệ số"],
+  ["trang_bi.json:luat.dongAn.tayAnLinhVanThach", "Tẩy ẩn (quay lại hiệu ứng, giữ điều kiện): Linh Văn Thạch mỗi lần", "số"],
+  ["trang_bi.json:luat.dongAn.tranMoiDong", "Dòng ẩn: mỗi dòng tối đa lực chiến", "%"],
+  ["trang_bi.json:luat.dongAn.tranTong", "Dòng ẩn: tổng tối đa lực chiến", "%"],
+  ["trang_bi.json:luat.dongRen.heSoLoaiPhu", "Dòng rèn: giá trị so với loại chỉ số phụ đó", "%"],
+  ["trang_bi.json:luat.dongRen.toiDa.ha", "Dòng rèn tối đa mỗi món ở Hạ vị", "số"],
+  ["trang_bi.json:luat.dongRen.toiDa.trung", "Dòng rèn tối đa mỗi món ở Trung vị", "số"],
+  ["trang_bi.json:luat.dongRen.toiDa.than", "Dòng rèn tối đa mỗi món ở Thần vực", "số"],
+  ["trang_bi.json:luat.dongRen.toiDa.thanh", "Dòng rèn tối đa mỗi món ở Thánh vực", "số"],
+  ["trang_bi.json:luat.dongRen.doiDongKhiTinh", "Đổi dòng rèn: Khí Tinh mỗi lần", "số"],
   ["phap_bao.json:o.ha_vi", "Ô pháp bảo ở Hạ vị", "số"],
   ["phap_bao.json:o.trung_vi_tro_len", "Ô pháp bảo từ Trung vị", "số"],
   ["phap_khi.json:o", "Ô pháp khí", "số"],
@@ -379,7 +443,7 @@ export function assemble(rows: Record<string, Record<string, unknown>[]>): Recor
   if (rows["Mạch cộng hưởng"]) files["dao_co_ban.json"].mach = Object.fromEntries(rows["Mạch cộng hưởng"].map((m) => [m.quan_he, m.mach]));
   // File chưa có sheet nào trong Excel (Đạo Cơ Bàn ở file cũ) thì không xuất
   for (const f of TB_FILES) if (!PARTS.some((p) => p.file === f && rows[p.def.sheet])) delete files[f];
-  const order = ["id", "ten", "nguon", "chu_de", "gan_voi", "than", "rang_buoc", "moc", "an"];
+  const order = ["id", "ten", "lo", "nguon", "chu_de", "gan_voi", "than", "rang_buoc", "moc", "an"];
   files["set.json"].bo = (files["set.json"].bo as Record<string, unknown>[]).map((b) => {
     const moc = rows["Set mốc"].filter((m) => m.bo === b.id).map(({ bo: _, ...m }) => m);
     const full: Record<string, unknown> = { ...b, moc };

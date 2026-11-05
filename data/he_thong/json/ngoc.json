@@ -5,7 +5,8 @@
     "Nén 3 viên cùng hệ cùng cấp lên 1 viên cấp trên; ty_le_nen_len là tỷ lệ đậu khi nén lên cấp đó (đề xuất). Ngọc từ cấp 7 khóa vào nhân vật (chốt mục 13).",
     "Cấp là thuộc tính của từng viên, không nằm trong mã. Mã NG-KH giữ như danh_sach.json; ten_han_viet là tên hiện trong tooltip (đề xuất).",
     "tran (đề xuất 2026-11-04): mỗi hệ, phần sát thương từ ngọc trên satThuongMem chỉ tính một nửa và không vượt satThuongToiDa; kháng từ ngọc trên khangMem tính một nửa và không vượt khangToiDa.",
-    "song_he, phach (luyện khí, đề xuất 2026-11-04): song hệ hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp, mỗi hệ moi_he giá trị một viên thường, tính trong trần mềm của hệ đó; đậu theo ty_le_dau cố định (không theo bảng nén), thất bại mất that_bai_mat viên (viên đặt thứ hai), phù phu_giu giữ lại cả hai; mỗi lần dùng tiêu 1 tấm phù, đậu hay không cũng mất. Phách điểm hóa từ 1 ngọc cấp 10 (luyen_khi.json luat.phachKhiTinh, luat.phachTyLe), khảm ô công, cho gia_tri và nâng trần sát thương hệ đó lên tran_toi_da; mỗi hệ 1 Phách tính trần; khóa."
+    "song_he, phach (luyện khí, đề xuất 2026-11-04): song hệ hợp 2 viên cùng cấp, hai hệ tương sinh hoặc tương hợp, mỗi hệ moi_he giá trị một viên thường, tính trong trần mềm của hệ đó; đậu theo ty_le_dau cố định (không theo bảng nén), thất bại mất that_bai_mat viên (viên đặt thứ hai), phù phu_giu giữ lại cả hai; mỗi lần dùng tiêu 1 tấm phù, đậu hay không cũng mất. Phách điểm hóa từ 1 ngọc cấp 10 (luyen_khi.json luat.phachKhiTinh, luat.phachTyLe), khảm ô công, cho gia_tri và nâng trần sát thương hệ đó lên tran_toi_da; mỗi hệ 1 Phách tính trần; khóa.",
+    "binh_an (set đồ 2.0, đề xuất): 6 binh ấn của binh bộ (set.json binh_bo), chỉ khảm vào chi_kham_vao, chiếm dòng khảm như ngọc, Ý châu, ấn bộ; bậc như ấn bộ (set.json bac_an)."
   ],
   "he": [
     {
@@ -482,7 +483,7 @@
       "ten": "Ấn Chu Thiên",
       "bo": "chu_thien",
       "he": "tho",
-      "ban_cho": false,
+      "ban_cho": true,
       "nguon": ["tien_nhan_dong_phu","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
     {
@@ -490,7 +491,7 @@
       "ten": "Ấn Phá Quân",
       "bo": "pha_quan",
       "he": "cuc_duong",
-      "ban_cho": false,
+      "ban_cho": true,
       "nguon": ["thuong_co_chien_truong","doi_cong_hien_khi_tong_giu_bi_canh"]
     },
     {
@@ -498,8 +499,52 @@
       "ten": "Ấn Hỗn Độn",
       "bo": "hon_don",
       "he": null,
-      "ban_cho": false,
+      "ban_cho": true,
       "nguon": ["hon_don_bi_canh","doi_cong_hien_khi_tong_giu_bi_canh"]
+    }
+  ],
+  "binh_an": [
+    {
+      "ma_vp": "NG-BA-001",
+      "ten": "Binh Ấn Bạo Kích",
+      "binh_bo": "bao_kich",
+      "chi_kham_vao": ["vu_khi","bao_tay","ngoc_boi"],
+      "nguon": ["theo_bac_an"]
+    },
+    {
+      "ma_vp": "NG-BA-002",
+      "ten": "Binh Ấn Xuyên Phá",
+      "binh_bo": "xuyen_pha",
+      "chi_kham_vao": ["vu_khi","bao_tay","ngoc_boi"],
+      "nguon": ["theo_bac_an"]
+    },
+    {
+      "ma_vp": "NG-BA-003",
+      "ten": "Binh Ấn Liên Kích",
+      "binh_bo": "lien_kich",
+      "chi_kham_vao": ["vu_khi","bao_tay","ngoc_boi"],
+      "nguon": ["theo_bac_an"]
+    },
+    {
+      "ma_vp": "NG-BA-004",
+      "ten": "Binh Ấn Pháp Nguyên",
+      "binh_bo": "phap_nguyen",
+      "chi_kham_vao": ["vu_khi","bao_tay","ngoc_boi"],
+      "nguon": ["theo_bac_an"]
+    },
+    {
+      "ma_vp": "NG-BA-005",
+      "ten": "Binh Ấn Hấp Hồn",
+      "binh_bo": "hap_hon",
+      "chi_kham_vao": ["vu_khi","bao_tay","ngoc_boi"],
+      "nguon": ["theo_bac_an"]
+    },
+    {
+      "ma_vp": "NG-BA-006",
+      "ten": "Binh Ấn Trấn Thủ",
+      "binh_bo": "tran_thu",
+      "chi_kham_vao": ["vu_khi","bao_tay","ngoc_boi"],
+      "nguon": ["theo_bac_an"]
     }
   ]
 }

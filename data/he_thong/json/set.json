@@ -3,20 +3,103 @@
     "Set đồ dựa trên ấn bộ: ấn là vật phẩm khảm vào một dòng khảm đã kích hoạt, nên đúng luật 'thuộc tính chỉ hiện khi khảm ngọc' (chốt 2026-11-03). Kiểu món nào cũng mang được ấn bộ nào.",
     "Mốc 2/4/7: số món đang mặc có cùng ấn và còn độ bền trên 0. 3 món tính mốc 2, 5–6 món tính mốc 4.",
     "Mỗi món giữ tối đa 1 ấn bộ. Tối đa 3 bộ cùng lúc (2+2+2), 7 ô nên chỉ một bộ đạt mốc 7.",
-    "Hiệu ứng set không tăng theo cường hóa, độ hiếm hay cấp; ấn bộ không có cấp.",
+    "Hiệu ứng set không tăng theo cường hóa, độ hiếm hay cấp đồ; ấn bộ không có cấp nhưng có bậc lục → đỏ (bac_an): mốc 2 và 4 nhân he_so theo bậc thấp nhất trong các ấn đang tính cho bộ đó; số trong moc[] là ở bậc tím (set đồ 2.0, đề xuất).",
     "Trần: quy đổi lực chiến mốc 2 không quá 1%, đủ mốc 4 không quá 3%, đủ mốc 7 không quá 6%, tính trong trần 35% của đồ. Hiệu ứng kinh tế của set cộng pháp khí không quá +10% mỗi loại sản lượng; tỷ lệ nén, cường hóa, luyện đan tính chung trần +15% của phù.",
     "Hiệu ứng 'mỗi trận' tính lại từ đầu mỗi trận mô phỏng; mọi chọn mục tiêu phải deterministic (hòa thì theo id).",
     "Đồ tím trở lên rơi ở bí cảnh có 30% đã khảm sẵn ấn bộ của bí cảnh đó ở một dòng khảm thêm. Ấn rời cũng rơi ở bí cảnh đó; tông môn giữ bí cảnh đổi được ấn bằng cống hiến.",
-    "3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn): ấn khóa vào nhân vật. 17 bộ còn lại: ấn chưa khảm bán được trên chợ; món đã khảm bán kèm ấn nếu món đó bán được.",
-    "Gỡ ấn bằng Thoát Khảm Phù (PH-CH-008) thì ấn còn nguyên; gỡ không phù thì ấn vỡ."
+    "Giao dịch theo bậc ấn (bac_an[].giao_dich): lục không bán lại trên chợ, lam và tím bán được, vàng và đỏ khóa vào nhân vật. 3 bộ thần (Chu Thiên, Phá Quân, Hỗn Độn) chỉ có ấn từ bậc luat.boThanTuBac. Món đã khảm bán kèm ấn nếu món đó và ấn đều bán được.",
+    "Gỡ ấn bằng Thoát Khảm Phù (PH-CH-008) thì ấn còn nguyên; gỡ không phù thì ấn vỡ.",
+    "bo[].lo: lộ sức mạnh của bộ (ngoai_cong, noi_cong, thu_ngoai, thu_noi, hap_thu, phan_chan, khong_toc, kinh_te, khac_che), dùng cho binh bộ đồng lộ và bản đồ khắc lộ (GDD tab Trang bị phần 14).",
+    "moc[].chi_so_kem: chỉ số áp như hiệu ứng chi_so, đi kèm một mốc có loai khác (hanh_vi, ho_tran, kinh_te). Khóa chỉ số mới của set đồ 2.0: attackSpeed, lifesteal, manaDrain, manaCostCut, innerDamage, defOuter, defInner, hpRegen (phần nghìn máu tối đa mỗi giây), damageTakenCut, reflect; buaGiamMana, hoiManaPhapBao là hành vi mới.",
+    "bac_an: mốc 7 chỉ mở khi cả 7 ấn có tinh_moc_7; ghép luat.ghepAnSo ấn cùng bộ cùng bậc thành 1 ấn bậc trên, chỉ ở bậc có ghep_len (lục lên lam, lam lên tím); vàng, đỏ chỉ rơi. Bậc là thuộc tính từng viên, mã giữ NG-AN-001…020.",
+    "hop_bo: mặc cùng lúc từ 2 bộ đang kích (đủ mốc 2), mỗi cặp xét quan hệ hệ ấn (quan_he_to_hop.json). Mỗi bộ lấy he_so tốt nhất của nó (cộng hưởng Đạo Cơ Bàn thay nếu cao hơn), rồi nhân he_so của tuong_khac nếu có bất kỳ bộ đang kích nào khắc nó. Chỉ nhân mốc 2; mana_max cộng một lần cho mỗi cặp đối cực.",
+    "binh_bo: binh ấn (ngoc.json binh_an) khảm vào vũ khí, bao tay, ngọc bội và chiếm dòng khảm. Mốc luat.binhBoMoc (2 và 3 món), mỗi người luat.binhBoMoiNguoi binh bộ; cùng lộ với một ấn bộ đang kích thì mốc 3 nhân luat.binhBoDongLoHeSo. Bậc binh ấn như ấn bộ (bac_an); số ở bậc tím.",
+    "bo_tron: bộ 7 món lục bán ở shop NPC, mỗi món khảm sẵn ấn bậc lục của bộ đó; 17 bộ, không có 3 bộ thần."
   ],
   "moc": [2,4,7],
   "tran": {"boToiDa":3,"luc_chien_phan_nghin":{"2":10,"4":30,"7":60},"kinhTeToiDa":100,"tyLeChungTranPhu":150},
   "ty_le_kham_san_tim_tro_len": 300,
+  "bac_an": [
+    {
+      "ma": "luc",
+      "ten": "Lục",
+      "bac": 1,
+      "he_so": 600,
+      "tinh_moc_7": false,
+      "ghep_len": true,
+      "giao_dich": "khong_ban_lai",
+      "nguon": "Shop NPC; shop còn bán bộ trọn 7 món lục có sẵn ấn"
+    },
+    {
+      "ma": "lam",
+      "ten": "Lam",
+      "bac": 2,
+      "he_so": 800,
+      "tinh_moc_7": false,
+      "ghep_len": true,
+      "giao_dich": "ban_duoc",
+      "nguon": "Chợ người chơi; quái thường, bí cảnh"
+    },
+    {
+      "ma": "tim",
+      "ten": "Tím",
+      "bac": 3,
+      "he_so": 1000,
+      "tinh_moc_7": true,
+      "ghep_len": false,
+      "giao_dich": "ban_duoc",
+      "nguon": "Boss của bí cảnh nguồn bộ đó, dị thú"
+    },
+    {
+      "ma": "vang",
+      "ten": "Vàng",
+      "bac": 4,
+      "he_so": 1100,
+      "tinh_moc_7": true,
+      "ghep_len": false,
+      "giao_dich": "khoa",
+      "nguon": "Boss dị thú Linh, Huyền, Thiên; boss liên minh cuối tuần"
+    },
+    {
+      "ma": "do",
+      "ten": "Đỏ",
+      "bac": 5,
+      "he_so": 1200,
+      "tinh_moc_7": true,
+      "ghep_len": false,
+      "giao_dich": "khoa",
+      "nguon": "Thần thú Tứ Tượng, boss Hỗn Độn Bí Cảnh"
+    }
+  ],
+  "hop_bo": [
+    {
+      "quan_he": "thuan",
+      "ten": "Thuần",
+      "he_so": 1100,
+      "mo_ta": "Cùng hệ. Đặt kề trên Đạo Cơ Bàn thì thành cộng hưởng Đồng Khí ×1,25, kháng hệ đó +3%"
+    },
+    {"quan_he":"tuong_sinh","ten":"Tương sinh","he_so":1200,"mo_ta":"Trên Đạo Cơ Bàn: cộng hưởng Tương Dưỡng ×1,5"},
+    {"quan_he":"tuong_hop","ten":"Tương hợp","he_so":1200,"mo_ta":"Trên Đạo Cơ Bàn: cộng hưởng Tương Dưỡng ×1,5"},
+    {
+      "quan_he": "doi_cuc",
+      "ten": "Đối cực",
+      "he_so": 1300,
+      "mana_max": -20,
+      "mo_ta": "Trên Đạo Cơ Bàn: cộng hưởng Âm Dương ×2, mana tối đa −2%"
+    },
+    {"quan_he":"trung_tinh","ten":"Trung tính","he_so":1000,"mo_ta":"Không đổi"},
+    {
+      "quan_he": "tuong_khac",
+      "ten": "Tương khắc",
+      "he_so": 800,
+      "mo_ta": "Bộ bị bất kỳ bộ đang kích nào khắc thì mốc 2 nhân thêm ×0,8, kể cả khi có hợp bộ hay cộng hưởng; trên bàn là mạch đứt"
+    }
+  ],
   "bo": [
     {
       "id": "tu_bao",
       "ten": "Tụ Bảo",
+      "lo": "kinh_te",
       "nguon": "linh_thach_quat",
       "chu_de": "tai_nang",
       "gan_voi": {"tai_nang":"tu_kim_tien"},
@@ -42,6 +125,7 @@
     {
       "id": "bach_thao",
       "ten": "Bách Thảo",
+      "lo": "hap_thu",
       "nguon": "duoc_coc",
       "chu_de": "tai_nang",
       "gan_voi": {"tai_nang":"tu_duoc"},
@@ -52,8 +136,9 @@
         {
           "so": 4,
           "loai": "kinh_te",
-          "mo_ta": "Mỏ dược trấn giữ +5%; cứ 10 lần thu tay thêm 1 dược liệu cùng bậc",
-          "tham_so": {"sanLuongMoDuoc":50,"themMoi10LanThu":1}
+          "mo_ta": "Hồi 0,3% máu mỗi giây; mỏ dược trấn giữ +5%",
+          "tham_so": {"sanLuongMoDuoc":50},
+          "chi_so_kem": {"hpRegen":3}
         },
         {
           "so": 7,
@@ -67,19 +152,15 @@
     {
       "id": "ban_thach",
       "ten": "Bàn Thạch",
+      "lo": "thu_ngoai",
       "nguon": "khoang_mach_dong",
       "chu_de": "tai_nang",
       "gan_voi": {"tai_nang":"tu_the","loai_chieu":"ho_the"},
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Khiên nhận được +6%","tham_so":{"khienNhan":60}},
-        {
-          "so": 4,
-          "loai": "hanh_vi",
-          "mo_ta": "Hộ thể của người mặc che thêm chính mình (3 thành 4 mục tiêu, khiên phần thêm bằng 50%)",
-          "tham_so": {"themMucTieuBanThan":1,"heSoKhienThem":500}
-        },
+        {"so":2,"loai":"chi_so","mo_ta":"Máu +3%","tham_so":{"hp":30}},
+        {"so":4,"loai":"chi_so","mo_ta":"Thủ ngoại +5%; hồi 0,2% máu mỗi giây","tham_so":{"defOuter":50,"hpRegen":2}},
         {
           "so": 7,
           "loai": "hanh_vi",
@@ -92,18 +173,19 @@
     {
       "id": "liep_thu",
       "ten": "Liệp Thú",
+      "lo": "ngoai_cong",
       "nguon": "thu_lam",
       "chu_de": "vai_tro",
       "gan_voi": {"vai_tro":"san_di_thu","loai_chieu":"tam_xa"},
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Sát thương lên dị thú và boss +5% (chỉ PvE)","tham_so":{"satThuongPvE":50}},
+        {"so":2,"loai":"chi_so","mo_ta":"Tốc đánh +3%","tham_so":{"attackSpeed":30}},
         {
           "so": 4,
-          "loai": "hanh_vi",
-          "mo_ta": "Tầm xa ưu tiên kẻ địch máu thấp nhất trong tầm",
-          "tham_so": {"chonMucTieu":"mau_thap_nhat"}
+          "loai": "chi_so",
+          "mo_ta": "Chí mạng +2%; sát thương lên dị thú và boss PvE +8%",
+          "tham_so": {"critBonus":20,"satThuongPvE":80}
         },
         {
           "so": 7,
@@ -117,18 +199,19 @@
     {
       "id": "thiet_ky",
       "ten": "Thiết Kỵ",
+      "lo": "phan_chan",
       "nguon": "co_chien_truong",
       "chu_de": "vai_tro",
       "gan_voi": {"vai_tro":"tien_tuyen","loai_chieu":"can_quet"},
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Phòng thủ +3%","tham_so":{"def":30}},
+        {"so":2,"loai":"chi_so","mo_ta":"Giảm sát thương nhận 2%","tham_so":{"damageTakenCut":20}},
         {
           "so": 4,
-          "loai": "hanh_vi",
-          "mo_ta": "Mỗi lần Cận chiến quét, mục tiêu đầu tiên nhận thêm 20% sát thương",
-          "tham_so": {"mucTieuDau":200}
+          "loai": "chi_so",
+          "mo_ta": "Phản 5% sát thương cận chiến nhận; giảm sát thương nhận thêm 1%",
+          "tham_so": {"reflect":50,"damageTakenCut":10}
         },
         {
           "so": 7,
@@ -142,6 +225,7 @@
     {
       "id": "van_uyen",
       "ten": "Văn Uyên",
+      "lo": "noi_cong",
       "nguon": "tang_kinh_dong",
       "chu_de": "tai_nang",
       "gan_voi": {"tai_nang":"tu_phap","loai_chieu":"dien_rong"},
@@ -151,9 +235,9 @@
         {"so":2,"loai":"chi_so","mo_ta":"Mana tối đa +4%","tham_so":{"manaMax":40}},
         {
           "so": 4,
-          "loai": "hanh_vi",
-          "mo_ta": "Diện rộng bị khống chế lúc vận công thì hoàn lại 50% hồi chiêu thay vì mất trắng",
-          "tham_so": {"hoanHoiChieu":500}
+          "loai": "chi_so",
+          "mo_ta": "Giảm mana thi triển 8%; sát thương chiêu nội +3%",
+          "tham_so": {"manaCostCut":80,"innerDamage":30}
         },
         {
           "so": 7,
@@ -167,23 +251,19 @@
     {
       "id": "ngoc_tuy",
       "ten": "Ngọc Tủy",
+      "lo": "thu_noi",
       "nguon": "ngoc_tuy_dong",
       "chu_de": "he",
       "gan_voi": {"he":"theo_linh_can"},
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {
-          "so": 2,
-          "loai": "kinh_te",
-          "mo_ta": "Nén ngọc +2% tỷ lệ (tính chung trần +15% của phù)",
-          "tham_so": {"tyLeNenNgoc":20}
-        },
+        {"so":2,"loai":"chi_so","mo_ta":"Thủ nội +4%","tham_so":{"defInner":40}},
         {
           "so": 4,
-          "loai": "khac_che",
-          "mo_ta": "Kháng hệ đang khắc linh căn chính của người mặc +6%",
-          "tham_so": {"khangHeKhacMinh":60}
+          "loai": "chi_so",
+          "mo_ta": "Mana tối đa +5%; giảm mana thi triển 8%; công lực −3%",
+          "tham_so": {"manaMax":50,"manaCostCut":80,"atk":-30}
         },
         {
           "so": 7,
@@ -197,6 +277,7 @@
     {
       "id": "linh_tuyen",
       "ten": "Linh Tuyền",
+      "lo": "hap_thu",
       "nguon": "linh_tuyen_dong",
       "chu_de": "vai_tro",
       "gan_voi": {"vai_tro":"hoi_phuc","loai_chieu":"hoi_phuc"},
@@ -207,8 +288,9 @@
         {
           "so": 4,
           "loai": "hanh_vi",
-          "mo_ta": "Hồi phục: hồi mana khi đang vận chỉ −10% thay −20%",
-          "tham_so": {"hoiManaKhiVan":-100}
+          "mo_ta": "Hồi phục: hồi mana khi đang vận chỉ −10% thay −20%; thủ nội +2%",
+          "tham_so": {"hoiManaKhiVan":-100},
+          "chi_so_kem": {"defInner":20}
         },
         {
           "so": 7,
@@ -222,6 +304,7 @@
     {
       "id": "bang_phach",
       "ten": "Băng Phách",
+      "lo": "khong_toc",
       "nguon": "bang_phach_cung",
       "chu_de": "he",
       "gan_voi": {"he":["thuy","cuc_han"],"loai_chieu":"khong_che"},
@@ -232,8 +315,9 @@
         {
           "so": 4,
           "loai": "hanh_vi",
-          "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%",
-          "tham_so": {"giamDanKhongChe":750}
+          "mo_ta": "Khống chế liên tiếp cùng mục tiêu còn 75% thay vì 50%; thủ nội +2%",
+          "tham_so": {"giamDanKhongChe":750},
+          "chi_so_kem": {"defInner":20}
         },
         {
           "so": 7,
@@ -247,6 +331,7 @@
     {
       "id": "loi_tri",
       "ten": "Lôi Trì",
+      "lo": "ngoai_cong",
       "nguon": "loi_tri",
       "chu_de": "he",
       "gan_voi": {"he":["loi","kim"]},
@@ -257,8 +342,8 @@
         {
           "so": 4,
           "loai": "chi_so",
-          "mo_ta": "Tê liệt khi chí mạng (Lôi) +0,25 s; xuyên giáp (Kim) +3%",
-          "tham_so": {"teLietTicks":5,"xuyenGiap":30}
+          "mo_ta": "Sát thương chí mạng +8%; tê liệt khi chí mạng (Lôi) +0,25 s",
+          "tham_so": {"critDamage":80,"teLietTicks":5}
         },
         {
           "so": 7,
@@ -272,6 +357,7 @@
     {
       "id": "ngu_thu",
       "ten": "Ngự Thú",
+      "lo": "kinh_te",
       "nguon": "yeu_thu_sao_huyet",
       "chu_de": "vai_tro",
       "gan_voi": {"vai_tro":"thu_cuoi"},
@@ -292,14 +378,20 @@
     {
       "id": "co_tong",
       "ten": "Cổ Tông",
+      "lo": "hap_thu",
       "nguon": "co_tong_di_tich",
       "chu_de": "vai_tro",
       "gan_voi": {"vai_tro":"phap_bao"},
       "than": false,
       "rang_buoc": null,
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Linh lực tối đa của pháp bảo +20%","tham_so":{"linhLucPhapBao":200}},
-        {"so":4,"loai":"hanh_vi","mo_ta":"Hồi chiêu pháp bảo −15%","tham_so":{"hoiChieuPhapBao":-150}},
+        {"so":2,"loai":"chi_so","mo_ta":"Hút mana: mỗi đòn rút 1% mana tối đa của mục tiêu","tham_so":{"manaDrain":10}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Hồi chiêu pháp bảo −15%; mỗi lần pháp bảo kích hoạt hồi 5% mana",
+          "tham_so": {"hoiChieuPhapBao":-150,"hoiManaPhapBao":50}
+        },
         {
           "so": 7,
           "loai": "hanh_vi",
@@ -312,6 +404,7 @@
     {
       "id": "dan_tien",
       "ten": "Đan Tiên",
+      "lo": "kinh_te",
       "nguon": "dan_tien_dong_phu",
       "chu_de": "tai_nang",
       "gan_voi": {"tai_nang":"tu_dan"},
@@ -332,6 +425,7 @@
     {
       "id": "thien_cong",
       "ten": "Thiên Công",
+      "lo": "kinh_te",
       "nguon": "luyen_khi_di_chi",
       "chu_de": "tai_nang",
       "gan_voi": {"tai_nang":"tu_ren"},
@@ -357,14 +451,21 @@
     {
       "id": "huyet_anh",
       "ten": "Huyết Ảnh",
+      "lo": "hap_thu",
       "nguon": "huyet_sat_ma_quat",
       "chu_de": "tai_nang",
       "gan_voi": {"tai_nang":"sat_thu","loai_chieu":"than_phap"},
       "than": false,
       "rang_buoc": "Bộ tà: mặc từ 4 món thì sát nghiệp nhận +50%",
       "moc": [
-        {"so":2,"loai":"chi_so","mo_ta":"Sát thương chí mạng +5%","tham_so":{"critDamage":50}},
-        {"so":4,"loai":"hanh_vi","mo_ta":"Thân pháp chỉ lộ vị trí 2 s thay 3 s","tham_so":{"loViTriTicks":40}},
+        {"so":2,"loai":"chi_so","mo_ta":"Hút máu +1,5%","tham_so":{"lifesteal":15}},
+        {
+          "so": 4,
+          "loai": "hanh_vi",
+          "mo_ta": "Sát thương chí mạng +5%; Thân pháp chỉ lộ vị trí 2 s thay 3 s",
+          "tham_so": {"loViTriTicks":40},
+          "chi_so_kem": {"critDamage":50}
+        },
         {
           "so": 7,
           "loai": "hanh_vi",
@@ -377,6 +478,7 @@
     {
       "id": "do_kiep",
       "ten": "Độ Kiếp",
+      "lo": "noi_cong",
       "nguon": "thien_loi_dai",
       "chu_de": "vai_tro",
       "gan_voi": {"vai_tro":"do_kiep","loai_chieu":"bua_chu"},
@@ -387,8 +489,8 @@
         {
           "so": 4,
           "loai": "hanh_vi",
-          "mo_ta": "Lần Bùa chú cuối cùng mỗi trận không tốn mana",
-          "tham_so": {"buaCuoiMienMana":1}
+          "mo_ta": "Bùa chú giảm mana thi triển 15%; lần Bùa chú cuối cùng mỗi trận không tốn mana",
+          "tham_so": {"buaGiamMana":150,"buaCuoiMienMana":1}
         },
         {
           "so": 7,
@@ -402,6 +504,7 @@
     {
       "id": "van_kiem",
       "ten": "Vạn Kiếm",
+      "lo": "ngoai_cong",
       "nguon": "van_kiem_trung",
       "chu_de": "vai_tro",
       "gan_voi": {"vai_tro":"sat_thuong_don","loai_chieu":"can_don"},
@@ -412,8 +515,9 @@
         {
           "so": 4,
           "loai": "hanh_vi",
-          "mo_ta": "Cận chiến đơn đánh mục tiêu dưới 30% máu +15% sát thương",
-          "tham_so": {"nguongMau":300,"satThuong":150}
+          "mo_ta": "Xuyên giáp +4%; Cận chiến đơn đánh mục tiêu dưới 30% máu +15% sát thương",
+          "tham_so": {"nguongMau":300,"satThuong":150},
+          "chi_so_kem": {"xuyenGiap":40}
         },
         {
           "so": 7,
@@ -427,6 +531,7 @@
     {
       "id": "chu_thien",
       "ten": "Chu Thiên",
+      "lo": "thu_noi",
       "nguon": "tien_nhan_dong_phu",
       "chu_de": "tai_nang",
       "gan_voi": {"tai_nang":"tu_tran","loai_chieu":"tran_phap"},
@@ -437,8 +542,9 @@
         {
           "so": 4,
           "loai": "hanh_vi",
-          "mo_ta": "Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên",
-          "tham_so": {"chonViTri":"dong_dich_nhat"}
+          "mo_ta": "Thủ nội +4%; Trận pháp đặt vào chỗ đông kẻ địch nhất thay vì quanh mục tiêu đầu tiên",
+          "tham_so": {"chonViTri":"dong_dich_nhat"},
+          "chi_so_kem": {"defInner":40}
         },
         {
           "so": 7,
@@ -452,13 +558,20 @@
     {
       "id": "pha_quan",
       "ten": "Phá Quân",
+      "lo": "ngoai_cong",
       "nguon": "thuong_co_chien_truong",
       "chu_de": "vai_tro",
       "gan_voi": {"vai_tro":"cong_thanh"},
       "than": true,
       "rang_buoc": "Mốc 4 và 7 chỉ áp trong chiến tranh địa bàn",
       "moc": [
-        {"so":2,"loai":"ho_tran","mo_ta":"Sát thương lên trận nhãn và hộ trận +5%","tham_so":{"satThuongHoTran":50}},
+        {
+          "so": 2,
+          "loai": "ho_tran",
+          "mo_ta": "Xuyên giáp +2%; sát thương lên trận nhãn và hộ trận +5%",
+          "tham_so": {"satThuongHoTran":50},
+          "chi_so_kem": {"xuyenGiap":20}
+        },
         {"so":4,"loai":"ho_tran","mo_ta":"Đòn phá trận đầu tiên mỗi trận công thành ×1,5","tham_so":{"heSoDonDau":1500}},
         {
           "so": 7,
@@ -472,6 +585,7 @@
     {
       "id": "hon_don",
       "ten": "Hỗn Độn",
+      "lo": "khac_che",
       "nguon": "hon_don_bi_canh",
       "chu_de": "he",
       "gan_voi": {"he":"moi_he"},
@@ -494,5 +608,211 @@
       ],
       "an": "NG-AN-020"
     }
-  ]
+  ],
+  "binh_bo": [
+    {
+      "id": "bao_kich",
+      "ten": "Bạo Kích",
+      "lo": ["ngoai_cong"],
+      "an": "NG-BA-001",
+      "moc_2": {"mo_ta":"Chí mạng +2%","tham_so":{"critBonus":20}},
+      "moc_3": {"mo_ta":"Sát thương chí mạng +8%","tham_so":{"critDamage":80}}
+    },
+    {
+      "id": "xuyen_pha",
+      "ten": "Xuyên Phá",
+      "lo": ["ngoai_cong"],
+      "an": "NG-BA-002",
+      "moc_2": {"mo_ta":"Xuyên giáp +3%","tham_so":{"xuyenGiap":30}},
+      "moc_3": {"mo_ta":"Xuyên kháng +3%; xuyên giáp thêm +2%","tham_so":{"resistPen":30,"xuyenGiap":20}}
+    },
+    {
+      "id": "lien_kich",
+      "ten": "Liên Kích",
+      "lo": ["ngoai_cong"],
+      "an": "NG-BA-003",
+      "moc_2": {"mo_ta":"Tốc đánh +3%","tham_so":{"attackSpeed":30}},
+      "moc_3": {"mo_ta":"Giảm hồi chiêu 3%","tham_so":{"cooldownCut":30}}
+    },
+    {
+      "id": "phap_nguyen",
+      "ten": "Pháp Nguyên",
+      "lo": ["noi_cong"],
+      "an": "NG-BA-004",
+      "moc_2": {"mo_ta":"Giảm mana thi triển 6%","tham_so":{"manaCostCut":60}},
+      "moc_3": {"mo_ta":"Sát thương chiêu nội +4%","tham_so":{"innerDamage":40}}
+    },
+    {
+      "id": "hap_hon",
+      "ten": "Hấp Hồn",
+      "lo": ["hap_thu"],
+      "an": "NG-BA-005",
+      "moc_2": {"mo_ta":"Hút máu +1%","tham_so":{"lifesteal":10}},
+      "moc_3": {"mo_ta":"Hút mana 0,5% mỗi đòn","tham_so":{"manaDrain":5}}
+    },
+    {
+      "id": "tran_thu",
+      "ten": "Trấn Thủ",
+      "lo": ["thu_ngoai","thu_noi"],
+      "an": "NG-BA-006",
+      "moc_2": {"mo_ta":"Khiên nhận +5%","tham_so":{"khienNhan":50}},
+      "moc_3": {"mo_ta":"Thủ ngoại +3%; thủ nội +3%","tham_so":{"defOuter":30,"defInner":30}}
+    }
+  ],
+  "bo_tron": [
+    {
+      "ma_vp": "TB-BO-001",
+      "bo": "tu_bao",
+      "ten": "Bộ trọn Tụ Bảo",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Tụ Bảo bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-002",
+      "bo": "bach_thao",
+      "ten": "Bộ trọn Bách Thảo",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Bách Thảo bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-003",
+      "bo": "ban_thach",
+      "ten": "Bộ trọn Bàn Thạch",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Bàn Thạch bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-004",
+      "bo": "liep_thu",
+      "ten": "Bộ trọn Liệp Thú",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Liệp Thú bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-005",
+      "bo": "thiet_ky",
+      "ten": "Bộ trọn Thiết Kỵ",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Thiết Kỵ bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-006",
+      "bo": "van_uyen",
+      "ten": "Bộ trọn Văn Uyên",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Văn Uyên bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-007",
+      "bo": "ngoc_tuy",
+      "ten": "Bộ trọn Ngọc Tủy",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Ngọc Tủy bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-008",
+      "bo": "linh_tuyen",
+      "ten": "Bộ trọn Linh Tuyền",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Linh Tuyền bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-009",
+      "bo": "bang_phach",
+      "ten": "Bộ trọn Băng Phách",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Băng Phách bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-010",
+      "bo": "loi_tri",
+      "ten": "Bộ trọn Lôi Trì",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Lôi Trì bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-011",
+      "bo": "ngu_thu",
+      "ten": "Bộ trọn Ngự Thú",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Ngự Thú bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-012",
+      "bo": "co_tong",
+      "ten": "Bộ trọn Cổ Tông",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Cổ Tông bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-013",
+      "bo": "dan_tien",
+      "ten": "Bộ trọn Đan Tiên",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Đan Tiên bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-014",
+      "bo": "thien_cong",
+      "ten": "Bộ trọn Thiên Công",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Thiên Công bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-015",
+      "bo": "huyet_anh",
+      "ten": "Bộ trọn Huyết Ảnh",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Huyết Ảnh bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-016",
+      "bo": "do_kiep",
+      "ten": "Bộ trọn Độ Kiếp",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Độ Kiếp bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BO-017",
+      "bo": "van_kiem",
+      "ten": "Bộ trọn Vạn Kiếm",
+      "bac": "luc",
+      "so_mon": 7,
+      "mo_ta": "7 món lục, mỗi món khảm sẵn ấn Vạn Kiếm bậc lục; không bán lại trên chợ",
+      "nguon": ["shop_npc"]
+    }
+  ],
+  "luat": {"ghepAnSo":3,"boThanTuBac":3,"binhBoMoiNguoi":1,"binhBoMoc":[2,3],"binhBoDongLoHeSo":1200}
 }

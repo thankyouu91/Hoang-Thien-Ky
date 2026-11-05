@@ -210,7 +210,7 @@ export function kiem(d: Any, raw: Raw): Report {
   if (d["trang_bi.json"]) {
     const tb = d["trang_bi.json"], ngoc = d["ngoc.json"], set = d["set.json"], pb = d["phap_bao.json"], pk = d["phap_khi.json"], vp = d["vat_pham.json"];
     const codes = [
-      ...tb.kieu, ...ngoc.he, ...ngoc.y_chau, ...ngoc.an_bo, ...(ngoc.song_he ?? []), ...(ngoc.phach ?? []), ...(d["thu_phat_trien.json"]?.thien_phu ?? []), ...pb.mon, ...pb.tran_giao, ...pk.mon, ...vp.phu, ...vp.dan, ...vp.nguyen_lieu,
+      ...tb.kieu, ...ngoc.he, ...ngoc.y_chau, ...ngoc.an_bo, ...(ngoc.song_he ?? []), ...(ngoc.phach ?? []), ...(d["thu_phat_trien.json"]?.thien_phu ?? []), ...(ngoc.binh_an ?? []), ...(set.bo_tron ?? []), ...pb.mon, ...pb.tran_giao, ...pk.mon, ...vp.phu, ...vp.dan, ...vp.nguyen_lieu,
     ].map((x: Any) => x.ma_vp);
     const dup = codes.filter((x, i) => codes.indexOf(x) !== i);
     if (dup.length) errors.push(`Trang bị: mã vật phẩm trùng ${[...new Set(dup)].slice(0, 8).join(", ")}`);
@@ -357,6 +357,48 @@ export function kiem(d: Any, raw: Raw): Report {
     }
     if (bad.length) errors.push(`Luyện khí: ${bad.join("; ")}`);
     else notes.push(`Luyện khí: tẩy luyện ${lk.tay_luyen.length} dòng (loại 1 khớp chỉ số phụ mặc định), khí linh ${lk.khi_linh.length - 1} cấp, ${lk.khi_van.length} khí văn, ${phachHe.length} Phách, ${lk.danh_khi.length} danh khí, ${lk.bao_giam.length} trang Bảo Giám`);
+  }
+
+  // Set đồ 2.0: bậc ấn theo độ hiếm, hợp bộ đủ quan hệ, binh bộ có binh ấn, bộ trọn đủ bộ thường, dòng ẩn, dòng rèn, điểm
+  const set2 = d["set.json"];
+  if (set2?.bac_an) {
+    const tb = d["trang_bi.json"], ngoc = d["ngoc.json"], bad: string[] = [];
+    const LO = ["ngoai_cong", "noi_cong", "thu_ngoai", "thu_noi", "hap_thu", "phan_chan", "khong_toc", "kinh_te", "khac_che"];
+    const bac = set2.bac_an as Any[];
+    if (bac.map((b) => b.ma).join(",") !== (tb.do_hiem as Any[]).map((x) => x.id).join(",")) bad.push("bậc ấn phải theo đúng 5 độ hiếm");
+    if (bac.some((b, i) => i > 0 && !(b.he_so > bac[i - 1].he_so))) bad.push("hệ số bậc ấn phải tăng dần");
+    if (bac.find((b) => b.ma === "tim")?.he_so !== 1000) bad.push("bậc tím phải là ×1,0 (số mốc ghi ở bậc tím)");
+    const rels = Object.keys(d["quan_he_to_hop.json"]), hop = (set2.hop_bo ?? []) as Any[];
+    const noRel = rels.filter((r) => !hop.some((h) => h.quan_he === r));
+    if (noRel.length || hop.length !== rels.length) bad.push(`hợp bộ thiếu quan hệ ${noRel.join(", ")}`);
+    for (const b of set2.bo as Any[]) if (b.lo !== undefined && !LO.includes(b.lo)) bad.push(`bộ ${b.id}: lộ lạ ${b.lo}`);
+    const binhAn = new Map(((ngoc.binh_an ?? []) as Any[]).map((x) => [x.ma_vp, x]));
+    const congSlots = (tb.o as Any[]).filter((o) => o.ngoc === "cong").map((o) => o.id).sort().join(",");
+    for (const b of (set2.binh_bo ?? []) as Any[]) {
+      const a = binhAn.get(b.an);
+      if (!a || a.binh_bo !== b.id) bad.push(`binh bộ ${b.id}: binh ấn ${b.an} không khớp`);
+      if (a && [...a.chi_kham_vao].sort().join(",") !== congSlots) bad.push(`${b.an}: chỉ khảm vào phải là 3 ô công ${congSlots}`);
+      for (const l of b.lo ?? []) if (!LO.includes(l)) bad.push(`binh bộ ${b.id}: lộ lạ ${l}`);
+      if (!b.moc_2?.tham_so || !b.moc_3?.tham_so) bad.push(`binh bộ ${b.id}: thiếu tham số mốc 2 hoặc 3`);
+    }
+    const thuong = (set2.bo as Any[]).filter((b) => !b.than).map((b) => b.id);
+    const tron = (set2.bo_tron ?? []) as Any[];
+    if (tron.map((t) => t.bo).join(",") !== thuong.join(",")) bad.push(`bộ trọn cần đúng ${thuong.length} bộ thường, có ${tron.length}`);
+    const an = (tb.dong_an ?? []) as Any[];
+    const dk = an.filter((x) => x.loai === "dieu_kien").length, hu = an.filter((x) => x.loai === "hieu_ung").length;
+    if (dk !== 12 || hu !== 12 || an.length !== 24) bad.push(`dòng ẩn: ${dk} điều kiện, ${hu} hiệu ứng, cần 12 và 12`);
+    const slotsAn = (tb.o as Any[]).filter((o) => o.co_dong_an).map((o) => o.id).sort().join(",");
+    if (tb.o.some((o: Any) => o.co_dong_an !== undefined) && slotsAn !== "dai,ngoc_boi") bad.push(`ô có dòng ẩn: ${slotsAn}, cần đai và ngọc bội`);
+    const ren = (tb.dong_ren ?? []) as Any[];
+    if (ren.some((r, i) => i > 0 && !(r.nac > ren[i - 1].nac))) bad.push("dòng rèn: mốc cường hóa phải tăng dần");
+    const viDien = Object.keys(d["vi_dien.json"]);
+    for (const r of ren) for (const v of r.vi_dien) if (!viDien.includes(v)) bad.push(`dòng rèn ${r.so}: vị diện lạ ${v}`);
+    const toiDa = tb.luat?.dongRen?.toiDa ?? {};
+    for (const v of viDien) if (toiDa[v] !== undefined && toiDa[v] !== ren.filter((r) => r.vi_dien.includes(v)).length) bad.push(`dòng rèn: tối đa ở ${v} là ${toiDa[v]}, bảng mở ${ren.filter((r) => r.vi_dien.includes(v)).length}`);
+    const diem = (tb.diem ?? []) as Any[];
+    if (new Set(diem.map((x) => x.stat)).size !== diem.length) bad.push("điểm trang bị: chỉ số trùng");
+    if (bad.length) errors.push(`Set đồ 2.0: ${bad.join("; ")}`);
+    else notes.push(`Set đồ 2.0: ${bac.length} bậc ấn (×${bac[0].he_so / 1000}–×${bac[bac.length - 1].he_so / 1000}), ${hop.length} quan hệ hợp bộ, ${(set2.binh_bo ?? []).length} binh bộ, ${tron.length} bộ trọn, ${an.length} dòng ẩn, ${ren.length} dòng rèn, ${diem.length} trọng số điểm`);
   }
 
   // Thú: tư chất đủ 100%, tu vi cộng dồn đúng và đủ ngày nuôi, 12 hệ đủ thú kỹ, 3 huyết mạch cân nhau, thiên phú hợp lệ
