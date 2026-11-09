@@ -15,6 +15,9 @@ import { FogMap } from "./fogMap.ts";
 import { currentSpot } from "./journey.ts";
 import { loadWalkGrid, type WalkGrid } from "./walkGrid.ts";
 
+/** Nền vẽ riêng cho map nhỏ (PixelLab), khóa theo <loại điểm>_<hệ>.png rồi <loại điểm>.png; chưa vẽ thì dùng nền Azgaar. */
+const MAPCON_FILES = import.meta.glob<string>("../../../../assets/pixellab/map_con/*.png", { query: "?url", import: "default" });
+
 const TAP_SLOP = 8;
 /** Tốc độ chạy trong khu vực, đơn vị bản đồ mỗi giây (đề xuất; thú cưỡi nhân sau này). */
 const SPEED = 8;
@@ -102,6 +105,8 @@ export class WorldScene implements Scene {
   private dungeon?: { x: number; y: number };
   private mockPlayers: MockPlayer[] = [];
   private pendingScope?: number;
+  /** Nền vẽ riêng của khu vực (PixelLab), undefined = chưa thử, null = không có. */
+  private bg?: HTMLImageElement | null;
   private player = { x: 0, y: 0, dir: 0 };
   private path: { x: number; y: number }[] = [];
   private joy = { on: false, id: -1, dx: 0, dy: 0 };
@@ -236,6 +241,8 @@ export class WorldScene implements Scene {
     this.camera.bounds = { x: c.x - SCOPE_R, y: c.y - SCOPE_R, w: SCOPE_R * 2, h: SCOPE_R * 2 };
     this.areaKey = "";
     this.path = [];
+    this.bg = undefined;
+    void this.loadMapBg(c);
 
     // Bãi farm quanh hang (GDD mục 3): BAI_COUNT bãi, dải cấp theo bậc 10 quanh cấp nguy hiểm, hồ sơ rơi riêng.
     const rnd = mulberry32(c.id * 1009 + 7);
@@ -289,6 +296,30 @@ export class WorldScene implements Scene {
       this.camera.zoom = 6;
       this.follow = true;
     }
+  }
+
+  /** Nạp nền vẽ riêng của khu vực: map_con/<loại>_<hệ>.png rồi map_con/<loại>.png; không có thì giữ nền Azgaar. */
+  private async loadMapBg(c: RegionPoint): Promise<void> {
+    const el = this.region?.region.element;
+    const keys = [`${c.type}_${el}`, c.type];
+    for (const k of keys) {
+      const load = MAPCON_FILES[`../../../../assets/pixellab/map_con/${k}.png`];
+      if (!load) continue;
+      try {
+        const url = await load();
+        const img = new Image();
+        await new Promise<void>((res, rej) => {
+          img.onload = () => res();
+          img.onerror = () => rej(new Error("ảnh lỗi"));
+          img.src = url;
+        });
+        if (this.center === c) this.bg = img;
+        return;
+      } catch {
+        // Thử khóa kế tiếp.
+      }
+    }
+    if (this.center === c) this.bg = null;
   }
 
   private joyMove(e: PointerEvent): void {
@@ -502,8 +533,18 @@ export class WorldScene implements Scene {
     const cam = this.camera;
     cam.apply(v);
     const view = cam.visible(v);
-    layers.drawBackground(ctx, view, cam.zoom * v.dpr);
-    if (cam.zoom >= 2) layers.drawRoads(ctx, cam.zoom, [r.region.code]);
+    const c0 = this.center;
+    if (this.bg) {
+      // Nền vẽ riêng (PixelLab) phủ kín khu vực; ngoài khu vực vẫn lót nền Azgaar.
+      // Ảnh pro để trong suốt (transparent) nên lót dưới một màu đất tối cho khỏi hổng.
+      layers.drawBackground(ctx, view, cam.zoom * v.dpr);
+      ctx.fillStyle = "#16111f";
+      ctx.fillRect(c0.x - SCOPE_R, c0.y - SCOPE_R, SCOPE_R * 2, SCOPE_R * 2);
+      ctx.drawImage(this.bg, c0.x - SCOPE_R, c0.y - SCOPE_R, SCOPE_R * 2, SCOPE_R * 2);
+    } else {
+      layers.drawBackground(ctx, view, cam.zoom * v.dpr);
+      if (cam.zoom >= 2) layers.drawRoads(ctx, cam.zoom, [r.region.code]);
+    }
 
     const f = this.fog;
     // Khu vực điểm của vùng trong phạm vi map nhỏ: vòng tròn màu loại điểm.
