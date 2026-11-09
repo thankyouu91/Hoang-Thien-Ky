@@ -1008,12 +1008,14 @@ export class MapScene implements Scene {
     const go = here
       ? `${enter ? `<button type="button" class="seal" data-a="vao">Vào</button>` : ""}<span class="muted">Bạn đang ở đây.</span>`
       : `<button type="button" class="seal" data-a="di">Đi tới</button>`;
+    // Bãi quái mẫu đánh tay (scenes/bai): hang dị thú ở vùng nhà vào thẳng được, chưa cần đi tới.
+    const bai = home && p.type === "hang_di_thu" ? `<button type="button" class="seal" data-a="bai">Vào bãi</button>` : "";
     const body = openSheet(
       c.name,
       `${art ? `<div class="loc-hero pix" style="background-image:url('${art}')" role="img" aria-label="${POINT_NAMES[p.type]}"></div>` : ""}
        <dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
        <div class="actions">
-         ${go}
+         ${bai}${go}
          ${canTake ? `<button type="button" disabled>Chiếm</button>` : ""}
          ${canWar ? `<button type="button" disabled>Tuyên chiến</button>` : ""}
        </div>
@@ -1027,6 +1029,10 @@ export class MapScene implements Scene {
       if (a === "di") void this.travelTo(c.region.code, p.id, c.name, body);
       if (a === "doi") void this.travelTo(c.region.code, p.id, c.name, body, true);
       if (a === "thoi") closeSheet();
+      if (a === "bai") {
+        closeSheet();
+        location.hash = "#bai";
+      }
       if (a === "vao") {
         closeSheet();
         this.ctx.nav.go({ screen: p.type === "thanh_chu" ? "thanh-chu" : "tong-mon" });
