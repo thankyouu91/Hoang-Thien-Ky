@@ -1,13 +1,13 @@
-// Dựng đội mẫu qua luật của @ktlp/rules, đúng đường người chơi đi: nhặt tàn quyển trong danh mục 480, nộp vào Tàng Kinh Các,
+// Dựng đội mẫu qua luật của @htk/rules, đúng đường người chơi đi: nhặt tàn quyển trong danh mục 480, nộp vào Tàng Kinh Các,
 // ghép công pháp, đặt bộ truyền thụ, rồi mỗi đệ tử học và chọn 4 công pháp mang vào trận.
 import {
   Rng, TALENTS, baseStats, maxGradeAtLevel, mul, ONE,
   type Element, type SkillType, type Talent, type UnitSpec,
-} from "@ktlp/sim";
+} from "@htk/sim";
 import {
   SCROLL_KINDS, RULES, apply, emptyState, addSect, addMember, transmissionSlots, loadoutTechniques,
   type Command, type GameState, type RuleEvent, type ScrollKind,
-} from "@ktlp/rules";
+} from "@htk/rules";
 import { BALANCE } from "./config.ts";
 
 /** Đội mẫu cố định một chiều, còn lại ngẫu nhiên; để trống là đội ngẫu nhiên. */

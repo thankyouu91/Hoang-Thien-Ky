@@ -52,9 +52,9 @@ export function ageOn(birthDate: string, now = new Date()): number {
   return age;
 }
 
-const KEY_SESSION = "ktlp.session";
-const KEY_ACCOUNTS = "ktlp.accounts";
-const KEY_PLAY = "ktlp.play";
+const KEY_SESSION = "htk.session";
+const KEY_ACCOUNTS = "htk.accounts";
+const KEY_PLAY = "htk.play";
 
 function read<T>(key: string): T | null {
   try {

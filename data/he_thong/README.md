@@ -1,6 +1,6 @@
 # Số liệu hệ thống
 
-`KhaiTongLapPhai_HeThong_v1.xlsx` là file số liệu mà GDD mục 1 nhắc tới. File gốc không còn, nên ngày 2026-11-02 dựng lại từ GDD (Claude Docs rev 162) và số đang chạy trong `packages/sim`. Ô màu vàng là đề xuất mới, chờ duyệt; sheet Ghi chú trong file giải thích màu và quy ước.
+`HoangThienKy_HeThong_v1.xlsx` là file số liệu mà GDD mục 1 nhắc tới. File gốc không còn, nên ngày 2026-11-02 dựng lại từ GDD (Claude Docs rev 162) và số đang chạy trong `packages/sim`. Ô màu vàng là đề xuất mới, chờ duyệt; sheet Ghi chú trong file giải thích màu và quy ước.
 
 File Excel là nguồn gốc. Sửa trong Excel, lưu lại, rồi chạy ở thư mục repo:
 

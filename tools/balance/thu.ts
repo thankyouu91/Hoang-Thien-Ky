@@ -5,7 +5,7 @@
 import { readFileSync } from "node:fs";
 import {
   SKILL_SPECS, SKILL_RULES, BATTLE, UNIT_CURVE, ROOT_BUFFS, TALENT_RULES, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, COMBO,
-} from "@ktlp/sim";
+} from "@htk/sim";
 
 const TABLES: Record<string, Record<string, unknown>> = {
   SKILL_SPECS, SKILL_RULES, BATTLE, UNIT_CURVE, ROOT_BUFFS, TALENT_RULES, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, COMBO,

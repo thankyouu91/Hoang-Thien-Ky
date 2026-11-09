@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { ELEMENTS, SKILL_TYPES, VARIANTS, composeTechnique } from "@ktlp/sim";
+import { ELEMENTS, SKILL_TYPES, VARIANTS, composeTechnique } from "@htk/sim";
 import { SCROLL_KINDS, scrollKind, scrollLabel, toScroll, GRADE_NAMES } from "../src/index.ts";
 
 test("480 tàn quyển: 12 hệ × 10 loại chiêu × 4 biến thể, mỗi hệ 40 quyển", () => {

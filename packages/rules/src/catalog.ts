@@ -1,8 +1,8 @@
 // Danh mục 480 tàn quyển (GDD mục 9): 12 hệ × 10 loại chiêu × 4 biến thể, mỗi hệ 40 quyển.
 // Phẩm (1–10) không thuộc danh mục mà được quay khi rơi. Tên lấy từ sheet Tàn quyển của
-// data/he_thong/KhaiTongLapPhai_HeThong_v1.xlsx, xuất ra tan_quyen.json bằng tools/data/xuat.ts.
+// data/he_thong/HoangThienKy_HeThong_v1.xlsx, xuất ra tan_quyen.json bằng tools/data/xuat.ts.
 // Không dùng Map, Set để đóng gói được cho runtime của Nakama.
-import { ELEMENTS, SKILL_TYPES, VARIANTS, type Element, type SkillType, type Variant, type Scroll } from "@ktlp/sim";
+import { ELEMENTS, SKILL_TYPES, VARIANTS, type Element, type SkillType, type Variant, type Scroll } from "@htk/sim";
 import TAN_QUYEN from "../../../data/he_thong/json/tan_quyen.json" with { type: "json" };
 
 export interface ScrollKind {

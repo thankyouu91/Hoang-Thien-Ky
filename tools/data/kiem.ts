@@ -5,7 +5,7 @@ import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, ROOT_BUFFS, GRADE_POW, LINH_EFFECT_POWER,
   SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, BASE_CRIT_PER_MILLE,
   elementMultiplier, comboRelation, composeTechnique, mul, ONE, type Element, type SkillType, type Variant,
-} from "@ktlp/sim";
+} from "@htk/sim";
 import type { Raw } from "./xuat.ts";
 
 type Any = any; // eslint-disable-line @typescript-eslint/no-explicit-any

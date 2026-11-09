@@ -1,8 +1,8 @@
 // Công pháp (GDD mục 14): 4 ô mang vào trận và tầng từng công pháp; bộ truyền thụ để học; tàn quyển trong túi để nộp;
-// Tàng Kinh Các để ghép, từ trưởng lão trở lên. Mọi nút đi qua lệnh của @ktlp/rules (mang_vao_tran, hoc_cong_phap,
+// Tàng Kinh Các để ghép, từ trưởng lão trở lên. Mọi nút đi qua lệnh của @htk/rules (mang_vao_tran, hoc_cong_phap,
 // nop_tan_quyen, ghep_cong_phap, dat_bo_truyen_thu); bản xem trước khi ghép dùng chính hàm của rules.
-import { GRADE_NAMES, scrollKind, techniqueName, techniqueOf, VARIANT_NAMES } from "@ktlp/rules";
-import { TICKS_PER_SECOND } from "@ktlp/sim";
+import { GRADE_NAMES, scrollKind, techniqueName, techniqueOf, VARIANT_NAMES } from "@htk/rules";
+import { TICKS_PER_SECOND } from "@htk/sim";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { CongPhapView, ScrollCard, TechniqueCard } from "../source.ts";
 import { term } from "../terms.ts";

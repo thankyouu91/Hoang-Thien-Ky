@@ -39,7 +39,7 @@ deadline:
 - [ ] Nhóm J mục 20 (pháp lý): G1 tự lập hay nhà phát hành, nhãn hiệu Hoàng Thiên Ký, 60 phút người dưới 18 tuổi tính treo máy thế nào — cần luật sư
 - [ ] Đo lại CPU combat server và băng thông AOI ở sprint đầu của Cửa 1 (đóng câu hỏi nhóm K)
 - [ ] Repo code đã có từ trước ở github.com/thankyouu91/Hoang-Thien-Ky (clone ở `C:\Project\Hoang-Thien-Ky`); bản làm việc cũ tên tạm ở `C:\Project\KhaiTongLapPhai`. Việc gộp/dọn thư mục code cũ do các phiên code quyết
-- [ ] Đổi tên file dữ liệu `data/he_thong/KhaiTongLapPhai_HeThong_v1.xlsx` và tham chiếu trong code — giao phiên bảng số liệu vì file này đang được code đọc
+- [x] Đổi tên file dữ liệu và đồng bộ tên toàn tập (2026-11-09, phiên Kimi Code): `HoangThienKy_HeThong_v1.xlsx`, package scope `@htk/*`, repo root `hoang-thien-ky`, tiêu đề proto và màn đăng nhập, khóa localStorage `htk.*`, tên map trong Azgaar "HTK · Hạ vị diện". Gom tài nguyên từ thư mục GDD cũ vào repo: 4 khung vùng vào `data/maps/`, `ThuCuoi_100_loai.csv` vào `data/he_thong/` (tao.ts không còn trỏ đường tuyệt đối). Test 30/30, build proto qua.
 
 ## Nhật ký tiến độ
 - **2026-11-01:** Khởi tạo GDD trên Claude Docs.

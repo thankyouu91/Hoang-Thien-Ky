@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { Battle, baseStats, type UnitSpec } from "@ktlp/sim";
+import { Battle, baseStats, type UnitSpec } from "@htk/sim";
 import {
   apply, emptyState, addSect, addMember, transmissionSlots, loadoutTechniques,
   type GameState, type Role, type Result,

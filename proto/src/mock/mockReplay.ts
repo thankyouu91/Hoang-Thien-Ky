@@ -1,5 +1,5 @@
-// Replay giả 10 đấu 10 để dựng trình phát trong lúc Sprint 1 viết lại @ktlp/sim.
-// Luật ở đây chỉ cần trông giống một trận (tiến lên, ra chiêu, trúng đòn, ngã); số liệu và luật thật nằm ở @ktlp/sim.
+// Replay giả 10 đấu 10 để dựng trình phát trong lúc Sprint 1 viết lại @htk/sim.
+// Luật ở đây chỉ cần trông giống một trận (tiến lên, ra chiêu, trúng đòn, ngã); số liệu và luật thật nằm ở @htk/sim.
 import { ELEMENT_IDS, type ElementId, type Replay, type ReplayEvent, type ReplaySource, type ReplayUnit, type SkillId } from "../replay/types.ts";
 
 const TPS = 20;

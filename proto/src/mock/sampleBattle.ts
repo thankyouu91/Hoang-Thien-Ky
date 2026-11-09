@@ -1,9 +1,9 @@
-// Đầu vào mẫu cho trận thật của @ktlp/sim: 10 đấu 10 cùng cấp, mỗi người 2 công pháp ghép từ tàn quyển phẩm 3.
+// Đầu vào mẫu cho trận thật của @htk/sim: 10 đấu 10 cùng cấp, mỗi người 2 công pháp ghép từ tàn quyển phẩm 3.
 // Chỉ số do proto tự chọn để trận dài khoảng nửa phút tới một phút; đội hình thật sẽ lấy từ packages/rules.
 import {
   composeTechnique, ELEMENTS, Rng, VARIANTS,
   type BattleInput, type Element, type SkillType, type Talent, type Technique, type UnitSpec,
-} from "@ktlp/sim";
+} from "@htk/sim";
 
 // Mỗi vị trí trong hàng: chiêu đặc biệt trước, chiêu thường sau (thứ tự ưu tiên), kèm tài năng hợp vai.
 const FRONT: { types: SkillType[]; talent: Talent }[] = [

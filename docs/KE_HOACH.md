@@ -11,7 +11,7 @@ Lập ngày 2026-11-02, dựa trên GDD rev 78 (Claude Docs) và repo ở commit
 | `packages/sim` | Sprint 0 xong: fixed-point, RNG có seed, khắc chế 12 hệ, chênh lệch cấp, mã băm. 5/5 test qua; đo lại 2026-11-02: 0,20 ms/trận, khoảng 5.000 trận/giây trên 1 luồng |
 | Trận đấu theo GDD | Mới có đòn thường + tuyệt chiêu; chưa có mana, vị trí, 10 loại chiêu, công pháp, hiệu ứng hệ |
 | GDD | Phần 4A, 4B xong. Còn 4C (thú cưỡi), 4D (dashboard), mục "vận hành và admin" |
-| Số liệu | `KhaiTongLapPhai_HeThong_v1.xlsx` mà GDD nhắc tới không có trên máy |
+| Số liệu | `HoangThienKy_HeThong_v1.xlsx` mà GDD nhắc tới không có trên máy |
 | Bản đồ | Khung 4 vị diện và toạ độ tâm vùng ở `data/maps`; chưa có đa giác vùng, chưa có điểm |
 | Hình ảnh | Chưa có. PixelLab MCP chưa cài trong Claude Code |
 | Máy dev | Node 24, Git; chưa có Docker |
@@ -74,7 +74,7 @@ Xong khi: trận 10 đấu 10 chạy 60 khung/giây trên một máy Android t�
 Đổi ngày 2026-11-02: địa hình, sông hồ, đường và điểm đặc biệt lấy từ Azgaar Fantasy Map Generator (MIT, cài ở `C:\Project\Fantasy-Map-Generator`); vùng vẫn lấy từ khung của mình.
 
 - Không có biển (người dùng chọn ngày 2026-11-02, vì điểm trên bản đồ sẽ là đảo nổi vẽ bằng PixelLab) và ít sông. Lòng giữa (Linh Hải) thành cao nguyên, rìa ngoài (Hư Không Hải) thành đất thấp; GDD mục 3 vẫn ghi là biển, cần sửa ở GDD.
-- `tools/mapgen/heightmap.ts` (đã có): đổi `ha_khung.png` thành `ha_heightmap.png` và ảnh chỉ số vùng `ha_vung.png`. Biên giới vùng thành dãy núi có khe làm đèo, mỗi hệ một dáng địa hình, đất dốc từ lòng giữa ra rìa để sông chảy ra mép. Có thư mục Azgaar thì chép thêm heightmap "KTLP · Hạ vị diện", ảnh vùng và `azgaar-patch.ts` (thành `public/ktlp/patch.js`).
+- `tools/mapgen/heightmap.ts` (đã có): đổi `ha_khung.png` thành `ha_heightmap.png` và ảnh chỉ số vùng `ha_vung.png`. Biên giới vùng thành dãy núi có khe làm đèo, mỗi hệ một dáng địa hình, đất dốc từ lòng giữa ra rìa để sông chảy ra mép. Có thư mục Azgaar thì chép thêm heightmap "HTK · Hạ vị diện", ảnh vùng và `azgaar-patch.ts` (thành `public/htk/patch.js`).
 - `tools/mapgen/azgaar-patch.ts` chạy trong trang Azgaar: gán mưa và biome theo hệ của từng vùng. Không có biển thì khí hậu của Azgaar cho cả bản đồ thành sa mạc và mọi sông chảy ngoài 12 vùng. Nền ngoài vùng là biome "Hư Không": không ai ở, không mưa, không có thị trấn hay đường.
 - Đã chốt ngày 2026-11-02: tùy chọn và cách sinh lại ở `data/maps/ha_azgaar_tuy_chon.json` (seed 488055760, 40K điểm, 1536 × 1024), ra `ha_azgaar.map`. Chạy lại ba lần cùng kết quả: 79 sông, 1.021 thị trấn, 696 đoạn đường. Không dùng quốc gia của Azgaar. Full JSON xuất từ Azgaar (37,7 MB, `ha_azgaar_full.json`) không vào git; `tools/mapgen` tự ghi bản rút gọn nén `ha_azgaar.json.gz` (2,3 MB) để commit.
 - `tools/mapgen/vung.ts` (đã có): gán mỗi ô vào 1 trong 12 vùng theo `ha_vung.png`. Nét viền tối của khung gần màu Cửu U Uyên nên có mảnh lẻ dọc biên giới; mỗi vùng chỉ giữ mảng liền lớn nhất. Mỗi vùng có 897–2.287 ô, 2–58 chỗ đường cắt sông; Lôi Đình Cốc có 1.064 ô, 125 thị trấn, 73 ô sông, 29 chỗ đường cắt sông.
@@ -190,7 +190,7 @@ Tổng cho Prototype: khoảng 70 hình và 50 hoạt ảnh.
 | Mã | Việc | Đề xuất của mình | Cần trước |
 |---|---|---|---|
 | Q1 | Duyệt hướng prototype web chơi một mình tới Cửa 1 (mục 2) | Duyệt | Sprint 2 |
-| Q2 | Gửi file `KhaiTongLapPhai_HeThong_v1.xlsx` | Đặt vào `data/` | Sprint 2 |
+| Q2 | Gửi file `HoangThienKy_HeThong_v1.xlsx` | Đặt vào `data/` | Sprint 2 |
 | Q3 | Cài PixelLab MCP (mục 6) | | Sprint 3 |
 | Q4 | Sân đấu: GDD có "đẩy lùi 1 ô", "tầm +1 ô", "áp sát" nhưng chưa định nghĩa sân | Một trục 12 ô, mỗi bên 6 ô; đội hình 2 hàng trước và sau; đi 1 ô mỗi 0,5 s; tầm cận chiến 1 ô, tầm xa 4 ô, diện rộng bán kính 2 ô. Tất cả là tham số | Sprint 1 |
 | Q5 | Viết GDD phần 4D (dashboard người chơi, tông môn, liên minh) | Làm trong tháng 12 | Sprint 7 |

@@ -1,5 +1,5 @@
 // Tàng Kinh Các: nhặt và nộp tàn quyển, ghép công pháp (GDD mục 6 và 9).
-import { composeTechnique, type Element, type Technique } from "@ktlp/sim";
+import { composeTechnique, type Element, type Technique } from "@htk/sim";
 import { findScrollKind, scrollKind, toScroll, TYPE_SUFFIX } from "./catalog.ts";
 import { RULES } from "./config.ts";
 import type { GameState, OwnedScroll, SectTechnique } from "./state.ts";

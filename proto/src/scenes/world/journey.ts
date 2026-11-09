@@ -5,8 +5,8 @@
 /** Tốc độ đi bộ trên map lớn, ô bản đồ mỗi giây (đề xuất; thú cưỡi nhân sau). */
 export const TRAVEL_SPEED = 8;
 
-const KEY_GOING = "ktlp.hanhTrinh.dangDi";
-const KEY_AT = "ktlp.hanhTrinh.dangO";
+const KEY_GOING = "htk.hanhTrinh.dangDi";
+const KEY_AT = "htk.hanhTrinh.dangO";
 
 export interface Journey {
   /** Điểm đích (id trong file điểm của vùng). */

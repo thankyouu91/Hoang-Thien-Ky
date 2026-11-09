@@ -3,7 +3,7 @@
 //   1. Đội yếu hơn 15% chỉ số nhưng đúng hệ khắc thắng ≥ 50% (GDD mục 2, trụ cột "Trí hơn lực"): hệ nào cũng phải có ít nhất
 //      một hệ đánh nó ×1,5 mà đội hệ đó, yếu hơn 15%, thắng được ≥ 50%.
 //   2. Không lựa chọn nào (hệ, loại chiêu ở ưu tiên 1, tổ hợp hệ chủ–phụ) thắng quá 65% trước đội ngẫu nhiên cùng sức.
-// Đội dựng qua luật của @ktlp/rules (doi.ts), tham số ở config.ts. Mỗi cặp đội đánh hai lần đổi bên để bỏ lợi thế đi trước.
+// Đội dựng qua luật của @htk/rules (doi.ts), tham số ở config.ts. Mỗi cặp đội đánh hai lần đổi bên để bỏ lợi thế đi trước.
 //
 // Chạy: npm.cmd run balance            (200 cặp mỗi ô, khoảng 76.000 trận)
 //       npm.cmd run balance -- --nhanh (20 cặp mỗi ô)   hoặc   -- --n <số cặp mỗi ô>
@@ -15,8 +15,8 @@ import {
   simulate, Rng, ELEMENTS, SKILL_TYPES, COMBO, ONE, MAX_TICKS, TICKS_PER_SECOND, comboRelation, elementMultiplier,
   SKILL_SPECS, SKILL_RULES, BATTLE, UNIT_CURVE, ROOT_BUFFS, TALENT_RULES, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, GRADE_POW,
   type Element,
-} from "@ktlp/sim";
-import { ELEMENT_NAMES, SKILL_TYPE_NAMES } from "@ktlp/rules";
+} from "@htk/sim";
+import { ELEMENT_NAMES, SKILL_TYPE_NAMES } from "@htk/rules";
 import { BALANCE } from "./config.ts";
 import { buildTeam, makeFrame, type Member, type Plan } from "./doi.ts";
 import { applyTrial } from "./thu.ts";

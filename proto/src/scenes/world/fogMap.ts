@@ -21,7 +21,7 @@ export class FogMap {
     this.oy = origin[1];
     this.w = Math.ceil(w / DIV);
     this.h = Math.ceil(h / DIV);
-    this.key = `ktlp.theGioi.suong.${code}`;
+    this.key = `htk.theGioi.suong.${code}`;
     this.seen = new Uint8Array(this.w * this.h);
     try {
       const saved = localStorage.getItem(this.key);

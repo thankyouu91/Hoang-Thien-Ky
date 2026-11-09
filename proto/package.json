@@ -1,5 +1,5 @@
 {
-  "name": "@ktlp/proto",
+  "name": "@htk/proto",
   "version": "0.0.1",
   "private": true,
   "description": "Prototype web chơi một mình tới Cửa 1 (Vite + canvas); bỏ đi sau Cửa 1",
@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@fontsource/be-vietnam-pro": "^5.3.0",
-    "@ktlp/rules": "0.0.1",
-    "@ktlp/sim": "0.0.1"
+    "@htk/rules": "0.0.1",
+    "@htk/sim": "0.0.1"
   },
   "devDependencies": {
     "typescript": "7.0.2",

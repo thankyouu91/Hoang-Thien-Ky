@@ -1,6 +1,6 @@
 // Nội dung dựng file số liệu lần đầu: bảng chép từ GDD (rev 162) và các tên, số mới đặt (đánh dấu "đề xuất" trong file Excel).
 // Số đã có trong packages/sim lấy thẳng từ code ở tao.ts, không chép lại ở đây.
-import type { Element, SkillType, Variant } from "@ktlp/sim";
+import type { Element, SkillType, Variant } from "@htk/sim";
 import type { Src } from "./bang.ts";
 
 /** Thứ tự hệ như bảng GDD mục 3 và 9. */

@@ -8,7 +8,7 @@ import * as B from "./bang.ts";
 import { kiem } from "./kiem.ts";
 
 const ROOT = new URL("../../", import.meta.url);
-export const XLSX_URL = new URL("data/he_thong/KhaiTongLapPhai_HeThong_v1.xlsx", ROOT);
+export const XLSX_URL = new URL("data/he_thong/HoangThienKy_HeThong_v1.xlsx", ROOT);
 export const JSON_URL = new URL("data/he_thong/json/", ROOT);
 
 /** Dòng thô của một sheet bảng: khóa cột → giá trị Excel, kèm số dòng Excel để báo lỗi. */

@@ -1,5 +1,5 @@
 // Bộ công pháp truyền thụ, học công pháp và chọn công pháp mang vào trận (GDD mục 6 và 9).
-import { maxGradeAtLevel, type Technique } from "@ktlp/sim";
+import { maxGradeAtLevel, type Technique } from "@htk/sim";
 import { RULES } from "./config.ts";
 import { techniqueOf } from "./library.ts";
 import type { GameState, LearnedTechnique } from "./state.ts";

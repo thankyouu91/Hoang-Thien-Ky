@@ -1,12 +1,12 @@
 {
-  "ghi_chu": "Tùy chọn Azgaar Fantasy Map Generator cho bản đồ Hạ vị. Sinh lại: (1) node --experimental-strip-types tools/mapgen/heightmap.ts ha C:\\Project\\Fantasy-Map-Generator (chép heightmap, ảnh vùng và public/ktlp/patch.js); (2) đặt localStorage['fmg-locks'] = JSON của 'fmg-locks' dưới đây rồi tải lại trang; (3) trong console: await (await import('/ktlp/patch.js')).install('ha'), rồi FMG.regenerateMap({ seed: '488055760' }). patch.js gán mưa và biome theo hệ, nên khoá 'prec' không còn tác dụng. Đã thử 2026-11-02: ba lần chạy cùng mã băm, 39.935 ô, 79 sông, 1.021 thị trấn, 696 đoạn đường, 267 điểm đánh dấu; ra data/maps/ha_azgaar.map và ha_azgaar_full.json.",
-  "azgaar": "v1.156.0, commit d279257, thêm 'ktlp-ha' vào src/data/precreated-heightmaps.ts",
+  "ghi_chu": "Tùy chọn Azgaar Fantasy Map Generator cho bản đồ Hạ vị. Sinh lại: (1) node --experimental-strip-types tools/mapgen/heightmap.ts ha C:\\Project\\Fantasy-Map-Generator (chép heightmap, ảnh vùng và public/htk/patch.js); (2) đặt localStorage['fmg-locks'] = JSON của 'fmg-locks' dưới đây rồi tải lại trang; (3) trong console: await (await import('/htk/patch.js')).install('ha'), rồi FMG.regenerateMap({ seed: '488055760' }). patch.js gán mưa và biome theo hệ, nên khoá 'prec' không còn tác dụng. Đã thử 2026-11-02: ba lần chạy cùng mã băm, 39.935 ô, 79 sông, 1.021 thị trấn, 696 đoạn đường, 267 điểm đánh dấu; ra data/maps/ha_azgaar.map và ha_azgaar_full.json.",
+  "azgaar": "v1.156.0, commit d279257, thêm 'htk-ha' vào src/data/precreated-heightmaps.ts",
   "seed": "488055760",
   "fmg-locks": {
     "mapWidth": 1536,
     "mapHeight": 1024,
     "points": 7,
-    "template": "ktlp-ha",
+    "template": "htk-ha",
     "lakeElevationLimit": 80,
     "resolveDepressionsSteps": 250,
     "culturesSet": "oriental",

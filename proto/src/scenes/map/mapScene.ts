@@ -30,7 +30,7 @@ const TYPE_ORDER: PointType[] = ["thanh_chu", "son_mon", "cua_bi_canh", "deo", "
 
 type Layer = "names" | "borders" | "fog";
 const LAYER_NAMES: Record<Layer, string> = { names: "Tên địa danh", borders: "Ranh giới", fog: "Sương mù" };
-const PREFS_KEY = "ktlp.banDo.lop";
+const PREFS_KEY = "htk.banDo.lop";
 
 /** Một ô nút có thể vẽ: điểm của vùng đã tải, hoặc thành chủ lấy từ mục lục khi file điểm vùng chưa về. */
 interface Cand {

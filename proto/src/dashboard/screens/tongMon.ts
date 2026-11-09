@@ -1,6 +1,6 @@
 // Tông môn: dashboard tông môn (GDD mục 14). Ai cũng thấy số liệu; nút chỉ hiện cho chức vị được làm việc đó (mục 6).
 // Thẻ Bảo Khố đặt ngay dưới Lãnh thổ và đếm số ngày còn đủ linh thạch trả phí duy trì (mục 10).
-import type { Role } from "@ktlp/rules";
+import type { Role } from "@htk/rules";
 import { POINT_NAMES } from "../../scenes/map/region.ts";
 import { loadLocationArt, locationArt, LOCATIONS, pixelArtEnabled, pointArt, sectModels, setPixelArt } from "../art/sectScene.ts";
 import { MiniMap } from "../minimap.ts";

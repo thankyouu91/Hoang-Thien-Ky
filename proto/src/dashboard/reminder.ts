@@ -4,7 +4,7 @@ import type { AuthSource } from "./auth.ts";
 export const REST_EVERY_MINUTES = 30;
 
 export function startRestReminder(auth: AuthSource): void {
-  const key = "ktlp.rest";
+  const key = "htk.rest";
   const shown = () => {
     try {
       return Number(sessionStorage.getItem(key) ?? "0");

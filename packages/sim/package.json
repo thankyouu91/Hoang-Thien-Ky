@@ -1,5 +1,5 @@
 {
-  "name": "@ktlp/sim",
+  "name": "@htk/sim",
   "version": "0.0.1",
   "description": "Thư viện mô phỏng trận deterministic, dùng chung cho client, worker xác minh và bot",
   "type": "module",

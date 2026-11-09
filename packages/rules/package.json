@@ -1,11 +1,11 @@
 {
-  "name": "@ktlp/rules",
+  "name": "@htk/rules",
   "version": "0.0.1",
   "description": "Luật game bằng TypeScript thuần (tàn quyển, Tàng Kinh Các, tông môn, mỏ): chạy trong prototype rồi mang nguyên vào Nakama",
   "type": "module",
   "main": "src/index.ts",
   "dependencies": {
-    "@ktlp/sim": "0.0.1"
+    "@htk/sim": "0.0.1"
   },
   "scripts": {
     "test": "node --experimental-strip-types --no-warnings --test \"test/**/*.test.ts\""

@@ -1,10 +1,10 @@
-// Replay từ trận thật: chạy lớp Battle của @ktlp/sim từng tick (bật ghi sự kiện ra chiêu) và so trạng thái
+// Replay từ trận thật: chạy lớp Battle của @htk/sim từng tick (bật ghi sự kiện ra chiêu) và so trạng thái
 // giữa hai tick để sinh sự kiện di chuyển, máu, mana, ngã. Không sửa sim; cùng BattleInput thì cùng trận với simulate().
 //
 // Giới hạn vì sim chưa ghi từng đòn đánh:
 // - Nhiều đòn trúng một người trong cùng tick gộp thành một số; thiêu đốt không có người đánh.
 // - Không biết đòn nào chí mạng, và phần sát thương khiên hút không hiện thành số.
-import { Battle, BATTLE, TICKS_PER_SECOND, type BattleInput } from "@ktlp/sim";
+import { Battle, BATTLE, TICKS_PER_SECOND, type BattleInput } from "@htk/sim";
 import type { Replay, ReplayEvent, ReplaySource, ReplayUnit } from "./types.ts";
 
 const ONE = 1000; // mana trong sim tính theo phần nghìn

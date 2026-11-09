@@ -1,9 +1,9 @@
-// Dựng file số liệu data/he_thong/KhaiTongLapPhai_HeThong_v1.xlsx lần đầu, từ GDD (noi_dung.ts) và số đang chạy trong packages/sim.
+// Dựng file số liệu data/he_thong/HoangThienKy_HeThong_v1.xlsx lần đầu, từ GDD (noi_dung.ts) và số đang chạy trong packages/sim.
 // Từ đó file Excel là nguồn gốc: sửa trong Excel rồi chạy xuat.ts để ra JSON. Chạy lại tao.ts sẽ xóa mọi chỗ đã sửa tay,
 // nên phải thêm --ghi-de.
 //
 // Chạy: node --experimental-strip-types --no-warnings tools/data/tao.ts [--ghi-de] [--thu <CSV 100 loài thú cưỡi>]
-// CSV thú cưỡi mặc định: C:\Project\GDD\ThuCuoi_100_loai.csv (bảng tên ở GDD mục 6, kèm dáng, nơi gặp, mô tả).
+// CSV thú cưỡi mặc định: data/he_thong/ThuCuoi_100_loai.csv (bảng tên ở GDD mục 6, kèm dáng, nơi gặp, mô tả).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
@@ -11,14 +11,14 @@ import {
   ROOT_BUFFS, COMBO, BASE_CRIT_PER_MILLE, RESIST_CAP, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES,
   elementMultiplier, comboRelation, parentOf, baseElement, isOpposite, generatesEither, beatsEither,
   type Element, type SkillType, type Variant,
-} from "@ktlp/sim";
-import { ELEMENT_NAMES, SKILL_TYPE_NAMES, VARIANT_NAMES, GRADE_NAMES, RULES } from "@ktlp/rules";
+} from "@htk/sim";
+import { ELEMENT_NAMES, SKILL_TYPE_NAMES, VARIANT_NAMES, GRADE_NAMES, RULES } from "@htk/rules";
 import { writeXlsx, colName, type Cell, type Fmt, type SheetOut } from "./xlsx.ts";
 import * as B from "./bang.ts";
 import * as N from "./noi_dung.ts";
 
 const ROOT = new URL("../../", import.meta.url);
-export const XLSX_URL = new URL("data/he_thong/KhaiTongLapPhai_HeThong_v1.xlsx", ROOT);
+export const XLSX_URL = new URL("data/he_thong/HoangThienKy_HeThong_v1.xlsx", ROOT);
 
 // ---------- quan hệ tổ hợp ----------
 
@@ -542,7 +542,7 @@ function parseCsv(text: string): string[][] {
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const args = process.argv.slice(2);
   const csvAt = args.indexOf("--thu");
-  const csv = csvAt >= 0 ? args[csvAt + 1] : "C:\\Project\\GDD\\ThuCuoi_100_loai.csv";
+  const csv = csvAt >= 0 ? args[csvAt + 1] : fileURLToPath(new URL("data/he_thong/ThuCuoi_100_loai.csv", ROOT));
   const out = fileURLToPath(XLSX_URL);
   if (existsSync(out) && !args.includes("--ghi-de")) {
     console.error(`${out} đã có. File Excel là nguồn gốc nên tao.ts không ghi đè; thêm --ghi-de nếu thật sự muốn dựng lại từ đầu.`);

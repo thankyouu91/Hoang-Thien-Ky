@@ -2,7 +2,7 @@
 // Mỗi hình suy ra từ ba thứ: mô hình tông môn (50 đảo tông môn trong assets/pixellab/tong_mon, mỗi mô hình một seed và
 // một bộ họa tiết đọc từ tên), địa thế sơn môn (GDD mục 3) và công trình (GDD mục 5). Cùng đầu vào thì cùng hình.
 // Không dùng PixelLab: 50 mô hình × 11 công trình là 550 hình, quá ngân sách; bản vẽ code thay được bằng hình họa sĩ sau.
-import type { Element } from "@ktlp/sim";
+import type { Element } from "@htk/sim";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 
 export type LocationId =

@@ -1,9 +1,9 @@
 // Trạng thái mẫu cho dashboard khi chưa có server giả (Sprint 5).
-// Phần tông môn, tàn quyển, công pháp dựng bằng chính lệnh của @ktlp/rules qua apply(); phần luật chưa có
+// Phần tông môn, tàn quyển, công pháp dựng bằng chính lệnh của @htk/rules qua apply(); phần luật chưa có
 // (mỏ, hành trình, trang bị, thú cưỡi, liên minh) là dữ liệu tạm ở đây, số lấy từ data/he_thong/json.
 // Tên người, tên tông môn và số lượng là tự đặt cho bản mẫu.
-import { addMember, addSect, apply, emptyState, type Command, type GameState, type Role } from "@ktlp/rules";
-import type { Element } from "@ktlp/sim";
+import { addMember, addSect, apply, emptyState, type Command, type GameState, type Role } from "@htk/rules";
+import type { Element } from "@htk/sim";
 import type { SectModel } from "../art/sectScene.ts";
 import type { Building, GearItem, GearSlot, PointType } from "../source.ts";
 import { HOLDABLE, stagesFrom, type RegionMap } from "../../scenes/map/region.ts";
@@ -92,7 +92,7 @@ function must(state: GameState, cmd: Command, now: number) {
   return r.events;
 }
 
-/** Dựng tông môn mẫu bằng lệnh của @ktlp/rules: nhặt và nộp tàn quyển, ghép, chọn bộ truyền thụ, học, mang vào trận. */
+/** Dựng tông môn mẫu bằng lệnh của @htk/rules: nhặt và nộp tàn quyển, ghép, chọn bộ truyền thụ, học, mang vào trận. */
 function buildRules(now: number): GameState {
   const s = emptyState();
   addSect(s, SECT, 34);

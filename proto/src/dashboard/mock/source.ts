@@ -1,13 +1,13 @@
 // Nguồn đọc gộp chạy ngay trong trang (chưa có server giả). Mỗi lệnh đọc dựng đủ các thẻ của một màn từ World,
-// kèm mốc giờ server; lệnh ghi đi qua apply() của @ktlp/rules khi luật đã có, phần còn lại sửa World trực tiếp.
+// kèm mốc giờ server; lệnh ghi đi qua apply() của @htk/rules khi luật đã có, phần còn lại sửa World trực tiếp.
 import {
   apply, GRADE_NAMES, loadoutTechniques, RULES, scrollKind, techniqueOf, transmissionSlots,
   type Command, type LearnedTechnique, type Role, type SectTechnique,
-} from "@ktlp/rules";
+} from "@htk/rules";
 import {
   BASE_CRIT_PER_MILLE, baseStats, BATTLE, maxGradeAtLevel, simulate, TICKS_PER_SECOND, unitBonuses,
   type BattleInput, type Element, type Technique,
-} from "@ktlp/sim";
+} from "@htk/sim";
 import CAP_TONG_MON from "../../../../data/he_thong/json/cap_tong_mon.json";
 import MO from "../../../../data/he_thong/json/mo.json";
 import THAM_SO from "../../../../data/he_thong/json/tham_so.json";
@@ -664,7 +664,7 @@ export class MockDashboardSource implements DashboardSource {
         return r.ok ? { ok: true, message: `${w.names[cmd.memberId]} đã xuất sư` } : r;
       }
       case "thu_mo": {
-        // Sprint 5 chuyển vào @ktlp/rules (mỏ tính lười 20 × cấp^1,15 mỗi giờ).
+        // Sprint 5 chuyển vào @htk/rules (mỏ tính lười 20 × cấp^1,15 mỗi giờ).
         const got = { linhThach: 0, quang: 0, duoc: 0 };
         for (const h of w.held) {
           if (h.level <= 0) continue;
@@ -681,7 +681,7 @@ export class MockDashboardSource implements DashboardSource {
         return { ok: true, message: `Bảo Khố +${fmt(got.linhThach)} linh thạch, +${fmt(got.quang)} quặng, +${fmt(got.duoc)} dược` };
       }
       case "hien_te": {
-        // Hiến tế: 50 XP tông môn mỗi linh thạch (GDD mục 12); Sprint 5 chuyển vào @ktlp/rules.
+        // Hiến tế: 50 XP tông môn mỗi linh thạch (GDD mục 12); Sprint 5 chuyển vào @htk/rules.
         const amount = Math.floor(cmd.amount);
         if (amount <= 0 || amount > w.player.linhThach) return { ok: false, error: "khong_du_linh_thach" };
         w.player.linhThach -= amount;

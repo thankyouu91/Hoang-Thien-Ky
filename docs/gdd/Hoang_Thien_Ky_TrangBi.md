@@ -14,7 +14,7 @@ source: git repo Hoang-Thien-Ky, docs/gdd (bản gốc cũ: Claude Docs tab Tran
 
 2026-11-03 · @ANN
 
-Tab này là danh mục vật phẩm chiến đấu và hệ thống set đồ: 7 ô trang bị với 420 kiểu, 10 khí hình vũ khí, ngọc 12 hệ cùng 2 loại ngọc đặc biệt, 20 bộ set, 50 pháp bảo, 24 pháp khí, phù, đan và nguyên liệu rèn. Mọi số là đề xuất. Số liệu đầy đủ nằm ở 20 sheet mới của file số liệu `data/he_thong/KhaiTongLapPhai_HeThong_v1.xlsx`, xuất ra `data/he_thong/json/` trong repo game.
+Tab này là danh mục vật phẩm chiến đấu và hệ thống set đồ: 7 ô trang bị với 420 kiểu, 10 khí hình vũ khí, ngọc 12 hệ cùng 2 loại ngọc đặc biệt, 20 bộ set, 50 pháp bảo, 24 pháp khí, phù, đan và nguyên liệu rèn. Mọi số là đề xuất. Số liệu đầy đủ nằm ở 20 sheet mới của file số liệu `data/he_thong/HoangThienKy_HeThong_v1.xlsx`, xuất ra `data/he_thong/json/` trong repo game.
 
 Tách thành tab riêng vì danh mục dài hơn 200 dòng bảng; mục 12 của tab chính giữ phần tóm tắt và trỏ sang đây.
 

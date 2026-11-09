@@ -1,9 +1,9 @@
-// Định dạng replay mà trình phát đọc. Đơn vị khớp @ktlp/sim: tick (20 tick = 1 giây), vị trí theo milli-ô trên trục 12 ô.
+// Định dạng replay mà trình phát đọc. Đơn vị khớp @htk/sim: tick (20 tick = 1 giây), vị trí theo milli-ô trên trục 12 ô.
 //
-// Sau Sprint 1, một SimReplaySource sẽ chạy simulate() của @ktlp/sim với BattleInput (seed, đội hình, nhật ký lệnh)
+// Sau Sprint 1, một SimReplaySource sẽ chạy simulate() của @htk/sim với BattleInput (seed, đội hình, nhật ký lệnh)
 // và đổi nhật ký sự kiện của sim sang Replay. Trình phát chỉ biết tới interface ReplaySource bên dưới.
 
-/** 12 hệ, cùng mã với ELEMENTS của @ktlp/sim. */
+/** 12 hệ, cùng mã với ELEMENTS của @htk/sim. */
 export const ELEMENT_IDS = [
   "kim", "moc", "thuy", "hoa", "tho",
   "loi", "phong", "cuc_duong", "cuc_am", "cuc_han",
@@ -11,7 +11,7 @@ export const ELEMENT_IDS = [
 ] as const;
 export type ElementId = (typeof ELEMENT_IDS)[number];
 
-/** 10 loại chiêu, cùng mã với SKILL_TYPES của @ktlp/sim. */
+/** 10 loại chiêu, cùng mã với SKILL_TYPES của @htk/sim. */
 export const SKILL_IDS = [
   "can_don", "can_quet", "tam_xa", "dien_rong", "ho_the",
   "bua_chu", "tran_phap", "hoi_phuc", "khong_che", "than_phap",
@@ -86,7 +86,7 @@ export interface Replay {
   arena?: string;
 }
 
-/** Nguồn replay: hiện là replay giả trong src/mock, sau này là simulate() của @ktlp/sim. */
+/** Nguồn replay: hiện là replay giả trong src/mock, sau này là simulate() của @htk/sim. */
 export interface ReplaySource {
   readonly label: string;
   load(): Promise<Replay>;

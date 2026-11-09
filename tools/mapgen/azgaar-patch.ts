@@ -2,8 +2,8 @@
 // biển thì Azgaar gần như không có mưa trên đất cao: cả bản đồ thành sa mạc và mọi con sông chỉ chảy ngoài 12 vùng. Gán theo
 // hệ thì mỗi vùng có thảm thực vật riêng, và có sông nhiều ít theo độ ẩm của hệ.
 //
-// heightmap.ts chép file này (đã bỏ kiểu) thành public/ktlp/patch.js của Azgaar. Trong console, trước khi sinh bản đồ:
-//   (await import("/ktlp/patch.js")).install("ha")
+// heightmap.ts chép file này (đã bỏ kiểu) thành public/htk/patch.js của Azgaar. Trong console, trước khi sinh bản đồ:
+//   (await import("/htk/patch.js")).install("ha")
 // install thay Precipitation.generate và Biomes.define của trang đang mở, nên sông, dân số, thị trấn, đường và điểm đánh
 // dấu đều tính theo mưa và biome mới.
 
@@ -68,8 +68,8 @@ type IndexMap = { width: number; height: number; at(x: number, y: number): numbe
 
 export async function install(plane: string): Promise<void> {
   const fmg = (window as unknown as { FMG: Fmg }).FMG;
-  const meta = (await (await fetch(`/ktlp/${plane}_toa_do.json`)).json()) as { centres: { name: string }[] };
-  const regions = await loadIndexMap(`/ktlp/${plane}_vung.png`);
+  const meta = (await (await fetch(`/htk/${plane}_toa_do.json`)).json()) as { centres: { name: string }[] };
+  const regions = await loadIndexMap(`/htk/${plane}_vung.png`);
   const themes = meta.centres.map((c) => THEMES[/\(([^)]+)\)/.exec(c.name)?.[1] ?? ""] ?? OUTSIDE);
   const themeAt = ([x, y]: [number, number]) => {
     const { width, height } = fmg.options.map.graph;

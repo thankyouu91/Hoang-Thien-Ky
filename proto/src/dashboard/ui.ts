@@ -1,5 +1,5 @@
 // Tiện ích DOM cho các màn dashboard: chuỗi HTML an toàn, đồng hồ đếm ngược theo giờ server, bảng trượt, thông báo.
-import type { Element, SkillType } from "@ktlp/sim";
+import type { Element, SkillType } from "@htk/sim";
 import { ELEMENT_STYLE, SKILL_NAME } from "../theme/elements.ts";
 
 export function esc(s: unknown): string {

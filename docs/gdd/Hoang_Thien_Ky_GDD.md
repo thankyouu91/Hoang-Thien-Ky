@@ -39,7 +39,7 @@ Hoàng Thiên Ký là tên chính thức của game (chốt 2026-11-05 với tê
 
 **Định vị:** MMORPG tiên hiệp có chiều sâu chiến thuật tông môn như game SLG, nhưng mỗi tông môn có bộ võ học riêng và phải giữ người, vì đệ tử phản bội sẽ mất đà tu luyện. Auto đầy đủ để tôn trọng thời gian, tay chơi canh được ở các khung chiến. Thông điệp: tu tiên bằng trí, không bằng ví.
 
-**File số liệu kèm theo:** `data/he_thong/KhaiTongLapPhai_HeThong_v1.xlsx` trong repo mã nguồn. File gốc không còn, nên ngày 2026-11-02 dựng lại từ tài liệu này và code. File gồm 12 hệ, 480 tàn quyển, 300 công pháp mẫu, 28 vùng, cấp tông môn 1–200, mỏ, bí cảnh, tỷ lệ rơi và thú cưỡi; ô màu vàng là đề xuất chờ duyệt. Mọi con số trong tài liệu này lấy từ file đó. File Excel là nguồn gốc: sửa file, chạy `tools/data/xuat.ts` để code đọc bản mới, rồi mình cập nhật lại tài liệu.
+**File số liệu kèm theo:** `data/he_thong/HoangThienKy_HeThong_v1.xlsx` trong repo mã nguồn. File gốc không còn, nên ngày 2026-11-02 dựng lại từ tài liệu này và code. File gồm 12 hệ, 480 tàn quyển, 300 công pháp mẫu, 28 vùng, cấp tông môn 1–200, mỏ, bí cảnh, tỷ lệ rơi và thú cưỡi; ô màu vàng là đề xuất chờ duyệt. Mọi con số trong tài liệu này lấy từ file đó. File Excel là nguồn gốc: sửa file, chạy `tools/data/xuat.ts` để code đọc bản mới, rồi mình cập nhật lại tài liệu.
 
 ## 2. Trụ cột thiết kế và người chơi mục tiêu
 

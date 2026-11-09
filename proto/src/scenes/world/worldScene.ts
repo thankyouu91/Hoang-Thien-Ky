@@ -49,7 +49,7 @@ const MOCK_NAMES = ["Minh Nguyệt", "Tử Sâm", "Hàn Liên", "Vô Song", "Ki�
 const FONT = '"Be Vietnam Pro", system-ui, sans-serif';
 const INK = "#2a1d14";
 const HALO = "rgba(243, 231, 201, 0.92)";
-const POS_KEY = "ktlp.theGioi.viTri";
+const POS_KEY = "htk.theGioi.viTri";
 
 interface Bai {
   x: number;

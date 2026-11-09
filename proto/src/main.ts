@@ -15,7 +15,7 @@ setTimeout(() => ("requestIdleCallback" in window ? requestIdleCallback(() => vo
 
 const canvas = document.getElementById("view") as HTMLCanvasElement;
 // Trận không có tab riêng (GDD mục 14): mở từ chiến báo trên Động phủ; vẫn vào thẳng được bằng #tran để thử trận.
-// Ô chọn nguồn giữ trận thật của @ktlp/sim với vài seed của đội hình mẫu, và trận giả để so.
+// Ô chọn nguồn giữ trận thật của @htk/sim với vài seed của đội hình mẫu, và trận giả để so.
 const battle = new BattleScene(
   [
     ...([[11], [2, "cao_nguyen"], [3, "mo_linh_thach"]] as const).map(([seed, arena]) => simReplaySource(`Sim · seed ${seed}`, () => sampleBattle(seed), arena)),
@@ -41,5 +41,5 @@ const app = new App(
 );
 dashboard.attach(app);
 app.start();
-// Gỡ lỗi từ console khi chạy dev: ktlp.fps, ktlp.view, sprites.size, ...
-if (import.meta.env.DEV) Object.assign(window, { ktlp: app, sprites });
+// Gỡ lỗi từ console khi chạy dev: htk.fps, htk.view, sprites.size, ...
+if (import.meta.env.DEV) Object.assign(window, { htk: app, sprites });

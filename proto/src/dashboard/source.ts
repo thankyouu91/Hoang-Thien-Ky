@@ -1,8 +1,8 @@
 // Lệnh đọc gộp của dashboard (GDD mục 14, Kỹ thuật): mỗi màn tải bằng một lệnh trả đủ các thẻ.
-// Bản đầu là MockDashboardSource dựng trạng thái mẫu bằng chính lệnh của @ktlp/rules; Sprint 5 thay bằng
+// Bản đầu là MockDashboardSource dựng trạng thái mẫu bằng chính lệnh của @htk/rules; Sprint 5 thay bằng
 // server giả trong Web Worker với cùng các hàm này, nên các màn không phải sửa.
-import type { BattleInput, Element, SkillType } from "@ktlp/sim";
-import type { Role, RuleError } from "@ktlp/rules";
+import type { BattleInput, Element, SkillType } from "@htk/sim";
+import type { Role, RuleError } from "@htk/rules";
 import type { LocationId, SectModel } from "./art/sectScene.ts";
 
 /** Mốc giờ server (ms) gửi kèm mọi lệnh đọc; đồng hồ đếm ngược ở client tự đếm từ mốc này. */
@@ -168,7 +168,7 @@ export interface NhanVatView extends Stamped {
   /** Lực chiến chia theo nguồn; đồ và thú có trần (GDD mục 13 và 6). */
   power: { total: number; parts: { id: "co_ban" | "do" | "thu"; label: string; value: number; cap?: number }[] };
   gear: Partial<Record<GearSlot, GearItem>>;
-  /** Bốn chỉ số chính, đúng các trường của UnitSpec trong @ktlp/sim. */
+  /** Bốn chỉ số chính, đúng các trường của UnitSpec trong @htk/sim. */
   main: StatLine[];
   stats: StatLine[];
   mounts: (MountView | null)[]; // 5 ô

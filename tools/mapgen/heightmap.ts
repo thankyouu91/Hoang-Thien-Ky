@@ -6,8 +6,8 @@
 //
 // Chạy: node --experimental-strip-types tools/mapgen/heightmap.ts [ha|trung|than|thanh] [thư mục Azgaar]
 // Ra: data/maps/<vị diện>_heightmap.png và <vị diện>_vung.png (chỉ số vùng cùng lưới: độ sáng (k + 1) × 16 là vùng k,
-// 0 là ngoài vùng). Có thư mục Azgaar thì chép heightmap vào public/heightmaps/ktlp-<vị diện>.png, còn ảnh vùng, toạ độ
-// vùng, bản đồ đã chốt (.map) và azgaar-patch.ts, azgaar-nen.ts (đã bỏ kiểu, thành patch.js, nen.js) vào public/ktlp/.
+// 0 là ngoài vùng). Có thư mục Azgaar thì chép heightmap vào public/heightmaps/htk-<vị diện>.png, còn ảnh vùng, toạ độ
+// vùng, bản đồ đã chốt (.map) và azgaar-patch.ts, azgaar-nen.ts (đã bỏ kiểu, thành patch.js, nen.js) vào public/htk/.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { stripTypeScriptTypes } from "node:module";
 import { join } from "node:path";
@@ -224,16 +224,16 @@ console.log(`${plane}: ${W}×${H} ô, độ cao ${hMin.toFixed(0)}–${hMax.toFi
 meta.centres.forEach((c, i) => console.log(`  ${c.name}: màu ${regionColors[i].join(",")}, ${region.filter((r) => r === i).length} ô`));
 
 if (azgaarDir) {
-  const target = join(azgaarDir, "public", "heightmaps", `ktlp-${plane}.png`);
+  const target = join(azgaarDir, "public", "heightmaps", `htk-${plane}.png`);
   if (!existsSync(join(azgaarDir, "public", "heightmaps"))) throw new Error(`Không thấy thư mục heightmaps của Azgaar ở ${azgaarDir}`);
   writeFileSync(target, png);
-  const ktlpDir = join(azgaarDir, "public", "ktlp");
-  mkdirSync(ktlpDir, { recursive: true });
-  writeFileSync(join(ktlpDir, `${plane}_vung.png`), regionPng);
-  writeFileSync(join(ktlpDir, `${plane}_toa_do.json`), readFileSync(new URL(`${plane}_toa_do.json`, dataDir)));
+  const htkDir = join(azgaarDir, "public", "htk");
+  mkdirSync(htkDir, { recursive: true });
+  writeFileSync(join(htkDir, `${plane}_vung.png`), regionPng);
+  writeFileSync(join(htkDir, `${plane}_toa_do.json`), readFileSync(new URL(`${plane}_toa_do.json`, dataDir)));
   for (const [source, script] of [["azgaar-patch.ts", "patch.js"], ["azgaar-nen.ts", "nen.js"]])
-    writeFileSync(join(ktlpDir, script), stripTypeScriptTypes(readFileSync(new URL(source, import.meta.url), "utf8")));
+    writeFileSync(join(htkDir, script), stripTypeScriptTypes(readFileSync(new URL(source, import.meta.url), "utf8")));
   const saved = new URL(`${plane}_azgaar.map`, dataDir); // bản đồ đã chốt, để vẽ ảnh nền
-  if (existsSync(saved)) writeFileSync(join(ktlpDir, `${plane}_azgaar.map`), readFileSync(saved));
-  console.log(`Đã chép sang ${target} và ${ktlpDir}`);
+  if (existsSync(saved)) writeFileSync(join(htkDir, `${plane}_azgaar.map`), readFileSync(saved));
+  console.log(`Đã chép sang ${target} và ${htkDir}`);
 }

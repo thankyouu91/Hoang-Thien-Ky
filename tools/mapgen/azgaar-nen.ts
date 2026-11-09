@@ -2,13 +2,13 @@
 // khung một vùng rồi tải về. Khung lấy từ map.frame của file điểm (diem.ts), nên điểm (x, y) nằm ở
 // ((x − x0) × SCALE, (y − y0) × SCALE) trên ảnh.
 //
-// heightmap.ts chép file này (đã bỏ kiểu) thành public/ktlp/nen.js, cùng <vị diện>_azgaar.map. Mở bản đồ đã lưu rồi vẽ:
-//   const { Load } = await import("/services/io/load.ts"); Load.uploadMap(await (await fetch("/ktlp/ha_azgaar.map")).blob())
-//   await (await import("/ktlp/nen.js")).render("ha_nen_loi_dinh_coc", [249, 172, 570, 479])
+// heightmap.ts chép file này (đã bỏ kiểu) thành public/htk/nen.js, cùng <vị diện>_azgaar.map. Mở bản đồ đã lưu rồi vẽ:
+//   const { Load } = await import("/services/io/load.ts"); Load.uploadMap(await (await fetch("/htk/ha_azgaar.map")).blob())
+//   await (await import("/htk/nen.js")).render("ha_nen_loi_dinh_coc", [249, 172, 570, 479])
 // Cả bản đồ chia ô theo mức phóng (lệnh do vi_dien.ts in ra):
-//   await (await import("/ktlp/nen.js")).renderTiles("ha_nen", [1, 2, 4, 6], 1024)
+//   await (await import("/htk/nen.js")).renderTiles("ha_nen", [1, 2, 4, 6], 1024)
 // Nhiều vùng một lần tải (một file ZIP):
-//   await (await import("/ktlp/nen.js")).renderZip("ha_nen", [{ name: "ha_nen_loi_dinh_coc", frame: [249, 172, 570, 479] }, …])
+//   await (await import("/htk/nen.js")).renderZip("ha_nen", [{ name: "ha_nen_loi_dinh_coc", frame: [249, 172, 570, 479] }, …])
 // Ảnh nền không có nhãn, thị trấn, quốc gia hay đường của Azgaar: điểm và chặng do proto vẽ theo file điểm.
 
 const STYLE = "ancient";
