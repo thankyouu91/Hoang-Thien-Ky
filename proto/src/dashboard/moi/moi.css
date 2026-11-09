@@ -42,7 +42,7 @@ body:not(.nguoi-moi) [data-act="choi-lai"] { display: none !important; }
 /* Trang chừa chỗ cho thẻ để nội dung cuối không bị che. */
 body.co-ftue #pages > .page { padding-bottom: calc(var(--sp-8) + 150px); }
 body.co-ftue #ftue.gon ~ #pages > .page, body.co-ftue:has(#ftue.gon) #pages > .page { padding-bottom: calc(var(--sp-8) + 56px); }
-body[data-scene="tran"] #ftue { display: none; }
+body[data-scene="tran"] #ftue, body[data-scene="bai"] #ftue { display: none; }
 @media (min-width: 960px) {
   #ftue { left: auto; right: 24px; bottom: 24px; width: 380px; }
 }
