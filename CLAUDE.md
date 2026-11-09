@@ -12,6 +12,8 @@
     - Không còn sàn số dư; chọn công cụ và số lần thử cho ra hình đẹp nhất, không chọn theo giá rẻ.
     - Báo số lượt hoặc tiền đã dùng (lấy từ `get_balance`) trong báo cáo.
     - Hết lượt và hết credits thì báo người dùng nạp thêm rồi làm tiếp phần khác; không tự mua hay nâng gói.
+- Chiến đấu (người dùng chốt ngày 2026-11-09): chuyển sang đánh tay thời gian thực ở bãi quái, người chơi tự di chuyển và tự ra chiêu; thay hẳn trận tự động 30 giây. Người chơi khác ở bản thử là bot giả lập trong trình duyệt. Đợt đầu chỉ làm một bãi quái mẫu (tab Khung prototype). Cho tới khi người dùng duyệt bãi mẫu: không đầu tư thêm vào `packages/sim`, `tools/balance` và màn Trận tự động, nhưng cũng chưa xóa chúng. GDD chưa cập nhật phần này.
+- Tiết kiệm token (người dùng yêu cầu ngày 2026-11-09): ponytail ultra và caveman bật mặc định cho mọi phiên. Làm phần nhỏ nhất đủ dùng, báo cáo ngắn, hạn chế nhắn qua lại giữa các phiên.
 - Nguồn thiết kế: GDD `C:\Project\GDD\Khai_Tong_Lap_Phai_GDD.md` (bản gốc Claude Docs). Mã phải khớp GDD; chỗ nào GDD ghi "đề xuất" thì để thành tham số cấu hình.
 - `packages/sim` phải deterministic: chỉ số nguyên / fixed-point thang 1000 (`fixed.ts`), không dùng Math.random, Math.sin, Math.sqrt, Date; thứ tự cập nhật theo id; mọi ngẫu nhiên qua `Rng`.
 - Mỗi thay đổi ở `packages/sim` phải chạy `npm.cmd test` (gồm 10.000 trận so mã băm) trước khi commit.
