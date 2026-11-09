@@ -14,6 +14,7 @@ import { cd, closeSheet, esc, fmt, openSheet, toast } from "../../dashboard/ui.t
 import { WorldLayers } from "./layers.ts";
 import { NODE, NODE_BIG, NodeSprites, Placer } from "./nodes.ts";
 import { HOLDABLE, loadRegion, loadWorld, POINT_NAMES, type RegionMap, type RegionPoint, type WorldMap, type WorldRegion } from "./region.ts";
+import { currentSpot, spotStatus, startJourney } from "../world/journey.ts";
 
 const TAP_SLOP = 8;
 /** Độ phóng (px CSS mỗi đơn vị bản đồ) từ đó hiện thêm từng bậc điểm: 1 điểm có chủ, cửa bí cảnh; 2 đèo, bến đò, linh tuyền; 3 còn lại. */
@@ -547,13 +548,23 @@ export class MapScene implements Scene {
     const inRange = home && d.inRange.includes(p.id);
     const canTake = home && d.can.chiem && HOLDABLE.includes(p.type) && own?.owner !== "minh" && own?.owner !== "dong_minh";
     const canWar = home && d.can.tuyenChien && own?.owner === "dich";
+    // Map lớn chỉ chạm-là-tới (GDD mục 3, tầng 1): Đi tới bắt đầu hành trình có thời gian; đang ở điểm thì Vào khu vực (tầng 2).
+    const spot = home ? spotStatus(p.id) : { kind: "xa" as const };
+    const goBtn =
+      spot.kind === "o_day"
+        ? `<button type="button" class="seal" data-a="vao">Vào khu vực</button>`
+        : spot.kind === "dang_di"
+          ? `<button type="button" disabled>Đang đi… còn ${spot.remainSec} s</button>`
+          : home
+            ? `<button type="button" class="seal" data-a="di">Đi tới</button>`
+            : "";
     const art = pointArt(c.region.code, p.type);
     const body = openSheet(
       c.name,
       `${art ? `<div class="loc-hero pix" style="background-image:url('${art}')" role="img" aria-label="${POINT_NAMES[p.type]}"></div>` : ""}
        <dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
        <div class="actions">
-         <button type="button" class="seal" data-a="di">Đi tới</button>
+         ${goBtn}
          ${canTake ? `<button type="button" data-a="chiem" ${inRange && d.held < d.maxHeld ? "" : "disabled"}>Chiếm</button>` : ""}
          ${canWar ? `<button type="button" data-a="chien">Tuyên chiến</button>` : ""}
        </div>
@@ -562,7 +573,15 @@ export class MapScene implements Scene {
     );
     body.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLElement>("[data-a]")?.dataset.a;
-      if (a === "di") this.ctx.nav.go({ screen: "the-gioi", pointId: p.id });
+      if (a === "vao") this.ctx.nav.go({ screen: "the-gioi", pointId: p.id });
+      if (a === "di") {
+        const homeMap = this.regions.get(d.map.region);
+        const from = homeMap?.points[currentSpot()];
+        if (!from) return;
+        const sec = startJourney(p.id, from, p);
+        closeSheet();
+        toast(`Đang đi tới ${p.name ?? POINT_NAMES[p.type]}, khoảng ${sec} giây…`);
+      }
       if (a === "chiem") toast("Chiếm điểm bằng trận tranh điểm có ở Sprint 6.");
       if (a === "chien") toast("Tuyên chiến có ở khối M5.");
     });

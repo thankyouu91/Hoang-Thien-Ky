@@ -16,14 +16,14 @@ source: git repo Hoang-Thien-Ky, docs/gdd (bản gốc cũ: Claude Docs tab chí
 
 ## 1. Tổng quan
 
-Hoàng Thiên Ký là tên chính thức của game (chốt 2026-11-05 với tên Thiên Hoang Ký, đổi thành Hoàng Thiên Ký ngày 2026-11-09; tên tạm trước đó là Khai Tông Lập Phái), lấy theo Hoàng Thiên đại lục, thế giới của game. Đây là MMORPG mobile tiên hiệp thời gian thực xoay quanh tông môn (chốt 2026-11-09, trước đó là chiến lược dạng dashboard). Người chơi điều khiển nhân vật di chuyển tự do trên bản đồ mở của từng vùng, đánh thời gian thực có auto đầy đủ; các tông môn chiếm các khu vực tranh chung trên bản đồ, giành mỏ và bí cảnh, ghép tàn quyển thành công pháp riêng, rồi thăng vị diện cả môn.
+Hoàng Thiên Ký là tên chính thức của game (chốt 2026-11-05 với tên Thiên Hoang Ký, đổi thành Hoàng Thiên Ký ngày 2026-11-09; tên tạm trước đó là Khai Tông Lập Phái), lấy theo Hoàng Thiên đại lục, thế giới của game. Đây là MMORPG mobile tiên hiệp thời gian thực xoay quanh tông môn (chốt 2026-11-09, trước đó là chiến lược dạng dashboard). Người chơi chạm điểm để đi trên map lớn, điều khiển nhân vật di chuyển tự do trong map nhỏ của từng khu vực, đánh thời gian thực có auto đầy đủ; các tông môn chiếm các khu vực tranh chung trên bản đồ, giành mỏ và bí cảnh, ghép tàn quyển thành công pháp riêng, rồi thăng vị diện cả môn.
 
-**Một câu:** Bạn sống ở thành chủ trung lập của một vùng Hạ vị diện, lập hoặc gia nhập một tông môn (tông môn mới rơi ngẫu nhiên vào một vị trí có địa thế riêng), chạy trên bản đồ mở mở dần sương mù, chiếm mỏ và tranh tài nguyên với các liên minh khác trong các trận thời gian thực. Khi tông môn đạt cấp 200, cả môn phi thăng lên vị diện cao hơn và bắt đầu lại từ cấp 1 ở một vùng ngẫu nhiên.
+**Một câu:** Bạn sống ở thành chủ trung lập của một vùng Hạ vị diện, lập hoặc gia nhập một tông môn (tông môn mới rơi ngẫu nhiên vào một vị trí có địa thế riêng), chạm điểm để đi trên map lớn, vào khu vực thì chạy tự do farm và mở dần sương mù, chiếm mỏ và tranh tài nguyên với các liên minh khác trong các trận thời gian thực. Khi tông môn đạt cấp 200, cả môn phi thăng lên vị diện cao hơn và bắt đầu lại từ cấp 1 ở một vùng ngẫu nhiên.
 
 | Mục | Quyết định |
 |---|---|
 | Thể loại | MMORPG mobile thời gian thực xoay quanh tông môn, auto đầy đủ (tự làm nhiệm vụ, treo máy, tự PK) theo chuẩn MMORPG mobile Việt Nam; chốt 2026-11-09 |
-| Bản đồ | Mỗi vùng một bản đồ mở liền mạch, di chuyển tự do thời gian thực; các điểm tranh (mỏ, bí cảnh, sơn môn) là khu vực có tọa độ trên map, có sương mù; 4 vị diện, 28 vùng (12 Hạ vị, 9 Trung vị, 5 Thần vực, 2 Thánh vực) |
+| Bản đồ | Hai tầng (chốt 2026-11-09): map lớn của vùng/vị diện di chuyển bằng chạm điểm đến, tính thời gian theo quãng đường; map nhỏ của từng khu vực là bản đồ mở chi tiết, di chuyển tự do thời gian thực, có bãi farm và hầm ngục; có sương mù; 4 vị diện, 28 vùng (12 Hạ vị, 9 Trung vị, 5 Thần vực, 2 Thánh vực) |
 | Nền tảng | Android và iOS cùng lúc |
 | Thị trường đầu | Việt Nam (cần giấy phép G1, xem mục 18) |
 | Đội | Một người; thuê ngoài mỹ thuật, âm thanh và pháp lý |
@@ -113,9 +113,16 @@ Rìa ngoài đại lục là Hư Không Hải, vùng đất chết: không ai ch
 
 ### Hành trình, vùng nguy hiểm và tử vong
 
-**Di chuyển thời gian thực (chốt 2026-11-09).** Ra khỏi thành chủ hay lãnh thổ tông môn, người chơi chạm điểm đến (hoặc dùng joystick) và nhân vật tự chạy theo đường trên map; tốc độ chuẩn theo cấp, thú cưỡi tăng tốc. Thay cho xác suất gặp sự kiện mỗi chặng như bản cũ, trên map có sẵn dị thú lang thang, cướp NPC của Huyết Sát Môn và người chơi khác; chạm vào là vào trận thời gian thực (mục 8). Mật độ và cấp dị thú theo cấp nguy hiểm của khu vực, nên đi xa vẫn nguy hiểm dần như thiết kế cũ. Server vẫn kiểm soát vị trí và tốc độ (mục 16), nên không hack tốc độ được.
+**Di chuyển hai tầng (chốt 2026-11-09).** Bản đồ chia hai tầng rõ rệt:
+
+- **Tầng 1 — map lớn (vùng và vị diện):** là màn Bản đồ; di chuyển chỉ bằng chạm điểm đến (nút Đi tới), không điều khiển tay. Thời gian đi tính theo quãng đường chia tốc độ (đề xuất: 8 ô mỗi giây khi đi bộ; thú cưỡi nhân tốc độ), hiện đếm ngược trên bản đồ; trên đường vẫn gặp cướp và sát thủ như luật vùng nguy hiểm. Tới nơi rồi mới vào được khu vực của điểm đó.
+- **Tầng 2 — map nhỏ (khu vực):** mỗi điểm (hang dị thú, mỏ, thành chủ, sơn môn…) có một map nhỏ chi tiết, di chuyển tự do thời gian thực bằng joystick hoặc chạm (combat mục 8 diễn ra ở tầng này). Trong map nhỏ, người chơi thấy những người chơi khác đang ở cùng khu vực: đang farm, đang treo máy auto (có cờ auto); ủy thác khi tắt game thì nhân vật rời map nên không hiện. Server đồng bộ tầng này bằng AOI (mục 16).
 
 **Vùng hoạt động theo cấp.** Mỗi khu vực trên map có cấp nguy hiểm, tính theo quãng đường ngắn nhất tới thành chủ (đã chốt 2026-11-02): 1 ở thành chủ, 250 ở nơi xa nhất của vùng, nên bậc 10 cấp nào cũng có chỗ luyện. Thành chủ và khu vực quanh sơn môn có NPC hộ đạo là vùng an toàn; ra ngoài đó, ai cũng có thể bị người chơi khác đồ sát. Đi vào nơi có cấp nguy hiểm càng cao hơn cấp mình thì dị thú càng mạnh, càng dễ gặp cướp và sát thủ. Ở thượng vị, nơi không còn cấp nhân vật, cấp nguy hiểm so với cảnh giới.
+
+**Bãi farm trong map nhỏ (chốt hướng 2026-11-09, số là đề xuất).** Map nhỏ của hang dị thú và khu dã ngoại có nhiều bãi farm. Mỗi bãi có: hệ quái theo hệ chủ đạo của vùng; dải cấp riêng (bãi chia theo bậc 10 cấp quanh cấp nguy hiểm của điểm, ví dụ điểm cấp 80 có bãi 70–80 và 80–90); hồ sơ rơi đồ riêng — mỗi bãi nghiêng một loại (ngọc, dược liệu, quặng, tàn quyển, linh thạch), để người chơi chọn bãi theo nhu cầu; mật độ quái. Luật luyện bãi quái (18 trận mỗi giờ, trần 8 giờ, chênh cấp, đúng hệ, trần cộng +40%) giữ nguyên ở tab Nhiệm vụ; bãi farm chính là hiện thân real-time của luật đó.
+
+**Hầm ngục trong bãi farm (đề xuất).** Bãi từ cấp 60 trở lên có cửa hầm ngục. Trong hầm: quái đông gấp đôi và chỉ số +30%, đổi lại rơi đồ quý (ấn bộ từ tím, ngọc cấp cao, tàn quyết bảo vật, tỷ lệ thần vật ×2). Hầm thiết kế cho party: một mình rất khó vì quái đông, và đi một mình thì mất buff party theo tài năng (mục 3); khuyến khích đi cùng team có đủ vai trò. Hầm có 3 tầng, càng sâu quái càng mạnh và đồ càng quý; tầng 3 có boss nhỏ.
 
 **Đồ sát, sát nghiệp và lao tù thành chủ (đã chốt).** Ngoài thành chủ và khu vực có NPC hộ đạo, người chơi được đồ sát người chơi khác, bên cạnh dị thú và cướp NPC của Huyết Sát Môn. Mỗi lần đồ sát cộng điểm sát nghiệp. Kẻ sát nghiệp quá nặng mà bị giết thì bị nhốt trong lao tù thành chủ 4–12 giờ, không ra ngoài được, tùy mức sát nghiệp. Có hai cách ra sớm: tông môn chuộc ra, hoặc mua Kim Bài Miễn Tử với giá rất cao. Khi ra tù, dù bằng cách nào, nhân vật mất hết đồ đang mặc và rớt 2 cảnh giới nhỏ (ví dụ cấp 100 xuống 98), chỉ số bị trừ theo cấp.
 

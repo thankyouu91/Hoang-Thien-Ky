@@ -1,8 +1,7 @@
-// Bản đồ mở thời gian thực của một vùng (GDD mục 3, 8, 14; KE_HOACH mục 9 Sprint R1).
-// Nhân vật chạy tự do: joystick ảo (HUD trái) hoặc chạm điểm đến để auto chạy (A* trên lưới đi bộ);
-// camera bám theo; địa hình chặn đường (núi, sông) theo lưới do tools/mapgen/di_bo.ts sinh.
-// Điểm tranh là khu vực tròn — vào khu vực hiện thẻ điểm; sương mù mở theo bán kính đi qua và lưu theo người chơi.
-// Bãi dị thú (hang) có quái lang thang; chạm quái báo trận ở Sprint R2.
+// Map nhỏ của một khu vực (GDD mục 3, tầng 2; KE_HOACH mục 9): vào từ map lớn khi đã đi tới điểm (journey.ts).
+// Di chuyển tự do thời gian thực: joystick ảo hoặc chạm để auto chạy (A* trên lưới đi bộ); camera bám.
+// Khu vực hang dị thú có các bãi farm với dải cấp và hồ sơ rơi đồ riêng, hầm ngục (từ cấp 60, quái đông và mạnh,
+// khuyến khích party), và người chơi khác đang farm/treo auto (prototype: người giả). Chạm quái báo trận ở Sprint R2.
 import { Camera } from "../../app/camera.ts";
 import type { Scene } from "../../app/scene.ts";
 import type { View } from "../../app/view.ts";
@@ -13,11 +12,14 @@ import { ELEMENT_STYLE } from "../../theme/elements.ts";
 import { WorldLayers } from "../map/layers.ts";
 import { HOLDABLE, loadRegion, loadWorld, POINT_NAMES, type RegionMap, type RegionPoint, type WorldMap } from "../map/region.ts";
 import { FogMap } from "./fogMap.ts";
+import { currentSpot } from "./journey.ts";
 import { loadWalkGrid, type WalkGrid } from "./walkGrid.ts";
 
 const TAP_SLOP = 8;
-/** Tốc độ chạy chuẩn, đơn vị bản đồ mỗi giây (đề xuất; thú cưỡi nhân sau này). */
+/** Tốc độ chạy trong khu vực, đơn vị bản đồ mỗi giây (đề xuất; thú cưỡi nhân sau này). */
 const SPEED = 8;
+/** Nửa cạnh map nhỏ quanh điểm trung tâm, đơn vị bản đồ (đề xuất). */
+const SCOPE_R = 34;
 /** Bán kính khu vực theo loại điểm, đơn vị bản đồ (đề xuất, tham số). */
 const AREA_R: Record<PointType, number> = {
   thanh_chu: 7,
@@ -31,21 +33,56 @@ const AREA_R: Record<PointType, number> = {
   deo: 3,
   ben_do: 3,
 };
-/** Quái lang thang quanh mỗi hang trong tầm này của người chơi. */
-const MOB_NEAR = 40;
-const MOB_PER_DEN = 3;
+/** Bãi farm quanh hang: số bãi, bán kính bãi, khoảng cách từ hang. */
+const BAI_COUNT = 3;
+const BAI_R = 4.5;
+/** Hầm ngục: chỉ hang từ cấp nguy hiểm này mới có (GDD mục 3). */
+const DUNGEON_MIN_DANGER = 60;
 /** Chạm quái gần hơn mức này thì vào trận (R2). */
 const MOB_TOUCH = 1.4;
+/** Hồ sơ rơi đồ của bãi: mỗi bãi nghiêng một loại (GDD mục 3). */
+const DROP_PROFILES = ["Ngọc", "Dược liệu", "Quặng", "Tàn quyển", "Linh thạch"];
+const MOCK_NAMES = ["Minh Nguyệt", "Tử Sâm", "Hàn Liên", "Vô Song", "Kiếm Khách 09"];
 const FONT = '"Be Vietnam Pro", system-ui, sans-serif';
 const INK = "#2a1d14";
 const HALO = "rgba(243, 231, 201, 0.92)";
 const POS_KEY = "ktlp.theGioi.viTri";
 
+interface Bai {
+  x: number;
+  y: number;
+  lvLo: number;
+  lvHi: number;
+  profile: string;
+}
 interface Mob {
   x: number;
   y: number;
-  den: number;
+  bx: number; // tâm lang thang (bãi hoặc hầm)
+  by: number;
+  r: number;
   phase: number;
+  big: boolean; // quái hầm ngục
+}
+interface MockPlayer {
+  x: number;
+  y: number;
+  bai: number;
+  name: string;
+  auto: boolean;
+  phase: number;
+}
+
+/** PRNG xác định theo hạt (bãi và người giả giữ cố định giữa các lần vào). */
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
 export class WorldScene implements Scene {
@@ -59,6 +96,12 @@ export class WorldScene implements Scene {
   private grid?: WalkGrid;
   private fog?: FogMap;
   private regionCode = "loi_dinh_coc";
+  /** Điểm trung tâm của khu vực đang mở. */
+  private center?: RegionPoint;
+  private bai: Bai[] = [];
+  private dungeon?: { x: number; y: number };
+  private mockPlayers: MockPlayer[] = [];
+  private pendingScope?: number;
   private player = { x: 0, y: 0, dir: 0 };
   private path: { x: number; y: number }[] = [];
   private joy = { on: false, id: -1, dx: 0, dy: 0 };
@@ -67,7 +110,7 @@ export class WorldScene implements Scene {
   private mobs: Mob[] = [];
   private mobT = 0;
   private mobTouchCd = 0;
-  private areaOf = -1;
+  private areaKey = "";
   private revealAcc = 0;
   private active = false;
   private ready = false;
@@ -77,15 +120,15 @@ export class WorldScene implements Scene {
   private joyKnob: HTMLElement;
 
   constructor(_ctx: DashCtx, canvas: HTMLCanvasElement) {
-    this.camera.minZoom = 1.2;
-    this.camera.maxZoom = 8;
+    this.camera.minZoom = 1.5;
+    this.camera.maxZoom = 10;
 
     this.hud = document.createElement("div");
     this.hud.className = "world-hud";
     this.hud.innerHTML = `
       <div class="world-joy"><i></i></div>
       <div class="world-actions">
-        <button type="button" data-a="home">Về thành chủ</button>
+        <button type="button" data-a="map">Ra map lớn</button>
         <button type="button" data-a="stop">Dừng</button>
       </div>`;
     this.joyBase = this.hud.querySelector(".world-joy")!;
@@ -113,7 +156,7 @@ export class WorldScene implements Scene {
     this.joyBase.addEventListener("pointercancel", joyEnd);
     this.hud.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLElement>("[data-a]")?.dataset.a;
-      if (a === "home") this.goHome();
+      if (a === "map") _ctx.nav.go({ screen: "ban-do", at: this.center ? { x: this.center.x, y: this.center.y } : undefined });
       if (a === "stop") {
         this.path = [];
         toast("Đứng lại");
@@ -139,19 +182,20 @@ export class WorldScene implements Scene {
     canvas.addEventListener("wheel", () => (this.followPause = 2.5), { passive: true });
   }
 
-  /** Tự chạy tới một điểm (từ thẻ điểm ở màn Bản đồ), gọi trước khi mở scene. */
+  /** Mở khu vực của một điểm (từ nút Vào khu vực ở map lớn), gọi trước khi chuyển scene. */
   focus(g: { pointId?: number; at?: { x: number; y: number } }): void {
-    const r = this.region;
-    if (!r) return;
-    if (g.pointId !== undefined) {
-      const p = r.points[g.pointId];
-      if (p) this.moveTo(p.x, p.y);
-    } else if (g.at) this.moveTo(g.at.x, g.at.y);
+    this.pendingScope = g.pointId;
+    if (this.ready) this.applyScope();
   }
 
   enter(v: View): void {
     this.v = v;
     this.active = true;
+    // Deep-link thử nghiệm khi dev: #the-gioi/<id điểm> mở thẳng khu vực của điểm (bỏ qua hành trình).
+    if (import.meta.env.DEV && location.hash.startsWith("#the-gioi/")) {
+      const id = Number(location.hash.slice("#the-gioi/".length));
+      if (Number.isFinite(id)) this.pendingScope = id;
+    }
     void this.load();
   }
 
@@ -161,7 +205,7 @@ export class WorldScene implements Scene {
     try {
       localStorage.setItem(POS_KEY, JSON.stringify({ region: this.regionCode, x: this.player.x, y: this.player.y }));
     } catch {
-      // Không lưu được thì lần sau về thành chủ.
+      // Không lưu được thì lần sau đứng ở điểm trung tâm.
     }
   }
 
@@ -175,27 +219,75 @@ export class WorldScene implements Scene {
       this.layers.prefetch(this.regionCode);
       this.layers.addRegion(region);
     }
-    const [x0, y0, x1, y1] = region.map.bbox;
-    this.camera.bounds = { x: x0 - 10, y: y0 - 10, w: x1 - x0 + 20, h: y1 - y0 + 20 };
     if (!this.fog) this.fog = new FogMap(this.regionCode, grid.origin, grid.w, grid.h);
-    if (!this.ready) {
-      this.ready = true;
-      const home = region.points.find((p) => p.type === "thanh_chu")!;
-      let spawn = { x: home.x, y: home.y };
-      try {
-        const saved = JSON.parse(localStorage.getItem(POS_KEY) ?? "null") as { region: string; x: number; y: number } | null;
-        if (saved && saved.region === this.regionCode && grid.walkable(saved.x, saved.y)) spawn = saved;
-      } catch {
-        // Bỏ qua, về thành chủ.
+    this.applyScope();
+    this.ready = true;
+  }
+
+  /** Chốt điểm trung tâm của khu vực và dựng bãi farm, hầm ngục, người giả quanh đó. */
+  private applyScope(): void {
+    const r = this.region;
+    const g = this.grid;
+    if (!r || !g) return;
+    const id = this.pendingScope ?? currentSpot();
+    this.pendingScope = undefined;
+    const c = r.points[id] ?? r.points.find((p) => p.type === "thanh_chu")!;
+    this.center = c;
+    this.camera.bounds = { x: c.x - SCOPE_R, y: c.y - SCOPE_R, w: SCOPE_R * 2, h: SCOPE_R * 2 };
+    this.areaKey = "";
+    this.path = [];
+
+    // Bãi farm quanh hang (GDD mục 3): BAI_COUNT bãi, dải cấp theo bậc 10 quanh cấp nguy hiểm, hồ sơ rơi riêng.
+    const rnd = mulberry32(c.id * 1009 + 7);
+    this.bai = [];
+    this.dungeon = undefined;
+    this.mockPlayers = [];
+    if (c.type === "hang_di_thu") {
+      for (let i = 0; i < BAI_COUNT; i++) {
+        const a = i * 2.399 + rnd() * 0.6;
+        const d = 9 + rnd() * 6;
+        const pos = g.nearestWalkable(c.x + Math.cos(a) * d, c.y + Math.sin(a) * d);
+        if (!pos) continue;
+        const lo = Math.max(1, c.danger - 10 + i * 10);
+        this.bai.push({ x: pos.x, y: pos.y, lvLo: lo, lvHi: lo + 10, profile: DROP_PROFILES[(c.id + i) % DROP_PROFILES.length] });
       }
-      this.player.x = spawn.x;
-      this.player.y = spawn.y;
-      this.fog.reveal(spawn.x, spawn.y, 16);
-      if (this.v) {
-        this.camera.x = spawn.x;
-        this.camera.y = spawn.y;
-        this.camera.zoom = 4;
+      if (c.danger >= DUNGEON_MIN_DANGER) {
+        const a = rnd() * Math.PI * 2;
+        const pos = g.nearestWalkable(c.x + Math.cos(a) * 20, c.y + Math.sin(a) * 20);
+        if (pos) this.dungeon = pos;
       }
+      // Người chơi khác đang farm/treo auto (prototype: giả, đứng ở bãi; bản thật là người thật trong AOI, mục 16).
+      for (let i = 0; i < MOCK_NAMES.length && this.bai.length; i++) {
+        const b = this.bai[i % this.bai.length];
+        const pos = g.nearestWalkable(b.x + rnd() * 4 - 2, b.y + rnd() * 4 - 2);
+        if (!pos) continue;
+        this.mockPlayers.push({ x: pos.x, y: pos.y, bai: i % this.bai.length, name: MOCK_NAMES[i], auto: i % 3 !== 0, phase: rnd() * 10 });
+      }
+    }
+
+    // Quái: mỗi bãi 2 con lang thang; hầm ngục 6 con lớn hơn.
+    this.mobs = [];
+    for (const b of this.bai)
+      for (let i = 0; i < 2; i++) this.mobs.push({ x: b.x, y: b.y, bx: b.x, by: b.y, r: BAI_R - 1, phase: Math.random() * 10, big: false });
+    if (this.dungeon)
+      for (let i = 0; i < 6; i++) this.mobs.push({ x: this.dungeon.x, y: this.dungeon.y, bx: this.dungeon.x, by: this.dungeon.y, r: 4, phase: Math.random() * 10, big: true });
+
+    // Vị trí người chơi: khôi phục nếu còn trong khu vực, không thì đứng ở điểm trung tâm.
+    let spawn = { x: c.x, y: c.y };
+    try {
+      const saved = JSON.parse(localStorage.getItem(POS_KEY) ?? "null") as { region: string; x: number; y: number } | null;
+      if (saved && saved.region === this.regionCode && g.walkable(saved.x, saved.y) && Math.hypot(saved.x - c.x, saved.y - c.y) < SCOPE_R) spawn = saved;
+    } catch {
+      // Bỏ qua.
+    }
+    this.player.x = spawn.x;
+    this.player.y = spawn.y;
+    this.fog?.reveal(spawn.x, spawn.y, 16);
+    if (this.v) {
+      this.camera.x = spawn.x;
+      this.camera.y = spawn.y;
+      this.camera.zoom = 6;
+      this.follow = true;
     }
   }
 
@@ -226,14 +318,6 @@ export class WorldScene implements Scene {
       return;
     }
     this.path = p;
-  }
-
-  private goHome(): void {
-    const home = this.region?.points.find((p) => p.type === "thanh_chu");
-    if (!home) return;
-    this.moveTo(home.x, home.y);
-    this.follow = true;
-    toast("Đang về thành chủ…");
   }
 
   /** Bước đi có va chạm lưới: chặn thì trượt theo từng trục. */
@@ -297,63 +381,96 @@ export class WorldScene implements Scene {
     this.mobTouchCd = Math.max(0, this.mobTouchCd - dt);
   }
 
-  /** Quái lang thang quanh các hang gần người chơi: trôi qua lại quanh hang, mỗi con một pha. */
+  /** Quái lang thang quanh tâm bãi/hầm; người giả khẽ động tại bãi. */
   private updateMobs(dt: number): void {
-    const r = this.region;
-    const f = this.fog;
-    if (!r || !f) return;
-    const p = this.player;
     this.mobT += dt;
-    const dens = r.points.filter((pt) => pt.type === "hang_di_thu" && Math.hypot(pt.x - p.x, pt.y - p.y) < MOB_NEAR && f.lit(pt.x, pt.y));
-    const want = new Set(dens.map((d) => d.id));
-    this.mobs = this.mobs.filter((m) => want.has(m.den));
-    for (const d of dens) {
-      const have = this.mobs.filter((m) => m.den === d.id).length;
-      for (let i = have; i < MOB_PER_DEN; i++) {
-        const a = Math.random() * Math.PI * 2;
-        this.mobs.push({ x: d.x + Math.cos(a) * 3, y: d.y + Math.sin(a) * 3, den: d.id, phase: Math.random() * 10 });
-      }
-    }
+    const p = this.player;
     for (const m of this.mobs) {
-      const d = r.points[m.den];
       m.phase += dt;
       const a = m.phase * 0.35;
-      const rr = 2.5 + Math.sin(m.phase * 0.7) * 1.2;
-      m.x = d.x + Math.cos(a) * rr;
-      m.y = d.y + Math.sin(a) * rr * 0.7;
+      const rr = m.r * (0.6 + Math.sin(m.phase * 0.7) * 0.25);
+      m.x = m.bx + Math.cos(a) * rr;
+      m.y = m.by + Math.sin(a) * rr * 0.7;
       if (this.mobTouchCd <= 0 && Math.hypot(m.x - p.x, m.y - p.y) < MOB_TOUCH) {
         this.mobTouchCd = 3;
-        toast(`Gặp dị thú ở ${esc(d.name ?? "hang")} (cấp ${d.danger})! Trận thời gian thực có ở Sprint R2.`);
+        toast(m.big ? "Quái hầm ngục mạnh và đông — nên đi cùng party! (Sprint R2)" : "Gặp dị thú! Trận thời gian thực có ở Sprint R2.");
+      }
+    }
+    for (const mp of this.mockPlayers) {
+      if (!mp.auto) {
+        // Người chơi thật điều khiển tay: đi vòng quanh bãi.
+        mp.phase += dt * 0.5;
+        const b = this.bai[mp.bai];
+        mp.x = b.x + Math.cos(mp.phase) * 3;
+        mp.y = b.y + Math.sin(mp.phase) * 2;
       }
     }
   }
 
-  /** Vào khu vực của một điểm thì mở thẻ điểm; ra khỏi thì thôi. */
+  /** Vào khu vực của bãi/hầm/điểm trung tâm thì mở thẻ tương ứng; ra khỏi thì thôi. */
   private checkArea(): void {
     const r = this.region;
-    if (!r) return;
+    const c = this.center;
+    if (!r || !c) return;
     const p = this.player;
-    let inside = -1;
-    for (const pt of r.points) {
-      const rr = AREA_R[pt.type] ?? 3;
-      if ((pt.x - p.x) ** 2 + (pt.y - p.y) ** 2 <= rr * rr) {
-        inside = pt.id;
-        break;
+    let key = "";
+    if (this.dungeon && Math.hypot(this.dungeon.x - p.x, this.dungeon.y - p.y) <= 5) key = "ham-nguc";
+    else {
+      for (let i = 0; i < this.bai.length; i++)
+        if (Math.hypot(this.bai[i].x - p.x, this.bai[i].y - p.y) <= BAI_R) {
+          key = `bai-${i}`;
+          break;
+        }
+      if (!key) {
+        const rr = AREA_R[c.type] ?? 3;
+        if (Math.hypot(c.x - p.x, c.y - p.y) <= rr) key = "diem";
       }
     }
-    if (inside === this.areaOf) return;
-    this.areaOf = inside;
-    if (inside >= 0) this.openPoint(r.points[inside]);
+    if (key === this.areaKey) return;
+    this.areaKey = key;
+    if (key === "ham-nguc") this.openDungeon();
+    else if (key.startsWith("bai-")) this.openBai(this.bai[Number(key.slice(4))]);
+    else if (key === "diem") this.openPoint(c);
   }
 
-  /** Thẻ điểm khi bước vào khu vực (GDD mục 14; các hành động chiến có ở sprint sau). */
+  private openBai(b: Bai): void {
+    const c = this.center!;
+    const body = openSheet(
+      `Bãi ${c.name ?? "dã ngoại"}`,
+      `<dl class="kv">
+        <dt>Cấp quái</dt><dd>${b.lvLo}–${b.lvHi}</dd>
+        <dt>Nghiêng rơi</dt><dd>${esc(b.profile)}</dd>
+        <dt>Người đang farm</dt><dd>${this.mockPlayers.length} người trong khu vực</dd>
+      </dl>
+      <div class="actions"><button type="button" data-a="farm">Luyện bãi (R2)</button></div>
+      <p class="muted">Mỗi bãi một hồ sơ rơi đồ và dải cấp — GDD mục 3.</p>`,
+    );
+    body.addEventListener("click", () => toast("Luyện bãi real-time có ở Sprint R2."));
+  }
+
+  private openDungeon(): void {
+    const c = this.center!;
+    const body = openSheet(
+      `Hầm ngục · ${c.name ?? ""}`,
+      `<dl class="kv">
+        <dt>Tầng</dt><dd>1/3 (mở dần)</dd>
+        <dt>Quái</dt><dd>Đông gấp đôi, chỉ số +30%</dd>
+        <dt>Rơi</dt><dd>Ấn bộ tím trở lên, ngọc cấp cao, tàn quyết; thần vật ×2</dd>
+      </dl>
+      <div class="actions"><button type="button" data-a="vao">Vào hầm (R2)</button></div>
+      <p class="muted">Một mình rất khó: mất buff party theo tài năng. Nên đi cùng team — GDD mục 3.</p>`,
+    );
+    body.addEventListener("click", () => toast("Hầm ngục là instance riêng, có ở Sprint R2–R4."));
+  }
+
+  /** Thẻ điểm trung tâm của khu vực. */
   private openPoint(p: RegionPoint): void {
     const w = this.world;
     if (!w) return;
     const type = w.types[p.type];
     const rows: [string, string][] = [
       ["Loại", p.tier ? w.tiers[p.tier].label : type.label],
-      ["Vùng", esc(r0(this.region!).name)],
+      ["Vùng", esc(this.region!.region.name)],
       ["Cấp nguy hiểm", String(p.danger)],
     ];
     if (p.terrain) rows.push(["Địa thế", w.terrains[p.terrain] ?? p.terrain]);
@@ -362,12 +479,11 @@ export class WorldScene implements Scene {
       p.name ?? POINT_NAMES[p.type],
       `<dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
        <div class="actions">
-         ${p.type === "hang_di_thu" ? `<button type="button" data-a="farm">Luyện bãi (R2)</button>` : ""}
          ${holdable ? `<button type="button" data-a="chiem">Chiếm (sprint sau)</button>` : ""}
        </div>
-       <p class="muted">Bản đồ mở thời gian thực — Sprint R1.</p>`,
+       <p class="muted">Map nhỏ của khu vực — GDD mục 3 tầng 2.</p>`,
     );
-    body.addEventListener("click", () => toast("Trận và chiếm điểm real-time có ở Sprint R2–R3."));
+    body.addEventListener("click", () => toast("Chiếm điểm real-time có ở sprint sau."));
   }
 
   draw(v: View): void {
@@ -376,11 +492,11 @@ export class WorldScene implements Scene {
     const world = this.world;
     const layers = this.layers;
     const r = this.region;
-    if (!world || !layers || !r) {
+    if (!world || !layers || !r || !this.center) {
       ctx.fillStyle = "#efe6d6";
       ctx.font = `600 13px ${FONT}`;
       ctx.textAlign = "center";
-      ctx.fillText("Đang tải bản đồ mở…", v.w / 2, (v.h - v.bottom) / 2);
+      ctx.fillText("Đang tải khu vực…", v.w / 2, (v.h - v.bottom) / 2);
       return;
     }
     const cam = this.camera;
@@ -389,8 +505,8 @@ export class WorldScene implements Scene {
     layers.drawBackground(ctx, view, cam.zoom * v.dpr);
     if (cam.zoom >= 2) layers.drawRoads(ctx, cam.zoom, [r.region.code]);
 
-    // Khu vực điểm: vòng tròn màu loại điểm; chưa mở sương thì mờ.
     const f = this.fog;
+    // Khu vực điểm của vùng trong phạm vi map nhỏ: vòng tròn màu loại điểm.
     for (const p of r.points) {
       if (p.x < view.x - 8 || p.y < view.y - 8 || p.x > view.x + view.w + 8 || p.y > view.y + view.h + 8) continue;
       const lit = f ? f.lit(p.x, p.y) : true;
@@ -401,6 +517,29 @@ export class WorldScene implements Scene {
       ctx.fill();
       ctx.lineWidth = 0.35;
       ctx.strokeStyle = hexA(world.types[p.type].color, lit ? 0.85 : 0.3);
+      ctx.stroke();
+    }
+    // Bãi farm: vòng nét đứt màu hệ, tâm đậm.
+    const el = ELEMENT_STYLE[r.region.element as keyof typeof ELEMENT_STYLE];
+    for (const b of this.bai) {
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, BAI_R, 0, Math.PI * 2);
+      ctx.fillStyle = hexA(el?.color ?? "#7b241c", 0.1);
+      ctx.fill();
+      ctx.lineWidth = 0.4;
+      ctx.setLineDash([1, 1]);
+      ctx.strokeStyle = hexA(el?.color ?? "#7b241c", 0.9);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    // Hầm ngục: vòng tối.
+    if (this.dungeon) {
+      ctx.beginPath();
+      ctx.arc(this.dungeon.x, this.dungeon.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(24, 16, 30, 0.35)";
+      ctx.fill();
+      ctx.lineWidth = 0.5;
+      ctx.strokeStyle = "#4a3370";
       ctx.stroke();
     }
     // Đường auto đang chạy.
@@ -414,22 +553,36 @@ export class WorldScene implements Scene {
       ctx.stroke();
       ctx.setLineDash([]);
     }
-    // Quái lang thang (chấm màu hệ của vùng, có bóng).
-    const el = ELEMENT_STYLE[r.region.element as keyof typeof ELEMENT_STYLE];
+    // Quái lang thang.
     for (const m of this.mobs) {
+      const s = m.big ? 1.3 : 0.9;
       ctx.beginPath();
-      ctx.ellipse(m.x, m.y + 0.7, 0.9, 0.4, 0, 0, Math.PI * 2);
+      ctx.ellipse(m.x, m.y + 0.7 * s, 0.9 * s, 0.4 * s, 0, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(30, 20, 12, 0.3)";
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(m.x, m.y, 0.9, 0, Math.PI * 2);
-      ctx.fillStyle = el?.color ?? "#7b241c";
+      ctx.arc(m.x, m.y, 0.9 * s, 0, Math.PI * 2);
+      ctx.fillStyle = m.big ? "#4a3370" : (el?.color ?? "#7b241c");
       ctx.fill();
       ctx.lineWidth = 0.25;
       ctx.strokeStyle = INK;
       ctx.stroke();
     }
-    // Nhân vật: thân tròn màu giấy viền mực, tia chỉ hướng đi.
+    // Người chơi khác (giả): chấm xám xanh, cờ auto.
+    for (const mp of this.mockPlayers) {
+      ctx.beginPath();
+      ctx.ellipse(mp.x, mp.y + 0.9, 1, 0.4, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(30, 20, 12, 0.3)";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(mp.x, mp.y, 1, 0, Math.PI * 2);
+      ctx.fillStyle = "#5d8aa8";
+      ctx.fill();
+      ctx.lineWidth = 0.25;
+      ctx.strokeStyle = INK;
+      ctx.stroke();
+    }
+    // Nhân vật của mình.
     const p = this.player;
     ctx.beginPath();
     ctx.ellipse(p.x, p.y + 0.9, 1.1, 0.45, 0, 0, Math.PI * 2);
@@ -449,26 +602,53 @@ export class WorldScene implements Scene {
     // Sương mù phủ trên cùng.
     f?.draw(ctx);
 
-    // Tên điểm trong tầm nhìn, theo px màn hình cho dễ đọc.
+    // Chữ theo px màn hình: tên bãi (cấp + hồ sơ rơi), hầm ngục, người chơi, tên điểm.
     ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
-    if (cam.zoom >= 2.4) {
+    ctx.textAlign = "center";
+    ctx.lineJoin = "round";
+    for (const b of this.bai) {
+      const s = cam.toScreen(b.x, b.y, v);
+      const label = `Bãi ${b.lvLo}–${b.lvHi} · ${b.profile}`;
       ctx.font = `600 11px ${FONT}`;
-      ctx.textAlign = "center";
       ctx.textBaseline = "bottom";
-      ctx.lineJoin = "round";
-      for (const p2 of r.points) {
-        if (p2.x < view.x || p2.y < view.y || p2.x > view.x + view.w || p2.y > view.y + view.h) continue;
-        if (f && !f.lit(p2.x, p2.y)) continue;
-        const s = cam.toScreen(p2.x, p2.y, v);
-        const name = p2.name ?? POINT_NAMES[p2.type];
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = HALO;
-        ctx.strokeText(name, s.x, s.y - (AREA_R[p2.type] ?? 3) * cam.zoom - 4);
-        ctx.fillStyle = p2.type === "thanh_chu" ? "#6b1d12" : INK;
-        ctx.fillText(name, s.x, s.y - (AREA_R[p2.type] ?? 3) * cam.zoom - 4);
-      }
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = HALO;
+      ctx.strokeText(label, s.x, s.y - BAI_R * cam.zoom - 3);
+      ctx.fillStyle = INK;
+      ctx.fillText(label, s.x, s.y - BAI_R * cam.zoom - 3);
     }
-    // Chỉ số gỡ lỗi: tốc độ, vị trí, số quái.
+    if (this.dungeon) {
+      const s = cam.toScreen(this.dungeon.x, this.dungeon.y, v);
+      ctx.font = `700 11px ${FONT}`;
+      ctx.textBaseline = "bottom";
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = HALO;
+      ctx.strokeText("Hầm ngục", s.x, s.y - 5 * cam.zoom - 3);
+      ctx.fillStyle = "#4a3370";
+      ctx.fillText("Hầm ngục", s.x, s.y - 5 * cam.zoom - 3);
+    }
+    ctx.font = `600 10px ${FONT}`;
+    ctx.textBaseline = "top";
+    for (const mp of this.mockPlayers) {
+      const s = cam.toScreen(mp.x, mp.y, v);
+      const label = mp.auto ? `${mp.name} · auto` : mp.name;
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = HALO;
+      ctx.strokeText(label, s.x, s.y + 1.4 * cam.zoom);
+      ctx.fillStyle = "#33526b";
+      ctx.fillText(label, s.x, s.y + 1.4 * cam.zoom);
+    }
+    const c = this.center;
+    const s0 = cam.toScreen(c.x, c.y, v);
+    ctx.font = `700 12px ${FONT}`;
+    ctx.textBaseline = "bottom";
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = HALO;
+    const cname = c.name ?? POINT_NAMES[c.type];
+    ctx.strokeText(cname, s0.x, s0.y - (AREA_R[c.type] ?? 3) * cam.zoom - 4);
+    ctx.fillStyle = c.type === "thanh_chu" ? "#6b1d12" : INK;
+    ctx.fillText(cname, s0.x, s0.y - (AREA_R[c.type] ?? 3) * cam.zoom - 4);
+    // Chỉ số gỡ lỗi.
     if (import.meta.env.DEV) {
       ctx.font = `11px ${FONT}`;
       ctx.textAlign = "left";
@@ -477,10 +657,6 @@ export class WorldScene implements Scene {
       ctx.fillText(`(${fmt(p.x)}; ${fmt(p.y)}) · quái ${this.mobs.length} · ${this.path.length ? "đang chạy" : "đứng"}`, 8, 22);
     }
   }
-}
-
-function r0(r: RegionMap) {
-  return r.region;
 }
 
 /** Màu hex #rrggbb thành rgba có alpha. */

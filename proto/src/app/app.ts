@@ -103,14 +103,16 @@ export class App {
     if (s.page) s.page.hidden = false;
     document.body.dataset.scene = s.id;
     for (const b of this.tabbar.querySelectorAll("button")) b.setAttribute("aria-selected", String(b.dataset.scene === s.id));
-    history.replaceState(history.state, "", "#" + s.id);
     this.measureBottom();
     s.enter?.(this.view);
+    // Ghi hash sau enter để scene đọc được tham số deep-link (ví dụ #the-gioi/232) trước khi hash về dạng gọn.
+    history.replaceState(history.state, "", "#" + s.id);
     this.onShow?.(s);
   }
 
   private byHash(): Scene | undefined {
-    return this.scenes.find((s) => "#" + s.id === location.hash);
+    // Cho phép deep-link kèm tham số dạng #the-gioi/232 (chỉ số của điểm), phục vụ thử nghiệm.
+    return this.scenes.find((s) => "#" + s.id === location.hash || location.hash.startsWith("#" + s.id + "/"));
   }
 
   private measureBottom(): void {
