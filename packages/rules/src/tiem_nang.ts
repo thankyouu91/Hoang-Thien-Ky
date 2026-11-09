@@ -1,29 +1,19 @@
 // Điểm tiềm năng nhân vật (GDD mục 6, đề xuất 2026-11-09 của phiên Bảng Điểm; ghi chú diem-tiem-nang.md). Mỗi cấp +diemMoiCap điểm;
 // điểm đang có = (cấp − 1) × diemMoiCap trừ điểm đã cộng, nên chỉ lưu phân bố (Member.diemTiemNang). Mỗi điểm cho `moiDiem` phần nghìn
 // vào chỉ số trận (tên BuffStat của UnitSpec.bonuses); từ điểm thứ mocGiam + 1 trong một thuộc tính, mỗi điểm còn giamConLai phần nghìn.
-// shortcut: số ở TIEM_NANG_DU_PHONG theo ghi chú; khi có data/he_thong/json/diem_tiem_nang.json thì đọc file và thêm test so lệch.
+// Số ở data/he_thong/json/diem_tiem_nang.json.
 import type { BuffStat, UnitSpec } from "@ktlp/sim";
+import DTN from "../../../data/he_thong/json/diem_tiem_nang.json" with { type: "json" };
 import type { GameState, Member } from "./state.ts";
 import type { Result } from "./apply.ts";
 
 export interface AttributeRow { id: string; ten: string; moiDiem: Partial<Record<BuffStat, number>> }
 
-const TIEM_NANG_DU_PHONG = {
-  diemMoiCap: 1,
-  mocGiam: 120,
-  giamConLai: 500,
-  thuocTinh: [
-    { id: "the_phach", ten: "Thể phách", moiDiem: { hp: 1 } },
-    { id: "khi_luc", ten: "Khí lực", moiDiem: { atk: 0.8 } },
-    { id: "can_cot", ten: "Căn cốt", moiDiem: { def: 2 } },
-    { id: "than_thuc", ten: "Thần thức", moiDiem: { critBonus: 1, critDamage: 1 } },
-    { id: "linh_luc", ten: "Linh lực", moiDiem: { manaMax: 2.5, manaCostCut: 0.4 } },
-    { id: "than_phap", ten: "Thân pháp", moiDiem: { attackSpeed: 1.5, cooldownCut: 1 } },
-  ] as AttributeRow[],
-};
-const T = TIEM_NANG_DU_PHONG;
+const T = DTN as unknown as { diemMoiCap: number; mocGiam: number; giamConLai: number; tayDiem: { mienPhiDuoiCap: number; linhThach: number }; thuocTinh: AttributeRow[] };
 export const DIEM_MOI_CAP = T.diemMoiCap;
 export const ATTRIBUTES: AttributeRow[] = T.thuocTinh;
+/** Phí tẩy điểm (bên gọi trừ): miễn phí dưới cấp mienPhiDuoiCap, từ đó linhThach linh thạch mỗi lần. */
+export const TAY_DIEM = T.tayDiem;
 const has = (id: string) => ATTRIBUTES.some((a) => a.id === id);
 
 /** Tổng điểm đã cộng của một người. */
@@ -80,7 +70,7 @@ export function addPoints(state: GameState, memberId: string, thuocTinh: string,
   return { ok: true, events: [{ type: "cong_diem", memberId, thuocTinh, diem }] };
 }
 
-/** Tẩy điểm: xóa phân bố, trả lại toàn bộ điểm. Phí (linh thạch từ cấp 50) do bên gọi lo, như các phí ngoài luật khác. */
+/** Tẩy điểm: xóa phân bố, trả lại toàn bộ điểm. Phí (TAY_DIEM) do bên gọi lo, như các phí ngoài luật khác. */
 export function resetPoints(state: GameState, memberId: string): Result {
   const member = state.members[memberId];
   if (!member) return { ok: false, error: "khong_co_thanh_vien" };

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { Battle, baseStats, composeTechnique, type UnitSpec } from "@ktlp/sim";
+import { Battle, baseStats, composeTechnique, unitBonuses, type UnitSpec } from "@ktlp/sim";
 import {
   apply, emptyState, addMember, attributeBonuses, unspentPoints, withAttributes, ATTRIBUTES, DIEM_MOI_CAP,
   type GameState, type Result,
@@ -62,4 +62,10 @@ test("vào trận: withAttributes cộng vào UnitSpec.bonuses; không cộng đ
   assert.deepEqual(geared.bonuses, { atk: 50 + 40, def: 20 });
   const u = new Battle({ seed: 1, teamA: [geared], teamB: [{ ...spec, id: 101 }] }).units.find((x) => x.id === 1)!;
   assert.equal(u.atk, Math.trunc((spec.atk * (1000 + 90)) / 1000));
+});
+
+test("dữ liệu diem_tiem_nang.json: khóa moiDiem là chỉ số trận của sim, id không trùng", () => {
+  const stats = Object.keys(unitBonuses([], [], []));
+  for (const a of ATTRIBUTES) for (const k of Object.keys(a.moiDiem)) assert.ok(stats.indexOf(k) >= 0, `${a.id}: ${k}`);
+  assert.equal(new Set(ATTRIBUTES.map((a) => a.id)).size, ATTRIBUTES.length);
 });
