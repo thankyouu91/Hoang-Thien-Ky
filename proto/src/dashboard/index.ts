@@ -12,6 +12,7 @@ import { simReplaySource } from "../replay/simSource.ts";
 import type { ReplaySource } from "../replay/types.ts";
 import type { BattleScene } from "../scenes/battle/battleScene.ts";
 import { MapScene } from "../scenes/map/mapScene.ts";
+import { WorldScene } from "../scenes/world/worldScene.ts";
 import { MockAuth } from "./auth.ts";
 import { icon, type IconName } from "./icons.ts";
 import { showLogin } from "./login.ts";
@@ -56,6 +57,10 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
         case "ban-do":
           map.focus(g);
           app.show(map);
+          break;
+        case "the-gioi":
+          world?.focus(g);
+          if (world) app.show(world);
           break;
         case "tong-mon":
           tongMon.setTab(g.tab ?? "tong-quan");
@@ -116,6 +121,8 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
   const congPhap = new CongPhapScene(ctx);
   const lienMinh = new LienMinhScene(ctx);
   const nhanVat = new NhanVatScene(ctx, sprites);
+  // Bản đồ mở thời gian thực (GDD mục 3, KE_HOACH mục 9 Sprint R1): không có nút tab, mở bằng "Đi tới" hoặc #the-gioi.
+  const world = new WorldScene(ctx, canvas);
   const byId: Record<string, Scene> = { "dong-phu": dongPhu, "ban-do": map, "tong-mon": tongMon, "cong-phap": congPhap, "lien-minh": lienMinh };
 
   // Lúc rảnh sau khi vào game: tải trước file điểm, ảnh nền và hình đảo của vùng, để mở tab Bản đồ là có ngay.
@@ -130,7 +137,7 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
 
   return {
     tabs: [dongPhu, map, tongMon, congPhap, lienMinh],
-    offTab: [nhanVat],
+    offTab: [nhanVat, world],
     onShow(s: Scene): void {
       closeSheet();
       if (TAB_IDS.includes(s.id)) lastMain = s.id;

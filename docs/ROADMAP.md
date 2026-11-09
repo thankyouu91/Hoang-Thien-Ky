@@ -6,7 +6,7 @@ Kế hoạch chi tiết, lý do và các việc chờ quyết nằm ở `docs/KE
 
 | Sprint | Nội dung | Kết quả cần có | Trạng thái |
 |---|---|---|---|
-| R1 | Map mở Lôi Đình Cốc: chạy tự do, camera, sương mù, điểm tranh dạng khu vực | 60 khung/giây trên điện thoại, auto chạy tới mọi điểm | |
+| R1 | Map mở Lôi Đình Cốc: chạy tự do, camera, sương mù, điểm tranh dạng khu vực | 60 khung/giây trên điện thoại, auto chạy tới mọi điểm | Xong 2026-11-09: scene `the-gioi` trong proto (joystick + chạm để auto chạy A* trên lưới đi bộ `ha_di_bo_*.json`, camera bám, sương mù mở theo bán kính và lưu localStorage, khu vực điểm mở thẻ khi bước vào, quái lang thang quanh hang). Mở bằng nút Đi tới ở Bản đồ hoặc #the-gioi. Còn: đo fps thật trên điện thoại khi demo |
 | R2 | Combat real-time trên `packages/sim` trong Web Worker; HUD joystick + 4 nút chiêu + Auto | Trận 10 đấu 10 real-time đúng 20 Hz, khớp mã băm batch | |
 | R3 | `worker/combat` qua WebSocket, world server tối giản, 2 client thật PvP | Hai máy đánh nhau real-time; đo băng thông AOI thật | |
 | R4 | Bí cảnh instance, treo máy farm, FTUE rút gọn, chơi thử 2 tuần | Cửa 1 theo tiêu chí ở KE_HOACH mục 9 | |

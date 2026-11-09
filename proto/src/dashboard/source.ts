@@ -76,6 +76,7 @@ export type Go =
   | { screen: "dong-phu" }
   | { screen: "nhan-vat"; tab?: "trang-bi" | "chi-so" | "thu-cuoi" }
   | { screen: "ban-do"; pointId?: number; at?: { x: number; y: number } }
+  | { screen: "the-gioi"; pointId?: number; at?: { x: number; y: number } }
   | { screen: "tong-mon"; tab?: "tong-quan" | "son-mon" | "thanh-vien" | "chien-su" }
   | { screen: "cong-phap"; section?: "mang" | "truyen-thu" | "tui" | "tang-kinh" }
   | { screen: "lien-minh" }

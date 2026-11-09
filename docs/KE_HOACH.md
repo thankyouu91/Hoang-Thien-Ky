@@ -223,6 +223,8 @@ Ngày 2026-11-09 người dùng chốt chuyển game từ chiến lược dashbo
 
 ### Sprint R1 · Map mở một vùng, di chuyển tự do
 
+Xong 2026-11-09 (phiên Kimi Code): scene `the-gioi` trong `proto/src/scenes/world/` (worldScene, walkGrid, fogMap). Joystick ảo + chạm điểm đến để auto chạy (A* trên lưới đi bộ, rút gọn theo thị tuyến), camera bám mượt (kéo map thì tạm ngừng bám 2,5 s), địa hình chặn đường theo lưới `data/maps/ha_di_bo_<mã vùng>.json` do `tools/mapgen/di_bo.ts` sinh (đất h ≥ 20, núi ≥ 60 và sông chặn; đường và điểm ép mở; 12 vùng 78–93% đi được, 10–29 KB mỗi vùng). Điểm tranh là khu vực tròn theo loại, vào là mở thẻ điểm; sương mù mở bán kính 12 ô quanh nhân vật, lưu localStorage theo vùng; hang dị thú có 3 quái lang thang, chạm vào báo trận (R2). Nối từ nút "Đi tới" của thẻ điểm ở màn Bản đồ, hoặc vào thẳng bằng #the-gioi. Đã build qua và chạy thử trong trình duyệt: spawn ở Lăng Trường Thành, auto chạy, mở sương đúng. Chưa đo fps thật trên điện thoại — đo khi demo.
+
 - Scene map mở trong `proto/` (scene mới, không đụng dashboard): vẽ ảnh nền chia ô của Lôi Đình Cốc (`data/maps/ha_nen/`), nhân vật chạy tự do bằng joystick ảo và chạm điểm đến (auto chạy theo đường Azgaar), camera bám, địa hình chặn đường (núi, sông) bằng lưới đi bộ sinh từ `tools/mapgen`.
 - Điểm tranh là khu vực tròn trên map (bán kính theo loại, tham số); vào khu vực hiện thẻ điểm. Sương mù mở theo bán kính đi qua, lưu theo người chơi.
 - Một bãi dị thú với quái lang thang trong khu vực cấp nguy hiểm; chạm quái vào trận (Sprint R2).

@@ -562,7 +562,7 @@ export class MapScene implements Scene {
     );
     body.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLElement>("[data-a]")?.dataset.a;
-      if (a === "di") toast("Hành trình theo chặng có ở khối M3; prototype chưa đi được.");
+      if (a === "di") this.ctx.nav.go({ screen: "the-gioi", pointId: p.id });
       if (a === "chiem") toast("Chiếm điểm bằng trận tranh điểm có ở Sprint 6.");
       if (a === "chien") toast("Tuyên chiến có ở khối M5.");
     });
