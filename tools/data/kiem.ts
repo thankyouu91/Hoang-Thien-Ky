@@ -4,7 +4,7 @@
 import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, VARIANT_STATS, ELEMENT_STATS, ELEMENT_EFFECTS, ROOT_BUFFS, GRADE_POW, LINH_EFFECT_POWER,
   SKILL_RULES, CAST_FLOOR, BATTLE, UNIT_CURVE, TALENT_RULES, ARTIFACT_RULES, BASE_CRIT_PER_MILLE, RESIST_CAP, COUNTER_FLOOR, DAMAGE_KIND, HIDDEN_RULES,
-  elementMultiplier, comboRelation, composeTechnique, mul, ONE, type Element, type SkillType, type Variant,
+  elementMultiplier, comboRelation, composeTechnique, unitBonuses, mul, ONE, type Element, type SkillType, type Variant,
 } from "@ktlp/sim";
 import { existsSync, readFileSync } from "node:fs";
 import type { Raw } from "./xuat.ts";
@@ -482,6 +482,27 @@ export function kiem(d: Any, raw: Raw): Report {
       const pham = d["pham.json"][0], top = tg[tg.length - 1];
       const diem = tg.reduce((a, x) => a + Math.round(x.diemLuyen * pham.power / 1000), 0), quyen = tg.reduce((a, x) => a + x.congHien, 0);
       notes.push(`Tầng công pháp: ${tg.length} tầng, tầng cuối uy lực +${top.uyLuc / 10}%; lên hết 1 công pháp ${pham.name} tốn ${diem} điểm luyện (${Math.ceil(diem / cp.diemLuyenMoiCap)} cấp) và ${quyen} tàn quyển (${quyen * pham.contribution} cống hiến)`);
+    }
+  }
+
+  // Điểm tiềm năng: thuộc tính khác mã, khóa mỗi điểm đúng chỉ số cộng của sim, luật trong khoảng
+  {
+    const dt = d["diem_tiem_nang.json"] as Any, bad: string[] = [];
+    if (!dt) errors.push("Điểm tiềm năng: thiếu diem_tiem_nang.json");
+    else {
+      const stats = new Set(Object.keys(unitBonuses([], [], []))), tt = (dt.thuocTinh ?? []) as Any[];
+      if (!tt.length || new Set(tt.map((x) => x.id)).size !== tt.length) bad.push("thuộc tính trống hoặc trùng mã");
+      for (const x of tt) {
+        const ks = Object.entries((x.moiDiem ?? {}) as Record<string, unknown>);
+        if (!ks.length) bad.push(`${x.id}: moiDiem trống`);
+        for (const [k, v] of ks) if (!stats.has(k) || !(typeof v === "number" && v > 0)) bad.push(`${x.id}: ${k} = ${String(v)} (cần khóa chỉ số cộng của sim, số dương)`);
+      }
+      if (!(dt.diemMoiCap > 0)) bad.push("diemMoiCap phải lớn hơn 0");
+      if (!(dt.mocGiam > 0)) bad.push("mocGiam phải lớn hơn 0");
+      if (!(dt.giamConLai >= 0 && dt.giamConLai <= 1000)) bad.push("giamConLai phải trong 0–1000 phần nghìn");
+      if (!(dt.tayDiem?.mienPhiDuoiCap > 0 && dt.tayDiem?.linhThach >= 0)) bad.push("tayDiem thiếu mienPhiDuoiCap hoặc linhThach");
+      if (bad.length) errors.push(`Điểm tiềm năng: ${bad.join("; ")}`);
+      else notes.push(`Điểm tiềm năng: ${tt.length} thuộc tính, +${dt.diemMoiCap} điểm mỗi cấp, từ điểm ${dt.mocGiam + 1} của một thuộc tính còn ${dt.giamConLai / 10}% tác dụng`);
     }
   }
 

@@ -256,6 +256,12 @@ export const PARTS: PartDef[] = [
     c("don_vi", "Đơn vị", "unit", { width: 8 }),
     c("tinh_khi", "Tính khi (ho_chu, ca_5, thu_cuoi, cong_thanh, luon, luyen_hoa)", "text", { width: 14 }), nguon,
   ]),
+  // Điểm tiềm năng nhân vật (GDD mục 6, phiên Bảng Điểm hệ thống 2026-11-09; mọi số là đề xuất). Luật số ở Luật trang bị.
+  T("Điểm tiềm năng", "diem_tiem_nang.json", "thuocTinh", "ma", [
+    c("ma", "Mã", "text", { json: "id", width: 11 }), c("ten", "Thuộc tính", "text", { width: 11 }),
+    c("tom_tat", "Tóm tắt", "text", { json: "tomTat", width: 18 }),
+    c("moi_diem", "Mỗi điểm (khóa chỉ số cộng của sim, phần nghìn; hp, atk, def, manaMax tính trên chỉ số gốc theo cấp)", "kv", { json: "moiDiem", width: 40 }),
+  ]),
   T("Luật trang bị", "", "", "khoa", [
     c("khoa", "Khóa (file:đường dẫn)", "text", { width: 40 }), c("ten", "Tên", "text", { width: 45, json: false }),
     c("gia_tri", "Giá trị", "qty", { unitCol: "kieu", width: 10 }), c("kieu", "Kiểu", "text", { width: 8 }),
@@ -284,6 +290,7 @@ const TOP_ORDER: Record<string, string[]> = {
   "dao_co_ban.json": ["ghi_chu", "o", "cong_huong", "mach", "luat"],
   "luyen_khi.json": ["ghi_chu", "tay_luyen", "khi_linh", "khi_van", "phan_giai", "danh_khi", "bao_giam", "te_luyen_tang", "luat"],
   "thu_phat_trien.json": ["ghi_chu", "tu_chat", "tu_vi", "thu_ky", "huyet_mach", "thien_phu"],
+  "diem_tiem_nang.json": ["ghi_chu", "diemMoiCap", "mocGiam", "giamConLai", "tayDiem", "thuocTinh"],
 };
 export const TB_FILES = Object.keys(TOP_ORDER);
 
@@ -373,6 +380,11 @@ export const LUAT: [string, string, string][] = [
   ["luyen_khi.json:luat.danhKhiMoiNguoi", "Danh khí: mỗi người mặc tối đa", "số"],
   ["luyen_khi.json:luat.baoGiamTuanLinhVanThach", "Bảo Giám: trang tuần thưởng Linh Văn Thạch", "số"],
   ["luyen_khi.json:luat.teLuyenHoiChieuSan", "Tế luyện tầng: hồi chiêu pháp bảo sau mọi nguồn không dưới", "%"],
+  ["diem_tiem_nang.json:diemMoiCap", "Điểm tiềm năng: số điểm mỗi lần lên cấp", "số"],
+  ["diem_tiem_nang.json:mocGiam", "Điểm tiềm năng: số điểm một thuộc tính còn đủ tác dụng (mốc giảm)", "số"],
+  ["diem_tiem_nang.json:giamConLai", "Điểm tiềm năng: tác dụng còn lại của mỗi điểm vượt mốc giảm", "%"],
+  ["diem_tiem_nang.json:tayDiem.mienPhiDuoiCap", "Tẩy điểm tiềm năng: miễn phí dưới cấp", "số"],
+  ["diem_tiem_nang.json:tayDiem.linhThach", "Tẩy điểm tiềm năng: linh thạch mỗi lần từ cấp đó", "số"],
 ];
 
 // ---------- dựng lần đầu từ data/trang_bi ----------

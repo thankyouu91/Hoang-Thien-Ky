@@ -36,6 +36,8 @@
 //   set_2_ghi_chu   3 ghi chú set đồ 2.0 (set.json bậc ấn, trang_bi.json áo giày +2,6%, ngoc.json binh_an) theo bản đã duyệt
 //   tang_cong_phap  sheet Tầng công pháp (10 tầng: uy lực, giảm hồi chiêu, giảm mana, điểm luyện, cống hiến) → tang_cong_phap.json;
 //                   tham_so cong_phap.diemLuyenMoiCap; luật lên tầng ở sheet Ghi chú (phiên Bảng Điểm hệ thống, đề xuất)
+//   diem_tiem_nang  sheet Điểm tiềm năng (6 thuộc tính, mỗi điểm theo chỉ số cộng của sim) → diem_tiem_nang.json; 5 luật (điểm mỗi cấp,
+//                   mốc giảm, tẩy điểm) ở Luật trang bị; ghi chú (phiên Bảng Điểm hệ thống 2026-11-09, đề xuất)
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -1694,11 +1696,55 @@ const tangCongPhap: Step = (wb, log) => {
   else { wb.appendRows(B.NOTE_SHEET, [[{ v: def.sheet, bold: true }, { v: GHI_CHU_TANG_CP }]]); log.push("Ghi chú: thêm luật lên tầng công pháp"); }
 };
 
+// ---------- điểm tiềm năng nhân vật (GDD mục 6, phiên Bảng Điểm hệ thống 2026-11-09; mọi số là đề xuất) ----------
+
+/** [mã, tên, tóm tắt, mỗi điểm (khóa chỉ số cộng BuffStat của sim, phần nghìn)]. */
+const DTN: [string, string, string, string][] = [
+  ["the_phach", "Thể phách", "Máu", "hp: 1"],
+  ["khi_luc", "Khí lực", "Công lực", "atk: 0.8"],
+  ["can_cot", "Căn cốt", "Phòng thủ", "def: 2"],
+  ["than_thuc", "Thần thức", "Chí mạng", "critBonus: 1; critDamage: 1"],
+  ["linh_luc", "Linh lực", "Mana", "manaMax: 2.5; manaCostCut: 0.4"],
+  ["than_phap", "Thân pháp", "Tốc đánh, hồi chiêu", "attackSpeed: 1.5; cooldownCut: 1"],
+];
+/** Luật ở sheet Luật trang bị: [khóa, giá trị theo kiểu ở TB.LUAT ("%" ghi tỷ lệ)]. */
+const DTN_LUAT: [string, number][] = [
+  ["diem_tiem_nang.json:diemMoiCap", 1], ["diem_tiem_nang.json:mocGiam", 120], ["diem_tiem_nang.json:giamConLai", 0.5],
+  ["diem_tiem_nang.json:tayDiem.mienPhiDuoiCap", 50], ["diem_tiem_nang.json:tayDiem.linhThach", 1000],
+];
+const DTN_GHI_CHU = [
+  "Điểm tiềm năng (GDD mục 6, phiên Bảng Điểm hệ thống 2026-11-09; mọi số là đề xuất; đo sim: dồn 250 điểm vào một thuộc tính thắng 84,5–88,5%, sáu hướng cân). Mỗi lần lên cấp +diemMoiCap điểm; điểm đang có = (cấp − 1) × diemMoiCap − điểm đã cộng, chỉ lưu phân bố theo thuộc tính.",
+  "thuocTinh[].moiDiem: tác dụng của 1 điểm, khóa đúng tên chỉ số cộng (BuffStat) của sim, phần nghìn, gộp vào UnitSpec.bonuses khi dựng trận; hp, atk, def, manaMax là phần nghìn của chỉ số gốc theo cấp, khóa khác là phần nghìn tuyệt đối. Số lẻ (0,8; 2,5; 0,4) giữ nguyên.",
+  "Mốc giảm: trong một thuộc tính, từ điểm thứ mocGiam + 1 mỗi điểm chỉ còn giamConLai phần nghìn tác dụng (điểm hiệu quả = min(d, mocGiam) + (d − mocGiam) × giamConLai / 1000). Tẩy điểm: miễn phí dưới cấp tayDiem.mienPhiDuoiCap, từ cấp đó tốn tayDiem.linhThach linh thạch mỗi lần.",
+];
+
+const diemTiemNang: Step = (wb, log) => {
+  const def = partDef("Điểm tiềm năng");
+  if (wb.names().includes(def.sheet)) log.push(`${def.sheet}: sheet đã có, bỏ qua`);
+  else {
+    wb.addSheet(table(def, DTN.map(([ma, ten, tom_tat, moi_diem]) => ({ ma, ten, tom_tat, moi_diem }))), B.TANG_CONG_PHAP.sheet);
+    log.push(`${def.sheet}: thêm sheet ${DTN.length} thuộc tính sau ${B.TANG_CONG_PHAP.sheet}`);
+  }
+  const luatDef = partDef("Luật trang bị"), have = new Set(wb.sheet(luatDef.sheet).cells.map((r) => norm(r?.[0])));
+  const luat = DTN_LUAT.filter(([k]) => !have.has(k)).map(([khoa, gia_tri]) => {
+    const [, ten, kieu] = TB.LUAT.find((l) => l[0] === khoa)!;
+    return { khoa, ten, gia_tri, kieu };
+  });
+  if (luat.length) wb.appendRows(luatDef.sheet, tableRows(luatDef, luat));
+  log.push(`Luật trang bị: thêm ${luat.length} dòng điểm tiềm năng`);
+  const gc = partDef("Ghi chú trang bị"), gs = wb.sheet(gc.sheet), h = (gs.cells[0] ?? []).map(norm);
+  const at = (key: string) => h.indexOf(gc.cols.find((c) => c.key === key)!.header);
+  const cu = gs.cells.filter((r, i) => i > 0 && norm(r?.[at("file")]) === "diem_tiem_nang.json").map((r) => norm(r[at("noi_dung")]));
+  const moi = DTN_GHI_CHU.filter((v) => !cu.includes(v)).map((noi_dung, i) => ({ file: "diem_tiem_nang.json", stt: cu.length + i + 1, noi_dung }));
+  if (moi.length) wb.appendRows(gc.sheet, tableRows(gc, moi));
+  log.push(`Ghi chú trang bị: thêm ${moi.length} dòng diem_tiem_nang.json`);
+};
+
 export const STEPS: Record<string, Step> = {
   artifact_rules: artifactRules, dao_co_ban: daoCoBan, dao_co_ban_mo: daoCoBanMo, tran_lan_2: tranLan2, hop_tran: hopTran,
   luyen_khi: luyenKhi, hop_tran_2: hopTran2, luyen_khi_2: luyenKhi2, luyen_khi_3: luyenKhi3, luyen_khi_4: luyenKhi4, luyen_khi_5: luyenKhi5, luyen_khi_6: luyenKhi6, luyen_khi_7: luyenKhi7,
   thu_phat_trien: thuPhatTrien, set_2: set2, set_2b: set2b, set_2c: set2c, goc_085: goc085, set_2d: set2d, set_2e: set2e, set_2f: set2f, set_2g: set2g, set_2h: set2h, set_2i: set2i, set_2j: set2j, set_2k: set2k, set_2l: set2l, set_2m: set2m, set_2_chot: set2Chot, set_2_ghi_chu: set2GhiChu,
-  tang_cong_phap: tangCongPhap,
+  tang_cong_phap: tangCongPhap, diem_tiem_nang: diemTiemNang,
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
