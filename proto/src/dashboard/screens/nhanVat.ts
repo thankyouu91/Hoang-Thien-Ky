@@ -28,6 +28,7 @@ import { lang, langSwitch, setLang, type Lang } from "../i18n.ts";
 import { moGopY } from "../mayChuUi.ts";
 import { BAC_TEN, bacBadge, GHEP_AN_SO, ghepLen, binhAnArt, binhBoBlock, binhBoSheet, dongAnHtml, dongRenHtml, gearSet2Rows, setRow, setSheet } from "../set2View.ts";
 import { laBanMau } from "../moi/demo.ts";
+import { tiemNangCmd, tiemNangHtml } from "./tiemNangUi.ts";
 import { bacTrangPhuc, DANG_THEO_MA, hinhLonCands } from "../trangPhuc.ts";
 import { elementWheel } from "../elementWheel.ts";
 import { gemValue, hasKhiLinh } from "../luyenKhi.ts";
@@ -395,6 +396,7 @@ export class NhanVatScene extends PageScene<NhanVatView> {
         <div class="nv-row"><span>Điểm trang bị</span><b>${fmt(v.score)}</b></div>
         ${combat.map(statRow).join("")}
         <p class="nv-note">Chạm một dòng để xem nguồn: gốc theo cấp, đồ, ngọc, thú, tài năng, linh căn.</p>`)}
+      ${v.tiemNang ? group(`Điểm tiềm năng${v.tiemNang.chuaCong > 0 ? ` · còn ${fmt(v.tiemNang.chuaCong)}` : ""}`, tiemNangHtml(v.tiemNang), v.tiemNang.chuaCong > 0) : ""}
       ${group("Tu luyện", `
         <div class="nv-row"><span>Tu vi</span><b>${fmt(v.exp)} / ${fmt(v.expToNext)}</b></div>
         <div class="bar"><i style="width:${(exp * 100).toFixed(1)}%"></i></div>
@@ -934,6 +936,9 @@ export class NhanVatScene extends PageScene<NhanVatView> {
     } else if (name === "gop-y") moGopY();
     else if (name === "lang") {
       if (el.dataset.lang !== lang()) setLang(el.dataset.lang as Lang);
+    } else if (name === "tn-cong" || name === "tn-tay") {
+      const cmd = v.tiemNang && tiemNangCmd(name, el, v.tiemNang);
+      if (cmd) void this.send(cmd);
     } else if (name === "stat") this.openStat(v.stats.find((s) => s.id === el.dataset.stat)!);
     else if (name === "cultivation") this.openCultivation(v);
     else if (name === "main") {

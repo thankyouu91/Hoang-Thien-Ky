@@ -1,8 +1,8 @@
 // Nguồn đọc gộp chạy ngay trong trang (chưa có server giả). Mỗi lệnh đọc dựng đủ các thẻ của một màn từ World,
 // kèm mốc giờ server; lệnh ghi đi qua apply() của @ktlp/rules khi luật đã có, phần còn lại sửa World trực tiếp.
 import {
-  apply, bacHeSo, BINH_AN_O, binhBoOf, boardCell, boardCellOpen, DIEM_LUYEN_MOI_CAP, diemTrangBi, DONG_REN, gearStats, ghepAn, GRADE_NAMES, kieuInfo,
-  layerCost, loadoutTechniques, maxInlayLines, RULES,
+  apply, attributeBonuses, bacHeSo, BINH_AN_O, binhBoOf, boardCell, boardCellOpen, DIEM_LUYEN_MOI_CAP, diemTrangBi, DONG_REN, gearStats, ghepAn, GRADE_NAMES, kieuInfo,
+  layerCost, loadoutTechniques, maxInlayLines, RULES, unspentPoints,
   scrollKind, setLo, TECHNIQUE_LAYERS, techniqueOf, trainingPoints, transmissionSlots,
   type Bac, type BoardPiece, type Command, type EquipItem, type GearStats, type InlayLine, type LearnedTechnique, type Progress, type Role,
   type SectTechnique,
@@ -27,9 +27,10 @@ import { RETREAT_HOURS } from "../source.ts";
 import type {
   BagItem, BanDoView, BinhBoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, ForgeLineView, GearItem, GearSlot, Go,
   HiddenLineView, LienMinhView, LuyenKhiView, MiniMapView, MountView, NhanVatView, ScrollCard, SetMilestone, SetView, StatLine, StatSource,
-  TangCongPhapView, TechniqueCard, TodoCard, TongMonView, TopBarView,
+  TangCongPhapView, TechniqueCard, TiemNangView, TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
 import { statsAt, tangRows } from "../tangCongPhap.ts";
+import { diemHieuQua, TN } from "../tiemNang.ts";
 import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.ts";
 import {
   createWorld, npcSects, pieceBagItem, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, samePiece, todayAt, type DongAnRaw, type NpcSect, type World, type WorldGear,
@@ -721,6 +722,8 @@ export class MockDashboardSource implements DashboardSource {
     const techs = loadoutTechniques(w.rules, PLAYER);
     const fromRoot = unitBonuses(p.roots, [], techs);
     const fromTalent = unitBonuses([], [p.talent], techs);
+    // Điểm tiềm năng (GDD mục 6, đề xuất 2026-11-09): phần nghìn theo BuffStat từ @ktlp/rules, cùng số với trận.
+    const tnBon: Partial<Record<string, number>> = attributeBonuses(me);
 
     // Đồ: chỉ số gốc × (1 + 3% mỗi nấc); độ bền 0 thì mất hết chỉ số (GDD mục 12).
     const gear = { hp: 0, atk: 0, def: 0, mana: 0 };
@@ -752,11 +755,16 @@ export class MockDashboardSource implements DashboardSource {
     const hp = line("hp", "Máu", "", [
       { label: "Gốc theo cấp", value: base.hp }, { label: "Đồ", value: gear.hp }, { label: "Thú", value: mount.hp },
       { label: "Tài năng", value: pct(base.hp, fromTalent.hp) }, { label: "Buff linh căn", value: pct(base.hp, fromRoot.hp) },
+      { label: "Tiềm năng", value: pct(base.hp, tnBon.hp ?? 0) },
     ]);
-    const atk = line("atk", "Công lực", "", [{ label: "Gốc theo cấp", value: base.atk }, { label: "Đồ", value: gear.atk }, { label: "Thú", value: mount.atk }]);
+    const atk = line("atk", "Công lực", "", [
+      { label: "Gốc theo cấp", value: base.atk }, { label: "Đồ", value: gear.atk }, { label: "Thú", value: mount.atk },
+      { label: "Tiềm năng", value: pct(base.atk, tnBon.atk ?? 0) },
+    ]);
     const defSources: StatSource[] = [
       { label: "Gốc theo cấp", value: base.def }, { label: "Đồ", value: gear.def }, { label: "Thú", value: mount.def },
       { label: "Tài năng", value: pct(base.def, fromTalent.def) }, { label: "Buff linh căn", value: pct(base.def, fromRoot.def) },
+      { label: "Tiềm năng", value: pct(base.def, tnBon.def ?? 0) },
     ];
     // Phòng thủ chung chỉ còn trong main (trường def của UnitSpec); bảng chỉ số tách thủ ngoại, thủ nội (set đồ 2.0): cùng
     // phòng thủ gốc, cộng phần nghìn defOuter, defInner của set, dòng phụ, dòng rèn như sim.
@@ -771,9 +779,13 @@ export class MockDashboardSource implements DashboardSource {
     const mana = line("mana", "Mana", "", [
       { label: "Gốc theo cấp", value: BATTLE.manaMax }, { label: "Đồ", value: gear.mana },
       { label: "Tài năng", value: pct(BATTLE.manaMax, fromTalent.manaMax) }, { label: "Buff linh căn", value: pct(BATTLE.manaMax, fromRoot.manaMax) },
+      { label: "Tiềm năng", value: pct(BATTLE.manaMax, tnBon.manaMax ?? 0) },
     ]);
     const permille = (id: string, label: string, baseValue: number, key: keyof typeof fromRoot): StatLine =>
-      line(id, label, "‰", [{ label: "Gốc theo cấp", value: baseValue }, { label: "Tài năng", value: fromTalent[key] }, { label: "Buff linh căn", value: fromRoot[key] }]);
+      line(id, label, "‰", [
+        { label: "Gốc theo cấp", value: baseValue }, { label: "Tài năng", value: fromTalent[key] }, { label: "Buff linh căn", value: fromRoot[key] },
+        { label: "Tiềm năng", value: tnBon[key] ?? 0 },
+      ]);
     const stats: StatLine[] = [
       hp, atk, defOuter, defInner, mana,
       permille("crit", "Chí mạng", BASE_CRIT_PER_MILLE, "critBonus"),
@@ -785,6 +797,44 @@ export class MockDashboardSource implements DashboardSource {
       ...(Object.entries(resist) as [Element, number][]).map(([e, v]) => line(`resist_${e}`, `Kháng ${ELEMENT_LABEL[e]}`, "‰", [{ label: "Gốc theo cấp", value: 0 }, { label: "Ngọc", value: Math.round(v) }])),
       line("luck", "Luck", "", [{ label: "Gốc theo cấp", value: 0 }]),
     ];
+
+    // Điểm tiềm năng: dòng hiệu ứng đổi phần nghìn gốc thành số thật theo cấp; chưa cộng thì ghi mức của 10 điểm.
+    const tn = me.diemTiemNang ?? {};
+    // Số tuyệt đối nhỏ (dưới 10) giữ 1 chữ số lẻ, để "+0,8 công" không thành "+0 công".
+    const tnAbs = (b: number, pm: number): string => {
+      const x = (b * pm) / 1000;
+      return x >= 10 ? String(Math.round(x)) : (Math.round(x * 10) / 10).toLocaleString("vi-VN");
+    };
+    const tnUnit = (k: string, vPm: number): string => {
+      const r = Math.round(vPm);
+      switch (k) {
+        case "hp": return `+${tnAbs(base.hp, vPm)} máu`;
+        case "atk": return `+${tnAbs(base.atk, vPm)} công`;
+        case "def": return `+${tnAbs(base.def, vPm)} thủ`;
+        case "manaMax": return `+${tnAbs(BATTLE.manaMax, vPm)} mana`;
+        case "critBonus": return `+${r}‰ chí mạng`;
+        case "critDamage": return `+${r}‰ ST chí mạng`;
+        case "manaCostCut": return `−${r}‰ mana tiêu`;
+        case "attackSpeed": return `+${r}‰ tốc đánh`;
+        case "cooldownCut": return `−${r}‰ hồi chiêu`;
+        default: return "";
+      }
+    };
+    const daCong = Object.values(tn).reduce((a: number, b) => a + (b ?? 0), 0);
+    const tiemNang: TiemNangView = {
+      chuaCong: Math.max(0, unspentPoints(me)),
+      moiCap: TN.diemMoiCap,
+      attrs: TN.thuocTinh.map((t) => {
+        const d = tn[t.id] ?? 0;
+        // Chưa cộng thì ghi mức của 10 điểm (1 điểm lẻ hay làm tròn về 0).
+        const eff = d > 0 ? diemHieuQua(d) : 10;
+        const text = Object.entries(t.moiDiem).map(([k, v]) => tnUnit(k, eff * v)).join(" · ");
+        return { id: t.id, ten: t.ten, tomTat: t.tomTat, diem: d, hieuUng: d > 0 ? text : `mỗi 10 điểm ${text}`, quaMoc: d > TN.mocGiam };
+      }),
+      mocGiam: TN.mocGiam,
+      tayDiemPhi: me.level >= TN.tayDiem.mienPhiDuoiCap ? TN.tayDiem.linhThach : 0,
+      daCong,
+    };
 
     const power = (s: { hp: number; atk: number; def: number }) => s.hp * POWER.hp + s.atk * POWER.atk + s.def * POWER.def;
     const techPower = techs.reduce((a, t) => a + (t.damage / 1000) * t.targets * POWER.tech, 0);
@@ -868,6 +918,7 @@ export class MockDashboardSource implements DashboardSource {
       learned,
       bag: { capacity: BAG_CAPACITY, items },
       riding: p.riding,
+      tiemNang,
       power: {
         total,
         parts: [
@@ -1515,6 +1566,22 @@ export class MockDashboardSource implements DashboardSource {
         const r = rule({ type: "len_tang_cong_phap", actor: PLAYER, techniqueId: cmd.techniqueId });
         const l = this.me.learned.find((x) => x.techniqueId === cmd.techniqueId);
         return r.ok && l ? { ok: true, message: `${l.name} lên tầng ${l.layer}` } : r;
+      }
+      case "cong_diem": {
+        const r = rule({ type: "cong_diem", actor: PLAYER, thuocTinh: cmd.thuocTinh, diem: cmd.diem });
+        const t = TN.thuocTinh.find((x) => x.id === cmd.thuocTinh);
+        return r.ok ? { ok: true, message: `${t?.ten ?? cmd.thuocTinh} +${cmd.diem} điểm` } : r;
+      }
+      case "tay_diem": {
+        // Phí linh thạch nằm ngoài luật (như các phí khác): mock trừ trước rồi mới gọi rules.
+        const p = w.player;
+        if (!Object.values(this.me.diemTiemNang ?? {}).some((d) => d)) return { ok: false, error: "chua_cong_diem" };
+        const phi = this.me.level >= TN.tayDiem.mienPhiDuoiCap ? TN.tayDiem.linhThach : 0;
+        if (p.linhThach < phi) return { ok: false, error: "khong_du_linh_thach" };
+        const r = rule({ type: "tay_diem", actor: PLAYER });
+        if (!r.ok) return r;
+        p.linhThach -= phi;
+        return { ok: true, message: phi ? `Đã tẩy điểm, tốn ${phi} linh thạch` : "Đã tẩy điểm" };
       }
       case "cho_xuat_su": {
         const r = rule({ type: "cho_xuat_su", actor: PLAYER, memberId: cmd.memberId });

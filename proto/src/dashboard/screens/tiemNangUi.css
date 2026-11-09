@@ -1,0 +1,9 @@
+/* Nhóm Điểm tiềm năng (screens/tiemNangUi.ts) ở cột Thông tin màn Nhân vật; dùng token tokens.css, lớp nv-row có sẵn. */
+.tn-sub { color: var(--c-ink-3); font-size: var(--fs-xs); }
+.tn-ctl { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 4px; }
+.tn-ctl b { min-width: 26px; text-align: right; font-variant-numeric: tabular-nums; }
+.tn-ctl .btn.small { padding: 1px 7px; }
+.tn-fx { margin: -2px 0 4px 4px; font-size: var(--fs-xs); }
+.tn-moc { color: var(--c-warn); }
+.tn-co { color: var(--c-accent-ink); }
+.tn-tay { margin-top: var(--sp-2); }

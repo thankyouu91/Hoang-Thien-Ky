@@ -251,6 +251,11 @@ export const ERROR_TEXT: Record<string, string> = {
   da_toi_tang: "Công pháp đã đủ 10 tầng.",
   thieu_diem_luyen: "Chưa đủ điểm luyện công pháp. Lên cấp để có thêm.",
   thieu_cong_hien: "Chưa đủ cống hiến để lên tầng này.",
+  // Điểm tiềm năng (lệnh cong_diem, tay_diem)
+  thuoc_tinh_sai: "Thuộc tính không hợp lệ.",
+  diem_khong_hop_le: "Số điểm cộng không hợp lệ.",
+  thieu_diem_tiem_nang: "Chưa đủ điểm tiềm năng. Lên cấp để có thêm.",
+  chua_cong_diem: "Chưa cộng điểm nào để tẩy.",
   da_hoc: "Đã học công pháp này.",
   vuot_so_cong_phap: "Chỉ mang được 4 công pháp.",
   vuot_so_suat: "Bộ truyền thụ đã đủ suất.",

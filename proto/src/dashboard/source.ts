@@ -329,6 +329,8 @@ export interface NhanVatView extends Stamped {
   /** Bốn chỉ số chính, đúng các trường của UnitSpec trong @ktlp/sim. */
   main: StatLine[];
   stats: StatLine[];
+  /** Điểm tiềm năng (GDD mục 6, đề xuất 2026-11-09): nguồn chưa có thì màn ẩn nhóm này. */
+  tiemNang?: TiemNangView;
   mounts: (MountView | null)[]; // 5 ô
   combos: { name: string; effect: string; active: boolean }[];
   /** Hình nhân vật ghép: thân, áo và đồ (khoá manifest). */
@@ -519,6 +521,18 @@ export interface ScrollCard {
   contribution: number; // cống hiến nếu nộp
 }
 
+/** Điểm tiềm năng của nhân vật: điểm chưa cộng và từng thuộc tính (tiemNang.ts; số ở diem_tiem_nang.json khi có). */
+export interface TiemNangView {
+  chuaCong: number;
+  moiCap: number;
+  /** hieuUng: chữ sẵn "+N máu" theo điểm đang có; mocGiam đạt thì dòng ghi "mốc mềm". */
+  attrs: { id: string; ten: string; tomTat: string; diem: number; hieuUng: string; quaMoc: boolean }[];
+  mocGiam: number;
+  /** Phí tẩy điểm lần này: 0 là miễn phí. */
+  tayDiemPhi: number;
+  daCong: number;
+}
+
 export interface CongPhapView extends Stamped {
   top: TopBarView;
   viewerRole: Role | null;
@@ -620,6 +634,10 @@ export type DashboardCommand =
   | { type: "mang_vao_tran"; techniqueIds: number[] }
   /** Lên một tầng cho công pháp đã học: tốn điểm luyện và cống hiến theo tang_cong_phap.json (lệnh rules len_tang_cong_phap). */
   | { type: "len_tang_cong_phap"; techniqueId: number }
+  /** Cộng điểm tiềm năng vào một thuộc tính (TẠM ở mock tới khi rules có lệnh cong_diem). */
+  | { type: "cong_diem"; thuocTinh: string; diem: number }
+  /** Tẩy toàn bộ điểm tiềm năng; từ cấp 50 tốn linh thạch (tiemNang.ts TN.tayDiem). */
+  | { type: "tay_diem" }
   /** Mặc một món trang bị trong túi; món đang ở ô đó về túi. */
   | { type: "mac_do"; uid: number }
   /** Tháo món ở một ô về túi; túi đầy thì không tháo được. */

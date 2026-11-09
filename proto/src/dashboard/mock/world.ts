@@ -310,6 +310,9 @@ function buildRules(now: number): GameState {
   const t6 = compose(["moc.hoi_phuc.linh", 1], ["thuy.hoi_phuc.ben", 1]);
   must(s, { type: "dat_bo_truyen_thu", actor: PLAYER, techniqueIds: [t1, t2, t3, t4, t5, t6] }, now);
   for (const t of [t1, t2, t3, t4]) must(s, { type: "hoc_cong_phap", actor: PLAYER, techniqueId: t }, now);
+  // Điểm tiềm năng mẫu: đã cộng 30 điểm kiểu Tu thể, phần còn lại để người xem tự chia (GDD mục 6, đề xuất 2026-11-09).
+  must(s, { type: "cong_diem", actor: PLAYER, thuocTinh: "the_phach", diem: 18 }, now);
+  must(s, { type: "cong_diem", actor: PLAYER, thuocTinh: "can_cot", diem: 12 }, now);
   // Ô thứ tư để trống: thẻ Việc nên làm "Ô công pháp còn trống"; công pháp hộ thể đã học nằm chờ trong túi để kéo vào.
   must(s, { type: "mang_vao_tran", actor: PLAYER, techniqueIds: [t1, t2, t3] }, now);
 
