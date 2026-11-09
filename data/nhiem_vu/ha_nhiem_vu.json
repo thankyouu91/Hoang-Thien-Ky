@@ -2725,7 +2725,16 @@
     "tamDaoLoanPick": 1,
     "tamDaoEnemyExclude": [],
     "khacChe": "muc 8, gom vong thien dia di he hoa > am_lanh > kim > quang > hoa (de xuat)",
-    "defaultDangerMaxRelative": 20
+    "defaultDangerMaxRelative": 20,
+    "placeholders": {
+      "$home": "he cua vung nha (vung tong dau tien)",
+      "$pheDaChon": "phe nguoi choi chon o chuong 4",
+      "$beatenByHome": "he bi he vung nha khac",
+      "$roundDistinct": "moi hiep mot he khac cac hiep truoc, rut theo hat giong trong 12 he, bo he cua nguoi choi",
+      "$counterOfRound": "he khac he dich cua hiep do",
+      "unknown": "he bi he nguoi choi khac (loi ra cho may chay, khong de ket)"
+    },
+    "costOr": "tru lua chon dau tien du; thieu het thi mien phi (cho tam cua prototype, khong de ket)"
   },
   "tongTruyen": {
     "status": "de_xuat",
