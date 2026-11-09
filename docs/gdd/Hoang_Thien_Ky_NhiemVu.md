@@ -22,7 +22,7 @@ Hạ vị có một tuyến chính 6 chương theo cảnh giới (57 nhiệm v�
 
 ## Cốt truyện: Thiên Thê gãy
 
-Vạn năm trước, Thập Nhị Cổ Tông cùng giữ Thiên Thê, chiếc thang nối bốn vị diện của Hoàng Thiên đại lục. Mỗi cổ tông giữ một hệ và có gốc ở một vùng Hạ vị (bảng ở phần Vùng truyện).
+Vạn năm trước, Thập Nhị Cổ Tông cùng giữ Thiên Thê, chiếc thang nối bốn vị diện của Thiên Hoang đại lục. Mỗi cổ tông giữ một hệ và có gốc ở một vùng Hạ vị (bảng ở phần Vùng truyện).
 
 Kiếp Đoạn Mạch bẻ gãy Thiên Thê. Linh mạch Hạ vị cạn, mười hai cổ tông tan rã, công pháp của họ vỡ thành tàn quyển rơi vào các động phủ cũ, nay là bí cảnh. Nay linh mạch sống lại (mùa 1 Linh Mạch Phục Tô, mục 17), và thời khai tông lập phái bắt đầu.
 

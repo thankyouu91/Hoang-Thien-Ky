@@ -769,7 +769,7 @@ Hai chỉ số mới: giảm thời gian bị khống chế (3 điểm trang b�
 
 Còn lại cho lần cân 10 loại chiêu: cặp Hấp Thu khắc Khống Tốc (45–48%) và cặp Thủ Nội khắc Nội Công quá mạnh khi đội công chỉ mang chiêu nội (70%). Cả hai đều dính tới việc nhóm chiêu nội yếu.
 
-**Đo lần 8: sau đề xuất cân 10 loại chiêu (2026-11-05; người dùng duyệt cùng ngày).** Số loại chiêu ở mục 8 tab Hoàng Thiên Ký — GDD, kèm Văn Uyên mốc 4 giảm mana thi triển 6% còn 4,5%. 200 cặp, bậc tím. Bảng ghi tỷ lệ thắng của bên khắc. A: công pháp theo lộ; B: hai bên cùng công pháp; C: lộ mang đúng loại đòn.
+**Đo lần 8: sau đề xuất cân 10 loại chiêu (2026-11-05; người dùng duyệt cùng ngày).** Số loại chiêu ở mục 8 tab Thiên Hoang Ký — GDD, kèm Văn Uyên mốc 4 giảm mana thi triển 6% còn 4,5%. 200 cặp, bậc tím. Bảng ghi tỷ lệ thắng của bên khắc. A: công pháp theo lộ; B: hai bên cùng công pháp; C: lộ mang đúng loại đòn.
 
 | Cặp | Trước A / B / C | Sau A / B / C |
 |---|---|---|

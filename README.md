@@ -1,12 +1,12 @@
-# Hoàng Thiên Ký — mã nguồn
+# Thiên Hoang Ký — mã nguồn
 
-MMORPG mobile tiên hiệp thời gian thực xoay quanh tông môn (chuyển từ chiến lược dashboard ngày 2026-11-09; tên cũ: Khai Tông Lập Phái, Thiên Hoang Ký). Thiết kế đầy đủ nằm trong `docs/gdd/` (GDD, git là nguồn sự thật).
+MMORPG mobile tiên hiệp thời gian thực xoay quanh tông môn (chuyển từ chiến lược dashboard ngày 2026-11-09; tên cũ: Khai Tông Lập Phái, Hoàng Thiên Ký). Thiết kế đầy đủ nằm trong `docs/gdd/` (GDD, git là nguồn sự thật).
 
 ## Cấu trúc
 
 | Thư mục | Nội dung | Trạng thái |
 |---|---|---|
-| `docs/gdd` | GDD Hoàng Thiên Ký (nguồn sự thật từ 2026-11-09): GDD chính, Nhiệm vụ, Trang bị, Hub (README) | Có |
+| `docs/gdd` | GDD Thiên Hoang Ký (nguồn sự thật từ 2026-11-09): GDD chính, Nhiệm vụ, Trang bị, Hub (README) | Có |
 | `packages/sim` | Thư viện mô phỏng trận deterministic (fixed-point, RNG có seed, 20 tick/giây, mã băm trạng thái): ghép công pháp, sân đấu, 10 loại chiêu, hiệu ứng 12 hệ, tài năng. Từ 2026-11-09 chạy trên combat server cho trận thời gian thực; client dùng để hiển thị và phát lại chiến báo | Sprint 0–1: xong |
 | `packages/rules` | Luật game bằng TypeScript thuần: tàn quyển, Tàng Kinh Các, tông môn, mỏ; chạy trong prototype rồi mang nguyên vào Nakama | Sprint 2, 5 |
 | `tools/balance` | Chạy hàng nghìn trận, xuất tỷ lệ thắng theo hệ, loại chiêu và tổ hợp | Sprint 2 |

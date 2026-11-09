@@ -16,7 +16,7 @@ export function showLogin(auth: AuthSource, ageLabel: string, onDone: () => void
     <span class="age-badge" title="Nhãn phân loại độ tuổi">${esc(ageLabel)}</span>
     <header class="login-brand">
       <p class="eyebrow">Tông môn tiên hiệp</p>
-      <h1>Hoàng Thiên Ký</h1>
+      <h1>Thiên Hoang Ký</h1>
       <p class="tag">Lập tông, giữ mỏ, ghép công pháp.</p>
     </header>
     <form class="login-card" novalidate></form>

@@ -10,13 +10,13 @@ status: active
 source: git repo Hoang-Thien-Ky, docs/gdd (bản gốc cũ: Claude Docs tab chính, rev 296)
 ---
 
-# Hoàng Thiên Ký — Tài liệu thiết kế game (GDD)
+# Thiên Hoang Ký — Tài liệu thiết kế game (GDD)
 
 2026-11-01 · @ANN
 
 ## 1. Tổng quan
 
-Hoàng Thiên Ký là tên chính thức của game (chốt 2026-11-05 với tên Thiên Hoang Ký, đổi thành Hoàng Thiên Ký ngày 2026-11-09; tên tạm trước đó là Khai Tông Lập Phái), lấy theo Hoàng Thiên đại lục, thế giới của game. Đây là MMORPG mobile tiên hiệp thời gian thực xoay quanh tông môn (chốt 2026-11-09, trước đó là chiến lược dạng dashboard). Người chơi chạm điểm để đi trên map lớn, điều khiển nhân vật di chuyển tự do trong map nhỏ của từng khu vực, đánh thời gian thực có auto đầy đủ; các tông môn chiếm các khu vực tranh chung trên bản đồ, giành mỏ và bí cảnh, ghép tàn quyển thành công pháp riêng, rồi thăng vị diện cả môn.
+Thiên Hoang Ký là tên chính thức của game (chốt 2026-11-05, đổi sang Hoàng Thiên Ký sáng 2026-11-09 rồi quay lại Thiên Hoang Ký cùng ngày; tên tạm trước đó là Khai Tông Lập Phái), lấy theo Thiên Hoang đại lục, thế giới của game. Đây là MMORPG mobile tiên hiệp thời gian thực xoay quanh tông môn (chốt 2026-11-09, trước đó là chiến lược dạng dashboard). Người chơi chạm điểm để đi trên map lớn, điều khiển nhân vật di chuyển tự do trong map nhỏ của từng khu vực, đánh thời gian thực có auto đầy đủ; các tông môn chiếm các khu vực tranh chung trên bản đồ, giành mỏ và bí cảnh, ghép tàn quyển thành công pháp riêng, rồi thăng vị diện cả môn.
 
 **Một câu:** Bạn sống ở thành chủ trung lập của một vùng Hạ vị diện, lập hoặc gia nhập một tông môn (tông môn mới rơi ngẫu nhiên vào một vị trí có địa thế riêng), chạm điểm để đi trên map lớn, vào khu vực thì chạy tự do farm và mở dần sương mù, chiếm mỏ và tranh tài nguyên với các liên minh khác trong các trận thời gian thực. Khi tông môn đạt cấp 200, cả môn phi thăng lên vị diện cao hơn và bắt đầu lại từ cấp 1 ở một vùng ngẫu nhiên.
 
@@ -58,7 +58,7 @@ Mọi tính năng mới phải phục vụ ít nhất một trong bốn trụ c�
 
 ## 3. Thế giới: vị diện, vùng và nguyên tố
 
-Hoàng Thiên đại lục gồm 4 vị diện, mỗi vị diện là một bản đồ riêng (đã chốt): Hạ vị 12 vùng xếp vòng quanh Linh Hải, cao nguyên tụ linh khí ở lòng giữa, Trung vị 9 vùng quanh Vân Hải, Thần vực 5 vùng quanh Thần Sơn, Thánh vực 2 vùng. Khung bố cục, lưới định vị 24 × 16 ô (A1–X16) và toạ độ thành chủ nằm trong thư mục map của dự án. Càng vào trong, linh khí càng đậm và tài nguyên càng quý. Mỗi vùng là một bản đồ mở liền mạch (chốt 2026-11-09, trước là bản đồ điểm nối bằng đường): người chơi di chuyển tự do thời gian thực trên map 2D isometric, không chia ô; các điểm tranh (thành chủ, vị trí sơn môn, mỏ, linh tuyền, cửa bí cảnh, đèo, bến đò, hang dị thú) là các khu vực có tọa độ và bán kính trên map. Số lượng, vị trí và phân bố điểm giữ nguyên từ bộ sinh bản đồ (`tools/mapgen`); đèo và bến đò vẫn là cửa ải vì địa hình (núi, hẻm, sông) ép đường đi tự nhiên qua đó.
+Thiên Hoang đại lục gồm 4 vị diện, mỗi vị diện là một bản đồ riêng (đã chốt): Hạ vị 12 vùng xếp vòng quanh Linh Hải, cao nguyên tụ linh khí ở lòng giữa, Trung vị 9 vùng quanh Vân Hải, Thần vực 5 vùng quanh Thần Sơn, Thánh vực 2 vùng. Khung bố cục, lưới định vị 24 × 16 ô (A1–X16) và toạ độ thành chủ nằm trong thư mục map của dự án. Càng vào trong, linh khí càng đậm và tài nguyên càng quý. Mỗi vùng là một bản đồ mở liền mạch (chốt 2026-11-09, trước là bản đồ điểm nối bằng đường): người chơi di chuyển tự do thời gian thực trên map 2D isometric, không chia ô; các điểm tranh (thành chủ, vị trí sơn môn, mỏ, linh tuyền, cửa bí cảnh, đèo, bến đò, hang dị thú) là các khu vực có tọa độ và bán kính trên map. Số lượng, vị trí và phân bố điểm giữ nguyên từ bộ sinh bản đồ (`tools/mapgen`); đèo và bến đò vẫn là cửa ải vì địa hình (núi, hẻm, sông) ép đường đi tự nhiên qua đó.
 
 *[Hình nhúng: bản đồ đề xuất · 4 vị diện, 28 vùng — xem bản gốc trên Claude Docs]*
 
@@ -1375,7 +1375,7 @@ Server quyết định mọi thứ; client chỉ hiển thị và gửi input. V
 
 ### Kiến trúc mở rộng theo nấc
 
-**Nhiều thế giới, không phải một bản đồ khổng lồ.** Một vùng Hạ vị trung bình có khoảng 90 vị trí sơn môn và khoảng 210 điểm giữ được (mỏ, linh tuyền, cửa bí cảnh, đèo, bến đò); tông môn cấp 200 giữ tối đa 20 điểm. Với tông môn trung bình 25–55 người, mỗi vùng chứa được khoảng 2.000–5.000 người và mỗi thế giới 12 vùng khoảng 30.000–50.000 người (ước lượng). Quy mô lớn đạt được bằng cách chạy nhiều thế giới song song. Mỗi thế giới là một bản đồ Hoàng Thiên đầy đủ 4 vị diện; tông môn phi thăng trong thế giới của mình. Chat, liên minh, chợ và xếp hạng gói trong một thế giới; tài khoản và thanh toán dùng chung.
+**Nhiều thế giới, không phải một bản đồ khổng lồ.** Một vùng Hạ vị trung bình có khoảng 90 vị trí sơn môn và khoảng 210 điểm giữ được (mỏ, linh tuyền, cửa bí cảnh, đèo, bến đò); tông môn cấp 200 giữ tối đa 20 điểm. Với tông môn trung bình 25–55 người, mỗi vùng chứa được khoảng 2.000–5.000 người và mỗi thế giới 12 vùng khoảng 30.000–50.000 người (ước lượng). Quy mô lớn đạt được bằng cách chạy nhiều thế giới song song. Mỗi thế giới là một bản đồ Thiên Hoang đầy đủ 4 vị diện; tông môn phi thăng trong thế giới của mình. Chat, liên minh, chợ và xếp hạng gói trong một thế giới; tài khoản và thanh toán dùng chung.
 
 | Thành phần | MVP (vài nghìn người) | 100.000 người | 1 triệu người |
 |---|---|---|---|
@@ -1590,7 +1590,7 @@ Rủi ro lớn nhất là phạm vi: bản đồ thời gian thực, 28 vùng v�
 - [x] Cấp nhân vật: Hạ vị tối đa 250; Trung vị về cấp 1, giữ chỉ số, tối đa 200; thượng vị không còn cấp, tu luyện chiêu thức với tỷ lệ 30% (đã chốt, xem mục 7).
 - [x] Xuất sư hợp lệ chỉ dừng tầng công pháp, không bị giảm 50% (đã chốt, xem mục 6).
 - [x] Thể loại: MMORPG mobile thời gian thực, auto đầy đủ; điểm tranh giữ trên bản đồ mở dạng khu vực có tọa độ (chốt 2026-11-09, chuyển từ chiến lược dashboard).
-- [x] Tên chính thức: Hoàng Thiên Ký (chốt 2026-11-09; trước là Thiên Hoang Ký chốt 2026-11-05, tên tạm Khai Tông Lập Phái). Việc kiểm tra trùng tên và nhãn hiệu chuyển sang nhóm J.
+- [x] Tên chính thức: Thiên Hoang Ký (chốt 2026-11-05, đổi sang Hoàng Thiên Ký rồi quay lại Thiên Hoang Ký trong ngày 2026-11-09; tên tạm Khai Tông Lập Phái). Việc kiểm tra trùng tên và nhãn hiệu chuyển sang nhóm J.
 - [x] Engine: Cocos Creator + TypeScript toàn stack (chốt 2026-11-09 theo hướng repo đang chạy; world server real-time bằng Go, xem mục 16).
 - [x] Bế quan: 16q mỗi giờ nhân linh khí vị diện, trần 8 giờ mỗi ngày, linh tuyền +20% (thống nhất 2026-11-09 giữa mục 14 và tab Nhiệm vụ, thay luật cũ "8 giờ đủ một cấp"; bảng ngày đều đặn tính 2 giờ).
 - [x] Bãi quái trên bản đồ: mỗi vùng cần khoảng 50 hang dị thú phủ cấp nguy hiểm 60–250 theo bậc 10; cấp nguy hiểm tính theo quãng đường tới thành chủ (bản đồ commit 34d9da0), nên vùng nào cũng đủ 2 hang mỗi bậc 10 cấp từ 10 tới 250.
@@ -1695,7 +1695,7 @@ Rủi ro lớn nhất là phạm vi: bản đồ thời gian thực, 28 vùng v�
 
 - [ ] Tự lập công ty xin G1 hay đi qua nhà phát hành — quyết trước closed beta.
 - [ ] Thử nghiệm kín trước khi có Quyết định phát hành được làm tới đâu — hỏi luật sư hoặc nhà phát hành.
-- [ ] Kiểm tra trùng tên Hoàng Thiên Ký trên Google Play, App Store Việt Nam, tên miền, mạng xã hội; tra và đăng ký nhãn hiệu ở Cục Sở hữu trí tuệ.
+- [ ] Kiểm tra trùng tên Thiên Hoang Ký trên Google Play, App Store Việt Nam, tên miền, mạng xã hội; tra và đăng ký nhãn hiệu ở Cục Sở hữu trí tuệ.
 - [ ] Ngân sách cho mỹ thuật, âm thanh, luật sư, máy chủ và SMS OTP.
 - [ ] Luyện bãi khi tắt game (ủy thác) và treo máy khi mở game có tính vào 60 phút mỗi ngày của người dưới 18 tuổi không — hỏi luật sư; nếu treo máy tính giờ thì hết giờ tự chuyển sang ủy thác.
 

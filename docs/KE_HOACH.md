@@ -1,4 +1,4 @@
-# Kế hoạch xây dựng Hoàng Thiên Ký
+# Kế hoạch xây dựng Thiên Hoang Ký
 
 Lập ngày 2026-11-02, dựa trên GDD rev 78 (Claude Docs) và repo ở commit `225a5b2`. Bản này chi tiết hoá lộ trình mục 18 của GDD; `docs/ROADMAP.md` giữ bảng tóm tắt và sẽ cập nhật theo bản này khi được duyệt.
 
