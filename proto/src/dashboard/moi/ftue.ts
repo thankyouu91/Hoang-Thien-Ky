@@ -73,7 +73,7 @@ export const MON_TAN_THU: Record<string, { name: string; kind: "dan" | "phu"; co
 
 // ---- Trận nhập môn -------------------------------------------------------------------------------------------------
 
-const ONE_MON = (id: number, level: number, permille: number, element: Element, type: SkillType, row: 0 | 1): UnitSpec => {
+export const ONE_MON = (id: number, level: number, permille: number, element: Element, type: SkillType, row: 0 | 1): UnitSpec => {
   const b = baseStats(level);
   return {
     id, level, element, row, monster: true,
@@ -104,7 +104,7 @@ export function donViNguoiChoi(w: World): UnitSpec {
 }
 
 /** Đồng môn NPC đi cùng (GDD tab Nhiệm vụ, luật chung: bước cần người khác thì đệ tử NPC đứng thay). */
-function dongMon(id: number, level: number, element: Element, type: SkillType, row: 0 | 1): UnitSpec {
+export function dongMon(id: number, level: number, element: Element, type: SkillType, row: 0 | 1): UnitSpec {
   const b = baseStats(level);
   return {
     id, level, element, row, talents: [row === 0 ? "tu_the" : "tu_phap"], hp: b.hp, atk: b.atk, def: b.def, sectId: "loi_tri_phong",
@@ -116,7 +116,7 @@ function dongMon(id: number, level: number, element: Element, type: SkillType, r
  * Trận có hạt giống mà người chơi thắng: thử lần lượt các hạt giống; vẫn thua thì giảm sức dị thú 10% mỗi vòng (luật chung tab
  * Nhiệm vụ: nhiệm vụ không thất bại, không bước nào kẹt).
  */
-function tranThang(build: (permille: number) => Omit<BattleInput, "seed">, permille: number, seed0: number): { input: BattleInput; permille: number } {
+export function tranThang(build: (permille: number) => Omit<BattleInput, "seed">, permille: number, seed0: number): { input: BattleInput; permille: number } {
   for (let p = permille; p >= 200; p -= 100) {
     const base = build(p);
     for (let s = 0; s < 24; s++) {
@@ -242,7 +242,7 @@ export const TEN_HE: Record<Element, string> = {
   cuc_duong: "Cực dương", cuc_am: "Cực âm", cuc_han: "Cực hàn", quang: "Quang", am_lanh: "Âm lãnh",
 };
 
-function themChienBao(w: World, moi: MoiState, input: BattleInput, title: string, arena: string, now: number): number {
+export function themChienBao(w: World, moi: MoiState, input: BattleInput, title: string, arena: string, now: number): number {
   const id = Math.max(0, ...w.reports.map((r) => r.id)) + 1;
   moi.tran[id] = input;
   w.reports.unshift({ id, seed: input.seed, title, at: now, arena });

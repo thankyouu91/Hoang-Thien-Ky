@@ -63,13 +63,29 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
     el.classList.toggle("gon", f.thuGon);
     const pct = Math.round((f.xong / f.tong) * 100);
     if (f.thuGon) {
-      ve(`<button type="button" class="ftue-pill" data-f="mo">${f.buoc ? `Nhiệm vụ ${f.buoc.so}/${f.tong} · ${esc(f.buoc.ten)}` : "Nhập Thế · xong"}</button>`);
+      const nhan = f.buoc ? `Nhiệm vụ ${f.buoc.so}/${f.tong} · ${esc(f.buoc.ten)}` : f.nv ? `Nhiệm vụ ${f.nv.id.replace("chinh.", "")} · ${esc(f.nv.ten)}` : "Nhập Thế · xong";
+      ve(`<button type="button" class="ftue-pill" data-f="mo">${nhan}</button>`);
+      return;
+    }
+    if (!f.buoc && f.nv) {
+      // Tuyến nhiệm vụ chính 1–250 (moi/nhiemVu.ts). Chưa đủ cấp: mốc cấp là phanh nhịp, bế quan để lên cấp.
+      const nv = f.nv;
+      const so = nv.id.replace("chinh.", "");
+      const hang = nv.moKhoa
+        ? `<span class="ftue-thuong"></span><button type="button" class="seal small" data-f="nv">${esc(nv.nut)}</button>`
+        : `${beQuanNut(f.beQuanXong)}`;
+      const loi = nv.moKhoa ? nv.loi : `Mở ở cấp ${nv.minLevel} (bạn đang cấp ${f.level}). ${beQuanLoi(f.moiGio, f.beQuanXong)}`;
+      ve(`
+        <button type="button" class="ftue-thu icon-btn" data-f="gon" aria-label="Thu gọn thẻ nhiệm vụ">–</button>
+        <div class="ftue-dau"><span class="ftue-so">Chương ${nv.chuong} · ${so}</span><b>${esc(nv.ten)}</b></div>
+        <p>${esc(loi)}</p>
+        <div class="ftue-hang">${hang}</div>`);
       return;
     }
     if (!f.buoc) {
-      // Hết chương 0: chỉ đường tới việc lên cấp có thật trong bản thử (bế quan), không để người mới vào ngõ cụt.
+      // Hết chuỗi nhiệm vụ trong dữ liệu: còn bế quan để lên cấp tiếp.
       ve(`
-        <div class="ftue-dau"><span class="ftue-so">Nhập Thế · ${f.tong}/${f.tong}</span><b>Đã xong 15 phút đầu</b></div>
+        <div class="ftue-dau"><span class="ftue-so">Nhiệm vụ · xong</span><b>Hết nhiệm vụ trong bản chơi thử</b></div>
         <p>${beQuanLoi(f.moiGio, f.beQuanXong)}</p>
         <div class="ftue-hang">${beQuanNut(f.beQuanXong)}<button type="button" class="btn small" data-f="an">Đóng thẻ</button></div>
         <div class="ftue-tien"><i style="width:100%"></i></div>`);
@@ -138,11 +154,53 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
     }
   };
 
+  /** Bảng của bước nhiệm vụ 1–250: ải có bài học và 4 quyển mượn, lựa chọn có các lối xử, còn lại một nút làm. */
+  const bangNv = async () => {
+    const src = await host.nguon.get();
+    const f = src.ftue();
+    const ct = src.nvChiTiet();
+    if (!ct) return;
+    if (f.nv && !f.nv.moKhoa) {
+      const body = openSheet(`${ct.q.ten}`, `
+        <p>Mở ở cấp ${f.nv.minLevel}; bạn đang cấp ${f.level}. ${esc(beQuanLoi(f.moiGio, f.beQuanXong))}</p>
+        <div class="actions moi-actions">${beQuanNut(f.beQuanXong, "wide")}</div>`);
+      body.addEventListener("click", (e) => {
+        const t = (e.target as HTMLElement).closest<HTMLElement>("[data-f='be_quan']");
+        if (t) void beQuan(Number(t.dataset.gio));
+      });
+      return;
+    }
+    const than: string[] = [`<p>${esc(ct.loi)}</p>`, `<p class="moi-nho">Thưởng: ${esc(ct.thuong)}</p>`];
+    let nut = `<button type="button" class="seal wide" data-ok>${esc(ct.nut)}</button>`;
+    if (ct.ai) {
+      than.splice(1, 0, `<p class="moi-nho">${esc(ct.ai.lesson)}</p><p class="moi-nho">Chọn quyển mượn:</p>`);
+      nut = ct.ai.loan.map((l, i) => `<button type="button" class="${i === 0 ? "seal" : "btn"} wide" data-ok data-muon-i="${i}"><img src="${heArt(l.element)}" alt="" style="width:22px;height:22px;vertical-align:-5px"> ${esc(TEN_HE[l.element])} · ${esc(TEN_CHIEU[l.skill] ?? l.skill)}</button>`).join("");
+    } else if (ct.chon) {
+      const ten: Record<string, string> = { nop: "Nộp theo yêu cầu", tu_choi: "Từ chối" };
+      nut = ct.chon.map((o, i) => `<button type="button" class="${i === 0 ? "seal" : "btn"} wide" data-ok data-chon="${o.id}">${esc(ten[o.id] ?? o.id)}${o.cost?.length ? ` (tốn ${o.cost.map((c) => `${c.count} tàn quyển`).join(", ")})` : ""}</button>`).join("");
+    } else if (ct.viec === "tu_luyen") {
+      nut = `${beQuanNut(f.beQuanXong, "wide")}<button type="button" class="btn wide" data-ok>Đã xong một lượt</button>`;
+    } else if (ct.viec === "dot_pha") {
+      nut = `<button type="button" class="btn wide" data-nhan-vat>Mở màn Nhân vật</button><button type="button" class="seal wide" data-ok>Đã đột phá</button>`;
+    }
+    // Luôn chừa lối bế quan (trừ bước tu_luyen đã có): người muốn treo máy không phải chờ xong nhiệm vụ.
+    if (ct.viec !== "tu_luyen") nut += beQuanNut(f.beQuanXong, "wide");
+    const body = openSheet(ct.q.ten, `${than.join("")}<div class="actions moi-actions">${nut}</div>`);
+    body.addEventListener("click", (e) => {
+      const t = (e.target as HTMLElement).closest<HTMLElement>("[data-ok], [data-f='be_quan'], [data-nhan-vat]");
+      if (!t) return;
+      if (t.dataset.f === "be_quan") void beQuan(Number(t.dataset.gio));
+      else if (t.hasAttribute("data-nhan-vat")) host.nav.go({ screen: "nhan-vat", tab: "thong-tin" });
+      else void lam("nv", { muon_i: t.dataset.muonI, chon: t.dataset.chon });
+    });
+  };
+
   el.addEventListener("click", (e) => {
     const t = (e.target as HTMLElement).closest<HTMLElement>("[data-f]");
     if (!t) return;
     const f = t.dataset.f;
     if (f === "lam") void moViec(t.dataset.viec!);
+    else if (f === "nv") void bangNv();
     else if (f === "be_quan") void beQuan(Number(t.dataset.gio));
     else if (f === "gon" || f === "mo") void host.nguon.get().then((s) => (s.lam("thu_gon", { on: f === "gon" }), capNhat()));
     else if (f === "an") void host.nguon.get().then((s) => (s.lam("an_the"), capNhat()));
@@ -187,6 +245,7 @@ export function moFtue(host: FtueHost): { capNhat(): void; onShow(sceneId: strin
     async moBuoc() {
       const f = (await host.nguon.get()).ftue();
       if (f.buoc) return void moViec(f.buoc.viec);
+      if (f.nv) return void bangNv();
       const ke = f.ke;
       const body = openSheet("Tu luyện tiếp", `
         <p>${beQuanLoi(f.moiGio, f.beQuanXong)}</p>

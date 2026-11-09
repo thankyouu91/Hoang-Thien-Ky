@@ -10,6 +10,7 @@ import {
 } from "./ftue.ts";
 import { donBanCu, docTienDo, ghiTienDo, khoaLuu, PHIEN_BAN_LUU, TIEN_TO, xoaTienDo } from "./luu.ts";
 import { chang, PLAYER, SECT, taoTheGioiMoi, VUNG_MO } from "./theGioiMoi.ts";
+import { expLenCap, expNguon, lamNv, nvHienTai, thuongNv } from "./nhiemVu.ts";
 
 const REGION = REGION_JSON as unknown as RegionMap;
 const NOW = new Date(2026, 10, 5, 9, 30).getTime();
@@ -184,4 +185,77 @@ test("bế quan không trừ tu vi khi mốc kết thúc trước mốc bắt đ
   moi.beQuan = { batDau: NOW, ketThuc: NOW - 3600_000, moiGio: 114 };
   assert.equal(chotBeQuan(w, moi, NOW), 0);
   assert.equal(moi.beQuan, undefined);
+});
+
+// ---- Tuyến nhiệm vụ chính 1–250 (moi/nhiemVu.ts) --------------------------------------------------------------------
+
+test("đi hết chương 1 bằng máy chạy nhiệm vụ: không kẹt, trận thắng, lên cấp 51", () => {
+  const { w } = diHetChuoi(1313);
+  const { moi } = taoTheGioiMoi(1313, REGION, NOW);
+  moi.xong = CHUOI.map((q) => q.id);
+  const me = w.rules.members[PLAYER];
+  const E = (lv: number) => expLenCap(lv);
+  const breakOf = (lv: number) => Math.min(250, Math.ceil(lv / 50) * 50);
+  /** Cộng tu vi như gainExp của mock (dừng chờ đột phá ở cấp cuối cảnh giới). */
+  const congExp = (exp: number) => {
+    w.player.exp += exp;
+    while (me.level < breakOf(me.level) && w.player.exp >= E(me.level)) {
+      w.player.exp -= E(me.level);
+      me.level++;
+    }
+    if (me.level === breakOf(me.level)) w.player.exp = Math.min(w.player.exp, E(me.level));
+  };
+  /** Bế quan giả tới khi đủ cấp (16q mỗi giờ theo bảng; đủ thấy mốc cấp là phanh nhịp). */
+  const lenToi = (muc: number) => {
+    let canh = 0;
+    while (me.level < muc && canh++ < 10_000) {
+      congExp(expNguon("be_quan", me.level));
+      if (me.level === breakOf(me.level) && me.level < muc && w.player.exp >= E(me.level)) {
+        w.player.exp -= E(me.level);
+        me.level++; // đột phá (lệnh dot_pha của mock)
+      }
+    }
+    assert.ok(me.level >= muc, `kẹt khi lên cấp ${muc}, đang ${me.level}`);
+  };
+  let guard = 0;
+  let q = nvHienTai(moi);
+  while (q && q.chapter === 1 && guard++ < 300) {
+    if (me.level < q.minLevel) {
+      lenToi(q.minLevel);
+      continue;
+    }
+    let now = NOW + guard * 60_000;
+    let r = lamNv(w, moi, q, { chon: "tu_choi" }, now);
+    if (!r.ok && r.error === "bi_canh_dong") {
+      const trua = new Date(now); trua.setHours(12, 1, 0, 0);
+      r = lamNv(w, moi, q, {}, trua.getTime());
+    }
+    if (!r.ok && r.error === "can_be_quan") {
+      moi.nvTuLuyenXong = true; // một lượt bế quan vừa chốt
+      r = lamNv(w, moi, q, {}, now);
+    }
+    if (!r.ok && r.error === "chua_dot_pha") {
+      lenToi(breakOf(me.level) + 1);
+      r = lamNv(w, moi, q, {}, now);
+    }
+    assert.ok(r.ok, `kẹt ở ${q.id}: ${r.ok ? "" : r.error}`);
+    if (r.battleId) assert.equal(simulate(moi.tran[r.battleId]).winner, "A", `trận ${q.id} thua`);
+    if (r.xongNhiemVu) {
+      const t = thuongNv(q, me.level);
+      assert.ok(t.exp > 0 && t.linhThach > 0, `${q.id} không có thưởng`);
+      congExp(t.exp);
+      w.player.linhThach += t.linhThach;
+    }
+    q = nvHienTai(moi);
+  }
+  assert.ok(moi.xong.includes("chinh.1.10"), "chưa xong chương 1");
+  assert.ok(me.level >= 51, `cấp ${me.level} < 51`);
+  assert.ok(w.player.mounts.some(Boolean), "chưa có thú cưỡi (1.3)");
+});
+
+test("nhịp bế quan 16q mỗi giờ chậm dần theo cấp (không lên cấp quá nhanh)", () => {
+  // Giờ cho một cấp = E(L) / (16 × q(L)); phải tăng dần và vượt 8 giờ (trần một ngày) từ quanh cấp 100.
+  const gio = (lv: number) => expLenCap(lv) / expNguon("be_quan", lv);
+  assert.ok(gio(100) > 8, `cấp 100 chỉ ${gio(100).toFixed(1)} giờ một cấp`);
+  assert.ok(gio(200) > gio(100) && gio(100) > gio(30), "nhịp không chậm dần");
 });

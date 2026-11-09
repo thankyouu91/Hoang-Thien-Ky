@@ -80,6 +80,11 @@ export interface MoiState {
   /** Ẩn thẻ chỉ dẫn sau khi xong chương 0. */
   anThe?: boolean;
   thuGon?: boolean;
+  /** Nhiệm vụ chính sau chương 0: bước đang làm; cờ đã xong một lượt bế quan (bước tu_luyen); danh vọng phe; giờ bế quan hôm nay. */
+  nvBuoc?: number;
+  nvTuLuyenXong?: boolean;
+  danhVong?: Record<string, number>;
+  beQuanNgay?: { ngay: string; gio: number };
   /** Bế quan đang chạy (sau chương 0): mốc bắt đầu, kết thúc, tu vi mỗi giờ tính lúc bắt đầu. */
   beQuan?: { batDau: number; ketThuc: number; moiGio: number };
 }
@@ -119,7 +124,7 @@ export function chang(m: RegionMap, start: number): Map<number, number> {
 
 const GIU_DUOC: PointType[] = ["mo_linh_thach", "mo_quang", "mo_duoc", "linh_tuyen", "cua_bi_canh", "deo", "ben_do"];
 
-type VungRow = { name: string; elements: string[]; dropElements: string[] };
+type VungRow = { name: string; elements: string[]; dropElements: string[]; dropWeights?: Record<string, number> };
 export const VUNG_DATA = VUNG as unknown as Record<string, VungRow>;
 
 /** Hệ bị hệ chủ đạo của vùng khắc mạnh nhất (nhiệm vụ 0.5, `$beatenByHome`): hệ số ×1,5 theo GDD mục 8. */

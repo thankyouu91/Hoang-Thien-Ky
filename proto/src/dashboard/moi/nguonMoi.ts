@@ -19,6 +19,7 @@ import {
 } from "./ftue.ts";
 import { docTienDo, donBanCu, ghiTienDo, xoaTienDo } from "./luu.ts";
 import { CAP_LAP_TONG, hatGiongMoi, heBiKhac, PLAYER, SECT, taoTheGioiMoi, VUNG_DATA, VUNG_MO, type MoiState } from "./theGioiMoi.ts";
+import { aiTamDao, expNguon, lamNv, LOI_AI, loiBuoc, nvBuocHienTai, nvHienTai, phatThuongVatPham, quyenMuon, thuongNv } from "./nhiemVu.ts";
 
 /**
  * Nối các phần của một lời báo bằng " · ", dịch từng phần trước khi nối (bản tiếng Anh): bộ dịch áp mẫu cho cả câu trước
@@ -36,6 +37,12 @@ Object.assign(ERROR_TEXT, {
   da_co_tong: "Bạn đã ở trong một tông môn.",
   chi_ban_mau: "Nút thử này chỉ có ở bản mẫu trên máy dev.",
   chua_co_cong_phap: "Cần ghép công pháp đầu tiên trước.",
+  chua_du_cap_nv: "Chưa đủ cấp cho nhiệm vụ này; bế quan để lên cấp.",
+  thieu_tan_quyen: "Thiếu tàn quyển trong túi; thắng trận nhiệm vụ sẽ rơi thêm.",
+  bi_canh_dong: "Bí cảnh chỉ mở lúc 12:00 và 20:00, mỗi lần 30 phút.",
+  can_be_quan: "Bế quan một lượt trước (1 giờ là đủ).",
+  chua_dot_pha: "Chưa đột phá: tu vi đầy ở mốc rồi bấm Đột phá ở màn Nhân vật.",
+  het_gio_be_quan: "Hôm nay đã bế quan đủ 8 giờ; mai làm mới lúc 05:00.",
 });
 
 /** Lệnh thử chỉ dùng ở bản mẫu; người chơi thật không dùng được (nút cũng ẩn bằng moi.css). */
@@ -55,6 +62,8 @@ export interface FtueView {
   /** Sau chương 0: tu vi bế quan mỗi giờ, và bế quan đang chạy (mốc kết thúc). */
   moiGio: number;
   beQuanXong?: number;
+  /** Nhiệm vụ chính đang làm sau chương 0 (moi/nhiemVu.ts); moKhoa false khi chưa đủ cấp. */
+  nv?: { id: string; ten: string; chuong: number; minLevel: number; moKhoa: boolean; loi: string; nut: string; viec: string };
 }
 
 /** Thông tin cho các bảng của từng bước (FTUE UI). */
@@ -103,7 +112,12 @@ export class NguonMoi extends MockDashboardSource {
   protected override currentQuest(): { id: string; name: string; step: string; go: Go } | undefined {
     const b = buocHienTai(this.moi);
     if (b) return { id: b.id, name: `Nhập Thế ${b.so}/7: ${b.ten}`, step: b.loi, go: { screen: "nhiem-vu", id: b.id } };
-    // Sau chương 0: nhiệm vụ chính kế chưa có trong bản thử, nên chỉ việc lên cấp có thật là bế quan.
+    // Sau chương 0: tuyến nhiệm vụ chính cấp 1–250 (moi/nhiemVu.ts); chưa đủ cấp thì mốc cấp là phanh nhịp (bế quan chờ).
+    const nv = nvHienTai(this.moi);
+    if (nv) {
+      const step = this.me.level < nv.minLevel ? `Mở ở cấp ${nv.minLevel}` : loiBuoc(nv, nvBuocHienTai(this.moi, nv)).loi;
+      return { id: nv.id, name: `Chương ${nv.chapter} · ${nv.name}`, step, go: { screen: "nhiem-vu", id: nv.id } };
+    }
     const step = this.beQuanXong() ? "Đang bế quan" : `Bế quan: mỗi giờ +${this.retreatPerHour()} tu vi`;
     return { id: "be_quan", name: "Tu luyện tiếp", step, go: { screen: "nhiem-vu", id: "be_quan" } };
   }
@@ -200,9 +214,26 @@ export class NguonMoi extends MockDashboardSource {
     return v;
   }
 
+  /** Trần bế quan 8 giờ mỗi ngày, làm mới 05:00 (đề xuất, cùng luật trần giờ của bãi quái) để không lên cấp quá nhanh. */
+  private static readonly TRAN_BE_QUAN_GIO = 8;
+  private ngayBeQuan(now: number): string {
+    return new Date(now - 5 * 3600_000).toDateString();
+  }
+
   override async send(cmd: DashboardCommand): Promise<CommandResult> {
     if (laLenhThu(cmd.type)) return { ok: false, error: "chi_ban_mau" };
     if (CAN_TONG.has(cmd.type) && !this.daVaoTong) return { ok: false, error: "chua_vao_tong" };
+    if (cmd.type === "be_quan") {
+      const ngay = this.ngayBeQuan(this.now());
+      const bq = this.moi.beQuanNgay?.ngay === ngay ? this.moi.beQuanNgay : { ngay, gio: 0 };
+      if (bq.gio + cmd.gio > NguonMoi.TRAN_BE_QUAN_GIO) return { ok: false, error: "het_gio_be_quan" };
+      const r = await super.send(cmd);
+      if (r.ok) {
+        this.moi.beQuanNgay = { ngay, gio: bq.gio + cmd.gio };
+        this.luu();
+      }
+      return r;
+    }
     const r = await super.send(cmd);
     if (r.ok) {
       let msg = r.message;
@@ -243,11 +274,41 @@ export class NguonMoi extends MockDashboardSource {
 
   ftue(): FtueView {
     const b = buocHienTai(this.moi);
+    const nv = b ? undefined : nvHienTai(this.moi);
     return {
-      buoc: b, tong: 7, xong: this.moi.xong.length, ke: b ? undefined : nhiemVuKe(this.me.level),
+      buoc: b, tong: 7, xong: this.moi.xong.filter((id) => id.startsWith("chinh.0.")).length, ke: b ? undefined : nhiemVuKe(this.me.level),
       anThe: !!this.moi.anThe, thuGon: !!this.moi.thuGon, level: this.me.level,
       moiGio: this.retreatPerHour(), beQuanXong: this.beQuanXong(),
+      nv: nv && {
+        id: nv.id, ten: nv.name, chuong: nv.chapter, minLevel: nv.minLevel, moKhoa: this.me.level >= nv.minLevel,
+        ...loiBuoc(nv, nvBuocHienTai(this.moi, nv)), viec: nvBuocHienTai(this.moi, nv).do,
+      },
     };
+  }
+
+  /** Bảng của bước nhiệm vụ hiện tại: ải (bài học, 4 quyển mượn), lựa chọn, hay chỉ lời và một nút. */
+  nvChiTiet(): { q: { id: string; ten: string; chuong: number }; loi: string; nut: string; viec: string; ai?: { lesson: string; loan: { element: Element; skill: string }[] }; chon?: { id: string; cost?: { item: string; count: number }[] }[]; thuong: string } | undefined {
+    const nv = nvHienTai(this.moi);
+    if (!nv) return undefined;
+    const step = nvBuocHienTai(this.moi, nv);
+    const trial = step.do === "tam_dao" ? aiTamDao(step.trial) : undefined;
+    const t = thuongNv(nv, this.me.level);
+    return {
+      q: { id: nv.id, ten: nv.name, chuong: nv.chapter },
+      ...loiBuoc(nv, step), viec: step.do,
+      ai: trial?.loan?.length ? { lesson: LOI_AI[trial.lesson] ?? trial.lesson, loan: quyenMuon(trial, this.w.region.region.element as Element) } : undefined,
+      chon: step.do === "chon" ? step.options : undefined,
+      thuong: `${t.exp} tu vi, ${t.linhThach} linh thạch`,
+    };
+  }
+
+  /**
+   * Tốc độ bế quan của bản người mới: 16q mỗi giờ theo bảng exp của tab Nhiệm vụ (sourcesQ.be_quan, đề xuất), chậm dần
+   * so với E(L) khi cấp cao (cấp 100 ≈ 12 giờ một cấp) thay cho 1/8 E(L) phẳng của bản mẫu; cộng linh tuyền +20% như cũ.
+   */
+  protected override retreatPerHour(): number {
+    const goc = expNguon("be_quan", this.me.level);
+    return goc + (this.w.held.some((h) => h.type === "linh_tuyen") ? Math.round(goc * 0.2) : 0);
   }
 
   /** Mốc xong của lượt bế quan đang chạy: việc be_quan của mock (lệnh be_quan, nút ở Nhân vật hay thẻ nhập môn), hoặc lượt dở của bản lưu cũ. */
@@ -264,7 +325,10 @@ export class NguonMoi extends MockDashboardSource {
     const now = this.now();
     const truoc = this.w.jobs.length;
     this.settleRetreats(now);
+    // Một lượt bế quan vừa chốt: bước tu_luyen của nhiệm vụ đang chờ được tính (moi/nhiemVu.ts).
+    if (this.w.jobs.length !== truoc) this.moi.nvTuLuyenXong = true;
     const exp = chotBeQuan(this.w, this.moi, now);
+    if (exp) this.moi.nvTuLuyenXong = true;
     if (exp) {
       this.gainExp(exp);
       const id = Math.max(0, ...this.w.mail.map((m) => m.id)) + 1;
@@ -364,6 +428,24 @@ export class NguonMoi extends MockDashboardSource {
       case "dat_nhac": {
         const r = lamDatNhac(moi, now);
         return done("chinh.0.7", r.ok ? { ...r, message: "Đã đặt nhắc. Nhận túi tân thủ" } : r);
+      }
+      case "nv": {
+        // Một bước của tuyến nhiệm vụ chính 1–250 (moi/nhiemVu.ts).
+        const q = nvHienTai(moi);
+        if (!q) return { ok: false, error: "lenh_khong_hop_le" };
+        const r = lamNv(w, moi, q, arg, now);
+        if (!r.ok) return r;
+        let msg = r.message;
+        if (r.xongNhiemVu) {
+          const t = thuongNv(q, this.me.level);
+          this.gainExp(t.exp);
+          w.player.linhThach += t.linhThach;
+          const mon = phatThuongVatPham(w, q, now);
+          msg = noi([msg, `Xong ${q.name}`, `+${t.exp} tu vi`, `+${t.linhThach} linh thạch`, ...mon]);
+          ghi("nhiem_vu_chinh", { id: q.id, chuong: q.chapter });
+        }
+        this.luu();
+        return { ...r, message: msg };
       }
       case "an_the":
         moi.anThe = true;
