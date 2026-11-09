@@ -24,3 +24,25 @@ export const RULES = {
   outerMaxLearned: 2,
   outerMaxGrade: 2,
 };
+
+/** Trang bị (GDD mục 12, tab Trang bị; data/he_thong/json). Mọi số là đề xuất trừ chỗ ghi chốt. */
+export const GEAR = {
+  /** Cường hóa mỗi nấc +3% chỉ số gốc của món. */
+  enhancePerLevel: 30,
+  /** Trần cường hóa: +30 ở Hạ vị và Trung vị, +50 ở thượng vị (chốt). */
+  maxEnhance: 50,
+  /** Thưởng chỉ số của đồ rơi trong bí cảnh: 4–8% (chốt). */
+  secretBonusMin: 40,
+  secretBonusMax: 80,
+  /** Đồ bí cảnh thêm 1–2 dòng khảm (chốt; số dòng quay khi rơi, lưu ở từng món), tối đa 5 dòng. */
+  secretExtraLines: 2,
+  maxLines: 5,
+  /** Ngọc khảm trùng hệ linh căn hiệu quả +20%. */
+  rootGemBonus: 1200,
+  /** Mỗi vũ khí khảm 1 viên Ý châu (tab Trang bị, phần 5). */
+  maxYChau: 1,
+  /** Hồi phục tốn mana gấp 3 (GDD mục 8); hệ số mana của Cầm Ý (×2,7) tính trên mức này. */
+  healManaTimes: 3000,
+  /** Pháp bảo tự rèn (Tu rèn) +10% chỉ số chính (GDD mục 6). */
+  selfForgedArtifact: 1100,
+};

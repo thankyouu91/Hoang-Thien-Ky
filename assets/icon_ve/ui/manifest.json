@@ -1,0 +1,63 @@
+{
+  "ghi_chu": [
+    "Icon 5 nút thanh điều hướng (proto/src/dashboard/index.ts, kiểu ở game.css mục 7), vẽ Canva cùng phong cách tranh vẽ 3D của icon vật phẩm, nền trong, cắt sát rồi đặt giữa ô 192 px.",
+    "Vẽ ngày 2026-11-05 theo yêu cầu làm giao diện giống chơi game hơn."
+  ],
+  "assets": [
+    {
+      "file": "tab/dong_phu.webp",
+      "ten": "Nút Động phủ",
+      "width": 192,
+      "height": 192,
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → trang 512×512 → xuất PNG → cắt sát, webp 192 q88",
+      "canva_media": "MAHaBgzh2LQ",
+      "canva_media_tach_nen": "MAHaBtGjy_Y",
+      "canva_design": "DAHaBqlmlHk trang 2",
+      "created": "2026-11-05"
+    },
+    {
+      "file": "tab/ban_do.webp",
+      "ten": "Nút Bản đồ",
+      "width": 192,
+      "height": 192,
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → trang 512×512 → xuất PNG → cắt sát, webp 192 q88",
+      "canva_media": "MAHaBoR-R80",
+      "canva_media_tach_nen": "MAHaBnL_2fA",
+      "canva_design": "DAHaBqlmlHk trang 3",
+      "created": "2026-11-05"
+    },
+    {
+      "file": "tab/tong_mon.webp",
+      "ten": "Nút Tông môn",
+      "width": 192,
+      "height": 192,
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → trang 512×512 → xuất PNG → cắt sát, webp 192 q88",
+      "canva_media": "MAHaBnqPYnE",
+      "canva_media_tach_nen": "MAHaBrhHMBQ",
+      "canva_design": "DAHaBqlmlHk trang 4",
+      "created": "2026-11-05"
+    },
+    {
+      "file": "tab/cong_phap.webp",
+      "ten": "Nút Công pháp",
+      "width": 192,
+      "height": 192,
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → trang 512×512 → xuất PNG → cắt sát, webp 192 q88",
+      "canva_media": "MAHaBg0a9gI",
+      "canva_media_tach_nen": "MAHaBndJA3U",
+      "canva_design": "DAHaBqlmlHk trang 5",
+      "created": "2026-11-05"
+    },
+    {
+      "file": "tab/lien_minh.webp",
+      "ten": "Nút Liên minh",
+      "width": 192,
+      "height": 192,
+      "tool": "Canva generate-image (SQUARE_1_1) → remove-background → trang 512×512 → xuất PNG → cắt sát, webp 192 q88",
+      "canva_media": "MAHaBg3vfKw",
+      "canva_media_tach_nen": "MAHaBiVxFcw",
+      "canva_design": "DAHaBqlmlHk trang 6",
+      "created": "2026-11-05"
+    }
+  ]
+}

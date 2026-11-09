@@ -1,0 +1,105 @@
+/* Bộ token của dashboard (GDD mục 14–15), bản sáng màu kem làm lại ngày 2026-11-03.
+   Nền vàng kem, chữ mực nâu đậm, một màu nhấn đỏ son kiểu ấn triện; màu 12 hệ chỉ làm điểm nhấn nhỏ.
+   Tương phản chữ (WCAG 2.1) đo trên --c-bg / --c-surface / --c-sunken:
+     --c-ink 13,9 / 15,3 / 12,7 · --c-ink-2 7,4 / 8,2 / 6,8 · --c-ink-3 5,0 / 5,5 / 4,6 · --c-accent 5,7 / 6,3 / 5,2
+     chữ trắng trên --c-accent 6,5 · --c-ok 5,6 / 6,2 / 5,1 — mọi cặp chữ đều đạt AA (≥ 4,5).
+   Tên biến có tiền tố riêng để không đè --ink, --panel, --line của style.css (HUD màn Trận vẫn tối). */
+:root {
+  /* Màu nền: giấy kem (trang), giấy sáng (thẻ), giấy lõm (rãnh, ô trống) */
+  --c-bg: #f6efdf;
+  --c-surface: #fffaf0;
+  --c-sunken: #efe5cf;
+  --c-raised: #fffdf8;
+  /* Mực */
+  --c-ink: #2a2018;
+  --c-ink-2: #5a4a3b;
+  --c-ink-3: #76634f;
+  --c-line: rgba(74, 52, 30, 0.12);
+  --c-line-2: rgba(74, 52, 30, 0.22);
+  /* Nhấn: đỏ son ấn triện (GDD mục 15). Một màu nhấn duy nhất cho việc chính và trạng thái gấp. */
+  --c-accent: #b3261e;
+  --c-accent-hover: #971d16;
+  --c-accent-soft: #f7e3dc;
+  /* Đỏ son sẫm cho chữ tiêu đề kiểu tranh giấy (tên nhân vật, tiêu đề nhóm): 8,8 trên --c-surface */
+  --c-accent-ink: #8a1f16;
+  --c-on-accent: #fff8ef;
+  /* Trạng thái (chỉ dùng cho chữ ngắn và chấm, không làm nền lớn) */
+  --c-ok: #2e6b34;
+  --c-ok-soft: #e3eedb;
+  --c-warn: #8a5a00;
+  --c-info: #2f5f9e;
+  /* Nền trang sau tấm giấy (như tấm bản đồ cũ sau bảng trong mẫu) và nét khung đỏ mảnh */
+  --c-page: #efe6d3;
+  --c-frame: rgba(138, 31, 22, 0.55);
+  --c-frame-soft: rgba(138, 31, 22, 0.35);
+  /* Phủ nền hộp thoại */
+  --c-scrim: rgba(42, 32, 24, 0.42);
+
+  /* 12 hệ, GDD mục 15 (giữ khớp theme/elements.ts). Chỉ làm chấm, viền mảnh, icon; không làm nền khối lớn. */
+  --el-kim: #d9dde3;
+  --el-moc: #3f9b4b;
+  --el-thuy: #1f4fa8;
+  --el-hoa: #d1352b;
+  --el-tho: #b8893b;
+  --el-loi: #8a3ffc;
+  --el-phong: #86dcc8;
+  --el-quang: #f2c230;
+  --el-am_lanh: #6b7c93;
+  --el-cuc_duong: #f28c28;
+  --el-cuc_am: #4a3370;
+  --el-cuc_han: #a8e6f5;
+
+  /* Độ hiếm vật phẩm (người dùng chốt 2026-11-03): lục (đồ shop) < lam < tím < vàng < đỏ. Màu nền ô, viền cùng màu đậm hơn;
+     chữ tên độ hiếm dùng bản -ink (đạt AA trên --c-surface). Khung chi tiết luôn ghi chữ độ hiếm, không chỉ dựa vào màu. */
+  --rar-luc: #7fa36c; --rar-luc-bg: #e4eed8; --rar-luc-ink: #3f6b33;
+  --rar-lam: #6f93c2; --rar-lam-bg: #dfe8f3; --rar-lam-ink: #2c5487;
+  --rar-tim: #9f7cc0; --rar-tim-bg: #ece1f3; --rar-tim-ink: #6d3a8e;
+  --rar-vang: #c3962f; --rar-vang-bg: #f6e8c1; --rar-vang-ink: #7a5a0c;
+  --rar-do: #c25446; --rar-do-bg: #f7ddd6; --rar-do-ink: #9a2a1e;
+
+  /* Chữ */
+  /* Chữ có chân theo mẫu tranh giấy (2026-11-03). Từ 2026-11-04: Lora cho chữ đọc, Cormorant Garamond cho tiêu đề, tên và
+     số cấp (fonts.css nạp, canvas dùng theme/fonts.ts); cả hai OFL, đủ dấu tiếng Việt. */
+  --font: "Lora Space", "Lora Variable", Cambria, "Times New Roman", serif;
+  --font-serif: var(--font);
+  --font-display: "Cormorant Garamond", "Lora Variable", Cambria, serif;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 15px;
+  --fs-lg: 17px;
+  --fs-xl: 20px;
+  --fs-2xl: 26px;
+  --lh: 1.45;
+
+  /* Khoảng cách theo bậc 4 px */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --gutter: 16px;
+
+  /* Bo góc */
+  /* Góc gần vuông như giấy cắt; chỉ ô tròn (chân dung, chấm trạng thái) mới bo tròn */
+  --r-xs: 2px;
+  --r-sm: 3px;
+  --r-md: 3px;
+  --r-lg: 4px;
+  --r-pill: 999px;
+
+  /* Bóng: nhẹ, ấm, không viền đậm */
+  --sh-1: 0 0 0 1px var(--c-line), 0 1px 2px rgba(74, 52, 30, 0.05);
+  --sh-2: 0 0 0 1px var(--c-line), 0 4px 14px rgba(74, 52, 30, 0.08);
+  --sh-3: 0 -6px 30px rgba(42, 32, 24, 0.16);
+  --focus: 0 0 0 3px rgba(179, 38, 30, 0.28);
+
+  /* Khung */
+  --top-h: 56px;
+  --bar-h: 60px;
+  --rail-w: 96px;
+  --safe-top: env(safe-area-inset-top);
+  --page-max: 680px;
+  --page-max-wide: 1080px;
+}

@@ -1,0 +1,41 @@
+// Worker `thienhoangky-wiki`: wiki người chơi ở https://wiki.thienhoangky.fun (bản build VitePress, static assets).
+// Cổng vào: worker/index.ts, biến CONG. Hướng dẫn build và deploy: wiki/README.md.
+// Chỉ gắn tên miền khi cổng đã sẵn (link mời dùng chung tên miền, hoặc ứng dụng Access cho wiki.thienhoangky.fun).
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "thienhoangky-wiki",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  // Một đường vào duy nhất là tên miền có cổng: tắt *.workers.dev và URL xem trước của từng phiên bản.
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "wiki.thienhoangky.fun", "custom_domain": true }],
+  // Trước khi đẩy: sinh trang tra cứu từ JSON, build VitePress, kiểm chữ nội bộ và giới hạn số file (scripts/kiem.ts).
+  "build": { "command": "npm run build" },
+  "assets": {
+    "directory": "./docs/.vitepress/dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Trang HTML qua cổng của Worker; JS, CSS, font có mã băm và icon phục vụ thẳng (không tốn lượt request của gói free).
+    "run_worker_first": ["/*", "!/assets/*", "!/hinh/*"]
+  },
+  // D1 chung với game, chỉ đọc bảng nguoi_choi_thu (SELECT). Wiki không có migration riêng.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "thienhoangky",
+      "database_id": "aa2c1b16-661a-4df8-94a3-37ee20cc0f5e",
+      "migrations_dir": "../cloudflare/migrations"
+    }
+  ],
+  "vars": {
+    // "loi_moi" (cookie link mời của game), "access" (Cloudflare Access + kiểm JWT) hoặc "mo" (chỉ chạy ở máy).
+    "CONG": "loi_moi",
+    "LINK_GAME": "https://play.thienhoangky.fun",
+    "ACCESS_TEAM_DOMAIN": "jolly-water-a8bd.cloudflareaccess.com",
+    "ACCESS_AUD": ""
+  },
+  // Log do Worker tự ghi; tắt invocation log để cookie và đường dẫn không vào Workers Logs.
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+}

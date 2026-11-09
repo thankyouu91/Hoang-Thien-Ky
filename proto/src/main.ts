@@ -5,6 +5,7 @@ import { mockReplaySource } from "./mock/mockReplay.ts";
 import { sampleBattle } from "./mock/sampleBattle.ts";
 import { simReplaySource } from "./replay/simSource.ts";
 import { BattleScene } from "./scenes/battle/battleScene.ts";
+import { BaiScene } from "./scenes/bai/baiScene.ts";
 
 // Hình PixelLab (cả manifest, ~190 ảnh) chỉ nạp khi cần: lúc mở Trận hoặc Nhân vật, hoặc lúc rảnh sau khi vào game,
 // để không tranh đường tải với Động phủ và bản đồ. Scene vẽ khối màu cho tới khi ảnh có mặt.
@@ -24,6 +25,8 @@ const battle = new BattleScene(
   sprites,
 );
 const dashboard = createDashboard(sprites, canvas, battle);
+// Bãi quái mẫu đánh tay thời gian thực (#bai), vào từ thẻ hang dị thú trên bản đồ (người dùng chốt 2026-11-09).
+const bai = new BaiScene(sprites);
 
 const app = new App(
   canvas,
@@ -32,9 +35,9 @@ const app = new App(
   // Thứ tự trên thanh dưới; scene đầu (Động phủ) là màn mở mặc định.
   dashboard.tabs,
   {
-    offTab: [...dashboard.offTab, battle],
+    offTab: [...dashboard.offTab, battle, bai],
     onShow: (s) => {
-      if (s === battle || s.id === "nhan-vat") void loadSprites();
+      if (s === battle || s === bai || s.id === "nhan-vat") void loadSprites();
       dashboard.onShow(s);
     },
   },

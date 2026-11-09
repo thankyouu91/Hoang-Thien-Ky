@@ -91,16 +91,29 @@ export class Placer {
     this.grid.clear();
   }
 
+  /** Hình chữ nhật có còn trống không (không giữ chỗ). */
+  fits(x0: number, y0: number, x1: number, y1: number): boolean {
+    const c = this.cell;
+    for (let cx = Math.floor(x0 / c); cx <= Math.floor(x1 / c); cx++)
+      for (let cy = Math.floor(y0 / c); cy <= Math.floor(y1 / c); cy++)
+        for (const r of this.grid.get(cx * 4096 + cy) ?? []) if (x0 < r.x1 && r.x0 < x1 && y0 < r.y1 && r.y0 < y1) return false;
+    return true;
+  }
+
   /** Thử đặt hình chữ nhật; trống thì giữ chỗ và trả true. */
   take(x0: number, y0: number, x1: number, y1: number): boolean {
+    if (!this.fits(x0, y0, x1, y1)) return false;
+    this.reserve(x0, y0, x1, y1);
+    return true;
+  }
+
+  /** Giữ chỗ dù đã có gì ở đó (dấu của mình luôn hiện, những thứ đặt sau phải né). */
+  reserve(x0: number, y0: number, x1: number, y1: number): void {
     const c = this.cell;
     const cx0 = Math.floor(x0 / c);
     const cx1 = Math.floor(x1 / c);
     const cy0 = Math.floor(y0 / c);
     const cy1 = Math.floor(y1 / c);
-    for (let cx = cx0; cx <= cx1; cx++)
-      for (let cy = cy0; cy <= cy1; cy++)
-        for (const r of this.grid.get(cx * 4096 + cy) ?? []) if (x0 < r.x1 && r.x0 < x1 && y0 < r.y1 && r.y0 < y1) return false;
     const r = { x0, y0, x1, y1 };
     for (let cx = cx0; cx <= cx1; cx++)
       for (let cy = cy0; cy <= cy1; cy++) {
@@ -109,12 +122,11 @@ export class Placer {
         if (list) list.push(r);
         else this.grid.set(k, [r]);
       }
-    return true;
   }
 
-  /** Giữ chỗ cho ô nút tâm (x, y), chừa khoảng trống quanh ô. */
-  node(x: number, y: number, size: number): boolean {
-    const h = size / 2 + GAP / 2;
+  /** Giữ chỗ cho ô nút (hay chấm) tâm (x, y), chừa khoảng trống `gap` quanh ô. */
+  node(x: number, y: number, size: number, gap = GAP): boolean {
+    const h = size / 2 + gap / 2;
     return this.take(x - h, y - h, x + h, y + h);
   }
 }

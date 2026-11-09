@@ -298,6 +298,7 @@ export const PARAMS_EXTRA: [string, string, string, number | string, string, str
   ["cong_phap", "outerMaxLearned", "Ngoại môn: học tối đa số công pháp", 2, "số", "6", "gdd"],
   ["cong_phap", "outerMaxGrade", "Ngoại môn: phẩm cao nhất học được", 2, "số", "6", "gdd"],
   ["cong_phap", "outerDays", "Số ngày ở ngoại môn", 7, "số", "6", "gdd"],
+  ["cong_phap", "diemLuyenMoiCap", "Điểm luyện công pháp cộng mỗi lần nhân vật lên cấp (quỹ chung, tiêu để lên tầng)", 20, "số", "6", "de_xuat"],
   ["roi_do", "mainElementShare", "Tàn quyển rơi thuộc hệ chủ đạo của vùng Hạ vị", 0.5, "%", "3, 11", "gdd"],
   ["roi_do", "luckTopGradesBonus", "Luck +10 của Tu kim tiền: cộng cho 2 phẩm cao nhất", 0.02, "%", "11", "gdd"],
   ["roi_do", "dropRateMin", "Tỷ lệ rơi gốc thấp nhất của bí cảnh", 0.04, "%", "11", "gdd"],
@@ -340,10 +341,33 @@ export const PARAMS_EXTRA: [string, string, string, number | string, string, str
   ["thu_cuoi", "waterSpeedMul", "Thủy thú qua sông, bến đò (hệ số)", 2, "hệ số", "6", "gdd"],
   ["thu_cuoi", "escortSpeed", "Hộ tống đỉnh vô chủ: tốc độ thường", 0.50, "%", "6, 12", "gdd"],
   ["thu_cuoi", "escortSpeedBeasts", "Hộ tống có 5 tẩu thú từ Hóa Hình", 0.75, "%", "6", "gdd"],
+  // Thú: tăng trưởng, bổ trợ, phát triển (GDD tab cùng tên, 2026-11-05; đề xuất)
+  ["thu_cuoi", "supportPets", "Thú hộ chủ: số con ra thú kỹ trong trận", 1, "số", "", "de_xuat"],
+  ["thu_cuoi", "supportFirstTicks", "Thú kỹ: lần đầu ra ở giây", 5, "giây", "", "de_xuat"],
+  ["thu_cuoi", "supportCooldownTicks", "Thú kỹ: hồi", 10, "giây", "", "de_xuat"],
+  ["thu_cuoi", "supportPowerTarget", "Thú kỹ cấp 4: mục tiêu lực chiến tối đa (đo bằng tools/balance)", 0.02, "%", "", "de_xuat"],
+  ["thu_cuoi", "fourSymbolsExtraTargets", "Tứ Tượng: thú kỹ thêm số đồng đội gần chủ nhất", 1, "số", "", "de_xuat"],
+  ["thu_cuoi", "pillTuVi", "Dưỡng Linh Đơn đúng cấp: tu vi mỗi viên", 100, "số", "", "de_xuat"],
+  ["thu_cuoi", "pillLowerRealmShare", "Dưỡng Linh Đơn thấp hơn đại cảnh giới của thú: còn", 0.5, "%", "", "de_xuat"],
+  ["thu_cuoi", "ownerTuViPerDay", "Mục tiêu cân bằng: tu vi thú nhận từ kinh nghiệm chủ mỗi ngày ở Hạ vị", 200, "số", "", "de_xuat"],
+  ["thu_cuoi", "growthDaysTarget", "Mục tiêu: số ngày nuôi đều để thú 3 sao vào Thông Thiên ở Hạ vị", 90, "số", "6", "de_xuat"],
+  ["thu_cuoi", "aptitudeRerollPerDay", "Tẩy Tủy Đơn: mỗi thú tối đa số viên mỗi ngày", 1, "số", "", "de_xuat"],
+  ["thu_cuoi", "aptitudeRerollPillLevel", "Tẩy Tủy Đơn: cấp linh đơn", 5, "số", "", "de_xuat"],
+  ["thu_cuoi", "nestMinAptitude", "Thú nở từ trứng Yêu Thú Sào Huyệt: tư chất tối thiểu (sao)", 3, "số", "", "de_xuat"],
+  ["thu_cuoi", "fourSymbolsAptitude", "Tứ Tượng: tư chất (sao)", 5, "số", "", "de_xuat"],
+  ["thu_cuoi", "talentStatSameMax", "Thiên phú chỉ số cùng tên: tính tối đa số thú", 2, "số", "", "de_xuat"],
+  ["thu_cuoi", "talentTier2Realm", "Thiên phú bậc 2: từ đại cảnh giới", 3, "số", "", "de_xuat"],
+  ["thu_cuoi", "bloodlineRealm", "Huyết mạch thức tỉnh: khi vào đại cảnh giới", 3, "số", "", "de_xuat"],
+  ["thu_cuoi", "bloodlineSwapPillLevel", "Đổi huyết mạch: tốn 1 Phá Cảnh Đơn cấp", 6, "số", "", "de_xuat"],
 ];
 
 /** Mô tả tham số lấy từ code: [khóa, tên, kiểu, mục GDD (trống = chỉ có trong code), nguồn]. */
-export const CODE_PARAMS: Record<"SKILL_RULES" | "BATTLE" | "UNIT_CURVE" | "TALENT_RULES", [string, string, string, string, Src][]> = {
+export const CODE_PARAMS: Record<"SKILL_RULES" | "CAST_FLOOR" | "BATTLE" | "UNIT_CURVE" | "TALENT_RULES" | "ARTIFACT_RULES", [string, string, string, string, Src][]> = {
+  /** Sàn sau mọi phần giảm (Tu trận, set, Ý châu); đề xuất của phiên set đồ 2026-11-03, sim c72b41f. */
+  CAST_FLOOR: [
+    ["formationTicks", "Trận pháp: bày trận ngắn nhất sau mọi phần giảm (Tu trận, set, Ý châu)", "giây", "", "de_xuat"],
+    ["channelTicks", "Diện rộng: vận công ngắn nhất sau mọi phần giảm", "giây", "", "de_xuat"],
+  ],
   SKILL_RULES: [
     ["aoeCastTicks", "Diện rộng: thời gian vận công", "giây", "8", "gdd"],
     ["shieldOfBase", "Hộ thể: khiên theo sát thương gốc", "hệ số", "8", "gdd"],
@@ -362,6 +386,15 @@ export const CODE_PARAMS: Record<"SKILL_RULES" | "BATTLE" | "UNIT_CURVE" | "TALE
     ["exposedTicks", "Thân pháp: lộ vị trí", "giây", "8", "gdd"],
     ["selfShieldCooldownTicks", "Thổ: khiên bản thân tối đa một lần mỗi khoảng này", "giây", "", "code"],
     ["meleeKnockback", "Phong: chiêu cận chiến cũng đẩy lùi", "có/không", "", "code"],
+    // Hợp trận (người dùng đổi luật trận pháp 2026-11-04): nhiều người cùng bày trận pháp gần nhau thì nhập một trận
+    ["formationJoinRange", "Hợp trận: tâm trận cách nhau trong khoảng này thì nhập một trận", "ô", "", "de_xuat"],
+    ["formationBond2", "Hợp trận 2 người: hệ số", "hệ số", "8", "gdd"],
+    ["formationBond3", "Hợp trận 3 người: hệ số", "hệ số", "8", "gdd"],
+    ["formationBond5", "Hợp trận 5 người: hệ số", "hệ số", "8", "gdd"],
+    // Hợp trận lần 2 (người dùng duyệt 2026-11-04)
+    ["formationJoinWait", "Hợp trận: bày xong muộn hơn người sớm nhất của trận quá khoảng này thì bày trận riêng", "giây", "", "de_xuat"],
+    ["formationExtraTargets", "Hợp trận: mỗi người thêm, trận chung đánh thêm số mục tiêu", "số", "", "de_xuat"],
+    ["formationMaxTargets", "Hợp trận: số mục tiêu tối đa của trận chung", "số", "", "de_xuat"],
   ],
   BATTLE: [
     ["fieldLength", "Chiều dài sân", "ô", "", "code"],
@@ -402,5 +435,16 @@ export const CODE_PARAMS: Record<"SKILL_RULES" | "BATTLE" | "UNIT_CURVE" | "TALE
     ["satThuStealthTicks", "Sát thủ: ẩn thân đầu trận", "giây", "6", "gdd"],
     ["satThuDashCooldownCut", "Sát thủ: thân pháp hồi chiêu giảm", "%", "6", "gdd"],
     ["tuDuocHealTaken", "Tu dược: hồi máu nhận", "%", "6", "gdd"],
+  ],
+  /** Điều kiện kích hoạt pháp bảo (GDD tab Trang bị; sim f656195). Hai tầm "kề bên", "trong tầm" là đề xuất. */
+  ARTIFACT_RULES: [
+    ["adjacentRange", "Pháp bảo: \"kề bên\", \"đứng sát\" là trong khoảng này", "ô", "", "de_xuat"],
+    ["nearRange", "Pháp bảo Hồ lô: \"trong tầm\" là trong khoảng này", "ô", "", "de_xuat"],
+    ["luanMinEnemies", "Luân: số kẻ địch cận chiến đứng sát tối thiểu", "số", "", "gdd"],
+    ["chauHits", "Châu: số đòn tầm xa kế tiếp", "số", "", "gdd"],
+    ["thapAllies", "Tháp: số đồng đội gần nhất được che", "số", "", "gdd"],
+    ["dinhHealOfMax", "Đỉnh: kích hoạt khi lượng hồi từ phần này của máu tối đa", "%", "", "gdd"],
+    ["chuongMinControlled", "Chuông: số đồng đội đang bị khống chế tối thiểu", "số", "", "gdd"],
+    ["anDashDamage", "Ấn: đòn lướt của địch còn lại", "%", "", "gdd"],
   ],
 };

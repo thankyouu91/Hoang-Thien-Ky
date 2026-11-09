@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "nod
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { readXlsx, type SheetIn, type Value } from "./xlsx.ts";
 import * as B from "./bang.ts";
+import * as TB from "./trang_bi.ts";
 import { kiem } from "./kiem.ts";
 
 const ROOT = new URL("../../", import.meta.url);
@@ -28,7 +29,7 @@ function readTable(def: B.TableDef, s: SheetIn): RawRow[] {
   for (const c of def.cols) {
     const i = header.indexOf(c.header);
     if (i < 0) {
-      if (c.json === false) continue; // cột chỉ để xem, thiếu cũng được
+      if (c.json === false || c.optional || c.nullable) continue; // cột chỉ để xem hoặc được bỏ trống, thiếu cũng được
       throw new Error(`Sheet "${def.sheet}" thiếu cột "${c.header}"`);
     }
     at[c.key] = i;
@@ -45,18 +46,14 @@ function readTable(def: B.TableDef, s: SheetIn): RawRow[] {
   return rows;
 }
 
-function setPath(obj: Record<string, unknown>, path: string, v: unknown): void {
-  const parts = path.split(".");
-  let o = obj;
-  for (const p of parts.slice(0, -1)) o = (o[p] ??= {}) as Record<string, unknown>;
-  o[parts[parts.length - 1]] = v;
-}
-
 /** Excel → { tên file JSON: nội dung } và các dòng thô (cho phép kiểm). */
 export function convert(sheetList: SheetIn[]): { files: Record<string, unknown>; raw: Raw } {
   const sheets = new Map(sheetList.map((s) => [s.name, s]));
   const raw: Raw = {};
   for (const def of B.SHEETS) if (def.kind === "table") raw[def.sheet] = readTable(def, need(sheets, def.sheet));
+  // Sheet trang bị: file cũ chưa có thì bỏ qua
+  const tbDefs = TB.PARTS.map((p) => p.def).filter((d) => sheets.has(d.sheet));
+  for (const def of tbDefs) raw[def.sheet] = readTable(def, need(sheets, def.sheet));
 
   const nameToId = (def: B.TableDef): Record<string, string> =>
     Object.fromEntries(raw[def.sheet].map((r) => [norm(r.ten as Value), norm(r[def.id] as Value)]));
@@ -64,7 +61,8 @@ export function convert(sheetList: SheetIn[]): { files: Record<string, unknown>;
   const relIds = nameToId(B.QUAN_HE);
 
   const files: Record<string, unknown> = {};
-  for (const def of B.SHEETS) {
+  const tableRows: Record<string, Record<string, unknown>[]> = {};
+  for (const def of [...B.SHEETS, ...tbDefs]) {
     if (def.kind === "params") files[def.file] = readParams(need(sheets, def.sheet));
     else if (def.kind === "matrix") files[def.file] = readMatrix(def, need(sheets, def.sheet), refs.he, relIds, files);
     else {
@@ -88,17 +86,20 @@ export function convert(sheetList: SheetIn[]): { files: Record<string, unknown>;
             v = Array.isArray(v) ? v.map(conv) : conv(v as string);
           }
           if (v === undefined) {
-            if (!c.optional) throw new Error(`${where}: ô trống`);
-            continue;
+            if (c.nullable) v = null;
+            else if (c.optional) continue;
+            else throw new Error(`${where}: ô trống`);
           }
-          setPath(o, c.json ?? c.key, v);
+          B.setPath(o, c.json ?? c.key, v);
         }
         return o;
       });
-      files[def.file] = def.shape === "list" ? rows : Object.fromEntries(rows.map((o) => [String(o[def.cols.find((c) => c.key === def.id)!.json || def.id]), o]));
+      tableRows[def.sheet] = rows;
+      if (def.file) files[def.file] = def.shape === "list" ? rows : Object.fromEntries(rows.map((o) => [String(o[def.cols.find((c) => c.key === def.id)!.json || def.id]), o]));
     }
   }
   postProcess(files);
+  Object.assign(files, TB.assemble(tableRows));
   return { files, raw };
 }
 

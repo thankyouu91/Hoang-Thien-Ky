@@ -15,6 +15,8 @@ const BY_ELEMENT: Record<string, string[]> = {
   cuc_duong: ["Dương", "Liệt", "Sa", "Xích", "Diệu", "Nhật", "Hỏa", "Kim"],
   cuc_am: ["U", "Uyên", "Ám", "Huyền", "Cửu", "Âm", "Tịch", "Mặc"],
   cuc_han: ["Băng", "Tuyết", "Hàn", "Sương", "Ngân", "Bạch", "Lẫm", "Đông"],
+  // Linh Hải Cấm Khu (cam_khu.ts): không theo hệ nào, tên cổ và dữ
+  hon_don: ["Hỗn", "Độn", "Hoang", "Cổ", "Huyết", "Thái", "Hồng", "Ma", "Uyên", "Tịch", "Huyền", "Diệt"],
 };
 const COMMON = [
   "Thanh", "Vân", "Nguyệt", "Hạc", "Long", "Hổ", "Ngọc", "Tùng", "Thạch", "Linh", "Tiên", "Phượng", "Lộc", "An", "Bình",
@@ -31,9 +33,42 @@ const SUFFIX: Record<string, string[]> = {
   linh_tuyen: ["Tuyền"],
   cua_bi_canh: ["Bí Cảnh"],
   hang_di_thu: ["Động", "Quật", "Huyệt"],
+  hang_thu_hoang: ["Hoàng Sào", "Vương Huyệt"],
   deo: ["Quan"],
   ben_do: ["Độ"],
 };
+
+/** Đuôi tên địa hình (mã như trường "kind" của nhan.ts) */
+const FEATURE_SUFFIX: Record<string, string[]> = {
+  khe: ["Khê"],
+  song: ["Thủy", "Hà"],
+  giang: ["Giang"],
+  nui: ["Sơn", "Lĩnh", "Phong"],
+  rung: ["Lâm"],
+  dong_co: ["Dã", "Bình"],
+  sa_mac: ["Sa", "Mạc"],
+  dam_lay: ["Trạch", "Đàm"],
+  bang_nguyen: ["Tuyết Nguyên", "Băng Nguyên"],
+};
+
+/** Đặt tên địa hình (sông, núi, rừng…) của một vùng như namePoints; `used` là các tên đã có trong vùng, để không trùng */
+export function nameFeatures(features: { kind: string; name?: string }[], element: string, rnd: () => number, used = new Set<string>()): void {
+  const pick = <T>(list: T[]) => list[Math.floor(rnd() * list.length)];
+  const themed = BY_ELEMENT[element] ?? COMMON;
+  for (const f of features) {
+    for (let attempt = 0; ; attempt++) {
+      const first = rnd() < 0.5 ? pick(themed) : pick(COMMON);
+      let second = pick(COMMON);
+      while (second === first) second = pick(COMMON);
+      const name = `${first} ${second} ${pick(FEATURE_SUFFIX[f.kind] ?? ["Địa"])}`;
+      if (!used.has(name) || attempt > 50) {
+        used.add(name);
+        f.name = name;
+        break;
+      }
+    }
+  }
+}
 
 /** Đặt tên cho mọi điểm của một vùng; `rnd` là bộ sinh số ngẫu nhiên có seed, trả số trong [0, 1) */
 export function namePoints(points: { type: string; name?: string }[], element: string, rnd: () => number): void {

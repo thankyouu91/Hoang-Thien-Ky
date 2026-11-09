@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <!--#mo-->
+    <title>Thiên Hoang Ký</title>
+    <meta name="description" content="Thiên Hoang Ký: game chiến lược tông môn tiên hiệp trên điện thoại, đang phát triển và open test.">
+  </head>
+  <body class="trang-chu">
+    <!--#dau-->
+    <main id="noi-dung">
+      <!-- Phần 1: tranh thủy mặc người dùng gửi (2026-11-05), để NGUYÊN tranh tĩnh (lớp tu sĩ động từng thử bị chê,
+           đã bỏ); chỉ thêm hạt linh khí bay chậm lên, tan ở 70–90% chiều cao (src/heroCanh.ts). -->
+      <section class="dau-tranh" aria-labelledby="ten-game">
+        <div class="tranh-nen" aria-hidden="true">
+          <img class="hero-anh" src="/hinh/rieng/hero_1880.webp" srcset="/hinh/rieng/hero_960.webp 960w, /hinh/rieng/hero_1880.webp 1880w" sizes="100vw" alt="" fetchpriority="high" decoding="async">
+        </div>
+        <div class="dau-tranh-chu">
+          <p class="the-kin">Đang phát triển · Open test</p>
+          <img class="an-lon" src="/hinh/brand/dau_an_256.webp" width="128" height="128" alt="" fetchpriority="high">
+          <h1 id="ten-game">Thiên Hoang Ký</h1>
+          <p class="cau-tho">Thiên Hoang mây trắng ngang trời,<br>một tông dựng mộng muôn đời phi thăng.</p>
+          <div class="hang-nut">
+            <a class="nut nut-lon" href="https://play.thienhoangky.fun/">Vào chơi thử</a>
+            <a class="nut-chu" href="/the-gioi/">Xem thế giới</a>
+          </div>
+          <p class="ghi-nho">Chơi ngay trên trình duyệt điện thoại hoặc máy tính.</p>
+        </div>
+      </section>
+
+      <!-- Phần 2: đại lục, dùng ảnh chụp bản đồ Hạ vị từ prototype. -->
+      <section class="khoi khoi-dai-luc" aria-labelledby="h-dai-luc">
+        <p class="the-han" aria-hidden="true">天荒大陸</p>
+        <h2 id="h-dai-luc" class="tieu-de">Thiên Hoang đại lục</h2>
+        <p class="dan">
+          Bốn vị diện xếp vòng từ ngoài vào trong; càng vào trong linh khí càng đậm. Bản chơi thử mở Hạ vị diện:
+          12 vùng quanh Cấm Khu, mỗi vùng mang một trong 12 hệ, mỗi thành chủ một vùng trời.
+        </p>
+        <figure class="hinh-dai-luc giay">
+          <a class="phong" href="/the-gioi/" aria-label="Bản đồ Hạ vị diện, mở trang Thế giới">
+            <img src="/hinh/rieng/dai_luc.webp" width="1600" height="1043" alt="Bản đồ Hạ vị diện: 12 vùng quanh Cấm Khu, chụp từ bản chơi thử" loading="lazy" decoding="async">
+          </a>
+          <figcaption>Hạ vị diện trong bản chơi thử — chạm để xem từng vùng, từng hệ.</figcaption>
+        </figure>
+        <a class="xem-them" href="/the-gioi/">Bốn vị diện, 12 vùng và 12 hệ</a>
+      </section>
+
+      <!-- Phần 3: tính năng trong game. -->
+      <section class="khoi khoi-tinh-nang" aria-labelledby="h-tn">
+        <p class="the-han" aria-hidden="true">法門</p>
+        <h2 id="h-tn" class="tieu-de">Trong game có gì</h2>
+        <ul class="luoi-tinh-nang">
+          <li><img src="/hinh/tong_mon/kim_van_kiem_tong.webp" width="56" height="56" alt="" loading="lazy" class="pix"><b>Lập tông</b><span>Tông môn rơi vào một địa thế riêng; 11 công trình, mỗi mô hình một dáng.</span></li>
+          <li><img src="/hinh/diem/mo_linh_thach.webp" width="56" height="56" alt="" loading="lazy" class="pix"><b>Bản đồ sương mù</b><span>Mở sương bằng Truyền Tống Trận, giành mỏ linh thạch, quặng và dược.</span></li>
+          <li><img src="/hinh/tan_quyen/loi.webp" width="56" height="56" alt="" loading="lazy"><b>Ghép công pháp</b><span>480 tàn quyển, 12 hệ, 10 loại chiêu; bộ võ học riêng của mỗi môn.</span></li>
+          <li><img src="/hinh/chieu/dien_rong.webp" width="56" height="56" alt="" loading="lazy"><b>Trận đấu tự động</b><span>Đánh theo khắc chế hệ; đội yếu hơn vẫn thắng nếu chọn đúng.</span></li>
+          <li><img src="/hinh/diem/cua_bi_canh.webp" width="56" height="56" alt="" loading="lazy" class="pix"><b>Bí cảnh hai khung giờ</b><span>12:00 và 20:00 mỗi ngày, tranh đoạt tàn quyển và tài bảo.</span></li>
+          <li><img src="/hinh/thu/bach_ho.webp" width="56" height="56" alt="" loading="lazy" class="pix"><b>Thú cưỡi</b><span>100 loài; cưỡi một con, cả đội thú cộng chỉ số, ghép tổ hợp kích hiệu ứng.</span></li>
+          <li><img src="/hinh/ngoc/thuy.webp" width="56" height="56" alt="" loading="lazy"><b>Luyện khí và set đồ</b><span>Rèn, khảm ngọc, khí vận và những bộ set đổi lối đánh.</span></li>
+          <li><img src="/hinh/cong_phap/quang.webp" width="56" height="56" alt="" loading="lazy"><b>Cả môn phi thăng</b><span>Tông môn cấp 200 thì cả môn bay lên vị diện cao hơn, làm lại từ đầu.</span></li>
+        </ul>
+        <blockquote class="cau-lon">
+          <p>Tu tiên bằng trí, không bằng ví.</p>
+        </blockquote>
+        <a class="xem-them" href="/diem-rieng/">Đọc kỹ từng điểm</a>
+      </section>
+
+      <!-- Phần 4: một góc tranh, không còn tranh địa điểm. -->
+      <section class="khoi khoi-hinh" aria-labelledby="h-hinh">
+        <p class="the-han" aria-hidden="true">畫卷</p>
+        <h2 id="h-hinh" class="tieu-de">Một góc tranh</h2>
+        <div class="dai-hinh bon-o">
+          <figure class="tu-si-bay" aria-label="Tu sĩ lơ lửng, hình động PixelLab">
+            <span class="sprite" role="img" aria-label="Tu sĩ nữ mặc đạo bào lơ lửng"></span>
+          </figure>
+          <!--#hinh:thu/bach_ho.webp-->
+          <!--#hinh:tan_quyen/loi.webp-->
+          <!--#hinh:dao_do/kim.webp-->
+        </div>
+        <a class="xem-them" href="/thu-vien/">Xem thư viện hình</a>
+      </section>
+
+      <!-- Phần 5: wiki, từ tân thủ tới cao thủ. -->
+      <section class="khoi khoi-wiki" aria-labelledby="h-wiki">
+        <p class="the-han" aria-hidden="true">秘笈</p>
+        <h2 id="h-wiki" class="tieu-de">Từ tân thủ tới cao thủ</h2>
+        <p class="dan">Wiki của game: đường đi tuần đầu, bảng khắc chế, cách ghép công pháp và bảng tra đầy đủ số liệu.</p>
+        <div class="the-ba bon">
+          <a class="the-link the-chinh" href="https://wiki.thienhoangky.fun/nhap-mon/nguoi-moi">
+            <b>Hướng dẫn người mới</b>
+            <span>15 phút đầu và tuần đầu nên làm gì.</span>
+          </a>
+          <a class="the-link" href="https://wiki.thienhoangky.fun/he/">
+            <b>12 hệ, 10 loại chiêu</b>
+            <span>Hệ nào khắc hệ nào, chọn đội hình ra sao.</span>
+          </a>
+          <a class="the-link" href="https://wiki.thienhoangky.fun/cong-phap/">
+            <b>Tàn quyển và công pháp</b>
+            <span>Cách ghép bộ võ học riêng của tông môn.</span>
+          </a>
+          <a class="the-link" href="https://wiki.thienhoangky.fun/tra-cuu/">
+            <b>Bảng tra cứu</b>
+            <span>Số liệu tàn quyển, thú, trang bị, bí cảnh.</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Phần 6: chính sách, góp ý, nhật ký. -->
+      <section class="khoi khoi-cuoi" aria-labelledby="h-cuoi">
+        <h2 id="h-cuoi" class="tieu-de">Chính sách và cập nhật</h2>
+        <div class="the-ba bon">
+          <a class="the-link" href="/chinh-sach-bao-mat/">
+            <b>Chính sách bảo mật</b>
+            <span>Bản chơi thử giữ gì, không giữ gì về bạn.</span>
+          </a>
+          <a class="the-link" href="/chinh-sach-game/">
+            <b>Chính sách game</b>
+            <span>Nhãn tuổi, giờ chơi, ứng xử và tài khoản chơi thử.</span>
+          </a>
+          <a class="the-link" href="/gop-y/">
+            <b>Góp ý</b>
+            <span>Báo lỗi hay nói điều bạn thích, không thích.</span>
+          </a>
+          <a class="the-link" href="/nhat-ky/">
+            <b>Nhật ký cập nhật</b>
+            <span>Game vừa thêm gì, theo từng ngày.</span>
+          </a>
+        </div>
+      </section>
+    </main>
+    <!--#chan-->
+  </body>
+</html>

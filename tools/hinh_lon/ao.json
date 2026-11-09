@@ -1,0 +1,34 @@
+{
+  "ghi_chu": [
+    "Lời mô tả trang phục cho hình lớn Pháp tướng (tools/hinh_lon/ve.mjs). Dáng theo món áo: proto/src/dashboard/trangPhuc.ts.",
+    "Bậc theo cảnh giới: 1 Luyện Khí, 2 Trúc Cơ và Kết Đan, 3 Nguyên Anh trở lên. Màu vẽ sẵn theo trang phục, không nhuộm theo hệ."
+  ],
+  "bac": {
+    "1": "a simple, modest version: plain sturdy materials and few ornaments (a beginner of the Qi Refining realm)",
+    "2": "a refined version: finer materials, tasteful embroidery and metal fittings, a jade or silver ornament (an established cultivator of the Foundation Establishment realm)",
+    "3": "a majestic version: ornate luxurious materials, intricate luminous embroidery or faintly glowing engraved runes, ribbons or cloth drifting in the air (a powerful elder of the Nascent Soul realm and above)"
+  },
+  "dang": {
+    "bo_y": "a commoner's rough hemp robe and trousers in earthy browns and faded greens, a straw-rope belt, cloth shoes",
+    "thu_sinh": "a scholar's long robe in soft white and ink blue with wide sleeves, a scholar's sash, a writing brush tucked at the belt",
+    "dao_bao": "a Taoist cultivator's long robe in deep blue with a white inner collar and a black sash",
+    "vo_phuc": "a martial artist's short jacket and baggy trousers in deep red and black, leather bracers, a wide black sash",
+    "da_hanh": "a night-stalker outfit in black and charcoal: a hood, a cloth mask over nose and mouth, fitted tunic, arm wraps, soft boots",
+    "tang_y": "a monk's robe in saffron and earthy brown with a draped kasaya over one shoulder and a string of prayer beads",
+    "ao_long": "a heavy fur-lined cloak in dark brown and grey over a warm quilted tunic, a thick fur collar, sturdy boots",
+    "tien_y": "an ethereal fairy robe of layered translucent silk in white and soft pastel tones with long floating ribbon sleeves and sash streamers",
+    "phap_y": "a mage's ceremonial robe in deep purple and gold with embroidered mystic symbols (bagua trigrams, stars), a high collar and broad sleeves",
+    "giap_da": "light leather war armor: a hardened brown leather breastplate with stitched straps over a dark tunic, leather bracers, wrapped leg guards",
+    "giap_phien": "lamellar war armor: rows of bronze and iron plates laced over a padded robe, round chest mirror plates, armored shoulder guards",
+    "giap_lan": "scale war armor: a coat of small overlapping steel scales over a dark robe, scaled shoulder guards, a leather belt, armored tassets",
+    "giap_tuong": "a general's war armor: gilded plates and lion-face fittings over a crimson battle robe, dragon-head pauldrons, a flowing cape"
+  },
+  "nghe": {
+    "tu_tran": "a dark navy-blue long robe with white cloud-pattern trim along the hem and cuffs, black sash belt, dark trousers and boots",
+    "tu_dan": "a blue robe with a long brown leather apron over it, black sash belt, cloth-wrapped forearms, simple sandals",
+    "sat_thu": "a dark blue hooded assassin outfit: hood covering the head, black cloth mask over nose and mouth, fitted tunic, black arm wraps, black sash, dark trousers and black boots",
+    "tu_ren": "a sleeveless dark top showing bare muscular arms, a long brown leather blacksmith apron, black sash, brown leather bracers, baggy dark trousers and brown leather boots",
+    "tu_duoc": "a light blue herbalist robe with a cream inner collar, black sash with small pouches, straw sandals",
+    "tu_kim_tien": "a rich dark blue long coat with gold trim and a gold belt, a thick white fur collar, dark boots"
+  }
+}

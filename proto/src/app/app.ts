@@ -4,6 +4,8 @@ import type { Scene } from "./scene.ts";
 import { createView, syncSize, type View } from "./view.ts";
 
 const BG = "#14110f";
+/** Chữ đo fps ở góc trên trái: chỉ khi chạy dev server, hoặc bản build có ?debug=1 (người chơi không thấy). */
+const SHOW_FPS = import.meta.env.DEV || new URLSearchParams(location.search).get("debug") === "1";
 
 export interface AppOptions {
   /** Scene không có nút trên thanh dưới, mở bằng hash hoặc `open` (Trận mở từ chiến báo, Nhân vật từ thanh trên). */
@@ -135,12 +137,14 @@ export class App {
       ctx.fillRect(0, 0, v.w, v.h);
       this.current.draw(v);
 
-      ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
-      ctx.font = "11px system-ui, sans-serif";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "top";
-      ctx.fillStyle = "rgba(239, 230, 214, 0.6)";
-      ctx.fillText(`${Math.round(this.fps.fps)} fps · ${this.fps.worstMs.toFixed(0)} ms`, 8, 8);
+      if (SHOW_FPS) {
+        ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
+        ctx.font = "11px system-ui, sans-serif";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillStyle = "rgba(239, 230, 214, 0.6)";
+        ctx.fillText(`${Math.round(this.fps.fps)} fps · ${this.fps.worstMs.toFixed(0)} ms`, 8, 8);
+      }
     }
 
     requestAnimationFrame(this.frame);

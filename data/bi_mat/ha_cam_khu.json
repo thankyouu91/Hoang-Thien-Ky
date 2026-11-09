@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "zone": "cam_khu",
+  "name": "Linh Hải Cấm Khu",
+  "source": "Người dùng 2026-11-03. Con số ghi (đề xuất) là chưa chốt, chờ duyệt.",
+  "public": "Người chơi chỉ thấy warning trong data/maps/ha_diem_cam_khu.json: CẤM KHU cực kỳ nguy hiểm, đồn rằng bảo vật và vật phẩm rơi nhiều hơn bên ngoài. Không lộ con số nào dưới đây.",
+  "map": {
+    "points": "data/maps/ha_diem_cam_khu.json (tools/mapgen/cam_khu.ts): 542 điểm, 10 cửa ải (mỗi vùng giáp ranh một cửa), 12 hang Thú Hoàng quanh khu, mỏ, linh tuyền, cửa bí cảnh, hang dị thú như các vùng quanh tính theo diện tích",
+    "danger": "Cấp nguy hiểm 200 ở cửa ải, tăng theo quãng đường vào sâu tới 250; hang Thú Hoàng 280"
+  },
+  "drop": {
+    "multiplier": 1.3,
+    "note": "Mọi thứ rơi ra trong khu (vật phẩm, bảo vật, tàn quyển, nguyên liệu săn và khai thác) có tỷ lệ cao hơn bên ngoài 30%. Nhân lên tỷ lệ rơi gốc, phẩm tàn quyển vẫn theo bảng Hạ vị."
+  },
+  "entry": {
+    "safeLevel": 200,
+    "belowSafe": {
+      "note": "Dưới cấp 200 bước qua cửa ải: khả năng chết ngay tại chỗ, không thì trọng thương",
+      "instantDeath": 0.35,
+      "heavyInjury": 0.65,
+      "heavyInjuryNote": "(đề xuất) trọng thương: còn 10% máu, giảm 50% công và phòng trong 2 giờ, bị đẩy ra cửa ải"
+    },
+    "hunting": {
+      "note": "Từ cấp 200 tới 250 trở lên muốn săn trong khu phải đi theo nhóm, hoặc vào theo tông môn",
+      "minGroup": 3,
+      "orSectRaid": true,
+      "soloPenalty": "(đề xuất) đi một mình bị tính như dưới cấp 200 khi gặp thú cấp cao hơn mình"
+    }
+  },
+  "beasts": {
+    "levels": [200, 250],
+    "grade": "Linh, thỉnh thoảng Huyền (đề xuất)",
+    "note": "Thú trong khu cấp cao hơn bên ngoài; cấp bãi theo cấp nguy hiểm của điểm"
+  },
+  "boss": {
+    "title": "Thú Hoàng",
+    "grade": "Huyền",
+    "gradeNote": "Người dùng gọi là 'cấp Hoàng'. GDD không có phẩm dị thú Hoàng (Hoàng là phẩm công pháp và tàn quyển); phẩm dị thú cao nhất ở Hạ vị là Huyền (Yêu Thú Sào Huyệt), nên lấy Huyền và gọi boss là Thú Hoàng.",
+    "level": 280,
+    "lairs": 12,
+    "where": "12 hang Thú Hoàng (type hang_thu_hoang) rải quanh khu, cách biên khu 12–40 đơn vị bản đồ",
+    "respawnHours": 72,
+    "respawnNote": "(đề xuất) trảm xong thì 72 giờ sau Thú Hoàng mới quay lại hang",
+    "drops": "(đề xuất) trứng thú phẩm Huyền như Yêu Thú Sào Huyệt, cộng drop.multiplier"
+  },
+  "sect": {
+    "buildOrMove": "Tông môn muốn dựng sơn môn hoặc dời sơn môn vào trong khu phải trảm Thú Hoàng quanh chỗ dựng trước",
+    "clearRadius": 120,
+    "clearRadiusNote": "(đề xuất) mọi hang Thú Hoàng trong bán kính 120 đơn vị bản đồ quanh vị trí sơn môn phải đang trống (đã trảm, chưa quay lại)",
+    "partialClear": {
+      "note": "Chỉ trảm 1 Thú Hoàng rồi dời vào thì bị thú triều tấn công liên tục trong ngày",
+      "tidesPerDayPerLivingBoss": 4,
+      "tidesNote": "(đề xuất) mỗi Thú Hoàng còn sống trong bán kính trên thêm 4 đợt thú triều mỗi ngày vào sơn môn, rải đều; trảm hết thì chỉ còn Yêu Triều chung của mùa"
+    },
+    "wipedInside": {
+      "note": "Tông môn bị diệt trong khu (mất Chính Điện) là mất tất cả, phải làm lại từ đầu",
+      "lose": ["công trình", "kho tông môn", "lãnh thổ", "cấp tông môn"],
+      "keepNote": "(đề xuất) người chơi giữ nhân vật, đồ trên người và cấp; tông môn coi như giải tán"
+    }
+  },
+  "openQuestions": [
+    "Tỷ lệ chết ngay 35% khi vào dưới cấp 200 có quá gắt không?",
+    "Nhóm tối thiểu 3 người có hợp không, hay tính theo tổng lực chiến?",
+    "Trảm Thú Hoàng: cần mấy người, có giới hạn lượt mỗi ngày không?",
+    "Thú triều vào sơn môn trong khu: đánh mô phỏng như công thành hay như Yêu Triều?"
+  ]
+}

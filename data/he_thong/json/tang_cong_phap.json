@@ -1,0 +1,12 @@
+[
+  {"tang":1,"uyLuc":0,"hoiChieu":0,"mana":0,"diemLuyen":0,"congHien":0},
+  {"tang":2,"uyLuc":25,"hoiChieu":0,"mana":0,"diemLuyen":10,"congHien":0},
+  {"tang":3,"uyLuc":50,"hoiChieu":0,"mana":0,"diemLuyen":20,"congHien":0},
+  {"tang":4,"uyLuc":75,"hoiChieu":0,"mana":50,"diemLuyen":30,"congHien":1},
+  {"tang":5,"uyLuc":100,"hoiChieu":0,"mana":50,"diemLuyen":40,"congHien":1},
+  {"tang":6,"uyLuc":125,"hoiChieu":0,"mana":50,"diemLuyen":50,"congHien":2},
+  {"tang":7,"uyLuc":150,"hoiChieu":0,"mana":100,"diemLuyen":60,"congHien":2},
+  {"tang":8,"uyLuc":175,"hoiChieu":0,"mana":100,"diemLuyen":70,"congHien":3},
+  {"tang":9,"uyLuc":200,"hoiChieu":0,"mana":100,"diemLuyen":80,"congHien":4},
+  {"tang":10,"uyLuc":250,"hoiChieu":50,"mana":100,"diemLuyen":90,"congHien":5}
+]

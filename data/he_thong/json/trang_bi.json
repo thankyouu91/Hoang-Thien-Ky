@@ -1,0 +1,4594 @@
+{
+  "ghi_chu": [
+    "7 ô trang bị (GDD mục 6, 12). Kiểu chỉ đổi hình và tên; chỉ số gốc theo ô và độ hiếm; hệ và thuộc tính đến từ ngọc khảm (người dùng chốt 2026-11-03).",
+    "chinh, phu: gia_tri là phần nghìn của chỉ số chuẩn nhân vật cùng cấp ở độ hiếm lục +0. Món độ hiếm khác nhân he_so của độ hiếm; cường hóa mỗi nấc +3% chỉ số gốc; đồ bí cảnh +4–8% (chốt).",
+    "dong_kham: số dòng khảm gốc theo độ hiếm; đồ bí cảnh thêm 1–2 dòng (chốt), tối đa 5. Một dòng giữ được 1 ngọc hệ, 1 Ý châu (chỉ vũ khí) hoặc 1 ấn bộ.",
+    "ngoc: 'cong' = ngọc khảm vào ô này tăng sát thương chiêu cùng hệ; 'thu' = tăng kháng hệ đó (resist trong packages/sim).",
+    "Trần: trang bị, ngọc, cường hóa và set cộng lại không quá khoảng 35% lực chiến (mục 13). Phiên Sprint chỉnh số tuyệt đối bằng công cụ cân bằng; ở đây chỉ là tỷ lệ giữa các ô.",
+    "Tách thủ ngoại và thủ nội: người dùng chốt 2026-11-05. Chỉ số chính áo là thủ ngoại +2,6%, giày là thủ nội +2,6% (đã nhân ×0,85). Tẩy luyện loại 4 của giày thành thủ ngoại, của áo thành thủ nội. Loại sát thương của từng loại chiêu ở loai_chieu.json loai_sat_thuong.",
+    "dong_ren: cường hóa lên nac mở 1 dòng rèn ở vi_dien; chọn 1 trong 4 loại phụ của ô (luyen_khi.json tay_luyen), giá trị luat.dongRen.heSoLoaiPhu của loại đó. Tối đa luat.dongRen.toiDa theo vị diện; đổi dòng tốn luat.dongRen.doiDongKhiTinh Khí Tinh; tụt nấc dưới mốc thì dòng tạm tắt.",
+    "dong_an: chỉ trên ô có co_dong_an (ngọc bội, đai). Mỗi dòng là 1 điều kiện (loai dieu_kien) + 1 hiệu ứng (hieu_ung), quay khi món rơi hoặc rèn ra; số dòng luat.dongAn.soDong theo độ hiếm. Hiện ??? tới lần đầu kích phát; Giám Định Phù (PH-CH-011) lộ trước điều kiện 1 dòng; tẩy ẩn quay lại hiệu ứng, giữ điều kiện. Song ẩn: ngọc bội và đai cùng điều kiện thì cả hai hiệu ứng ×luat.dongAn.songAnHeSo. Nhóm của điều kiện (nhom) nhân hiệu ứng theo he_so: tinh ×0,2, loai_tran ×0,25, trong_tran ×0,3; cùng lúc tối đa luat.dongAn.toiDaHieuLuc dòng có hiệu lực, chọn theo điểm trang bị sau hệ số.",
+    "diem: điểm trang bị cho mỗi `moi` (1% hoặc 0,1%) của chỉ số; điểm món là tổng các lớp, điểm nhân vật là 7 món cộng set. Chỉ để so sánh, gợi ý và lọc chợ, không dùng trong trận; phiên Sprint chỉnh bằng đo.",
+    "Chỉ số chính, phụ của 7 ô và 4 loại tẩy luyện (luyen_khi.json tay_luyen) đã hạ ×0,85 theo trần 35% chia lại của set đồ 2.0 (phiên Sprint đo 2026-11-05), làm tròn về số nguyên gần nhất, 0,5 làm tròn lên; dòng rèn lấy theo bảng tẩy luyện này."
+  ],
+  "do_hiem": [
+    {"id":"luc","ten":"Lục","bac":1,"he_so":1000,"dong_kham":1,"nguon":"Shop NPC ở thành chủ"},
+    {"id":"lam","ten":"Lam","bac":2,"he_so":1120,"dong_kham":2,"nguon":"Rơi trong và ngoài bí cảnh; rèn ở lò cấp 1–4"},
+    {"id":"tim","ten":"Tím","bac":3,"he_so":1250,"dong_kham":2,"nguon":"Bí cảnh; rèn ở lò cấp 5 trở lên"},
+    {
+      "id": "vang",
+      "ten": "Vàng",
+      "bac": 4,
+      "he_so": 1400,
+      "dong_kham": 3,
+      "nguon": "Thần vật: bí cảnh hiếm, săn linh thú và thần thú"
+    },
+    {
+      "id": "do",
+      "ten": "Đỏ",
+      "bac": 5,
+      "he_so": 1550,
+      "dong_kham": 3,
+      "nguon": "Thần vật, hiếm hơn vàng: bí cảnh hiếm, săn linh thú và thần thú"
+    }
+  ],
+  "o": [
+    {
+      "id": "vu_khi",
+      "ma": "KI",
+      "ten": "Vũ khí",
+      "chinh": {"stat":"atk","ten":"Công lực","gia_tri":34},
+      "phu": {"stat":"critDamage","ten":"Sát thương chí mạng","gia_tri":17},
+      "ngoc": "cong",
+      "hien_tren_nguoi": true,
+      "cong_thuc_ren": {"quang":10,"linh_moc":2},
+      "co_dong_an": false
+    },
+    {
+      "id": "mu",
+      "ma": "MU",
+      "ten": "Mũ",
+      "chinh": {"stat":"hp","ten":"Máu","gia_tri":17},
+      "phu": {"stat":"manaMax","ten":"Mana tối đa","gia_tri":17},
+      "ngoc": "thu",
+      "hien_tren_nguoi": true,
+      "cong_thuc_ren": {"quang":4,"yeu_thu_cot":2},
+      "co_dong_an": false
+    },
+    {
+      "id": "ao",
+      "ma": "AO",
+      "ten": "Áo",
+      "chinh": {"stat":"defOuter","ten":"Thủ ngoại","gia_tri":26},
+      "phu": {"stat":"hp","ten":"Máu","gia_tri":13},
+      "ngoc": "thu",
+      "hien_tren_nguoi": true,
+      "cong_thuc_ren": {"quang":6,"yeu_thu_bi":3,"thien_tam_ti":3},
+      "co_dong_an": false
+    },
+    {
+      "id": "dai",
+      "ma": "DA",
+      "ten": "Đai",
+      "chinh": {"stat":"hp","ten":"Máu","gia_tri":21},
+      "phu": {"stat":"healTaken","ten":"Hồi máu nhận","gia_tri":9},
+      "ngoc": "thu",
+      "hien_tren_nguoi": false,
+      "cong_thuc_ren": {"quang":2,"van_cam":2},
+      "co_dong_an": true
+    },
+    {
+      "id": "bao_tay",
+      "ma": "BT",
+      "ten": "Bao tay",
+      "chinh": {"stat":"atk","ten":"Công lực","gia_tri":17},
+      "phu": {"stat":"critBonus","ten":"Chí mạng","gia_tri":4},
+      "ngoc": "cong",
+      "hien_tren_nguoi": false,
+      "cong_thuc_ren": {"quang":2,"yeu_thu_bi":2},
+      "co_dong_an": false
+    },
+    {
+      "id": "giay",
+      "ma": "GI",
+      "ten": "Giày",
+      "chinh": {"stat":"defInner","ten":"Thủ nội","gia_tri":26},
+      "phu": {"stat":"attackSpeed","ten":"Tốc đánh","gia_tri":9},
+      "ngoc": "thu",
+      "hien_tren_nguoi": false,
+      "cong_thuc_ren": {"quang":3,"yeu_thu_bi":2},
+      "co_dong_an": false
+    },
+    {
+      "id": "ngoc_boi",
+      "ma": "NB",
+      "ten": "Ngọc bội",
+      "chinh": {"stat":"manaMax","ten":"Mana tối đa","gia_tri":21},
+      "phu": {"stat":"cooldownCut","ten":"Giảm hồi chiêu","gia_tri":4},
+      "ngoc": "cong",
+      "hien_tren_nguoi": false,
+      "cong_thuc_ren": {"quang":1,"van_cam":1,"ngoc_cap_1":1},
+      "co_dong_an": true
+    }
+  ],
+  "kieu": [
+    {
+      "ma_vp": "TB-KI-001",
+      "o": "vu_khi",
+      "so": 1,
+      "ten": "Kiếm Thanh Cương",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-002",
+      "o": "vu_khi",
+      "so": 2,
+      "ten": "Kiếm Thiết Phong",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-003",
+      "o": "vu_khi",
+      "so": 3,
+      "ten": "Kiếm Thanh Đồng",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-004",
+      "o": "vu_khi",
+      "so": 4,
+      "ten": "Kiếm Đào Mộc",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-005",
+      "o": "vu_khi",
+      "so": 5,
+      "ten": "Kiếm Trúc Ảnh",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-006",
+      "o": "vu_khi",
+      "so": 6,
+      "ten": "Kiếm Bạch Cương",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-007",
+      "o": "vu_khi",
+      "so": 7,
+      "ten": "Kiếm Hắc Thiết",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-008",
+      "o": "vu_khi",
+      "so": 8,
+      "ten": "Kiếm Khách Hành",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-009",
+      "o": "vu_khi",
+      "so": 9,
+      "ten": "Kiếm Song Nhận",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-010",
+      "o": "vu_khi",
+      "so": 10,
+      "ten": "Kiếm Thạch Văn",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-011",
+      "o": "vu_khi",
+      "so": 11,
+      "ten": "Kiếm Thô Phong",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-012",
+      "o": "vu_khi",
+      "so": 12,
+      "ten": "Kiếm Liễu Diệp",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-013",
+      "o": "vu_khi",
+      "so": 13,
+      "ten": "Kiếm Thư Sinh",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-014",
+      "o": "vu_khi",
+      "so": 14,
+      "ten": "Kiếm Sơn Dã",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-015",
+      "o": "vu_khi",
+      "so": 15,
+      "ten": "Kiếm Hồng Anh",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-016",
+      "o": "vu_khi",
+      "so": 16,
+      "ten": "Kiếm Thiết Cốt",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-017",
+      "o": "vu_khi",
+      "so": 17,
+      "ten": "Kiếm Đồng Hoàn",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-018",
+      "o": "vu_khi",
+      "so": 18,
+      "ten": "Kiếm Ô Mộc",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-019",
+      "o": "vu_khi",
+      "so": 19,
+      "ten": "Kiếm Tế Vũ",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-020",
+      "o": "vu_khi",
+      "so": 20,
+      "ten": "Kiếm Quân Doanh",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-021",
+      "o": "vu_khi",
+      "so": 21,
+      "ten": "Kiếm Thiết Lân",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-022",
+      "o": "vu_khi",
+      "so": 22,
+      "ten": "Kiếm Ngân Tuyến",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-023",
+      "o": "vu_khi",
+      "so": 23,
+      "ten": "Kiếm Thanh Hà",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-024",
+      "o": "vu_khi",
+      "so": 24,
+      "ten": "Kiếm Tùng Văn",
+      "do_hiem": "luc",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-KI-025",
+      "o": "vu_khi",
+      "so": 25,
+      "ten": "Kiếm Lưu Vân",
+      "do_hiem": "lam",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-026",
+      "o": "vu_khi",
+      "so": 26,
+      "ten": "Kiếm Hạc Vũ",
+      "do_hiem": "lam",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-027",
+      "o": "vu_khi",
+      "so": 27,
+      "ten": "Kiếm Thanh Liên",
+      "do_hiem": "lam",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-028",
+      "o": "vu_khi",
+      "so": 28,
+      "ten": "Kiếm Bích Lạc",
+      "do_hiem": "lam",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-029",
+      "o": "vu_khi",
+      "so": 29,
+      "ten": "Kiếm Nguyệt Ảnh",
+      "do_hiem": "lam",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-030",
+      "o": "vu_khi",
+      "so": 30,
+      "ten": "Kiếm Tinh Thần",
+      "do_hiem": "lam",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-031",
+      "o": "vu_khi",
+      "so": 31,
+      "ten": "Kiếm Hổ Phách",
+      "do_hiem": "lam",
+      "khi_hinh": "dao",
+      "ten_de_xuat": "Đao Hổ Khiếu",
+      "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-032",
+      "o": "vu_khi",
+      "so": 32,
+      "ten": "Kiếm Long Ngâm",
+      "do_hiem": "lam",
+      "khi_hinh": "thuong",
+      "ten_de_xuat": "Thương Ngân Long",
+      "mo_ta": "Trường thương, lao tới đâm xuyên",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-033",
+      "o": "vu_khi",
+      "so": 33,
+      "ten": "Kiếm Thu Hồ",
+      "do_hiem": "lam",
+      "khi_hinh": "con",
+      "ten_de_xuat": "Côn Bàn Long",
+      "mo_ta": "Côn dài, thủ thế che thân và che bạn",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-034",
+      "o": "vu_khi",
+      "so": 34,
+      "ten": "Kiếm Phi Yến",
+      "do_hiem": "lam",
+      "khi_hinh": "cung",
+      "ten_de_xuat": "Cung Hạc Vũ",
+      "mo_ta": "Cung và tên, bắn từ hàng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-035",
+      "o": "vu_khi",
+      "so": 35,
+      "ten": "Kiếm Mai Hoa",
+      "do_hiem": "lam",
+      "khi_hinh": "phien",
+      "ten_de_xuat": "Phiến Thu Thủy",
+      "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-036",
+      "o": "vu_khi",
+      "so": 36,
+      "ten": "Kiếm Trường Hồng",
+      "do_hiem": "lam",
+      "khi_hinh": "but",
+      "ten_de_xuat": "Bút Phán Quan",
+      "mo_ta": "Phù bút vẽ bùa, điểm huyệt",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-037",
+      "o": "vu_khi",
+      "so": 37,
+      "ten": "Kiếm Tử Trúc",
+      "do_hiem": "lam",
+      "khi_hinh": "ky",
+      "ten_de_xuat": "Kỳ Ngũ Hành",
+      "mo_ta": "Trận kỳ cắm đất bày trận",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-038",
+      "o": "vu_khi",
+      "so": 38,
+      "ten": "Kiếm Kỳ Lân",
+      "do_hiem": "lam",
+      "khi_hinh": "cam",
+      "ten_de_xuat": "Cầm Lưu Thủy",
+      "mo_ta": "Đàn cổ, tiếng đàn dưỡng thương",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-039",
+      "o": "vu_khi",
+      "so": 39,
+      "ten": "Kiếm Huyền Quy",
+      "do_hiem": "lam",
+      "khi_hinh": "tieu",
+      "ten_de_xuat": "Tiêu Bích Ngọc",
+      "mo_ta": "Sáo trúc, tiếng tiêu mê hồn trói chân địch",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-040",
+      "o": "vu_khi",
+      "so": 40,
+      "ten": "Kiếm Thanh Hồng",
+      "do_hiem": "lam",
+      "khi_hinh": "dao",
+      "ten_de_xuat": "Đao Nguyệt Nha",
+      "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-KI-041",
+      "o": "vu_khi",
+      "so": 41,
+      "ten": "Kiếm Bạch Ngọc",
+      "do_hiem": "tim",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-042",
+      "o": "vu_khi",
+      "so": 42,
+      "ten": "Kiếm Tử Vân",
+      "do_hiem": "tim",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-043",
+      "o": "vu_khi",
+      "so": 43,
+      "ten": "Kiếm Phượng Vĩ",
+      "do_hiem": "tim",
+      "khi_hinh": "thuong",
+      "ten_de_xuat": "Thương Lôi Minh",
+      "mo_ta": "Trường thương, lao tới đâm xuyên",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-044",
+      "o": "vu_khi",
+      "so": 44,
+      "ten": "Kiếm Thất Tinh",
+      "do_hiem": "tim",
+      "khi_hinh": "con",
+      "ten_de_xuat": "Côn Kim Cang",
+      "mo_ta": "Côn dài, thủ thế che thân và che bạn",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-045",
+      "o": "vu_khi",
+      "so": 45,
+      "ten": "Kiếm Thiên Hà",
+      "do_hiem": "tim",
+      "khi_hinh": "cung",
+      "ten_de_xuat": "Cung Truy Tinh",
+      "mo_ta": "Cung và tên, bắn từ hàng sau",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-046",
+      "o": "vu_khi",
+      "so": 46,
+      "ten": "Kiếm U Lan",
+      "do_hiem": "tim",
+      "khi_hinh": "phien",
+      "ten_de_xuat": "Phiến Hàn Băng",
+      "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-047",
+      "o": "vu_khi",
+      "so": 47,
+      "ten": "Kiếm Bích Huyết",
+      "do_hiem": "tim",
+      "khi_hinh": "but",
+      "ten_de_xuat": "Bút Xuân Thu",
+      "mo_ta": "Phù bút vẽ bùa, điểm huyệt",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-048",
+      "o": "vu_khi",
+      "so": 48,
+      "ten": "Kiếm Lưu Ly",
+      "do_hiem": "tim",
+      "khi_hinh": "ky",
+      "ten_de_xuat": "Kỳ Thất Tinh",
+      "mo_ta": "Trận kỳ cắm đất bày trận",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-049",
+      "o": "vu_khi",
+      "so": 49,
+      "ten": "Kiếm Vạn Hoa",
+      "do_hiem": "tim",
+      "khi_hinh": "cam",
+      "ten_de_xuat": "Cầm Tiêu Vĩ",
+      "mo_ta": "Đàn cổ, tiếng đàn dưỡng thương",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-050",
+      "o": "vu_khi",
+      "so": 50,
+      "ten": "Kiếm Giao Long",
+      "do_hiem": "tim",
+      "khi_hinh": "tieu",
+      "ten_de_xuat": "Tiêu Phượng Minh",
+      "mo_ta": "Sáo trúc, tiếng tiêu mê hồn trói chân địch",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-051",
+      "o": "vu_khi",
+      "so": 51,
+      "ten": "Kiếm Tử Điện",
+      "do_hiem": "tim",
+      "khi_hinh": "dao",
+      "ten_de_xuat": "Đao Hàn Nguyệt",
+      "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-052",
+      "o": "vu_khi",
+      "so": 52,
+      "ten": "Kiếm Huyễn Ảnh",
+      "do_hiem": "tim",
+      "khi_hinh": "thuong",
+      "ten_de_xuat": "Thương Truy Phong",
+      "mo_ta": "Trường thương, lao tới đâm xuyên",
+      "nguon": ["van_kiem_trung","luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-KI-053",
+      "o": "vu_khi",
+      "so": 53,
+      "ten": "Kiếm Hoàng Long",
+      "do_hiem": "vang",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-KI-054",
+      "o": "vu_khi",
+      "so": 54,
+      "ten": "Kiếm Thái Hư",
+      "do_hiem": "vang",
+      "khi_hinh": "cung",
+      "ten_de_xuat": "Cung Xạ Nhật",
+      "mo_ta": "Cung và tên, bắn từ hàng sau",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-KI-055",
+      "o": "vu_khi",
+      "so": 55,
+      "ten": "Kiếm Xích Tiêu",
+      "do_hiem": "vang",
+      "khi_hinh": "phien",
+      "ten_de_xuat": "Phiến Thái Hư",
+      "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-KI-056",
+      "o": "vu_khi",
+      "so": 56,
+      "ten": "Kiếm Hiên Viên",
+      "do_hiem": "vang",
+      "khi_hinh": "cam",
+      "ten_de_xuat": "Cầm Thiên Lại",
+      "mo_ta": "Đàn cổ, tiếng đàn dưỡng thương",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-KI-057",
+      "o": "vu_khi",
+      "so": 57,
+      "ten": "Kiếm Vạn Tượng",
+      "do_hiem": "vang",
+      "khi_hinh": "ky",
+      "ten_de_xuat": "Kỳ Vạn Tượng",
+      "mo_ta": "Trận kỳ cắm đất bày trận",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-KI-058",
+      "o": "vu_khi",
+      "so": 58,
+      "ten": "Kiếm Huyết Long",
+      "do_hiem": "do",
+      "khi_hinh": "kiem",
+      "mo_ta": "Kiếm thẳng hai lưỡi, binh khí quen tay của tu sĩ",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-KI-059",
+      "o": "vu_khi",
+      "so": 59,
+      "ten": "Kiếm Phần Thiên",
+      "do_hiem": "do",
+      "khi_hinh": "dao",
+      "ten_de_xuat": "Đao Phần Thiên",
+      "mo_ta": "Đao một lưỡi bản rộng, chém quét",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-KI-060",
+      "o": "vu_khi",
+      "so": 60,
+      "ten": "Kiếm Hỗn Độn",
+      "do_hiem": "do",
+      "khi_hinh": "phien",
+      "ten_de_xuat": "Phiến Hỗn Độn",
+      "mo_ta": "Quạt nan sắt hoặc lông vũ, quạt ra gió lửa một vùng",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-KI-061",
+      "o": "vu_khi",
+      "so": 61,
+      "ten": "Thiên Vấn Kiếm",
+      "do_hiem": "do",
+      "khi_hinh": "kiem",
+      "mo_ta": "Danh khí (thần binh có tên): Cận chiến đơn chí mạng thì chiêu đó hồi chiêu nhanh 0,5 s",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-062",
+      "o": "vu_khi",
+      "so": 62,
+      "ten": "Đoạn Nhạc Đao",
+      "do_hiem": "do",
+      "khi_hinh": "dao",
+      "mo_ta": "Danh khí (thần binh có tên): Mỗi mục tiêu trúng quét từ thứ 3 trở đi cho người cầm khiên 1% máu tối đa",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-063",
+      "o": "vu_khi",
+      "so": 63,
+      "ten": "Lạc Tinh Cung",
+      "do_hiem": "do",
+      "khi_hinh": "cung",
+      "mo_ta": "Danh khí (thần binh có tên): Đòn tầm xa vào kẻ đang vận công +20% sát thương",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-064",
+      "o": "vu_khi",
+      "so": 64,
+      "ten": "Phong Lôi Phiến",
+      "do_hiem": "do",
+      "khi_hinh": "phien",
+      "mo_ta": "Danh khí (thần binh có tên): Diện rộng trúng từ 6 mục tiêu thì lần vận công kế tiếp nhanh gấp đôi",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-065",
+      "o": "vu_khi",
+      "so": 65,
+      "ten": "Bất Động Côn",
+      "do_hiem": "do",
+      "khi_hinh": "con",
+      "mo_ta": "Danh khí (thần binh có tên): Khiên hộ thể của người cầm đỡ thêm 1 lần khống chế cho người được che",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-066",
+      "o": "vu_khi",
+      "so": 66,
+      "ten": "Tạo Hóa Bút",
+      "do_hiem": "do",
+      "khi_hinh": "but",
+      "mo_ta": "Danh khí (thần binh có tên): Bùa chú thêm 1 lần mỗi trận, mỗi lần −15% sát thương",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-067",
+      "o": "vu_khi",
+      "so": 67,
+      "ten": "Tinh La Kỳ",
+      "do_hiem": "do",
+      "khi_hinh": "ky",
+      "mo_ta": "Danh khí (thần binh có tên): Trận pháp bày xong thì đồng đội đứng trong trận +5% phòng thủ trong 5 s",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-068",
+      "o": "vu_khi",
+      "so": 68,
+      "ten": "Vọng Nguyệt Cầm",
+      "do_hiem": "do",
+      "khi_hinh": "cam",
+      "mo_ta": "Danh khí (thần binh có tên): Hồi phục giải luôn 1 hiệu ứng thiêu đốt hoặc độc",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-069",
+      "o": "vu_khi",
+      "so": 69,
+      "ten": "Ngọc Lâu Tiêu",
+      "do_hiem": "do",
+      "khi_hinh": "tieu",
+      "mo_ta": "Danh khí (thần binh có tên): Khống chế trúng kẻ đang vận công hoặc đang bày trận thì chiêu đó mất luôn, không hoàn hồi chiêu",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-KI-070",
+      "o": "vu_khi",
+      "so": 70,
+      "ten": "Phá Thiên Thương",
+      "do_hiem": "do",
+      "khi_hinh": "thuong",
+      "mo_ta": "Danh khí (thần binh có tên): Lướt tới xong, đòn kế tiếp xuyên 20% khiên",
+      "nguon": ["luyen_danh_khi"]
+    },
+    {
+      "ma_vp": "TB-MU-001",
+      "o": "mu",
+      "so": 1,
+      "ten": "Ô Sa Mặc Ngọc",
+      "do_hiem": "luc",
+      "dang": "o_sa",
+      "mo_ta": "Ô sa: mũ cánh chuồn của văn sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-002",
+      "o": "mu",
+      "so": 2,
+      "ten": "Nón Lá Trúc Ti",
+      "do_hiem": "luc",
+      "dang": "non",
+      "mo_ta": "Nón: nón lá, nón tre, đấu lạp",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-003",
+      "o": "mu",
+      "so": 3,
+      "ten": "Đấu Lạp Phong Trần",
+      "do_hiem": "luc",
+      "dang": "non",
+      "mo_ta": "Nón: nón lá, nón tre, đấu lạp",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-004",
+      "o": "mu",
+      "so": 4,
+      "ten": "Khăn Vấn Thanh Bố",
+      "do_hiem": "luc",
+      "dang": "khan",
+      "mo_ta": "Khăn: khăn vấn, khăn chít đầu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-005",
+      "o": "mu",
+      "so": 5,
+      "ten": "Đạo Quan Mộc Trâm",
+      "do_hiem": "luc",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-006",
+      "o": "mu",
+      "so": 6,
+      "ten": "Mũ Da Thú",
+      "do_hiem": "luc",
+      "dang": "mu",
+      "mo_ta": "Mũ: mũ da, mũ lông, mũ vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-007",
+      "o": "mu",
+      "so": 7,
+      "ten": "Khôi Thiết Phiến",
+      "do_hiem": "luc",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-008",
+      "o": "mu",
+      "so": 8,
+      "ten": "Khôi Đồng Đầu",
+      "do_hiem": "luc",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-009",
+      "o": "mu",
+      "so": 9,
+      "ten": "Mạo Nho Sinh",
+      "do_hiem": "luc",
+      "dang": "mao",
+      "mo_ta": "Mạo: mũ mềm của nho sinh, đạo sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-010",
+      "o": "mu",
+      "so": 10,
+      "ten": "Nón Lá Tị Thủy",
+      "do_hiem": "luc",
+      "dang": "non",
+      "mo_ta": "Nón: nón lá, nón tre, đấu lạp",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-011",
+      "o": "mu",
+      "so": 11,
+      "ten": "Khăn Đầu Hồng",
+      "do_hiem": "luc",
+      "dang": "khan",
+      "mo_ta": "Khăn: khăn vấn, khăn chít đầu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-012",
+      "o": "mu",
+      "so": 12,
+      "ten": "Mũ Lông Chồn",
+      "do_hiem": "luc",
+      "dang": "mu",
+      "mo_ta": "Mũ: mũ da, mũ lông, mũ vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-013",
+      "o": "mu",
+      "so": 13,
+      "ten": "Đạo Quan Hoàng Bố",
+      "do_hiem": "luc",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-014",
+      "o": "mu",
+      "so": 14,
+      "ten": "Khôi Da Tê",
+      "do_hiem": "luc",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-015",
+      "o": "mu",
+      "so": 15,
+      "ten": "Mạo Lục Hợp",
+      "do_hiem": "luc",
+      "dang": "mao",
+      "mo_ta": "Mạo: mũ mềm của nho sinh, đạo sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-016",
+      "o": "mu",
+      "so": 16,
+      "ten": "Mũ Cỏ Bện",
+      "do_hiem": "luc",
+      "dang": "mu",
+      "mo_ta": "Mũ: mũ da, mũ lông, mũ vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-017",
+      "o": "mu",
+      "so": 17,
+      "ten": "Phát Quan Đồng",
+      "do_hiem": "luc",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-018",
+      "o": "mu",
+      "so": 18,
+      "ten": "Khôi Quân Sĩ",
+      "do_hiem": "luc",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-019",
+      "o": "mu",
+      "so": 19,
+      "ten": "Mũ Khăn Lụa",
+      "do_hiem": "luc",
+      "dang": "mu",
+      "mo_ta": "Mũ: mũ da, mũ lông, mũ vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-020",
+      "o": "mu",
+      "so": 20,
+      "ten": "Nón Tre Sơn Dã",
+      "do_hiem": "luc",
+      "dang": "non",
+      "mo_ta": "Nón: nón lá, nón tre, đấu lạp",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-021",
+      "o": "mu",
+      "so": 21,
+      "ten": "Đạo Mạo Bát Quái",
+      "do_hiem": "luc",
+      "dang": "mao",
+      "mo_ta": "Mạo: mũ mềm của nho sinh, đạo sĩ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-022",
+      "o": "mu",
+      "so": 22,
+      "ten": "Mũ Lính Tuần",
+      "do_hiem": "luc",
+      "dang": "mu",
+      "mo_ta": "Mũ: mũ da, mũ lông, mũ vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-023",
+      "o": "mu",
+      "so": 23,
+      "ten": "Khăn Chít Mặc Sắc",
+      "do_hiem": "luc",
+      "dang": "khan",
+      "mo_ta": "Khăn: khăn vấn, khăn chít đầu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-024",
+      "o": "mu",
+      "so": 24,
+      "ten": "Mũ Mềm Bố Y",
+      "do_hiem": "luc",
+      "dang": "mu",
+      "mo_ta": "Mũ: mũ da, mũ lông, mũ vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-MU-025",
+      "o": "mu",
+      "so": 25,
+      "ten": "Ngọc Quan Tử Vân",
+      "do_hiem": "lam",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-026",
+      "o": "mu",
+      "so": 26,
+      "ten": "Khôi Ưng Dực",
+      "do_hiem": "lam",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-027",
+      "o": "mu",
+      "so": 27,
+      "ten": "Ô Sa Lôi Văn",
+      "do_hiem": "lam",
+      "dang": "o_sa",
+      "mo_ta": "Ô sa: mũ cánh chuồn của văn sĩ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-028",
+      "o": "mu",
+      "so": 28,
+      "ten": "Đạo Quan Liên Hoa",
+      "do_hiem": "lam",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-029",
+      "o": "mu",
+      "so": 29,
+      "ten": "Khôi Hổ Đầu",
+      "do_hiem": "lam",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-030",
+      "o": "mu",
+      "so": 30,
+      "ten": "Mạo Hạc Vũ",
+      "do_hiem": "lam",
+      "dang": "mao",
+      "mo_ta": "Mạo: mũ mềm của nho sinh, đạo sĩ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-031",
+      "o": "mu",
+      "so": 31,
+      "ten": "Quan Ngân Ti",
+      "do_hiem": "lam",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-032",
+      "o": "mu",
+      "so": 32,
+      "ten": "Khăn Lưu Vân",
+      "do_hiem": "lam",
+      "dang": "khan",
+      "mo_ta": "Khăn: khăn vấn, khăn chít đầu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-033",
+      "o": "mu",
+      "so": 33,
+      "ten": "Khôi Long Lân",
+      "do_hiem": "lam",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-034",
+      "o": "mu",
+      "so": 34,
+      "ten": "Mũ Phượng Linh",
+      "do_hiem": "lam",
+      "dang": "mu",
+      "mo_ta": "Mũ: mũ da, mũ lông, mũ vải",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-035",
+      "o": "mu",
+      "so": 35,
+      "ten": "Đấu Lạp Ẩn Giả",
+      "do_hiem": "lam",
+      "dang": "non",
+      "mo_ta": "Nón: nón lá, nón tre, đấu lạp",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-036",
+      "o": "mu",
+      "so": 36,
+      "ten": "Quan Thanh Ngọc",
+      "do_hiem": "lam",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-037",
+      "o": "mu",
+      "so": 37,
+      "ten": "Khôi Huyền Thiết",
+      "do_hiem": "lam",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-038",
+      "o": "mu",
+      "so": 38,
+      "ten": "Mạo Tùng Hạc",
+      "do_hiem": "lam",
+      "dang": "mao",
+      "mo_ta": "Mạo: mũ mềm của nho sinh, đạo sĩ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-039",
+      "o": "mu",
+      "so": 39,
+      "ten": "Phát Quan Song Long",
+      "do_hiem": "lam",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-040",
+      "o": "mu",
+      "so": 40,
+      "ten": "Khăn Tử La",
+      "do_hiem": "lam",
+      "dang": "khan",
+      "mo_ta": "Khăn: khăn vấn, khăn chít đầu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-MU-041",
+      "o": "mu",
+      "so": 41,
+      "ten": "Bạch Ngọc Quan",
+      "do_hiem": "tim",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-042",
+      "o": "mu",
+      "so": 42,
+      "ten": "Khôi Kỳ Lân",
+      "do_hiem": "tim",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-043",
+      "o": "mu",
+      "so": 43,
+      "ten": "Quan Tinh Tú",
+      "do_hiem": "tim",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-044",
+      "o": "mu",
+      "so": 44,
+      "ten": "Mạo Lưu Ly",
+      "do_hiem": "tim",
+      "dang": "mao",
+      "mo_ta": "Mạo: mũ mềm của nho sinh, đạo sĩ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-045",
+      "o": "mu",
+      "so": 45,
+      "ten": "Phượng Quan Tử Tinh",
+      "do_hiem": "tim",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-046",
+      "o": "mu",
+      "so": 46,
+      "ten": "Khôi Thiên Lang",
+      "do_hiem": "tim",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-047",
+      "o": "mu",
+      "so": 47,
+      "ten": "Quan Nguyệt Hoa",
+      "do_hiem": "tim",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-048",
+      "o": "mu",
+      "so": 48,
+      "ten": "Đạo Quan Thất Bảo",
+      "do_hiem": "tim",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-049",
+      "o": "mu",
+      "so": 49,
+      "ten": "Mạo Huyễn Vũ",
+      "do_hiem": "tim",
+      "dang": "mao",
+      "mo_ta": "Mạo: mũ mềm của nho sinh, đạo sĩ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-050",
+      "o": "mu",
+      "so": 50,
+      "ten": "Khôi Giao Long",
+      "do_hiem": "tim",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-051",
+      "o": "mu",
+      "so": 51,
+      "ten": "Quan Bích Hải",
+      "do_hiem": "tim",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-052",
+      "o": "mu",
+      "so": 52,
+      "ten": "Khăn Vân Hà",
+      "do_hiem": "tim",
+      "dang": "khan",
+      "mo_ta": "Khăn: khăn vấn, khăn chít đầu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-MU-053",
+      "o": "mu",
+      "so": 53,
+      "ten": "Quan Phượng Hoàng",
+      "do_hiem": "vang",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-MU-054",
+      "o": "mu",
+      "so": 54,
+      "ten": "Khôi Hoàng Long",
+      "do_hiem": "vang",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-MU-055",
+      "o": "mu",
+      "so": 55,
+      "ten": "Quan Diệu Nhật",
+      "do_hiem": "vang",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-MU-056",
+      "o": "mu",
+      "so": 56,
+      "ten": "Quan Cửu Châu",
+      "do_hiem": "vang",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-MU-057",
+      "o": "mu",
+      "so": 57,
+      "ten": "Khôi Thiên Tướng",
+      "do_hiem": "vang",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-MU-058",
+      "o": "mu",
+      "so": 58,
+      "ten": "Quan Xích Phượng",
+      "do_hiem": "do",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-MU-059",
+      "o": "mu",
+      "so": 59,
+      "ten": "Khôi Ma Thần",
+      "do_hiem": "do",
+      "dang": "khoi",
+      "mo_ta": "Khôi: mũ giáp kim loại của võ tướng",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-MU-060",
+      "o": "mu",
+      "so": 60,
+      "ten": "Quan Đế Vương",
+      "do_hiem": "do",
+      "dang": "quan",
+      "mo_ta": "Quan: mũ quan, phát quan, trâm cài của đạo sĩ và tiên nhân",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-AO-001",
+      "o": "ao",
+      "so": 1,
+      "ten": "Bố Y Thô",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-002",
+      "o": "ao",
+      "so": 2,
+      "ten": "Sam Thanh Bố",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-003",
+      "o": "ao",
+      "so": 3,
+      "ten": "Đạo Bào Tro",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-004",
+      "o": "ao",
+      "so": 4,
+      "ten": "Giáp Da Thú",
+      "do_hiem": "luc",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-005",
+      "o": "ao",
+      "so": 5,
+      "ten": "Giáp Đồng Phiến",
+      "do_hiem": "luc",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-006",
+      "o": "ao",
+      "so": 6,
+      "ten": "Áo Bông Kép",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-007",
+      "o": "ao",
+      "so": 7,
+      "ten": "Sam Trắng Thư Sinh",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-008",
+      "o": "ao",
+      "so": 8,
+      "ten": "Áo Vải Sơn Dã",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-009",
+      "o": "ao",
+      "so": 9,
+      "ten": "Giáp Liên Hoàn",
+      "do_hiem": "luc",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-010",
+      "o": "ao",
+      "so": 10,
+      "ten": "Đạo Bào Hoàng",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-011",
+      "o": "ao",
+      "so": 11,
+      "ten": "Áo Choàng Lông",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-012",
+      "o": "ao",
+      "so": 12,
+      "ten": "Giáp Trúc Phiến",
+      "do_hiem": "luc",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-013",
+      "o": "ao",
+      "so": 13,
+      "ten": "Bào Lam Đơn",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-014",
+      "o": "ao",
+      "so": 14,
+      "ten": "Y Phục Dạ Hành",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-015",
+      "o": "ao",
+      "so": 15,
+      "ten": "Giáp Da Tê",
+      "do_hiem": "luc",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-016",
+      "o": "ao",
+      "so": 16,
+      "ten": "Áo Nâu Tăng Nhân",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-017",
+      "o": "ao",
+      "so": 17,
+      "ten": "Bào Lá Trúc",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-018",
+      "o": "ao",
+      "so": 18,
+      "ten": "Giáp Vải Bông",
+      "do_hiem": "luc",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-019",
+      "o": "ao",
+      "so": 19,
+      "ten": "Áo Gấm Thô",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-020",
+      "o": "ao",
+      "so": 20,
+      "ten": "Bào Thanh Sam",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-021",
+      "o": "ao",
+      "so": 21,
+      "ten": "Áo Ngắn Võ Sinh",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-022",
+      "o": "ao",
+      "so": 22,
+      "ten": "Giáp Ngực Đồng",
+      "do_hiem": "luc",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-023",
+      "o": "ao",
+      "so": 23,
+      "ten": "Áo Tơi Rơm",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-024",
+      "o": "ao",
+      "so": 24,
+      "ten": "Bào Mực Nhạt",
+      "do_hiem": "luc",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-AO-025",
+      "o": "ao",
+      "so": 25,
+      "ten": "Đạo Bào Lưu Vân",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-026",
+      "o": "ao",
+      "so": 26,
+      "ten": "Giáp Huyền Thiết",
+      "do_hiem": "lam",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-027",
+      "o": "ao",
+      "so": 27,
+      "ten": "Bào Hạc Văn",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-028",
+      "o": "ao",
+      "so": 28,
+      "ten": "Giáp Thiết Lân",
+      "do_hiem": "lam",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-029",
+      "o": "ao",
+      "so": 29,
+      "ten": "Sam Bích Hà",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-030",
+      "o": "ao",
+      "so": 30,
+      "ten": "Bào Tùng Hạc",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-031",
+      "o": "ao",
+      "so": 31,
+      "ten": "Giáp Hổ Văn",
+      "do_hiem": "lam",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-032",
+      "o": "ao",
+      "so": 32,
+      "ten": "Y Phi Yến",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-033",
+      "o": "ao",
+      "so": 33,
+      "ten": "Bào Mai Hoa",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-034",
+      "o": "ao",
+      "so": 34,
+      "ten": "Giáp Ngân Lân",
+      "do_hiem": "lam",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-035",
+      "o": "ao",
+      "so": 35,
+      "ten": "Bào Thanh Liên",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-036",
+      "o": "ao",
+      "so": 36,
+      "ten": "Áo Choàng Hắc Ưng",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-037",
+      "o": "ao",
+      "so": 37,
+      "ten": "Giáp Quy Bối",
+      "do_hiem": "lam",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-038",
+      "o": "ao",
+      "so": 38,
+      "ten": "Bào Trúc Lâm",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-039",
+      "o": "ao",
+      "so": 39,
+      "ten": "Sam Tử La",
+      "do_hiem": "lam",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-040",
+      "o": "ao",
+      "so": 40,
+      "ten": "Giáp Long Lân",
+      "do_hiem": "lam",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-AO-041",
+      "o": "ao",
+      "so": 41,
+      "ten": "Pháp Y Tinh Hà",
+      "do_hiem": "tim",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-042",
+      "o": "ao",
+      "so": 42,
+      "ten": "Giáp Kỳ Lân",
+      "do_hiem": "tim",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-043",
+      "o": "ao",
+      "so": 43,
+      "ten": "Bào Phượng Vũ",
+      "do_hiem": "tim",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-044",
+      "o": "ao",
+      "so": 44,
+      "ten": "Y Lưu Ly",
+      "do_hiem": "tim",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-045",
+      "o": "ao",
+      "so": 45,
+      "ten": "Giáp Huyễn Ảnh",
+      "do_hiem": "tim",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-046",
+      "o": "ao",
+      "so": 46,
+      "ten": "Bào Tử Vân",
+      "do_hiem": "tim",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-047",
+      "o": "ao",
+      "so": 47,
+      "ten": "Pháp Y Bát Quái",
+      "do_hiem": "tim",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-048",
+      "o": "ao",
+      "so": 48,
+      "ten": "Giáp Thiên Lang",
+      "do_hiem": "tim",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-049",
+      "o": "ao",
+      "so": 49,
+      "ten": "Bào Nguyệt Hoa",
+      "do_hiem": "tim",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-050",
+      "o": "ao",
+      "so": 50,
+      "ten": "Y Thiên Tằm",
+      "do_hiem": "tim",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-051",
+      "o": "ao",
+      "so": 51,
+      "ten": "Giáp Bích Lân",
+      "do_hiem": "tim",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-052",
+      "o": "ao",
+      "so": 52,
+      "ten": "Bào Vạn Hoa",
+      "do_hiem": "tim",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-AO-053",
+      "o": "ao",
+      "so": 53,
+      "ten": "Tiên Y Vũ Linh",
+      "do_hiem": "vang",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-AO-054",
+      "o": "ao",
+      "so": 54,
+      "ten": "Giáp Hoàng Long",
+      "do_hiem": "vang",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-AO-055",
+      "o": "ao",
+      "so": 55,
+      "ten": "Bào Cửu Long",
+      "do_hiem": "vang",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-AO-056",
+      "o": "ao",
+      "so": 56,
+      "ten": "Giáp Thiên Tướng",
+      "do_hiem": "vang",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-AO-057",
+      "o": "ao",
+      "so": 57,
+      "ten": "Pháp Y Thái Hư",
+      "do_hiem": "vang",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-AO-058",
+      "o": "ao",
+      "so": 58,
+      "ten": "Bào Xích Hoàng",
+      "do_hiem": "do",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-AO-059",
+      "o": "ao",
+      "so": 59,
+      "ten": "Giáp Huyết Long",
+      "do_hiem": "do",
+      "dang": "giap",
+      "mo_ta": "Giáp: giáp da, giáp vảy, giáp phiến cho người đứng trước",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-AO-060",
+      "o": "ao",
+      "so": 60,
+      "ten": "Y Phần Thiên",
+      "do_hiem": "do",
+      "dang": "bao",
+      "mo_ta": "Bào: đạo bào, pháp y, sam vải lụa cho người đứng sau",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-DA-001",
+      "o": "dai",
+      "so": 1,
+      "ten": "Đai Da Ngọc Khấu",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-002",
+      "o": "dai",
+      "so": 2,
+      "ten": "Đai Vải Bố",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-003",
+      "o": "dai",
+      "so": 3,
+      "ten": "Đai Dây Thừng",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-004",
+      "o": "dai",
+      "so": 4,
+      "ten": "Đai Da Trâu",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-005",
+      "o": "dai",
+      "so": 5,
+      "ten": "Đai Đồng Khấu",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-006",
+      "o": "dai",
+      "so": 6,
+      "ten": "Đai Lụa Lam",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-007",
+      "o": "dai",
+      "so": 7,
+      "ten": "Đai Trúc Phiến",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-008",
+      "o": "dai",
+      "so": 8,
+      "ten": "Đai Hồ Lô",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-009",
+      "o": "dai",
+      "so": 9,
+      "ten": "Đai Túi Dược",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-010",
+      "o": "dai",
+      "so": 10,
+      "ten": "Đai Xích Sắt",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-011",
+      "o": "dai",
+      "so": 11,
+      "ten": "Đai Gấm Thô",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-012",
+      "o": "dai",
+      "so": 12,
+      "ten": "Đai Da Rắn",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-013",
+      "o": "dai",
+      "so": 13,
+      "ten": "Đai Mây Bện",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-014",
+      "o": "dai",
+      "so": 14,
+      "ten": "Đai Quân Sĩ",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-015",
+      "o": "dai",
+      "so": 15,
+      "ten": "Đai Đạo Sĩ",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-016",
+      "o": "dai",
+      "so": 16,
+      "ten": "Đai Ngọc Thô",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-017",
+      "o": "dai",
+      "so": 17,
+      "ten": "Đai Da Hươu",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-018",
+      "o": "dai",
+      "so": 18,
+      "ten": "Đai Lụa Hồng",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-019",
+      "o": "dai",
+      "so": 19,
+      "ten": "Đai Kiếm Khách",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-020",
+      "o": "dai",
+      "so": 20,
+      "ten": "Đai Vảy Cá",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-021",
+      "o": "dai",
+      "so": 21,
+      "ten": "Đai Đá Cuội",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-022",
+      "o": "dai",
+      "so": 22,
+      "ten": "Đai Thắt Nút",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-023",
+      "o": "dai",
+      "so": 23,
+      "ten": "Đai Mây Trắng",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-024",
+      "o": "dai",
+      "so": 24,
+      "ten": "Đai Sừng Thú",
+      "do_hiem": "luc",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-DA-025",
+      "o": "dai",
+      "so": 25,
+      "ten": "Đai Lôi Văn",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-026",
+      "o": "dai",
+      "so": 26,
+      "ten": "Đai Ngân Hạc",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-027",
+      "o": "dai",
+      "so": 27,
+      "ten": "Đai Thanh Ngọc",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-028",
+      "o": "dai",
+      "so": 28,
+      "ten": "Đai Hổ Đầu",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-029",
+      "o": "dai",
+      "so": 29,
+      "ten": "Đai Lưu Vân",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-030",
+      "o": "dai",
+      "so": 30,
+      "ten": "Đai Long Khấu",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-031",
+      "o": "dai",
+      "so": 31,
+      "ten": "Đai Mai Hoa",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-032",
+      "o": "dai",
+      "so": 32,
+      "ten": "Đai Bích Lạc",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-033",
+      "o": "dai",
+      "so": 33,
+      "ten": "Đai Huyền Quy",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-034",
+      "o": "dai",
+      "so": 34,
+      "ten": "Đai Tùng Văn",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-035",
+      "o": "dai",
+      "so": 35,
+      "ten": "Đai Song Ngư",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-036",
+      "o": "dai",
+      "so": 36,
+      "ten": "Đai Ngọc Bích",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-037",
+      "o": "dai",
+      "so": 37,
+      "ten": "Đai Phi Yến",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-038",
+      "o": "dai",
+      "so": 38,
+      "ten": "Đai Thất Hoàn",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-039",
+      "o": "dai",
+      "so": 39,
+      "ten": "Đai Tử Trúc",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-040",
+      "o": "dai",
+      "so": 40,
+      "ten": "Đai Bạch Lân",
+      "do_hiem": "lam",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-DA-041",
+      "o": "dai",
+      "so": 41,
+      "ten": "Đai Tinh Tú",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-042",
+      "o": "dai",
+      "so": 42,
+      "ten": "Đai Kỳ Lân",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-043",
+      "o": "dai",
+      "so": 43,
+      "ten": "Đai Phượng Vĩ",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-044",
+      "o": "dai",
+      "so": 44,
+      "ten": "Đai Lưu Ly",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-045",
+      "o": "dai",
+      "so": 45,
+      "ten": "Đai Tử Vân",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-046",
+      "o": "dai",
+      "so": 46,
+      "ten": "Đai Thất Bảo",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-047",
+      "o": "dai",
+      "so": 47,
+      "ten": "Đai Bát Quái",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-048",
+      "o": "dai",
+      "so": 48,
+      "ten": "Đai Nguyệt Hoa",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-049",
+      "o": "dai",
+      "so": 49,
+      "ten": "Đai Huyễn Lân",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-050",
+      "o": "dai",
+      "so": 50,
+      "ten": "Đai Giao Long",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-051",
+      "o": "dai",
+      "so": 51,
+      "ten": "Đai Bích Hải",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-052",
+      "o": "dai",
+      "so": 52,
+      "ten": "Đai Ngọc Tủy",
+      "do_hiem": "tim",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-DA-053",
+      "o": "dai",
+      "so": 53,
+      "ten": "Đai Hoàng Long",
+      "do_hiem": "vang",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-DA-054",
+      "o": "dai",
+      "so": 54,
+      "ten": "Đai Cửu Châu",
+      "do_hiem": "vang",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-DA-055",
+      "o": "dai",
+      "so": 55,
+      "ten": "Đai Diệu Nhật",
+      "do_hiem": "vang",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-DA-056",
+      "o": "dai",
+      "so": 56,
+      "ten": "Đai Thiên Tướng",
+      "do_hiem": "vang",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-DA-057",
+      "o": "dai",
+      "so": 57,
+      "ten": "Đai Vạn Tượng",
+      "do_hiem": "vang",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-DA-058",
+      "o": "dai",
+      "so": 58,
+      "ten": "Đai Xích Long",
+      "do_hiem": "do",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-DA-059",
+      "o": "dai",
+      "so": 59,
+      "ten": "Đai Huyết Phượng",
+      "do_hiem": "do",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-DA-060",
+      "o": "dai",
+      "so": 60,
+      "ten": "Đai Hỗn Nguyên",
+      "do_hiem": "do",
+      "dang": "dai",
+      "mo_ta": "Đai lưng: da, vải, ngọc khấu",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-BT-001",
+      "o": "bao_tay",
+      "so": 1,
+      "ten": "Găng Da Thô",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-002",
+      "o": "bao_tay",
+      "so": 2,
+      "ten": "Hộ Uyển Vải",
+      "do_hiem": "luc",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-003",
+      "o": "bao_tay",
+      "so": 3,
+      "ten": "Thủ Sáo Bố",
+      "do_hiem": "luc",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-004",
+      "o": "bao_tay",
+      "so": 4,
+      "ten": "Hộ Thủ Đồng",
+      "do_hiem": "luc",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-005",
+      "o": "bao_tay",
+      "so": 5,
+      "ten": "Găng Da Trâu",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-006",
+      "o": "bao_tay",
+      "so": 6,
+      "ten": "Hộ Uyển Da",
+      "do_hiem": "luc",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-007",
+      "o": "bao_tay",
+      "so": 7,
+      "ten": "Găng Thợ Rèn",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-008",
+      "o": "bao_tay",
+      "so": 8,
+      "ten": "Hộ Thủ Sắt",
+      "do_hiem": "luc",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-009",
+      "o": "bao_tay",
+      "so": 9,
+      "ten": "Thủ Sáo Lụa",
+      "do_hiem": "luc",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-010",
+      "o": "bao_tay",
+      "so": 10,
+      "ten": "Băng Tay Võ Sinh",
+      "do_hiem": "luc",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-011",
+      "o": "bao_tay",
+      "so": 11,
+      "ten": "Găng Hái Thuốc",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-012",
+      "o": "bao_tay",
+      "so": 12,
+      "ten": "Hộ Uyển Trúc",
+      "do_hiem": "luc",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-013",
+      "o": "bao_tay",
+      "so": 13,
+      "ten": "Găng Lông Thú",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-014",
+      "o": "bao_tay",
+      "so": 14,
+      "ten": "Hộ Thủ Xích",
+      "do_hiem": "luc",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-015",
+      "o": "bao_tay",
+      "so": 15,
+      "ten": "Găng Da Rắn",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-016",
+      "o": "bao_tay",
+      "so": 16,
+      "ten": "Hộ Uyển Quân Sĩ",
+      "do_hiem": "luc",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-017",
+      "o": "bao_tay",
+      "so": 17,
+      "ten": "Găng Hở Ngón",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-018",
+      "o": "bao_tay",
+      "so": 18,
+      "ten": "Thủ Sáo Đen",
+      "do_hiem": "luc",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-019",
+      "o": "bao_tay",
+      "so": 19,
+      "ten": "Hộ Uyển Đinh Đồng",
+      "do_hiem": "luc",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-020",
+      "o": "bao_tay",
+      "so": 20,
+      "ten": "Găng Da Hươu",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-021",
+      "o": "bao_tay",
+      "so": 21,
+      "ten": "Hộ Thủ Sừng",
+      "do_hiem": "luc",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-022",
+      "o": "bao_tay",
+      "so": 22,
+      "ten": "Găng Thợ Săn",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-023",
+      "o": "bao_tay",
+      "so": 23,
+      "ten": "Hộ Uyển Gấm",
+      "do_hiem": "luc",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-024",
+      "o": "bao_tay",
+      "so": 24,
+      "ten": "Găng Vải Bông",
+      "do_hiem": "luc",
+      "dang": "gang",
+      "mo_ta": "Găng: găng da, găng vải",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-BT-025",
+      "o": "bao_tay",
+      "so": 25,
+      "ten": "Hộ Thủ Thiết Lân",
+      "do_hiem": "lam",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-026",
+      "o": "bao_tay",
+      "so": 26,
+      "ten": "Hộ Uyển Lưu Vân",
+      "do_hiem": "lam",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-027",
+      "o": "bao_tay",
+      "so": 27,
+      "ten": "Hộ Thủ Hổ Trảo",
+      "do_hiem": "lam",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-028",
+      "o": "bao_tay",
+      "so": 28,
+      "ten": "Thủ Sáo Hạc Văn",
+      "do_hiem": "lam",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-029",
+      "o": "bao_tay",
+      "so": 29,
+      "ten": "Hộ Uyển Long Văn",
+      "do_hiem": "lam",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-030",
+      "o": "bao_tay",
+      "so": 30,
+      "ten": "Hộ Thủ Ưng Trảo",
+      "do_hiem": "lam",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-031",
+      "o": "bao_tay",
+      "so": 31,
+      "ten": "Thủ Sáo Thanh Ti",
+      "do_hiem": "lam",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-032",
+      "o": "bao_tay",
+      "so": 32,
+      "ten": "Hộ Uyển Ngân Hoàn",
+      "do_hiem": "lam",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-033",
+      "o": "bao_tay",
+      "so": 33,
+      "ten": "Hộ Thủ Huyền Thiết",
+      "do_hiem": "lam",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-034",
+      "o": "bao_tay",
+      "so": 34,
+      "ten": "Thủ Sáo Mai Hoa",
+      "do_hiem": "lam",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-035",
+      "o": "bao_tay",
+      "so": 35,
+      "ten": "Hộ Uyển Ngọc Bích",
+      "do_hiem": "lam",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-036",
+      "o": "bao_tay",
+      "so": 36,
+      "ten": "Hộ Thủ Quy Giáp",
+      "do_hiem": "lam",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-037",
+      "o": "bao_tay",
+      "so": 37,
+      "ten": "Thủ Sáo Phi Yến",
+      "do_hiem": "lam",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-038",
+      "o": "bao_tay",
+      "so": 38,
+      "ten": "Hộ Uyển Tùng Hạc",
+      "do_hiem": "lam",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-039",
+      "o": "bao_tay",
+      "so": 39,
+      "ten": "Hộ Thủ Ngân Lân",
+      "do_hiem": "lam",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-040",
+      "o": "bao_tay",
+      "so": 40,
+      "ten": "Thủ Sáo Tử La",
+      "do_hiem": "lam",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-BT-041",
+      "o": "bao_tay",
+      "so": 41,
+      "ten": "Hộ Thủ Kỳ Lân",
+      "do_hiem": "tim",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-042",
+      "o": "bao_tay",
+      "so": 42,
+      "ten": "Hộ Uyển Tinh Tú",
+      "do_hiem": "tim",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-043",
+      "o": "bao_tay",
+      "so": 43,
+      "ten": "Thủ Sáo Lưu Ly",
+      "do_hiem": "tim",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-044",
+      "o": "bao_tay",
+      "so": 44,
+      "ten": "Hộ Thủ Giao Long",
+      "do_hiem": "tim",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-045",
+      "o": "bao_tay",
+      "so": 45,
+      "ten": "Hộ Uyển Phượng Vũ",
+      "do_hiem": "tim",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-046",
+      "o": "bao_tay",
+      "so": 46,
+      "ten": "Thủ Sáo Huyễn Ảnh",
+      "do_hiem": "tim",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-047",
+      "o": "bao_tay",
+      "so": 47,
+      "ten": "Hộ Thủ Thiên Lang",
+      "do_hiem": "tim",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-048",
+      "o": "bao_tay",
+      "so": 48,
+      "ten": "Hộ Uyển Bát Quái",
+      "do_hiem": "tim",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-049",
+      "o": "bao_tay",
+      "so": 49,
+      "ten": "Thủ Sáo Thiên Tằm",
+      "do_hiem": "tim",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-050",
+      "o": "bao_tay",
+      "so": 50,
+      "ten": "Hộ Thủ Bích Lân",
+      "do_hiem": "tim",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-051",
+      "o": "bao_tay",
+      "so": 51,
+      "ten": "Hộ Uyển Tử Vân",
+      "do_hiem": "tim",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-052",
+      "o": "bao_tay",
+      "so": 52,
+      "ten": "Thủ Sáo Nguyệt Hoa",
+      "do_hiem": "tim",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-BT-053",
+      "o": "bao_tay",
+      "so": 53,
+      "ten": "Hộ Thủ Hoàng Long",
+      "do_hiem": "vang",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-BT-054",
+      "o": "bao_tay",
+      "so": 54,
+      "ten": "Hộ Uyển Diệu Nhật",
+      "do_hiem": "vang",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-BT-055",
+      "o": "bao_tay",
+      "so": 55,
+      "ten": "Hộ Thủ Thiên Tướng",
+      "do_hiem": "vang",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-BT-056",
+      "o": "bao_tay",
+      "so": 56,
+      "ten": "Hộ Uyển Cửu Châu",
+      "do_hiem": "vang",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-BT-057",
+      "o": "bao_tay",
+      "so": 57,
+      "ten": "Thủ Sáo Vạn Tượng",
+      "do_hiem": "vang",
+      "dang": "thu_sao",
+      "mo_ta": "Thủ sáo: bao tay lụa, bao tay vải mỏng",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-BT-058",
+      "o": "bao_tay",
+      "so": 58,
+      "ten": "Hộ Thủ Xích Long",
+      "do_hiem": "do",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-BT-059",
+      "o": "bao_tay",
+      "so": 59,
+      "ten": "Hộ Thủ Ma Thần",
+      "do_hiem": "do",
+      "dang": "ho_thu",
+      "mo_ta": "Hộ thủ: bao tay giáp kim loại",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-BT-060",
+      "o": "bao_tay",
+      "so": 60,
+      "ten": "Hộ Uyển Phần Thiên",
+      "do_hiem": "do",
+      "dang": "ho_uyen",
+      "mo_ta": "Hộ uyển: bao cổ tay",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-GI-001",
+      "o": "giay",
+      "so": 1,
+      "ten": "Ngoa Vải Đen",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-002",
+      "o": "giay",
+      "so": 2,
+      "ten": "Hài Cỏ",
+      "do_hiem": "luc",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-003",
+      "o": "giay",
+      "so": 3,
+      "ten": "Giày Vải Bố",
+      "do_hiem": "luc",
+      "dang": "giay",
+      "mo_ta": "Giày: giày vải, guốc, dép",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-004",
+      "o": "giay",
+      "so": 4,
+      "ten": "Ngoa Da Thú",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-005",
+      "o": "giay",
+      "so": 5,
+      "ten": "Guốc Gỗ",
+      "do_hiem": "luc",
+      "dang": "giay",
+      "mo_ta": "Giày: giày vải, guốc, dép",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-006",
+      "o": "giay",
+      "so": 6,
+      "ten": "Ngoa Quân Sĩ",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-007",
+      "o": "giay",
+      "so": 7,
+      "ten": "Hài Thư Sinh",
+      "do_hiem": "luc",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-008",
+      "o": "giay",
+      "so": 8,
+      "ten": "Ngoa Da Trâu",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-009",
+      "o": "giay",
+      "so": 9,
+      "ten": "Giày Tăng Nhân",
+      "do_hiem": "luc",
+      "dang": "giay",
+      "mo_ta": "Giày: giày vải, guốc, dép",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-010",
+      "o": "giay",
+      "so": 10,
+      "ten": "Ngoa Lông Thú",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-011",
+      "o": "giay",
+      "so": 11,
+      "ten": "Hài Trúc Bện",
+      "do_hiem": "luc",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-012",
+      "o": "giay",
+      "so": 12,
+      "ten": "Ngoa Đinh Đồng",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-013",
+      "o": "giay",
+      "so": 13,
+      "ten": "Giày Leo Núi",
+      "do_hiem": "luc",
+      "dang": "giay",
+      "mo_ta": "Giày: giày vải, guốc, dép",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-014",
+      "o": "giay",
+      "so": 14,
+      "ten": "Ngoa Da Rắn",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-015",
+      "o": "giay",
+      "so": 15,
+      "ten": "Hài Gấm Thô",
+      "do_hiem": "luc",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-016",
+      "o": "giay",
+      "so": 16,
+      "ten": "Ngoa Mũi Sắt",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-017",
+      "o": "giay",
+      "so": 17,
+      "ten": "Giày Dạ Hành",
+      "do_hiem": "luc",
+      "dang": "giay",
+      "mo_ta": "Giày: giày vải, guốc, dép",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-018",
+      "o": "giay",
+      "so": 18,
+      "ten": "Hài Đạo Sĩ",
+      "do_hiem": "luc",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-019",
+      "o": "giay",
+      "so": 19,
+      "ten": "Ngoa Da Hươu",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-020",
+      "o": "giay",
+      "so": 20,
+      "ten": "Giày Vải Xanh",
+      "do_hiem": "luc",
+      "dang": "giay",
+      "mo_ta": "Giày: giày vải, guốc, dép",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-021",
+      "o": "giay",
+      "so": 21,
+      "ten": "Ngoa Cao Cổ",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-022",
+      "o": "giay",
+      "so": 22,
+      "ten": "Hài Lụa Hồng",
+      "do_hiem": "luc",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-023",
+      "o": "giay",
+      "so": 23,
+      "ten": "Ngoa Thợ Săn",
+      "do_hiem": "luc",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-024",
+      "o": "giay",
+      "so": 24,
+      "ten": "Dép Tre Sơn Dã",
+      "do_hiem": "luc",
+      "dang": "giay",
+      "mo_ta": "Giày: giày vải, guốc, dép",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-GI-025",
+      "o": "giay",
+      "so": 25,
+      "ten": "Giày Đạp Vân",
+      "do_hiem": "lam",
+      "dang": "giay",
+      "mo_ta": "Giày: giày vải, guốc, dép",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-026",
+      "o": "giay",
+      "so": 26,
+      "ten": "Ngoa Hạc Vũ",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-027",
+      "o": "giay",
+      "so": 27,
+      "ten": "Ngoa Thiết Lân",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-028",
+      "o": "giay",
+      "so": 28,
+      "ten": "Hài Lưu Vân",
+      "do_hiem": "lam",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-029",
+      "o": "giay",
+      "so": 29,
+      "ten": "Ngoa Hổ Văn",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-030",
+      "o": "giay",
+      "so": 30,
+      "ten": "Ngoa Long Lân",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-031",
+      "o": "giay",
+      "so": 31,
+      "ten": "Hài Thanh Liên",
+      "do_hiem": "lam",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-032",
+      "o": "giay",
+      "so": 32,
+      "ten": "Ngoa Phi Yến",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-033",
+      "o": "giay",
+      "so": 33,
+      "ten": "Ngoa Ngân Lân",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-034",
+      "o": "giay",
+      "so": 34,
+      "ten": "Hài Mai Hoa",
+      "do_hiem": "lam",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-035",
+      "o": "giay",
+      "so": 35,
+      "ten": "Ngoa Huyền Thiết",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-036",
+      "o": "giay",
+      "so": 36,
+      "ten": "Ngoa Truy Ảnh",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-037",
+      "o": "giay",
+      "so": 37,
+      "ten": "Hài Tử La",
+      "do_hiem": "lam",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-038",
+      "o": "giay",
+      "so": 38,
+      "ten": "Ngoa Quy Giáp",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-039",
+      "o": "giay",
+      "so": 39,
+      "ten": "Ngoa Tùng Hạc",
+      "do_hiem": "lam",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-040",
+      "o": "giay",
+      "so": 40,
+      "ten": "Hài Bích Hải",
+      "do_hiem": "lam",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-GI-041",
+      "o": "giay",
+      "so": 41,
+      "ten": "Ngoa Kỳ Lân",
+      "do_hiem": "tim",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-042",
+      "o": "giay",
+      "so": 42,
+      "ten": "Ngoa Tinh Tú",
+      "do_hiem": "tim",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-043",
+      "o": "giay",
+      "so": 43,
+      "ten": "Hài Lưu Ly",
+      "do_hiem": "tim",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-044",
+      "o": "giay",
+      "so": 44,
+      "ten": "Ngoa Giao Long",
+      "do_hiem": "tim",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-045",
+      "o": "giay",
+      "so": 45,
+      "ten": "Ngoa Huyễn Ảnh",
+      "do_hiem": "tim",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-046",
+      "o": "giay",
+      "so": 46,
+      "ten": "Hài Nguyệt Hoa",
+      "do_hiem": "tim",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-047",
+      "o": "giay",
+      "so": 47,
+      "ten": "Ngoa Thiên Lang",
+      "do_hiem": "tim",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-048",
+      "o": "giay",
+      "so": 48,
+      "ten": "Ngoa Bát Quái",
+      "do_hiem": "tim",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-049",
+      "o": "giay",
+      "so": 49,
+      "ten": "Hài Thiên Tằm",
+      "do_hiem": "tim",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-050",
+      "o": "giay",
+      "so": 50,
+      "ten": "Ngoa Bích Lân",
+      "do_hiem": "tim",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-051",
+      "o": "giay",
+      "so": 51,
+      "ten": "Ngoa Tử Vân",
+      "do_hiem": "tim",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-052",
+      "o": "giay",
+      "so": 52,
+      "ten": "Hài Vạn Hoa",
+      "do_hiem": "tim",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-GI-053",
+      "o": "giay",
+      "so": 53,
+      "ten": "Ngoa Hoàng Long",
+      "do_hiem": "vang",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-GI-054",
+      "o": "giay",
+      "so": 54,
+      "ten": "Ngoa Thiên Tướng",
+      "do_hiem": "vang",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-GI-055",
+      "o": "giay",
+      "so": 55,
+      "ten": "Hài Diệu Nhật",
+      "do_hiem": "vang",
+      "dang": "hai",
+      "mo_ta": "Hài: giày vải, giày gấm mũi cong",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-GI-056",
+      "o": "giay",
+      "so": 56,
+      "ten": "Ngoa Cửu Châu",
+      "do_hiem": "vang",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-GI-057",
+      "o": "giay",
+      "so": 57,
+      "ten": "Ngoa Đại Bằng",
+      "do_hiem": "vang",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-GI-058",
+      "o": "giay",
+      "so": 58,
+      "ten": "Ngoa Phượng Hoàng",
+      "do_hiem": "do",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-GI-059",
+      "o": "giay",
+      "so": 59,
+      "ten": "Ngoa Huyết Long",
+      "do_hiem": "do",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-GI-060",
+      "o": "giay",
+      "so": 60,
+      "ten": "Ngoa Phần Thiên",
+      "do_hiem": "do",
+      "dang": "ngoa",
+      "mo_ta": "Ngoa: ủng cao cổ",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-NB-001",
+      "o": "ngoc_boi",
+      "so": 1,
+      "ten": "Bội Bích Hoàn",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-002",
+      "o": "ngoc_boi",
+      "so": 2,
+      "ten": "Bội Đá Thanh",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-003",
+      "o": "ngoc_boi",
+      "so": 3,
+      "ten": "Bội Gỗ Đào",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-004",
+      "o": "ngoc_boi",
+      "so": 4,
+      "ten": "Bội Đồng Tiền",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-005",
+      "o": "ngoc_boi",
+      "so": 5,
+      "ten": "Bội Xương Thú",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-006",
+      "o": "ngoc_boi",
+      "so": 6,
+      "ten": "Bội Ngọc Thô",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-007",
+      "o": "ngoc_boi",
+      "so": 7,
+      "ten": "Bội Hồ Lô",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-008",
+      "o": "ngoc_boi",
+      "so": 8,
+      "ten": "Bội Cá Chép",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-009",
+      "o": "ngoc_boi",
+      "so": 9,
+      "ten": "Bội Lá Trúc",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-010",
+      "o": "ngoc_boi",
+      "so": 10,
+      "ten": "Bội Đồng Linh",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-011",
+      "o": "ngoc_boi",
+      "so": 11,
+      "ten": "Bội Bồ Đề",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-012",
+      "o": "ngoc_boi",
+      "so": 12,
+      "ten": "Bội Ve Sầu",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-013",
+      "o": "ngoc_boi",
+      "so": 13,
+      "ten": "Bội Mây Đá",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-014",
+      "o": "ngoc_boi",
+      "so": 14,
+      "ten": "Bội Sừng Hươu",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-015",
+      "o": "ngoc_boi",
+      "so": 15,
+      "ten": "Bội Hổ Phách Thô",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-016",
+      "o": "ngoc_boi",
+      "so": 16,
+      "ten": "Bội Thỏ Ngọc",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-017",
+      "o": "ngoc_boi",
+      "so": 17,
+      "ten": "Bội Vỏ Sò",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-018",
+      "o": "ngoc_boi",
+      "so": 18,
+      "ten": "Bội Sen Gỗ",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-019",
+      "o": "ngoc_boi",
+      "so": 19,
+      "ten": "Bội Ấn Đồng",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-020",
+      "o": "ngoc_boi",
+      "so": 20,
+      "ten": "Bội Kết Hồng",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-021",
+      "o": "ngoc_boi",
+      "so": 21,
+      "ten": "Bội Song Ngư Đá",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-022",
+      "o": "ngoc_boi",
+      "so": 22,
+      "ten": "Bội Phù Gỗ",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-023",
+      "o": "ngoc_boi",
+      "so": 23,
+      "ten": "Bội Hạt Châu",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-024",
+      "o": "ngoc_boi",
+      "so": 24,
+      "ten": "Bội Đá Vân",
+      "do_hiem": "luc",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["shop_npc"]
+    },
+    {
+      "ma_vp": "TB-NB-025",
+      "o": "ngoc_boi",
+      "so": 25,
+      "ten": "Bội Mã Não",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-026",
+      "o": "ngoc_boi",
+      "so": 26,
+      "ten": "Bội Bạch Hạc",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-027",
+      "o": "ngoc_boi",
+      "so": 27,
+      "ten": "Bội Song Long",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-028",
+      "o": "ngoc_boi",
+      "so": 28,
+      "ten": "Bội Lan Hoa",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-029",
+      "o": "ngoc_boi",
+      "so": 29,
+      "ten": "Bội Ngân Tỏa",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-030",
+      "o": "ngoc_boi",
+      "so": 30,
+      "ten": "Bội Phỉ Thúy",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-031",
+      "o": "ngoc_boi",
+      "so": 31,
+      "ten": "Bội Sư Tử",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-032",
+      "o": "ngoc_boi",
+      "so": 32,
+      "ten": "Bội Như Ý",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-033",
+      "o": "ngoc_boi",
+      "so": 33,
+      "ten": "Bội Mai Hoa",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-034",
+      "o": "ngoc_boi",
+      "so": 34,
+      "ten": "Bội Hồ Điệp",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-035",
+      "o": "ngoc_boi",
+      "so": 35,
+      "ten": "Bội Lưu Vân",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-036",
+      "o": "ngoc_boi",
+      "so": 36,
+      "ten": "Bội Bát Bảo",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-037",
+      "o": "ngoc_boi",
+      "so": 37,
+      "ten": "Bội Quy Thọ",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-038",
+      "o": "ngoc_boi",
+      "so": 38,
+      "ten": "Bội Trúc Tiết",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-039",
+      "o": "ngoc_boi",
+      "so": 39,
+      "ten": "Bội Thanh Điền",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-040",
+      "o": "ngoc_boi",
+      "so": 40,
+      "ten": "Bội Tùng Hạc",
+      "do_hiem": "lam",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["co_chien_truong","roi_ngoai_bi_canh","ren_lo_1_4"]
+    },
+    {
+      "ma_vp": "TB-NB-041",
+      "o": "ngoc_boi",
+      "so": 41,
+      "ten": "Bội Kỳ Lân",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-042",
+      "o": "ngoc_boi",
+      "so": 42,
+      "ten": "Bội Tử Tinh",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-043",
+      "o": "ngoc_boi",
+      "so": 43,
+      "ten": "Bội Nguyệt Quang",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-044",
+      "o": "ngoc_boi",
+      "so": 44,
+      "ten": "Bội Thất Tinh",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-045",
+      "o": "ngoc_boi",
+      "so": 45,
+      "ten": "Bội Phượng Lưu Ly",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-046",
+      "o": "ngoc_boi",
+      "so": 46,
+      "ten": "Bội Huyễn Thải",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-047",
+      "o": "ngoc_boi",
+      "so": 47,
+      "ten": "Bội Giao Long",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-048",
+      "o": "ngoc_boi",
+      "so": 48,
+      "ten": "Bội Ngọc Tủy",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-049",
+      "o": "ngoc_boi",
+      "so": 49,
+      "ten": "Bội Bát Quái",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-050",
+      "o": "ngoc_boi",
+      "so": 50,
+      "ten": "Bội Linh Hồ",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-051",
+      "o": "ngoc_boi",
+      "so": 51,
+      "ten": "Bội Liên Lưu Ly",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-052",
+      "o": "ngoc_boi",
+      "so": 52,
+      "ten": "Bội Tinh Hà",
+      "do_hiem": "tim",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["luyen_khi_di_chi","ren_lo_5_tro_len"]
+    },
+    {
+      "ma_vp": "TB-NB-053",
+      "o": "ngoc_boi",
+      "so": 53,
+      "ten": "Bội Long Phượng",
+      "do_hiem": "vang",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-NB-054",
+      "o": "ngoc_boi",
+      "so": 54,
+      "ten": "Bội Hoàng Long",
+      "do_hiem": "vang",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-NB-055",
+      "o": "ngoc_boi",
+      "so": 55,
+      "ten": "Bội Diệu Nhật",
+      "do_hiem": "vang",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-NB-056",
+      "o": "ngoc_boi",
+      "so": 56,
+      "ten": "Bội Cửu Châu",
+      "do_hiem": "vang",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-NB-057",
+      "o": "ngoc_boi",
+      "so": 57,
+      "ten": "Bội Thái Hư",
+      "do_hiem": "vang",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["tien_nhan_dong_phu","thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-NB-058",
+      "o": "ngoc_boi",
+      "so": 58,
+      "ten": "Bội Xích Long",
+      "do_hiem": "do",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-NB-059",
+      "o": "ngoc_boi",
+      "so": 59,
+      "ten": "Bội Huyết Ngọc",
+      "do_hiem": "do",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    },
+    {
+      "ma_vp": "TB-NB-060",
+      "o": "ngoc_boi",
+      "so": 60,
+      "ten": "Bội Hỗn Nguyên",
+      "do_hiem": "do",
+      "dang": "boi",
+      "mo_ta": "Ngọc bội đeo hông: đá, ngọc, gỗ, đồng",
+      "nguon": ["thuong_co_chien_truong","hon_don_bi_canh","san_linh_thu","san_than_thu"]
+    }
+  ],
+  "dong_ren": [
+    {"so":1,"nac":10,"vi_dien":["ha","trung","than","thanh"]},
+    {"so":2,"nac":20,"vi_dien":["ha","trung","than","thanh"]},
+    {"so":3,"nac":30,"vi_dien":["ha","trung","than","thanh"]},
+    {"so":4,"nac":40,"vi_dien":["than","thanh"]},
+    {"so":5,"nac":50,"vi_dien":["than","thanh"]}
+  ],
+  "dong_an": [
+    {
+      "ma": "DN-DK-001",
+      "loai": "dieu_kien",
+      "noi_dung": "Đang mặc từ 4 món cùng một bộ",
+      "tham_so": {"cungBoToiThieu":4},
+      "nhom": "tinh",
+      "he_so": 200
+    },
+    {
+      "ma": "DN-DK-002",
+      "loai": "dieu_kien",
+      "noi_dung": "Hai ngọc trên món này tương sinh nhau",
+      "tham_so": {"haiNgocTuongSinh":true},
+      "nhom": "tinh",
+      "he_so": 200
+    },
+    {
+      "ma": "DN-DK-003",
+      "loai": "dieu_kien",
+      "noi_dung": "Linh căn trùng hệ một ngọc trên món này",
+      "tham_so": {"linhCanTrungNgoc":true},
+      "nhom": "tinh",
+      "he_so": 200
+    },
+    {
+      "ma": "DN-DK-004",
+      "loai": "dieu_kien",
+      "noi_dung": "Trận PvE (dị thú, boss)",
+      "tham_so": {"tran":"pve"},
+      "nhom": "loai_tran",
+      "he_so": 250
+    },
+    {
+      "ma": "DN-DK-005",
+      "loai": "dieu_kien",
+      "noi_dung": "Trận chiến tranh địa bàn",
+      "tham_so": {"tran":"chien_tranh"},
+      "nhom": "loai_tran",
+      "he_so": 250
+    },
+    {
+      "ma": "DN-DK-006",
+      "loai": "dieu_kien",
+      "noi_dung": "Máu dưới 50%",
+      "tham_so": {"mauDuoi":500},
+      "nhom": "trong_tran",
+      "he_so": 300
+    },
+    {
+      "ma": "DN-DK-007",
+      "loai": "dieu_kien",
+      "noi_dung": "10 giây đầu trận",
+      "tham_so": {"truocTicks":200},
+      "nhom": "trong_tran",
+      "he_so": 300
+    },
+    {
+      "ma": "DN-DK-008",
+      "loai": "dieu_kien",
+      "noi_dung": "Sau giây thứ 30",
+      "tham_so": {"sauTicks":600},
+      "nhom": "trong_tran",
+      "he_so": 300
+    },
+    {
+      "ma": "DN-DK-009",
+      "loai": "dieu_kien",
+      "noi_dung": "Đứng hàng trước",
+      "tham_so": {"hang":"truoc"},
+      "nhom": "tinh",
+      "he_so": 200
+    },
+    {"ma":"DN-DK-010","loai":"dieu_kien","noi_dung":"Đứng hàng sau","tham_so":{"hang":"sau"},"nhom":"tinh","he_so":200},
+    {
+      "ma": "DN-DK-011",
+      "loai": "dieu_kien",
+      "noi_dung": "Khí linh của món từ cấp 3",
+      "tham_so": {"khiLinhCapToiThieu":3},
+      "nhom": "tinh",
+      "he_so": 200
+    },
+    {
+      "ma": "DN-DK-012",
+      "loai": "dieu_kien",
+      "noi_dung": "Đội địch có hệ khắc linh căn mình",
+      "tham_so": {"dichKhacLinhCan":true},
+      "nhom": "loai_tran",
+      "he_so": 250
+    },
+    {"ma":"DN-HU-001","loai":"hieu_ung","noi_dung":"Công lực +3%","tham_so":{"atk":30}},
+    {"ma":"DN-HU-002","loai":"hieu_ung","noi_dung":"Thủ ngoại +4%","tham_so":{"defOuter":40}},
+    {"ma":"DN-HU-003","loai":"hieu_ung","noi_dung":"Thủ nội +4%","tham_so":{"defInner":40}},
+    {"ma":"DN-HU-004","loai":"hieu_ung","noi_dung":"Chí mạng +2%","tham_so":{"critBonus":20}},
+    {"ma":"DN-HU-005","loai":"hieu_ung","noi_dung":"Hút máu +1%","tham_so":{"lifesteal":10}},
+    {"ma":"DN-HU-006","loai":"hieu_ung","noi_dung":"Giảm mana thi triển 5%","tham_so":{"manaCostCut":50}},
+    {"ma":"DN-HU-007","loai":"hieu_ung","noi_dung":"Hồi 0,2% máu mỗi giây","tham_so":{"hpRegen":2}},
+    {"ma":"DN-HU-008","loai":"hieu_ung","noi_dung":"Phản 3% sát thương cận chiến","tham_so":{"reflect":30}},
+    {"ma":"DN-HU-009","loai":"hieu_ung","noi_dung":"Giảm sát thương nhận 2%","tham_so":{"damageTakenCut":20}},
+    {"ma":"DN-HU-010","loai":"hieu_ung","noi_dung":"Tốc đánh +2%","tham_so":{"attackSpeed":20}},
+    {"ma":"DN-HU-011","loai":"hieu_ung","noi_dung":"Giảm hồi chiêu 2%","tham_so":{"cooldownCut":20}},
+    {"ma":"DN-HU-012","loai":"hieu_ung","noi_dung":"Kháng hệ khắc mình +3%","tham_so":{"khangHeKhacMinh":30}}
+  ],
+  "diem": [
+    {"stat":"atk","ten":"Công lực","diem":10,"moi":10},
+    {"stat":"hp","ten":"Máu","diem":8,"moi":10},
+    {"stat":"defOuter","ten":"Thủ ngoại","diem":5,"moi":10},
+    {"stat":"defInner","ten":"Thủ nội","diem":5,"moi":10},
+    {"stat":"critBonus","ten":"Chí mạng","diem":12,"moi":10},
+    {"stat":"critDamage","ten":"Sát thương chí mạng","diem":3,"moi":10},
+    {"stat":"attackSpeed","ten":"Tốc đánh","diem":10,"moi":10},
+    {"stat":"cooldownCut","ten":"Giảm hồi chiêu","diem":12,"moi":10},
+    {"stat":"armorPen","ten":"Xuyên giáp","diem":6,"moi":10},
+    {"stat":"resistPen","ten":"Xuyên kháng","diem":6,"moi":10},
+    {"stat":"elementDamage","ten":"Sát thương hệ (ngọc)","diem":4,"moi":10},
+    {"stat":"resist","ten":"Kháng hệ (ngọc)","diem":3,"moi":10},
+    {"stat":"lifesteal","ten":"Hút máu","diem":15,"moi":10},
+    {"stat":"manaDrain","ten":"Hút mana","diem":8,"moi":10},
+    {"stat":"manaCostCut","ten":"Giảm mana thi triển","diem":4,"moi":10},
+    {"stat":"manaMax","ten":"Mana tối đa","diem":2,"moi":10},
+    {"stat":"hpRegen","ten":"Hồi máu mỗi giây","diem":10,"moi":1},
+    {"stat":"healTaken","ten":"Hồi máu nhận","diem":4,"moi":10},
+    {"stat":"healPower","ten":"Hiệu quả hồi máu và khiên","diem":4,"moi":10},
+    {"stat":"shieldTaken","ten":"Khiên nhận","diem":3,"moi":10},
+    {"stat":"damageTakenCut","ten":"Giảm sát thương nhận","diem":12,"moi":10},
+    {"stat":"reflect","ten":"Phản đòn","diem":6,"moi":10},
+    {"stat":"controlTime","ten":"Thời gian khống chế","diem":3,"moi":10},
+    {"stat":"innerDamage","ten":"Sát thương chiêu nội","diem":8,"moi":10},
+    {"stat":"damageTakenCutOuter","ten":"Giảm sát thương ngoại nhận","diem":6,"moi":10},
+    {"stat":"damageTakenCutInner","ten":"Giảm sát thương nội nhận","diem":6,"moi":10},
+    {"stat":"controlTakenCut","ten":"Giảm thời gian bị khống chế","diem":3,"moi":10},
+    {"stat":"reflectTakenCut","ten":"Giảm sát thương phản đòn nhận vào","diem":1,"moi":10}
+  ],
+  "luat": {
+    "dongAn": {
+      "soDong": {"lam":1,"tim":2,"vang":3,"do":3},
+      "songAnHeSo": 1250,
+      "tayAnLinhVanThach": 3,
+      "tranMoiDong": 3,
+      "tranTong": 10,
+      "toiDaHieuLuc": 3
+    },
+    "dongRen": {"heSoLoaiPhu":150,"toiDa":{"ha":3,"trung":3,"than":5,"thanh":5},"doiDongKhiTinh":2},
+    "giamSatThuongNhanToiDa": 250
+  }
+}

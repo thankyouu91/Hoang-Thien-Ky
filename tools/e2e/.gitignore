@@ -1,0 +1,5 @@
+# Bản build riêng của bài kiểm (không đụng proto/dist mà tab deploy dùng), kết quả chạy, và cookie link mời khi chạy trên mạng.
+node_modules/
+.ban-build/
+ket-qua/
+.auth/

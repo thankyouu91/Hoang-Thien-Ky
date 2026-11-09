@@ -1,0 +1,37 @@
+{
+  "_ghi_chu": "Đổi màu trang phục theo nguyên tố (linh căn chính) lúc vẽ. Điểm ảnh của áo có hue nằm trong dải 'hue' và độ bão hoà >= 'sat' được thay bằng màu nội suy giữa 3 tông của hệ: k = do_sang_chuan_hoa * 'reach' (0 -> tông đậm, 0,5 -> tông giữa, 1 -> tông nhạt), trong đó do_sang_chuan_hoa = (độ sáng điểm - độ sáng nhỏ nhất của dải) / (lớn nhất - nhỏ nhất), tính trên ảnh nghỉ của bộ áo. Hue tính theo độ (0-360), dải có thể vắt qua 0 khi tu > den. Da, tóc, viền đen, đồ da nâu, viền vàng không đổi.",
+  "ao": {
+    "dao_bao": { "hue": [195, 250], "sat": 0.22, "reach": 1.0 },
+    "vo_phuc": { "hue": [318, 8], "sat": 0.25, "reach": 0.6 },
+    "tu_tran": { "hue": [195, 250], "sat": 0.22, "reach": 1.0 },
+    "tu_dan": { "hue": [195, 250], "sat": 0.22, "reach": 1.0 },
+    "sat_thu": { "hue": [195, 250], "sat": 0.22, "reach": 0.8 },
+    "tu_ren": { "hue": [195, 250], "sat": 0.22, "reach": 1.0 },
+    "tu_duoc": { "hue": [195, 250], "sat": 0.22, "reach": 1.0 },
+    "tu_kim_tien": { "hue": [195, 250], "sat": 0.22, "reach": 1.0 }
+  },
+  "tai_nang": {
+    "tu_the": "vo_phuc",
+    "tu_phap": "dao_bao",
+    "tu_tran": "tu_tran",
+    "tu_dan": "tu_dan",
+    "sat_thu": "sat_thu",
+    "tu_ren": "tu_ren",
+    "tu_duoc": "tu_duoc",
+    "tu_kim_tien": "tu_kim_tien"
+  },
+  "he": {
+    "kim": [[110, 118, 130], [190, 198, 210], [245, 248, 252]],
+    "moc": [[30, 90, 40], [70, 160, 60], [160, 220, 110]],
+    "thuy": [[20, 40, 110], [40, 90, 180], [120, 170, 230]],
+    "hoa": [[120, 20, 15], [210, 50, 30], [255, 150, 70]],
+    "tho": [[110, 75, 25], [185, 135, 55], [235, 200, 120]],
+    "loi": [[70, 25, 120], [140, 70, 210], [215, 170, 255]],
+    "phong": [[40, 120, 110], [100, 200, 180], [190, 245, 230]],
+    "quang": [[150, 110, 10], [235, 190, 40], [255, 240, 150]],
+    "am_lanh": [[55, 70, 90], [110, 130, 155], [180, 200, 215]],
+    "cuc_duong": [[150, 60, 10], [240, 130, 30], [255, 210, 110]],
+    "cuc_am": [[35, 20, 50], [80, 45, 110], [150, 110, 180]],
+    "cuc_han": [[60, 130, 170], [140, 210, 240], [225, 250, 255]]
+  }
+}

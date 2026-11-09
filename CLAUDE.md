@@ -6,13 +6,15 @@
     - Chỗ cần chọn thì lấy phương án mình đề xuất, rồi ghi rõ đã chọn gì và vì sao trong báo cáo.
     - Được commit phần việc của mình: chạy test trước, chỉ commit file của mình (`git commit -- <đường dẫn>`), vì nhiều phiên cùng làm trong repo này.
     - Trong GDD, số tự đặt vẫn ghi "đề xuất" để người dùng xem lại sau.
-    - Vẫn phải hỏi trước khi: push hoặc đưa gì lên mạng; gửi tin nhắn, email ra ngoài; mua hoặc nâng gói; xóa dữ liệu hoặc viết lại lịch sử git; tải file qua trình duyệt; sửa file do phiên khác giữ.
+    - Deploy lên Cloudflare (người dùng nói ngày 2026-11-05: "tôi có worker mà, đẩy cho nó làm", "mấy cái vụ xét duyệt và tự deploy commit"): tab Deploy Cloudflare tự xét và deploy, không hỏi lại. Chỉ deploy commit đã chạy test qua, từ worktree sạch `C:\Project\GDD\KhaiTongLapPhai-deploy` (hoặc thư mục con đang sạch), mở trang kiểm tra sau deploy, báo số phiên bản. Tab khác cần đưa bản mới lên thì commit xong nhắn tab Deploy, không tự deploy.
+    - Vẫn phải hỏi trước khi: push lên GitHub hoặc đưa lên mạng thứ khác ngoài deploy Cloudflare ở trên; gửi tin nhắn, email ra ngoài; mua hoặc nâng gói; xóa dữ liệu hoặc viết lại lịch sử git; tải file qua trình duyệt; sửa file do phiên khác giữ.
 - PixelLab (người dùng nói ngày 2026-11-03: "ko phải lo ngân sách cứ phát triển hình ảnh nào tốt nhất tôi sẽ topup thêm chi phí tạo hình"):
     - Không còn sàn số dư; chọn công cụ và số lần thử cho ra hình đẹp nhất, không chọn theo giá rẻ.
     - Báo số lượt hoặc tiền đã dùng (lấy từ `get_balance`) trong báo cáo.
     - Hết lượt và hết credits thì báo người dùng nạp thêm rồi làm tiếp phần khác; không tự mua hay nâng gói.
 - Nguồn thiết kế: GDD trong chính repo này tại `docs/gdd/` (`Hoang_Thien_Ky_GDD.md`; git là nguồn sự thật từ 2026-11-09, bản Claude Docs chỉ còn là lưu trữ). Mã phải khớp GDD; chỗ nào GDD ghi "đề xuất" thì để thành tham số cấu hình.
-- Từ 2026-11-09 game là MMORPG mobile thời gian thực (trước là chiến lược dashboard): combat do server tính bằng `packages/sim` ở 20 tick/giây, client chỉ gửi input; world server real-time bằng Go; `proto/` dashboard giữ làm testbench, Cửa 1 làm map mở real-time.
+- Từ 2026-11-09 game là MMORPG mobile thời gian thực (trước là chiến lược dashboard), bản đồ hai tầng (GDD mục 3): map lớn chạm-là-tới có thời gian đi, map nhỏ khu vực chạy tự do. Combat đánh tay thời gian thực ở bãi quái (người dùng chốt 2026-11-09): người chơi tự di chuyển và tự ra chiêu; người chơi khác ở bản thử là bot giả lập. Đợt đầu là một bãi quái mẫu (`scenes/bai`, tab Khung prototype) và map nhỏ khu vực (`scenes/world`, #the-gioi); hai scene này sẽ hợp nhất khi thiết kế khu vực chốt. Cho tới khi người dùng duyệt bãi mẫu: không đầu tư thêm vào `packages/sim`, `tools/balance` và màn Trận tự động, nhưng cũng chưa xóa chúng.
+- Tiết kiệm token (người dùng yêu cầu ngày 2026-11-09): ponytail ultra và caveman bật mặc định cho mọi phiên. Làm phần nhỏ nhất đủ dùng, báo cáo ngắn, hạn chế nhắn qua lại giữa các phiên.
 - `packages/sim` phải deterministic: chỉ số nguyên / fixed-point thang 1000 (`fixed.ts`), không dùng Math.random, Math.sin, Math.sqrt, Date; thứ tự cập nhật theo id; mọi ngẫu nhiên qua `Rng`.
 - Mỗi thay đổi ở `packages/sim` phải chạy `npm.cmd test` (gồm 10.000 trận so mã băm) trước khi commit.
 - TypeScript chỉ dùng cú pháp xóa được (không enum, không namespace) để Node chạy thẳng file `.ts`; import ghi rõ đuôi `.ts`.

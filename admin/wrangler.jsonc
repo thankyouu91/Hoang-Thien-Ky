@@ -1,0 +1,42 @@
+// Worker thienhoangky-admin: giao diện admin + API, sau Cloudflare Access ở admin.thienhoangky.fun.
+// Dùng chung D1 `thienhoangky` với Worker game (tab deploy). Bảng admin có tiền tố qt_, migration ở ./migrations
+// với bảng theo dõi riêng d1_migrations_qt để không đụng migration của Worker game (cloudflare/migrations/).
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "thienhoangky-admin",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  "routes": [{ "pattern": "admin.thienhoangky.fun", "custom_domain": true }],
+  // Chỉ vào được qua tên miền có Access; không mở *.workers.dev hay URL xem trước.
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // Cả file tĩnh cũng qua Worker để kiểm JWT; Access sai cấu hình thì giao diện cũng không lộ.
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "thienhoangky",
+      "database_id": "aa2c1b16-661a-4df8-94a3-37ee20cc0f5e",
+      "migrations_dir": "migrations",
+      "migrations_table": "d1_migrations_qt"
+    }
+  ],
+  "vars": {
+    // Nơi chạy game: link mời là GAME_ORIGIN + "/moi/<ma>". Dời game sang tên miền khác thì chỉ đổi dòng này rồi deploy.
+    "GAME_ORIGIN": "https://play.thienhoangky.fun",
+    // Hai lớp (người dùng chốt 2026-11-05 "Giữ Access"): ứng dụng Access "Thiên Hoang Ký – quản trị" (mã email, group "THK quan tri")
+    // chặn ở biên, Worker kiểm lại JWT của ứng dụng đó, rồi mới tới đăng nhập tên + mật khẩu (worker/taiKhoan.ts).
+    // Xóa ứng dụng Access thì phải xóa hai dòng này, không thì mọi yêu cầu bị 401. Chạy cục bộ và test tự ghi đè thành rỗng.
+    "ACCESS_TEAM_DOMAIN": "jolly-water-a8bd.cloudflareaccess.com",
+    "ACCESS_AUD": "8845cb2cdf92bb8fbe412aff4968092b4a6800f594bb53831b46abe8a092c505"
+  },
+  // Gửi thư đặt lại mật khẩu (worker/datLai.ts). Gói Free: chỉ tới địa chỉ đã xác nhận ở Email Routing của tài khoản.
+  "send_email": [{ "name": "THU" }],
+  // Log do Worker tự ghi (không có mật khẩu, mã phiên). Tắt invocation log để header và đường dẫn không vào Workers Logs.
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+}

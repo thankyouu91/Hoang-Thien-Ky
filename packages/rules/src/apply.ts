@@ -1,10 +1,12 @@
 // Cửa vào duy nhất của luật game: mọi lệnh đi qua `apply(state, command, now)` (docs/KE_HOACH.md mục 2).
 // Lệnh hỏng thì trả lỗi và không đổi trạng thái; lệnh hợp lệ sửa `state` tại chỗ và trả về các sự kiện.
 // `now` là giờ server (ms) do bên gọi đưa vào; luật không tự đọc đồng hồ.
-import type { GameState, OwnedScroll, SectTechnique } from "./state.ts";
-import { pickUpScroll, depositScroll, composeInLibrary } from "./library.ts";
+import type { GameState, LearnedTechnique, OwnedScroll, SectTechnique } from "./state.ts";
+import { pickUpScroll, depositScroll, composeInLibrary, composeStarter } from "./library.ts";
 import { setTransmission, learnTechnique, setLoadout } from "./transmission.ts";
-import { releaseMember, leaveSect } from "./departure.ts";
+import { joinSect, releaseMember, leaveSect } from "./departure.ts";
+import { raiseLayer } from "./layers.ts";
+import { addPoints, resetPoints } from "./tiem_nang.ts";
 
 export type Command =
   /** Chỉ hệ thống gửi: tàn quyển rơi trong bí cảnh, thưởng nhiệm vụ. */
@@ -15,7 +17,16 @@ export type Command =
   | { type: "hoc_cong_phap"; actor: string; techniqueId: number }
   | { type: "mang_vao_tran"; actor: string; techniqueIds: number[] }
   | { type: "cho_xuat_su"; actor: string; memberId: string }
-  | { type: "roi_tong"; actor: string };
+  | { type: "roi_tong"; actor: string }
+  /** Người chưa có tông vào làm ngoại môn (GDD mục 6; bản chơi một mình: tông NPC nhận ngay, chưa xét đơn, lời mời, vị diện). */
+  | { type: "gia_nhap_tong"; actor: string; sectId: string }
+  /** Nhiệm vụ 0.4: ghép 1 chủ quyển với 1 phụ quyển trong túi thành công pháp tân thủ riêng; mỗi người một lần. */
+  | { type: "ghep_tan_thu"; actor: string; main: number; subs: number[] }
+  /** Lên một tầng công pháp đã học, tiêu điểm luyện và cống hiến (layers.ts). */
+  | { type: "len_tang_cong_phap"; actor: string; techniqueId: number }
+  /** Điểm tiềm năng (tiem_nang.ts): cộng vào một thuộc tính; tẩy toàn bộ (phí do bên gọi lo). */
+  | { type: "cong_diem"; actor: string; thuocTinh: string; diem: number }
+  | { type: "tay_diem"; actor: string };
 
 export type RuleEvent =
   | { type: "nhat_tan_quyen"; memberId: string; scroll: OwnedScroll }
@@ -24,7 +35,12 @@ export type RuleEvent =
   | { type: "dat_bo_truyen_thu"; sectId: string; techniqueIds: number[] }
   | { type: "hoc_cong_phap"; memberId: string; techniqueId: number }
   | { type: "mang_vao_tran"; memberId: string; techniqueIds: number[] }
-  | { type: "roi_tong"; memberId: string; sectId: string; betrayed: boolean };
+  | { type: "roi_tong"; memberId: string; sectId: string; betrayed: boolean }
+  | { type: "gia_nhap_tong"; memberId: string; sectId: string }
+  | { type: "ghep_tan_thu"; memberId: string; technique: LearnedTechnique }
+  | { type: "len_tang_cong_phap"; memberId: string; techniqueId: number; layer: number; diemLuyen: number; congHien: number }
+  | { type: "cong_diem"; memberId: string; thuocTinh: string; diem: number }
+  | { type: "tay_diem"; memberId: string; diem: number };
 
 export type RuleError =
   | "lenh_khong_hop_le"
@@ -47,7 +63,17 @@ export type RuleError =
   | "vuot_so_cong_phap"
   | "chua_hoc"
   | "khong_cung_tong"
-  | "tong_chu_khong_roi_duoc";
+  | "tong_chu_khong_roi_duoc"
+  | "da_co_tong"
+  | "khong_co_tong"
+  | "da_ghep_tan_thu"
+  | "cong_phap_dung_tang"
+  | "da_toi_tang"
+  | "thieu_diem_luyen"
+  | "thieu_cong_hien"
+  | "thuoc_tinh_sai"
+  | "diem_khong_hop_le"
+  | "thieu_diem_tiem_nang";
 
 export type Result = { ok: true; events: RuleEvent[] } | { ok: false; error: RuleError };
 
@@ -70,6 +96,16 @@ export function apply(state: GameState, cmd: Command, now: number): Result {
       return releaseMember(state, cmd.actor, cmd.memberId);
     case "roi_tong":
       return leaveSect(state, cmd.actor);
+    case "gia_nhap_tong":
+      return joinSect(state, cmd.actor, cmd.sectId);
+    case "ghep_tan_thu":
+      return composeStarter(state, cmd.actor, cmd.main, cmd.subs);
+    case "len_tang_cong_phap":
+      return raiseLayer(state, cmd.actor, cmd.techniqueId);
+    case "cong_diem":
+      return addPoints(state, cmd.actor, cmd.thuocTinh, cmd.diem);
+    case "tay_diem":
+      return resetPoints(state, cmd.actor);
     default:
       return { ok: false, error: "lenh_khong_hop_le" };
   }

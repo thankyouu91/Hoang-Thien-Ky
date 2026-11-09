@@ -2,7 +2,7 @@
   "name": "hoang-thien-ky",
   "private": true,
   "version": "0.0.1",
-  "description": "Khai Tông Lập Phái — mã nguồn game (monorepo)",
+  "description": "Thiên Hoang Ký — mã nguồn game (monorepo)",
   "workspaces": ["packages/*", "proto"],
   "scripts": {
     "test": "npm run test -w @htk/sim -w @htk/rules",

@@ -2,6 +2,7 @@
 import { maxGradeAtLevel, type Technique } from "@htk/sim";
 import { RULES } from "./config.ts";
 import { techniqueOf } from "./library.ts";
+import { applyLayer } from "./layers.ts";
 import type { GameState, LearnedTechnique } from "./state.ts";
 import type { Result } from "./apply.ts";
 
@@ -68,13 +69,14 @@ export function setLoadout(state: GameState, memberId: string, techniqueIds: num
 
 /**
  * Chỉ số trận của các công pháp đang mang, theo thứ tự ưu tiên; dùng làm `techniques` của đơn vị trong trận
- * (đơn vị cần thêm `sectId` của tông hiện tại). Công pháp của tông đã phản bội được đánh dấu để trận giảm 50% lên người tông đó.
+ * (đơn vị cần thêm `sectId` của tông hiện tại), đã áp tầng (layers.ts). Công pháp của tông đã phản bội được đánh dấu để trận giảm
+ * 50% lên người tông đó.
  */
 export function loadoutTechniques(state: GameState, memberId: string): Technique[] {
   const member = state.members[memberId];
   return member.loadout.map((id) => {
     const l = findLearned(member.learned, id)!;
-    const t = techniqueOf(l);
+    const t = applyLayer(techniqueOf(l), l.layer);
     if (l.betrayed) t.forsakenSect = l.sectId;
     return t;
   });

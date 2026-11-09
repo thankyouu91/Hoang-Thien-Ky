@@ -56,7 +56,9 @@
     "outerMaxGrade": 2,
     "outerDays": 7,
     "baseCrit": 50,
-    "resistCap": 800
+    "resistCap": 200,
+    "counterFloor": 1200,
+    "diemLuyenMoiCap": 20
   },
   "roi_do": {
     "mainElementShare": 500,
@@ -102,7 +104,24 @@
     "flyerSpeedBonus": 100,
     "waterSpeedMul": 2000,
     "escortSpeed": 500,
-    "escortSpeedBeasts": 750
+    "escortSpeedBeasts": 750,
+    "supportPets": 1,
+    "supportFirstTicks": 100,
+    "supportCooldownTicks": 200,
+    "supportPowerTarget": 20,
+    "fourSymbolsExtraTargets": 1,
+    "pillTuVi": 100,
+    "pillLowerRealmShare": 500,
+    "ownerTuViPerDay": 200,
+    "growthDaysTarget": 90,
+    "aptitudeRerollPerDay": 1,
+    "aptitudeRerollPillLevel": 5,
+    "nestMinAptitude": 3,
+    "fourSymbolsAptitude": 5,
+    "talentStatSameMax": 2,
+    "talentTier2Realm": 3,
+    "bloodlineRealm": 3,
+    "bloodlineSwapPillLevel": 6
   },
   "SKILL_RULES": {
     "aoeCastTicks": 20,
@@ -121,8 +140,16 @@
     "dashStandOff": 500,
     "exposedTicks": 60,
     "selfShieldCooldownTicks": 120,
-    "meleeKnockback": false
+    "meleeKnockback": false,
+    "formationJoinRange": 2000,
+    "formationBond2": 1300,
+    "formationBond3": 1600,
+    "formationBond5": 2000,
+    "formationJoinWait": 20,
+    "formationExtraTargets": 2,
+    "formationMaxTargets": 10
   },
+  "CAST_FLOOR": {"formationTicks":20,"channelTicks":10},
   "BATTLE": {
     "fieldLength": 12000,
     "frontPos": 4500,
@@ -156,5 +183,15 @@
     "satThuStealthTicks": 60,
     "satThuDashCooldownCut": 200,
     "tuDuocHealTaken": 100
+  },
+  "ARTIFACT_RULES": {
+    "adjacentRange": 1000,
+    "nearRange": 4000,
+    "luanMinEnemies": 3,
+    "chauHits": 2,
+    "thapAllies": 3,
+    "dinhHealOfMax": 150,
+    "chuongMinControlled": 2,
+    "anDashDamage": 500
   }
 }

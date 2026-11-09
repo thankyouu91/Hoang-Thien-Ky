@@ -2,7 +2,8 @@
 // Kiểm: đủ số từng loại, mỗi điểm một ô và nằm trong vùng, mọi điểm đi tới được thành chủ, số chặng và cấp nguy hiểm khớp.
 //
 // Chạy: node --experimental-strip-types tools/mapgen/kiem.ts [vị diện] [mã vùng]   (mặc định: ha loi_dinh_coc)
-// Ra: data/maps/<vị diện>_diem_<mã vùng>.svg (có ảnh nền <vị diện>_nen_<mã vùng>.webp thì lồng vào); có phép kiểm sai thì thoát mã 1
+// Ra: data/maps/<vị diện>_diem_<mã vùng>.svg (có ảnh nền chia ô theo <vị diện>_vi_dien.json thì lồng các ô mức chi tiết nhất
+// phủ khung nhìn); có phép kiểm sai thì thoát mã 1
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { loadPlaneMap, type AzgaarMap } from "./azgaar.ts";
 import { assignCells, loadRegions, slug } from "./vung.ts";
@@ -166,8 +167,33 @@ function dangerColor(danger: number): string {
   return `rgb(${r},${g},${b})`;
 }
 
-/** `background`: ảnh nền bản đồ tranh (data URI) của khung map.frame, có thì phủ lên nền ô và bỏ nét sông vẽ lại */
-function preview(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, results: [string, boolean, string][], background?: string): string {
+type Rect = [number, number, number, number];
+type Tile = { href: string; x: number; y: number; w: number; h: number };
+type PlaneIndex = { map: { width: number; height: number }; background: { tile: number; path: string; levels: { level: number; cols: number; rows: number }[] } };
+
+/** Ô ảnh nền (data URI, toạ độ bản đồ) phủ khung nhìn, theo mục background của <vị diện>_vi_dien.json: mức nhỏ nhất không dưới
+ * `want` px ảnh mỗi đơn vị bản đồ (mặc định mức chi tiết nhất) */
+export function backgroundTiles({ map, background }: PlaneIndex, dataDir: URL, want = Infinity) {
+  const levels = [...background.levels].sort((a, b) => a.level - b.level);
+  const { level, cols, rows } = levels.find((l) => l.level >= want) ?? levels.at(-1)!;
+  const span = background.tile / level;
+  return ([x0, y0, x1, y1]: Rect): Tile[] => {
+    const tiles: Tile[] = [];
+    for (let row = Math.max(0, Math.floor(y0 / span)); row < Math.min(rows, Math.ceil(y1 / span)); row++)
+      for (let col = Math.max(0, Math.floor(x0 / span)); col < Math.min(cols, Math.ceil(x1 / span)); col++) {
+        const path = background.path.replace("{level}", String(level)).replace("{col}", String(col)).replace("{row}", String(row));
+        const file = new URL(path, dataDir);
+        if (!existsSync(file)) continue;
+        // ô ở mép bản đồ đã cắt gọn theo bản đồ
+        const x = col * span, y = row * span, w = Math.min(map.width, x + span) - x, h = Math.min(map.height, y + span) - y;
+        tiles.push({ href: `data:image/webp;base64,${readFileSync(file).toString("base64")}`, x, y, w, h });
+      }
+    return tiles;
+  };
+}
+
+/** `background(khung nhìn)`: các ô ảnh nền bản đồ tranh phủ khung nhìn, có thì phủ lên nền ô và bỏ nét sông vẽ lại */
+function preview(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, results: [string, boolean, string][], background?: (view: Rect) => Tile[]): string {
   const PAD = 14, MAP_W = 1100, LEGEND_W = 340;
   const [x0, y0, x1, y1] = file.map.bbox;
   const vx = x0 - PAD, vy = y0 - PAD, vw = x1 - x0 + 2 * PAD, vh = y1 - y0 + 2 * PAD;
@@ -184,12 +210,14 @@ function preview(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, 
     out.push(`<polygon points="${poly}" fill="${color}" stroke="${color}" stroke-width="0.5"/>`);
     const shade = Math.max(0, (c.h - 35) / 160);
     if (shade > 0) out.push(`<polygon points="${poly}" fill="#000" fill-opacity="${n1(shade * 10) / 10}"/>`);
-    if (region[c.i] !== k) out.push(`<polygon points="${poly}" fill="#f4f1ea" fill-opacity="0.6" stroke="#f4f1ea" stroke-opacity="0.6" stroke-width="0.5"/>`);
   }
-  if (background && file.map.frame) {
-    const [fx0, fy0, fx1, fy1] = file.map.frame;
-    out.push(`<image href="${background}" x="${fx0}" y="${fy0}" width="${fx1 - fx0}" height="${fy1 - fy0}" preserveAspectRatio="none"/>`);
-  }
+  const tiles = background?.([vx, vy, vx + vw, vy + vh]) ?? [];
+  const n3 = (x: number) => Math.round(x * 1000) / 1000; // ô ×6 dài 170,667: làm tròn thô sẽ hở khe giữa hai ô
+  for (const t of tiles) out.push(`<image href="${t.href}" x="${n3(t.x)}" y="${n3(t.y)}" width="${n3(t.w)}" height="${n3(t.h)}" preserveAspectRatio="none"/>`);
+  // ô ngoài vùng mờ đi, phủ lên cả ảnh nền; gộp một đường để chỗ hai ô chồng nhau không đậm thành lưới
+  const outside = map.cells.filter((c) => inView(c.p) && region[c.i] !== k);
+  const fade = outside.map((c) => `M${c.v.map((v) => map.vertices[v].map(n1).join(",")).join("L")}Z`).join("");
+  out.push(`<path d="${fade}" fill="#f4f1ea" fill-opacity="0.6"/>`);
   for (const c of map.cells) {
     if (region[c.i] !== k) continue;
     for (const n of c.c) {
@@ -201,7 +229,7 @@ function preview(file: PointFile, map: AzgaarMap, region: Int8Array, k: number, 
       }
     }
   }
-  for (const r of background ? [] : map.rivers) {
+  for (const r of tiles.length ? [] : map.rivers) {
     // ô -1 là chỗ sông chảy ra khỏi mép bản đồ
     const pts = r.cells.filter((c) => map.cells[c] && inView(map.cells[c].p)).map((c) => map.cells[c].p.map(n1).join(","));
     if (pts.length > 1) out.push(`<polyline points="${pts.join(" ")}" fill="none" stroke="#3b7dd8" stroke-width="${n1(0.5 + Math.min(1.5, r.discharge / 400))}" stroke-linecap="round"/>`);
@@ -276,8 +304,8 @@ if (import.meta.main) {
   const results = check(file, map, region, k, codes);
   for (const [name, pass, detail] of results) console.log(`${pass ? "✓" : "✗"} ${name}${detail ? `: ${detail}` : ""}`);
   const svg = new URL(`${plane}_diem_${code}.svg`, dataDir);
-  const nen = new URL(`${plane}_nen_${code}.webp`, dataDir); // ảnh nền từ azgaar-nen.ts, nếu đã xuất
-  const background = existsSync(nen) ? `data:image/webp;base64,${readFileSync(nen).toString("base64")}` : undefined;
+  const index = new URL(`${plane}_vi_dien.json`, dataDir); // mục lục vi_dien.ts, ô ảnh nền từ azgaar-nen.ts renderTiles
+  const background = existsSync(index) ? backgroundTiles(JSON.parse(readFileSync(index, "utf8")), dataDir) : undefined;
   writeFileSync(svg, preview(file, map, region, k, results, background));
   console.log(`ghi ${svg.pathname}`);
   if (results.some((r) => !r[1])) process.exit(1);

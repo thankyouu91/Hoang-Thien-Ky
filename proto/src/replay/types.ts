@@ -33,6 +33,10 @@ export interface ReplayUnit {
   sprite?: string;
   /** Ngoại hình ghép: thân, áo, đồ; chưa có thì trình xem tự chọn theo hàng đứng. */
   look?: Look;
+  /** Cấp nhân vật (GDD mục 6–7), để vẽ theo cảnh giới; replay giả có thể bỏ trống. */
+  level?: number;
+  /** Dị thú hay boss PvE (UnitSpec.monster): màn Trận vẽ bằng hình thú `sprite`, không ghép người. */
+  monster?: boolean;
 }
 
 /** Ngoại hình nhân vật ghép từ thân và từng món đồ (ghi chú chung pixellab-tu-si.md). */
@@ -45,6 +49,12 @@ export interface Look {
   hat?: string;
   /** Mã vũ khí trong do/vu_khi/ */
   weapon?: string;
+  /** Màu áo theo hệ (linh căn chính), bảng nhan_vat/mau_he.json; bỏ trống thì giữ màu gốc của bộ áo */
+  tint?: ElementId;
+  /** Nhóm độ hiếm của vũ khí: tím, vàng, đỏ thì vũ khí có vầng sáng (GDD mục 6) */
+  weaponRarity?: "luc" | "lam" | "tim" | "vang" | "do";
+  /** Mức cường hoá của vũ khí; từ +21 có thêm ánh sáng (GDD mục 6) */
+  weaponPlus?: number;
 }
 
 /** Sự kiện xếp theo tick tăng dần. Các trường hp, mana, pos là giá trị sau sự kiện. */
@@ -66,11 +76,23 @@ export type ReplayEvent =
       subElements?: ElementId[];
       /** Đòn mang chiêu cuối tông chủ */
       ult?: boolean;
+      /** Phẩm công pháp 1–10 (GDD mục 9); hiệu ứng chiêu càng cao phẩm càng nhiều hạt, càng sáng */
+      grade?: number;
     }
-  | { tick: number; kind: "hit"; unit: number; src: number; amount: number; crit: boolean; hp: number }
+  /** `counter`: hệ chiêu khắc linh căn người trúng (hệ số khắc 1,5 trở lên, GDD mục 8), màn Trận vẽ số nổi hơn. */
+  | { tick: number; kind: "hit"; unit: number; src: number; amount: number; crit: boolean; hp: number; counter?: boolean }
   | { tick: number; kind: "heal"; unit: number; src: number; amount: number; hp: number }
   | { tick: number; kind: "mana"; unit: number; mana: number }
-  | { tick: number; kind: "death"; unit: number };
+  | { tick: number; kind: "death"; unit: number }
+  /**
+   * Trạng thái do chiêu hay hệ gây ra (choáng, trói, chậm, thiêu, giảm hồi máu, khiên, lộ vị trí, ẩn thân), lấy từ sim
+   * lúc thời hạn đổi: `until` là tick hết hạn; bằng `tick` khi trạng thái mất sớm (khiên bị phá hết).
+   */
+  | { tick: number; kind: "status"; unit: number; status: StatusKind; until: number };
+
+/** Trạng thái theo thời gian, cùng tên với các trường *Until của Unit trong @htk/sim. */
+export const STATUS_KINDS = ["stun", "root", "slow", "burn", "healCut", "shield", "exposed", "stealth"] as const;
+export type StatusKind = (typeof STATUS_KINDS)[number];
 
 export interface Replay {
   /** Tick mỗi giây */
@@ -84,6 +106,10 @@ export interface Replay {
   winner: "A" | "B" | "draw";
   /** Nền sân trong assets/pixellab/san_dau/ (vo_truong, cao_nguyen, mo_linh_thach); bỏ trống là võ trường. */
   arena?: string;
+  /** Tên hai bên (đội A, đội B), ví dụ tên tông môn và "Dị thú"; bỏ trống thì "Ta"/"Địch" theo `viewer`, không có nữa thì "Đội A"/"Đội B". */
+  teams?: [string, string];
+  /** Phía của người xem (0 đội A, 1 đội B): có thì hết trận hiện "Thắng"/"Thua" theo phía này. */
+  viewer?: 0 | 1;
 }
 
 /** Nguồn replay: hiện là replay giả trong src/mock, sau này là simulate() của @htk/sim. */

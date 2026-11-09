@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   ELEMENTS, SKILL_TYPES, VARIANTS, SKILL_SPECS, ALLY_SKILLS, VARIANT_STATS, LINH_EFFECT_POWER, ELEMENT_STATS, ELEMENT_EFFECTS,
-  ROOT_BUFFS, SKILL_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, GRADE_POW, BASE_CRIT_PER_MILLE, RESIST_CAP, COMBO,
+  ROOT_BUFFS, SKILL_RULES, CAST_FLOOR, ARTIFACT_RULES, BATTLE, UNIT_CURVE, TALENT_RULES, GRADE_POW, BASE_CRIT_PER_MILLE, RESIST_CAP, COUNTER_FLOOR, COMBO, DAMAGE_KIND, DAMAGE_CUT_CAP, HIDDEN_RULES,
   elementMultiplier, comboRelation,
 } from "../src/index.ts";
 
@@ -46,13 +46,27 @@ test("khắc chế 12 × 12 khớp khac_che.json", () => {
 
 test("tham số trận đấu khớp tham_so.json", () => {
   const p = data("tham_so.json");
-  const groups: [string, Record<string, unknown>][] = [["SKILL_RULES", SKILL_RULES], ["BATTLE", BATTLE], ["UNIT_CURVE", UNIT_CURVE], ["TALENT_RULES", TALENT_RULES]];
+  const groups: [string, Record<string, unknown>][] = [["SKILL_RULES", SKILL_RULES], ["CAST_FLOOR", CAST_FLOOR], ["ARTIFACT_RULES", ARTIFACT_RULES], ["BATTLE", BATTLE], ["UNIT_CURVE", UNIT_CURVE], ["TALENT_RULES", TALENT_RULES]];
   for (const [name, values] of groups) {
     assert.deepEqual(Object.keys(p[name]).sort(), Object.keys(values).sort(), `${name}: tên khóa`);
     for (const key of Object.keys(values)) assert.equal(values[key], p[name][key], `${name}.${key}`);
   }
   assert.equal(BASE_CRIT_PER_MILLE, p.cong_phap.baseCrit);
   assert.equal(RESIST_CAP, p.cong_phap.resistCap);
+  assert.equal(COUNTER_FLOOR, p.cong_phap.counterFloor);
+});
+
+test("loại sát thương theo loại chiêu khớp loai_chieu.json; ngưỡng dòng ẩn khớp trang_bi.json dong_an", () => {
+  const lc = data("loai_chieu.json") as Record<string, { loai_sat_thuong: string | null }>;
+  for (const t of SKILL_TYPES) assert.equal(DAMAGE_KIND[t], lc[t].loai_sat_thuong, t);
+  const dk: Record<string, number> = {};
+  for (const r of data("trang_bi.json").dong_an as { tham_so: Record<string, unknown> }[]) {
+    for (const k of ["mauDuoi", "truocTicks", "sauTicks"]) if (typeof r.tham_so[k] === "number") dk[k] = r.tham_so[k] as number;
+  }
+  assert.deepEqual([dk.mauDuoi, dk.truocTicks, dk.sauTicks], [HIDDEN_RULES.lowHpBelow, HIDDEN_RULES.openingTicks, HIDDEN_RULES.lateTicks]);
+  const luat = data("trang_bi.json").luat;
+  assert.equal(HIDDEN_RULES.maxActive, luat.dongAn.toiDaHieuLuc);
+  assert.equal(DAMAGE_CUT_CAP, luat.giamSatThuongNhanToiDa);
 });
 
 test("phẩm: hệ số 1,25^(phẩm − 1) khớp pham.json", () => {

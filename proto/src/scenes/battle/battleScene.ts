@@ -1,27 +1,59 @@
 import type { Sprites } from "../../assets/sprites.ts";
+import { createArenaBackdrop, type ArenaBackdrop, type ArenaKind } from "../../three/index.ts";
 import { Camera, type Rect } from "../../app/camera.ts";
 import type { Scene } from "../../app/scene.ts";
 import type { View } from "../../app/view.ts";
 import { ReplayPlayer } from "../../replay/player.ts";
+import { FONT_DISPLAY, FONT_TEXT } from "../../theme/fonts.ts";
 import { between, ReplayIndex, type UnitTimeline } from "../../replay/timeline.ts";
 import type { Look, ReplaySource } from "../../replay/types.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
 import { animInfo, assignLooks, drawCharacter, resolveLook, type Anim } from "./character.ts";
+import { assignDang, dangLift, drawDang, drawSwingTrail, type DangId } from "./dangDung.ts";
+import { drawDissolve, drawDust, impactFilter, ThanNguoi } from "./chuyenDong.ts";
+import { buildPhapLuan, phapLuanBeat, type PhapLuanUnit } from "./phapLuan.ts";
 import { ReplayControls } from "./controls.ts";
-import { FxLayer, type Point } from "./fx.ts";
-import { drawMotif } from "./motifs.ts";
-import { VfxLib } from "./vfx.ts";
+import { FxLayer, type Point } from "../../hieu_ung/fx2d.ts";
+import { createSkillFx, type SkillFx } from "../../hieu_ung/index.ts";
+import { drawMotif } from "../../hieu_ung/motifs.ts";
+import { VfxLib } from "../../hieu_ung/vfx.ts";
+import { tr } from "../../dashboard/i18n.ts";
+import { installChunkGuard, isChunkError, onChunkError, setReturnHash } from "../../chunkGuard.ts";
 
 const CELL = 64; // đơn vị thế giới mỗi ô sân
 const LANE = 60; // khoảng cách ngang giữa hai người cùng hàng
 const SIZE = 40; // cạnh khối nhân vật
-const TEAM_RING = ["#e6d8b8", "#b3261e"]; // đội A giấy dó, đội B ấn son
+const TEAM_RING = ["#f2e6c8", "#d6372a"]; // đội A giấy dó, đội B ấn son (sáng, vì áo theo hệ nên vòng chân là dấu đội chính)
 const HP = "#7bc96f";
 const MANA = "#5aa9e6";
 const NUMBER_LIFE = 0.9; // giây thực một con số sát thương bay lên
+const COUNTER_COLOR = "#ff8a3d"; // số sát thương của đòn khắc hệ
+const COUNTER_TIPS = 4; // mấy đòn khắc đầu trận có nhãn "Khắc ×1,5" (GDD mục 14, FTUE: thấy khắc chế hoạt động)
+const TIP_SIZE = 13; // cỡ chữ nhãn "Khắc ×1,5", đơn vị thế giới (khoảng 11 px trên màn 375 px)
+const STACK_TICKS = 8; // đòn vào cùng một người cách nhau dưới chừng này tick thì số xếp chồng thay vì đè nhau
+const STACK_MAX = 60; // chồng cao quá chừng này (đơn vị thế giới) thì quay lại hàng đầu
+const BEAST_SCALE = 1.6; // cạnh hình dị thú so với SIZE (người là 1,4): thú to hơn người một chút
+const SCORE_SIDE = 104; // px CSS mỗi bên mép trên dành cho nút của thanh trên (Quay lại), dòng tỉ số nằm giữa
 const HEAVY_HIT = 0.05; // đòn từ 5% máu tối đa trở lên mới diễn hoạt ảnh trúng đòn
 const BADGE = 12; // cạnh dấu hệ đặt trước thanh máu, đơn vị thế giới
 const DEFAULT_ARENA = "vo_truong"; // nền sân khi replay không nói trận đánh ở đâu
+
+/**
+ * Bản đồ chiến trường theo vùng (assets/pixellab/chien_truong/<vùng>/<bối cảnh>.png, replay.arena = "<vùng>/<bối cảnh>"):
+ * ảnh lớn nên không nằm trong bộ nạp Sprites, nạp khi trận cần. undefined khi chưa nạp xong hoặc chưa có hình.
+ */
+const battlefields = new Map<string, HTMLImageElement>();
+function battlefield(arena: string | undefined): HTMLImageElement | undefined {
+  if (!arena?.includes("/")) return undefined;
+  let img = battlefields.get(arena);
+  if (!img) {
+    img = new Image();
+    img.src = `${import.meta.env.BASE_URL}pixellab/chien_truong/${arena}.png`;
+    battlefields.set(arena, img);
+  }
+  return img.complete && img.naturalWidth > 0 ? img : undefined;
+}
+const THREE_ARENAS = new Set<string>(["vo_truong", "mo_linh_thach", "cao_nguyen"] satisfies ArenaKind[]); // sân có bản Three.js
 
 /** Số tick từ mốc gần nhất không sau t trong `marks` (xếp tăng dần) tới t; undefined nếu chưa có mốc nào. */
 function since(marks: number[] | undefined, t: number): number | undefined {
@@ -48,6 +80,8 @@ export class BattleScene implements Scene {
   private sprites: Sprites;
   private vfx: VfxLib;
   private fx = new FxLayer();
+  /** Hiệu ứng chiêu Three.js phủ trên canvas (hieu_ung/); chưa sẵn sàng hay không có WebGL2 thì vẽ bản 2D của `fx` */
+  private fx3d: SkillFx | null = null;
   private index: ReplayIndex | null = null;
   private player: ReplayPlayer | null = null;
   private error = "";
@@ -57,10 +91,26 @@ export class BattleScene implements Scene {
   private lateral = new Map<number, number>();
   /** Mốc ra chiêu và trúng đòn nặng theo id, xếp tăng dần */
   private marks = new Map<number, { casts: number[]; hits: number[] }>();
+  /** Mấy đòn khắc hệ đầu trận, hiện kèm nhãn "Khắc ×1,5" */
+  private counterTips = new Set<object>();
+  /** Chồng số sát thương: dòng của từng số (đơn vị thế giới) và tick đòn đầu của chồng (cả chồng bay lên cùng nhịp) */
+  private numberLift = new Map<object, { base: number; start: number }>();
   /** Ngoại hình ghép theo id (tạm theo đội và hàng khi replay chưa có) */
   private looks = new Map<number, Look>();
+  /** Dáng đứng theo id: theo tài năng (tu_si/<tài năng>), tông chủ ngự kiếm (dangDung.ts) */
+  private dangs = new Map<number, DangId>();
+  /** Pháp luân theo id (phapLuan.ts): công pháp chủ tu, cấp (ReplayUnit.level) và các lần ra chiêu */
+  private luans = new Map<number, PhapLuanUnit>();
+  /** Chuyển động thân người (chuyenDong.ts): khựng, khung va chạm, bị đẩy, nhún bước, bụi, bóng lướt, tan khi ngã */
+  private than: ThanNguoi | null = null;
   /** Trục sân dọc khi màn hình đứng, ngang khi màn hình nằm */
   private vertical: boolean | null = null;
+  /** Vùng nhìn và camera lúc căn sân lần cuối */
+  private fitted: { w: number; h: number; x: number; y: number; zoom: number } | null = null;
+  /** Nền sân Three.js của loại sân và chiều dài sân đang xem; layer null khi sân đó chưa có bản Three.js */
+  private backdrop: { key: string; layer: ArenaBackdrop | null } | null = null;
+  /** Màn đã mở trận (hash lúc gọi open), để tải lại trang giữa trận thì về đó thay vì trận thử của #tran */
+  private openedFrom: string | null = null;
 
   /** sources[0] mở mặc định; người xem đổi nguồn ở ô chọn trên thanh điều khiển. */
   constructor(sources: ReplaySource[], sprites: Sprites) {
@@ -68,8 +118,17 @@ export class BattleScene implements Scene {
     this.source = this.sources[0];
     this.sprites = sprites;
     this.vfx = new VfxLib(sprites);
-    this.controls = new ReplayControls(this.sources.map((s) => s.label), (i) => this.load(this.sources[i]));
+    // Hết trận, nút "Tiếp tục" về màn đã mở trận (như nút Quay lại của thanh trên), không có thì về Động phủ.
+    const back = () => {
+      if (history.length > 1) history.back();
+      else location.hash = "#dong-phu";
+    };
+    this.controls = new ReplayControls(this.sources.map((s) => s.label), (i) => this.load(this.sources[i]), back);
     this.hud = this.controls.el;
+    // Màn Trận dựng ngay lúc mở app (main.ts), nên gắn bộ chặn lỗi tải chunk sau deploy ở đây cho cả app. Trận mở từ chiến
+    // báo không giữ được qua lần tải lại (nguồn trận không nằm trong URL): khi đó về màn đã mở trận.
+    installChunkGuard();
+    setReturnHash(() => (location.hash === "#" + this.id ? this.openedFrom : null));
   }
 
   /**
@@ -78,6 +137,10 @@ export class BattleScene implements Scene {
    */
   open(source: ReplaySource): void {
     if (!this.sources.includes(source)) this.sources.unshift(source);
+    // Nơi gọi mở trận rồi mới chuyển màn, nên hash lúc này còn là màn trước (Động phủ, chiến báo…).
+    if (location.hash !== "#" + this.id) this.openedFrom = location.hash || "#dong-phu";
+    // Trận mở cho người chơi: ẩn ô chọn nguồn (công cụ thử trận), hết trận có nút Tiếp tục.
+    this.controls.lock();
     this.controls.setSources(this.sources.map((s) => s.label), this.sources.indexOf(source));
     this.load(source);
   }
@@ -85,6 +148,12 @@ export class BattleScene implements Scene {
   enter(v: View): void {
     if (this.loads === 0) this.load(this.source);
     this.fitIfRotated(v);
+    this.fx3d ??= createSkillFx(v.ctx.canvas);
+    this.fx3d.show(true);
+  }
+
+  leave(): void {
+    this.fx3d?.show(false);
   }
 
   private load(source: ReplaySource): void {
@@ -95,6 +164,7 @@ export class BattleScene implements Scene {
     this.player = null;
     this.error = "";
     this.controls.loading();
+    this.controls.ended(null);
     source.load().then(
       (replay) => {
         if (n !== this.loads) return;
@@ -105,13 +175,48 @@ export class BattleScene implements Scene {
         this.controls.bind(this.player);
         this.layoutLanes();
         this.buildMarks();
+        this.counterTips = new Set(this.index.hits.filter((h) => h.kind === "hit" && h.counter).slice(0, COUNTER_TIPS));
+        this.stackNumbers();
         this.looks = assignLooks(replay.units);
+        // Bộ áo tài năng nạp lười (sprites.ts): nạp trước các bộ có trong trận; lúc chờ resolveLook lùi về đạo bào.
+        for (const l of this.looks.values()) {
+          this.sprites.ensure(`nhan_vat/${l.body}/${l.outfit}/`);
+          this.sprites.ensure(`nhan_vat/${l.body}/${l.outfit}.png`);
+        }
+        this.dangs = assignDang(replay.units);
+        this.luans = buildPhapLuan(replay.units, replay.events);
+        this.than = new ThanNguoi(this.index, this.sprites, (id) => this.looks.get(id));
         this.vertical = null;
       },
       (e: unknown) => {
-        if (n === this.loads) this.error = String(e);
+        if (n !== this.loads) return;
+        // Không để màn đứng "Đang tải…": báo rõ; lỗi tải chunk sau deploy thì bộ chặn tải lại trang hoặc hiện nút Tải lại.
+        console.warn("Không tải được trận", e);
+        this.error = tr("Không tải được trận. Tải lại trang để thử lại.");
+        if (isChunkError(e)) onChunkError();
       },
     );
+  }
+
+  /**
+   * Chồng số sát thương: các đòn vào cùng một người cách nhau dưới STACK_TICKS gom thành một chồng, mỗi số (kèm nhãn khắc) một
+   * dòng, để "18" và "243" không dính thành "18243". Cả chồng bay lên cùng nhịp tính từ đòn đầu (số cũ không lấn lên dòng số
+   * mới). Chồng quá cao hay kéo quá lâu thì mở chồng mới. Tính một lần lúc nạp trận nên tua tới lui vẫn đúng chỗ.
+   */
+  private stackNumbers(): void {
+    this.numberLift.clear();
+    const stacks = new Map<number, { start: number; last: number; top: number }>();
+    for (const e of this.index!.hits) {
+      let s = stacks.get(e.unit);
+      if (!s || e.tick - s.last > STACK_TICKS || e.tick - s.start > 2 * STACK_TICKS || s.top > STACK_MAX) {
+        s = { start: e.tick, last: e.tick, top: 0 };
+        stacks.set(e.unit, s);
+      }
+      this.numberLift.set(e, { base: s.top, start: s.start });
+      const { size, tip } = this.numberStyle(e);
+      s.top += size + 3 + (tip ? TIP_SIZE + 2 : 0);
+      s.last = e.tick;
+    }
   }
 
   update(dt: number): void {
@@ -125,7 +230,7 @@ export class BattleScene implements Scene {
     const player = this.player;
     if (!index || !player) {
       ctx.fillStyle = "#a89c88";
-      ctx.font = "15px system-ui, sans-serif";
+      ctx.font = `15px ${FONT_TEXT}`;
       ctx.textAlign = "center";
       ctx.fillText(this.error || `Đang tải ${this.source.label}…`, v.w / 2, (v.h - v.bottom) / 2);
       return;
@@ -136,36 +241,46 @@ export class BattleScene implements Scene {
 
     const life = (s: number) => Math.min(2 * tps, s * tps * player.speed);
     const cam = this.camera;
+    const at = (id: number, time = t) => {
+      const ut = index.byId.get(id);
+      return ut ? this.place(ut.pos.moving(time), this.lat(id)) : null;
+    };
+    const zone = (center: number, radius: number) => {
+      const p = this.place(center, 0);
+      const along = (radius / 1000) * CELL;
+      const half = 3.5 * LANE;
+      return this.vertical ? { ...p, rx: half, ry: along } : { ...p, rx: along, ry: half };
+    };
     this.fx.prepare({
-      ctx, index, t, life, size: SIZE, zoom: cam.zoom, dpr: v.dpr,
-      at: (id, time = t) => {
-        const ut = index.byId.get(id);
-        return ut ? this.place(ut.pos.moving(time), this.lat(id)) : null;
-      },
-      zone: (center, radius) => {
-        const p = this.place(center, 0);
-        const along = (radius / 1000) * CELL;
-        const half = 3.5 * LANE;
-        return this.vertical ? { ...p, rx: half, ry: along } : { ...p, rx: along, ry: half };
-      },
+      ctx, index, t, life, size: SIZE, zoom: cam.zoom, dpr: v.dpr, at, zone,
       toScreen: (p) => cam.toScreen(p.x, p.y, v),
       image: (key) => this.sprites.get(key),
       vfx: this.vfx,
     });
+    // Lớp Three.js vẽ cả bốn pha hiệu ứng; khung nào nó chưa vẽ được (chưa nạp, không có WebGL2) thì giữ bản 2D.
+    const fx3d = !!this.fx3d?.active;
 
     cam.apply(v);
     // Rung màn hình khi có đòn lớn: dời cả sân theo px màn hình.
     const shake = this.fx.shake();
     if (shake.x || shake.y) ctx.translate(shake.x / cam.zoom, shake.y / cam.zoom);
     this.drawField(ctx, index.replay.fieldLength);
-    this.fx.ground();
+    if (!fx3d) this.fx.ground();
 
     // Ai vừa trúng đòn trong 3 tick gần nhất thì nháy trắng.
     const flashed = new Set(between(index.hits, t - 3, t).filter((h) => h.kind === "hit").map((h) => h.unit));
     const lunges = this.fx.lunges();
-    for (const ut of index.units) this.drawUnit(ctx, ut, t, flashed.has(ut.unit.id), lunges.get(ut.unit.id));
+    for (const ut of index.units) this.drawUnit(ctx, ut, t, flashed.has(ut.unit.id), lunges.get(ut.unit.id), life, at);
 
-    this.fx.air();
+    if (!fx3d) this.fx.air();
+    this.fx3d?.frame(
+      { index, t, speed: player.speed, life, at, zone, size: SIZE },
+      { w: v.w, h: v.h, bottom: v.bottom, x: cam.x, y: cam.y, zoom: cam.zoom, shakeX: shake.x, shakeY: shake.y },
+      0,
+    );
+    // Lớp trước của sân Three.js (cành, nhũ đá, mây, viền tối mép sân) phủ lên người và hiệu ứng, dưới số sát thương.
+    ctx.imageSmoothingEnabled = true;
+    this.arenaBackdrop()?.drawFront(ctx, performance.now() / 1000, !!this.vertical);
     this.drawNumbers(ctx, index, t, life(NUMBER_LIFE));
     this.fx.callouts();
     this.drawScore(v, index, t, player);
@@ -191,8 +306,11 @@ export class BattleScene implements Scene {
     for (const m of this.marks.values()) m.casts.sort((a, b) => a - b);
   }
 
-  /** Hoạt ảnh và khung của một người tại t, ưu tiên: ngã, ra chiêu, trúng đòn nặng, đứng. null nếu chưa có hình. */
-  private pose(ut: UnitTimeline, t: number, look: Look): { anim: Anim; frame: number } | null {
+  /**
+   * Hoạt ảnh và khung của một người tại t, ưu tiên: ngã, ra chiêu, trúng đòn nặng, chạy, đứng. `trail` là khung để vẽ
+   * vệt vũ khí. null nếu chưa có hình.
+   */
+  private pose(ut: UnitTimeline, t: number, look: Look, life: (s: number) => number): { anim: Anim; frame: number; trail?: number } | null {
     const idle = animInfo(this.sprites, look, "dung");
     if (!idle) return null;
     const tps = this.index!.replay.tps;
@@ -206,10 +324,18 @@ export class BattleScene implements Scene {
       if (p) return { anim: "nga", frame: Math.min(p.frame, p.frames - 1) };
     } else {
       const m = this.marks.get(ut.unit.id);
-      const cast = play("ra_chieu", since(m?.casts, t));
-      if (cast && cast.frame < cast.frames) return cast;
+      // Ra chiêu theo loại chiêu (chuyenDong.ts): vung trước, khựng ở khung chạm; thân chưa có dải riêng thì ra_chieu chung.
+      if (this.than) {
+        const act = this.than.act(ut, t, life);
+        if (act) return act;
+      } else {
+        const cast = play("ra_chieu", since(m?.casts, t));
+        if (cast && cast.frame < cast.frames) return cast;
+      }
       const hit = play("trung_don", since(m?.hits, t));
       if (hit && hit.frame < hit.frames) return hit;
+      const run = this.than?.gait(ut, t);
+      if (run) return run;
     }
     // Đứng thở lệch nhịp theo id để cả đội không nhấp nhô cùng lúc.
     return { anim: "dung", frame: (Math.floor((t / tps) * idle.fps) + ut.unit.id) % idle.frames };
@@ -252,14 +378,74 @@ export class BattleScene implements Scene {
     return this.vertical ? { x: -half, y: 0, w: 2 * half, h: len } : { x: 0, y: -half, w: len, h: 2 * half };
   }
 
+  /**
+   * Căn sân vừa màn hình khi xoay màn hình, hoặc khi vùng nhìn đổi cỡ mà người xem chưa kéo hay zoom
+   * (pane hiện ra, thanh bên của khung mới bật tắt). Bỏ qua lúc canvas chưa có kích thước.
+   */
   private fitIfRotated(v: View): void {
-    if (!this.index) return;
-    const vertical = v.h - v.bottom >= v.w;
-    if (vertical === this.vertical) return;
+    const h = v.h - v.bottom;
+    if (!this.index || v.w <= 0 || h <= 0) return;
+    const vertical = h >= v.w;
+    const cam = this.camera;
+    const f = this.fitted;
+    const untouched = !!f && cam.zoom === f.zoom && cam.x === f.x && cam.y === f.y;
+    const resized = !!f && (f.w !== v.w || f.h !== h);
+    if (vertical === this.vertical && !(resized && untouched)) return;
     this.vertical = vertical;
     const r = this.fieldRect();
-    this.camera.fit(r, v, 8);
-    this.camera.bounds = r;
+    cam.fit(r, v, 8);
+    cam.bounds = r;
+    this.fitted = { w: v.w, h, x: cam.x, y: cam.y, zoom: cam.zoom };
+  }
+
+  /**
+   * Nền sân Three.js của trận đang xem: mỗi chiều trục nướng một lần (lần vẽ đầu thì bắt đầu nướng), rồi mỗi khung vẽ
+   * theo toạ độ thế giới nên kéo, zoom, xoay màn vẫn khớp. Đổi sang trận ở sân khác thì bỏ bản cũ.
+   * null khi sân chưa có bản Three.js; draw() trả false khi chưa nướng xong hay máy không có WebGL2.
+   */
+  private arenaBackdrop(): ArenaBackdrop | null {
+    if (!this.index) return null;
+    const kind = this.index.replay.arena ?? DEFAULT_ARENA;
+    const length = (this.index.replay.fieldLength / 1000) * CELL;
+    const key = `${kind}|${length}`;
+    if (this.backdrop?.key !== key) {
+      this.backdrop?.layer?.dispose();
+      const layer = THREE_ARENAS.has(kind) ? createArenaBackdrop(kind as ArenaKind, { length, halfCross: 3.5 * LANE }) : null;
+      this.backdrop = { key, layer };
+    }
+    return this.backdrop.layer;
+  }
+
+  /** Sân san_dau/<tên> khi không có bản đồ chiến trường: "<vùng>/<bối cảnh>" lùi về sân cùng bối cảnh nếu có, không thì võ trường. */
+  private plainArena(): string {
+    const arena = this.index?.replay.arena ?? DEFAULT_ARENA;
+    if (!arena.includes("/")) return arena;
+    const ctx = arena.split("/")[1];
+    return this.sprites.get("san_dau/" + ctx) ? ctx : DEFAULT_ARENA;
+  }
+
+  /**
+   * Bản đồ chiến trường theo vùng: dải sân giữa ảnh trùng sân, cảnh của vùng phủ ra ngoài sân (ảnh cao gấp đôi bề ngang sân,
+   * rộng theo tỉ lệ ảnh) nên thu nhỏ hay màn rộng thì thấy cả khung cảnh. Ngoài sân phủ tối hơn để người nổi trên nền.
+   */
+  private drawBattlefield(ctx: CanvasRenderingContext2D, img: HTMLImageElement, r: Rect): void {
+    const len = this.vertical ? r.h : r.w;
+    const cross = this.vertical ? r.w : r.h;
+    const h = cross * 2;
+    const w = (h * img.naturalWidth) / img.naturalHeight;
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+    ctx.translate(r.x + r.w / 2, r.y + r.h / 2);
+    if (this.vertical) ctx.rotate(-Math.PI / 2);
+    ctx.drawImage(img, -w / 2, -h / 2, w, h);
+    ctx.fillStyle = "rgba(20, 17, 15, 0.45)";
+    ctx.fillRect(-w / 2, -h / 2, w, (h - cross) / 2);
+    ctx.fillRect(-w / 2, cross / 2, w, (h - cross) / 2);
+    ctx.fillRect(-w / 2, -cross / 2, (w - len) / 2, cross);
+    ctx.fillRect(len / 2, -cross / 2, (w - len) / 2, cross);
+    ctx.fillStyle = "rgba(20, 17, 15, 0.15)";
+    ctx.fillRect(-len / 2, -cross / 2, len, cross);
+    ctx.restore();
   }
 
   // ---- vẽ ----
@@ -267,9 +453,14 @@ export class BattleScene implements Scene {
   private drawField(ctx: CanvasRenderingContext2D, fieldLength: number): void {
     const r = this.fieldRect();
     const cells = fieldLength / 1000;
-    // Nền sân PixelLab (san_dau/<tên>, vẽ ngang theo chiều trục sân); màn đứng xoay 90 độ. Chưa có hình thì nền tối.
-    const bg = this.sprites.get("san_dau/" + (this.index?.replay.arena ?? DEFAULT_ARENA));
-    if (bg) {
+    // Nền sân Three.js nếu đã nướng (cả lề quanh sân, sương trôi, đèn nhịp sáng; không cần phủ tối); không thì nền
+    // PixelLab (san_dau/<tên>, vẽ ngang theo chiều trục sân, màn đứng xoay 90 độ); chưa có hình nào thì nền tối.
+    const backdrop = this.arenaBackdrop();
+    const drawn = !!backdrop && backdrop.draw(ctx, performance.now() / 1000, !!this.vertical);
+    const map = drawn ? undefined : battlefield(this.index?.replay.arena);
+    const bg = drawn || map ? undefined : this.sprites.get("san_dau/" + this.plainArena());
+    if (map) this.drawBattlefield(ctx, map, r);
+    else if (bg) {
       ctx.imageSmoothingEnabled = false;
       if (this.vertical) {
         ctx.save();
@@ -282,14 +473,16 @@ export class BattleScene implements Scene {
       }
       // Phủ tối nhẹ để người và hiệu ứng nổi trên nền.
       ctx.fillStyle = "rgba(20, 17, 15, 0.25)";
-    } else {
+      ctx.fillRect(r.x, r.y, r.w, r.h);
+    } else if (!drawn) {
       ctx.fillStyle = "#1f1a15";
+      ctx.fillRect(r.x, r.y, r.w, r.h);
     }
-    ctx.fillRect(r.x, r.y, r.w, r.h);
-    // Nền đá lát đã có ô để ước khoảng cách: chỉ kẻ ô khi chưa có nền, vạch giữa sân thì luôn giữ (mờ hơn khi có nền).
-    ctx.globalAlpha = bg ? 0.5 : 1;
+    // Nền đã có ô hay vân để ước khoảng cách: chỉ kẻ ô khi chưa có nền, vạch giữa sân thì luôn giữ (mờ hơn khi có nền).
+    const plain = !drawn && !bg && !map;
+    ctx.globalAlpha = plain ? 1 : 0.5;
     ctx.beginPath();
-    for (let i = 0; i <= (bg ? -1 : cells); i++) {
+    for (let i = 0; i <= (plain ? cells : -1); i++) {
       const a = this.place(i * 1000, 0);
       if (this.vertical) {
         ctx.moveTo(r.x, a.y);
@@ -318,39 +511,97 @@ export class BattleScene implements Scene {
     ctx.globalAlpha = 1;
   }
 
-  private drawUnit(ctx: CanvasRenderingContext2D, ut: UnitTimeline, t: number, flash: boolean, lunge?: Point): void {
+  private drawUnit(
+    ctx: CanvasRenderingContext2D, ut: UnitTimeline, t: number, flash: boolean, lunge: Point | undefined,
+    life: (s: number) => number, at: (id: number, time?: number) => Point | null,
+  ): void {
     const u = ut.unit;
-    const p = this.place(ut.pos.moving(t), this.lat(u.id));
-    const x = p.x + (lunge?.x ?? 0);
-    const y = p.y + (lunge?.y ?? 0);
+    const lat = this.lat(u.id);
+    const p = this.place(ut.pos.moving(t), lat);
+    // Thân người (chuyenDong.ts): khựng khi trúng đòn nặng (tPose), dời vì bị đẩy và nhún bước; vòng đội, thanh máu, dấu
+    // hệ vẫn ở chỗ cũ (x, y) cho dễ đọc.
+    const mo = this.than?.motion(ut, t, life, (id, tick) => at(id, tick), (pos) => this.place(pos, lat));
+    // Dị thú có hình thú riêng (sprite thu/<loài>) thì vẽ hình đó, không ghép người.
+    const beast = !!u.monster && !!this.sprites.get(u.sprite);
+    const wanted = beast ? undefined : this.looks.get(u.id);
+    const look = wanted && resolveLook(this.sprites, wanted);
+    const pose = look ? this.pose(ut, mo?.tPose ?? t, look, life) : null;
+    // Dải ra chiêu theo loại (gói 2) tự có bước nhún tới: bỏ cú nhích của hiệu ứng để không nhích đôi.
+    const nudge = pose?.anim.startsWith("ra_chieu_") ? undefined : lunge;
+    const x = p.x + (nudge?.x ?? 0);
+    const y = p.y + (nudge?.y ?? 0);
+    const bodyX = x + (mo?.dx ?? 0);
+    const bodyY = y + (mo?.dy ?? 0);
     const dead = t >= ut.death;
     const style = ELEMENT_STYLE[u.element];
     const h = SIZE / 2;
-    const wanted = this.looks.get(u.id);
-    const look = wanted && resolveLook(this.sprites, wanted);
-    const pose = look ? this.pose(ut, t, look) : null;
     const sprite = pose ? undefined : this.sprites.get(u.sprite);
     const icon = this.sprites.get("he/" + u.element);
+    const tps = this.index!.replay.tps;
+    const dang = this.dangs.get(u.id) ?? "thuong";
+    // Người bay (lơ lửng, ngự kiếm) nhấc khỏi mặt đất: bóng nhỏ và nhạt đi, thanh máu nhấc theo.
+    const lift = pose && look ? (dangLift(dang, pose.anim, t / tps, u.id * 0.37) * SIZE * 1.4) / 64 : 0;
+    const shrink = 1 - Math.min(0.45, lift / 30);
 
-    ctx.globalAlpha = dead ? 0.25 : 1;
+    ctx.globalAlpha = dead ? 0.25 : 1 - (1 - shrink) * 0.8;
     ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
     ctx.beginPath();
-    ctx.ellipse(x, y + h, h, h * 0.35, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y + h, h * shrink, h * 0.35 * shrink, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.globalAlpha = dead ? 0.25 : 1;
+    ctx.beginPath();
+    ctx.ellipse(x, y + h, h, h * 0.35, 0, 0, Math.PI * 2);
     ctx.imageSmoothingEnabled = false; // giữ nét pixel art khi phóng to
 
     const figure = !!(pose || sprite);
     if (figure) {
       // Có hình PixelLab: vòng đội dưới chân, người đứng trên vòng; dấu hệ đặt trước thanh máu (vẽ ở dưới).
-      ctx.lineWidth = 3;
+      // Vòng dày kèm quầng mờ cùng màu (người dùng chọn 2026-11-05: áo theo hệ nên đội nhận bằng vòng chân và viền thanh máu).
+      const alpha = ctx.globalAlpha;
       ctx.strokeStyle = TEAM_RING[u.team];
+      ctx.globalAlpha = alpha * 0.35;
+      ctx.lineWidth = 8.5;
       ctx.stroke();
-      const s = SIZE * 1.4;
+      ctx.globalAlpha = alpha;
+      ctx.lineWidth = 4.5;
+      ctx.stroke();
+      const s = SIZE * (beast ? BEAST_SCALE : 1.4);
       if (pose && look) {
-        // Nhân vật ghép có hoạt ảnh: ngã xong thì mờ dần; trúng đòn nháy nhẹ.
-        const tps = this.index!.replay.tps;
-        ctx.globalAlpha = dead ? Math.max(0.35, 1 - (t - ut.death) / (1.5 * tps)) : flash ? 0.7 : 1;
-        drawCharacter(ctx, this.sprites, look, pose.anim, pose.frame, x, y + h, s / 64, u.team === 1);
+        // Pháp luân từ Trúc Cơ: nhịp tụ lực, bung, khung chạm theo các lần ra chiêu, chỉ tính từ t (không giữ trạng thái).
+        const pl = this.luans.get(u.id);
+        const luan = pl ? { spec: pl.spec, beat: phapLuanBeat(pl.casts, t, tps) } : undefined;
+        const mirror = u.team === 1;
+        // withLuan: bóng lướt và khung va chạm không vẽ pháp luân (khỏi thành vòng trắng, mực to và đỡ tốn).
+        const paint = (px: number, py: number, withLuan: boolean) => {
+          const ok = drawDang(ctx, this.sprites, look, dang, pose.anim, pose.frame, t / tps, px, py, s / 64, mirror, style.color, u.id * 0.37, withLuan ? luan : luan && { ...luan, hidden: true });
+          if (!ok) drawCharacter(ctx, this.sprites, look, pose.anim, pose.frame, px, py, s / 64, mirror);
+        };
+        // Bụi dưới chân và bóng mờ khi lướt (đuôi lấy từ chính đường đã đi).
+        if (mo) {
+          drawDust(ctx, mo.dust, h);
+          for (const g of mo.ghosts) {
+            ctx.globalAlpha = g.alpha;
+            paint(g.x, g.y + h, false);
+          }
+        }
+        // Thân: bè ra hay nhún quanh chân; khung va chạm trắng rồi mực (thay nháy mờ); ngã thì tan dần còn 0,3.
+        // Khung va chạm cần ctx.filter; máy không có (Safari, WebView cũ) và đòn nhẹ thì giữ nháy 0,7 như cũ.
+        const filterOk = "filter" in ctx;
+        const struck = !!mo && mo.impact >= 0 && filterOk;
+        ctx.save();
+        ctx.globalAlpha = dead ? mo?.alpha ?? Math.max(0.35, 1 - (t - ut.death) / (1.5 * tps)) : flash && !struck ? 0.7 : 1;
+        if (mo && (mo.sx !== 1 || mo.sy !== 1)) {
+          ctx.translate(bodyX, bodyY + h);
+          ctx.scale(mo.sx, mo.sy);
+          ctx.translate(-bodyX, -(bodyY + h));
+        }
+        if (struck) ctx.filter = impactFilter(mo!.impact);
+        paint(bodyX, bodyY + h, !struck);
+        if (struck) ctx.filter = "none";
+        ctx.restore();
+        // Vệt mũi vũ khí khi ra chiêu cận chiến; hạt hệ khi tan.
+        if (pose.trail !== undefined) drawSwingTrail(ctx, this.sprites, look, pose.anim, pose.trail, bodyX, bodyY + h, s / 64, mirror, style.color);
+        if (mo?.dissolve) drawDissolve(ctx, u.element, bodyX, bodyY - h * 0.2, mo.dissolve);
       } else if (u.team === 1) {
         if (flash && !dead) ctx.globalAlpha = 0.5;
         // Hình PixelLab nhìn hướng đông nam; đội B lật ngang để hai đội quay mặt vào nhau.
@@ -379,7 +630,7 @@ export class BattleScene implements Scene {
         ctx.drawImage(icon, x - 12, y - 12, 24, 24);
       } else {
         ctx.fillStyle = style.ink;
-        ctx.font = "bold 12px system-ui, sans-serif";
+        ctx.font = `bold 12px ${FONT_TEXT}`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(style.short, x, y + 1);
@@ -392,7 +643,7 @@ export class BattleScene implements Scene {
     const bw = SIZE + 4;
     const badge = figure ? BADGE + 2 : 0;
     const bx = x - (bw + badge) / 2 + badge;
-    const by = (figure ? y + h - SIZE * 1.4 : y - h) - 12;
+    const by = (figure ? y + h - SIZE * (beast ? BEAST_SCALE : 1.4) - lift : y - h) - 12;
     if (figure) {
       const cx = bx - 2 - BADGE / 2;
       const cy = by + 3.5;
@@ -409,6 +660,10 @@ export class BattleScene implements Scene {
     }
     ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
     ctx.fillRect(bx - 1, by - 1, bw + 2, 9);
+    // Viền thanh máu màu đội, cùng màu vòng chân.
+    ctx.strokeStyle = TEAM_RING[u.team];
+    ctx.lineWidth = 1;
+    ctx.strokeRect(bx - 1.5, by - 1.5, bw + 3, 10);
     ctx.fillStyle = HP;
     ctx.fillRect(bx, by, (bw * ut.hp.step(t)) / u.hpMax, 4);
     ctx.fillStyle = MANA;
@@ -426,47 +681,73 @@ export class BattleScene implements Scene {
       if (!ut) continue;
       const age = (t - e.tick) / life;
       const p = this.place(ut.pos.step(e.tick), this.lat(e.unit));
-      // Nhiều đòn cùng lúc vào một người thì lệch ngang theo người đánh để khỏi đè nhau.
-      const x = p.x + (((e.src * 37) % 25) - 12);
-      const y = p.y - SIZE / 2 - 18 - age * 34;
-      let text = String(e.amount);
-      let color = "#fbf6ec";
-      let size = 13;
-      if (e.kind === "heal") {
-        text = "+" + e.amount;
-        color = HP;
-      } else if (e.crit) {
-        text = e.amount + "!";
-        color = "#ffd34d";
-        size = 17;
-      }
+      // Đòn gần nhau vào cùng một người xếp chồng (stackNumbers), cả chồng bay lên theo đòn đầu; mờ dần theo tuổi từng số.
+      // Lệch ngang nhẹ theo người đánh cho đỡ thẳng hàng.
+      const lift = this.numberLift.get(e);
+      const rise = ((t - (lift?.start ?? e.tick)) / life) * 34;
+      const x = p.x + (((e.src * 37) % 13) - 6);
+      const y = p.y - SIZE / 2 - 18 - rise - (lift?.base ?? 0);
+      const { text, color, size, tip } = this.numberStyle(e);
       ctx.globalAlpha = 1 - age * age;
-      ctx.font = `bold ${size}px system-ui, sans-serif`;
+      ctx.font = `bold ${size}px ${FONT_TEXT}`;
       ctx.strokeText(text, x, y);
       ctx.fillStyle = color;
       ctx.fillText(text, x, y);
+      if (tip) {
+        ctx.font = `bold ${TIP_SIZE}px ${FONT_TEXT}`;
+        const ty = y - size / 2 - TIP_SIZE / 2 - 1;
+        ctx.strokeText(tip, x, ty);
+        ctx.fillText(tip, x, ty);
+      }
     }
     ctx.globalAlpha = 1;
   }
 
-  /** Số người còn đứng mỗi đội, và kết quả khi hết trận. Vẽ theo toạ độ màn hình. */
+  /** Chữ, màu, cỡ của một số sát thương hay hồi máu, và nhãn "Khắc ×1,5" nếu là một trong vài đòn khắc đầu trận. */
+  private numberStyle(e: ReplayIndex["hits"][number]): { text: string; color: string; size: number; tip: string } {
+    if (e.kind === "heal") return { text: "+" + e.amount, color: HP, size: 13, tip: "" };
+    if (e.crit) return { text: e.amount + "!", color: "#ffd34d", size: 17, tip: "" };
+    // Đòn khắc hệ: số cam, to hơn; vài đòn đầu trận kèm nhãn để người mới thấy khắc chế hoạt động.
+    if (e.counter) return { text: String(e.amount), color: COUNTER_COLOR, size: 16, tip: this.counterTips.has(e) ? tr("Khắc ×1,5") : "" };
+    return { text: String(e.amount), color: "#fbf6ec", size: 13, tip: "" };
+  }
+
+  /**
+   * Số người còn đứng mỗi bên, và kết quả khi hết trận (kèm nút Tiếp tục khi trận mở cho người chơi). Vẽ theo toạ độ
+   * màn hình. Tên hai bên lấy từ replay.teams, không có thì "Ta"/"Địch" theo replay.viewer, không có nữa thì "Đội A"/"Đội B".
+   */
   private drawScore(v: View, index: ReplayIndex, t: number, player: ReplayPlayer): void {
     const ctx = v.ctx;
+    const r = index.replay;
+    const names = (r.teams ?? (r.viewer === undefined ? ["Đội A", "Đội B"] : r.viewer === 0 ? ["Ta", "Địch"] : ["Địch", "Ta"])).map(tr);
     ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
     ctx.textBaseline = "top";
     ctx.textAlign = "center";
-    ctx.font = "bold 14px system-ui, sans-serif";
+    ctx.font = `bold 14px ${FONT_TEXT}`;
     ctx.fillStyle = "#efe6d6";
-    ctx.fillText(`Đội A ${index.alive(0, t)}  ·  ${index.alive(1, t)} Đội B`, v.w / 2, 8);
-    if (t < index.replay.ticks || player.playing) return;
-    const w = index.replay.winner;
-    const text = w === "draw" ? "Hoà" : `Đội ${w} thắng`;
-    ctx.font = "bold 28px system-ui, sans-serif";
+    const score = `${names[0]} ${index.alive(0, t)}  ·  ${index.alive(1, t)} ${names[1]}`;
+    // Tên tông môn dài không vừa khoảng giữa hai bên thanh trên (nút Quay lại ở góc phải): hạ xuống dưới thanh, vẫn dài thì thu chữ.
+    let sy = 8;
+    const sw = ctx.measureText(score).width;
+    if (sw > v.w - 2 * SCORE_SIDE) {
+      sy = 50;
+      const room = v.w - 24;
+      if (sw > room) ctx.font = `bold ${Math.max(10, Math.floor((14 * room) / sw))}px ${FONT_TEXT}`;
+    }
+    ctx.fillText(score, v.w / 2, sy);
+    const mid = (v.h - v.bottom) / 2;
+    const ended = t >= r.ticks && !player.playing;
+    this.controls.ended(ended ? mid + 30 : null);
+    if (!ended) return;
+    const w = r.winner;
+    const won = w !== "draw" && r.viewer !== undefined ? (w === "A") === (r.viewer === 0) : undefined;
+    const text = w === "draw" ? tr("Hoà") : won !== undefined ? tr(won ? "Thắng" : "Thua") : tr(`${w === "A" ? names[0] : names[1]} thắng`);
+    ctx.font = `bold 32px ${FONT_DISPLAY}`;
     ctx.textBaseline = "middle";
     ctx.lineWidth = 6;
     ctx.strokeStyle = "rgba(0, 0, 0, 0.7)";
-    ctx.strokeText(text, v.w / 2, (v.h - v.bottom) / 2);
-    ctx.fillStyle = "#ffd34d";
-    ctx.fillText(text, v.w / 2, (v.h - v.bottom) / 2);
+    ctx.strokeText(text, v.w / 2, mid);
+    ctx.fillStyle = won === false ? "#e8e0d2" : "#ffd34d";
+    ctx.fillText(text, v.w / 2, mid);
   }
 }

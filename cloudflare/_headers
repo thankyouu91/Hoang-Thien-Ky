@@ -1,0 +1,23 @@
+# Header cho static assets của thienhoangky.fun (chép vào proto/dist khi deploy, xem scripts/chuan-bi.mjs).
+# HTML giữ mặc định của Workers (max-age=0, must-revalidate) để bản mới lên ngay.
+
+# File của Vite có mã băm trong tên: giữ lâu.
+/assets/*
+  Cache-Control: private, max-age=31536000, immutable
+
+# Hình PixelLab và tranh vẽ: tên không đổi khi vẽ lại, nên giữ ngắn và làm mới ngầm.
+/pixellab/*
+  Cache-Control: private, max-age=600, stale-while-revalidate=86400
+/icon_ve/*
+  Cache-Control: private, max-age=600, stale-while-revalidate=86400
+
+# Dấu ấn và favicon: công khai (trang cổng link mời cần), đổi ít.
+/brand/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: same-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  X-Robots-Tag: noindex

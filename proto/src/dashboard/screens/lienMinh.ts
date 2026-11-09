@@ -4,7 +4,7 @@
 import { MiniMap } from "../minimap.ts";
 import { PageScene, type DashCtx } from "../shell.ts";
 import type { LienMinhView } from "../source.ts";
-import { agoText, cd, clockText, esc, toast } from "../ui.ts";
+import { agoText, cd, clockText, esc, SAP_CO, sapCo } from "../ui.ts";
 
 export class LienMinhScene extends PageScene<LienMinhView> {
   private mini: MiniMap;
@@ -29,7 +29,7 @@ export class LienMinhScene extends PageScene<LienMinhView> {
   }
 
   protected render(v: LienMinhView): void {
-    this.page.innerHTML = `${v.alliance ? this.joined(v) : this.none(v)}
+    this.page.innerHTML = `<div class="panel">${v.alliance ? this.joined(v) : this.none(v)}</div>
       <details class="dev"><summary>Công cụ thử (prototype)</summary>
         <label><input type="checkbox" data-dev="joined" ${v.alliance ? "checked" : ""}> Tông môn đã vào liên minh</label>
       </details>`;
@@ -52,69 +52,79 @@ export class LienMinhScene extends PageScene<LienMinhView> {
   private none(v: LienMinhView): string {
     const canJoin = v.can.lienMinh && v.sectLevel >= v.joinLevel;
     const canCreate = v.can.lienMinh && v.sectLevel >= v.createLevel;
-    return `
-      <section class="card">
-        <h2>Chưa có liên minh</h2>
-        <p class="muted">Liên minh tối đa 5 tông môn cùng vị diện. Xin vào từ tông môn cấp ${v.joinLevel}, lập từ cấp ${v.createLevel}.</p>
-        ${v.can.lienMinh ? `<button type="button" class="wide seal" data-act="create" ${canCreate ? "" : "disabled"}>Lập liên minh</button>` : `<p class="muted">Chỉ tông chủ và phó tông chủ xin vào hay lập liên minh.</p>`}
-      </section>
-      <section class="card">
-        <h2>Liên minh cùng vị diện</h2>
-        <ul class="list">${v.list
-          .map(
-            (l) => `<li class="row"><span class="grow"><b>${esc(l.name)}</b>${l.invited ? ` <span class="chip sk">Mời bạn</span>` : ""}<span class="muted block">${l.sects}/5 tông môn · tông mạnh nhất cấp ${l.level}</span></span>
-              ${v.can.lienMinh ? `<button type="button" class="${l.invited ? "seal" : "btn"} small" data-act="join" data-id="${l.id}" ${canJoin ? "" : "disabled"}>${l.invited ? "Nhận lời" : "Xin vào"}</button>` : ""}</li>`,
-          )
-          .join("")}</ul>
-      </section>`;
+    // Việc chính khi chưa có liên minh: nhận lời mời hoặc xin vào một liên minh cùng vị diện.
+    return `<div class="cols">
+      <div class="col">
+        <section class="card primary">
+          <h2>Liên minh cùng vị diện</h2>
+          <ul class="list">${v.list
+            .map(
+              (l) => `<li class="row"><span class="grow"><b>${esc(l.name)}</b>${l.invited ? ` <span class="chip plain bad">Mời bạn</span>` : ""}<span class="muted block">${l.sects}/5 tông môn · tông mạnh nhất cấp ${l.level}</span></span>
+                ${v.can.lienMinh ? `<button type="button" class="${l.invited ? "seal" : "btn"} small" data-act="join" data-id="${l.id}" ${canJoin ? "" : "disabled"}>${l.invited ? "Nhận lời" : "Xin vào"}</button>` : ""}</li>`,
+            )
+            .join("") || `<li class="empty-note">Chưa có liên minh nào trong vị diện.</li>`}</ul>
+          ${v.can.lienMinh ? "" : `<p class="note">Chỉ tông chủ và phó tông chủ xin vào hay lập liên minh.</p>`}
+        </section>
+      </div>
+      <div class="col">
+        <section class="card">
+          <h2>Chưa có liên minh</h2>
+          <p class="muted">Liên minh tối đa 5 tông môn cùng vị diện. Xin vào từ tông môn cấp ${v.joinLevel}, lập từ cấp ${v.createLevel}.</p>
+          ${v.can.lienMinh ? `<button type="button" class="wide" data-act="create" ${canCreate ? "" : "disabled"}>Lập liên minh ${SAP_CO}</button>` : ""}
+        </section>
+      </div>
+    </div>`;
   }
 
   private joined(v: LienMinhView): string {
     const a = v.alliance!;
     const now = v.serverNow;
-    return `
-      <section class="card">
-        <h2>${esc(a.name)} <span class="right">minh chủ ${esc(a.leader)}</span></h2>
-        <p class="muted">Tối đa 5 tông môn, cùng vị diện</p>
-        ${v.can.lienMinh ? `<div class="actions inline"><button type="button" class="btn small" data-act="invite" ${a.sects.length >= 5 ? "disabled" : ""}>Mời tông môn</button><button type="button" class="btn small" data-act="declare">Tuyên chiến</button><button type="button" class="btn small" data-act="leave">Rời liên minh</button></div>` : ""}
-      </section>
-      <section class="card">
+    const head = `<section class="card al-head">
+        <h1>${esc(a.name)}</h1>
+        <p class="sub">Minh chủ ${esc(a.leader)} · ${a.sects.length}/5 tông môn cùng vị diện</p>
+        ${v.can.lienMinh ? `<div class="btns compact"><button type="button" class="btn small" data-act="invite" ${a.sects.length >= 5 ? "disabled" : ""}>Mời tông môn ${SAP_CO}</button><button type="button" class="btn small" data-act="declare">Tuyên chiến ${SAP_CO}</button><button type="button" class="btn small" data-act="leave">Rời liên minh ${SAP_CO}</button></div>` : ""}
+      </section>`;
+    const sects = `<section class="card">
         <h2>Tông môn thành viên <span class="right">${a.sects.length} / 5</span></h2>
         <ul class="list">${a.sects
           .map((s) => `<li class="row"><span class="swatch" style="background:${s.color}"></span><span class="grow"><b>${esc(s.name)}</b><span class="muted block">cấp ${s.level} · phe ${esc(s.faction)} · ${s.points} điểm · ${s.online} online</span></span></li>`)
           .join("")}</ul>
-      </section>
-      <div class="pair">
-        <section class="card mini-card"><h2>Lãnh thổ liên minh</h2><div class="mini-slot"></div></section>
-        <section class="card">
-          <h2>Lịch chiến tuần</h2>
-          <p>${esc(a.warDays)}<br>${esc(a.warHours)}</p>
-          ${a.wars.map((w) => `<p class="muted">${esc(w.with)}: còn ${cd(w.startsAt, "đang đánh")}</p>`).join("")}
-        </section>
-      </div>
-      <section class="card">
-        <h2>Xin hộ chiến</h2>
+      </section>`;
+    // Bản đồ mini lãnh thổ liên minh đặt cạnh lịch chiến để nhìn ra mặt trận (GDD mục 14).
+    const front = `<section class="card front-card">
+        <h2>Mặt trận</h2>
+        <div class="front">
+          <div class="mini-slot"></div>
+          <div class="war-days"><span class="muted">Lịch chiến tuần</span><b>${esc(a.warDays)}</b><b>${esc(a.warHours)}</b>
+            ${a.wars.map((w) => `<span class="muted">${esc(w.with)}: còn ${cd(w.startsAt, "đang đánh")}</span>`).join("")}</div>
+        </div>
+      </section>`;
+    // Việc chính khi đã có liên minh: hộ chiến cho đồng minh đang bị đánh.
+    const help = `<section class="card primary">
+        <h2>Xin hộ chiến <span class="right">${a.helpRequests.length}</span></h2>
         <ul class="list">${a.helpRequests
-          .map((h) => `<li class="row"><span class="grow"><b>${esc(h.from)}</b><span class="muted block">${esc(h.point)} · ${agoText(now, h.at)}</span></span><button type="button" class="seal small" data-act="help">Hộ chiến</button></li>`)
-          .join("")}</ul>
-        <button type="button" class="wide" data-act="ask-help">Xin hộ chiến cho tông mình</button>
-      </section>
-      <section class="card">
+          .map((h) => `<li class="row"><span class="grow"><b>${esc(h.from)}</b><span class="muted block">${esc(h.point)} · ${agoText(now, h.at)}</span></span><button type="button" class="seal small" data-act="help">Hộ chiến ${SAP_CO}</button></li>`)
+          .join("") || `<li class="empty-note">Không ai đang xin hộ chiến.</li>`}</ul>
+        <button type="button" class="wide" data-act="ask-help">Xin hộ chiến cho tông mình ${SAP_CO}</button>
+      </section>`;
+    const boss = `<section class="card">
         <h2>Boss liên minh <span class="right">${esc(a.boss.days)}</span></h2>
-        <p><b>${esc(a.boss.name)}</b> <span class="muted">còn ${a.boss.hpPercent}% máu</span></p>
-        <div class="bar boss"><i style="width:${a.boss.hpPercent}%"></i></div>
-      </section>
-      <section class="card chat">
+        <div class="boss-line"><b>${esc(a.boss.name)}</b><span class="muted">còn ${a.boss.hpPercent}% máu</span></div>
+        <div class="bar"><i style="width:${a.boss.hpPercent}%"></i></div>
+      </section>`;
+    const chat = `<section class="card chat">
         <h2>Chat liên minh</h2>
         <ul class="chat-log">${a.chat
           .map(
-            (c) => `<li><span class="muted">${clockText(c.at)} · ${esc(c.from)}</span><span class="block">${esc(c.text)}</span>
-              ${c.reported ? `<span class="muted">Đã báo cáo</span>` : `<button type="button" class="link small-link" data-act="report" data-id="${c.id}">Báo cáo</button>`}</li>`,
+            (c) => `<li><span class="who"><span><b>${esc(c.from)}</b> · ${clockText(c.at)}</span>
+              ${c.reported ? `<span>Đã báo cáo</span>` : `<button type="button" class="link small-link" data-act="report" data-id="${c.id}">Báo cáo</button>`}</span>
+              <span class="text">${esc(c.text)}</span></li>`,
           )
           .join("")}</ul>
         <form class="chat-form" data-act="chat"><input name="text" maxlength="200" autocomplete="off" placeholder="Nhắn cho liên minh" aria-label="Tin nhắn"><button type="submit" class="seal">Gửi</button></form>
-        <p class="muted">Có lọc từ; chạm Báo cáo để gửi tin xấu cho quản trị (G1).</p>
+        <p class="note">Có lọc từ; chạm Báo cáo để gửi tin xấu cho quản trị (G1).</p>
       </section>`;
+    return `${head}<div class="cols"><div class="col">${help}${front}${boss}</div><div class="col">${sects}${chat}</div></div>`;
   }
 
   protected override act(name: string, el: HTMLElement): void {
@@ -134,11 +144,11 @@ export class LienMinhScene extends PageScene<LienMinhView> {
       case "invite":
       case "leave":
       case "declare":
-        toast("Lập, mời, rời liên minh và tuyên chiến có ở khối M5.");
+        sapCo("Lập, mời, rời liên minh và tuyên chiến");
         break;
       case "help":
       case "ask-help":
-        toast("Hộ chiến có ở khối M5.");
+        sapCo("Hộ chiến");
         break;
     }
   }

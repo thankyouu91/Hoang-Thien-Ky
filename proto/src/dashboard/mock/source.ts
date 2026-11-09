@@ -1,8 +1,11 @@
 // Nguồn đọc gộp chạy ngay trong trang (chưa có server giả). Mỗi lệnh đọc dựng đủ các thẻ của một màn từ World,
 // kèm mốc giờ server; lệnh ghi đi qua apply() của @htk/rules khi luật đã có, phần còn lại sửa World trực tiếp.
 import {
-  apply, GRADE_NAMES, loadoutTechniques, RULES, scrollKind, techniqueOf, transmissionSlots,
-  type Command, type LearnedTechnique, type Role, type SectTechnique,
+  apply, attributeBonuses, bacHeSo, BINH_AN_O, binhBoOf, boardCell, boardCellOpen, DIEM_LUYEN_MOI_CAP, diemTrangBi, DONG_REN, gearStats, ghepAn, GRADE_NAMES, kieuInfo,
+  layerCost, loadoutTechniques, maxInlayLines, RULES, unspentPoints,
+  scrollKind, setLo, TECHNIQUE_LAYERS, techniqueOf, trainingPoints, transmissionSlots,
+  type Bac, type BoardPiece, type Command, type EquipItem, type GearStats, type InlayLine, type LearnedTechnique, type Progress, type Role,
+  type SectTechnique,
 } from "@htk/rules";
 import {
   BASE_CRIT_PER_MILLE, baseStats, BATTLE, maxGradeAtLevel, simulate, TICKS_PER_SECOND, unitBonuses,
@@ -18,13 +21,30 @@ import THU_CANH_GIOI from "../../../../data/he_thong/json/thu_canh_gioi.json";
 import THU_KICH_PHAT from "../../../../data/he_thong/json/thu_kich_phat.json";
 import NHIEM_VU from "../../../../data/nhiem_vu/ha_nhiem_vu.json";
 import { sampleBattle } from "../../mock/sampleBattle.ts";
-import { loadRegion, POINT_NAMES, stagesFrom } from "../../scenes/map/region.ts";
+import { loadRegion, loadWorld, POINT_NAMES, routeIds, stagesFrom } from "../../scenes/map/region.ts";
+import { destOf, legsOf, minutesPerStage, planTrip, startFrom, whereAt } from "./hanhTrinh.ts";
+import { RETREAT_HOURS } from "../source.ts";
 import type {
-  BanDoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, GearItem, Go, LienMinhView,
-  MiniMapView, MountView, NhanVatView, ScrollCard, StatLine, StatSource, TechniqueCard, TodoCard, TongMonView, TopBarView,
+  BagItem, BanDoView, BinhBoView, CommandResult, CongPhapView, DashboardCommand, DashboardSource, DongPhuView, ForgeLineView, GearItem, GearSlot, Go,
+  HiddenLineView, LienMinhView, LuyenKhiView, MiniMapView, MountView, NhanVatView, ScrollCard, SetMilestone, SetView, StatLine, StatSource,
+  TangCongPhapView, TechniqueCard, TiemNangView, TodoCard, TongMonView, TopBarView,
 } from "../source.ts";
+import { statsAt, tangRows } from "../tangCongPhap.ts";
+import { diemHieuQua, TN } from "../tiemNang.ts";
 import { ADULT_AGE, ageOn, MINOR_DAILY_MINUTES, type AuthSource } from "../auth.ts";
-import { createWorld, PLAYER, REGION, SECT, todayAt, type World } from "./world.ts";
+import {
+  createWorld, npcSects, pieceBagItem, PLAYER, RARITY_GRADE, RARITY_LABEL, REGION, SECT, samePiece, todayAt, type DongAnRaw, type NpcSect, type World, type WorldGear,
+} from "./world.ts";
+import NGOC from "../../../../data/he_thong/json/ngoc.json";
+import SET from "../../../../data/he_thong/json/set.json";
+import TO_HOP from "../../../../data/he_thong/json/to_hop.json";
+import TRANG_BI from "../../../../data/he_thong/json/trang_bi.json";
+import {
+  addExp, canDecompose, DANH_KHI, DANH_KHI_COST, doPhoCode, hasKhiLinh, khiHinhOf, khiTinhOf, KL_MAX, KL_PER_KHI_TINH, LO_MIN, loRate, PHACH_FROM,
+  PHACH_KHI_TINH, PHACH_RATE, phachCode, phachName, reached, REROLL_KHI_TINH, rerollStone, rerollSub, rollOffer, SONG_HE_FROM, SONG_HE_LOSE, SONG_HE_PHU,
+  SLOT_NAMES, SONG_HE_RATE, songHeOk, stoneBack, SUB, syncVan, UNLOCK,
+  VAN_REROLL, yieldLocked,
+} from "../luyenKhi.ts";
 
 const H = 3600_000;
 const KT = THAM_SO.kinh_te;
@@ -50,6 +70,42 @@ const GEAR_CAP = 0.35;
 const MOUNT_CAP = 0.15;
 /** Mỗi thú cộng statBonus / 5 % máu, công, phòng gốc (đề xuất cho proto). */
 const MOUNT_STAT_DIV = 5;
+/** Túi gốc 50 ô (GDD mục 12, đề xuất). */
+const BAG_CAPACITY = 50;
+/** Bế quan ở Hạ vị: mỗi giờ được 1/8 kinh nghiệm của cấp đang tu (đề xuất); linh tuyền tông giữ cộng 20% (đề xuất). */
+const RETREAT_HOURS_PER_LEVEL = 8;
+const SPRING_BONUS = 0.2;
+/** Linh khí vị diện nhân thẳng vào tốc độ tu luyện (GDD mục 7). */
+const LINH_KHI_HA = 1;
+/** Uid ảo cho công pháp đã học khi hiện trong túi (không chiếm ô). */
+const LEARNED_UID = 1_000_000;
+
+/** Món trang bị đem vào túi, phẩm lọc và nhãn theo độ hiếm. */
+function gearBagItem(uid: number, g: GearItem): BagItem {
+  return {
+    uid, kind: "trang_bi", name: g.name, grade: RARITY_GRADE[g.rarity], gradeLabel: RARITY_LABEL[g.rarity],
+    count: 1, icon: g.icon, art: g.art, rarity: g.rarity, code: g.code, detail: "Đồ đã tháo.", gear: g,
+  };
+}
+
+/** Thứ tự hệ trong mã vật phẩm của danh sách icon vẽ (TQ-HE-xxx, CP-HE-xxx; assets/icon_ve/danh_sach.json). */
+const ICON_ELEMENTS: Element[] = ["kim", "moc", "thuy", "hoa", "tho", "loi", "phong", "quang", "am_lanh", "cuc_duong", "cuc_am", "cuc_han"];
+/** Hình công pháp đã vẽ trong assets/icon_ve/cong_phap (chỉ lấy tên file, không nạp ảnh). */
+const CONG_PHAP_ART = new Set(Object.keys(import.meta.glob("../../../../assets/icon_ve/cong_phap/**/*.webp")).map((k) => k.replace(/^.*icon_ve\//, "").replace(/\.webp$/, "")));
+
+/** Hình công pháp: ba hệ là bộ ba theo chủ hệ, hai hệ là cặp theo thứ tự 12 hệ, một hệ là quyển thuần hệ; chưa vẽ thì lùi về quyển thuần hệ. */
+function techniqueArt(main: Element, subs: Element[]): string {
+  const pure = `cong_phap/${main}`;
+  const pair = () => [main, subs[0]].sort((a, b) => ICON_ELEMENTS.indexOf(a) - ICON_ELEMENTS.indexOf(b)).join("_");
+  const want = subs.length >= 2 ? `cong_phap/bo_ba/${main}` : subs.length === 1 ? `cong_phap/ghep/${pair()}` : pure;
+  return CONG_PHAP_ART.has(want) ? want : pure;
+}
+const elementCode = (prefix: string, e: Element) => `${prefix}-HE-${String(ICON_ELEMENTS.indexOf(e) + 1).padStart(3, "0")}`;
+
+/** Phẩm lọc của tàn quyển và công pháp: Phàm, Hoàng là hạ; Huyền là trung; từ Địa trở lên là cao (đề xuất). */
+function techGrade(grade: number): BagItem["grade"] {
+  return grade <= 2 ? "ha" : grade === 3 ? "trung" : "cao";
+}
 
 const ROLE_ORDER: Role[] = ["tong_chu", "pho_tong_chu", "truong_lao", "noi_mon", "ngoai_mon"];
 const atLeast = (role: Role | null, min: Role): boolean => role !== null && ROLE_ORDER.indexOf(role) <= ROLE_ORDER.indexOf(min);
@@ -57,6 +113,169 @@ const atLeast = (role: Role | null, min: Role): boolean => role !== null && ROLE
 const TERRAIN_NAMES: Record<string, string> = {
   son_hiem: "Sơn hiểm", thuy_trach: "Thủy trạch", thuong_lo: "Thương lộ", co_tich: "Cổ tích", linh_mach: "Linh mạch", hoa_mach: "Hỏa mạch",
 };
+
+const SEAL_SET: Record<string, string> = Object.fromEntries((NGOC.an_bo as { ma_vp: string; bo: string }[]).map((a) => [a.ma_vp, a.bo]));
+
+/** Số món mỗi bộ trên đồ đang mặc còn độ bền (mỗi món một ấn), như gearStats của @htk/rules. */
+function gearSets(gear: World["player"]["gear"]): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const g of Object.values(gear)) if (g?.seal && g.durability > 0) out[SEAL_SET[g.seal]] = (out[SEAL_SET[g.seal]] ?? 0) + 1;
+  return out;
+}
+
+// ---- Set đồ 2.0 (GDD tab Trang bị phần 14): mọi số tính bằng gearStats, diemTrangBi của @htk/rules ----------------------
+
+const DONG_AN = TRANG_BI.dong_an as { ma: string; loai: string; noi_dung: string }[];
+const DONG_AN_TEXT: Record<string, string> = Object.fromEntries(DONG_AN.map((d) => [d.ma, d.noi_dung]));
+const DONG_AN_HU = DONG_AN.filter((d) => d.loai === "hieu_ung").map((d) => d.ma);
+const TAY_AN_LVT = (TRANG_BI.luat as { dongAn: { tayAnLinhVanThach: number } }).dongAn.tayAnLinhVanThach;
+const GHEP_AN_SO = (SET.luat as { ghepAnSo: number }).ghepAnSo;
+/** Mã Giám Định Phù (vat_pham.json). */
+const GIAM_DINH_PHU = "PH-CH-011";
+const SET_ROW: Record<string, { ten: string; moc: { so: number; mo_ta: string }[] }> = Object.fromEntries(
+  (SET.bo as unknown as { id: string; ten: string; moc: { so: number; mo_ta: string }[] }[]).map((b) => [b.id, b]),
+);
+const BINH_ROW: Record<string, { moc_2: { mo_ta: string }; moc_3: { mo_ta: string } }> = Object.fromEntries(
+  (SET.binh_bo as unknown as { id: string; moc_2: { mo_ta: string }; moc_3: { mo_ta: string } }[]).map((b) => [b.id, b]),
+);
+const SET_HE: Record<string, string | null> = Object.fromEntries((NGOC.an_bo as { bo: string; he: string | null }[]).map((a) => [a.bo, a.he]));
+const RELATION = TO_HOP.relation as Record<string, Record<string, string>>;
+/** Quan hệ hệ ấn giữa hai bộ (như set2.ts của @htk/rules); Hỗn Độn không hệ là trung tính. */
+const quanHe = (a: string, b: string): string => {
+  const x = SET_HE[a], y = SET_HE[b];
+  return x && y ? RELATION[x][y] : "trung_tinh";
+};
+const kieuOk = (code?: string): code is string => {
+  if (!code) return false;
+  try {
+    kieuInfo(code);
+    return true;
+  } catch {
+    return false;
+  }
+};
+const minBac = (bacs: Bac[]): Bac => bacs.reduce<Bac>((m, b) => (bacHeSo(b) < bacHeSo(m) ? b : m), "do");
+
+/** Món của trạng thái mẫu đổi sang EquipItem của @htk/rules; `sub` là loại phụ 0–3 của ô (luyenKhi.slots). */
+function toEquip(g: WorldGear, sub = 0): EquipItem {
+  const kham: InlayLine[] = g.gems.map((x): InlayLine => ({ loai: "ngoc", he: x.element, cap: x.level }));
+  if (g.seal) kham.push({ loai: "an", ma: g.seal, bac: g.sealTier });
+  if (g.binhAn) kham.push({ loai: "binh_an", ma: g.binhAn.ma, bac: g.binhAn.tier });
+  return {
+    kieu: g.code!, nac: g.plus, doBen: g.durability, biCanh: 0, dongThem: 0, kham, phu: sub + 1, ren: g.ren,
+    dongAn: g.dongAn?.map((d) => ({ dk: d.dk, hu: d.hu })),
+  };
+}
+
+/** Dòng ẩn phần đã lộ; `pair` là dòng ẩn của món kia (ngọc bội với đai) để báo song ẩn khi cả hai điều kiện đã lộ. */
+function hiddenView(lines: DongAnRaw[], pair?: DongAnRaw[]): HiddenLineView[] {
+  return lines.map((l) => {
+    const dk = l.lo !== "an";
+    const hu = l.lo === "het";
+    const v: HiddenLineView = { dk: dk ? l.dk : null, hu: hu ? l.hu : null };
+    if (dk) v.dkText = DONG_AN_TEXT[l.dk];
+    if (hu) v.huText = DONG_AN_TEXT[l.hu];
+    if (dk && (pair ?? []).some((o) => o.lo !== "an" && o.dk === l.dk)) v.songAn = true;
+    return v;
+  });
+}
+
+/** Dòng rèn: giá trị là phần gearStats thêm vào khi bật dòng đó (tính ở nấc đủ mốc, nên dòng tạm tắt vẫn có số). */
+function forgeView(g: WorldGear, sub: number, level: number, roots: Element[]): ForgeLineView[] {
+  const ren = g.ren ?? [];
+  return ren.map((loai, i) => {
+    const at = DONG_REN.moc[i];
+    const row = SUB[g.slot][loai - 1];
+    const base = { ...toEquip(g, sub), nac: Math.max(g.plus, at) };
+    const a = gearStats([{ ...base, ren: ren.slice(0, i + 1) }], level, roots);
+    const b = gearStats([{ ...base, ren: ren.slice(0, i) }], level, roots);
+    const key = row.stat === "lifesteal" ? "lifestealFlat" : row.stat;
+    const flat = key === "hp" || key === "atk" || key === "def" || key === "manaMax";
+    const bonus = (x: GearStats) => x.bonuses[key as keyof GearStats["bonuses"]] ?? 0;
+    const value = flat ? a[key] - b[key] : bonus(a) - bonus(b);
+    return { at, stat: row.stat, label: row.ten, value, unit: flat ? "" : "‰", on: g.plus >= at };
+  });
+}
+
+/**
+ * Món như màn thấy: bỏ phần chỉ server giữ (dòng ẩn thật, mã dòng rèn), thêm dòng ẩn đã lộ, dòng rèn, điểm riêng món.
+ * Mã kiểu không có trong trang_bi.json (danh khí của bản mẫu) thì không có điểm và dòng rèn.
+ */
+function gearView(g: WorldGear, sub: number, level: number, roots: Element[], pair?: DongAnRaw[]): GearItem {
+  const { dongAn, ren, ...v } = g;
+  const out: GearItem = { ...v, gems: g.gems.map((x) => ({ ...x })) };
+  if (dongAn?.length) out.hiddenLines = hiddenView(dongAn, pair);
+  if (!kieuOk(g.code)) return out;
+  out.lines = maxInlayLines(toEquip(g, sub));
+  if (ren?.length) out.forgeLines = forgeView(g, sub, level, roots);
+  out.score = diemTrangBi(gearStats([toEquip(g, sub)], level, roots), level);
+  return out;
+}
+
+/** Bộ có món trên người: bộ đang kích theo gearStats (bậc, hệ số, mốc), bộ 1 món thì mọi mốc tắt. */
+function setViews(gs: GearStats, gear: World["player"]["gear"]): SetView[] {
+  const bacs: Record<string, Bac[]> = {};
+  for (const g of Object.values(gear)) if (g?.seal && g.durability > 0) (bacs[SEAL_SET[g.seal]] ??= []).push(g.sealTier ?? "tim");
+  const active = gs.sets.map((a) => a.bo);
+  const out: SetView[] = gs.sets.map((a) => {
+    const relations: SetView["relations"] = [];
+    if (a.hopBo.nguon === "ban") {
+      const r = gs.board?.congHuong.find((c) => c.a === a.bo || c.b === a.bo);
+      if (r) relations.push({ with: r.a === a.bo ? r.b : r.a, kind: "ban", quanHe: r.mach });
+    } else if (a.hopBo.nguon) {
+      const w = active.find((b) => b !== a.bo && quanHe(a.bo, b) === a.hopBo.nguon);
+      if (w) relations.push({ with: w, kind: "hop", quanHe: a.hopBo.nguon });
+    }
+    if (a.hopBo.biKhac) relations.push({ with: a.hopBo.biKhac, kind: "khac" });
+    const milestones = SET_ROW[a.bo].moc.map((m): SetMilestone => {
+      const reached = a.mon >= m.so;
+      const lock = !reached ? undefined : m.so === 7 && a.moc7ThieuBac ? "bac" : a.thieuDieuKien?.includes(m.so) ? "dieu_kien" : undefined;
+      return lock ? { at: m.so, on: false, text: m.mo_ta, lock } : { at: m.so, on: reached, text: m.mo_ta };
+    });
+    return { id: a.bo, name: SET_ROW[a.bo].ten, pieces: a.mon, tier: a.bac, factor: a.heSo2, factor4: a.heSo4, lo: setLo(a.bo), relations, milestones };
+  });
+  for (const [bo, list] of Object.entries(bacs)) {
+    if (active.includes(bo)) continue;
+    const tier = minBac(list);
+    out.push({
+      id: bo, name: SET_ROW[bo].ten, pieces: list.length, tier, factor: bacHeSo(tier), factor4: bacHeSo(tier), lo: setLo(bo), relations: [],
+      milestones: SET_ROW[bo].moc.map((m) => ({ at: m.so, on: false, text: m.mo_ta })),
+    });
+  }
+  return out;
+}
+
+/** Binh bộ trên ô công: bộ có nhiều binh ấn nhất (mỗi người 1 binh bộ); đồng lộ xét với bộ đang kích. */
+function binhBoView(gs: GearStats, gear: World["player"]["gear"]): BinhBoView | undefined {
+  const by: Record<string, Bac[]> = {};
+  for (const g of Object.values(gear)) if (g?.binhAn && g.durability > 0) (by[g.binhAn.ma] ??= []).push(g.binhAn.tier);
+  const ma = Object.keys(by).sort((a, b) => by[b].length - by[a].length || a.localeCompare(b))[0];
+  if (!ma) return undefined;
+  const row = binhBoOf(ma);
+  const n = by[ma].length;
+  const dongLo = gs.binhBo?.bo === row.id ? gs.binhBo.dongLo : gs.sets.some((a) => setLo(a.bo).some((l) => row.lo.includes(l)));
+  const text = BINH_ROW[row.id];
+  return {
+    id: row.id, name: row.ten, pieces: n, tier: minBac(by[ma]), lo: row.lo, dongLo,
+    milestones: [{ at: 2, on: n >= 2, text: text.moc_2.mo_ta }, { at: 3, on: n >= 3, text: text.moc_3.mo_ta }],
+  };
+}
+
+/** Tiến độ cho Đạo Cơ Bàn: Hạ vị, cấp và số thứ tự cảnh giới (1 Luyện Khí … 5 Hóa Thần, cùng mốc với realmOf). */
+function progressOf(level: number): Progress {
+  return { viDien: "ha", cap: level, canhGioi: level <= 50 ? 1 : level <= 100 ? 2 : level <= 150 ? 3 : level <= 200 ? 4 : 5 };
+}
+
+/** Tên viên cho lời báo: ấn theo tên, ngọc kèm cấp. */
+function pieceLabel(piece: BoardPiece): string {
+  const name = pieceBagItem(0, piece).name;
+  return piece.loai === "an" ? name : `${name} cấp ${piece.cap}`;
+}
+
+/** Cấp cuối cảnh giới chứa `level`: tới đây tu vi dừng ở mức đủ, chờ Đột phá (Hạ vị tối đa cấp 250). */
+function breakLevelOf(level: number): number {
+  return Math.min(250, Math.ceil(level / 50) * 50);
+}
 
 /** Cảnh giới Hạ vị theo cấp (GDD mục 7). */
 export function realmOf(level: number): string {
@@ -80,9 +299,15 @@ function sectRow(level: number) {
   return CAP_TONG_MON[Math.max(0, Math.min(CAP_TONG_MON.length - 1, level - 1))];
 }
 
+/** Dòng tóm tắt chỉ số trận ở một tầng (tầng 1 là chỉ số gốc của công thức). */
+function techSummary(tech: Technique, layer = 1): string {
+  const s = statsAt(tech, layer);
+  const cd = s.cooldownTicks / TICKS_PER_SECOND;
+  return `D ${Math.round(s.damage / 1000)} · ${tech.targets} mục tiêu · hồi ${cd.toLocaleString("vi-VN")} s · ${s.manaCost} mana`;
+}
+
 function techCard(t: Pick<SectTechnique, "name" | "main" | "subs" | "grade"> & { id: number }, extra: Partial<TechniqueCard> = {}): TechniqueCard {
   const tech: Technique = techniqueOf(t);
-  const cd = tech.cooldownTicks / TICKS_PER_SECOND;
   return {
     id: t.id,
     name: t.name,
@@ -91,7 +316,8 @@ function techCard(t: Pick<SectTechnique, "name" | "main" | "subs" | "grade"> & {
     element: tech.element,
     subElements: tech.subElements,
     type: tech.type,
-    summary: `D ${Math.round(tech.damage / 1000)} · ${tech.targets} mục tiêu · hồi ${cd.toLocaleString("vi-VN")} s · ${tech.manaCost} mana`,
+    summary: techSummary(tech),
+    art: techniqueArt(tech.element, tech.subElements),
     ...extra,
   };
 }
@@ -110,15 +336,40 @@ function scrollCard(s: { uid: number; kind: string; grade: number }): ScrollCard
   };
 }
 
-function learnedCard(l: LearnedTechnique): TechniqueCard {
-  return techCard({ ...l, id: l.techniqueId }, { layer: l.layer, frozen: l.frozen });
+/**
+ * Công pháp đã học: tóm tắt theo tầng đang có (cùng số rules.loadoutTechniques đưa vào trận). Có `quy` (điểm luyện đang có,
+ * cống hiến) thì kèm bảng tầng và giá lên tầng kế cho màn Công pháp.
+ */
+function learnedCard(l: LearnedTechnique, quy?: { diemLuyen: number; congHien: number }): TechniqueCard {
+  const tech = techniqueOf(l);
+  return techCard({ ...l, id: l.techniqueId }, {
+    layer: l.layer,
+    frozen: l.frozen,
+    summary: techSummary(tech, l.layer),
+    ...(quy ? { tang: tangView(l, tech, quy) } : {}),
+  });
+}
+
+/** Bảng 10 tầng của một công pháp (chỉ số trận và giá theo phẩm) và tầng kế, kèm lý do chưa lên được. */
+function tangView(l: LearnedTechnique, tech: Technique, quy: { diemLuyen: number; congHien: number }): TangCongPhapView {
+  const rows = tangRows(tech, l.grade, TICKS_PER_SECOND);
+  if (l.layer >= TECHNIQUE_LAYERS) return { rows };
+  const gia = layerCost(l.layer + 1, l.grade);
+  const thieu = l.frozen
+    ? "Đang dừng tầng vì đã rời tông"
+    : quy.diemLuyen < gia.diemLuyen
+      ? `Thiếu ${gia.diemLuyen - quy.diemLuyen} điểm luyện`
+      : quy.congHien < gia.congHien
+        ? `Thiếu ${gia.congHien - quy.congHien} cống hiến`
+        : undefined;
+  return { rows, next: { tang: l.layer + 1, ...gia, thieu } };
 }
 
 export class MockDashboardSource implements DashboardSource {
-  private w: World;
-  private auth?: AuthSource;
+  protected w: World;
+  protected auth?: AuthSource;
 
-  private constructor(w: World, auth?: AuthSource) {
+  protected constructor(w: World, auth?: AuthSource) {
     this.w = w;
     this.auth = auth;
   }
@@ -128,25 +379,120 @@ export class MockDashboardSource implements DashboardSource {
   }
 
   /** Giờ server giả: cùng đồng hồ máy. */
-  private now(): number {
+  protected now(): number {
     return Date.now();
   }
 
-  private get me() {
+  protected get me() {
     return this.w.rules.members[PLAYER];
   }
 
-  private get sect() {
+  /** Thêm tu vi: lên cấp trong cảnh giới; ở cấp cuối cảnh giới thì tu vi dừng ở mức đủ, chờ Đột phá. */
+  protected gainExp(amount: number): void {
+    const p = this.w.player;
+    const me = this.me;
+    p.exp += amount;
+    while (me.level < breakLevelOf(me.level) && p.exp >= expToNext(me.level)) {
+      p.exp -= expToNext(me.level);
+      me.level++;
+    }
+    if (me.level === breakLevelOf(me.level)) p.exp = Math.min(p.exp, expToNext(me.level));
+  }
+
+  /** Luyện khí cho màn: bản sao trạng thái, sổ Bảo Giám gộp cả đồ đang có. */
+  private luyenKhiView(): LuyenKhiView {
+    const p = this.w.player;
+    const lk = p.luyenKhi;
+    const owned = new Set(lk.owned);
+    for (const g of Object.values(p.gear)) if (g?.code) owned.add(g.code);
+    for (const it of p.bag) if (it.code && it.gear) owned.add(it.code);
+    return {
+      ...lk,
+      slots: Object.fromEntries(Object.entries(lk.slots).map(([k, v]) => [k, { ...v, kl: { ...v!.kl }, van: [...v!.van], offer: v!.offer && [...v!.offer] }])),
+      gems: lk.gems.filter((g) => g.n > 0).map((g) => ({ ...g })),
+      phach: [...lk.phach],
+      owned: [...owned],
+      doPho: [...lk.doPho],
+      anVanLo: [...lk.anVanLo],
+      week: { ...lk.week },
+    };
+  }
+
+  /** Tiêu Khí Tinh: phần khóa tiêu trước (không bán được), rồi tới phần tự do. */
+  private spendKhiTinh(n: number): void {
+    const lk = this.w.player.luyenKhi;
+    lk.khiTinh -= n;
+    lk.khiTinhKhoa = Math.max(0, Math.min(lk.khiTinhKhoa - n, lk.khiTinh));
+  }
+
+  /** Ô khí văn chưa chọn đầu tiên mà chưa có lựa chọn chờ: quay sẵn 3 khí văn (miễn phí). */
+  private offerNext(slot: GearSlot): void {
+    const ls = this.w.player.luyenKhi.slots[slot];
+    if (!ls || ls.offer) return;
+    const o = ls.van.indexOf(null);
+    if (o < 0) return;
+    ls.offer = rollOffer(slot);
+    ls.offerAt = o;
+  }
+
+  /** Món về túi: gộp chồng cùng loại nếu là viên Đạo Cơ Bàn. */
+  private toBag(piece: BoardPiece, count: number): void {
+    const p = this.w.player;
+    const stack = this.pieceStack(piece);
+    if (stack) stack.count += count;
+    else p.bag.push(pieceBagItem(p.nextUid++, piece, count));
+  }
+
+  private bagFull(): boolean {
+    return this.w.player.bag.length + this.me.bag.length >= BAG_CAPACITY;
+  }
+
+  /** Chồng cùng loại trong túi của một viên Đạo Cơ Bàn. */
+  private pieceStack(piece: BoardPiece): BagItem | undefined {
+    return this.w.player.bag.find((x) => x.boardPiece && samePiece(x.boardPiece, piece));
+  }
+
+  /** Viên gỡ khỏi bàn về túi: gộp vào chồng cùng loại, chưa có thì thêm món mới. */
+  private pieceToBag(piece: BoardPiece): void {
+    const p = this.w.player;
+    const stack = this.pieceStack(piece);
+    if (stack) stack.count++;
+    else p.bag.push(pieceBagItem(p.nextUid++, piece));
+  }
+
+  protected get sect() {
     return this.w.rules.sects[SECT];
   }
 
-  private top(): TopBarView {
+  /** Tốc độ bế quan: 1/RETREAT_HOURS_PER_LEVEL kinh nghiệm cấp mỗi giờ, nhân linh khí, cộng linh tuyền của tông. */
+  protected retreatPerHour(): number {
+    const base = Math.round(expToNext(this.me.level) / RETREAT_HOURS_PER_LEVEL);
+    const spring = this.w.held.some((h) => h.type === "linh_tuyen") ? Math.round(base * LINH_KHI_HA * SPRING_BONUS) : 0;
+    return base * LINH_KHI_HA + spring;
+  }
+
+  /** Bế quan bằng lệnh đã xong: cộng tu vi (dừng ở mốc đột phá như gainExp), bỏ việc, gửi thư. Gọi ở mỗi lần đọc (top). */
+  protected settleRetreats(now: number): void {
+    const w = this.w;
+    const done = w.jobs.filter((j) => j.kind === "be_quan" && j.exp !== undefined && j.endsAt <= now);
+    if (!done.length) return;
+    w.jobs = w.jobs.filter((j) => !done.includes(j));
+    for (const j of done) {
+      this.gainExp(j.exp!);
+      w.mail.unshift({ id: Math.max(0, ...w.mail.map((m) => m.id)) + 1, from: "Động phủ", title: "Bế quan xong", body: `Bế quan xong, +${j.exp} tu vi.`, unread: true });
+    }
+  }
+
+  protected top(): TopBarView {
+    this.settleRetreats(this.now());
     const p = this.w.player;
     return {
       name: p.name,
       portrait: "nhan_vat/nam_khoe/dao_bao",
       level: this.me.level,
       realm: realmOf(this.me.level),
+      exp: p.exp,
+      expToNext: expToNext(this.me.level),
       linhThach: p.linhThach,
       tienNgoc: p.tienNgoc,
       satNghiep: p.satNghiep,
@@ -162,7 +508,7 @@ export class MockDashboardSource implements DashboardSource {
     return Math.max(0, MINOR_DAILY_MINUTES - this.auth!.playedMinutesToday());
   }
 
-  private miniMap(focus?: number[]): MiniMapView {
+  protected miniMap(focus?: number[]): MiniMapView {
     const w = this.w;
     const now = this.now();
     const marks: MiniMapView["marks"] = w.held.map((h) => ({ pointId: h.pointId, owner: "minh", attacked: !!h.attacked && h.attacked.endsAt > now }));
@@ -186,10 +532,52 @@ export class MockDashboardSource implements DashboardSource {
       for (const id of frontier) for (const n of near.get(id) ?? []) if (!revealed.has(n)) (revealed.add(n), next.push(n));
       frontier = next;
     }
-    const t = w.travel;
-    const progress = Math.max(0, Math.min(1, (now - t.startsAt) / (t.endsAt - t.startsAt)));
     const openGates = this.calendarOpen(now) ? w.region.points.filter((p) => p.type === "cua_bi_canh" && revealed.has(p.id)).map((p) => p.id) : [];
-    return { region: REGION, marks, sonMon: w.sonMon, self: { from: t.from, to: t.to, progress }, openGates, revealed: [...revealed], focus };
+    // Sự kiện đang diễn ra: chiến tranh 21:00–22:00 (điểm của mình và của tông địch), Yêu Triều (hang dị thú sát rìa ngoài).
+    const alerts: MiniMapView["alerts"] = [];
+    for (const war of w.wars) {
+      if (now < war.startsAt || now >= war.startsAt + H) continue;
+      const foe = w.sects.find((s) => s.name === war.with);
+      alerts.push({
+        kind: "chien_tranh", title: `Chiến tranh với ${war.with}`, endsAt: war.startsAt + H,
+        points: [w.sonMon, ...w.held.map((h) => h.pointId), ...(foe ? [foe.sonMon, ...foe.points] : [])],
+      });
+    }
+    for (const tide of w.tides) {
+      if (now < tide.startsAt || now >= tide.endsAt) continue;
+      alerts.push({ kind: "yeu_trieu", title: tide.title, endsAt: tide.endsAt, points: w.region.points.filter((p) => p.type === "hang_di_thu" && p.ring < tide.maxRing).map((p) => p.id) });
+    }
+    return { region: REGION, marks, sonMon: w.sonMon, self: this.selfView(now), openGates, revealed: [...revealed], focus, alerts };
+  }
+
+  /** Chỗ của mình cho bản đồ: đoạn đang đi (kèm giờ để màn tự chạy dấu) và điểm tới cuối chuyến. */
+  protected selfView(now: number): MiniMapView["self"] {
+    const w = this.w;
+    const at = whereAt(w, now);
+    const self: MiniMapView["self"] = { from: at.from, to: at.to, progress: at.progress };
+    if (at.region !== w.region.region.code) self.region = at.region;
+    if (!at.moving || !at.leg) return self;
+    self.startsAt = at.leg.startsAt;
+    self.endsAt = at.leg.endsAt;
+    const legs = legsOf(w);
+    const d = destOf(w);
+    // Chuyến có sẵn của bản mẫu (không qua di_toi) không ghi tên và số chặng: tính từ vùng nhà.
+    const stages = w.travel.stages ?? legs.reduce((s, l) => s + Math.max(0, (routeIds(w.region, l.from, l.to)?.length ?? 1) - 1), 0);
+    const name = w.travel.name ?? (d.region === w.region.region.code ? this.pointLabel(d.pointId) : "");
+    self.dest = { ...d, name, endsAt: legs[legs.length - 1].endsAt, stages };
+    return self;
+  }
+
+  /** Tên một điểm vùng nhà cho lời báo: sơn môn của mình là tên tông, còn lại tên điểm hay tên loại. */
+  protected pointLabel(id: number): string {
+    const p = this.w.region.points[id];
+    return id === this.w.sonMon ? this.w.sect.name : (p.name ?? POINT_NAMES[p.type]);
+  }
+
+  /** Đang cưỡi thú (ô thú đang chọn có thú): đi nhanh hơn. */
+  protected riding(): boolean {
+    const p = this.w.player;
+    return !!p.mounts[p.riding];
   }
 
   /** Bí cảnh mở 12:00 và 20:00, mỗi lần 30 phút (sheet Tham số: opensPerDay, openMinutes). */
@@ -198,7 +586,7 @@ export class MockDashboardSource implements DashboardSource {
     return [12, 20].some((h) => now >= todayAt(now, h) && now < todayAt(now, h) + mins * 60_000);
   }
 
-  private todo(now: number): TodoCard[] {
+  protected todo(now: number): TodoCard[] {
     const w = this.w;
     const cards: TodoCard[] = [];
     const hit = w.held.find((h) => h.attacked && h.attacked.endsAt > now);
@@ -219,7 +607,7 @@ export class MockDashboardSource implements DashboardSource {
       cards.push({ id: "o_trong", title: "Ô công pháp còn trống", detail: `Đang mang ${this.me.loadout.length}/${RULES.loadoutSize}`, go: { screen: "cong-phap", section: "mang" } });
     }
     const worn = Object.values(w.player.gear).find((g) => g && g.durability < LOW_DURABILITY);
-    if (worn) cards.push({ id: "do_hong", title: "Đồ sắp hỏng", detail: `${worn.name} còn ${worn.durability}/${worn.durabilityMax}`, go: { screen: "nhan-vat", tab: "trang-bi" } });
+    if (worn) cards.push({ id: "do_hong", title: "Đồ sắp hỏng", detail: `${worn.name} còn ${worn.durability}/${worn.durabilityMax}`, go: { screen: "nhan-vat", tab: "phap-tuong" } });
     if (w.applicants.length && atLeast(this.me.role, "truong_lao")) {
       cards.push({ id: "don", title: "Đơn xin vào", detail: `${w.applicants.length} đơn chờ duyệt`, go: { screen: "tong-mon", tab: "thanh-vien" } });
     }
@@ -228,7 +616,7 @@ export class MockDashboardSource implements DashboardSource {
     return cards.slice(0, 3);
   }
 
-  private currentQuest(): { id: string; name: string; step: string; go: Go } | undefined {
+  protected currentQuest(): { id: string; name: string; step: string; go: Go } | undefined {
     const level = this.me.level;
     const main = NHIEM_VU.quests.filter((q) => q.kind === "chinh" && q.minLevel <= level);
     const q = main[main.length - 1];
@@ -243,16 +631,22 @@ export class MockDashboardSource implements DashboardSource {
   async dongPhu(): Promise<DongPhuView> {
     const w = this.w;
     const now = this.now();
+    // Bế quan vừa xong chốt trước khi dựng thẻ Đang chạy (top() cũng chốt, nhưng gọi sau).
+    this.settleRetreats(now);
     const thanhChu = w.region.points.find((p) => p.type === "thanh_chu")!;
-    const t = w.travel;
+    // Hành trình đang đi: số chặng còn lại theo tỉ lệ thời gian của cả chuyến; điểm tới ở vùng khác thì bản đồ bay tới toạ độ.
+    const dest = this.selfView(now).dest;
+    const legs = legsOf(w);
+    const span = legs[legs.length - 1].endsAt - legs[0].startsAt;
+    const destAt = dest && dest.region !== w.region.region.code ? (await loadRegion(dest.region)).points[dest.pointId] : undefined;
     const running = [
-      ...(t.endsAt > now - 30 * 60_000
+      ...(dest
         ? [{
             kind: "hanh_trinh" as const,
-            title: "Hành trình về sơn môn",
-            detail: `Từ thành chủ, ${Math.max(0, 3 - Math.floor(((now - t.startsAt) / (t.endsAt - t.startsAt)) * 3))}/3 chặng còn lại`,
-            endsAt: t.endsAt,
-            go: { screen: "ban-do", pointId: t.to } as Go,
+            title: `Hành trình tới ${dest.name}`,
+            detail: `${Math.max(0, Math.ceil((dest.stages * (dest.endsAt - now)) / Math.max(1, span)))}/${dest.stages} chặng còn lại`,
+            endsAt: dest.endsAt,
+            go: (destAt ? { screen: "ban-do", at: { x: destAt.x, y: destAt.y } } : { screen: "ban-do", pointId: dest.pointId }) as Go,
           }]
         : []),
       ...w.jobs.map((j) => ({
@@ -260,7 +654,7 @@ export class MockDashboardSource implements DashboardSource {
         title: j.title,
         detail: j.detail,
         endsAt: j.endsAt,
-        go: (j.kind === "xay" ? { screen: "tong-mon", tab: "son-mon" } : j.kind === "be_quan" ? { screen: "cong-phap", section: "mang" } : { screen: "nhan-vat", tab: "trang-bi" }) as Go,
+        go: (j.kind === "xay" ? { screen: "tong-mon", tab: "son-mon" } : j.kind === "be_quan" ? { screen: "cong-phap", section: "mang" } : { screen: "nhan-vat", tab: "phap-tuong" }) as Go,
       })),
     ];
     const mins = THAM_SO.roi_do.openMinutes * 60_000;
@@ -309,20 +703,27 @@ export class MockDashboardSource implements DashboardSource {
     return m && { from: m.from, title: m.title, body: m.body };
   }
 
-  /** Chiến báo mẫu dùng đội hình mẫu của màn Trận (mock/sampleBattle.ts) với seed riêng. */
-  async battle(id: number): Promise<{ label: string; input: BattleInput; arena?: string } | undefined> {
+  /** Chiến báo mẫu dùng đội hình mẫu của màn Trận (mock/sampleBattle.ts) với seed riêng; tông mình là đội A. */
+  async battle(
+    id: number,
+  ): Promise<{ label: string; input: BattleInput; arena?: string; teams?: [string, string]; viewer?: 0 | 1 } | undefined> {
     const r = this.w.reports.find((x) => x.id === id);
-    return r && { label: `Chiến báo · ${r.title}`, input: sampleBattle(r.seed), arena: r.arena };
+    if (!r) return undefined;
+    const b = { label: `Chiến báo · ${r.title}`, input: sampleBattle(r.seed), arena: r.arena, viewer: 0 as const };
+    return r.vs ? { ...b, teams: [this.w.sect.name, r.vs] } : b;
   }
 
   async nhanVat(): Promise<NhanVatView> {
     const w = this.w;
+    this.settleRetreats(this.now());
     const me = this.me;
     const p = w.player;
     const base = baseStats(me.level);
     const techs = loadoutTechniques(w.rules, PLAYER);
     const fromRoot = unitBonuses(p.roots, [], techs);
     const fromTalent = unitBonuses([], [p.talent], techs);
+    // Điểm tiềm năng (GDD mục 6, đề xuất 2026-11-09): phần nghìn theo BuffStat từ @htk/rules, cùng số với trận.
+    const tnBon: Partial<Record<string, number>> = attributeBonuses(me);
 
     // Đồ: chỉ số gốc × (1 + 3% mỗi nấc); độ bền 0 thì mất hết chỉ số (GDD mục 12).
     const gear = { hp: 0, atk: 0, def: 0, mana: 0 };
@@ -354,20 +755,39 @@ export class MockDashboardSource implements DashboardSource {
     const hp = line("hp", "Máu", "", [
       { label: "Gốc theo cấp", value: base.hp }, { label: "Đồ", value: gear.hp }, { label: "Thú", value: mount.hp },
       { label: "Tài năng", value: pct(base.hp, fromTalent.hp) }, { label: "Buff linh căn", value: pct(base.hp, fromRoot.hp) },
+      { label: "Tiềm năng", value: pct(base.hp, tnBon.hp ?? 0) },
     ]);
-    const atk = line("atk", "Công lực", "", [{ label: "Gốc theo cấp", value: base.atk }, { label: "Đồ", value: gear.atk }, { label: "Thú", value: mount.atk }]);
-    const def = line("def", "Phòng thủ", "", [
+    const atk = line("atk", "Công lực", "", [
+      { label: "Gốc theo cấp", value: base.atk }, { label: "Đồ", value: gear.atk }, { label: "Thú", value: mount.atk },
+      { label: "Tiềm năng", value: pct(base.atk, tnBon.atk ?? 0) },
+    ]);
+    const defSources: StatSource[] = [
       { label: "Gốc theo cấp", value: base.def }, { label: "Đồ", value: gear.def }, { label: "Thú", value: mount.def },
       { label: "Tài năng", value: pct(base.def, fromTalent.def) }, { label: "Buff linh căn", value: pct(base.def, fromRoot.def) },
-    ]);
+      { label: "Tiềm năng", value: pct(base.def, tnBon.def ?? 0) },
+    ];
+    // Phòng thủ chung chỉ còn trong main (trường def của UnitSpec); bảng chỉ số tách thủ ngoại, thủ nội (set đồ 2.0): cùng
+    // phòng thủ gốc, cộng phần nghìn defOuter, defInner của set, dòng phụ, dòng rèn như sim.
+    const def = line("def", "Phòng thủ", "", defSources);
+    const sub = (s: GearSlot) => p.luyenKhi.slots[s]?.sub ?? 0;
+    const worn = (Object.values(p.gear) as WorldGear[]).filter((g) => g && kieuOk(g.code));
+    const gs = gearStats(
+      worn.map((g) => toEquip(g, sub(g.slot))), me.level, p.roots, { cells: p.board, progress: progressOf(me.level) }, techs.map((t) => t.element),
+    );
+    const defOuter = line("defOuter", "Thủ ngoại", "", [...defSources, { label: "Set, dòng phụ, dòng rèn", value: pct(def.value, gs.bonuses.defOuter ?? 0) }]);
+    const defInner = line("defInner", "Thủ nội", "", [...defSources, { label: "Set, dòng phụ, dòng rèn", value: pct(def.value, gs.bonuses.defInner ?? 0) }]);
     const mana = line("mana", "Mana", "", [
       { label: "Gốc theo cấp", value: BATTLE.manaMax }, { label: "Đồ", value: gear.mana },
       { label: "Tài năng", value: pct(BATTLE.manaMax, fromTalent.manaMax) }, { label: "Buff linh căn", value: pct(BATTLE.manaMax, fromRoot.manaMax) },
+      { label: "Tiềm năng", value: pct(BATTLE.manaMax, tnBon.manaMax ?? 0) },
     ]);
     const permille = (id: string, label: string, baseValue: number, key: keyof typeof fromRoot): StatLine =>
-      line(id, label, "‰", [{ label: "Gốc theo cấp", value: baseValue }, { label: "Tài năng", value: fromTalent[key] }, { label: "Buff linh căn", value: fromRoot[key] }]);
+      line(id, label, "‰", [
+        { label: "Gốc theo cấp", value: baseValue }, { label: "Tài năng", value: fromTalent[key] }, { label: "Buff linh căn", value: fromRoot[key] },
+        { label: "Tiềm năng", value: tnBon[key] ?? 0 },
+      ]);
     const stats: StatLine[] = [
-      hp, atk, def, mana,
+      hp, atk, defOuter, defInner, mana,
       permille("crit", "Chí mạng", BASE_CRIT_PER_MILLE, "critBonus"),
       permille("critDamage", "Sát thương chí mạng", BATTLE.critDamage, "critDamage"),
       permille("attackSpeed", "Tốc đánh", 0, "attackSpeed"),
@@ -377,6 +797,44 @@ export class MockDashboardSource implements DashboardSource {
       ...(Object.entries(resist) as [Element, number][]).map(([e, v]) => line(`resist_${e}`, `Kháng ${ELEMENT_LABEL[e]}`, "‰", [{ label: "Gốc theo cấp", value: 0 }, { label: "Ngọc", value: Math.round(v) }])),
       line("luck", "Luck", "", [{ label: "Gốc theo cấp", value: 0 }]),
     ];
+
+    // Điểm tiềm năng: dòng hiệu ứng đổi phần nghìn gốc thành số thật theo cấp; chưa cộng thì ghi mức của 10 điểm.
+    const tn = me.diemTiemNang ?? {};
+    // Số tuyệt đối nhỏ (dưới 10) giữ 1 chữ số lẻ, để "+0,8 công" không thành "+0 công".
+    const tnAbs = (b: number, pm: number): string => {
+      const x = (b * pm) / 1000;
+      return x >= 10 ? String(Math.round(x)) : (Math.round(x * 10) / 10).toLocaleString("vi-VN");
+    };
+    const tnUnit = (k: string, vPm: number): string => {
+      const r = Math.round(vPm);
+      switch (k) {
+        case "hp": return `+${tnAbs(base.hp, vPm)} máu`;
+        case "atk": return `+${tnAbs(base.atk, vPm)} công`;
+        case "def": return `+${tnAbs(base.def, vPm)} thủ`;
+        case "manaMax": return `+${tnAbs(BATTLE.manaMax, vPm)} mana`;
+        case "critBonus": return `+${r}‰ chí mạng`;
+        case "critDamage": return `+${r}‰ ST chí mạng`;
+        case "manaCostCut": return `−${r}‰ mana tiêu`;
+        case "attackSpeed": return `+${r}‰ tốc đánh`;
+        case "cooldownCut": return `−${r}‰ hồi chiêu`;
+        default: return "";
+      }
+    };
+    const daCong = Object.values(tn).reduce((a: number, b) => a + (b ?? 0), 0);
+    const tiemNang: TiemNangView = {
+      chuaCong: Math.max(0, unspentPoints(me)),
+      moiCap: TN.diemMoiCap,
+      attrs: TN.thuocTinh.map((t) => {
+        const d = tn[t.id] ?? 0;
+        // Chưa cộng thì ghi mức của 10 điểm (1 điểm lẻ hay làm tròn về 0).
+        const eff = d > 0 ? diemHieuQua(d) : 10;
+        const text = Object.entries(t.moiDiem).map(([k, v]) => tnUnit(k, eff * v)).join(" · ");
+        return { id: t.id, ten: t.ten, tomTat: t.tomTat, diem: d, hieuUng: d > 0 ? text : `mỗi 10 điểm ${text}`, quaMoc: d > TN.mocGiam };
+      }),
+      mocGiam: TN.mocGiam,
+      tayDiemPhi: me.level >= TN.tayDiem.mienPhiDuoiCap ? TN.tayDiem.linhThach : 0,
+      daCong,
+    };
 
     const power = (s: { hp: number; atk: number; def: number }) => s.hp * POWER.hp + s.atk * POWER.atk + s.def * POWER.def;
     const techPower = techs.reduce((a, t) => a + (t.damage / 1000) * t.targets * POWER.tech, 0);
@@ -409,16 +867,58 @@ export class MockDashboardSource implements DashboardSource {
       tu_tuong: false,
     };
     const talent = TAI_NANG[p.talent];
+    const now = this.now();
+    // Tu luyện: gốc theo cấp, nhân linh khí vị diện, cộng linh tuyền tông đang giữ.
+    const perHourBase = Math.round(expToNext(me.level) / RETREAT_HOURS_PER_LEVEL);
+    const spring = w.held.some((h) => h.type === "linh_tuyen") ? Math.round(perHourBase * LINH_KHI_HA * SPRING_BONUS) : 0;
+    const breakLevel = breakLevelOf(me.level);
+    const retreat = w.jobs.find((j) => j.kind === "be_quan" && j.endsAt > now);
+    const byId = (id: number) => me.learned.find((l) => l.techniqueId === id)!;
+    const loadout: (TechniqueCard | null)[] = [];
+    for (let i = 0; i < RULES.loadoutSize; i++) loadout.push(me.loadout[i] !== undefined ? learnedCard(byId(me.loadout[i])) : null);
+    const learned = me.learned.map((l) => learnedCard(l));
+    const items: BagItem[] = [
+      ...p.bag.map((it) => (it.gear ? { ...it, gear: gearView(it.gear, 0, me.level, p.roots) } : it)),
+      ...me.bag.map((sc): BagItem => {
+        const c = scrollCard(sc);
+        return {
+          uid: c.uid, kind: "tan_quyen", name: c.name, grade: techGrade(c.grade), gradeLabel: c.gradeName, count: 1, element: c.element,
+          art: `tan_quyen/${c.element}`, code: elementCode("TQ", c.element), detail: `Nộp ở Tàng Kinh Các được ${c.contribution} cống hiến.`,
+        };
+      }),
+      ...learned
+        .filter((t) => !me.loadout.includes(t.id))
+        // Hình công pháp vẽ Canva theo hệ (TechniqueCard.art); loại chiêu hiện ở chip icon_ve/chieu/<loại> trên màn.
+        .map((t): BagItem => ({ uid: LEARNED_UID + t.id, kind: "cong_phap", name: t.name, grade: techGrade(t.grade), gradeLabel: t.gradeName, count: 1, element: t.element, art: t.art, code: elementCode("CP", t.element), detail: t.summary, technique: t })),
+    ];
     return {
-      serverNow: this.now(),
+      serverNow: now,
       top: this.top(),
+      name: p.name,
       roots: p.roots,
       talent: { id: talent.id, name: talent.name, combat: talent.combat },
       level: me.level,
       exp: p.exp,
       expToNext: expToNext(me.level),
-      sect: { name: w.sect.name, role: me.role },
+      sect: { name: w.sect.name, role: me.role, faction: w.sect.faction },
       satNghiep: p.satNghiep,
+      contribution: me.contribution,
+      cultivation: {
+        perHour: perHourBase * LINH_KHI_HA + spring,
+        sources: [
+          { label: `Gốc: 1/${RETREAT_HOURS_PER_LEVEL} kinh nghiệm cấp mỗi giờ`, value: perHourBase },
+          { label: `Linh khí Hạ vị ×${LINH_KHI_HA}`, value: perHourBase * (LINH_KHI_HA - 1) },
+          { label: `Linh tuyền của tông +${SPRING_BONUS * 100}%`, value: spring },
+        ],
+        breakAt: { level: breakLevel, realm: realmOf(breakLevel + 1) },
+        canBreak: me.level === breakLevel && p.exp >= expToNext(me.level),
+        retreat: retreat && { title: retreat.title, endsAt: retreat.endsAt },
+      },
+      loadout,
+      learned,
+      bag: { capacity: BAG_CAPACITY, items },
+      riding: p.riding,
+      tiemNang,
       power: {
         total,
         parts: [
@@ -427,12 +927,22 @@ export class MockDashboardSource implements DashboardSource {
           { id: "thu", label: "Thú", value: Math.round(mountP), cap: MOUNT_CAP },
         ],
       },
-      gear: p.gear,
+      gear: Object.fromEntries(
+        (Object.entries(p.gear) as [GearSlot, WorldGear][]).map(([s, g]) => [
+          s, gearView(g, sub(s), me.level, p.roots, s === "ngoc_boi" ? p.gear.dai?.dongAn : s === "dai" ? p.gear.ngoc_boi?.dongAn : undefined),
+        ]),
+      ),
+      sets: setViews(gs, p.gear),
+      binhBo: binhBoView(gs, p.gear),
+      score: diemTrangBi(gs, me.level),
       main: [hp, atk, def, mana],
       stats,
       mounts: mountViews,
       combos: Object.values(THU_KICH_PHAT).map((k) => ({ name: k.name, effect: `${k.condition}: ${k.effect}`, active: active[k.id] ?? false })),
-      look: { body: "nam_khoe", outfit: "dao_bao", idle: "nhan_vat/nam_khoe/dao_bao/dung", hat: "o_sa", weapon: "kiem" },
+      // Mũ và vũ khí trên hình đổi theo món đang mặc.
+      board: { cells: { ...p.board }, gearSets: gearSets(p.gear), progress: progressOf(me.level) },
+      luyenKhi: this.luyenKhiView(),
+      look: { body: "nam_khoe", outfit: "dao_bao", idle: "nhan_vat/nam_khoe/dao_bao/dung", hat: p.gear.mu?.icon?.split("/").pop(), weapon: p.gear.vu_khi?.icon?.split("/").pop() },
     };
   }
 
@@ -513,15 +1023,28 @@ export class MockDashboardSource implements DashboardSource {
     const sect = this.sect;
     const role = me.role;
     const byId = (id: number) => me.learned.find((l) => l.techniqueId === id)!;
+    // Điểm luyện công pháp: quỹ chung suy từ cấp và tầng đã lên (tangCongPhap.ts); thẻ đã học kèm bảng tầng và giá tầng kế.
+    const quy = { diemLuyen: trainingPoints(me), congHien: me.contribution };
     const loadout: (TechniqueCard | null)[] = [];
-    for (let i = 0; i < RULES.loadoutSize; i++) loadout.push(me.loadout[i] !== undefined ? learnedCard(byId(me.loadout[i])) : null);
+    for (let i = 0; i < RULES.loadoutSize; i++) loadout.push(me.loadout[i] !== undefined ? learnedCard(byId(me.loadout[i]), quy) : null);
     const fromSect = me.learned.filter((l) => l.sectId === SECT).length;
+    const lv = baseStats(me.level);
+    const lv1 = baseStats(me.level + 1);
     return {
       serverNow: this.now(),
       top: this.top(),
       viewerRole: role,
       loadout,
-      learned: me.learned.map(learnedCard),
+      learned: me.learned.map((l) => learnedCard(l, quy)),
+      diemLuyen: {
+        co: quy.diemLuyen,
+        moiCap: DIEM_LUYEN_MOI_CAP,
+        level: me.level,
+        exp: this.w.player.exp,
+        expNext: expToNext(me.level),
+        dotPha: me.level === breakLevelOf(me.level),
+        moiCapChiSo: { hp: lv1.hp - lv.hp, atk: lv1.atk - lv.atk, def: lv1.def - lv.def },
+      },
       transmission: sect.transmission.map((id) => {
         const t = sect.techniques.find((x) => x.id === id)!;
         const learned = me.learned.some((l) => l.techniqueId === id);
@@ -591,11 +1114,25 @@ export class MockDashboardSource implements DashboardSource {
     };
   }
 
+  private npc?: Promise<Record<string, NpcSect[]>>;
+  /** Tông NPC cả vị diện: dựng lần đầu mở bản đồ (cần file điểm mọi vùng; màn bản đồ cũng dùng lại các file này). */
+  private npcSects(): Promise<Record<string, NpcSect[]>> {
+    const w = this.w;
+    return (this.npc ??= loadWorld()
+      .then((plane) => Promise.all(plane.regions.map((r) => loadRegion(r.code))))
+      .then((maps) => npcSects(maps, REGION, new Set([w.sonMon, ...w.sects.map((s) => s.sonMon)]), new Set([w.sect.name, ...w.sects.map((s) => s.name), "Huyết Sát Môn"]))));
+  }
+
   async banDo(): Promise<BanDoView> {
     const w = this.w;
     const now = this.now();
     const role = this.me.role;
+    const npc = await this.npcSects();
     const owners: BanDoView["owners"] = {};
+    for (const s of npc[REGION] ?? []) owners[s.pointId] = { owner: "npc", name: s.name };
+    const sectSites: BanDoView["sectSites"] = {};
+    for (const [code, list] of Object.entries(npc))
+      if (code !== REGION) sectSites[code] = Object.fromEntries(list.map((s) => [s.pointId, { owner: "npc", name: s.name }]));
     owners[w.sonMon] = { owner: "minh", name: w.sect.name };
     for (const h of w.held) {
       owners[h.pointId] = {
@@ -621,6 +1158,7 @@ export class MockDashboardSource implements DashboardSource {
       map: this.miniMap(),
       sectIsland: `tong_mon/${w.sect.model.id}`,
       owners,
+      sectSites,
       inRange: [...dist].filter(([, d]) => d <= row.range).map(([id]) => id),
       held: w.held.length,
       maxHeld: row.maxPoints,
@@ -655,9 +1193,395 @@ export class MockDashboardSource implements DashboardSource {
         const t = this.sect.techniques.find((x) => x.id === cmd.techniqueId);
         return r.ok ? { ok: true, message: `Đã học ${t?.name ?? "công pháp"}, tầng 1` } : r;
       }
+      case "mac_do": {
+        const p = w.player;
+        const i = p.bag.findIndex((x) => x.uid === cmd.uid && x.gear);
+        if (i < 0) return { ok: false, error: "khong_thay_mon" };
+        const g = p.bag[i].gear!;
+        const old = p.gear[g.slot];
+        p.bag.splice(i, 1);
+        if (old) p.bag.push(gearBagItem(p.nextUid++, old));
+        p.gear[g.slot] = g;
+        return { ok: true, message: old ? `Đã mặc ${g.name}, ${old.name} về túi` : `Đã mặc ${g.name}` };
+      }
+      case "thao_do": {
+        const p = w.player;
+        const g = p.gear[cmd.slot];
+        if (!g) return { ok: false, error: "khong_thay_mon" };
+        if (p.bag.length + this.me.bag.length >= BAG_CAPACITY) return { ok: false, error: "tui_day" };
+        delete p.gear[cmd.slot];
+        p.bag.push(gearBagItem(p.nextUid++, g));
+        return { ok: true, message: `${g.name} về túi` };
+      }
+      case "dot_pha": {
+        const p = w.player;
+        const me = this.me;
+        if (me.level !== breakLevelOf(me.level) || me.level >= 250 || p.exp < expToNext(me.level)) return { ok: false, error: "chua_du_tu_vi" };
+        p.exp -= expToNext(me.level);
+        me.level++;
+        // Không báo bằng chữ: thanh trên phát màn đột phá khi cảnh giới đổi.
+        return { ok: true };
+      }
+      case "dev_len_cap": {
+        let need = -w.player.exp;
+        for (let i = 0, lv = this.me.level; i < Math.max(1, cmd.levels); i++, lv++) need += expToNext(lv);
+        this.gainExp(Math.max(0, need));
+        return { ok: true };
+      }
+      case "phan_giai": {
+        const p = w.player;
+        const lk = p.luyenKhi;
+        if (!reached(progressOf(this.me.level), UNLOCK.phanGiai)) return { ok: false, error: "chua_mo" };
+        const items = cmd.uids.map((uid) => p.bag.find((x) => x.uid === uid));
+        if (!items.length || items.some((it) => !it?.gear)) return { ok: false, error: "khong_thay_mon" };
+        if (items.some((it) => !canDecompose(it!.gear!.rarity))) return { ok: false, error: "khong_phan_giai_duoc" };
+        let kt = 0;
+        let stones = 0;
+        for (const it of items) {
+          const g = it!.gear!;
+          const n = khiTinhOf(g.rarity);
+          kt += n;
+          if (yieldLocked(g.rarity)) lk.khiTinhKhoa += n;
+          stones += stoneBack(g.plus);
+          // Ngọc và ấn đang khảm về túi nguyên vẹn; kiểu của món vẫn ghi trong Bảo Giám.
+          for (const gem of g.gems) this.toBag({ loai: "ngoc", he: gem.element, cap: gem.level }, 1);
+          if (g.seal) this.toBag({ loai: "an", ma: g.seal }, 1);
+          if (it!.code && !lk.owned.includes(it!.code)) lk.owned.push(it!.code);
+          p.bag.splice(p.bag.indexOf(it!), 1);
+        }
+        lk.khiTinh += kt;
+        return { ok: true, message: `Nhận ${fmt(kt)} Khí Tinh${stones ? `, ${stones} nấc Luyện Khí Thạch` : ""}` };
+      }
+      case "tay_luyen": {
+        const p = w.player;
+        const ls = p.luyenKhi.slots[cmd.slot];
+        if (!reached(progressOf(this.me.level), UNLOCK.tayLuyen)) return { ok: false, error: "chua_mo" };
+        if (!ls || !p.gear[cmd.slot]) return { ok: false, error: "khong_thay_mon" };
+        if (p.luyenKhi.khiTinh < REROLL_KHI_TINH) return { ok: false, error: "khong_du_khi_tinh" };
+        const stone = rerollStone(p.gear[cmd.slot]!.rarity);
+        if (p.linhThach < stone) return { ok: false, error: "khong_du_linh_thach" };
+        // Chỉ Tu rèn chọn thẳng loại; người khác quay trong 3 loại còn lại.
+        if (cmd.loai !== undefined && String(p.talent) !== "tu_ren") return { ok: false, error: "chi_tu_ren" };
+        if (cmd.loai !== undefined && (cmd.loai < 0 || cmd.loai > 3 || cmd.loai === ls.sub)) return { ok: false, error: "sai_loai" };
+        this.spendKhiTinh(REROLL_KHI_TINH);
+        p.linhThach -= stone;
+        ls.sub = cmd.loai ?? rerollSub(ls.sub);
+        const x = SUB[cmd.slot][ls.sub];
+        return { ok: true, message: `Chỉ số phụ mới: ${x.ten} ${x.gt}` };
+      }
+      case "nap_khi_linh": {
+        const p = w.player;
+        const g = p.gear[cmd.slot];
+        const ls = p.luyenKhi.slots[cmd.slot];
+        if (!reached(progressOf(this.me.level), UNLOCK.khiLinh)) return { ok: false, error: "chua_mo" };
+        if (!g || !ls) return { ok: false, error: "khong_thay_mon" };
+        if (!hasKhiLinh(g.rarity)) return { ok: false, error: "khong_co_khi_linh" };
+        if (ls.kl.cap >= KL_MAX) return { ok: false, error: "khi_linh_toi_da" };
+        const n = Math.min(Math.floor(cmd.khiTinh), p.luyenKhi.khiTinh);
+        if (n < 1) return { ok: false, error: "khong_du_khi_tinh" };
+        this.spendKhiTinh(n);
+        const passed = addExp(ls.kl, n * KL_PER_KHI_TINH);
+        syncVan(ls, g.rarity);
+        this.offerNext(cmd.slot);
+        return { ok: true, message: passed.length ? `Khí linh ${g.name} lên cấp ${ls.kl.cap}` : `Nạp ${n} Khí Tinh` };
+      }
+      case "chon_khi_van": {
+        const ls = w.player.luyenKhi.slots[cmd.slot];
+        if (!reached(progressOf(this.me.level), UNLOCK.khiLinh)) return { ok: false, error: "chua_mo" };
+        if (!ls || cmd.o < 0 || cmd.o >= ls.van.length) return { ok: false, error: "khong_thay_o" };
+        if (ls.offerAt !== cmd.o || !ls.offer?.includes(cmd.ma)) return { ok: false, error: "khong_co_lua_chon" };
+        ls.van[cmd.o] = cmd.ma;
+        ls.offer = undefined;
+        ls.offerAt = undefined;
+        this.offerNext(cmd.slot);
+        return { ok: true };
+      }
+      case "tay_van": {
+        const lk = w.player.luyenKhi;
+        const ls = lk.slots[cmd.slot];
+        if (!reached(progressOf(this.me.level), UNLOCK.khiLinh)) return { ok: false, error: "chua_mo" };
+        if (!ls || cmd.o < 0 || cmd.o >= ls.van.length) return { ok: false, error: "khong_thay_o" };
+        if (lk.linhVanThach < VAN_REROLL) return { ok: false, error: "khong_du_linh_van_thach" };
+        lk.linhVanThach -= VAN_REROLL;
+        ls.offer = rollOffer(cmd.slot);
+        ls.offerAt = cmd.o;
+        return { ok: true };
+      }
+      case "hop_song_he": {
+        const lk = w.player.luyenKhi;
+        const a = lk.gems.find((x) => x.id === cmd.a && x.n > 0);
+        const b = lk.gems.find((x) => x.id === cmd.b && x.n > 0);
+        if (!a || !b || a === b) return { ok: false, error: "khong_thay_mon" };
+        if (a.he2 || b.he2 || a.cap !== b.cap || a.cap < SONG_HE_FROM || !songHeOk(a.he, b.he)) return { ok: false, error: "khong_hop_duoc" };
+        // Phù bảo ngọc dùng mỗi lần hợp (đậu hay không đều tiêu một tấm).
+        const bag = w.player.bag;
+        const phu = cmd.phu ? bag.find((it) => it.code === SONG_HE_PHU && it.count > 0) : undefined;
+        if (cmd.phu && !phu) return { ok: false, error: "khong_thay_mon" };
+        if (phu && --phu.count === 0) bag.splice(bag.indexOf(phu), 1);
+        // Tỷ lệ đậu cố định (GDD rev 47). Không đậu: mất viên b (SONG_HE_LOSE viên), giữ viên a; có phù thì giữ cả hai.
+        if (Math.random() * 1000 >= SONG_HE_RATE) {
+          if (phu) return { ok: true, message: "Hợp không đậu: Phù bảo ngọc giữ lại cả hai viên" };
+          b.n -= SONG_HE_LOSE;
+          return { ok: true, message: "Hợp không đậu: mất viên thứ hai" };
+        }
+        a.n--;
+        b.n--;
+        const same = lk.gems.find((x) => x.he === a.he && x.he2 === b.he && x.cap === a.cap);
+        if (same) same.n++;
+        else lk.gems.push({ id: `sh${w.player.nextUid++}`, he: a.he, he2: b.he, cap: a.cap, n: 1 });
+        return { ok: true, message: `Thành ngọc song hệ cấp ${a.cap}` };
+      }
+      case "diem_hoa_phach": {
+        const lk = w.player.luyenKhi;
+        const g = lk.gems.find((x) => x.id === cmd.gem && x.n > 0);
+        if (!g) return { ok: false, error: "khong_thay_mon" };
+        if (g.he2 || g.cap < PHACH_FROM) return { ok: false, error: "khong_hop_duoc" };
+        if (lk.phach.includes(g.he)) return { ok: false, error: "da_co_phach" };
+        if (lk.khiTinh < PHACH_KHI_TINH) return { ok: false, error: "khong_du_khi_tinh" };
+        this.spendKhiTinh(PHACH_KHI_TINH);
+        if (Math.random() * 1000 >= PHACH_RATE) return { ok: true, message: `Không đậu: mất ${PHACH_KHI_TINH} Khí Tinh, ngọc còn nguyên` };
+        g.n--;
+        lk.phach.push(g.he);
+        if (!lk.owned.includes(phachCode(g.he))) lk.owned.push(phachCode(g.he));
+        return { ok: true, message: `Thành ${phachName(g.he)}` };
+      }
+      case "khai_lo_danh_khi": {
+        const p = w.player;
+        const lk = p.luyenKhi;
+        const i = DANH_KHI.findIndex((d) => d.ma === cmd.ma);
+        if (i < 0) return { ok: false, error: "khong_thay_mon" };
+        const d = DANH_KHI[i];
+        if (!reached(progressOf(this.me.level), UNLOCK.danhKhi)) return { ok: false, error: "chua_mo" };
+        const lo = w.buildings.find((b) => b.id === "luyen_khi_cac")?.level ?? 0;
+        if (lo < LO_MIN) return { ok: false, error: "lo_chua_du_cap" };
+        const phoi = p.bag.find((it) => it.gear?.slot === "vu_khi" && it.gear.rarity === "do" && khiHinhOf(it.code) === d.khiHinh);
+        if (!lk.doPho.includes(doPhoCode(i)) || !phoi) return { ok: false, error: "thieu_nguyen_lieu" };
+        if (lk.vanThiet < DANH_KHI_COST.vanThiet || lk.khiTinh < DANH_KHI_COST.khiTinh) return { ok: false, error: "thieu_nguyen_lieu" };
+        // 4 người khác nhau cùng tông; chủ lò là mình thì phải Tu rèn (nguồn đọc chưa có tài năng của thành viên khác).
+        const crew = new Set(cmd.nguoi);
+        if (cmd.nguoi.length !== 4 || crew.size !== 4 || cmd.nguoi.some((id) => !w.rules.members[id])) return { ok: false, error: "thieu_nguoi_luyen" };
+        if (cmd.nguoi[0] === PLAYER && String(p.talent) !== "tu_ren") return { ok: false, error: "chi_tu_ren" };
+        this.spendKhiTinh(DANH_KHI_COST.khiTinh);
+        lk.vanThiet -= DANH_KHI_COST.vanThiet;
+        if (Math.random() * 1000 >= loRate(lo)) return { ok: true, message: "Lò không thành: mất Khí Tinh và Vẫn Thiết, còn phôi và đồ phổ" };
+        // Thành: phôi thành danh khí (giữ chỉ số phôi), đồ phổ dùng hết; danh khí khóa vào nhân vật.
+        const g = phoi.gear!;
+        phoi.name = d.ten;
+        phoi.code = d.ma;
+        phoi.art = undefined;
+        phoi.detail = `Danh khí. Danh văn: ${d.van}`;
+        phoi.gear = { ...g, name: d.ten, code: d.ma, art: undefined };
+        lk.doPho.splice(lk.doPho.indexOf(doPhoCode(i)), 1);
+        if (!lk.owned.includes(d.ma)) lk.owned.push(d.ma);
+        return { ok: true, message: `Luyện thành ${d.ten}` };
+      }
+      case "kham": {
+        const p = w.player;
+        const it = p.bag.find((x) => x.uid === cmd.uid && x.count > 0);
+        if (!it) return { ok: false, error: "khong_thay_mon" };
+        const g = p.gear[cmd.slot];
+        if (!g) return { ok: false, error: "chua_mac_do" };
+        const piece = it.boardPiece;
+        const binh = !piece && it.code?.startsWith("NG-BA-") ? it.code : undefined;
+        if (!piece && !binh) return { ok: false, error: "khong_kham_duoc" };
+        if (binh && !BINH_AN_O.includes(cmd.slot)) return { ok: false, error: "binh_an_sai_o" };
+        // Dòng khảm: ngọc, ấn, binh ấn mỗi thứ một dòng; số dòng theo độ hiếm (trang_bi.json), đồ cũ không có kiểu thì theo sockets.
+        const used = g.gems.length + (g.seal ? 1 : 0) + (g.binhAn ? 1 : 0);
+        const max = kieuOk(g.code) ? maxInlayLines(toEquip(g)) : Math.max(g.sockets, used);
+        const replaces = (piece?.loai === "an" && !!g.seal) || (!!binh && !!g.binhAn);
+        if (!replaces && used >= max) return { ok: false, error: "het_dong_kham" };
+        const take = () => {
+          if (--it.count === 0) p.bag.splice(p.bag.indexOf(it), 1);
+        };
+        const slotName = SLOT_NAMES[cmd.slot];
+        if (piece?.loai === "ngoc") {
+          take();
+          g.gems.push({ element: piece.he, level: piece.cap });
+          g.sockets = Math.max(g.sockets, used + 1);
+          return { ok: true, message: `Đã khảm ${it.name} vào ${slotName}` };
+        }
+        if (piece?.loai === "an") {
+          const old = g.seal ? ({ loai: "an", ma: g.seal, bac: g.sealTier ?? "tim" } as const) : undefined;
+          if (old && !this.pieceStack(old) && it.count > 1 && this.bagFull()) return { ok: false, error: "tui_day" };
+          take();
+          g.seal = piece.ma;
+          g.sealTier = piece.bac ?? "tim";
+          if (old) this.pieceToBag(old);
+          else g.sockets = Math.max(g.sockets, used + 1);
+          return { ok: true, message: old ? `Đã khảm ${it.name} vào ${slotName}, ấn cũ về túi` : `Đã khảm ${it.name} vào ${slotName}` };
+        }
+        // Binh ấn: bậc đọc từ nhãn ("Binh ấn Lam"); viên cũ về túi thành một món riêng (gộp chồng cùng mã, cùng bậc).
+        const tier = (Object.entries(RARITY_LABEL).find(([, l]) => it.gradeLabel.endsWith(l))?.[0] ?? "tim") as Bac;
+        const old = g.binhAn;
+        if (old && it.count > 1 && this.bagFull()) return { ok: false, error: "tui_day" };
+        take();
+        g.binhAn = { ma: binh!, tier };
+        if (old) {
+          const row = binhBoOf(old.ma);
+          const label = `Binh ấn ${RARITY_LABEL[old.tier]}`;
+          const stack = p.bag.find((x) => x.code === old.ma && x.gradeLabel === label);
+          if (stack) stack.count++;
+          else
+            p.bag.push({
+              uid: p.nextUid++, kind: "ngoc", name: `Binh Ấn ${row.ten}`, grade: RARITY_GRADE[old.tier], gradeLabel: label, count: 1, code: old.ma,
+              rarity: old.tier, art: `binh_an/${row.id}`, detail: "Khảm vào vũ khí, bao tay hoặc ngọc bội: 2 và 3 binh ấn cùng bộ mở mốc của binh bộ.",
+            });
+        } else g.sockets = Math.max(g.sockets, used + 1);
+        return { ok: true, message: old ? `Đã khảm ${it.name} vào ${slotName}, binh ấn cũ về túi` : `Đã khảm ${it.name} vào ${slotName}` };
+      }
+      case "di_toi": {
+        const world = await loadWorld();
+        const zones = world.zones ?? [];
+        const codes = world.regions.map((r) => r.code);
+        if (!codes.includes(cmd.region) && !zones.some((z) => z.code === cmd.region)) return { ok: false, error: "khong_thay_diem" };
+        const p = (await loadRegion(cmd.region)).points[cmd.pointId];
+        if (!p) return { ok: false, error: "khong_thay_diem" };
+        const per = minutesPerStage(this.riding());
+        const plan = await planTrip(await startFrom(w, now), { region: cmd.region, pointId: cmd.pointId }, zones, codes, now, per);
+        if (typeof plan === "string") return { ok: false, error: plan };
+        const home = w.region.region.code;
+        const name = cmd.region === home ? this.pointLabel(cmd.pointId) : (p.name ?? POINT_NAMES[p.type]);
+        const first = plan.legs[0];
+        const last = plan.legs[plan.legs.length - 1];
+        // Chuyến chỉ trong vùng nhà giữ dạng cũ (from, to, giờ); có đoạn ở vùng khác thì ghi legs để biết đang ở vùng nào.
+        const homeOnly = plan.legs.length === 1 && first.region === home && whereAt(w, now).region === home;
+        w.travel = { from: first.from, to: last.to, startsAt: first.startsAt, endsAt: last.endsAt, name, stages: plan.stages, ...(homeOnly ? {} : { legs: plan.legs }) };
+        const mins = Math.round((last.endsAt - now) / 60_000);
+        return { ok: true, message: `Lên đường tới ${name}: ${plan.stages} chặng, khoảng ${mins} phút` };
+      }
+      case "be_quan": {
+        if (!RETREAT_HOURS.includes(cmd.gio)) return { ok: false, error: "lenh_khong_hop_le" };
+        if (w.jobs.some((j) => j.kind === "be_quan" && j.endsAt > now)) return { ok: false, error: "dang_be_quan" };
+        const exp = this.retreatPerHour() * cmd.gio;
+        w.jobs.push({ kind: "be_quan", title: "Bế quan", detail: `Xong được +${exp} tu vi`, startsAt: now, endsAt: now + cmd.gio * H, exp });
+        return { ok: true, message: `Bắt đầu bế quan ${cmd.gio} giờ, xong được ${exp} tu vi` };
+      }
+      case "toi_ngay": {
+        // Bản thử: dời cả chuyến về trước cho đoạn cuối xong đúng lúc này.
+        if (!whereAt(w, now).moving) return { ok: false, error: "khong_dang_di" };
+        const t = w.travel;
+        const shift = legsOf(w)[legsOf(w).length - 1].endsAt - now;
+        w.travel = {
+          ...t, startsAt: t.startsAt - shift, endsAt: t.endsAt - shift,
+          ...(t.legs ? { legs: t.legs.map((l) => ({ ...l, startsAt: l.startsAt - shift, endsAt: l.endsAt - shift })) } : {}),
+        };
+        const name = t.name ?? (destOf(w).region === w.region.region.code ? this.pointLabel(destOf(w).pointId) : "nơi đến");
+        return { ok: true, message: `Đã tới ${name}` };
+      }
+      case "ghep_an": {
+        const p = w.player;
+        const it = p.bag.find((x) => x.uid === cmd.uid);
+        if (!it) return { ok: false, error: "khong_thay_mon" };
+        const pc = it.boardPiece;
+        if (!pc || pc.loai !== "an") return { ok: false, error: "khong_phai_an" };
+        if (it.count < GHEP_AN_SO) return { ok: false, error: "an_khong_du" };
+        let next: Bac;
+        try {
+          next = ghepAn(pc.bac ?? "tim", GHEP_AN_SO);
+        } catch {
+          return { ok: false, error: "an_khong_ghep_len" };
+        }
+        const up: BoardPiece = { loai: "an", ma: pc.ma, bac: next };
+        // Chồng cũ còn viên mà chưa có chồng bậc trên thì cần thêm một ô túi.
+        if (it.count > GHEP_AN_SO && !this.pieceStack(up) && this.bagFull()) return { ok: false, error: "tui_day" };
+        it.count -= GHEP_AN_SO;
+        if (it.count === 0) p.bag.splice(p.bag.indexOf(it), 1);
+        this.pieceToBag(up);
+        return { ok: true, message: `Ghép thành ${pieceBagItem(0, up).name} bậc ${RARITY_LABEL[next]}` };
+      }
+      case "giam_dinh": {
+        const p = w.player;
+        const lines = p.gear[cmd.slot]?.dongAn ?? [];
+        if (!lines.length) return { ok: false, error: "khong_co_dong_an" };
+        const i = cmd.i ?? lines.findIndex((l) => l.lo === "an");
+        if (i < 0) return { ok: false, error: "da_lo" };
+        const l = lines[i];
+        if (!l) return { ok: false, error: "khong_thay_dong" };
+        if (l.lo !== "an") return { ok: false, error: "da_lo" };
+        const phu = p.bag.find((x) => x.code === GIAM_DINH_PHU && x.count > 0);
+        if (!phu) return { ok: false, error: "thieu_giam_dinh_phu" };
+        if (--phu.count === 0) p.bag.splice(p.bag.indexOf(phu), 1);
+        l.lo = "dk";
+        return { ok: true, message: `Điều kiện lộ: ${DONG_AN_TEXT[l.dk]}` };
+      }
+      case "tay_an": {
+        // Chỉ tẩy dòng đã kích phát (hiệu ứng đã lộ); hiệu ứng mới hiện ngay nên cặp mới vào sổ Ẩn văn (đề xuất).
+        const p = w.player;
+        const l = p.gear[cmd.slot]?.dongAn?.[cmd.i];
+        if (!l) return { ok: false, error: "khong_thay_dong" };
+        if (l.lo !== "het") return { ok: false, error: "an_chua_lo" };
+        const lk = p.luyenKhi;
+        if (lk.linhVanThach < TAY_AN_LVT) return { ok: false, error: "khong_du_linh_van_thach" };
+        lk.linhVanThach -= TAY_AN_LVT;
+        const others = DONG_AN_HU.filter((h) => h !== l.hu);
+        l.hu = others[Math.floor(Math.random() * others.length)];
+        const pair = `${l.dk}|${l.hu}`;
+        if (!lk.anVanLo.includes(pair)) lk.anVanLo.push(pair);
+        return { ok: true, message: `Hiệu ứng mới: ${DONG_AN_TEXT[l.hu]}` };
+      }
+      case "dat_vien": {
+        const p = w.player;
+        const i = p.bag.findIndex((x) => x.uid === cmd.uid && x.boardPiece);
+        if (i < 0) return { ok: false, error: "khong_thay_mon" };
+        const it = p.bag[i];
+        const piece = it.boardPiece!;
+        let cell: ReturnType<typeof boardCell>;
+        try {
+          cell = boardCell(cmd.cell);
+        } catch {
+          return { ok: false, error: "khong_thay_o" };
+        }
+        if (!boardCellOpen(cmd.cell, progressOf(this.me.level))) return { ok: false, error: "o_chua_mo" };
+        if (!cell.chi_nhan.includes(piece.loai)) return { ok: false, error: "o_khong_nhan" };
+        const old = p.board[cmd.cell];
+        // Viên cũ về túi cần một ô trống khi chưa có chồng cùng loại và viên mới không làm trống ô nào.
+        if (old && !this.pieceStack(old) && it.count > 1 && this.bagFull()) return { ok: false, error: "tui_day" };
+        if (it.count > 1) it.count--;
+        else p.bag.splice(i, 1);
+        if (old) this.pieceToBag(old);
+        p.board[cmd.cell] = piece;
+        return { ok: true, message: old ? `Đặt ${pieceLabel(piece)} vào ô ${cmd.cell}, ${pieceLabel(old)} về túi` : `Đặt ${pieceLabel(piece)} vào ô ${cmd.cell}` };
+      }
+      case "go_vien": {
+        const p = w.player;
+        const piece = p.board[cmd.cell];
+        if (!piece) return { ok: false, error: "khong_thay_mon" };
+        if (!this.pieceStack(piece) && this.bagFull()) return { ok: false, error: "tui_day" };
+        delete p.board[cmd.cell];
+        this.pieceToBag(piece);
+        return { ok: true, message: `${pieceLabel(piece)} về túi` };
+      }
+      case "cuoi_thu": {
+        const p = w.player;
+        const id = p.mounts[cmd.index];
+        if (!id) return { ok: false, error: "khong_thay_mon" };
+        p.riding = cmd.index;
+        return { ok: true, message: `Đang cưỡi ${THU_CUOI.find((t) => t.id === id)?.name ?? "thú"}` };
+      }
       case "mang_vao_tran": {
         const r = rule({ type: "mang_vao_tran", actor: PLAYER, techniqueIds: cmd.techniqueIds });
         return r.ok ? { ok: true, message: `Mang ${cmd.techniqueIds.length}/${RULES.loadoutSize} công pháp vào trận` } : r;
+      }
+      case "len_tang_cong_phap": {
+        const r = rule({ type: "len_tang_cong_phap", actor: PLAYER, techniqueId: cmd.techniqueId });
+        const l = this.me.learned.find((x) => x.techniqueId === cmd.techniqueId);
+        return r.ok && l ? { ok: true, message: `${l.name} lên tầng ${l.layer}` } : r;
+      }
+      case "cong_diem": {
+        const r = rule({ type: "cong_diem", actor: PLAYER, thuocTinh: cmd.thuocTinh, diem: cmd.diem });
+        const t = TN.thuocTinh.find((x) => x.id === cmd.thuocTinh);
+        return r.ok ? { ok: true, message: `${t?.ten ?? cmd.thuocTinh} +${cmd.diem} điểm` } : r;
+      }
+      case "tay_diem": {
+        // Phí linh thạch nằm ngoài luật (như các phí khác): mock trừ trước rồi mới gọi rules.
+        const p = w.player;
+        if (!Object.values(this.me.diemTiemNang ?? {}).some((d) => d)) return { ok: false, error: "chua_cong_diem" };
+        const phi = this.me.level >= TN.tayDiem.mienPhiDuoiCap ? TN.tayDiem.linhThach : 0;
+        if (p.linhThach < phi) return { ok: false, error: "khong_du_linh_thach" };
+        const r = rule({ type: "tay_diem", actor: PLAYER });
+        if (!r.ok) return r;
+        p.linhThach -= phi;
+        return { ok: true, message: phi ? `Đã tẩy điểm, tốn ${phi} linh thạch` : "Đã tẩy điểm" };
       }
       case "cho_xuat_su": {
         const r = rule({ type: "cho_xuat_su", actor: PLAYER, memberId: cmd.memberId });

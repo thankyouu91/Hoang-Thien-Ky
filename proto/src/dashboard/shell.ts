@@ -2,6 +2,7 @@
 import { Camera } from "../app/camera.ts";
 import type { Scene } from "../app/scene.ts";
 import type { AuthSource } from "./auth.ts";
+import { LevelFx, xpShare } from "./capDo.ts";
 import { icon } from "./icons.ts";
 import type { CommandResult, DashboardCommand, DashboardSource, Go, Stamped, TopBarView } from "./source.ts";
 import { assetUrl, ERROR_TEXT, esc, fmt, ServerClock, tickCountdowns, toast } from "./ui.ts";
@@ -24,6 +25,7 @@ export interface DashCtx {
 /** Thanh trên cố định ở mọi màn chính (GDD mục 14): chân dung, cấp và cảnh giới, linh thạch, tiên ngọc, nhãn tuổi G1. */
 export class TopBar {
   readonly el: HTMLElement;
+  private readonly level = new LevelFx();
 
   constructor(onPortrait: () => void, onBack: () => void) {
     this.el = document.createElement("header");
@@ -41,8 +43,8 @@ export class TopBar {
     const sat = t.satNghiep > 0 ? `<span class="pill sat" data-term="sat_nghiep">${icon("sword")}${fmt(t.satNghiep)}</span>` : "";
     this.el.querySelector(".content")!.innerHTML = `
       <button type="button" class="portrait" aria-label="${esc(t.name)}: mở màn Nhân vật">
-        <span class="avatar"><img src="${assetUrl(t.portrait)}" alt=""></span>
-        <span class="who"><b>Cấp ${t.level}</b><span>${esc(t.realm)}</span></span>
+        <span class="xp-ring" style="--xp:${xpShare(t)}" title="Tu vi ${fmt(t.exp)} / ${fmt(t.expToNext)}"><span class="avatar"><img src="${assetUrl(t.portrait)}" alt=""></span></span>
+        <span class="who"><b>Cấp <em class="lv">${t.level}</em></b><span>${esc(t.realm)}</span></span>
       </button>
       <span class="pills">
         ${minor}${sat}
@@ -50,6 +52,7 @@ export class TopBar {
         <span class="pill jade" data-term="tien_ngoc">${icon("jade")}${fmt(t.tienNgoc)}</span>
         <span class="age" title="Nhãn phân loại độ tuổi">${esc(t.ageLabel)}</span>
       </span>`;
+    this.level.update(t, this.el);
   }
 }
 

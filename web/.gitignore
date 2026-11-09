@@ -1,0 +1,4 @@
+# Sinh lại bằng npm.cmd run build (scripts/hinh.mjs xuất hình từ assets/ vào public/hinh)
+public/hinh/
+dist/
+.wrangler/

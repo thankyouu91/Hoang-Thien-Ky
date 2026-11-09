@@ -1,0 +1,49 @@
+{
+  "ghi_chu": [
+    "Đạo Cơ Bàn (GDD tab Trang bị, pháp bảo và set đồ, phần 8; mọi số là đề xuất): bàn lục giác 19 ô, tọa độ trục (q, r). Hai ô kề khi chênh một trong 6 hướng (±1, 0), (0, ±1), (1, −1), (−1, 1). Ô mở dần theo cảnh giới (o[].mo).",
+    "Đặt được ấn bộ (NG-AN) và ngọc hệ (NG-KH, mọi cấp); ô tâm chỉ nhận ấn (ấn chủ). Ngọc trên bàn không cộng chỉ số, chỉ mang hệ để dẫn mạch. Hệ của ấn ở ngoc.json an_bo[].he; Hỗn Độn không hệ.",
+    "Ô có đồ là thông khi nối về ô tâm qua chuỗi ô kề đều có đồ và không cặp kề nào tương khắc. Hai ô kề đều thông tạo một mạch; loại mạch lấy theo quan hệ hệ ở to_hop.json qua bảng mach (Hỗn Độn kề gì cũng là trung).",
+    "Mỗi ấn thông tính thêm 1 món cho bộ của nó, tối đa luat.banMonToiDaMoiBo món mỗi bộ (gồm ô tâm), chỉ khi bộ đó có ít nhất luat.banMonTrenDoToiThieu món trên đồ đang mặc còn độ bền.",
+    "Cộng hưởng: hai ấn của hai bộ đang kích, kề nhau và đều thông. Mỗi bộ chỉ nhận cộng hưởng mạnh nhất (Âm Dương > Tương Dưỡng > Đồng Khí) và chỉ nhân số ở mốc 2. Bàn đầy thêm tối đa luat.banTranLucChien lực chiến, trong trần 35% của đồ."
+  ],
+  "o": [
+    {"ma":"O","vong":"tam","q":0,"r":0,"mo":{"viDien":"ha","cap":20,"canhGioi":1},"chi_nhan":["an"]},
+    {"ma":"T1","vong":"trong","q":1,"r":0,"mo":{"viDien":"ha","cap":51,"canhGioi":2},"chi_nhan":["an","ngoc"]},
+    {"ma":"T4","vong":"trong","q":-1,"r":0,"mo":{"viDien":"ha","cap":51,"canhGioi":2},"chi_nhan":["an","ngoc"]},
+    {"ma":"T2","vong":"trong","q":1,"r":-1,"mo":{"viDien":"ha","cap":101,"canhGioi":3},"chi_nhan":["an","ngoc"]},
+    {"ma":"T5","vong":"trong","q":-1,"r":1,"mo":{"viDien":"ha","cap":101,"canhGioi":3},"chi_nhan":["an","ngoc"]},
+    {"ma":"T3","vong":"trong","q":0,"r":-1,"mo":{"viDien":"ha","cap":151,"canhGioi":4},"chi_nhan":["an","ngoc"]},
+    {"ma":"T6","vong":"trong","q":0,"r":1,"mo":{"viDien":"ha","cap":151,"canhGioi":4},"chi_nhan":["an","ngoc"]},
+    {"ma":"N2","vong":"canh","q":2,"r":-1,"mo":{"viDien":"ha","cap":201,"canhGioi":5},"chi_nhan":["an","ngoc"]},
+    {"ma":"N6","vong":"canh","q":-1,"r":-1,"mo":{"viDien":"ha","cap":201,"canhGioi":5},"chi_nhan":["an","ngoc"]},
+    {"ma":"N10","vong":"canh","q":-1,"r":2,"mo":{"viDien":"ha","cap":201,"canhGioi":5},"chi_nhan":["an","ngoc"]},
+    {"ma":"N4","vong":"canh","q":1,"r":-2,"mo":{"viDien":"trung","cap":1,"canhGioi":6},"chi_nhan":["an","ngoc"]},
+    {"ma":"N8","vong":"canh","q":-2,"r":1,"mo":{"viDien":"trung","cap":1,"canhGioi":6},"chi_nhan":["an","ngoc"]},
+    {"ma":"N12","vong":"canh","q":1,"r":1,"mo":{"viDien":"trung","cap":1,"canhGioi":6},"chi_nhan":["an","ngoc"]},
+    {"ma":"N1","vong":"goc","q":2,"r":0,"mo":{"viDien":"trung","cap":101,"canhGioi":7},"chi_nhan":["an","ngoc"]},
+    {"ma":"N5","vong":"goc","q":0,"r":-2,"mo":{"viDien":"trung","cap":101,"canhGioi":7},"chi_nhan":["an","ngoc"]},
+    {"ma":"N9","vong":"goc","q":-2,"r":2,"mo":{"viDien":"trung","cap":101,"canhGioi":7},"chi_nhan":["an","ngoc"]},
+    {"ma":"N3","vong":"goc","q":2,"r":-2,"mo":{"viDien":"than","canhGioi":8},"chi_nhan":["an","ngoc"]},
+    {"ma":"N7","vong":"goc","q":-2,"r":0,"mo":{"viDien":"than","canhGioi":8},"chi_nhan":["an","ngoc"]},
+    {"ma":"N11","vong":"goc","q":0,"r":2,"mo":{"viDien":"than","canhGioi":9},"chi_nhan":["an","ngoc"]}
+  ],
+  "cong_huong": [
+    {
+      "mach": "thuan",
+      "ten": "Đồng Khí",
+      "heSoMoc2": 1250,
+      "khangHe": 30,
+      "mo_ta": "Số ở mốc 2 của cả hai bộ ×1,25; kháng hệ đó +3%"
+    },
+    {"mach":"sinh","ten":"Tương Dưỡng","heSoMoc2":1500,"mo_ta":"Số ở mốc 2 của cả hai bộ ×1,5"},
+    {
+      "mach": "cuc",
+      "ten": "Âm Dương",
+      "heSoMoc2": 2000,
+      "manaMax": -20,
+      "mo_ta": "Số ở mốc 2 của cả hai bộ ×2; mana tối đa −2% (như tổ hợp đối cực: mạnh mà tốn mana)"
+    }
+  ],
+  "mach": {"thuan":"thuan","tuong_sinh":"sinh","tuong_hop":"sinh","doi_cuc":"cuc","trung_tinh":"trung","tuong_khac":"dut"},
+  "luat": {"banMonToiDaMoiBo":2,"banMonTrenDoToiThieu":2,"banMoTuCap":20,"banTranLucChien":30}
+}

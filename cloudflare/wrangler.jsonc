@@ -1,0 +1,32 @@
+// Worker `thienhoangky`: bản chơi thử ở https://play.thienhoangky.fun, vào bằng link mời /moi/<ma> (không qua Access), API /api/*, D1.
+// Hướng dẫn deploy: cloudflare/README.md. Hợp đồng API: docs/api.md.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "thienhoangky",
+  "main": "src/game.ts",
+  "compatibility_date": "2026-11-01",
+  // Chỉ một đường vào là tên miền (có cổng link mời): tắt *.workers.dev và URL xem trước của từng phiên bản.
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "play.thienhoangky.fun", "custom_domain": true }],
+  // Trước khi đẩy: build proto/dist, chép _headers, kiểm giới hạn số file và dung lượng.
+  "build": { "command": "node scripts/chuan-bi.mjs" },
+  "assets": {
+    "directory": "../proto/dist",
+    "binding": "ASSETS",
+    // Không trả index.html cho mọi đường dẫn thiếu file: file tĩnh không còn phải ra 404 (lỗi D-CHUNK); Worker tự trả index.html cho đường dẫn trang.
+    "not_found_handling": "none",
+    // Mọi đường dẫn qua cổng link mời của Worker, trừ file tĩnh có mã băm, hình và dấu ấn/favicon (phục vụ thẳng, không tốn lượt request).
+    "run_worker_first": ["/*", "!/assets/*", "!/pixellab/*", "!/icon_ve/*", "!/brand/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "thienhoangky",
+      "database_id": "aa2c1b16-661a-4df8-94a3-37ee20cc0f5e",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Log do Worker tự ghi; tắt invocation log để cookie và đường dẫn link mời không vào Workers Logs.
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+}

@@ -11,7 +11,8 @@
     "radius": 0,
     "ally": false,
     "suffix": "Trảm",
-    "rule": "Mạnh nhất đơn mục tiêu, phải áp sát và chịu đòn"
+    "rule": "Mạnh nhất đơn mục tiêu, phải áp sát và chịu đòn",
+    "loai_sat_thuong": "ngoai"
   },
   "can_quet": {
     "id": "can_quet",
@@ -25,7 +26,8 @@
     "radius": 0,
     "ally": false,
     "suffix": "Liên Hoàn",
-    "rule": "Nhiều mục tiêu gần, sát thương mỗi mục tiêu thấp hơn đòn đơn"
+    "rule": "Nhiều mục tiêu gần, sát thương mỗi mục tiêu thấp hơn đòn đơn",
+    "loai_sat_thuong": "ngoai"
   },
   "tam_xa": {
     "id": "tam_xa",
@@ -39,21 +41,23 @@
     "radius": 0,
     "ally": false,
     "suffix": "Châm",
-    "rule": "An toàn, +4% chí mạng, nhưng yếu hơn cận chiến"
+    "rule": "An toàn, +4% chí mạng, nhưng yếu hơn cận chiến",
+    "loai_sat_thuong": "ngoai"
   },
   "dien_rong": {
     "id": "dien_rong",
     "name": "Diện rộng",
-    "k": 600,
+    "k": 500,
     "targets": 10,
     "cooldownTicks": 80,
     "critPerMille": 0,
-    "mana": 35,
+    "mana": 70,
     "range": 4000,
     "radius": 2000,
     "ally": false,
     "suffix": "Cuồng Vũ",
-    "rule": "Đánh rộng thì yếu; vận công 1 s, bị khống chế là mất chiêu"
+    "rule": "Đánh rộng thì yếu; vận công 1 s, bị khống chế là mất chiêu",
+    "loai_sat_thuong": "noi"
   },
   "ho_the": {
     "id": "ho_the",
@@ -67,35 +71,38 @@
     "radius": 0,
     "ally": true,
     "suffix": "Cố Bản",
-    "rule": "Khiên bằng 120% sát thương gốc, gần như không gây sát thương"
+    "rule": "Khiên bằng 120% sát thương gốc, gần như không gây sát thương",
+    "loai_sat_thuong": "ngoai"
   },
   "bua_chu": {
     "id": "bua_chu",
     "name": "Bùa chú",
     "k": 3000,
     "targets": 1,
-    "cooldownTicks": 120,
+    "cooldownTicks": 80,
     "critPerMille": 0,
-    "mana": 160,
+    "mana": 200,
     "range": 4000,
     "radius": 0,
     "ally": false,
     "suffix": "Phù",
-    "rule": "Rất mạnh nhưng chỉ 3 lần mỗi trận"
+    "rule": "Rất mạnh nhưng chỉ 3 lần mỗi trận",
+    "loai_sat_thuong": "noi"
   },
   "tran_phap": {
     "id": "tran_phap",
     "name": "Trận pháp",
-    "k": 5000,
+    "k": 4300,
     "targets": 6,
-    "cooldownTicks": 400,
+    "cooldownTicks": 240,
     "critPerMille": 0,
-    "mana": 240,
+    "mana": 280,
     "range": 4000,
     "radius": 2000,
     "ally": false,
     "suffix": "Trận",
-    "rule": "Bày 5 s; địch bước vào có 15% bị tuyệt sát (trừ boss và đối thủ cảnh giới cao hơn)"
+    "rule": "Bày 5 s; địch bước vào có 15% bị tuyệt sát (trừ boss và đối thủ cảnh giới cao hơn)",
+    "loai_sat_thuong": "noi"
   },
   "hoi_phuc": {
     "id": "hoi_phuc",
@@ -109,21 +116,23 @@
     "radius": 0,
     "ally": true,
     "suffix": "Hồi Xuân",
-    "rule": "Hệ số k là hệ số hồi máu; tốn mana gấp 3, hồi mana −20% khi đang vận"
+    "rule": "Hệ số k là hệ số hồi máu; tốn mana gấp 3, hồi mana −20% khi đang vận",
+    "loai_sat_thuong": null
   },
   "khong_che": {
     "id": "khong_che",
     "name": "Khống chế",
-    "k": 500,
+    "k": 650,
     "targets": 1,
-    "cooldownTicks": 120,
+    "cooldownTicks": 60,
     "critPerMille": 0,
-    "mana": 10,
+    "mana": 60,
     "range": 3000,
     "radius": 0,
     "ally": false,
     "suffix": "Tỏa",
-    "rule": "Choáng 1,5 s; khống chế liên tiếp cùng mục tiêu thì giảm một nửa"
+    "rule": "Choáng 1,5 s; khống chế liên tiếp cùng mục tiêu thì giảm một nửa",
+    "loai_sat_thuong": "noi"
   },
   "than_phap": {
     "id": "than_phap",
@@ -137,6 +146,7 @@
     "radius": 0,
     "ally": false,
     "suffix": "Bộ",
-    "rule": "Lướt tới, đòn đầu +10% chí mạng; sau đó lộ vị trí 3 s"
+    "rule": "Lướt tới, đòn đầu +10% chí mạng; sau đó lộ vị trí 3 s",
+    "loai_sat_thuong": "ngoai"
   }
 }

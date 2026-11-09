@@ -1,0 +1,43 @@
+/* Chữ của cả hệ thống (2026-11-04): Lora cho chữ đọc, Cormorant Garamond cho tiêu đề, tên và số cấp. Cả hai OFL, đủ dấu
+   tiếng Việt, nạp từ @fontsource nên không gọi mạng ngoài; trình duyệt chỉ tải phần chữ (latin, vietnamese) trang dùng.
+   Token ở tokens.css (--font, --font-display); canvas dùng theme/fonts.ts. */
+@import "@fontsource-variable/lora/wght.css";
+@import "@fontsource-variable/lora/wght-italic.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/cormorant-garamond/700.css";
+@import "@fontsource/cormorant-garamond/700-italic.css";
+
+/* Lora bật số cùng bề (font-variant-numeric: tabular-nums, dùng ở đếm ngược, dòng số liệu) thì dấu cách cũng rộng theo bề số,
+   gấp đôi ở chữ đậm ("Lôi  Trì  Phong"). Lấy riêng dấu cách từ Cormorant (không đổi theo tnum), size-adjust cho bằng bề dấu
+   cách của Lora; --font đặt "Lora Space" trước "Lora Variable". */
+@font-face {
+  font-family: "Lora Space";
+  src: url("../../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-700-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  unicode-range: U+0020, U+00A0;
+  size-adjust: 112.6%;
+}
+
+/* Tiêu đề thẻ, tên màn, tên nhân vật và tông môn, tiêu đề tấm trượt: chữ tiêu đề. Cormorant mắt chữ thấp hơn Lora nên
+   cỡ tăng chừng 15% để cao ngang tiêu đề cũ; số dùng dạng thẳng hàng (lining) cho dễ đọc. Nạp sau dashboard.css. */
+.card > h2,
+.card > header > h2,
+.sec-h,
+.sect-id h1,
+.al-head h1,
+.nv-head h1 b,
+.nv-group > summary,
+#sheet header h2,
+.login-brand h1,
+.login-card h2 {
+  font-family: var(--font-display);
+  font-variant-numeric: lining-nums;
+  letter-spacing: 0.01em;
+}
+.card > h2, .card > header > h2, .sec-h, .nv-group > summary { font-size: 17px; }
+.card.primary > h2, #sheet header h2 { font-size: 20px; }
+.sect-id h1, .al-head h1, .nv-head h1 b, .login-card h2 { font-size: 23px; }
+.login-brand h1 { font-size: 37px; }
+@media (min-width: 960px) { .login-brand h1 { font-size: 46px; } }
+/* Phần phụ trong dòng tiêu đề vẫn là chữ đọc. */
+.card > h2 .right, .card > h2 .link { font-family: var(--font); font-size: var(--fs-sm); letter-spacing: 0; }

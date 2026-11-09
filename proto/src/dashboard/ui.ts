@@ -1,18 +1,22 @@
 // Tiện ích DOM cho các màn dashboard: chuỗi HTML an toàn, đồng hồ đếm ngược theo giờ server, bảng trượt, thông báo.
 import type { Element, SkillType } from "@htk/sim";
 import { ELEMENT_STYLE, SKILL_NAME } from "../theme/elements.ts";
+import { icon } from "./icons.ts";
+// Lớp dịch tự chạy khi được nạp (mọi màn đều nạp ui.ts): đang chọn tiếng Anh thì dịch chữ hiện trên trang.
+import { lang, locale } from "./i18n.ts";
 
 export function esc(s: unknown): string {
   return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }
 
+/** Số nguyên theo ngôn ngữ: "3.280" (vi), "3,280" (en). */
 export function fmt(n: number): string {
-  return Number.isFinite(n) ? Math.round(n).toLocaleString("vi-VN") : "∞";
+  return Number.isFinite(n) ? Math.round(n).toLocaleString(locale()) : "∞";
 }
 
-/** Phần nghìn ra phần trăm, một chữ số lẻ: 85 → "8,5%". */
+/** Phần nghìn ra phần trăm, một chữ số lẻ: 85 → "8,5%" (vi), "8.5%" (en). */
 export function pctText(perMille: number): string {
-  return `${(perMille / 10).toLocaleString("vi-VN", { maximumFractionDigits: 1 })}%`;
+  return `${(perMille / 10).toLocaleString(locale(), { maximumFractionDigits: 1 })}%`;
 }
 
 export function clockText(t: number): string {
@@ -20,24 +24,27 @@ export function clockText(t: number): string {
   return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
-/** "1 giờ 25 phút", "6 phút", "42 giây". */
+/** "1 giờ 25 phút", "6 phút", "42 giây"; tiếng Anh "1h 25m", "6m", "42s" (viết thẳng, không qua bảng, vì đếm mỗi giây). */
 export function durationText(ms: number): string {
+  const en = lang() === "en";
   const s = Math.max(0, Math.ceil(ms / 1000));
-  if (s < 60) return `${s} giây`;
+  if (s < 60) return en ? `${s}s` : `${s} giây`;
   const m = Math.ceil(s / 60);
-  if (m < 60) return `${m} phút`;
+  if (m < 60) return en ? `${m}m` : `${m} phút`;
   const h = Math.floor(m / 60);
   const r = m % 60;
-  if (h < 24) return r ? `${h} giờ ${r} phút` : `${h} giờ`;
-  return `${Math.floor(h / 24)} ngày ${h % 24} giờ`;
+  if (h < 24) return en ? (r ? `${h}h ${r}m` : `${h}h`) : r ? `${h} giờ ${r} phút` : `${h} giờ`;
+  return en ? `${Math.floor(h / 24)}d ${h % 24}h` : `${Math.floor(h / 24)} ngày ${h % 24} giờ`;
 }
 
-/** "vừa xong", "18 phút trước", "2 giờ trước", "3 ngày trước". */
+/** "vừa xong", "18 phút trước", "2 giờ trước", "3 ngày trước"; tiếng Anh "just now", "18m ago"… */
 export function agoText(now: number, t: number): string {
+  const en = lang() === "en";
   const m = Math.floor((now - t) / 60_000);
-  if (m < 1) return "vừa xong";
-  if (m < 60) return `${m} phút trước`;
+  if (m < 1) return en ? "just now" : "vừa xong";
+  if (m < 60) return en ? `${m}m ago` : `${m} phút trước`;
   const h = Math.floor(m / 60);
+  if (en) return h < 24 ? `${h}h ago` : `${Math.floor(h / 24)}d ago`;
   return h < 24 ? `${h} giờ trước` : `${Math.floor(h / 24)} ngày trước`;
 }
 
@@ -82,6 +89,11 @@ export function tickCountdowns(root: HTMLElement, now: number): number {
     if (left > 0) running++;
   }
   return running;
+}
+
+/** Icon vật phẩm vẽ (Canva, assets/icon_ve) theo mã ảnh, ví dụ "trang_bi/ao/26". */
+export function artUrl(ma: string): string {
+  return `${import.meta.env.BASE_URL}icon_ve/${ma}.webp`;
 }
 
 /** Icon PixelLab theo khoá manifest, ví dụ "he/loi". */
@@ -139,18 +151,41 @@ export function cropIcons(root: HTMLElement): void {
   }
 }
 
+/** Hình hệ: viên ngọc tròn vẽ Canva (assets/icon_ve/he/<hệ>.webp, 256 px, nền trong). */
+export const heArt = (e: string) => artUrl(`he/${e}`);
+
 /** Chip hệ: icon kèm tên, màu theo GDD mục 15 (không chỉ dựa vào màu). */
 export function elementChip(e: Element, withName = true): string {
   const st = ELEMENT_STYLE[e];
-  return `<span class="chip el" style="--c:${st.color};--ink:${st.ink}"><img src="${assetUrl(`he/${e}`)}" alt="" onerror="this.remove()">${withName ? esc(st.name) : ""}</span>`;
+  return `<span class="chip el" style="--c:${st.color};--ink:${st.ink}"><img src="${heArt(e)}" alt="" onerror="this.remove()">${withName ? esc(st.name) : ""}</span>`;
+}
+
+/**
+ * Bìa công pháp vẽ Canva (TechniqueCard.art: bộ ba quyển, cặp ghép hai hệ, hay quyển thuần hệ; không có thì quyển thuần
+ * hệ chủ). Hệ phụ là huy hiệu tròn viền màu hệ ở góc dưới phải, vì hình cặp ghép và bộ ba chưa vẽ đủ (phiên icon gợi ý).
+ * Tên hệ ghi bằng chữ ở chỗ khác trên thẻ nên không chỉ dựa vào màu.
+ */
+export function techCover(t: { art?: string; element: Element; subElements?: Element[] }, size: "s" | "m" | "l" = "m"): string {
+  const subs = (t.subElements ?? [])
+    .map((e) => `<i style="--c:${ELEMENT_STYLE[e].color}" title="Hệ phụ ${esc(ELEMENT_STYLE[e].name)}"><img src="${heArt(e)}" alt="" onerror="this.remove()"></i>`)
+    .join("");
+  return `<span class="tech-art ${size}"><img class="ve" src="${artUrl(t.art ?? `cong_phap/${t.element}`)}" alt="" onerror="this.remove()">${subs ? `<span class="tech-sub">${subs}</span>` : ""}</span>`;
 }
 
 export function skillChip(t: SkillType): string {
-  return `<span class="chip sk"><img src="${assetUrl(`chieu/${t}`)}" alt="" onerror="this.remove()">${esc(SKILL_NAME[t])}</span>`;
+  return `<span class="chip sk"><img class="ve" src="${artUrl(`chieu/${t}`)}" alt="" onerror="this.remove()">${esc(SKILL_NAME[t])}</span>`;
 }
 
 let toastTimer = 0;
 /** Thông báo ngắn ở trên thanh dưới. */
+/** Việc chưa mở ở bản chơi thử: một câu chung cho người chơi, không nhắc tên khối việc nội bộ (M3…M6, Sprint). */
+export function sapCo(what: string): void {
+  toast(`${what} sắp có ở bản sau.`);
+}
+
+/** Nhãn "Sắp có" trên nút của việc chưa mở; nút thêm lớp sap-co cho mờ đi (bấm vẫn được, để nghe câu sapCo). */
+export const SAP_CO = `<span class="sap-co-tag">Sắp có</span>`;
+
 export function toast(text: string, bad = false): void {
   let el = document.getElementById("toast");
   if (!el) {
@@ -167,8 +202,8 @@ export function toast(text: string, bad = false): void {
 }
 
 /**
- * Bảng trượt từ dưới lên cho chi tiết (món đồ, thẻ điểm, Thành chủ, Tàng Kinh Các).
- * Chạm nền tối hoặc nút Đóng để tắt; trả về phần thân để màn gắn sự kiện.
+ * Bảng trượt từ dưới lên cho chi tiết (món đồ, thẻ điểm, Thành chủ, Tàng Kinh Các); trên máy tính là hộp thoại giữa màn.
+ * Chạm nền mờ, nút × hoặc phím Esc để tắt; trả về phần thân để màn gắn sự kiện.
  */
 export function openSheet(title: string, html: string, onClose?: () => void): HTMLElement {
   closeSheet();
@@ -177,7 +212,7 @@ export function openSheet(title: string, html: string, onClose?: () => void): HT
   wrap.innerHTML = `
     <div class="sheet-bg" data-close></div>
     <section class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}">
-      <header><h2>${esc(title)}</h2><button type="button" class="ghost" data-close aria-label="Đóng">Đóng</button></header>
+      <header><h2>${esc(title)}</h2><button type="button" class="icon-btn" data-close aria-label="Đóng">${icon("close")}</button></header>
       <div class="sheet-body">${html}</div>
     </section>`;
   wrap.addEventListener("click", (e) => {
@@ -187,8 +222,13 @@ export function openSheet(title: string, html: string, onClose?: () => void): HT
     }
   });
   document.body.append(wrap);
+  wrap.querySelector<HTMLElement>(".icon-btn")?.focus({ preventScroll: true });
   return wrap.querySelector(".sheet-body")!;
 }
+
+addEventListener("keydown", (e) => {
+  if (e.key === "Escape") document.querySelector<HTMLElement>("#sheet [data-close].icon-btn")?.click();
+});
 
 export function closeSheet(): void {
   document.getElementById("sheet")?.remove();
@@ -201,8 +241,21 @@ export const ROLE_NAMES: Record<string, string> = {
 /** Lời của từng mã lỗi luật, để màn hiện cho người chơi. */
 export const ERROR_TEXT: Record<string, string> = {
   khong_du_quyen: "Chức vị của bạn không làm được việc này.",
+  khong_thay_mon: "Không tìm thấy món này.",
+  tui_day: "Túi đầy, cần trống một ô.",
   chua_du_cap: "Chưa đủ cấp để học phẩm này.",
   ngoai_mon_gioi_han: "Ngoại môn chỉ học tối đa 2 công pháp phẩm Phàm hoặc Hoàng.",
+  // Lên tầng công pháp (lệnh len_tang_cong_phap)
+  chua_hoc: "Chưa học công pháp này.",
+  cong_phap_dung_tang: "Công pháp đang dừng tầng vì đã rời tông.",
+  da_toi_tang: "Công pháp đã đủ 10 tầng.",
+  thieu_diem_luyen: "Chưa đủ điểm luyện công pháp. Lên cấp để có thêm.",
+  thieu_cong_hien: "Chưa đủ cống hiến để lên tầng này.",
+  // Điểm tiềm năng (lệnh cong_diem, tay_diem)
+  thuoc_tinh_sai: "Thuộc tính không hợp lệ.",
+  diem_khong_hop_le: "Số điểm cộng không hợp lệ.",
+  thieu_diem_tiem_nang: "Chưa đủ điểm tiềm năng. Lên cấp để có thêm.",
+  chua_cong_diem: "Chưa cộng điểm nào để tẩy.",
   da_hoc: "Đã học công pháp này.",
   vuot_so_cong_phap: "Chỉ mang được 4 công pháp.",
   vuot_so_suat: "Bộ truyền thụ đã đủ suất.",
@@ -212,5 +265,42 @@ export const ERROR_TEXT: Record<string, string> = {
   khong_co_tan_quyen: "Không còn tàn quyển này.",
   tong_chu_khong_roi_duoc: "Tông chủ không rời tông được.",
   khong_du_linh_thach: "Không đủ linh thạch.",
+  chua_du_tu_vi: "Chưa đủ tu vi để đột phá.",
+  khong_thay_o: "Không có ô này trên Đạo Cơ Bàn.",
+  o_chua_mo: "Ô này chưa mở.",
+  o_khong_nhan: "Ô này không nhận loại viên đó (ô tâm chỉ nhận ấn).",
+  chua_mo: "Chưa mở ở cảnh giới này.",
+  khong_phan_giai_duoc: "Đồ lục không phân giải được.",
+  khong_du_khi_tinh: "Không đủ Khí Tinh.",
+  khong_du_linh_van_thach: "Không đủ Linh Văn Thạch.",
+  chi_tu_ren: "Chỉ người có tài năng Tu rèn làm được.",
+  sai_loai: "Loại chỉ số phụ không hợp lệ.",
+  khong_co_khi_linh: "Món từ tím mới có khí linh.",
+  khi_linh_toi_da: "Khí linh đã cấp tối đa.",
+  khong_co_lua_chon: "Khí văn này không nằm trong 3 lựa chọn.",
+  khong_hop_duoc: "Hai viên không hợp được.",
+  da_co_phach: "Đã có Phách hệ này.",
+  lo_chua_du_cap: "Lò của tông chưa đủ cấp.",
+  thieu_nguyen_lieu: "Thiếu đồ phổ, phôi hoặc nguyên liệu.",
+  thieu_nguoi_luyen: "Cần đủ 4 người khác nhau cùng tông.",
   chua_co_trong_proto: "Chức năng này chưa có trong prototype.",
+  // Set đồ 2.0: ghép ấn, dòng ẩn
+  khong_phai_an: "Món này không phải ấn bộ.",
+  an_khong_du: "Cần đủ 3 ấn cùng bộ cùng bậc.",
+  an_khong_ghep_len: "Ấn bậc này không ghép lên được.",
+  khong_co_dong_an: "Món này không có dòng ẩn.",
+  da_lo: "Điều kiện của dòng này đã lộ.",
+  khong_thay_dong: "Không thấy dòng ẩn này.",
+  thieu_giam_dinh_phu: "Hết Giám Định Phù.",
+  an_chua_lo: "Hiệu ứng chưa lộ: dòng phải kích phát một lần mới tẩy được.",
+  // Khảm bằng kéo thả (lệnh kham)
+  chua_mac_do: "Ô này chưa mặc đồ.",
+  khong_kham_duoc: "Món này không khảm được.",
+  het_dong_kham: "Món này đã hết dòng khảm.",
+  binh_an_sai_o: "Binh ấn chỉ khảm vào vũ khí, bao tay, ngọc bội.",
+  // Đi lại trên bản đồ (mapScene giữ lời riêng; đây cho nơi khác gửi cùng lệnh)
+  da_o_day: "Bạn đang ở đây rồi.",
+  khong_co_duong: "Không có đường tới điểm này.",
+  khong_thay_diem: "Không tìm thấy điểm này.",
+  khong_dang_di: "Không có hành trình nào đang đi.",
 };

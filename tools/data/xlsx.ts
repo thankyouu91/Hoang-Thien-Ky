@@ -133,13 +133,140 @@ export const FILL_COLORS: Record<Exclude<Fill, "none">, string> = {
 };
 const FMT_ID: Record<Fmt, number> = { general: 0, int: 3, pct: 9, pct1: 164, pct2: 10, dec2: 2 };
 
-function esc(s: string): string {
+export function esc(s: string): string {
   return s
     .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "")
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 const NS = 'xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+
+/** Một kiểu ô trong cellXfs, viết cùng một cách cho file mới và file có sẵn (để tìm lại được bằng so chuỗi). */
+export function xfXml(numFmtId: number, fontId: number, fillId: number, wrap: boolean): string {
+  const align = wrap ? `<alignment wrapText="1" vertical="top"/>` : "";
+  return `<xf numFmtId="${numFmtId}" fontId="${fontId}" fillId="${fillId}" borderId="0" xfId="0"`
+    + `${numFmtId ? ' applyNumberFormat="1"' : ""}${fontId ? ' applyFont="1"' : ""}${fillId ? ' applyFill="1"' : ""}`
+    + `${align ? ` applyAlignment="1">${align}</xf>` : "/>"}`;
+}
+
+/** Một ô <c> ở dòng `r`, cột `ci` (đếm từ 0); ô trống không kiểu trả "". */
+export function cellXml(r: number, ci: number, c: Cell, styleOf: (c: Cell) => number, sheetName = ""): string {
+  const ref = cellRef(r, ci);
+  const st = styleOf(c);
+  const sAttr = st ? ` s="${st}"` : "";
+  if (c.f !== undefined) {
+    const f = `<f>${esc(c.f)}</f>`;
+    if (typeof c.v === "number") return `<c r="${ref}"${sAttr}>${f}<v>${c.v}</v></c>`;
+    if (typeof c.v === "string") return `<c r="${ref}"${sAttr} t="str">${f}<v>${esc(c.v)}</v></c>`;
+    return `<c r="${ref}"${sAttr}>${f}</c>`;
+  }
+  if (typeof c.v === "number") {
+    if (!Number.isFinite(c.v)) throw new Error(`Số không hợp lệ ở ${sheetName}!${ref}`);
+    return `<c r="${ref}"${sAttr}><v>${c.v}</v></c>`;
+  }
+  if (typeof c.v === "string" && c.v !== "") return `<c r="${ref}"${sAttr} t="inlineStr"><is><t xml:space="preserve">${esc(c.v)}</t></is></c>`;
+  return st ? `<c r="${ref}"${sAttr}/>` : "";
+}
+
+/** Một dòng <row> (dòng `r`, đếm từ 0), kiểu ô lấy qua `styleOf`. Dòng trống trả "". */
+export function rowXml(r: number, row: (Cell | null)[], styleOf: (c: Cell) => number, sheetName = ""): string {
+  const cells = row.map((c, ci) => (c ? cellXml(r, ci, c, styleOf, sheetName) : "")).filter(Boolean);
+  return cells.length ? `<row r="${r + 1}">${cells.join("")}</row>` : "";
+}
+
+/** Cả file XML của một sheet. */
+export function worksheetXml(s: SheetOut, styleOf: (c: Cell) => number, selected = false): string {
+  const rows = s.rows.map((row, r) => rowXml(r, row, styleOf, s.name)).filter(Boolean);
+  let view = `<sheetView workbookViewId="0"${selected ? ' tabSelected="1"' : ""}`;
+  if (s.freeze && (s.freeze.rows || s.freeze.cols)) {
+    const { rows: fr, cols: fc } = s.freeze;
+    const pane = fr && fc ? "bottomRight" : fr ? "bottomLeft" : "topRight";
+    view += `><pane${fc ? ` xSplit="${fc}"` : ""}${fr ? ` ySplit="${fr}"` : ""} topLeftCell="${cellRef(fr, fc)}" activePane="${pane}" state="frozen"/></sheetView>`;
+  } else view += "/>";
+  const cols = s.widths?.length
+    ? `<cols>${s.widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join("")}</cols>`
+    : "";
+  const lists = s.lists?.length
+    ? `<dataValidations count="${s.lists.length}">${s.lists.map((l) =>
+      `<dataValidation type="list" allowBlank="1" showErrorMessage="1" sqref="${l.ref}"><formula1>"${esc(l.values.join(","))}"</formula1></dataValidation>`).join("")}</dataValidations>`
+    : "";
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet ${NS}><sheetViews>${view}</sheetViews><sheetFormatPr defaultRowHeight="15"/>${cols}<sheetData>${rows.join("")}</sheetData>${lists}<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/></worksheet>`;
+}
+
+/**
+ * Kiểu ô của một file có sẵn (styles.xml): tìm hoặc thêm màu nền, định dạng số, chữ đậm và kiểu ô, để thêm dòng, cột, sheet
+ * mà không đụng tới kiểu cũ. File do Excel lưu lại có thể viết kiểu ô khác cách của mình; khi đó kiểu mới được thêm vào.
+ */
+export class StyleBook {
+  xml: string;
+  constructor(xml: string) {
+    this.xml = xml;
+  }
+  index(c: Cell): number {
+    const fmt = c.fmt ?? "general";
+    const numFmtId = fmt === "pct1" ? this.customFmt("0.0%") : FMT_ID[fmt];
+    const fontId = c.bold ? this.boldFont() : 0;
+    const fillId = !c.fill || c.fill === "none" ? 0 : this.fillOf(FILL_COLORS[c.fill]);
+    return this.findOrAdd("cellXfs", /<xf\b[^>]*?(?:\/>|>[\s\S]*?<\/xf>)/g, xfXml(numFmtId, fontId, fillId, !!c.wrap));
+  }
+  /** Tên màu nền của kiểu ô `xf` theo FILL_COLORS: "none" khi không nền, undefined khi màu không thuộc bảng. */
+  fillOfXf(xf: number): Fill | undefined {
+    const xfs = [...(this.block("cellXfs")?.[1] ?? "").matchAll(/<xf\b[^>]*?(?:\/>|>[\s\S]*?<\/xf>)/g)].map((m) => m[0]);
+    const fid = Number(/\bfillId="(\d+)"/.exec(xfs[xf] ?? "")?.[1] ?? 0);
+    const fill = [...(this.block("fills")?.[1] ?? "").matchAll(/<fill>[\s\S]*?<\/fill>|<fill\/>/g)].map((m) => m[0])[fid] ?? "";
+    const rgb = /\brgb="FF([0-9A-Fa-f]{6})"/.exec(fill)?.[1]?.toUpperCase();
+    if (!rgb) return "none";
+    return (Object.keys(FILL_COLORS) as Exclude<Fill, "none">[]).find((k) => FILL_COLORS[k] === rgb);
+  }
+  /** Chỉ số kiểu ô giống `xf` (định dạng số, chữ đậm, xuống dòng) nhưng nền màu `fill`; chưa có thì thêm. */
+  withFill(xf: number, fill: Exclude<Fill, "none">): number {
+    const item = /<xf\b[^>]*?(?:\/>|>[\s\S]*?<\/xf>)/g;
+    const xfs = [...(this.block("cellXfs")?.[1] ?? "").matchAll(item)].map((m) => m[0]);
+    const base = xfs[xf] ?? xfs[0];
+    const fid = this.fillOf(FILL_COLORS[fill]);
+    const num = (a: string) => Number(new RegExp(`\\b${a}="(\\d+)"`).exec(base)?.[1] ?? 0);
+    const wrap = /wrapText="1"/.test(base);
+    // Kiểu do xfXml dựng thì dựng lại cùng cách (dùng lại được kiểu có sẵn); kiểu Excel tự lưu thì chỉ thay fillId
+    let want = base === xfXml(num("numFmtId"), num("fontId"), num("fillId"), wrap) ? xfXml(num("numFmtId"), num("fontId"), fid, wrap)
+      : /\bfillId="\d+"/.test(base) ? base.replace(/\bfillId="\d+"/, `fillId="${fid}"`) : base.replace("<xf ", `<xf fillId="${fid}" `);
+    if (!/\bapplyFill=/.test(want)) want = want.replace("<xf ", '<xf applyFill="1" ');
+    return this.findOrAdd("cellXfs", item, want);
+  }
+  private block(name: string): RegExpExecArray | null {
+    return new RegExp(`<${name}\\b[^>]*?(?:/>|>([\\s\\S]*?)</${name}>)`).exec(this.xml);
+  }
+  /** Chỉ số của `want` trong khối `name`; chưa có thì thêm cuối khối (tạo khối trước `before` nếu chưa có). */
+  private findOrAdd(name: string, item: RegExp, want: string, before?: string): number {
+    const b = this.block(name);
+    const list = b ? [...(b[1] ?? "").matchAll(item)].map((m) => m[0]) : [];
+    const i = list.indexOf(want);
+    if (i >= 0) return i;
+    list.push(want);
+    const next = `<${name} count="${list.length}">${list.join("")}</${name}>`;
+    if (b) this.xml = this.xml.slice(0, b.index) + next + this.xml.slice(b.index + b[0].length);
+    else this.xml = this.xml.replace(`<${before}`, `${next}<${before}`);
+    return list.length - 1;
+  }
+  private fillOf(rgb: string): number {
+    const list = [...(this.block("fills")?.[1] ?? "").matchAll(/<fill>[\s\S]*?<\/fill>|<fill\/>/g)].map((m) => m[0]);
+    const i = list.findIndex((f) => f.toUpperCase().includes(`RGB="FF${rgb}"`));
+    return i >= 0 ? i : this.findOrAdd("fills", /<fill>[\s\S]*?<\/fill>|<fill\/>/g,
+      `<fill><patternFill patternType="solid"><fgColor rgb="FF${rgb}"/><bgColor indexed="64"/></patternFill></fill>`);
+  }
+  private boldFont(): number {
+    const list = [...(this.block("fonts")?.[1] ?? "").matchAll(/<font>[\s\S]*?<\/font>|<font\/>/g)].map((m) => m[0]);
+    const i = list.findIndex((f) => /<b\/>|<b val="(1|true)"\/>/.test(f));
+    return i >= 0 ? i : this.findOrAdd("fonts", /<font>[\s\S]*?<\/font>|<font\/>/g, `<font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font>`);
+  }
+  private customFmt(code: string): number {
+    const items = [...(this.block("numFmts")?.[1] ?? "").matchAll(/<numFmt\b[^>]*\/>/g)].map((m) => m[0]);
+    const found = items.find((x) => x.includes(`formatCode="${code}"`));
+    if (found) return Number(/numFmtId="(\d+)"/.exec(found)![1]);
+    const id = Math.max(163, ...items.map((x) => Number(/numFmtId="(\d+)"/.exec(x)![1]))) + 1;
+    this.findOrAdd("numFmts", /<numFmt\b[^>]*\/>/g, `<numFmt numFmtId="${id}" formatCode="${code}"/>`, "fonts");
+    return id;
+  }
+}
 
 export function writeXlsx(sheets: SheetOut[]): Buffer {
   const fills = Object.keys(FILL_COLORS) as Exclude<Fill, "none">[];
@@ -151,55 +278,12 @@ export function writeXlsx(sheets: SheetOut[]): Buffer {
     return i;
   };
 
-  const sheetXml = sheets.map((s, si) => {
-    const rows: string[] = [];
-    s.rows.forEach((row, r) => {
-      const cells: string[] = [];
-      row.forEach((c, ci) => {
-        if (!c) return;
-        const ref = cellRef(r, ci);
-        const st = xfIndex(c);
-        const sAttr = st ? ` s="${st}"` : "";
-        if (c.f !== undefined) {
-          const f = `<f>${esc(c.f)}</f>`;
-          if (typeof c.v === "number") cells.push(`<c r="${ref}"${sAttr}>${f}<v>${c.v}</v></c>`);
-          else if (typeof c.v === "string") cells.push(`<c r="${ref}"${sAttr} t="str">${f}<v>${esc(c.v)}</v></c>`);
-          else cells.push(`<c r="${ref}"${sAttr}>${f}</c>`);
-        } else if (typeof c.v === "number") {
-          if (!Number.isFinite(c.v)) throw new Error(`Số không hợp lệ ở ${s.name}!${ref}`);
-          cells.push(`<c r="${ref}"${sAttr}><v>${c.v}</v></c>`);
-        } else if (typeof c.v === "string" && c.v !== "") {
-          cells.push(`<c r="${ref}"${sAttr} t="inlineStr"><is><t xml:space="preserve">${esc(c.v)}</t></is></c>`);
-        } else if (st) {
-          cells.push(`<c r="${ref}"${sAttr}/>`);
-        }
-      });
-      if (cells.length) rows.push(`<row r="${r + 1}">${cells.join("")}</row>`);
-    });
-    let view = `<sheetView workbookViewId="0"${si === 0 ? ' tabSelected="1"' : ""}`;
-    if (s.freeze && (s.freeze.rows || s.freeze.cols)) {
-      const { rows: fr, cols: fc } = s.freeze;
-      const pane = fr && fc ? "bottomRight" : fr ? "bottomLeft" : "topRight";
-      view += `><pane${fc ? ` xSplit="${fc}"` : ""}${fr ? ` ySplit="${fr}"` : ""} topLeftCell="${cellRef(fr, fc)}" activePane="${pane}" state="frozen"/></sheetView>`;
-    } else view += "/>";
-    const cols = s.widths?.length
-      ? `<cols>${s.widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join("")}</cols>`
-      : "";
-    const lists = s.lists?.length
-      ? `<dataValidations count="${s.lists.length}">${s.lists.map((l) =>
-        `<dataValidation type="list" allowBlank="1" showErrorMessage="1" sqref="${l.ref}"><formula1>"${esc(l.values.join(","))}"</formula1></dataValidation>`).join("")}</dataValidations>`
-      : "";
-    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet ${NS}><sheetViews>${view}</sheetViews><sheetFormatPr defaultRowHeight="15"/>${cols}<sheetData>${rows.join("")}</sheetData>${lists}<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/></worksheet>`;
-  });
+  const sheetXml = sheets.map((s, si) => worksheetXml(s, xfIndex, si === 0));
 
   const xfs = xfKeys.map((k) => {
     const [fill, fmt, bold, wrap] = k.split("|");
     const fillId = fill === "none" ? 0 : 2 + fills.indexOf(fill as Exclude<Fill, "none">);
-    const numFmtId = FMT_ID[fmt as Fmt];
-    const align = wrap === "1" ? `<alignment wrapText="1" vertical="top"/>` : "";
-    return `<xf numFmtId="${numFmtId}" fontId="${bold === "1" ? 1 : 0}" fillId="${fillId}" borderId="0" xfId="0"`
-      + `${numFmtId ? ' applyNumberFormat="1"' : ""}${bold === "1" ? ' applyFont="1"' : ""}${fillId ? ' applyFill="1"' : ""}`
-      + `${align ? ` applyAlignment="1">${align}</xf>` : "/>"}`;
+    return xfXml(FMT_ID[fmt as Fmt], bold === "1" ? 1 : 0, fillId, wrap === "1");
   });
   const styles = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">`
     + `<numFmts count="1"><numFmt numFmtId="164" formatCode="0.0%"/></numFmts>`
@@ -264,33 +348,71 @@ function textOf(xml: string): string {
   return [...xml.replace(/<rPh\b[\s\S]*?<\/rPh>/g, "").matchAll(/<t(?:\s[^>]*)?>([\s\S]*?)<\/t>/g)].map((m) => unesc(m[1])).join("");
 }
 
-export function readXlsx(buf: Buffer): SheetIn[] {
-  const files = unzip(buf);
-  const get = (name: string): string => {
-    const b = files.get(name.replace(/^\//, ""));
-    if (!b) throw new Error(`Thiếu ${name} trong file xlsx`);
-    return b.toString("utf8");
-  };
-  const shared: string[] = files.has("xl/sharedStrings.xml")
-    ? [...get("xl/sharedStrings.xml").matchAll(/<si>([\s\S]*?)<\/si>/g)].map((m) => textOf(m[1]))
-    : [];
+function getPart(files: Map<string, Buffer>, name: string): string {
+  const b = files.get(name.replace(/^\//, ""));
+  if (!b) throw new Error(`Thiếu ${name} trong file xlsx`);
+  return b.toString("utf8");
+}
+
+/** Tên sheet → đường dẫn file XML của sheet trong gói, theo thứ tự trong workbook. */
+export function sheetParts(files: Map<string, Buffer>): [string, string][] {
   const rels: Record<string, string> = {};
-  for (const m of get("xl/_rels/workbook.xml.rels").matchAll(/<Relationship\b([^>]*)\/?>/g)) {
+  for (const m of getPart(files, "xl/_rels/workbook.xml.rels").matchAll(/<Relationship\b([^>]*)\/?>/g)) {
     const a = attrs(m[1]);
     rels[a.Id] = a.Target.startsWith("/") ? a.Target.slice(1) : `xl/${a.Target}`;
   }
-  const out: SheetIn[] = [];
-  for (const m of get("xl/workbook.xml").matchAll(/<sheet\b([^>]*)\/?>/g)) {
+  return [...getPart(files, "xl/workbook.xml").matchAll(/<sheet\b([^>]*)\/?>/g)].map((m) => {
     const a = attrs(m[1]);
-    const xml = get(rels[a["r:id"]]);
+    return [a.name, rels[a["r:id"]]];
+  });
+}
+
+/** Dời các địa chỉ tương đối (không có $) của công thức đi `dr` dòng, `dc` cột; bỏ qua chuỗi "..." và tên sheet '...'. */
+export function shiftFormula(f: string, dr: number, dc: number): string {
+  if (!dr && !dc) return f;
+  return f.split(/("(?:[^"]|"")*"|'(?:[^']|'')*')/).map((part, i) => i % 2 ? part
+    : part.replace(/(?<![A-Za-z0-9_.])(\$?)([A-Z]{1,3})(\$?)(\d+)(?![\d(A-Za-z_])/g, (m, cAbs: string, c: string, rAbs: string, r: string) => {
+      let col = 0;
+      for (const ch of c) col = col * 26 + ch.charCodeAt(0) - 64;
+      const nc = cAbs ? c : colName(col - 1 + dc);
+      const nr = rAbs ? r : String(Number(r) + dr);
+      return `${cAbs}${nc}${rAbs}${nr}`;
+    })).join("");
+}
+
+export function readXlsx(buf: Buffer): SheetIn[] {
+  return readFiles(unzip(buf));
+}
+
+/** Như readXlsx nhưng đọc từ gói đã giải nén (dùng khi đang sửa gói). */
+export function readFiles(files: Map<string, Buffer>): SheetIn[] {
+  const get = (name: string): string => getPart(files, name);
+  const shared: string[] = files.has("xl/sharedStrings.xml")
+    ? [...get("xl/sharedStrings.xml").matchAll(/<si>([\s\S]*?)<\/si>/g)].map((m) => textOf(m[1]))
+    : [];
+  const out: SheetIn[] = [];
+  for (const [name, part] of sheetParts(files)) {
+    const a = { name };
+    const xml = get(part);
     const cells: Value[][] = [];
     const formulas: (string | null)[][] = [];
+    // Công thức chung (Excel lưu công thức lặp lại một lần ở ô đầu, các ô sau chỉ ghi si): dời địa chỉ theo khoảng cách tới ô đầu
+    const masters = new Map<string, { text: string; row: number; col: number }>();
     for (const c of xml.matchAll(/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g)) {
       const ca = attrs(c[1]);
       const body = c[2] ?? "";
       const { row, col } = parseRef(ca.r);
       const vm = /<v>([\s\S]*?)<\/v>/.exec(body);
-      const fm = /<f(?:\s[^>]*)?>([\s\S]*?)<\/f>/.exec(body);
+      const fe = /<f\b([^>]*?)(?:\/>|>([\s\S]*?)<\/f>)/.exec(body);
+      let fm: [string, string] | null = null;
+      if (fe) {
+        const fa = attrs(fe[1]), text = unesc(fe[2] ?? "");
+        if (fa.t === "shared" && fa.si !== undefined) {
+          if (text) masters.set(fa.si, { text, row, col });
+          const m = masters.get(fa.si);
+          fm = m ? ["", shiftFormula(m.text, row - m.row, col - m.col)] : null;
+        } else fm = ["", text];
+      }
       let v: Value = null;
       switch (ca.t) {
         case "s": v = vm ? shared[Number(vm[1])] : null; break;
@@ -301,7 +423,7 @@ export function readXlsx(buf: Buffer): SheetIn[] {
         default: v = vm ? Number(vm[1]) : null;
       }
       (cells[row] ??= [])[col] = v === "" ? null : v;
-      if (fm) (formulas[row] ??= [])[col] = unesc(fm[1]);
+      if (fm) (formulas[row] ??= [])[col] = fm[1];
     }
     for (let r = 0; r < cells.length; r++) {
       cells[r] ??= [];

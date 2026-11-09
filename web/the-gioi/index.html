@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <!--#mo-->
+    <title>Thế giới · Thiên Hoang Ký</title>
+    <meta name="description" content="Thiên Hoang đại lục: bốn vị diện, 12 vùng Hạ vị và 12 hệ nguyên tố.">
+  </head>
+  <body>
+    <!--#dau-->
+    <main id="noi-dung">
+      <header class="dau-trang">
+        <p class="the-han" aria-hidden="true">天荒大陸</p>
+        <h1>Thiên Hoang đại lục</h1>
+        <p class="dan">
+          Thế giới của game là một đại lục gồm bốn vị diện. Mỗi vị diện là một bản đồ riêng; càng vào trong, linh khí càng đậm,
+          mỏ càng nhiều cấp và công pháp rơi ra càng cao phẩm. Rìa ngoài cùng là Hư Không Hải, vùng đất chết không ai chiếm được.
+        </p>
+      </header>
+
+      <section class="khoi" aria-labelledby="h-vi-dien">
+        <div class="hai-cot">
+          <div>
+            <h2 id="h-vi-dien" class="tieu-de">Bốn vị diện</h2>
+            <ol class="bang-vi-dien" data-dong-tang>
+              <li class="mo" data-tang="1" tabindex="0"><b>1</b><strong>Hạ vị diện</strong><span>12 vùng xếp vòng quanh Linh Hải; ở lòng giữa là cao nguyên tụ linh khí. Đây là phần mở ở bản chơi thử và bản đầu tiên.</span></li>
+              <li data-tang="2" tabindex="0"><b>2</b><strong>Trung vị diện</strong><span>9 vùng quanh Vân Hải. Linh khí gấp bốn Hạ vị.</span></li>
+              <li data-tang="3" tabindex="0"><b>3</b><strong>Thần vực</strong><span>5 vùng quanh Thần Sơn. Không còn cấp nhân vật, chỉ còn tu luyện chiêu thức.</span></li>
+              <li data-tang="4" tabindex="0"><b>4</b><strong>Thánh vực</strong><span>2 vùng ở tâm đại lục, linh khí đậm nhất.</span></li>
+            </ol>
+            <p class="ghi-chu">Mỗi lần thăng vị diện, tông môn dời một vòng vào gần tâm, tới một vùng ngẫu nhiên.</p>
+          </div>
+          <!-- Bốn vị diện chồng tầng (người dùng yêu cầu 2026-11-05): bốn đảo đá nổi trong mây, Hạ vị lớn nhất
+               dưới cùng lên tới Thánh vực nhỏ và sáng nhất; cột linh khí xuyên giữa, mũi tên son là đường phi thăng.
+               Chạm một thẻ bên trái (hoặc một tầng) thì tầng ấy sáng lên (main.ts, tangViDien). -->
+          <figure class="tang-vi-dien" aria-label="Bốn vị diện chồng tầng: Hạ vị diện lớn nhất dưới cùng, lên dần Trung vị, Thần vực, trên cùng là Thánh vực; mũi tên chỉ đường phi thăng lên tầng trên">
+            <svg viewBox="0 0 520 704" role="img" aria-labelledby="tvd-t">
+              <title id="tvd-t">Bốn vị diện chồng tầng, phi thăng đi lên</title>
+              <defs>
+                <linearGradient id="tvd-dat" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#eee4cd" />
+                  <stop offset="1" stop-color="#d8cbab" />
+                </linearGradient>
+                <linearGradient id="tvd-da" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#8a7e6b" />
+                  <stop offset="0.45" stop-color="#5d5445" />
+                  <stop offset="1" stop-color="#3b352c" />
+                </linearGradient>
+                <linearGradient id="tvd-cot" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#ecd9a0" stop-opacity="0" />
+                  <stop offset="0.38" stop-color="#ecd9a0" stop-opacity="0.5" />
+                  <stop offset="0.5" stop-color="#f8eecb" stop-opacity="0.9" />
+                  <stop offset="0.62" stop-color="#ecd9a0" stop-opacity="0.5" />
+                  <stop offset="1" stop-color="#ecd9a0" stop-opacity="0" />
+                </linearGradient>
+                <radialGradient id="tvd-may">
+                  <stop offset="0" stop-color="#ffffff" stop-opacity="0.75" />
+                  <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+                </radialGradient>
+                <radialGradient id="tvd-sang">
+                  <stop offset="0" stop-color="#c8584a" stop-opacity="0.32" />
+                  <stop offset="1" stop-color="#c8584a" stop-opacity="0" />
+                </radialGradient>
+                <clipPath id="tvd-clip-ha"><ellipse cx="260" cy="568" rx="223" ry="57" /></clipPath>
+                <marker id="tvd-mt" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M0 0 L8 4 L0 8 Z" fill="#b3261e" />
+                </marker>
+              </defs>
+              <rect x="236" y="26" width="48" height="616" fill="url(#tvd-cot)" />
+              <g fill="#dcae55" opacity="0.8">
+                <circle cx="252" cy="330" r="2.4" /><circle cx="270" cy="470" r="2" /><circle cx="262" cy="172" r="2.2" />
+                <circle cx="248" cy="586" r="2" /><circle cx="272" cy="72" r="2" />
+              </g>
+              <circle cx="260" cy="80" r="60" fill="url(#tvd-sang)" />
+              <g class="tang" data-tang="4">
+                <path d="M194 96 C202 114 214 126 228 130 C236 122 242 112 246 102 C254 122 266 132 280 132 C290 122 296 110 300 100 C310 106 320 102 326 96 Z" fill="url(#tvd-da)" />
+                <ellipse cx="260" cy="96" rx="66" ry="18" fill="url(#tvd-dat)" stroke="rgba(74,60,44,0.55)" stroke-width="1.6" />
+                <path d="M242 85 Q250 76 260 74 Q270 76 278 85 Q272 81 260 81 Q248 81 242 85 Z" fill="#4c4437" />
+                <rect x="253" y="83" width="14" height="10" fill="#5a4a3d" />
+                <circle cx="260" cy="70" r="2.8" fill="#b3261e" />
+                <text class="nh" x="260" y="152" text-anchor="middle">Thánh vực · 2 vùng</text>
+              </g>
+              <ellipse cx="356" cy="318" rx="110" ry="20" fill="url(#tvd-may)" />
+              <g class="tang" data-tang="3">
+                <path d="M148 232 C158 258 174 274 192 280 C200 270 206 258 212 246 C222 272 238 286 254 288 C264 276 272 262 278 248 C292 264 310 268 326 260 C344 252 360 244 372 232 Z" fill="url(#tvd-da)" />
+                <ellipse cx="260" cy="232" rx="112" ry="30" fill="url(#tvd-dat)" stroke="rgba(74,60,44,0.55)" stroke-width="1.6" />
+                <path d="M232 230 C240 214 250 200 258 190 C261 198 263 206 266 214 C270 208 274 204 278 202 C282 212 286 222 289 230 Z" fill="#6b6151" opacity="0.8" />
+                <path d="M256 200 Q 259 195 260 193 Q 262 198 264 203 Z" fill="#f4ecd8" opacity="0.8" />
+                <g fill="#937b58" opacity="0.7">
+                  <circle cx="190" cy="236" r="2.8" /><circle cx="226" cy="247" r="2.8" /><circle cx="294" cy="247" r="2.8" />
+                  <circle cx="330" cy="236" r="2.8" /><circle cx="218" cy="222" r="2.8" />
+                </g>
+                <text class="nh" x="260" y="310" text-anchor="middle">Thần vực · 5 vùng</text>
+              </g>
+              <ellipse cx="152" cy="476" rx="128" ry="23" fill="url(#tvd-may)" />
+              <g class="tang" data-tang="2">
+                <path d="M95 390 C106 424 128 444 150 452 C160 442 168 428 174 414 C184 450 200 470 218 476 C230 464 238 448 244 432 C256 458 274 468 292 466 C302 452 310 436 316 420 C334 438 356 440 374 428 C396 416 414 406 425 390 Z" fill="url(#tvd-da)" />
+                <ellipse cx="260" cy="390" rx="165" ry="44" fill="url(#tvd-dat)" stroke="rgba(74,60,44,0.55)" stroke-width="1.6" />
+                <ellipse cx="260" cy="390" rx="34" ry="9" fill="none" stroke="rgba(138,31,22,0.4)" stroke-width="1.4" />
+                <g fill="#937b58" opacity="0.7">
+                  <circle cx="150" cy="390" r="3" /><circle cx="176" cy="410" r="3" /><circle cx="222" cy="422" r="3" />
+                  <circle cx="298" cy="422" r="3" /><circle cx="344" cy="410" r="3" /><circle cx="370" cy="390" r="3" />
+                  <circle cx="344" cy="370" r="3" /><circle cx="222" cy="358" r="3" /><circle cx="176" cy="370" r="3" />
+                </g>
+                <text class="nh" x="260" y="498" text-anchor="middle">Trung vị · 9 vùng</text>
+              </g>
+              <ellipse cx="392" cy="530" rx="118" ry="22" fill="url(#tvd-may)" />
+              <g class="tang" data-tang="1">
+                <path d="M35 568 C48 606 74 628 100 638 C112 628 120 612 126 596 C136 640 152 662 170 672 C184 658 192 640 198 622 C210 652 228 666 248 670 C262 656 270 638 276 618 C292 644 312 654 334 652 C346 638 354 622 360 606 C380 626 404 628 424 612 C448 598 472 586 485 568 Z" fill="url(#tvd-da)" />
+                <ellipse cx="260" cy="568" rx="225" ry="58" fill="url(#tvd-dat)" stroke="rgba(74,60,44,0.55)" stroke-width="1.6" />
+                <!-- Dải giữa bản đồ Hạ vị thật, cắt theo mặt đĩa. -->
+                <g clip-path="url(#tvd-clip-ha)">
+                  <image href="/hinh/rieng/dai_luc.webp" x="35" y="510" width="450" height="116" preserveAspectRatio="xMidYMid slice" opacity="0.95" />
+                </g>
+                <ellipse cx="260" cy="568" rx="225" ry="58" fill="none" stroke="rgba(74,60,44,0.55)" stroke-width="1.6" />
+                <text class="nh" x="260" y="694" text-anchor="middle">Hạ vị · 12 vùng quanh Cấm Khu</text>
+              </g>
+              <ellipse cx="300" cy="652" rx="170" ry="24" fill="url(#tvd-may)" />
+              <g fill="none" stroke="#b3261e" stroke-width="2.2" opacity="0.85">
+                <path d="M438 556 Q472 496 406 428" marker-end="url(#tvd-mt)" />
+                <path d="M354 374 Q402 316 320 264" marker-end="url(#tvd-mt)" />
+                <path d="M300 210 Q338 158 284 120" marker-end="url(#tvd-mt)" />
+              </g>
+              <text class="nh phi" x="470" y="498" transform="rotate(-62 470 498)">phi thăng</text>
+            </svg>
+          </figure>
+        </div>
+      </section>
+
+      <section class="khoi" aria-labelledby="h-he">
+        <h2 id="h-he" class="tieu-de">12 vùng, 12 hệ</h2>
+        <p class="dan">
+          Mỗi vùng Hạ vị thuộc về một hệ nguyên tố. Vùng mà tông môn rơi vào quyết định hướng công pháp ban đầu, vì tàn quyển
+          rơi ở đó phần lớn mang hệ của vùng. Phần lớn các vùng kề nhau có hệ tương sinh, nên biên giới hai vùng là nơi ghép công pháp tốt nhất.
+        </p>
+
+        <div class="nhom-he">
+          <h3>Ngũ Hành</h3>
+          <ul class="luoi-he">
+            <li class="he" data-he="kim"><img src="/hinh/tan_quyen/kim.webp" alt="" width="76" height="76" loading="lazy"><b>Kim</b><span class="vung">Thiên Kiếm Nguyên</span><span class="ban-sac">Xuyên giáp, đơn mục tiêu</span></li>
+            <li class="he" data-he="moc"><img src="/hinh/tan_quyen/moc.webp" alt="" width="76" height="76" loading="lazy"><b>Mộc</b><span class="vung">Vạn Mộc Lâm</span><span class="ban-sac">Hồi phục, trói chân</span></li>
+            <li class="he" data-he="thuy"><img src="/hinh/tan_quyen/thuy.webp" alt="" width="76" height="76" loading="lazy"><b>Thủy</b><span class="vung">Bích Ba Hải</span><span class="ban-sac">Làm chậm, tiết kiệm mana</span></li>
+            <li class="he" data-he="hoa"><img src="/hinh/tan_quyen/hoa.webp" alt="" width="76" height="76" loading="lazy"><b>Hỏa</b><span class="vung">Xích Viêm Sơn</span><span class="ban-sac">Diện rộng, thiêu đốt</span></li>
+            <li class="he" data-he="tho"><img src="/hinh/tan_quyen/tho.webp" alt="" width="76" height="76" loading="lazy"><b>Thổ</b><span class="vung">Hậu Thổ Nguyên</span><span class="ban-sac">Phòng thủ, khiên</span></li>
+          </ul>
+        </div>
+        <div class="nhom-he">
+          <h3>Biến dị</h3>
+          <ul class="luoi-he">
+            <li class="he" data-he="loi"><img src="/hinh/tan_quyen/loi.webp" alt="" width="76" height="76" loading="lazy"><b>Lôi <i>từ Kim</i></b><span class="vung">Lôi Đình Cốc</span><span class="ban-sac">Chí mạng, tê liệt</span></li>
+            <li class="he" data-he="phong"><img src="/hinh/tan_quyen/phong.webp" alt="" width="76" height="76" loading="lazy"><b>Phong <i>từ Mộc</i></b><span class="vung">Cuồng Phong Nguyên</span><span class="ban-sac">Tốc độ, đẩy lùi</span></li>
+            <li class="he" data-he="cuc_han"><img src="/hinh/tan_quyen/cuc_han.webp" alt="" width="76" height="76" loading="lazy"><b>Cực hàn <i>từ Thủy</i></b><span class="vung">Vạn Niên Băng Nguyên</span><span class="ban-sac">Đóng băng, khống chế</span></li>
+            <li class="he" data-he="cuc_duong"><img src="/hinh/tan_quyen/cuc_duong.webp" alt="" width="76" height="76" loading="lazy"><b>Cực dương <i>từ Hỏa</i></b><span class="vung">Liệt Dương Mạc</span><span class="ban-sac">Bùng nổ, xuyên kháng</span></li>
+            <li class="he" data-he="cuc_am"><img src="/hinh/tan_quyen/cuc_am.webp" alt="" width="76" height="76" loading="lazy"><b>Cực âm <i>từ Thổ</i></b><span class="vung">Cửu U Uyên</span><span class="ban-sac">Nguyền rủa, sát thương theo thời gian</span></li>
+          </ul>
+        </div>
+        <div class="nhom-he">
+          <h3>Thiên địa dị hệ</h3>
+          <ul class="luoi-he">
+            <li class="he" data-he="quang"><img src="/hinh/tan_quyen/quang.webp" alt="" width="76" height="76" loading="lazy"><b>Quang</b><span class="vung">Diệu Quang Đài</span><span class="ban-sac">Hồi máu, chói mắt</span></li>
+            <li class="he" data-he="am_lanh"><img src="/hinh/tan_quyen/am_lanh.webp" alt="" width="76" height="76" loading="lazy"><b>Âm lãnh</b><span class="vung">U Minh Đầm</span><span class="ban-sac">Tầm xa, hút máu</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="khoi" aria-labelledby="h-song">
+        <div class="doc">
+          <h2 id="h-song" class="tieu-de">Sống trong một vùng</h2>
+          <h3>Thành chủ</h3>
+          <p>
+            Mỗi vùng có một thành chủ trung lập, không ai chiếm được và không có giao chiến. Người chơi sống ở đây: chợ chung,
+            nhiệm vụ, kho riêng, nơi hồi sinh. Từ thành, Truyền Tống Trận đưa thẳng về sơn môn của mình.
+          </p>
+          <h3>Sơn môn và địa thế</h3>
+          <p>
+            Lập tông thì không chọn chỗ. Tông môn rơi vào một vị trí sơn môn còn trống, và địa thế ở đó (linh mạch, sơn hiểm, hỏa mạch,
+            thủy trạch, cổ tích hay thương lộ) làm công trình này mạnh, công trình kia yếu.
+          </p>
+          <h3>Sương mù và đường đi</h3>
+          <p>
+            Bản đồ không chia ô: các điểm (mỏ, linh tuyền, đèo, bến đò, hang dị thú, cửa bí cảnh) nối với nhau bằng đường.
+            Ra khỏi thành, đường càng xa càng nguy hiểm; ngoài vùng an toàn, ai cũng có thể bị dị thú, cướp hay người chơi khác chặn đường.
+          </p>
+          <h3>Bốn phe</h3>
+        </div>
+        <ul class="ba-cot bon">
+          <li><b>Chính Đạo Minh</b><span>Các tông sống sót sau Đoạn Mạch, giữ trật tự ở thành chủ.</span></li>
+          <li><b>Huyết Sát Môn</b><span>Hậu duệ Cửu U Tông, bị đổ tội gây Đoạn Mạch và bị đuổi khỏi Cửu U Uyên.</span></li>
+          <li><b>Yêu tộc</b><span>Sống ven Hư Không Hải; hư không lan vào nên bị dồn dần vào trong.</span></li>
+          <li><b>Cổ tông di tích</b><span>Tàn hồn hộ pháp của 12 cổ tông, ở lại để thử người đi sau.</span></li>
+        </ul>
+        <p class="ghi-chu" style="margin-top:18px">Toàn bộ tên và cốt truyện là nguyên tác. Thuật ngữ Hán Việt trong game có chú giải khi chạm.</p>
+      </section>
+    </main>
+    <!--#chan-->
+  </body>
+</html>

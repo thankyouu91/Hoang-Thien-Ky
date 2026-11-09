@@ -1,0 +1,15 @@
+# Header cho static assets của thienhoangky.fun (Worker thienhoangky-web). HTML đi qua Worker (cổng link mời) và nhận header ở đó.
+
+# File của Vite có mã băm trong tên: giữ lâu.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Hình xuất từ assets/ (scripts/hinh.mjs). Trang gọi kèm ?v=<mã băm> nên đổi hình là đổi URL.
+/hinh/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: same-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()

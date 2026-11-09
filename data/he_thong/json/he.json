@@ -26,7 +26,7 @@
     "group": "Ngũ Hành",
     "identity": "Làm chậm, tiết kiệm mana",
     "effect": {"desc":"Làm chậm","value":200,"ticks":40},
-    "stats": {"dmg":0,"crit":0,"cd":0,"mana":-100,"range":0},
+    "stats": {"dmg":0,"crit":0,"cd":0,"mana":-50,"range":0},
     "rootBuff": {"desc":"Mana tối đa","stat":"manaMax","value":150}
   },
   "hoa": {

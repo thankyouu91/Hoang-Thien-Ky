@@ -1,0 +1,117 @@
+/*
+ * Lớp "chơi game" phủ lên dashboard.css (nạp sau, index.ts): giữ nền giấy kem, chữ có chân, khung đỏ mảnh, thêm
+ * phản hồi khi chạm, ánh sáng cho thứ đang kích, và sửa các chỗ bể khung. Mọi chuyển động tắt khi người chơi chọn
+ * giảm chuyển động.
+ */
+
+/* ---- 1. Chống bể khung --------------------------------------------------------------------------------------------- */
+/* Nút không tràn khỏi cột: chữ dài xuống dòng thay vì lòi ra ngoài */
+.btn, .seal { max-width: 100%; min-width: 0; white-space: normal; text-wrap: balance; line-height: 1.2; }
+.btn.small, .seal.small { padding-block: 4px; }
+/* Hàng nhãn + giá trị: nhãn co được, giá trị không đè nhãn */
+.nv-row > span:first-child { min-width: 0; }
+.nv-row > b { flex: 0 1 auto; min-width: 0; overflow-wrap: anywhere; }
+/* Đầu mục có chú thích dài: chú thích xuống dòng dưới tên mục, không bóp tên mục thành hai dòng */
+.page .nv-h { flex-wrap: wrap; align-items: baseline; row-gap: 0; }
+.page .nv-h > span { flex: 1 1 auto; min-width: 0; margin-left: auto; text-align: right; font-size: 12.5px; }
+
+/* Khối thử hiệu ứng (prototype) ở mục Tu luyện: nhãn trên, hai nút chia đôi bên dưới */
+.nv-dev { display: grid; gap: 6px; margin: 6px 0 4px; padding: 8px; border: 1px dashed var(--c-line-2); border-radius: 3px; color: var(--c-ink-3); font-size: 12.5px; }
+.nv-dev-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.nv-dev-btns .btn { min-height: 34px; padding: 4px 6px; font-size: 13px; }
+
+/* ---- 2. Nút chính Bế quan / Đột phá ---------------------------------------------------------------------------------- */
+.page .nv-main { position: relative; overflow: hidden; flex-direction: column; gap: 0; }
+.page .nv-main small { font: 500 12px/1.2 var(--font); letter-spacing: 0; opacity: 0.9; }
+/* Đang bế quan: không mờ nhạt như nút tắt mà là giấy son nhạt có dòng linh khí chảy qua, kèm đếm ngược */
+.page .nv-main.be-quan:disabled { opacity: 1; background: var(--c-accent-soft); box-shadow: inset 0 0 0 1px var(--c-frame), inset 0 0 0 3px var(--c-surface), inset 0 0 0 4px var(--c-frame-soft); color: var(--c-accent-ink) !important; }
+.page .nv-main.be-quan::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%); transform: translateX(-100%); animation: g-quet 2.8s ease-in-out infinite; pointer-events: none; }
+/* Đủ điều kiện đột phá: ấn son tỏa sáng theo nhịp thở */
+.page .nv-main.dot-pha { animation: g-tho-son 1.8s ease-in-out infinite; }
+
+/* ---- 3. Phản hồi khi chạm -------------------------------------------------------------------------------------------- */
+.page button:not(:disabled), #sheet button:not(:disabled) { transition: transform 0.08s ease, box-shadow 0.15s ease, background-color 0.15s ease, filter 0.15s ease; }
+.page button:not(:disabled):active, #sheet button:not(:disabled):active { transform: translateY(1px) scale(0.985); }
+.seal:not(:disabled):hover { filter: brightness(1.06); }
+/* Ô đồ, ô trang bị: nhấc nhẹ khi rê chuột, viền đậm màu độ hiếm */
+@media (hover: hover) {
+  .bag-cell:not(.empty):hover, .pt-slot:not(.empty):hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(74, 52, 30, 0.18), inset 0 0 0 1px var(--g, var(--t, var(--c-line-2))); }
+}
+/* Đồ vàng, đỏ: ánh kim lướt qua ô thỉnh thoảng */
+.bag-cell.r-vang, .bag-cell.r-do, .pt-slot.r-vang, .pt-slot.r-do { overflow: hidden; }
+.bag-cell.r-vang::after, .bag-cell.r-do::after, .pt-slot.r-vang::after, .pt-slot.r-do::after {
+  content: ""; position: absolute; inset: -20%; z-index: 2; background: linear-gradient(115deg, transparent 40%, rgba(255, 248, 220, 0.6) 50%, transparent 60%); transform: translateX(-120%); animation: g-quet 5.5s ease-in-out infinite; pointer-events: none;
+}
+.bag-cell.r-do::after, .pt-slot.r-do::after { animation-delay: 1.4s; }
+/* Ô đang chọn: viền son và quầng nhẹ */
+.bag-cell.sel { box-shadow: inset 0 0 0 1px var(--c-accent), 0 0 0 2px color-mix(in srgb, var(--c-accent) 25%, transparent); }
+/* Thanh tiến độ: vệt sáng chạy trên phần đã đầy */
+.bar > i { position: relative; overflow: hidden; }
+.bar > i::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent); transform: translateX(-100%); animation: g-quet 3.2s ease-in-out infinite; }
+
+/* ---- 4. Hình hệ (ngọc Canva) ------------------------------------------------------------------------------------------ */
+.chip.el img, .nv-el img, .tech-sub img { image-rendering: auto; filter: drop-shadow(0 0.5px 1px rgba(42, 32, 24, 0.35)); }
+.chip.el img { width: 18px; height: 18px; }
+.tech-sub img { width: 14px; height: 14px; }
+.nv-el img { width: 22px; height: 22px; border-radius: 50%; }
+/* Hệ đang kích (linh căn): quầng thở theo màu hệ */
+.nv-el.on img { animation: g-tho-he 2.4s ease-in-out infinite; }
+
+/* Vòng hệ quanh Pháp tướng (elementWheel.ts) */
+.pt-wheel image { image-rendering: auto; }
+.pt-wheel .wn { opacity: 1; }
+.pt-wheel .wn:not(.on) .w-orb { opacity: 0.5; filter: saturate(0.35); }
+.pt-wheel .wn .w-glow { transform-box: fill-box; transform-origin: center; animation: g-quang 2.4s ease-in-out infinite; }
+.pt-wheel .wn .w-ring { fill: none; stroke-width: 0.9; stroke-dasharray: 2.2 2.6; transform-box: fill-box; transform-origin: center; animation: g-xoay 9s linear infinite; }
+.pt-wheel .wn .w-sparks { transform-box: fill-box; transform-origin: center; animation: g-xoay-tam 5s linear infinite; }
+.pt-wheel .wn.on .w-orb { animation: g-noi 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.pt-stage.wheel-on .pt-wheel { opacity: 1; }
+
+/* ---- 5. Nhịp chuyển động --------------------------------------------------------------------------------------------- */
+@keyframes g-quet { 0%, 55% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+@keyframes g-tho-son {
+  0%, 100% { box-shadow: inset 0 0 0 3px var(--c-accent), inset 0 0 0 4px rgba(255, 238, 222, 0.42), 0 0 0 0 rgba(179, 38, 30, 0.35); }
+  50% { box-shadow: inset 0 0 0 3px var(--c-accent), inset 0 0 0 4px rgba(255, 238, 222, 0.7), 0 0 14px 3px rgba(179, 38, 30, 0.35); }
+}
+@keyframes g-tho-he { 0%, 100% { filter: drop-shadow(0 0 1px rgba(42, 32, 24, 0.35)); } 50% { filter: drop-shadow(0 0 5px rgba(255, 214, 120, 0.9)); } }
+@keyframes g-quang { 0%, 100% { opacity: 0.55; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.12); } }
+@keyframes g-xoay { to { transform: rotate(360deg); } }
+@keyframes g-xoay-tam { to { transform: rotate(360deg); } }
+@keyframes g-noi { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.2px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .page .nv-main.be-quan::after, .page .nv-main.dot-pha, .bag-cell::after, .pt-slot::after, .bar > i::after,
+  .nv-el.on img, .pt-wheel .wn .w-glow, .pt-wheel .wn .w-ring, .pt-wheel .wn .w-sparks, .pt-wheel .wn.on .w-orb { animation: none !important; }
+  .page button:not(:disabled):active, #sheet button:not(:disabled):active { transform: none; }
+}
+
+/* ---- 6. Màn rộng vừa (1100–1359 px): ba cột hẹp lại để cột giữa không bị bóp ---------------------------------------- */
+@media (min-width: 1100px) and (max-width: 1359px) {
+  .nv-cols { grid-template-columns: 232px minmax(0, 1fr) 268px; gap: var(--sp-4); }
+}
+/* Hàng trên cột giữa (chuyển Pháp tướng / Đạo Cơ Bàn / Luyện khí, linh căn, nút Vòng hệ): xuống dòng thay vì tràn */
+.nv-sub { flex-wrap: wrap; row-gap: 6px; }
+.nv-sub .nv-roots { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; text-align: right; }
+.nv-tog { flex: 0 0 auto; white-space: nowrap; }
+.nv-tog[aria-pressed="true"] { border-color: var(--c-frame); background: var(--c-accent-soft); color: var(--c-accent-ink); font-weight: 700; }
+
+/* ---- 7. Thanh điều hướng: icon vẽ, nút đang mở nổi lên và tỏa sáng ---------------------------------------------- */
+#tabbar .tab-art { position: relative; display: grid; place-items: center; width: 34px; height: 34px; }
+#tabbar .tab-art > * { grid-area: 1 / 1; }
+#tabbar .tab-ve { width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 1px 1.5px rgba(42, 32, 24, 0.3)) saturate(0.55) brightness(1.02); opacity: 0.78; transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease; }
+#tabbar .tab-art:has(.tab-ve) .tab-ic { visibility: hidden; }
+#tabbar button:hover .tab-ve { opacity: 1; filter: drop-shadow(0 1px 1.5px rgba(42, 32, 24, 0.3)) saturate(0.9); }
+#tabbar button[aria-selected="true"] .tab-ve { opacity: 1; filter: drop-shadow(0 2px 3px rgba(42, 32, 24, 0.35)) saturate(1.1); transform: translateY(-3px) scale(1.12); }
+/* Quầng son sau icon đang mở, thở chậm */
+#tabbar button[aria-selected="true"] .tab-art::before { content: ""; position: absolute; inset: -6px; z-index: -1; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 214, 140, 0.75), rgba(179, 38, 30, 0.18) 60%, transparent); animation: g-quang 2.6s ease-in-out infinite; }
+#tabbar button[aria-selected="true"] .tab-art { isolation: isolate; }
+@media (min-width: 1100px) { #tabbar .tab-art, #tabbar .tab-ve { width: 40px; height: 40px; } }
+@media (prefers-reduced-motion: reduce) { #tabbar button[aria-selected="true"] .tab-art::before { animation: none; } #tabbar .tab-ve { transition: none; } }
+
+/* ---- 8. Ô số liệu, đăng nhập ------------------------------------------------------------------------------------ */
+/* Ô số liệu (Lãnh thổ…): nhãn dài xuống dòng thay vì cắt "…", số dồn xuống đáy cho ba ô thẳng hàng */
+.metric { display: flex; flex-direction: column; justify-content: space-between; }
+.metric > span { overflow: visible; white-space: normal; text-overflow: clip; line-height: 1.25; overflow-wrap: break-word; }
+/* Đọc lại ngày sinh đã chọn bằng chữ, dưới ô ngày */
+#login .dob-doc { margin: -4px 0 10px; color: var(--c-ink-2); font-size: 13.5px; }
+#login .dob-doc b { color: var(--c-accent-ink); }

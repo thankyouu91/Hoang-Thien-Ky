@@ -1,9 +1,12 @@
 // Hình nền từng công trình trong tông môn, vẽ bằng code (SVG kiểu thủy mặc lúc chạng vạng, hợp nền tối của dashboard).
 // Mỗi hình suy ra từ ba thứ: mô hình tông môn (50 đảo tông môn trong assets/pixellab/tong_mon, mỗi mô hình một seed và
 // một bộ họa tiết đọc từ tên), địa thế sơn môn (GDD mục 3) và công trình (GDD mục 5). Cùng đầu vào thì cùng hình.
-// Không dùng PixelLab: 50 mô hình × 11 công trình là 550 hình, quá ngân sách; bản vẽ code thay được bằng hình họa sĩ sau.
+// Thứ tự dùng hình (cuối file): hình PixelLab nếu có, không thì cảnh Three.js nướng thành ảnh (proto/src/three), máy không có
+// WebGL2 thì bản SVG vẽ code ở đây.
 import type { Element } from "@htk/sim";
+import { loadWorld } from "../../scenes/map/region.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
+import { renderBackground } from "../../three/index.ts";
 
 export type LocationId =
   | "chinh_dien" | "tang_kinh_cac" | "ho_son_dai_tran" | "dien_vo_truong" | "luyen_dan_phong" | "luyen_khi_cac"
@@ -491,19 +494,30 @@ export function sectModels(): Promise<SectModel[]> {
 
 // ---- hình PixelLab khi có -----------------------------------------------------------------------------------------
 // Hình vẽ tay bằng PixelLab nằm ở assets/pixellab/cong_trinh/<mô hình>/<công trình>.png (có dòng trong manifest).
-// Công trình nào có thì dùng, không thì dùng bản vẽ code ở trên. Bộ hình đang vẽ lại bằng PixelLab Pro (create_image_pro, 320×192)
+// Công trình nào có thì dùng, không thì cảnh Three.js (dưới) rồi tới bản vẽ code ở trên. Bộ hình đang vẽ lại bằng PixelLab Pro (create_image_pro, 320×192)
 // theo thứ tự: Chính Điện của mọi mô hình, điểm bản đồ của mọi vùng, rồi các công trình còn lại; hình chưa tới lượt còn bản pixflux.
 
 let pixelArt = new Set<string>();
 let pointPixelArt = new Set<string>();
 let pixelArtOn = true;
+/** Biến thể nền thẻ điểm (assets/pixellab/diem_nen/bo_hinh.json): loại → hệ → bậc → đường dẫn theo dáng. */
+let pointIndex: Record<string, Record<string, Record<string, string[]>>> = {};
+/** Hệ của vùng và khu đặc biệt (mục lục bản đồ), để chọn biến thể theo hệ. */
+let regionElement = new Map<string, string>();
 
-/** Đọc manifest một lần để biết công trình nào có hình PixelLab; gọi trước khi vẽ màn. */
+/** Đọc manifest, chỉ mục biến thể điểm và hệ các vùng một lần; gọi trước khi vẽ màn. */
 export function loadLocationArt(): Promise<void> {
-  return loadManifest().then((m) => {
-    pixelArt = new Set(m.assets.filter((a) => a.file.startsWith("cong_trinh/")).map((a) => a.file.slice("cong_trinh/".length).replace(/\.png$/, "")));
-    pointPixelArt = new Set(m.assets.filter((a) => a.file.startsWith("diem_nen/")).map((a) => a.file.slice("diem_nen/".length).replace(/\.png$/, "")));
-  });
+  return Promise.all([
+    loadManifest().then((m) => {
+      pixelArt = new Set(m.assets.filter((a) => a.file.startsWith("cong_trinh/")).map((a) => a.file.slice("cong_trinh/".length).replace(/\.png$/, "")));
+      pointPixelArt = new Set(m.assets.filter((a) => a.file.startsWith("diem_nen/")).map((a) => a.file.slice("diem_nen/".length).replace(/\.png$/, "")));
+    }),
+    fetch(`${import.meta.env.BASE_URL}pixellab/diem_nen/bo_hinh.json`)
+      .then((r) => r.json())
+      .then((j: { loai?: typeof pointIndex }) => (pointIndex = j.loai ?? {}))
+      .catch(() => undefined),
+    loadWorld().then((w) => (regionElement = new Map([...w.regions, ...(w.zones ?? [])].map((r) => [r.code, r.element])))),
+  ]).then(() => undefined);
 }
 
 /** Công cụ thử: bật tắt hình PixelLab để so với bản vẽ code. */
@@ -515,15 +529,78 @@ export function pixelArtEnabled(): boolean {
   return pixelArtOn;
 }
 
-/** Hình nền của một loại điểm bản đồ trong vùng (assets/pixellab/diem_nen/<vùng>/<loại>.png), nếu đã có. */
-export function pointArt(region: string, type: string): string | undefined {
-  const key = `${region}/${type}`;
-  return pixelArtOn && pointPixelArt.has(key) ? `${import.meta.env.BASE_URL}pixellab/diem_nen/${key}.png` : undefined;
+// ---- cảnh Three.js cho chỗ chưa có hình PixelLab --------------------------------------------------------------------
+// renderBackground là async, còn các màn dựng HTML ngay: lần đầu trả bản tạm (SVG, hoặc không có hình với điểm bản đồ) và
+// bắt đầu nướng; nướng xong thì thay ảnh tạm đang hiện trên trang, các lần dựng sau dùng thẳng ảnh đã nướng. Chunk three
+// chỉ tải khi thật sự có chỗ thiếu hình. Công cụ thử tắt hình PixelLab thì thấy bản Three.js để so.
+
+/** Khoá "cong_trinh/<mô hình>/<công trình>" hoặc "diem/<vùng>/<loại>" → URL ảnh; null là đang nướng hoặc không vẽ được. */
+const baked = new Map<string, string | null>();
+
+function bake(key: string, render: () => Promise<string | null>, placeholder?: string): void {
+  if (baked.has(key)) return;
+  baked.set(key, null);
+  void render().then((url) => {
+    if (!url) return;
+    baked.set(key, url);
+    if (!placeholder) return;
+    for (const el of document.querySelectorAll<HTMLElement>("[style*='background-image']"))
+      if (el.style.backgroundImage.includes(placeholder)) el.style.backgroundImage = `url("${url}")`;
+  });
 }
 
-/** Hình nền của một công trình: hình PixelLab nếu có, không thì SVG vẽ code. */
+/** Một điểm cụ thể để chọn biến thể: id (dáng), bậc cửa bí cảnh, cấp mỏ. */
+export interface PointPick {
+  id: number;
+  tier?: string;
+  level?: number;
+}
+
+/** Bậc như đảo nổi (phiên pixellab-diem): mỏ cấp 1–2 → "1", 3–4 → "2", từ 5 → "3"; cửa bí cảnh theo tier; loại khác "0". */
+function pointBac(type: string, p: PointPick): string {
+  if (type.startsWith("mo_")) return !p.level || p.level <= 2 ? "1" : p.level <= 4 ? "2" : "3";
+  if (type === "cua_bi_canh") return p.tier ?? "thap";
+  return "0";
+}
+const bam = (id: number) => Math.imul(id + 1, 2654435761) >>> 0;
+
+/**
+ * Hình nền của một điểm bản đồ: có điểm thì chọn biến thể theo hệ vùng, bậc và dáng (diem_nen/bo_hinh.json; cùng một điểm
+ * luôn ra cùng hình, lên cấp chỉ đổi bậc), thiếu bậc thì lùi bậc "1"; không thì hình của loại trong vùng
+ * (diem_nen/<vùng>/<loại>.png); không có nữa thì Three.js.
+ */
+export function pointArt(region: string, type: string, p?: PointPick): string | undefined {
+  if (pixelArtOn && p) {
+    const byBac = pointIndex[type]?.[regionElement.get(region) ?? ""];
+    const ds = byBac?.[pointBac(type, p)] ?? byBac?.["1"];
+    if (ds?.length) return `${import.meta.env.BASE_URL}pixellab/${ds[bam(p.id) % ds.length]}.png`;
+  }
+  const key = `${region}/${type}`;
+  if (pixelArtOn && pointPixelArt.has(key)) return `${import.meta.env.BASE_URL}pixellab/diem_nen/${key}.png`;
+  const url = baked.get(`diem/${key}`);
+  if (url) return url;
+  bake(`diem/${key}`, async () => {
+    const r = (await loadWorld()).regions.find((x) => x.code === region);
+    return r ? renderBackground("diem", r.element as Element, region, { variant: type }) : null;
+  });
+  return undefined;
+}
+
+/**
+ * Bộ hình chung assets/pixellab/cong_trinh/chung/<công trình>.png (trừ Chính Điện): từ 2026-11-05 mỗi mô hình có bộ công
+ * trình riêng hợp với Chính Điện của nó, bộ chung chỉ còn là dự phòng khi mô hình chưa có hình công trình đó.
+ */
+const SHARED = "chung";
+
+/** Hình nền của một công trình: PixelLab (hình riêng của mô hình, rồi bộ chung) nếu có, không thì Three.js, máy không có WebGL2 thì SVG vẽ code. */
 export function locationArt(input: SceneInput): { url: string; pixel: boolean } {
   const key = `${input.model.id}/${input.location}`;
-  if (pixelArtOn && pixelArt.has(key)) return { url: `${import.meta.env.BASE_URL}pixellab/cong_trinh/${key}.png`, pixel: true };
-  return { url: sectSceneUrl(input), pixel: false };
+  const shared = `${SHARED}/${input.location}`;
+  for (const k of input.location === "chinh_dien" ? [key] : [key, shared])
+    if (pixelArtOn && pixelArt.has(k)) return { url: `${import.meta.env.BASE_URL}pixellab/cong_trinh/${k}.png`, pixel: true };
+  const url = baked.get(`cong_trinh/${key}`);
+  if (url) return { url, pixel: false };
+  const svg = sectSceneUrl(input);
+  bake(`cong_trinh/${key}`, () => renderBackground("cong_trinh", input.model.element, input.model.id, { variant: input.location }), svg);
+  return { url: svg, pixel: false };
 }

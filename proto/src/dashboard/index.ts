@@ -1,10 +1,8 @@
 // Ghép dashboard vào khung proto (GDD mục 14): thanh dưới Động phủ · Bản đồ · Tông môn · Công pháp · Liên minh,
 // thanh trên ở mọi màn chính, màn Nhân vật mở từ thanh trên, Trận mở từ chiến báo.
-import "@fontsource/be-vietnam-pro/400.css";
-import "@fontsource/be-vietnam-pro/500.css";
-import "@fontsource/be-vietnam-pro/600.css";
-import "@fontsource/be-vietnam-pro/700.css";
 import "./dashboard.css";
+import "./game.css";
+import "./fonts.css";
 import type { App } from "../app/app.ts";
 import type { Scene } from "../app/scene.ts";
 import type { Sprites } from "../assets/sprites.ts";
@@ -18,7 +16,12 @@ import { icon, type IconName } from "./icons.ts";
 import { showLogin } from "./login.ts";
 import { attachTerms } from "./terms.ts";
 import { startRestReminder } from "./reminder.ts";
+import { startTelemetry } from "./server.ts";
+import { startMayChuUi } from "./mayChuUi.ts";
 import { AGE_LABEL, MockDashboardSource } from "./mock/source.ts";
+import { laBanMau } from "./moi/demo.ts";
+import { moFtue } from "./moi/ftueUi.ts";
+import { NguonTheoTaiKhoan } from "./moi/nguonMoi.ts";
 import { CongPhapScene } from "./screens/congPhap.ts";
 import { DongPhuScene } from "./screens/dongPhu.ts";
 import { LienMinhScene } from "./screens/lienMinh.ts";
@@ -26,7 +29,7 @@ import { NhanVatScene } from "./screens/nhanVat.ts";
 import { TongMonScene } from "./screens/tongMon.ts";
 import { lazySource, TopBar, type DashCtx } from "./shell.ts";
 import type { Go } from "./source.ts";
-import { closeSheet, ServerClock, tickCountdowns, toast } from "./ui.ts";
+import { artUrl, closeSheet, ServerClock, tickCountdowns, toast } from "./ui.ts";
 
 export interface Dashboard {
   /** Năm màn trên thanh dưới, theo thứ tự GDD. */
@@ -71,11 +74,15 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
           app.show(congPhap);
           break;
         case "nhan-vat":
-          nhanVat.setTab(g.tab ?? "trang-bi");
+          nhanVat.setTab(g.tab ?? "phap-tuong");
           app.open("nhan-vat");
           break;
         case "thanh-chu":
           app.show(dongPhu);
+          break;
+        case "nhiem-vu":
+          if (ftue) ftue.moBuoc();
+          else app.show(dongPhu);
           break;
         case "tran":
           void openBattle(g.battleId);
@@ -92,7 +99,7 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
     if (!src) {
       const b = await ctx.source.battle(id);
       if (!b) return toast("Không tìm thấy trận này", true);
-      src = simReplaySource(b.label, () => b.input, b.arena);
+      src = simReplaySource(b.label, () => b.input, b.arena, { teams: b.teams, viewer: b.viewer });
       replays.set(id, src);
     }
     battle.open(src);
@@ -108,8 +115,15 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
   const auth = new MockAuth();
   attachTerms();
   startRestReminder(auth);
+  // Sự kiện ẩn danh lên thienhoangky.fun/api (docs/api.md); chạy dev không có API thì tự tắt.
+  startTelemetry(auth);
+  // Màn bảo trì theo cấu hình sống, ẩn nút Góp ý khi không nối được máy chủ (mayChuUi.ts).
+  startMayChuUi();
+  // Người chơi mới bắt đầu từ cấp 1, tiến độ lưu theo tài khoản (moi/). Thế giới mẫu cấp 42 chỉ chạy với ?demo=1 trên máy dev.
+  const banMau = laBanMau();
+  const nguonMoi = banMau ? undefined : new NguonTheoTaiKhoan(auth);
   const ctx: DashCtx = {
-    source: lazySource(() => MockDashboardSource.create(Date.now(), auth)),
+    source: nguonMoi ?? lazySource(() => MockDashboardSource.create(Date.now(), auth)),
     auth,
     clock: new ServerClock(),
     topbar,
@@ -124,6 +138,9 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
   // Bản đồ mở thời gian thực (GDD mục 3, KE_HOACH mục 9 Sprint R1): không có nút tab, mở bằng "Đi tới" hoặc #the-gioi.
   const world = new WorldScene(ctx, canvas);
   const byId: Record<string, Scene> = { "dong-phu": dongPhu, "ban-do": map, "tong-mon": tongMon, "cong-phap": congPhap, "lien-minh": lienMinh };
+  const reloadScene = () => (app?.scene as { reload?: () => void } | undefined)?.reload?.();
+  // Thẻ Nhiệm vụ nhập môn (FTUE bước 2–8) cho người chơi mới.
+  const ftue = nguonMoi && moFtue({ nguon: nguonMoi, auth, nav, reload: reloadScene });
 
   // Lúc rảnh sau khi vào game: tải trước file điểm, ảnh nền và hình đảo của vùng, để mở tab Bản đồ là có ngay.
   const idle = (fn: () => void) => ("requestIdleCallback" in window ? requestIdleCallback(fn, { timeout: 4000 }) : setTimeout(fn, 1500));
@@ -141,15 +158,18 @@ export function createDashboard(sprites: Sprites, canvas: HTMLCanvasElement, bat
     onShow(s: Scene): void {
       closeSheet();
       if (TAB_IDS.includes(s.id)) lastMain = s.id;
+      ftue?.onShow(s.id);
     },
     attach(a: App): void {
       app = a;
-      // Icon cho 5 nút của thanh dưới (App chỉ tạo nút chữ).
+      // Icon cho 5 nút của thanh dưới (App chỉ tạo nút chữ): hình vẽ Canva (assets/icon_ve/ui/tab), nút đang mở sáng lên
+      // (game.css); ảnh lỗi thì còn icon nét SVG bên dưới.
       for (const b of document.querySelectorAll<HTMLButtonElement>("#tabbar button")) {
         const name = TAB_ICONS[b.dataset.scene ?? ""];
-        if (name && !b.querySelector("svg")) b.innerHTML = `${icon(name, "tab-ic")}<span>${b.textContent}</span>`;
+        if (name && !b.querySelector(".tab-art"))
+          b.innerHTML = `<span class="tab-art">${icon(name, "tab-ic")}<img class="tab-ve" src="${artUrl(`ui/tab/${name}`)}" alt="" onerror="this.remove()"></span><span>${b.textContent}</span>`;
       }
-      if (!auth.session()) showLogin(auth, AGE_LABEL, () => (app?.scene as { reload?: () => void } | undefined)?.reload?.());
+      if (!auth.session()) showLogin(auth, AGE_LABEL, () => (reloadScene(), ftue?.capNhat()));
     },
   };
 }

@@ -1,0 +1,21 @@
+{
+  "ghi_chu": [
+    "Màn gieo quẻ ở bia Tầm Đạo (nhiệm vụ nhập môn 0.2, proto/src/dashboard/moi/ftueUi.ts): bia ở giữa, 12 nút hệ xoay quanh.",
+    "Vẽ lại bằng Canva ngày 2026-11-05 vì người dùng chê bản vẽ bằng CSS. Cùng phong cách tranh vẽ 3D của icon vật phẩm (assets/icon_ve).",
+    "12 nút hệ (vẽ cùng đợt, tờ xuất DAHaBvRZvqk trang 2–13) đã chuyển sang bộ dùng chung assets/icon_ve/he/<hệ>.webp (commit 7b2b534 của tab giao diện, hàm heArt trong ui.ts); thư mục he/ ở đây đã bỏ."
+  ],
+  "assets": [
+    {
+      "file": "bia.webp",
+      "ten": "Bia Tầm Đạo",
+      "width": 334,
+      "height": 600,
+      "description": "Game UI illustration: Bia Tầm Đạo, an ancient weathered stone stele for seeking the Dao, a tall round-topped grey-green stone tablet with faint carved cloud and mountain patterns, a thin glowing spirit vein of soft light running down its center, small moss and a carved stone lotus base, wisps of spirit mist around the foot. Chinese xianxia fantasy, highly detailed painterly 3D render, soft studio lighting, single object centered, isolated on a plain white background, no text, no characters, no frame.",
+      "tool": "Canva generate-image (PORTRAIT_2_3) → remove-background → trang 600×900 → xuất PNG → webp",
+      "canva_media": "MAHaBsn0ZOI",
+      "canva_media_tach_nen": "MAHaBveHHyA",
+      "canva_design": "DAHaBvRZvqk trang 14",
+      "created": "2026-11-05"
+    }
+  ]
+}

@@ -5,9 +5,11 @@
 //   text, list (cách nhau bằng dấu phẩy), bool ("có" / "không"), int, num: giữ nguyên
 //   pct (Excel lưu 0,1 hiện 10%), mul (hệ số 1,5): × 1000      sec (giây): × 20      cell (ô): × 1000
 //   qty: đơn vị lấy từ cột `unitCol` của cùng dòng ("%", "giây", "ô")
+//   unit: chữ đơn vị trong Excel ("%", "giây", "số ô") → mã đơn vị trong JSON ("phan_nghin", "tick", "o")
+//   kv: object viết "khóa: giá trị; khóa: giá trị", giá trị giữ đơn vị code; [a, b] là mảng, true/false là đúng sai
 import type { Fill } from "./xlsx.ts";
 
-export type Kind = "text" | "list" | "bool" | "int" | "num" | "pct" | "mul" | "sec" | "cell" | "qty";
+export type Kind = "text" | "list" | "bool" | "int" | "num" | "pct" | "mul" | "sec" | "cell" | "qty" | "unit" | "kv";
 /** Nguồn của số: GDD, code đang chạy, đề xuất mới trong file này, công thức. */
 export type Src = "gdd" | "code" | "de_xuat" | "cong_thuc";
 
@@ -17,17 +19,18 @@ export interface Col {
   kind: Kind;
   src: Src;
   width?: number;
-  /** Khóa trong JSON, có thể lồng bằng dấu chấm ("stats.dmg"); false = không xuất. Mặc định bằng `key`. */
+  /** Khóa trong JSON, có thể lồng bằng dấu chấm ("stats.dmg") và chỉ số mảng ("a[0]"); false = không xuất. Mặc định bằng `key`. */
   json?: string | false;
   unitCol?: string;
   optional?: boolean; // ô trống được phép (JSON bỏ khóa)
+  nullable?: boolean; // ô trống thành null trong JSON
   /** Ô ghi tên (một hoặc nhiều, cách nhau dấu phẩy) của dòng trong sheet khác; JSON đổi sang mã của dòng đó. */
   ref?: "he" | "thu_pham";
 }
 export interface TableDef {
   kind: "table";
   sheet: string;
-  file: string; // tên file JSON trong data/he_thong/json
+  file?: string; // tên file JSON trong data/he_thong/json; không có thì bảng là một phần của file ghép (trang_bi.ts)
   id: string; // khóa cột định danh
   shape: "map" | "list"; // JSON là object theo định danh hay mảng theo thứ tự dòng
   cols: Col[];
@@ -106,6 +109,8 @@ export const LOAI_CHIEU: TableDef = {
     c("dong_minh", "Nhắm đồng minh", "bool", "code", { json: "ally", width: 9 }),
     c("hau_to", "Hậu tố tên tàn quyển", "text", "de_xuat", { json: "suffix", width: 12 }),
     c("luat", "Luật đánh đổi", "text", "gdd", { json: "rule", width: 60 }),
+    // Set đồ 2.0 (người dùng duyệt tách thủ ngoại, thủ nội 2026-11-05): đòn ngoại giảm theo thủ ngoại, đòn nội theo thủ nội
+    c("loai_sat_thuong", "Loại sát thương (ngoai, noi; trống: không gây)", "text", "gdd", { json: "loai_sat_thuong", nullable: true, width: 12 }),
   ],
 };
 
@@ -186,6 +191,21 @@ export const CONG_PHAP: TableDef = {
     c("chi_mang", "Chí mạng", "pct", "cong_thuc", { json: false, width: 8 }),
     c("hoi_chieu", "Hồi chiêu (giây)", "num", "cong_thuc", { json: false, width: 9 }),
     c("mana", "Mana", "num", "cong_thuc", { json: false, width: 8 }),
+  ],
+};
+
+/**
+ * Tầng công pháp (GDD mục 6: mỗi công pháp 10 tầng, lên tầng bằng tu luyện và cống hiến). Mỗi dòng là tầng đích; uy lực, hồi chiêu,
+ * mana cộng dồn so với tầng 1. Số của phiên Bảng Điểm hệ thống, 2026-11-05 (đề xuất). Proto đọc thẳng tang_cong_phap.json.
+ */
+export const TANG_CONG_PHAP: TableDef = {
+  kind: "table", sheet: "Tầng công pháp", file: "tang_cong_phap.json", id: "tang", shape: "list", cols: [
+    c("tang", "Tầng", "int", "gdd", { json: "tang", width: 6 }),
+    c("uy_luc", "Uy lực cộng dồn so với tầng 1 (nhân sát thương, lượng hồi, khiên)", "pct", "de_xuat", { json: "uyLuc", width: 16 }),
+    c("hoi_chieu", "Giảm hồi chiêu cộng dồn", "pct", "de_xuat", { json: "hoiChieu", width: 11 }),
+    c("mana", "Giảm mana cộng dồn", "pct", "de_xuat", { json: "mana", width: 11 }),
+    c("diem_luyen", "Điểm luyện để lên tầng này (phẩm Phàm; phẩm khác × hệ số sát thương của phẩm)", "int", "de_xuat", { json: "diemLuyen", width: 18 }),
+    c("cong_hien", "Cống hiến: số tàn quyển cùng phẩm (× cống hiến khi nộp 1 tàn quyển của phẩm)", "int", "de_xuat", { json: "congHien", width: 18 }),
   ],
 };
 
@@ -332,14 +352,15 @@ export const LINH_DON: TableDef = {
 
 /** Thứ tự sheet trong file (sau sheet Ghi chú). */
 export const SHEETS: SheetDef[] = [
-  PARAMS, HE, KHAC_CHE, QUAN_HE, TO_HOP, LOAI_CHIEU, BIEN_THE, PHAM, TAI_NANG, TAN_QUYEN, CONG_PHAP,
+  PARAMS, HE, KHAC_CHE, QUAN_HE, TO_HOP, LOAI_CHIEU, BIEN_THE, PHAM, TAI_NANG, TAN_QUYEN, CONG_PHAP, TANG_CONG_PHAP,
   VI_DIEN, VUNG, CAP_TONG_MON, MO, BI_CANH, THU, THU_PHAM, THU_CANH_GIOI, THU_KICH_PHAT, LINH_DON,
 ];
 export const NOTE_SHEET = "Ghi chú";
 
 // ---------- đổi đơn vị ----------
 
-const UNIT: Record<string, number> = { "%": 1000, "giây": 20, "ô": 1000, "hệ số": 1000, "ô/giây": 50, "số": 1 };
+/** "ô" đổi sang milli-ô như sim; "số ô" là số ô đếm nguyên (đơn vị "o" của data/trang_bi). */
+const UNIT: Record<string, number> = { "%": 1000, "giây": 20, "ô": 1000, "số ô": 1, "hệ số": 1000, "ô/giây": 50, "số": 1 };
 
 /** Giá trị Excel → JSON theo kiểu cột. */
 export function toJson(kind: Kind, v: unknown, unit?: unknown): unknown {
@@ -357,7 +378,47 @@ export function toJson(kind: Kind, v: unknown, unit?: unknown): unknown {
       if (k === undefined) throw new Error(`Đơn vị lạ: ${String(unit)}`);
       return Math.round(num(v) * k);
     }
+    case "unit": {
+      const code = UNIT_CODE[String(v).trim()];
+      if (!code) throw new Error(`Đơn vị lạ: ${String(v)} (dùng ${Object.keys(UNIT_CODE).join(", ")})`);
+      return code;
+    }
+    case "kv": return parseKv(String(v));
   }
+}
+
+/** Chữ đơn vị trong Excel ↔ mã đơn vị trong JSON (cột kiểu unit). */
+const UNIT_CODE: Record<string, string> = { "%": "phan_nghin", "giây": "tick", "số ô": "o", "hệ số": "he_so" };
+export function unitLabel(code: string): string {
+  const label = Object.keys(UNIT_CODE).find((k) => UNIT_CODE[k] === code);
+  if (!label) throw new Error(`Mã đơn vị lạ: ${code}`);
+  return label;
+}
+/** Số theo mã đơn vị JSON → giá trị hiện trong Excel (ngược của qty). */
+export function fromCodeUnit(v: number, code: string): number {
+  return v / UNIT[unitLabel(code)];
+}
+
+/** Object → "khóa: giá trị; khóa: giá trị" (giữ đơn vị code). */
+export function kvText(o: Record<string, unknown>): string {
+  const one = (x: unknown): string => (Array.isArray(x) ? `[${x.map(one).join(", ")}]` : String(x));
+  return Object.entries(o).map(([k, x]) => `${k}: ${one(x)}`).join("; ");
+}
+export function parseKv(s: string): Record<string, unknown> {
+  const one = (x: string): unknown => {
+    x = x.trim();
+    if (x.startsWith("[") && x.endsWith("]")) return x.slice(1, -1).split(",").map((y) => y.trim()).filter(Boolean).map(one);
+    if (x === "true" || x === "false") return x === "true";
+    return /^-?\d+(\.\d+)?$/.test(x) ? Number(x) : x;
+  };
+  const out: Record<string, unknown> = {};
+  for (const part of s.split(";")) {
+    if (!part.trim()) continue;
+    const i = part.indexOf(":");
+    if (i < 0) throw new Error(`Thiếu dấu ":" trong "${part.trim()}"`);
+    out[part.slice(0, i).trim()] = one(part.slice(i + 1));
+  }
+  return out;
 }
 /** Giá trị của sheet Tham số → JSON theo cột Kiểu. */
 export function paramToJson(kieu: string, v: unknown): unknown {
@@ -371,6 +432,32 @@ export function paramFromCode(kieu: string, v: number | boolean): number | strin
   if (kieu === "có/không") return v ? "có" : "không";
   return (v as number) / UNIT[kieu];
 }
+// ---------- đường dẫn JSON ----------
+
+/** "a.b[0].c" → ["a", "b", 0, "c"]; số sau dấu chấm là khóa object ("tran.x.2"), số trong ngoặc vuông là chỉ số mảng. */
+function parsePath(path: string): (string | number)[] {
+  const out: (string | number)[] = [];
+  for (const part of path.split(".")) {
+    const m = /^([^[]*)((?:\[\d+\])*)$/.exec(part)!;
+    if (m[1]) out.push(m[1]);
+    for (const i of m[2].matchAll(/\[(\d+)\]/g)) out.push(Number(i[1]));
+  }
+  return out;
+}
+export function setPath(obj: Record<string, unknown>, path: string, v: unknown): void {
+  const seg = parsePath(path);
+  let o: Record<string | number, unknown> = obj;
+  seg.slice(0, -1).forEach((k, i) => {
+    o = (o[k] ??= typeof seg[i + 1] === "number" ? [] : {}) as Record<string | number, unknown>;
+  });
+  o[seg[seg.length - 1]] = v;
+}
+export function getPath(obj: unknown, path: string): unknown {
+  let o = obj as Record<string | number, unknown> | undefined;
+  for (const k of parsePath(path)) o = o?.[k] as Record<string | number, unknown> | undefined;
+  return o;
+}
+
 function num(v: unknown): number {
   const n = typeof v === "number" ? v : Number(String(v).replace(",", "."));
   if (!Number.isFinite(n)) throw new Error(`Không phải số: ${String(v)}`);

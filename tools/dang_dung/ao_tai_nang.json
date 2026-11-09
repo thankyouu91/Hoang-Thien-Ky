@@ -1,0 +1,43 @@
+{
+  "_ghi_chu": "Mã state PixelLab của bộ áo theo tài năng trên từng thân (gói 3, 2026-11-05). Bộ trên nam khoẻ có từ trước (phiên hình tu sĩ); ba thân còn lại tạo bằng create_character_state từ ảnh nghỉ thân trống, cùng mô tả. Khi dải dung.png của bộ áo đã vào manifest thì mã lấy từ manifest.",
+  "nam_khoe": {
+    "tu_tran": "b9301b1e-e308-41a6-9104-4e5e6a054cec",
+    "tu_dan": "f95b0a93-268d-4099-b728-d85c4900f0d0",
+    "sat_thu": "8a15545a-9fc0-4e14-b074-439232c40e1e",
+    "tu_ren": "3a8132fd-805f-47df-92b5-d6df894645a2",
+    "tu_duoc": "85287a9e-458a-4114-a7ca-f7f9cd7202ca",
+    "tu_kim_tien": "4adf9318-095b-4098-8150-0f65703d06c0"
+  },
+  "nam_manh": {
+    "tu_tran": "09e4963d-a9ce-405d-af3e-3cfc3ab6dffa",
+    "tu_dan": "97909a5c-03db-43b2-8f42-c1e6319cb057",
+    "sat_thu": "724cc2de-9e8e-4ee8-aaec-55acc02cf6ea",
+    "tu_ren": "3ad13ab1-e5b1-40a7-a42d-1a1765a613b7",
+    "tu_duoc": "7322ff83-e365-4d43-adc0-181d86d14860",
+    "tu_kim_tien": "5f8768cd-82c5-4cae-bd1c-1b04df89d358"
+  },
+  "nu_khoe": {
+    "tu_tran": "4348f742-8ab8-4f4a-8cb8-6b58047e7021",
+    "tu_dan": "81635c4e-4027-4b4d-94dc-3ae49655f903",
+    "sat_thu": "17876893-b057-4ff2-aace-99e3c6cb07ad",
+    "tu_ren": "96295c99-7d23-4a7e-ac69-fa0a30c25e9e",
+    "tu_duoc": "f52e7bf7-1c98-42df-af81-207c03c6a01b",
+    "tu_kim_tien": "7333aed5-633d-43e1-bf2d-6320d2811a1a"
+  },
+  "nu_manh": {
+    "tu_tran": "1fa252c9-d411-4b54-973f-65c1b55a2c00",
+    "tu_dan": "11d1d4b3-2c70-4536-b870-10a0b460e323",
+    "sat_thu": "12180e3e-6d49-493c-91e2-908e43e967aa",
+    "tu_ren": "9e08a185-d9b8-4dd2-ab40-cbd69ee1268a",
+    "tu_duoc": "50e1eb90-a18d-44c7-8bfe-743437ae7f81",
+    "tu_kim_tien": "cd7f3e16-7ef8-4616-aaf4-915d6f541b0e"
+  },
+  "mo_ta": {
+    "tu_tran": "wearing a long dark navy-blue formation master robe with white cloud-pattern trim along the hem and wide sleeves, black cloth sash, dark boots",
+    "tu_dan": "wearing a blue alchemist robe with a long brown leather apron over it, black sash, sleeves rolled to the forearm, dark shoes",
+    "sat_thu": "wearing a dark blue assassin outfit: hood over the head, cloth mask covering nose and mouth, fitted tunic, black sash, black wrist wraps, black boots",
+    "tu_ren": "blacksmith outfit: sleeveless dark grey undershirt with bare arms, long brown leather apron, leather bracers, dark trousers, brown boots",
+    "tu_duoc": "wearing a light pale-blue herbalist robe with cream trim, rope belt with a small pouch, straw sandals",
+    "tu_kim_tien": "wearing a rich royal-blue merchant robe with gold embroidered trim, wide gold belt, thick white fur collar, dark boots"
+  }
+}

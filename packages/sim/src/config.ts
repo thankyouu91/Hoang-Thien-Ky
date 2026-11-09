@@ -39,17 +39,20 @@ export interface SkillSpec {
  * k, số mục tiêu, hồi chiêu, chí mạng: GDD mục 8. Mana, tầm, bán kính: đề xuất.
  * Mana duyệt 2026-11-02: dò bằng tools/balance để không loại chiêu nào ở vị trí ưu tiên đầu thắng quá 65% trước đội ngẫu nhiên.
  * Chiêu ra nhanh và gây nhiều sát thương tốn mana nhiều hơn mức hồi. Hồi phục "tốn mana gấp 3" (GDD): 3 × mức gốc 60.
+ * Đề xuất 2026-11-05, cân nhóm nội (người dùng duyệt): diện rộng k 0,5 mana 70; bùa chú hồi chiêu 4 s mana 200;
+ * trận pháp ×4,3 hồi chiêu 12 s mana 280; khống chế k 0,65 hồi chiêu 3 s mana 60.
  */
 export const SKILL_SPECS: Record<SkillType, SkillSpec> = {
   can_don: { k: 1300, targets: 1, cooldownTicks: 1 * SEC, critPerMille: 0, mana: 120, range: 1000, radius: 0 },
   can_quet: { k: 1000, targets: 5, cooldownTicks: 2 * SEC, critPerMille: 0, mana: 140, range: 1000, radius: 0 },
   tam_xa: { k: 950, targets: 2, cooldownTicks: 1 * SEC, critPerMille: 40, mana: 140, range: 4000, radius: 0 },
-  dien_rong: { k: 600, targets: 10, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 35, range: 4000, radius: 2000 },
+  dien_rong: { k: 500, targets: 10, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 70, range: 4000, radius: 2000 },
   ho_the: { k: 200, targets: 3, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 25, range: 4000, radius: 0 },
-  bua_chu: { k: 3000, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 160, range: 4000, radius: 0 },
-  tran_phap: { k: 5000, targets: 6, cooldownTicks: 20 * SEC, critPerMille: 0, mana: 240, range: 4000, radius: 2000 },
+  bua_chu: { k: 3000, targets: 1, cooldownTicks: 4 * SEC, critPerMille: 0, mana: 200, range: 4000, radius: 0 },
+  // Trận pháp ×4,3, hồi chiêu 12 s (cân nhóm nội 2026-11-05; trước ×6,0, 20 s): bù 5 s bày trận.
+  tran_phap: { k: 4300, targets: 6, cooldownTicks: 12 * SEC, critPerMille: 0, mana: 280, range: 4000, radius: 2000 },
   hoi_phuc: { k: 900, targets: 3, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 180, range: 4000, radius: 0 },
-  khong_che: { k: 500, targets: 1, cooldownTicks: 6 * SEC, critPerMille: 0, mana: 10, range: 3000, radius: 0 },
+  khong_che: { k: 650, targets: 1, cooldownTicks: 3 * SEC, critPerMille: 0, mana: 60, range: 3000, radius: 0 },
   than_phap: { k: 1600, targets: 1, cooldownTicks: 8 * SEC, critPerMille: 0, mana: 25, range: 6000, radius: 0 },
 };
 
@@ -75,6 +78,39 @@ export const SKILL_RULES = {
   exposedTicks: 3 * SEC, // thân pháp: lộ vị trí 3 s, địch ưu tiên đánh
   selfShieldCooldownTicks: 6 * SEC, // Thổ: khiên bản thân tối đa một lần mỗi 6 s, không phải mỗi lần ra chiêu; đề xuất
   meleeKnockback: false, // Phong: chiêu cận chiến không đẩy lùi, để không đẩy địch ra khỏi tầm của chính mình; đề xuất
+  // Hợp trận (GDD mục 8, đã chốt 2026-11-04): đồng đội bày trận pháp chồng nhau thì nhập một trận, kích một lần khi người cuối bày xong.
+  formationJoinRange: 2000, // nhập trận khi tâm cách tâm tới 2 ô; đề xuất
+  formationBond2: 1300, // 2 người (Lưỡng Nghi): tổng sát thương ×1,3
+  formationBond3: 1600, // 3 người (Tam Tài) ×1,6; 4 người cũng tính mức này (đề xuất)
+  formationBond5: 2000, // từ 5 người (Ngũ Hành) ×2,0
+  // Hợp trận lần 2 (người dùng duyệt 2026-11-04 qua phiên trận pháp; đề xuất):
+  formationJoinWait: 20, // chỉ nhập trận nếu bày xong không muộn hơn người xong sớm nhất của nhóm quá 1 s
+  formationExtraTargets: 2, // trận chung thêm 2 mục tiêu mỗi người sau người đầu
+  formationMaxTargets: 10, // tối đa 10 mục tiêu
+};
+
+/**
+ * Sàn thời gian ra chiêu sau mọi phần giảm (Tu trận, set, Ý châu): bày trận 1 s, vận công diện rộng 0,5 s
+ * (đề xuất của phiên set đồ, 2026-11-03). Nhóm CAST_FLOOR trong tham_so.json.
+ */
+export const CAST_FLOOR = {
+  formationTicks: 1 * SEC,
+  channelTicks: SEC / 2,
+};
+
+/**
+ * Pháp bảo (tab Trang bị, phần 9; data/he_thong/json/phap_bao.json). Số đếm lấy theo điều kiện kích hoạt trong GDD;
+ * khoảng cách "kề bên", "đứng sát", "trong tầm" là đề xuất (2026-11-04). Nhóm ARTIFACT_RULES trong tham_so.json.
+ */
+export const ARTIFACT_RULES = {
+  adjacentRange: 1000, // "kề bên", "đứng sát": trong 1 ô
+  nearRange: 4000, // Hồ lô "trong tầm": trong 4 ô
+  luanMinEnemies: 3, // Luân: từ 3 kẻ địch cận chiến đứng sát
+  chauHits: 2, // Châu: 2 đòn tầm xa kế tiếp
+  thapAllies: 3, // Tháp: che 3 đồng đội gần nhất
+  dinhHealOfMax: 150, // Đỉnh: lượng hồi từ 15% máu tối đa
+  chuongMinControlled: 2, // Chuông: từ 2 đồng đội đang bị khống chế
+  anDashDamage: 500, // Ấn: đòn lướt còn 50%
 };
 
 /** Sân đấu và nhịp trận (Q4 trong docs/KE_HOACH.md): tất cả là đề xuất. */
@@ -122,13 +158,58 @@ export function maxGradeAtLevel(level: number): number {
   return level >= 150 ? 4 : level >= 100 ? 3 : level >= 50 ? 2 : 1;
 }
 
-/** Kháng hệ (từ ngọc) giảm tối đa 80% sát thương của hệ đó; đề xuất. */
-export const RESIST_CAP = 800;
+/**
+ * Tổng kháng một hệ từ mọi nguồn (ngọc, set, cộng hưởng, đan) giảm tối đa 20% sát thương của hệ đó, để khắc ×1,5 sau kháng
+ * vẫn còn ít nhất ×1,2 (đề xuất, đổi 2026-11-04 theo lần đo trần 2; trước là 80%).
+ */
+export const RESIST_CAP = 200;
 
-/** Chỉ số nhân vật mà buff linh căn và tài năng cộng vào, theo phần nghìn. */
+/**
+ * Đánh hệ bị khắc: sau mọi nguồn làm mềm (set Hỗn Độn, Ngự Khắc Văn, kháng), hệ số khắc nhân kháng vẫn không dưới ×1,2
+ * (tab Trang bị, phần 13: khí văn "không xóa được khắc"; đề xuất 2026-11-04). Chưa có trong tham_so.json.
+ */
+export const COUNTER_FLOOR = 1200;
+
+/**
+ * Chỉ số nhân vật mà buff linh căn, tài năng, trang bị và set cộng vào, theo phần nghìn trừ các chỉ số ghi tick.
+ * shieldTaken: khiên nhận được; monsterDamage: sát thương lên dị thú và boss PvE; armorPen: cộng vào xuyên giáp Kim của công pháp;
+ * paralyzeTicks: cộng tick vào tê liệt khi chí mạng của Lôi; formationTicks, channelTicks: cộng tick vào thời gian bày trận,
+ * vận công diện rộng (âm là nhanh hơn, không dưới CAST_FLOOR).
+ * Set đồ 2.0 (tab Trang bị, phần 14; đề xuất): defOuter, defInner: thủ ngoại, thủ nội cộng trên phòng thủ gốc;
+ * manaCostCut: chiêu tốn ít mana hơn; manaDrain: mỗi đòn rút chừng này mana tối đa của mục tiêu về mình;
+ * reflect: phản sát thương cận chiến nhận được; damageTakenCut: giảm sát thương đòn đánh nhận vào, sau phòng thủ;
+ * hpRegen: hồi chừng này máu tối đa mỗi giây; innerDamage: sát thương chiêu nội; lifestealFlat: hút máu theo sát thương
+ * gây ra (khác lifesteal là tăng hút máu của công pháp Cực âm); damageTakenCutOuter, damageTakenCutInner: giảm sát thương nhận chỉ
+ * với đòn ngoại, đòn nội (cộng với damageTakenCut, mỗi loại đòn không quá DAMAGE_CUT_CAP); reflectTakenCut: sát thương phản đòn
+ * nhận vào ít hơn; controlTakenCut: thời gian bị khống chế (choáng, đóng băng, trói chân) ngắn hơn.
+ */
 export type BuffStat =
-  | "hp" | "def" | "manaMax" | "damage" | "critBonus" | "critDamage" | "attackSpeed" | "cooldownCut"
-  | "healPower" | "healTaken" | "lifesteal" | "resistPen" | "dot" | "controlTime";
+  | "hp" | "atk" | "def" | "manaMax" | "damage" | "critBonus" | "critDamage" | "attackSpeed" | "cooldownCut"
+  | "healPower" | "healTaken" | "lifesteal" | "resistPen" | "dot" | "controlTime"
+  | "shieldTaken" | "monsterDamage" | "armorPen" | "paralyzeTicks" | "formationTicks" | "channelTicks"
+  | "defOuter" | "defInner" | "manaCostCut" | "manaDrain" | "reflect" | "damageTakenCut" | "hpRegen" | "innerDamage" | "lifestealFlat"
+  | "damageTakenCutOuter" | "damageTakenCutInner" | "reflectTakenCut" | "controlTakenCut";
+
+/** Tổng giảm sát thương nhận của một loại đòn (chung + theo loại) không quá chừng này phần nghìn (tab Trang bị, phần 14; đề xuất). */
+export const DAMAGE_CUT_CAP = 250;
+
+/**
+ * Loại sát thương theo loại chiêu (GDD mục 8, người dùng duyệt 2026-11-05; khớp loai_chieu.json loai_sat_thuong): đòn ngoại giảm
+ * theo thủ ngoại, đòn nội giảm theo thủ nội, xuyên giáp bỏ qua phòng thủ đúng loại. Phòng thủ gốc: thủ ngoại = thủ nội = phòng thủ.
+ */
+export const DAMAGE_KIND: Record<SkillType, "ngoai" | "noi" | null> = {
+  can_don: "ngoai", can_quet: "ngoai", than_phap: "ngoai", tam_xa: "ngoai", ho_the: "ngoai",
+  dien_rong: "noi", bua_chu: "noi", tran_phap: "noi", khong_che: "noi",
+  hoi_phuc: null,
+};
+
+/** Dòng ẩn của trang sức (tab Trang bị, phần 14.3.5): ngưỡng của các điều kiện trong trận (đề xuất). */
+export const HIDDEN_RULES = {
+  lowHpBelow: 500, // máu dưới 50%
+  openingTicks: 10 * SEC, // 10 giây đầu trận
+  lateTicks: 30 * SEC, // sau giây thứ 30
+  maxActive: 3, // mỗi người tối đa 3 dòng ẩn hiệu lực cùng lúc; rules xếp dòng theo thứ tự ưu tiên
+};
 
 /**
  * Buff khi luyện đúng hệ (GDD mục 9), áp cho cả nhân vật, mỗi hệ một lần. Trùng hệ chủ quyển nhận đủ, trùng hệ phụ quyển nhận một nửa.
@@ -200,7 +281,7 @@ export const MAX_RANGE_BONUS = 1000;
 export const ELEMENT_STATS: Record<Element, ScrollStats> = {
   kim: { ...NONE, crit: 20 },
   moc: NONE,
-  thuy: { ...NONE, mana: -100 },
+  thuy: { ...NONE, mana: -50 }, // cân nhóm nội 2026-11-05 (trước −100)
   hoa: { ...NONE, dmg: 50, mana: 50 },
   tho: { ...NONE, dmg: -50 },
   loi: { ...NONE, crit: 30 },

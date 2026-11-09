@@ -3,12 +3,14 @@
 // ((x − x0) × SCALE, (y − y0) × SCALE) trên ảnh.
 //
 // heightmap.ts chép file này (đã bỏ kiểu) thành public/htk/nen.js, cùng <vị diện>_azgaar.map. Mở bản đồ đã lưu rồi vẽ:
-//   const { Load } = await import("/services/io/load.ts"); Load.uploadMap(await (await fetch("/htk/ha_azgaar.map")).blob())
-//   await (await import("/htk/nen.js")).render("ha_nen_loi_dinh_coc", [249, 172, 570, 479])
+//   const { Load } = await import("/services/io/load.ts"); Load.uploadMap(await (await fetch("/ktlp/ha_azgaar.map")).blob())
+//   await (await import("/ktlp/nen.js")).render("ha_nen_loi_dinh_coc", [249, 172, 570, 479])
+// (ảnh nền từng vùng đã vẽ cất ở data/maps/ha_nen_vung/; bản đồ dùng ảnh chia ô của renderTiles)
 // Cả bản đồ chia ô theo mức phóng (lệnh do vi_dien.ts in ra):
-//   await (await import("/htk/nen.js")).renderTiles("ha_nen", [1, 2, 4, 6], 1024)
+//   await (await import("/ktlp/nen.js")).renderTiles("ha_nen", [1, 2, 4, 6], 1024, { sink: "http://127.0.0.1:5199/<mã>/" })
+// (sink là máy nhận file nhan-file.ts, ghi thẳng vào data/maps; bỏ sink thì tải một file ZIP qua hộp thoại)
 // Nhiều vùng một lần tải (một file ZIP):
-//   await (await import("/htk/nen.js")).renderZip("ha_nen", [{ name: "ha_nen_loi_dinh_coc", frame: [249, 172, 570, 479] }, …])
+//   await (await import("/ktlp/nen.js")).renderZip("ha_nen", [{ name: "ha_nen_loi_dinh_coc", frame: [249, 172, 570, 479] }, …])
 // Ảnh nền không có nhãn, thị trấn, quốc gia hay đường của Azgaar: điểm và chặng do proto vẽ theo file điểm.
 
 const STYLE = "ancient";
@@ -27,26 +29,32 @@ export async function render(name: string, frame: Frame, scale = SCALE): Promise
   download(await draw(frame, scale), `${name}.webp`);
 }
 
-/** Vẽ nhiều khung rồi tải một file ZIP; `dryRun` chỉ vẽ và trả kích thước, không tải */
-export async function renderZip(zipName: string, items: { name: string; frame: Frame }[], dryRun = false, scale = SCALE) {
+/** Vẽ nhiều khung rồi tải một file ZIP; `dryRun` chỉ vẽ và trả kích thước, không tải. Có `sink` (địa chỉ của nhan-file.ts)
+ * thì gửi thẳng từng ảnh vào data/maps/<zipName>/<name>.webp, không làm ZIP */
+export async function renderZip(zipName: string, items: { name: string; frame: Frame }[], dryRun = false, scale = SCALE, sink = "") {
   // đường dẫn mô-đun của máy chủ dev Vite (npm run dev); bản build không có
   const { default: JSZip } = await import(/* @vite-ignore */ "/@id/jszip");
   const zip = new JSZip();
   const sizes: Record<string, number> = {};
   for (const { name, frame } of items) {
     const blob = await draw(frame, scale);
-    zip.file(`${name}.webp`, blob);
+    if (sink && !dryRun) {
+      const reply = await fetch(`${sink}${zipName}/${name}.webp`, { method: "PUT", body: blob, headers: { "Content-Type": "image/webp" } });
+      if (!reply.ok) throw new Error(`Máy nhận file từ chối ${name}: ${reply.status}`);
+    } else zip.file(`${name}.webp`, blob);
     sizes[name] = Math.round(blob.size / 1024);
   }
+  if (sink && !dryRun) return { kb: sizes };
   const archive: Blob = await zip.generateAsync({ type: "blob" }); // WebP đã nén, không nén thêm
   if (!dryRun) download(archive, `${zipName}.zip`);
   return { kb: sizes, zipKb: Math.round(archive.size / 1024) };
 }
 
 /** Ảnh nền cả bản đồ chia ô cho từng mức phóng (vi_dien.ts in sẵn lệnh): ô (col, row) ở mức `level` phủ khung bản đồ
- * [col, row, col + 1, row + 1] × tile / level, ô ở mép cắt gọn theo bản đồ. Tải một file ZIP x<level>/<col>_<row>.webp;
- * `dryRun` chỉ vẽ và trả kích thước. Tiến độ ở window.__tiles */
-export async function renderTiles(zipName: string, levels: number[], tile: number, dryRun = false) {
+ * [col, row, col + 1, row + 1] × tile / level, ô ở mép cắt gọn theo bản đồ, lưu <name>/x<level>/<col>_<row>.webp.
+ * Có `sink` (địa chỉ của nhan-file.ts, gồm cả mã) thì gửi thẳng từng ô vào data/maps; không thì tải một file ZIP qua hộp
+ * thoại của trình duyệt; `dryRun` chỉ vẽ và trả kích thước. Tiến độ ở window.__tiles */
+export async function renderTiles(name: string, levels: number[], tile: number, { dryRun = false, sink = "" } = {}) {
   const { default: JSZip } = await import(/* @vite-ignore */ "/@id/jszip");
   const graph = (window as unknown as { FMG: { options: { map: { graph: { width: number; height: number } } } } }).FMG.options.map.graph;
   const jobs = levels.flatMap((level) => {
@@ -60,11 +68,16 @@ export async function renderTiles(zipName: string, levels: number[], tile: numbe
     const span = tile / level;
     const frame: Frame = [col * span, row * span, Math.min(graph.width, (col + 1) * span), Math.min(graph.height, (row + 1) * span)];
     const blob = await draw(frame, level);
-    zip.file(`x${level}/${col}_${row}.webp`, blob);
+    const path = `x${level}/${col}_${row}.webp`;
+    if (sink && !dryRun) {
+      const reply = await fetch(`${sink}${name}/${path}`, { method: "PUT", body: blob, headers: { "Content-Type": "image/webp" } });
+      if (!reply.ok) throw new Error(`Máy nhận file từ chối ${path}: ${reply.status}`);
+    } else zip.file(path, blob);
     (progress.done += 1), (progress.kb += Math.round(blob.size / 1024));
   }
+  if (sink && !dryRun) return progress;
   const archive: Blob = await zip.generateAsync({ type: "blob" });
-  if (!dryRun) download(archive, `${zipName}.zip`);
+  if (!dryRun) download(archive, `${name}.zip`);
   return { ...progress, zipKb: Math.round(archive.size / 1024) };
 }
 

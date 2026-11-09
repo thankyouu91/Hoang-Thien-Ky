@@ -1,0 +1,1547 @@
+{
+ "ghi_chu": "Sinh bởi scripts/hinh.mjs, đừng sửa tay.",
+ "nhom": [
+  {
+   "id": "anh_chup",
+   "ten": "Ảnh chụp bản thử",
+   "mo_ta": "Chụp từ prototype trên khung điện thoại. Giao diện còn đổi trước khi chơi thử.",
+   "nguon": "chụp màn hình prototype",
+   "anh": [
+    {
+     "file": "anh_chup/dang_nhap.webp",
+     "ten": "Màn đăng nhập",
+     "phu": "",
+     "kieu": "chup",
+     "w": 600,
+     "h": 1299,
+     "bam": "0ef8b206b2f4",
+     "kb": 31.3
+    },
+    {
+     "file": "anh_chup/dong_phu.webp",
+     "ten": "Động phủ, dashboard của người chơi",
+     "phu": "",
+     "kieu": "chup",
+     "w": 600,
+     "h": 1299,
+     "bam": "142757f28463",
+     "kb": 40.4
+    },
+    {
+     "file": "anh_chup/ban_do.webp",
+     "ten": "Bản đồ tranh một vùng",
+     "phu": "",
+     "kieu": "chup",
+     "w": 600,
+     "h": 1299,
+     "bam": "a048193d9729",
+     "kb": 62.1
+    },
+    {
+     "file": "anh_chup/nhan_vat.webp",
+     "ten": "Màn Nhân vật, Pháp tướng",
+     "phu": "",
+     "kieu": "chup",
+     "w": 600,
+     "h": 1299,
+     "bam": "c6f22bc8852b",
+     "kb": 59.5
+    },
+    {
+     "file": "anh_chup/tong_mon.webp",
+     "ten": "Màn Tông môn",
+     "phu": "",
+     "kieu": "chup",
+     "w": 600,
+     "h": 1299,
+     "bam": "9e1030a47a30",
+     "kb": 55.1
+    },
+    {
+     "file": "anh_chup/tran.webp",
+     "ten": "Trận đấu tự động",
+     "phu": "",
+     "kieu": "chup",
+     "w": 600,
+     "h": 1299,
+     "bam": "cdc2c3ca4aba",
+     "kb": 76.6
+    }
+   ]
+  },
+  {
+   "id": "tu_si",
+   "ten": "Tu sĩ",
+   "mo_ta": "Bốn thân, mỗi thân hai kiểu áo khởi đầu. Thân và đồ khởi đầu chỉ là hình, chỉ số như nhau.",
+   "nguon": "PixelLab",
+   "anh": [
+    {
+     "file": "tu_si/nam_khoe_dao_bao.webp",
+     "ten": "Nam khỏe, đạo bào",
+     "phu": "",
+     "kieu": "pix",
+     "w": 192,
+     "h": 256,
+     "bam": "8de43911a54d",
+     "kb": 4
+    },
+    {
+     "file": "tu_si/nam_khoe_vo_phuc.webp",
+     "ten": "Nam khỏe, võ phục",
+     "phu": "",
+     "kieu": "pix",
+     "w": 192,
+     "h": 256,
+     "bam": "d9b908e7efeb",
+     "kb": 5
+    },
+    {
+     "file": "tu_si/nam_manh_dao_bao.webp",
+     "ten": "Nam mảnh, đạo bào",
+     "phu": "",
+     "kieu": "pix",
+     "w": 192,
+     "h": 256,
+     "bam": "ab5d1973bb11",
+     "kb": 6.3
+    },
+    {
+     "file": "tu_si/nam_manh_vo_phuc.webp",
+     "ten": "Nam mảnh, võ phục",
+     "phu": "",
+     "kieu": "pix",
+     "w": 192,
+     "h": 256,
+     "bam": "1682defaeb19",
+     "kb": 5
+    },
+    {
+     "file": "tu_si/nu_khoe_dao_bao.webp",
+     "ten": "Nữ khỏe, đạo bào",
+     "phu": "",
+     "kieu": "pix",
+     "w": 192,
+     "h": 256,
+     "bam": "151ef24a6a79",
+     "kb": 4.6
+    },
+    {
+     "file": "tu_si/nu_khoe_vo_phuc.webp",
+     "ten": "Nữ khỏe, võ phục",
+     "phu": "",
+     "kieu": "pix",
+     "w": 192,
+     "h": 256,
+     "bam": "a2b8011935d0",
+     "kb": 6.1
+    },
+    {
+     "file": "tu_si/nu_manh_dao_bao.webp",
+     "ten": "Nữ mảnh, đạo bào",
+     "phu": "",
+     "kieu": "pix",
+     "w": 192,
+     "h": 256,
+     "bam": "9ad81f8868d5",
+     "kb": 5.3
+    },
+    {
+     "file": "tu_si/nu_manh_vo_phuc.webp",
+     "ten": "Nữ mảnh, võ phục",
+     "phu": "",
+     "kieu": "pix",
+     "w": 192,
+     "h": 256,
+     "bam": "da2ae95c0f12",
+     "kb": 5.1
+    }
+   ]
+  },
+  {
+   "id": "thu",
+   "ten": "Thú cưỡi",
+   "mo_ta": "28 trong 100 loài thú cưỡi, hai con mỗi hệ.",
+   "nguon": "PixelLab",
+   "anh": [
+    {
+     "file": "thu/thiet_boi_nguu.webp",
+     "ten": "Thiết Bối Ngưu",
+     "phu": "Hệ Kim · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "1f5c84a81ef5",
+     "kb": 1.7
+    },
+    {
+     "file": "thu/dong_trao_ung.webp",
+     "ten": "Đồng Trảo Ưng",
+     "phu": "Hệ Kim · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "85cda90fa33f",
+     "kb": 1.1
+    },
+    {
+     "file": "thu/thanh_loc.webp",
+     "ten": "Thanh Lộc",
+     "phu": "Hệ Mộc · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "e333c805dac0",
+     "kb": 1.6
+    },
+    {
+     "file": "thu/thanh_phong_yen.webp",
+     "ten": "Thanh Phong Yến",
+     "phu": "Hệ Phong · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "5f9da1c87223",
+     "kb": 1.1
+    },
+    {
+     "file": "thu/bich_ba_bao.webp",
+     "ten": "Bích Ba Báo",
+     "phu": "Hệ Thủy · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "4b3357df8302",
+     "kb": 1.4
+    },
+    {
+     "file": "thu/huyen_vu.webp",
+     "ten": "Huyền Vũ",
+     "phu": "Hệ Thủy · thủy thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "814ec0dbf2af",
+     "kb": 1.9
+    },
+    {
+     "file": "thu/hoa_tong_ma.webp",
+     "ten": "Hỏa Tông Mã",
+     "phu": "Hệ Hỏa · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "56e1ad6a0f81",
+     "kb": 1.2
+    },
+    {
+     "file": "thu/chu_tuoc.webp",
+     "ten": "Chu Tước",
+     "phu": "Hệ Hỏa · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "257ad6d37b0f",
+     "kb": 1.3
+    },
+    {
+     "file": "thu/kim_giap_quy.webp",
+     "ten": "Kim Giáp Quy",
+     "phu": "Hệ Kim · thủy thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "7eb656f373f4",
+     "kb": 1.9
+    },
+    {
+     "file": "thu/nham_ung.webp",
+     "ten": "Nham Ưng",
+     "phu": "Hệ Thổ · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "c6cedaf9ce45",
+     "kb": 1.1
+    },
+    {
+     "file": "thu/thiem_dien_bao.webp",
+     "ten": "Thiểm Điện Báo",
+     "phu": "Hệ Lôi · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "302360c82443",
+     "kb": 1.6
+    },
+    {
+     "file": "thu/cuu_tieu_loi_ung.webp",
+     "ten": "Cửu Tiêu Lôi Ưng",
+     "phu": "Hệ Lôi · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "7af52ed37f61",
+     "kb": 1.6
+    },
+    {
+     "file": "thu/cuong_phong_lang.webp",
+     "ten": "Cuồng Phong Lang",
+     "phu": "Hệ Phong · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "2a816fb7fa79",
+     "kb": 1.4
+    },
+    {
+     "file": "thu/ngu_phong_hac.webp",
+     "ten": "Ngự Phong Hạc",
+     "phu": "Hệ Phong · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "ab5266104041",
+     "kb": 1.3
+    },
+    {
+     "file": "thu/minh_quang_tuoc.webp",
+     "ten": "Minh Quang Tước",
+     "phu": "Hệ Quang · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "b43e07756c46",
+     "kb": 1.1
+    },
+    {
+     "file": "thu/ky_lan.webp",
+     "ten": "Kỳ Lân",
+     "phu": "Hệ Thổ · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "74e459bab59a",
+     "kb": 1.3
+    },
+    {
+     "file": "thu/u_minh_lang.webp",
+     "ten": "U Minh Lang",
+     "phu": "Hệ Âm lãnh · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "16656a4fdad9",
+     "kb": 1.5
+    },
+    {
+     "file": "thu/huyet_buc.webp",
+     "ten": "Huyết Bức",
+     "phu": "Hệ Âm lãnh · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "627d998baa83",
+     "kb": 1.5
+    },
+    {
+     "file": "thu/liet_diem_ho.webp",
+     "ten": "Liệt Diễm Hổ",
+     "phu": "Hệ Hỏa · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "e0df61f4287b",
+     "kb": 1.4
+    },
+    {
+     "file": "thu/kim_o.webp",
+     "ten": "Kim Ô",
+     "phu": "Hệ Cực dương · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "2685fd82c104",
+     "kb": 1.1
+    },
+    {
+     "file": "thu/cuu_u_ma_ho.webp",
+     "ten": "Cửu U Ma Hổ",
+     "phu": "Hệ Cực âm · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "da14d7d20fe5",
+     "kb": 1.6
+    },
+    {
+     "file": "thu/u_uyen_ngac.webp",
+     "ten": "U Uyên Ngạc",
+     "phu": "Hệ Cực âm · thủy thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "f2c88bfb6299",
+     "kb": 1.5
+    },
+    {
+     "file": "thu/tuyet_lang.webp",
+     "ten": "Tuyết Lang",
+     "phu": "Hệ Cực hàn · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "ec6bd6346c0d",
+     "kb": 1.2
+    },
+    {
+     "file": "thu/bang_phuong.webp",
+     "ten": "Băng Phượng",
+     "phu": "Hệ Cực hàn · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "bb7f83a8682e",
+     "kb": 1.4
+    },
+    {
+     "file": "thu/bach_ho.webp",
+     "ten": "Bạch Hổ",
+     "phu": "Hệ Kim · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "5ecc6b632cca",
+     "kb": 1.5
+    },
+    {
+     "file": "thu/thanh_long.webp",
+     "ten": "Thanh Long",
+     "phu": "Hệ Mộc · phi cầm",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "5680e7420609",
+     "kb": 1.4
+    },
+    {
+     "file": "thu/cuu_vi_ho.webp",
+     "ten": "Cửu Vĩ Hồ",
+     "phu": "Hệ Âm lãnh · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "c364fe578f4a",
+     "kb": 1.3
+    },
+    {
+     "file": "thu/ty_huu.webp",
+     "ten": "Tỳ Hưu",
+     "phu": "Hệ Kim · tẩu thú",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "9acee66417b0",
+     "kb": 1.2
+    }
+   ]
+  },
+  {
+   "id": "cong_trinh",
+   "ten": "Công trình",
+   "mo_ta": "Đủ 11 công trình của Vạn Kiếm Tông, rồi Chính Điện của các mô hình tông môn khác.",
+   "nguon": "PixelLab",
+   "anh": [
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_chinh_dien.webp",
+     "ten": "Chính Điện",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "07b5ce71df3c",
+     "kb": 18.4
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_tang_kinh_cac.webp",
+     "ten": "Tàng Kinh Các",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "8027bff05191",
+     "kb": 22.1
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_ho_son_dai_tran.webp",
+     "ten": "Hộ Sơn Đại Trận",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "fffbde8a64c1",
+     "kb": 18.7
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_dien_vo_truong.webp",
+     "ten": "Diễn Võ Trường",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "4c4019462966",
+     "kb": 19
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_luyen_dan_phong.webp",
+     "ten": "Luyện Đan Phòng",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "e3a5d39ce4f7",
+     "kb": 22.8
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_luyen_khi_cac.webp",
+     "ten": "Luyện Khí Các",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "c615dce24228",
+     "kb": 21.5
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_linh_duoc_vien.webp",
+     "ten": "Linh Dược Viên",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "e1675007f369",
+     "kb": 19.7
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_bao_kho.webp",
+     "ten": "Bảo Khố",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "b530df743e29",
+     "kb": 25.2
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_truyen_tong_tran.webp",
+     "ten": "Truyền Tống Trận",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "dc855c3c55d3",
+     "kb": 17
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_thuong_hoi.webp",
+     "ten": "Thương Hội",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "cc2c5e18c84d",
+     "kb": 22.9
+    },
+    {
+     "file": "cong_trinh/kim_van_kiem_tong_phi_thang_dai.webp",
+     "ten": "Phi Thăng Đài",
+     "phu": "Vạn Kiếm Tông, hệ Kim",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "b1f8c5bee431",
+     "kb": 16.9
+    },
+    {
+     "file": "cong_trinh/moc_thanh_truc_coc_chinh_dien.webp",
+     "ten": "Thanh Trúc Cốc",
+     "phu": "Chính Điện, hệ Mộc",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "b1446e1c3c91",
+     "kb": 21.4
+    },
+    {
+     "file": "cong_trinh/thuy_thuy_ta_cung_chinh_dien.webp",
+     "ten": "Thủy Tạ Cung",
+     "phu": "Chính Điện, hệ Thủy",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "4778cd9a5040",
+     "kb": 21.6
+    },
+    {
+     "file": "cong_trinh/hoa_hoa_son_thanh_chinh_dien.webp",
+     "ten": "Hỏa Sơn Thành",
+     "phu": "Chính Điện, hệ Hỏa",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "e5c111e87cda",
+     "kb": 23.2
+    },
+    {
+     "file": "cong_trinh/tho_son_nhac_tu_chinh_dien.webp",
+     "ten": "Sơn Nhạc Tự",
+     "phu": "Chính Điện, hệ Thổ",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "d5bf7e28ccd4",
+     "kb": 22.7
+    },
+    {
+     "file": "cong_trinh/loi_loi_tri_phong_chinh_dien.webp",
+     "ten": "Lôi Trì Phong",
+     "phu": "Chính Điện, hệ Lôi",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "84faf325c600",
+     "kb": 15.2
+    },
+    {
+     "file": "cong_trinh/phong_phi_van_dinh_chinh_dien.webp",
+     "ten": "Phi Vân Đỉnh",
+     "phu": "Chính Điện, hệ Phong",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "ff20c3813fca",
+     "kb": 16.4
+    },
+    {
+     "file": "cong_trinh/quang_quang_minh_dien_chinh_dien.webp",
+     "ten": "Quang Minh Điện",
+     "phu": "Chính Điện, hệ Quang",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "34374a65b8f1",
+     "kb": 22.2
+    },
+    {
+     "file": "cong_trinh/am_lanh_u_hon_dien_chinh_dien.webp",
+     "ten": "U Hồn Điện",
+     "phu": "Chính Điện, hệ Âm lãnh",
+     "kieu": "pix",
+     "w": 320,
+     "h": 192,
+     "bam": "4d5559dfae72",
+     "kb": 16.1
+    }
+   ]
+  },
+  {
+   "id": "dao",
+   "ten": "Đảo nổi trên bản đồ",
+   "mo_ta": "Mỗi điểm trên bản đồ tranh là một đảo nổi: sơn môn của các mô hình tông môn và các loại điểm tài nguyên.",
+   "nguon": "PixelLab",
+   "anh": [
+    {
+     "file": "tong_mon/kim_van_kiem_tong.webp",
+     "ten": "Vạn Kiếm Tông",
+     "phu": "Hệ Kim",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "871b1c4a4a9a",
+     "kb": 1.4
+    },
+    {
+     "file": "tong_mon/moc_thanh_truc_coc.webp",
+     "ten": "Thanh Trúc Cốc",
+     "phu": "Hệ Mộc",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "1816a0f2dd84",
+     "kb": 1.3
+    },
+    {
+     "file": "tong_mon/thuy_thuy_ta_cung.webp",
+     "ten": "Thủy Tạ Cung",
+     "phu": "Hệ Thủy",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "5a7e1b712a04",
+     "kb": 1.6
+    },
+    {
+     "file": "tong_mon/hoa_hoa_son_thanh.webp",
+     "ten": "Hỏa Sơn Thành",
+     "phu": "Hệ Hỏa",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "cbafd7b38876",
+     "kb": 1.4
+    },
+    {
+     "file": "tong_mon/tho_son_nhac_tu.webp",
+     "ten": "Sơn Nhạc Tự",
+     "phu": "Hệ Thổ",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "02869bb9d13e",
+     "kb": 1.5
+    },
+    {
+     "file": "tong_mon/loi_loi_tri_phong.webp",
+     "ten": "Lôi Trì Phong",
+     "phu": "Hệ Lôi",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "80ff80e67bfa",
+     "kb": 1.4
+    },
+    {
+     "file": "tong_mon/phong_phi_van_dinh.webp",
+     "ten": "Phi Vân Đỉnh",
+     "phu": "Hệ Phong",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "a1ab1ae33a9e",
+     "kb": 1.8
+    },
+    {
+     "file": "tong_mon/quang_quang_minh_dien.webp",
+     "ten": "Quang Minh Điện",
+     "phu": "Hệ Quang",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "09cc35f071d7",
+     "kb": 1.5
+    },
+    {
+     "file": "tong_mon/am_lanh_u_hon_dien.webp",
+     "ten": "U Hồn Điện",
+     "phu": "Hệ Âm lãnh",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "6bf0b6097485",
+     "kb": 1.4
+    },
+    {
+     "file": "diem/mo_linh_thach.webp",
+     "ten": "Mỏ linh thạch",
+     "phu": "",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "1a929619ce03",
+     "kb": 1
+    },
+    {
+     "file": "diem/mo_quang.webp",
+     "ten": "Mỏ quặng",
+     "phu": "",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "6f3e679a2f26",
+     "kb": 1.1
+    },
+    {
+     "file": "diem/mo_duoc.webp",
+     "ten": "Mỏ dược",
+     "phu": "",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "f71a1ffec578",
+     "kb": 1.5
+    },
+    {
+     "file": "diem/linh_tuyen.webp",
+     "ten": "Linh tuyền",
+     "phu": "",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "0f6533632c6d",
+     "kb": 1.3
+    },
+    {
+     "file": "diem/hang_di_thu.webp",
+     "ten": "Hang dị thú",
+     "phu": "",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "eab988c2fe3e",
+     "kb": 1.4
+    },
+    {
+     "file": "diem/cua_bi_canh.webp",
+     "ten": "Cửa bí cảnh",
+     "phu": "",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "f619640c63d4",
+     "kb": 1.2
+    },
+    {
+     "file": "diem/deo.webp",
+     "ten": "Đèo",
+     "phu": "",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "7fcae7159489",
+     "kb": 1.7
+    },
+    {
+     "file": "diem/ben_do.webp",
+     "ten": "Bến đò",
+     "phu": "",
+     "kieu": "pix",
+     "w": 64,
+     "h": 64,
+     "bam": "2216bbc82b00",
+     "kb": 0.8
+    }
+   ]
+  },
+  {
+   "id": "canh",
+   "ten": "Sân đấu và chiến trường",
+   "mo_ta": "Nền trận đấu tự động.",
+   "nguon": "PixelLab",
+   "anh": [
+    {
+     "file": "canh/vo_truong.webp",
+     "ten": "Võ trường",
+     "phu": "",
+     "kieu": "pix",
+     "w": 688,
+     "h": 384,
+     "bam": "fe78ffdebd68",
+     "kb": 44.5
+    },
+    {
+     "file": "canh/cao_nguyen.webp",
+     "ten": "Cao nguyên",
+     "phu": "",
+     "kieu": "pix",
+     "w": 688,
+     "h": 384,
+     "bam": "78c689272ac1",
+     "kb": 30.4
+    },
+    {
+     "file": "canh/loi_dinh_coc_deo.webp",
+     "ten": "Đèo ở Lôi Đình Cốc",
+     "phu": "",
+     "kieu": "pix",
+     "w": 688,
+     "h": 384,
+     "bam": "b774d875a153",
+     "kb": 59.9
+    },
+    {
+     "file": "canh/bang_nguyen_deo.webp",
+     "ten": "Đèo ở Vạn Niên Băng Nguyên",
+     "phu": "",
+     "kieu": "pix",
+     "w": 688,
+     "h": 384,
+     "bam": "b02fc4d2067d",
+     "kb": 74
+    }
+   ]
+  },
+  {
+   "id": "vat_pham",
+   "ten": "Vật phẩm",
+   "mo_ta": "Tàn quyển, công pháp, 10 loại chiêu và ngọc theo 12 hệ, vẽ tay kiểu tranh.",
+   "nguon": "Canva",
+   "anh": [
+    {
+     "file": "tan_quyen/kim.webp",
+     "ten": "Tàn quyển Kim",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "fe189f82b15a",
+     "kb": 18.7
+    },
+    {
+     "file": "tan_quyen/moc.webp",
+     "ten": "Tàn quyển Mộc",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "8d9176bdf38b",
+     "kb": 16.7
+    },
+    {
+     "file": "tan_quyen/thuy.webp",
+     "ten": "Tàn quyển Thủy",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "8d04f372f672",
+     "kb": 26.2
+    },
+    {
+     "file": "tan_quyen/hoa.webp",
+     "ten": "Tàn quyển Hỏa",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "136c3ec9175c",
+     "kb": 21.8
+    },
+    {
+     "file": "tan_quyen/tho.webp",
+     "ten": "Tàn quyển Thổ",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "8b78eafaa895",
+     "kb": 16.5
+    },
+    {
+     "file": "tan_quyen/loi.webp",
+     "ten": "Tàn quyển Lôi",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "093cd1c76e8c",
+     "kb": 17.6
+    },
+    {
+     "file": "tan_quyen/phong.webp",
+     "ten": "Tàn quyển Phong",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "f72729b17d65",
+     "kb": 14.7
+    },
+    {
+     "file": "tan_quyen/quang.webp",
+     "ten": "Tàn quyển Quang",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "0b40432774ce",
+     "kb": 18.7
+    },
+    {
+     "file": "tan_quyen/am_lanh.webp",
+     "ten": "Tàn quyển Âm lãnh",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "d1e4ee91e07c",
+     "kb": 15.9
+    },
+    {
+     "file": "tan_quyen/cuc_duong.webp",
+     "ten": "Tàn quyển Cực dương",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "f6fcaab1481c",
+     "kb": 23.2
+    },
+    {
+     "file": "tan_quyen/cuc_am.webp",
+     "ten": "Tàn quyển Cực âm",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "54b1775c52fc",
+     "kb": 18.4
+    },
+    {
+     "file": "tan_quyen/cuc_han.webp",
+     "ten": "Tàn quyển Cực hàn",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "70aff3c75f39",
+     "kb": 25.5
+    },
+    {
+     "file": "cong_phap/kim.webp",
+     "ten": "Công pháp Kim",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "65bd6355202b",
+     "kb": 16.3
+    },
+    {
+     "file": "cong_phap/moc.webp",
+     "ten": "Công pháp Mộc",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "57e9fd5fc46c",
+     "kb": 18.2
+    },
+    {
+     "file": "cong_phap/thuy.webp",
+     "ten": "Công pháp Thủy",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "6deecab11427",
+     "kb": 14.2
+    },
+    {
+     "file": "cong_phap/hoa.webp",
+     "ten": "Công pháp Hỏa",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "4bbd0c6c74a2",
+     "kb": 17.2
+    },
+    {
+     "file": "cong_phap/tho.webp",
+     "ten": "Công pháp Thổ",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "ed6b5f40f70c",
+     "kb": 10.8
+    },
+    {
+     "file": "cong_phap/loi.webp",
+     "ten": "Công pháp Lôi",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "288bcd31064f",
+     "kb": 15.3
+    },
+    {
+     "file": "cong_phap/phong.webp",
+     "ten": "Công pháp Phong",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "eba2897ec031",
+     "kb": 13.5
+    },
+    {
+     "file": "cong_phap/quang.webp",
+     "ten": "Công pháp Quang",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "b6aeec53908f",
+     "kb": 14.8
+    },
+    {
+     "file": "cong_phap/am_lanh.webp",
+     "ten": "Công pháp Âm lãnh",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "28af4877c756",
+     "kb": 16.2
+    },
+    {
+     "file": "cong_phap/cuc_duong.webp",
+     "ten": "Công pháp Cực dương",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "357928d0fdab",
+     "kb": 16.5
+    },
+    {
+     "file": "cong_phap/cuc_am.webp",
+     "ten": "Công pháp Cực âm",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "e96249ce486f",
+     "kb": 11.9
+    },
+    {
+     "file": "cong_phap/cuc_han.webp",
+     "ten": "Công pháp Cực hàn",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "aecc16d310e7",
+     "kb": 17.2
+    },
+    {
+     "file": "chieu/can_quet.webp",
+     "ten": "Cận quét",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "9c6924eac956",
+     "kb": 27.5
+    },
+    {
+     "file": "chieu/can_don.webp",
+     "ten": "Cận đơn",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "967aff8aa439",
+     "kb": 14.6
+    },
+    {
+     "file": "chieu/tam_xa.webp",
+     "ten": "Tầm xa",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "ea20e362205d",
+     "kb": 16.6
+    },
+    {
+     "file": "chieu/dien_rong.webp",
+     "ten": "Diện rộng",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "43404cffc222",
+     "kb": 20.4
+    },
+    {
+     "file": "chieu/khong_che.webp",
+     "ten": "Khống chế",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "9faf344d3237",
+     "kb": 23.7
+    },
+    {
+     "file": "chieu/hoi_phuc.webp",
+     "ten": "Hồi phục",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "6fb0970059c5",
+     "kb": 15.1
+    },
+    {
+     "file": "chieu/ho_the.webp",
+     "ten": "Hộ thể",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "968fa0973ba2",
+     "kb": 19
+    },
+    {
+     "file": "chieu/than_phap.webp",
+     "ten": "Thân pháp",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "d13aa45c439c",
+     "kb": 20.1
+    },
+    {
+     "file": "chieu/bua_chu.webp",
+     "ten": "Bùa chú",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "7156f6d3fc7c",
+     "kb": 23.5
+    },
+    {
+     "file": "chieu/tran_phap.webp",
+     "ten": "Trận pháp",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "ee7fe64536fe",
+     "kb": 18.7
+    },
+    {
+     "file": "ngoc/kim.webp",
+     "ten": "Ngọc Kim",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "c498a238385e",
+     "kb": 10.9
+    },
+    {
+     "file": "ngoc/moc.webp",
+     "ten": "Ngọc Mộc",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "1d88b34f729d",
+     "kb": 11.7
+    },
+    {
+     "file": "ngoc/thuy.webp",
+     "ten": "Ngọc Thủy",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "50953d02727f",
+     "kb": 13.6
+    },
+    {
+     "file": "ngoc/hoa.webp",
+     "ten": "Ngọc Hỏa",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "66638f605d10",
+     "kb": 13.5
+    },
+    {
+     "file": "ngoc/tho.webp",
+     "ten": "Ngọc Thổ",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "10019a8201fe",
+     "kb": 10.9
+    },
+    {
+     "file": "ngoc/loi.webp",
+     "ten": "Ngọc Lôi",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "2b99234108af",
+     "kb": 11.1
+    },
+    {
+     "file": "ngoc/phong.webp",
+     "ten": "Ngọc Phong",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "d18d33eb4440",
+     "kb": 12.2
+    },
+    {
+     "file": "ngoc/quang.webp",
+     "ten": "Ngọc Quang",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "3d3964672d9a",
+     "kb": 14
+    },
+    {
+     "file": "ngoc/am_lanh.webp",
+     "ten": "Ngọc Âm lãnh",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "df0b23fed34b",
+     "kb": 10.7
+    },
+    {
+     "file": "ngoc/cuc_duong.webp",
+     "ten": "Ngọc Cực dương",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "91874a18975a",
+     "kb": 12.3
+    },
+    {
+     "file": "ngoc/cuc_am.webp",
+     "ten": "Ngọc Cực âm",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "786c0f1c59db",
+     "kb": 10.5
+    },
+    {
+     "file": "ngoc/cuc_han.webp",
+     "ten": "Ngọc Cực hàn",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "9b5590e82edb",
+     "kb": 10.7
+    }
+   ]
+  },
+  {
+   "id": "dao_do",
+   "ten": "Đạo đồ",
+   "mo_ta": "Tranh mực hiện sau nhân vật, đổi theo công pháp và cảnh giới.",
+   "nguon": "Canva",
+   "anh": [
+    {
+     "file": "dao_do/kim.webp",
+     "ten": "Đạo đồ Kim",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "57d569515895",
+     "kb": 1.7
+    },
+    {
+     "file": "dao_do/moc.webp",
+     "ten": "Đạo đồ Mộc",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "f9098efe1947",
+     "kb": 14.9
+    },
+    {
+     "file": "dao_do/thuy.webp",
+     "ten": "Đạo đồ Thủy",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "2afa31be38d9",
+     "kb": 13.6
+    },
+    {
+     "file": "dao_do/hoa.webp",
+     "ten": "Đạo đồ Hỏa",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "784dcb25f8ca",
+     "kb": 24.8
+    },
+    {
+     "file": "dao_do/tho.webp",
+     "ten": "Đạo đồ Thổ",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "3e582868d560",
+     "kb": 31.4
+    },
+    {
+     "file": "dao_do/loi.webp",
+     "ten": "Đạo đồ Lôi",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "571fcf4c9379",
+     "kb": 1.7
+    },
+    {
+     "file": "dao_do/phong.webp",
+     "ten": "Đạo đồ Phong",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "7bbb23e7851b",
+     "kb": 10.9
+    },
+    {
+     "file": "dao_do/quang.webp",
+     "ten": "Đạo đồ Quang",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "375a54666c13",
+     "kb": 9.8
+    },
+    {
+     "file": "dao_do/am_lanh.webp",
+     "ten": "Đạo đồ Âm lãnh",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "b1f9b0b0298b",
+     "kb": 15.4
+    },
+    {
+     "file": "dao_do/cuc_duong.webp",
+     "ten": "Đạo đồ Cực dương",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "e9bdbe9e0dd9",
+     "kb": 31.9
+    },
+    {
+     "file": "dao_do/cuc_am.webp",
+     "ten": "Đạo đồ Cực âm",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "0ffaabc259fe",
+     "kb": 1.1
+    },
+    {
+     "file": "dao_do/cuc_han.webp",
+     "ten": "Đạo đồ Cực hàn",
+     "phu": "",
+     "kieu": "dao",
+     "w": 360,
+     "h": 540,
+     "bam": "051b34322269",
+     "kb": 8.5
+    }
+   ]
+  },
+  {
+   "id": "rieng",
+   "ten": "Riêng",
+   "mo_ta": "Không hiện trong thư viện.",
+   "nguon": "PixelLab",
+   "anh": [
+    {
+     "file": "rieng/tu_si_lo_lung.webp",
+     "ten": "Tu sĩ lơ lửng",
+     "phu": "",
+     "kieu": "pix",
+     "w": 768,
+     "h": 96,
+     "bam": "342b3f60bd8a",
+     "kb": 2.6
+    },
+    {
+     "file": "rieng/cong_phap_loi_quang.webp",
+     "ten": "Lôi Quang Liên Hoàn Quyết",
+     "phu": "",
+     "kieu": "ve",
+     "w": 320,
+     "h": 320,
+     "bam": "0596ab547219",
+     "kb": 25.1
+    },
+    {
+     "file": "brand/dau_an_96.webp",
+     "ten": "Dấu ấn nhỏ",
+     "phu": "",
+     "kieu": "brand",
+     "w": 96,
+     "h": 96,
+     "bam": "b42da2a6d184",
+     "kb": 8.7
+    },
+    {
+     "file": "brand/dau_an_256.webp",
+     "ten": "Dấu ấn",
+     "phu": "",
+     "kieu": "brand",
+     "w": 256,
+     "h": 256,
+     "bam": "17cf13353ab6",
+     "kb": 53.2
+    },
+    {
+     "file": "rieng/dai_luc.webp",
+     "ten": "Hạ vị diện",
+     "phu": "",
+     "kieu": "brand",
+     "w": 1600,
+     "h": 1043,
+     "bam": "057c573515d9",
+     "kb": 133.3
+    },
+    {
+     "file": "rieng/hero_1880.webp",
+     "ten": "Hero thủy mặc",
+     "phu": "",
+     "kieu": "hero",
+     "w": 1880,
+     "h": 848,
+     "bam": "5f96e76207cb",
+     "kb": 129
+    },
+    {
+     "file": "rieng/hero_960.webp",
+     "ten": "Hero thủy mặc nhỏ",
+     "phu": "",
+     "kieu": "hero",
+     "w": 960,
+     "h": 433,
+     "bam": "568e20c0bff0",
+     "kb": 45.1
+    }
+   ]
+  }
+ ]
+}

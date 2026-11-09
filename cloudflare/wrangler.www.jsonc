@@ -1,0 +1,14 @@
+// Worker `thienhoangky-www`: 301 www.thienhoangky.fun → thienhoangky.fun và choi.thienhoangky.fun → play.thienhoangky.fun (giữ đường dẫn).
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "thienhoangky-www",
+  "main": "src/www.ts",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "www.thienhoangky.fun", "custom_domain": true },
+    { "pattern": "choi.thienhoangky.fun", "custom_domain": true }
+  ],
+  "observability": { "enabled": false }
+}

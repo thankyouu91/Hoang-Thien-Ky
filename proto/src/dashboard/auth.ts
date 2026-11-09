@@ -12,6 +12,8 @@ export interface Session {
   birthDate: string; // YYYY-MM-DD
   guardian?: Guardian;
   since: number;
+  /** Khoá tài khoản (số điện thoại đã băm), để bộ đếm phút chơi tách theo tài khoản trên cùng một máy. */
+  account?: string;
 }
 
 export type OtpResult = { ok: true; resendAfter: number; devCode?: string } | { ok: false; error: string };
@@ -35,10 +37,13 @@ export const ADULT_AGE = 18;
 export const MINOR_DAILY_MINUTES = 60;
 const RESEND_SECONDS = 60;
 
-/** Số di động Việt Nam: 0 hoặc +84, rồi 9 chữ số bắt đầu bằng 3, 5, 7, 8, 9. Trả về dạng 0xxxxxxxxx hoặc null. */
+/**
+ * Số di động Việt Nam: 9 chữ số bắt đầu bằng 3, 5, 7, 8, 9, đứng sau 0, +84, 84, +84 0 hoặc không có gì (ô nhập đã in
+ * sẵn +84 nên người chơi hay gõ thẳng 9 số). Trả về dạng 0xxxxxxxxx hoặc null.
+ */
 export function normalizePhone(input: string): string | null {
-  const d = input.replace(/[\s.-]/g, "").replace(/^\+?84/, "0");
-  return /^0[35789]\d{8}$/.test(d) ? d : null;
+  const m = /^(?:\+?84)?0?([35789]\d{8})$/.exec(input.replace(/[\s.()-]/g, ""));
+  return m ? `0${m[1]}` : null;
 }
 
 export function maskPhone(p: string): string {
@@ -148,18 +153,27 @@ export class MockAuth implements AuthSource {
   }
 
   playedMinutesToday(): number {
-    const play = read<{ date: string; ms: number }>(KEY_PLAY);
-    return play && play.date === new Date().toDateString() ? Math.floor(play.ms / 60_000) : 0;
+    return Math.floor(this.playToday() / 60_000);
   }
 
   private start(phone: string, birthDate: string, guardian?: Guardian): void {
-    this.current = { phoneMasked: maskPhone(phone), birthDate, guardian, since: Date.now() };
+    this.current = { phoneMasked: maskPhone(phone), birthDate, guardian, since: Date.now(), account: accountKey(phone) };
     write(KEY_SESSION, this.current);
   }
 
+  /** Mili giây đã chơi hôm nay của tài khoản đang đăng nhập (tài khoản khác trên cùng máy đếm riêng). */
+  private playToday(): number {
+    const play = read<Record<string, { date: string; ms: number }>>(KEY_PLAY);
+    const mine = play?.[this.current?.account ?? "_"];
+    return mine && mine.date === new Date().toDateString() ? mine.ms : 0;
+  }
+
   private addPlay(ms: number): void {
-    const today = new Date().toDateString();
-    const play = read<{ date: string; ms: number }>(KEY_PLAY);
-    write(KEY_PLAY, { date: today, ms: (play && play.date === today ? play.ms : 0) + ms });
+    const play = read<Record<string, { date: string; ms: number }>>(KEY_PLAY) ?? {};
+    // Bản cũ lưu một bộ đếm chung { date, ms } cho cả máy: bỏ đi, đếm lại theo tài khoản.
+    if (typeof play.date === "string") delete play.date;
+    if (typeof play.ms === "number") delete play.ms;
+    play[this.current?.account ?? "_"] = { date: new Date().toDateString(), ms: this.playToday() + ms };
+    write(KEY_PLAY, play);
   }
 }

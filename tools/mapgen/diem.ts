@@ -16,7 +16,7 @@ const SEED = 20261102;
  * 80 quặng, 80 dược, 10 linh tuyền); ngày 2026-11-02 người dùng giảm mỏ linh thạch và mỏ dược còn một nửa vì quá nhiều đảo
  * giống nhau, tổng bớt đúng phần đó (450 → 350) để số vị trí sơn môn không đổi. Đèo và bến đò tuỳ địa hình, vị trí sơn môn
  * lấy phần còn lại cho đủ tổng. Hang dị thú và số bến đò tối đa là đề xuất */
-const MEAN_COUNTS = { total: 350, mo_linh_thach: 60, mo_quang: 80, mo_duoc: 40, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
+export const MEAN_COUNTS = { total: 350, mo_linh_thach: 60, mo_quang: 80, mo_duoc: 40, linh_tuyen: 10, cua_bi_canh: 6, hang_di_thu: 30 };
 /** Bậc cửa bí cảnh (người dùng chia ngày 2026-11-02; hình cửa xanh, vàng, đỏ) */
 export const GATE_TIERS = ["thap", "vua", "cao"] as const;
 /** Mỗi vùng ít nhất một cửa bí cảnh dưới cấp nguy hiểm này, cho nhiệm vụ đầu game (đề xuất của phiên nhiệm vụ: nhiệm vụ
@@ -437,7 +437,7 @@ export function stagesFrom(start: number, n: number, edges: { a: number; b: numb
   return dist;
 }
 
-function mulberry32(seed: number) {
+export function mulberry32(seed: number) {
   let s = seed >>> 0;
   return () => {
     s = (s + 0x6d2b79f5) >>> 0;
@@ -495,7 +495,12 @@ if (import.meta.main) {
     terrains,
     // ring: 0 sát rìa ngoài (Hư Không Hải), 1 sát lòng giữa (Linh Hải) của vị diện
     points: points.map((p) => ({ ...p, x: round(p.x), y: round(p.y), ring: Math.round(ring(p.x, p.y) * 100) / 100 })),
-    edges: edges.map((e) => ({ ...e, path: e.path.map(([x, y]) => [round(x), round(y)]) })),
+    // path luôn đi từ điểm a tới điểm b (lúc tìm đường có thể đi từ b), để proto cho ghim bám đường không phải đoán chiều
+    edges: edges.map((e) => {
+      const a = points[e.a], [x0, y0] = e.path[0], [x1, y1] = e.path.at(-1)!;
+      const path = Math.hypot(x0 - a.x, y0 - a.y) <= Math.hypot(x1 - a.x, y1 - a.y) ? e.path : [...e.path].reverse();
+      return { ...e, path: path.map(([x, y]) => [round(x), round(y)]) };
+    }),
   };
   const file = new URL(`${plane}_diem_${code}.json`, dataDir);
   writeFileSync(file, JSON.stringify(out));

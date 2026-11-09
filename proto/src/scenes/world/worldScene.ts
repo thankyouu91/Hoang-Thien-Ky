@@ -35,6 +35,7 @@ const AREA_R: Record<PointType, number> = {
   mo_duoc: 3.5,
   deo: 3,
   ben_do: 3,
+  hang_thu_hoang: 6,
 };
 /** Bãi farm quanh hang: số bãi, bán kính bãi, khoảng cách từ hang. */
 const BAI_COUNT = 3;
@@ -221,7 +222,7 @@ export class WorldScene implements Scene {
     this.grid = grid;
     if (!this.layers) {
       this.layers = new WorldLayers(world);
-      this.layers.prefetch(this.regionCode);
+      this.layers.prefetch();
       this.layers.addRegion(region);
     }
     if (!this.fog) this.fog = new FogMap(this.regionCode, grid.origin, grid.w, grid.h);
