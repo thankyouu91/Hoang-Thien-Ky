@@ -16,7 +16,7 @@ const COUNTER = 1500; // hệ số khắc hệ trong sim (phần nghìn), từ m
  * Hình cho dị thú (UnitSpec.monster) khi chưa có hình thú riêng cho trận: thú cưỡi PixelLab cùng hệ, ưu tiên tẩu thú
  * (đứng trên sân), mỗi con một hình theo id. undefined khi hệ đó chưa có thú nào.
  */
-function beastSprite(element: Element, id: number): string | undefined {
+export function beastSprite(element: Element, id: number): string | undefined {
   const same = THU_CUOI.filter((t) => t.element === element);
   const walkers = same.filter((t) => t.form === "Tẩu thú");
   const list = walkers.length > 0 ? walkers : same;
