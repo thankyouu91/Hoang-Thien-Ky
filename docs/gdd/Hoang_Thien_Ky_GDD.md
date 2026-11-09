@@ -484,11 +484,13 @@ Vị trí mới ngẫu nhiên đúng theo yêu cầu. Đề xuất thêm: chỉ 
 
 ## 8. Chiến đấu và khắc chế nguyên tố
 
-Trận đấu là combat thời gian thực (chốt 2026-11-09, trước là mô phỏng tự động tách màn). Người chơi điều khiển nhân vật của mình: di chuyển, chọn mục tiêu và tung chiêu từ 4 ô công pháp mang vào trận, kèm đánh thường và nút pháp bảo. Auto đầy đủ theo chuẩn MMORPG mobile: bật auto thì nhân vật tự chọn mục tiêu, tự ra chiêu theo ưu tiên đã xếp, tự dùng đan — người chơi can thiệp tay bất cứ lúc nào. Khi người chơi offline hoặc ủy thác, nhân vật và đệ tử NPC do AI của server điều khiển theo đúng bộ auto đó, nên luật "không cần online" của các trận tông môn vẫn giữ. Mọi trận có trọng trách (PvP, boss, tranh điểm, Chính Điện, bí cảnh) do server tính bằng chính thư viện mô phỏng chạy thời gian thực 20 tick mỗi giây (mục 16), client chỉ gửi input; vì vậy toàn bộ số đã cân (10 loại chiêu, hệ khắc, hợp trận, chênh cấp) chuyển nguyên sang thời gian thực: hồi chiêu thành cooldown, vận công và bày trận vẫn tính bằng giây.
+Trận đấu là combat thời gian thực (chốt 2026-11-09, trước là mô phỏng tự động tách màn; thống nhất một mô hình cùng ngày sau khi so hai hướng). **Đánh tay là chính:** người chơi di chuyển, chọn mục tiêu và tung chiêu từ 4 ô công pháp mang vào trận, kèm đánh thường, chiêu cuối khi đủ nội tại, pháp bảo và đan dược. **Auto là AI sinh input thay tay:** bật auto, treo máy, ủy thác hay offline trong chiến tranh thì server (hoặc client ở bản thử) tự sinh đúng dòng input đó theo bộ ưu tiên người chơi đã xếp — một đường input duy nhất, nên tay và auto không khác nhau về luật. Mọi trận có trọng trách (PvP, boss, tranh điểm, Chính Điện, bí cảnh) do server tính thời gian thực từ input, client chỉ gửi input và hiển thị; bãi quái farm lẻ tính lười theo lực chiến (tab Nhiệm vụ).
 
-**Độ dài trận (đã chốt):** một trận kéo dài trung bình khoảng 30 giây. Chỉ số chuẩn của nhân vật theo cấp được chỉnh để giữ mức này ở mọi cấp.
+**Lõi combat (đề xuất kỹ thuật):** engine real-time deterministic lớn dần từ bãi quái mẫu của prototype (`scenes/bai`), rồi tách thành package dùng chung cho client và combat server, theo đúng luật số nguyên fixed-point và RNG có seed của mục 16. `packages/sim` (trận tự động 30 giây) giữ lại làm testbench và nền công cụ cân bằng, không còn là lõi trận; toàn bộ số cân của 10 loại chiêu, set đồ và bảo vật đo lại trên combat đánh tay (mục 20 nhóm H, K).
 
-**Chống hòa (đề xuất):** trận kéo quá 45 giây thì mọi sát thương tăng 20% mỗi 5 giây, cộng dồn; hồi máu không tăng. Hết 90 giây mà chưa phân thắng bại thì hòa. Đo bằng đội mẫu: hòa còn khoảng 0,3% ở trận 10 đấu 10.
+**Độ dài trận (đã chốt):** trận PvP và tranh điểm kéo dài trung bình khoảng 30 giây; chỉ số chuẩn theo cấp chỉnh để giữ mức này. Farm bãi quái không áp trần này — trận kéo theo lượng quái.
+
+**Chống hòa (đề xuất):** trận PvP/tranh điểm kéo quá 45 giây thì mọi sát thương tăng 20% mỗi 5 giây, cộng dồn; hồi máu không tăng. Hết 90 giây mà chưa phân thắng bại thì hòa. (Số đo 0,3% hòa là của bản tự động cũ; đo lại trên đánh tay.)
 
 *[Hình nhúng: Ngũ Hành · 5 hệ, 5 cặp sinh, 5 cặp khắc — xem bản gốc trên Claude Docs]*
 
@@ -1338,10 +1340,10 @@ Server quyết định mọi thứ; client chỉ hiển thị và gửi input. V
 | Lớp | Lựa chọn | Lý do |
 |---|---|---|
 | Client | Cocos Creator 3.8 trở lên (TypeScript) | Xuất Android và iOS từ một mã nguồn, nhẹ trên máy cấu hình thấp, hỗ trợ Spine sẵn |
-| Mô phỏng trận | Thư viện TypeScript thuần, số nguyên fixed-point (`packages/sim`) | Chạy 20 tick/giây trong combat server để tính trận thời gian thực; client dùng cùng mã để hiển thị dự đoán và phát lại chiến báo |
+| Lõi combat | Engine real-time TypeScript thuần, số nguyên fixed-point — lớn từ bãi quái mẫu của prototype (`proto/src/scenes/bai`) rồi tách thành package dùng chung | Chạy 20 tick/giây trong combat server để tính trận từ input; client dùng cùng mã để hiển thị dự đoán và phát lại chiến báo; `packages/sim` (trận tự động) giữ làm testbench và nền cân bằng |
 | Game server | Nakama, runtime TypeScript | Tài khoản, liên minh, chat, xếp hạng, chợ, dashboard; điều phối tạo phòng chiến, không tự tính trận |
 | World server real-time | Module Go của Nakama (hoặc service Go riêng khi cần), mỗi vùng một match có thẩm quyền | Đồng bộ vị trí, AOI, dị thú, trạng thái điểm ở 10–20 Hz; goja (JS) quá chậm cho việc này (xem Rủi ro hiệu năng) |
-| Combat server | Pool worker Node.js chạy `packages/sim` thời gian thực, một trận một phòng | Node nhanh hơn goja nhiều lần; tách pool để tự tăng giảm theo tải |
+| Combat server | Pool worker Node.js chạy lõi combat real-time, một trận một phòng | Node nhanh hơn goja nhiều lần; tách pool để tự tăng giảm theo tải |
 | Việc định kỳ | Giải đấu và bảng xếp hạng có lịch reset của Nakama | Mở bí cảnh 12:00 và 20:00, mở khung chiến tranh, đóng mùa; không cần worker riêng |
 | Xác thực | OTP qua SMS tới số điện thoại Việt Nam | Bắt buộc theo Nghị định 147 |
 | Cơ sở dữ liệu | PostgreSQL (hỏi Heroic Labs mức hỗ trợ cho production; phương án khác là CockroachDB) | Nakama hỗ trợ sẵn; mọi khóa dữ liệu có world_id từ đầu để sau này tách thế giới |
@@ -1354,11 +1356,11 @@ Server quyết định mọi thứ; client chỉ hiển thị và gửi input. V
 
 **Luồng một trận đấu thời gian thực (tranh mỏ, bí cảnh, Chính Điện):**
 
-1. Khi trận tranh một điểm bắt đầu, Nakama khóa điểm, gom bản chụp hai đội (người chơi, NPC, công pháp, trận nhãn) và mở một phòng chiến trên combat server (worker Node chạy `packages/sim`), kèm một seed ngẫu nhiên và một mã trận.
+1. Khi trận tranh một điểm bắt đầu, Nakama khóa điểm, gom bản chụp hai đội (người chơi, NPC, công pháp, trận nhãn) và mở một phòng chiến trên combat server (worker Node chạy lõi combat), kèm một seed ngẫu nhiên và một mã trận.
 2. Client của mỗi người tham chiến nối vào phòng, gửi input (di chuyển, chọn mục tiêu, tung chiêu, bật auto) tới 10–20 lần mỗi giây; người offline hoặc bật auto thì server tự sinh input theo bộ auto của người đó.
 3. Combat server mô phỏng 20 tick mỗi giây, tính hết sát thương, khắc chế, hợp trận; mỗi 100 ms gửi snapshot trạng thái (vị trí, máu, hiệu ứng) trong tầm nhìn (AOI) về client. Client nội suy chuyển động giữa hai snapshot và dự đoán chuyển động của chính mình để không thấy trễ.
 4. Hết trận, combat server ký kết quả (kèm mã băm input log và seed) gửi Nakama; Nakama ghi kết quả và chuyển tài nguyên, đổi chủ điểm.
-5. Hai tông môn nhận thông báo; chiến báo kèm nút Xem trận phát lại từ input log bằng chính `packages/sim` trên client.
+5. Hai tông môn nhận thông báo; chiến báo kèm nút Xem trận phát lại từ input log bằng chính lõi combat trên client.
 
 **Luật deterministic (bắt buộc từ sprint đầu):**
 
@@ -1382,7 +1384,7 @@ Server quyết định mọi thứ; client chỉ hiển thị và gửi input. V
 | Thế giới | 1 thế giới, mở dần 4 vùng | 2–4 thế giới | 20–40 thế giới |
 | Nakama | 1 node, mỗi vùng 1 match | 1 node cho mỗi thế giới | Như trên, thêm cổng đăng nhập chung |
 | World server (vị trí, AOI) | Module Go trong cùng node Nakama | Service Go riêng cho mỗi thế giới, chia zone khi vùng đông | Cụm Go cho mỗi thế giới |
-| Combat server (tính trận) | Pool worker Node.js, tự tăng giảm | Nhân theo số trận đồng thời; cân nhắc port `packages/sim` sang Go hoặc WASM | Vài chục đến hơn 100 vCPU |
+| Combat server (tính trận) | Pool worker Node.js, tự tăng giảm | Nhân theo số trận đồng thời; cân nhắc port lõi combat sang Go hoặc WASM | Vài chục đến hơn 100 vCPU |
 | Hàng đợi và cache | Redis | Redis cho bảng chủ điểm, khóa điểm, giới hạn tần suất | NATS JetStream, Redis cho mỗi thế giới |
 | Cơ sở dữ liệu | 1 PostgreSQL + bản sao, PgBouncer | Mỗi thế giới 1 cơ sở dữ liệu; tài khoản, thanh toán ở cơ sở dữ liệu chung | Như trên |
 | Analytics | File log, nạp theo lô | ClickHouse | ClickHouse |
@@ -1398,7 +1400,7 @@ Các phần lần đầu dùng (Redis, NATS, ClickHouse, nhiều thế giới) c
 - Đồng bộ AOI có lọc sương mù; gói snapshot nhỏ, gộp nhiều entity một gói.
 - Gộp các lần ghi khoảng 1 giây hoặc theo tông môn rồi ghi một lượt; chat ghi vào log, không ghi vào cơ sở dữ liệu game.
 
-**Kiểm chứng có chọn lọc (đề xuất, chờ bạn duyệt):** combat đã do server tính nên không cần chạy lại để xác minh; thay vào đó, input log của một tỷ lệ nhỏ trận (đề xuất 5–10%) được phát lại ngoại tuyến bằng `packages/sim` để phát hiện lệch hành vi giữa các bản build, và tài khoản bị đánh dấu thì 100% trận của họ được phát lại kiểm tra.
+**Kiểm chứng có chọn lọc (đề xuất, chờ bạn duyệt):** combat đã do server tính nên không cần chạy lại để xác minh; thay vào đó, input log của một tỷ lệ nhỏ trận (đề xuất 5–10%) được phát lại ngoại tuyến bằng lõi combat để phát hiện lệch hành vi giữa các bản build, và tài khoản bị đánh dấu thì 100% trận của họ được phát lại kiểm tra.
 
 **Dàn đỉnh tải:** vào bí cảnh qua hàng chờ rải trong 2–3 phút thay vì cùng một giây; phát thưởng cuối mùa bằng job nền.
 
@@ -1490,7 +1492,7 @@ Mỗi mùa dài 6 tuần, có chủ đề, một Thiên Đạo Lệnh và một 
 
 ## 18. Phạm vi MVP và lộ trình phát hành
 
-MVP chỉ gồm Hạ vị diện: 12 vùng bản đồ mở, tông môn cấp 1–200, lãnh thổ, mỏ, bí cảnh, ghép công pháp và chiến tranh địa bàn thời gian thực. Thăng vị diện và Trung vị diện ra sau launch. Làm một mình, ước tính khoảng 30 tháng tới open beta (đề xuất 2026-11-09, trước là 24 tháng), vì netcode thời gian thực (world server, AOI, client prediction) và đồ họa map mở nặng hơn bản dashboard trước; bù lại, auto đầy đủ giữ được nhịp phiên ngắn và `packages/sim` vẫn dùng được nguyên cho combat server.
+MVP chỉ gồm Hạ vị diện: 12 vùng bản đồ mở, tông môn cấp 1–200, lãnh thổ, mỏ, bí cảnh, ghép công pháp và chiến tranh địa bàn thời gian thực. Thăng vị diện và Trung vị diện ra sau launch. Làm một mình, ước tính khoảng 30 tháng tới open beta (đề xuất 2026-11-09, trước là 24 tháng), vì netcode thời gian thực (world server, AOI, client prediction) và đồ họa map mở nặng hơn bản dashboard trước; bù lại, auto đầy đủ giữ được nhịp phiên ngắn và lõi combat lớn từ bãi mẫu của prototype.
 
 Cửa 1 là lúc sửa rẻ nhất: chạy trên map và đánh một trận mà chưa vui thì mọi thứ xây trên nó đều phí. Prototype Cửa 1 đổi mục tiêu thành: một vùng map mở chạy real-time, một nhân vật điều khiển tay + auto, một trận PvE và một trận PvP 10 đấu 10 trên combat server.
 
@@ -1566,7 +1568,7 @@ Rủi ro lớn nhất là phạm vi: bản đồ thời gian thực, 28 vùng v�
 |---|---|---|
 | Phạm vi quá lớn cho một người | MVP chỉ Hạ vị diện; dữ liệu công pháp sinh từ file Excel thay vì làm tay; thuê ngoài mỹ thuật; auto đầy đủ để cắt nội dung phải làm tay | Ngay bây giờ |
 | Kiệt sức, trễ hạn | Mỗi tháng có một bản chơi được; dùng AI hỗ trợ code và kiểm thử | Ngay bây giờ |
-| Netcode thời gian thực vượt sức một người (chuyển đổi 2026-11-09) | Cửa 1 làm trước: một vùng map mở, combat server chạy `packages/sim`; movement chỉ client prediction cho chính mình, người khác nội suy; bãi quái farm vẫn tính lười nên phần real-time thật chỉ gom ở PvP, boss và tranh điểm | Prototype |
+| Netcode thời gian thực vượt sức một người (chuyển đổi 2026-11-09) | Cửa 1 làm trước: một vùng map mở, combat server chạy lõi combat real-time; movement chỉ client prediction cho chính mình, người khác nội suy; bãi quái farm vẫn tính lười nên phần real-time thật chỉ gom ở PvP, boss và tranh điểm | Prototype |
 | Map mở thời gian thực quá tải server | World server Go, AOI lọc tầm nhìn, snapshot 10 Hz hạ nhịp khi đứng yên, lọc theo sương mù; thử tải 2.000 người giả lập mỗi vùng | Prototype |
 | 480 tàn quyển mất cân bằng | Cân bằng bằng tham số trong Excel; theo dõi tỷ lệ thắng theo tổ hợp; patch 2 tuần | Closed beta |
 | Tông môn lớn đè tông môn nhỏ | Giới hạn chênh cấp khi tuyên chiến, khiên tông môn mới, khung giờ chiến cố định | MVP |

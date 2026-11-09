@@ -425,7 +425,9 @@ export class WorldScene implements Scene {
       m.y = m.by + Math.sin(a) * rr * 0.7;
       if (this.mobTouchCd <= 0 && Math.hypot(m.x - p.x, m.y - p.y) < MOB_TOUCH) {
         this.mobTouchCd = 3;
-        toast(m.big ? "Quái hầm ngục mạnh và đông — nên đi cùng party! (Sprint R2)" : "Gặp dị thú! Trận thời gian thực có ở Sprint R2.");
+        // Chạm quái là vào trận đánh tay (scenes/bai); quái hầm ngục cũng về cùng màn trận ở bản thử này.
+        if (m.big) toast("Hầm ngục: quái đông và mạnh, nên đi cùng party!");
+        location.hash = "#bai";
       }
     }
     for (const mp of this.mockPlayers) {
@@ -474,10 +476,10 @@ export class WorldScene implements Scene {
         <dt>Nghiêng rơi</dt><dd>${esc(b.profile)}</dd>
         <dt>Người đang farm</dt><dd>${this.mockPlayers.length} người trong khu vực</dd>
       </dl>
-      <div class="actions"><button type="button" data-a="farm">Luyện bãi (R2)</button></div>
-      <p class="muted">Mỗi bãi một hồ sơ rơi đồ và dải cấp — GDD mục 3.</p>`,
+      <div class="actions"><button type="button" data-a="farm">Luyện bãi</button></div>
+      <p class="muted">Mỗi bãi một hồ sơ rơi đồ và dải cấp — GDD mục 3. Luyện bãi mở trận đánh tay (scenes/bai).</p>`,
     );
-    body.addEventListener("click", () => toast("Luyện bãi real-time có ở Sprint R2."));
+    body.addEventListener("click", () => (location.hash = "#bai"));
   }
 
   private openDungeon(): void {
@@ -489,10 +491,10 @@ export class WorldScene implements Scene {
         <dt>Quái</dt><dd>Đông gấp đôi, chỉ số +30%</dd>
         <dt>Rơi</dt><dd>Ấn bộ tím trở lên, ngọc cấp cao, tàn quyết; thần vật ×2</dd>
       </dl>
-      <div class="actions"><button type="button" data-a="vao">Vào hầm (R2)</button></div>
-      <p class="muted">Một mình rất khó: mất buff party theo tài năng. Nên đi cùng team — GDD mục 3.</p>`,
+      <div class="actions"><button type="button" data-a="vao">Vào hầm</button></div>
+      <p class="muted">Một mình rất khó: mất buff party theo tài năng. Nên đi cùng team — GDD mục 3. Bản thử vào cùng màn trận đánh tay.</p>`,
     );
-    body.addEventListener("click", () => toast("Hầm ngục là instance riêng, có ở Sprint R2–R4."));
+    body.addEventListener("click", () => (location.hash = "#bai"));
   }
 
   /** Thẻ điểm trung tâm của khu vực. */
