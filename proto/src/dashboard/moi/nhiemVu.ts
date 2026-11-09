@@ -8,7 +8,7 @@ import NHIEM_VU from "../../../../data/nhiem_vu/ha_nhiem_vu.json" with { type: "
 import THU_CUOI from "../../../../data/he_thong/json/thu_cuoi.json" with { type: "json" };
 import type { World } from "../mock/world.ts";
 import { dongMon, donViNguoiChoi, ONE_MON, TEN_HE, themChienBao, tranThang, type KetQua } from "./ftue.ts";
-import { heBiKhac, PLAYER, seeded, VUNG_DATA, type MoiState } from "./theGioiMoi.ts";
+import { heBiKhac, heKhacNhat, PLAYER, seeded, VUNG_DATA, type MoiState } from "./theGioiMoi.ts";
 
 interface NvStep {
   do: string;
@@ -36,6 +36,7 @@ interface NvQuest {
 interface Trial {
   id: string;
   lesson: string;
+  rounds?: number;
   enemy: { count: number; kind: string; element: string; skill?: SkillType; statPermille?: number };
   loan?: { element: string; skill: SkillType }[] | string;
   expect?: string[];
@@ -82,7 +83,7 @@ export function nvBuocHienTai(moi: MoiState, q: NvQuest): NvStep {
   return q.steps[Math.min(moi.nvBuoc ?? 0, q.steps.length - 1)];
 }
 
-/** Hệ trong spec: "$home" là hệ vùng; biến khác ($beatenByHome, $roundDistinct…) hay bỏ trống thì hệ bị hệ vùng khắc. */
+/** Hệ trong spec theo rules.placeholders: "$home" là hệ vùng; "$beatenByHome", biến "$..." lạ hay bỏ trống là hệ bị hệ vùng khắc (lối ra, không kẹt). "$roundDistinct"/"$counterOfRound" xử riêng ở nhánh ải nhiều hiệp. */
 function heCuaSpec(spec: string | undefined, home: Element): Element {
   if (spec === "$home") return home;
   if (!spec || spec.startsWith("$")) return heBiKhac(home);
@@ -142,11 +143,11 @@ export function quyenMuon(trial: Trial, home: Element): { element: Element; skil
 }
 
 /** Trận vượt ải: người chơi solo cộng quyển mượn đã chọn. */
-function tranAi(w: World, moi: MoiState, q: NvQuest, trial: Trial, muon: { element: Element; skill: SkillType } | undefined, now: number): number {
+function tranAi(w: World, moi: MoiState, q: NvQuest, trial: Trial, muon: { element: Element; skill: SkillType } | undefined, now: number, foeHiep?: Element): number {
   const me = donViNguoiChoi(w);
   const loaner = muon ? [composeTechnique(toScroll(`${muon.element}.${muon.skill}.linh`, 1), [toScroll(`${muon.element}.${muon.skill}.bao`, 1)])] : [];
   const lv = w.rules.members[PLAYER].level;
-  const foe = heCuaSpec(trial.enemy.element, w.region.region.element as Element);
+  const foe = foeHiep ?? heCuaSpec(trial.enemy.element, w.region.region.element as Element);
   const skillDich = trial.enemy.skill ?? "can_don";
   const { input } = tranThang((p) => ({
     teamA: [{ ...me, techniques: [...loaner, ...me.techniques].slice(0, 4) }],
@@ -198,11 +199,34 @@ export function lamNv(w: World, moi: MoiState, q: NvQuest, arg: Record<string, u
         const home = w.region.region.element as Element;
         const loan = quyenMuon(trial, home);
         const chonQuyen = loan.length ? loan[Math.min(Math.max(0, Number(arg.muon_i ?? 0)), loan.length - 1)] : undefined;
+        const phatQua = () => {
+          for (const it of trial.reward?.items ?? []) {
+            if (it.item === "tan_quyen") apply(w.rules, { type: "nhat_tan_quyen", actor: "system", memberId: PLAYER, kind: `${heCuaSpec(it.element, home)}.can_don.linh`, grade: GRADE_NUM[it.grade] ?? 1 }, now);
+          }
+        };
+        // Ải nhiều hiệp (tamDao.8, "$roundDistinct"): mỗi hiệp một hệ địch riêng rút theo hạt giống trong 12 hệ bỏ hệ nhà;
+        // mượn lại mỗi hiệp, đúng là hệ khắc địch hiệp đó ("$counterOfRound").
+        const rounds = trial.rounds ?? 1;
+        if (rounds > 1) {
+          const rand = seeded(moi.seed + bamChuoi(trial.id));
+          const pool = ELEMENTS.filter((e) => e !== home);
+          for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+          const hiep = moi.aiHiep ?? 0;
+          const foe = pool[hiep % pool.length];
+          const khac = heKhacNhat(foe);
+          const battleId = tranAi(w, moi, q, trial, chonQuyen, now, foe);
+          const msg = `Hiệp ${hiep + 1}/${rounds}: địch hệ ${TEN_HE[foe]}` + (chonQuyen?.element === khac ? `, mượn ${TEN_HE[khac]} khắc đúng` : `, quyển khắc đúng là ${TEN_HE[khac]}`);
+          if (hiep + 1 < rounds) {
+            moi.aiHiep = hiep + 1;
+            return { ok: true, battleId, message: msg };
+          }
+          moi.aiHiep = undefined;
+          phatQua();
+          return xongBuoc({ ok: true, battleId, message: msg });
+        }
         const battleId = tranAi(w, moi, q, trial, chonQuyen, now);
         const muon = chonQuyen?.element;
-        for (const it of trial.reward?.items ?? []) {
-          if (it.item === "tan_quyen") apply(w.rules, { type: "nhat_tan_quyen", actor: "system", memberId: PLAYER, kind: `${heCuaSpec(it.element, w.region.region.element as Element)}.can_don.linh`, grade: GRADE_NUM[it.grade] ?? 1 }, now);
-        }
+        phatQua();
         const dung = muon !== undefined && (trial.expect ?? []).map((e) => heCuaSpec(e, home)).includes(muon);
         return xongBuoc({ ok: true, battleId, message: dung ? `Mượn quyển ${TEN_HE[muon!]}: chọn đúng khắc chế` : muon && trial.expect?.length ? `Qua ải; quyển khắc đúng là ${trial.expect.map((e) => TEN_HE[heCuaSpec(e, home)]).join(", ")}` : "Qua ải" });
       }
@@ -279,11 +303,13 @@ export function lamNv(w: World, moi: MoiState, q: NvQuest, arg: Record<string, u
       return xongBuoc({ ok: true, message: `Đã đạt cấp ${step.level ?? q.minLevel}` });
     }
     case "nuoi_bi_canh": {
-      // Nạp nuôi bí cảnh: lấy nhánh linh thạch khi đủ, không thì dựng trận tụ linh tạm (fallback, miễn phí).
-      const gia = step.cost?.or?.find((c) => c.item === "linh_thach")?.count ?? 0;
-      if (gia && w.player.linhThach >= gia) {
-        w.player.linhThach -= gia;
-        return xongBuoc({ ok: true, message: `Nạp ${gia} linh thạch nuôi bí cảnh` });
+      // Luật rules.costOr: trừ lựa chọn đầu tiên đủ, thiếu hết thì miễn phí (chỗ tạm của prototype, không để kẹt).
+      // Prototype chưa có kho dược liệu nên nhánh duoc_lieu coi như không đủ.
+      for (const c of step.cost?.or ?? []) {
+        if (c.item === "linh_thach" && w.player.linhThach >= c.count) {
+          w.player.linhThach -= c.count;
+          return xongBuoc({ ok: true, message: `Nạp ${c.count} linh thạch nuôi bí cảnh` });
+        }
       }
       return xongBuoc({ ok: true, message: "Dựng trận tụ linh tạm cho bí cảnh" });
     }

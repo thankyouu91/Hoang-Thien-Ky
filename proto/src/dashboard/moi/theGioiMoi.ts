@@ -82,6 +82,8 @@ export interface MoiState {
   thuGon?: boolean;
   /** Nhiệm vụ chính sau chương 0: bước đang làm; cờ đã xong một lượt bế quan (bước tu_luyen); danh vọng phe; giờ bế quan hôm nay. */
   nvBuoc?: number;
+  /** Hiệp đang đánh của ải Tầm Đạo nhiều hiệp (tamDao.8). */
+  aiHiep?: number;
   nvTuLuyenXong?: boolean;
   danhVong?: Record<string, number>;
   beQuanNgay?: { ngay: string; gio: number };
@@ -133,6 +135,13 @@ export const VUNG_DATA = VUNG as unknown as Record<string, VungRow>;
 export function heBiKhac(home: Element): Element {
   let best: Element = ELEMENTS[0];
   for (const e of ELEMENTS) if (e !== home && elementMultiplier(home, e) > elementMultiplier(home, best)) best = e;
+  return best;
+}
+
+/** Hệ khắc `foe` mạnh nhất (`$counterOfRound` của ải Tầm Đạo 8). */
+export function heKhacNhat(foe: Element): Element {
+  let best: Element = ELEMENTS[0];
+  for (const e of ELEMENTS) if (e !== foe && elementMultiplier(e, foe) > elementMultiplier(best, foe)) best = e;
   return best;
 }
 

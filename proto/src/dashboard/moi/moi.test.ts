@@ -219,6 +219,7 @@ test("đi hết chuỗi nhiệm vụ chính 1.1–5.8 bằng máy chạy: không
     assert.ok(me.level >= muc, `kẹt khi lên cấp ${muc}, đang ${me.level}`);
   };
   let guard = 0;
+  const hiepMsg: string[] = [];
   let q = nvHienTai(moi);
   while (q && guard++ < 3000) {
     if (me.level < q.minLevel) {
@@ -249,6 +250,7 @@ test("đi hết chuỗi nhiệm vụ chính 1.1–5.8 bằng máy chạy: không
       r = lamNv(w, moi, q, { chon: "tu_choi" }, now);
     }
     assert.ok(r.ok, `kẹt ở ${q.id}: ${r.ok ? "" : r.error}`);
+    if (r.message?.startsWith("Hiệp ")) hiepMsg.push(r.message);
     if (r.battleId) assert.equal(simulate(moi.tran[r.battleId]).winner, "A", `trận ${q.id} thua`);
     if (r.xongNhiemVu) {
       const t = thuongNv(q, me.level);
@@ -263,6 +265,10 @@ test("đi hết chuỗi nhiệm vụ chính 1.1–5.8 bằng máy chạy: không
   assert.equal(me.level, 250, `cấp ${me.level} khác 250`);
   assert.ok(w.player.mounts.some(Boolean), "chưa có thú cưỡi (1.3)");
   assert.ok(Object.keys(moi.danhVong ?? {}).length > 0, "chưa có danh vọng nào");
+  // Ải 8 ($roundDistinct): đúng 3 hiệp, mỗi hiệp một hệ địch riêng.
+  assert.equal(hiepMsg.length, 3, `ải 8 có ${hiepMsg.length} hiệp: ${hiepMsg.join(" | ")}`);
+  const heHiep = hiepMsg.map((m) => m.match(/địch hệ ([^,]+)/)?.[1]); // tên hệ có thể hai chữ (Cực hàn…)
+  assert.equal(new Set(heHiep).size, 3, `hệ các hiệp trùng nhau: ${heHiep.join(", ")}`);
 });
 
 test("nhịp bế quan 16q mỗi giờ chậm dần theo cấp (không lên cấp quá nhanh)", () => {
