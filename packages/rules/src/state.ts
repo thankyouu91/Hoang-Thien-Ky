@@ -49,6 +49,7 @@ export interface Member {
   bag: OwnedScroll[]; // tàn quyển nhặt được thuộc về người nhặt (GDD mục 6)
   learned: LearnedTechnique[];
   loadout: number[]; // techniqueId mang vào trận, tối đa 4, theo thứ tự ưu tiên
+  diemTiemNang?: Partial<Record<string, number>>; // điểm tiềm năng đã cộng theo thuộc tính (tiem_nang.ts); điểm chưa cộng suy ra từ cấp
 }
 
 export interface Sect {

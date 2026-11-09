@@ -10,5 +10,6 @@ export * from "./setfx.ts";
 export * from "./luyen_khi.ts";
 export * from "./set2.ts";
 export * from "./layers.ts";
+export * from "./tiem_nang.ts";
 export * from "./artifacts.ts";
 export * from "./apply.ts";

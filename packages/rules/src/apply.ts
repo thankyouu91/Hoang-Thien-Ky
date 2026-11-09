@@ -6,6 +6,7 @@ import { pickUpScroll, depositScroll, composeInLibrary, composeStarter } from ".
 import { setTransmission, learnTechnique, setLoadout } from "./transmission.ts";
 import { joinSect, releaseMember, leaveSect } from "./departure.ts";
 import { raiseLayer } from "./layers.ts";
+import { addPoints, resetPoints } from "./tiem_nang.ts";
 
 export type Command =
   /** Chỉ hệ thống gửi: tàn quyển rơi trong bí cảnh, thưởng nhiệm vụ. */
@@ -22,7 +23,10 @@ export type Command =
   /** Nhiệm vụ 0.4: ghép 1 chủ quyển với 1 phụ quyển trong túi thành công pháp tân thủ riêng; mỗi người một lần. */
   | { type: "ghep_tan_thu"; actor: string; main: number; subs: number[] }
   /** Lên một tầng công pháp đã học, tiêu điểm luyện và cống hiến (layers.ts). */
-  | { type: "len_tang_cong_phap"; actor: string; techniqueId: number };
+  | { type: "len_tang_cong_phap"; actor: string; techniqueId: number }
+  /** Điểm tiềm năng (tiem_nang.ts): cộng vào một thuộc tính; tẩy toàn bộ (phí do bên gọi lo). */
+  | { type: "cong_diem"; actor: string; thuocTinh: string; diem: number }
+  | { type: "tay_diem"; actor: string };
 
 export type RuleEvent =
   | { type: "nhat_tan_quyen"; memberId: string; scroll: OwnedScroll }
@@ -34,7 +38,9 @@ export type RuleEvent =
   | { type: "roi_tong"; memberId: string; sectId: string; betrayed: boolean }
   | { type: "gia_nhap_tong"; memberId: string; sectId: string }
   | { type: "ghep_tan_thu"; memberId: string; technique: LearnedTechnique }
-  | { type: "len_tang_cong_phap"; memberId: string; techniqueId: number; layer: number; diemLuyen: number; congHien: number };
+  | { type: "len_tang_cong_phap"; memberId: string; techniqueId: number; layer: number; diemLuyen: number; congHien: number }
+  | { type: "cong_diem"; memberId: string; thuocTinh: string; diem: number }
+  | { type: "tay_diem"; memberId: string; diem: number };
 
 export type RuleError =
   | "lenh_khong_hop_le"
@@ -64,7 +70,10 @@ export type RuleError =
   | "cong_phap_dung_tang"
   | "da_toi_tang"
   | "thieu_diem_luyen"
-  | "thieu_cong_hien";
+  | "thieu_cong_hien"
+  | "thuoc_tinh_sai"
+  | "diem_khong_hop_le"
+  | "thieu_diem_tiem_nang";
 
 export type Result = { ok: true; events: RuleEvent[] } | { ok: false; error: RuleError };
 
@@ -93,6 +102,10 @@ export function apply(state: GameState, cmd: Command, now: number): Result {
       return composeStarter(state, cmd.actor, cmd.main, cmd.subs);
     case "len_tang_cong_phap":
       return raiseLayer(state, cmd.actor, cmd.techniqueId);
+    case "cong_diem":
+      return addPoints(state, cmd.actor, cmd.thuocTinh, cmd.diem);
+    case "tay_diem":
+      return resetPoints(state, cmd.actor);
     default:
       return { ok: false, error: "lenh_khong_hop_le" };
   }
