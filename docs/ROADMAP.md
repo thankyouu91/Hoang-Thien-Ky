@@ -1,8 +1,19 @@
 # Lộ trình triển khai
 
-Kế hoạch chi tiết, lý do và các việc chờ quyết nằm ở `docs/KE_HOACH.md` (duyệt 2026-11-02). Sprint dài 2 tuần.
+Kế hoạch chi tiết, lý do và các việc chờ quyết nằm ở `docs/KE_HOACH.md` (duyệt 2026-11-02; mục 9 viết lại Cửa 1 cho MMORPG thời gian thực, 2026-11-09). Sprint dài 2 tuần.
 
-## Prototype (tới Cửa 1)
+## Cửa 1 mới: map mở thời gian thực (từ 2026-11-09)
+
+| Sprint | Nội dung | Kết quả cần có | Trạng thái |
+|---|---|---|---|
+| R1 | Map mở Lôi Đình Cốc: chạy tự do, camera, sương mù, điểm tranh dạng khu vực | 60 khung/giây trên điện thoại, auto chạy tới mọi điểm | |
+| R2 | Combat real-time trên `packages/sim` trong Web Worker; HUD joystick + 4 nút chiêu + Auto | Trận 10 đấu 10 real-time đúng 20 Hz, khớp mã băm batch | |
+| R3 | `worker/combat` qua WebSocket, world server tối giản, 2 client thật PvP | Hai máy đánh nhau real-time; đo băng thông AOI thật | |
+| R4 | Bí cảnh instance, treo máy farm, FTUE rút gọn, chơi thử 2 tuần | Cửa 1 theo tiêu chí ở KE_HOACH mục 9 | |
+
+Nền đã có: `packages/sim` đo 0,85 ms mỗi trận 10 đấu 10 × 600 tick (2026-11-09); bản đồ 12 vùng và ảnh nền chia ô; `proto/` dashboard giữ làm testbench.
+
+## Prototype cũ (dashboard, giữ làm lịch sử)
 
 | Sprint | Lịch | Nội dung | Kết quả cần có | Trạng thái |
 |---|---|---|---|---|

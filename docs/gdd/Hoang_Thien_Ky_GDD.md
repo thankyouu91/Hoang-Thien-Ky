@@ -1364,7 +1364,7 @@ Server quyết định mọi thứ; client chỉ hiển thị và gửi input. V
 
 **Đồng bộ map mở:** world server (Go) giữ trạng thái sống của từng vùng: vị trí người chơi và dị thú đang hiện, đoàn quân, chủ điểm, sự kiện. Client chỉ nhận entity trong AOI quanh mình (bán kính tầm nhìn theo độ phóng), snapshot 10 lần mỗi giây, mỗi gói dưới 1.500 byte; ra khỏi AOI thì entity biến mất khỏi client. Server lọc theo sương mù: khu vực chưa mở với tông môn và đồng minh thì không gửi điểm và đoàn quân xuống client. Phần tĩnh của vùng (địa hình, vị trí điểm, cấp nguy hiểm, ảnh nền) là file có số phiên bản sinh từ `tools/mapgen`, tải một lần qua CDN. Ngoài giờ chiến tranh match hạ nhịp snapshot còn 2 lần mỗi giây cho đối tượng đứng yên.
 
-**Rủi ro hiệu năng:** runtime JavaScript của Nakama (goja) là trình thông dịch không có JIT, chậm hơn Node.js nhiều lần. Vì vậy ngay từ MVP: combat chạy ở pool worker Node.js riêng, còn world server real-time (vị trí, AOI ở 10–20 Hz) viết bằng Go — bản dashboard cũ ghi đây là phương án dự phòng, bản thời gian thực nâng lên thành mặc định. Ước lượng hiện tại: một trận 10 đấu 10 kéo 30 giây ở 20 tick tốn khoảng 0,3–1 giây CPU trong Node.js (đo lại ngay sprint đầu); một zone 2.000 người đứng farm tốn chủ yếu là băng thông snapshot AOI.
+**Rủi ro hiệu năng:** runtime JavaScript của Nakama (goja) là trình thông dịch không có JIT, chậm hơn Node.js nhiều lần. Vì vậy ngay từ MVP: combat chạy ở pool worker Node.js riêng, còn world server real-time (vị trí, AOI ở 10–20 Hz) viết bằng Go — bản dashboard cũ ghi đây là phương án dự phòng, bản thời gian thực nâng lên thành mặc định. **Đo thật 2026-11-09 trên Node 24 (máy dev, `npm run bench`):** trận 10 đấu 10 đủ 4 công pháp mỗi người chạy hết 600 tick (trận 30 giây) trong **0,85 ms** — về mặt tính toán, một lõi CPU gánh được khoảng 35.000 trận đồng thời; chừa ngân sách ×100 cho input, snapshot và điều phối thì khoảng **350 phòng chiến mỗi lõi** (đề xuất). Nút thắt thật của world server là băng thông snapshot AOI chứ không phải CPU trận: entity khoảng 16 byte, AOI 50 entity × 10 Hz ≈ 8 KB/s mỗi người, tức khoảng 16 MB/s cho 2.000 người một vùng; nén delta và hạ nhịp khi đứng yên (2 Hz) đưa về khoảng 2–4 KB/s mỗi người (đề xuất, đo lại ở Cửa 1).
 
 ### Kiến trúc mở rộng theo nấc
 
@@ -1384,7 +1384,7 @@ Các phần lần đầu dùng (Redis, NATS, ClickHouse, nhiều thế giới) c
 
 **Làm ngay ở MVP vì sửa muộn rất đắt:**
 
-- Đo thời gian CPU một trận trong Node.js và đo băng thông snapshot AOI của một zone ngay sprint đầu. Ước lượng hiện tại: 0,3–1 giây CPU mỗi trận trong Node.js; goja không dùng cho combat hay world real-time.
+- Đo CPU một trận trong Node.js: xong 2026-11-09 (0,85 ms mỗi trận 10 đấu 10, xem Rủi ro hiệu năng). Còn lại: đo băng thông snapshot AOI của một zone thật ở Cửa 1.
 - Tách combat ra pool worker Node.js, world real-time viết bằng Go.
 - Tính sản lượng mỏ và bãi quái farm kiểu lười: chỉ lưu cấp mỏ và mốc thu cuối, tính khi người chơi mở ra; không chạy tick, không ghi định kỳ.
 - Gắn world_id vào mọi khóa dữ liệu.
@@ -1698,7 +1698,7 @@ Rủi ro lớn nhất là phạm vi: bản đồ thời gian thực, 28 vùng v�
 - [ ] Prototype dashboard hiện tại (proto/): giữ làm testbench cho sim và dashboard; Cửa 1 làm map mở real-time mới. **Đề xuất chốt: duyệt hướng này.**
 - [ ] Timeline MVP 30 tháng (mục 18, trước 24). **Đề xuất chốt: duyệt.**
 - [ ] HUD: joystick trái, cụm chiêu phải, nút Auto cạnh cụm chiêu (mục 14). **Đề xuất chốt: duyệt.**
-- [ ] Ước lượng CPU combat server 0,3–1 giây mỗi trận và băng thông AOI cần đo lại ở sprint đầu. **Giữ mở — đo xong đóng.**
+- [x] Ước lượng CPU combat server: đo 2026-11-09, trận 10 đấu 10 hết 600 tick trong 0,85 ms trên Node 24 → khoảng 350 phòng chiến mỗi lõi sau khi chừa ×100 cho input và snapshot. Băng thông AOI ước 2–4 KB/s mỗi người sau nén delta — đo lại ở Cửa 1.
 
 ## 21. Vận hành tự động và admin tối giản
 

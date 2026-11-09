@@ -1,4 +1,4 @@
-# Kế hoạch xây dựng Khai Tông Lập Phái
+# Kế hoạch xây dựng Hoàng Thiên Ký
 
 Lập ngày 2026-11-02, dựa trên GDD rev 78 (Claude Docs) và repo ở commit `225a5b2`. Bản này chi tiết hoá lộ trình mục 18 của GDD; `docs/ROADMAP.md` giữ bảng tóm tắt và sẽ cập nhật theo bản này khi được duyệt.
 
@@ -214,3 +214,49 @@ Tổng cho Prototype: khoảng 70 hình và 50 hoạt ảnh.
 - Hết sprint: test xanh, commit, ghi nhật ký vào tab Coding của GDD, cập nhật bảng ở `ROADMAP.md`.
 - Mỗi tháng có một bản chơi được (biện pháp chống kiệt sức ở mục 20).
 - Số nào GDD ghi "đề xuất" thì để thành tham số cấu hình, không viết cứng.
+
+## 9. Chuyển hướng MMORPG thời gian thực (2026-11-09)
+
+Ngày 2026-11-09 người dùng chốt chuyển game từ chiến lược dashboard sang **MMORPG mobile thời gian thực** (GDD mục 1, 3, 8, 16): map mở di chuyển tự do, combat real-time server-authoritative, giữ auto đầy đủ. Phần này là kế hoạch mới cho Cửa 1; các sprint 0–8 ở trên giữ nguyên làm lịch sử, `proto/` dashboard giữ làm testbench cho sim, dashboard và bản đồ điểm.
+
+**Kết quả đo nền (2026-11-09, Node 24, máy dev):** `packages/sim` chạy trận 10 đấu 10 đủ 4 công pháp hết 600 tick (30 giây) trong 0,85 ms; đội ngẫu nhiên 0,30 ms/trận. Như vậy CPU trận không phải nút thắt (khoảng 350 phòng chiến mỗi lõi sau khi chừa ×100 cho input và snapshot, GDD mục 16); việc cần chứng minh ở Cửa 1 là **vòng lặp input → sim → snapshot chạy đúng nhịp 20 Hz** và **băng thông AOI**.
+
+### Sprint R1 · Map mở một vùng, di chuyển tự do
+
+- Scene map mở trong `proto/` (scene mới, không đụng dashboard): vẽ ảnh nền chia ô của Lôi Đình Cốc (`data/maps/ha_nen/`), nhân vật chạy tự do bằng joystick ảo và chạm điểm đến (auto chạy theo đường Azgaar), camera bám, địa hình chặn đường (núi, sông) bằng lưới đi bộ sinh từ `tools/mapgen`.
+- Điểm tranh là khu vực tròn trên map (bán kính theo loại, tham số); vào khu vực hiện thẻ điểm. Sương mù mở theo bán kính đi qua, lưu theo người chơi.
+- Một bãi dị thú với quái lang thang trong khu vực cấp nguy hiểm; chạm quái vào trận (Sprint R2).
+
+Xong khi: chạy quanh Lôi Đình Cốc 60 khung/giây trên điện thoại, auto chạy tới được mọi điểm, sương mù mở và lưu.
+
+### Sprint R2 · Combat thời gian thực trên sim
+
+- Phòng chiến chạy `packages/sim` ở 20 tick/giây trong Web Worker của proto: client gửi input (di chuyển, chọn mục tiêu, tung chiêu 1–4, bật auto), sim trả snapshot 10 Hz, client nội suy.
+- HUD (GDD mục 14): joystick trái, đánh thường + 4 nút công pháp + pháp bảo + đan bên phải, nút Auto, thanh máu/mana, khung mục tiêu.
+- Auto theo bộ ưu tiên của GDD mục 8; trận PvE tại bãi quái và một trận 10 đấu 10 với đội NPC.
+
+Xong khi: trận 10 đấu 10 real-time điều khiển tay và auto đều chạy đúng 20 Hz, kết quả khớp mã băm với chạy batch; chiến báo phát lại từ input log.
+
+### Sprint R3 · Tách combat server, hai người chơi thật
+
+- `worker/combat` (Node): một trận một phòng, nhận input qua WebSocket, snapshot AOI; Nakama (hoặc server giả tối giản) điều phối tạo phòng và ghi kết quả.
+- World server tối giản cho một vùng (trước bằng Node, Go để MVP): vị trí người chơi, AOI lọc tầm nhìn, lọc sương mù.
+- Hai client thật cùng trên map: nhìn thấy nhau, PvP 1v1, PK tại bãi.
+
+Xong khi: hai máy điện thoại cùng Wi-Fi đánh nhau real-time; đo được băng thông AOI thật trên 50 bot đứng trong một vùng (đối chiếu ước lượng 2–4 KB/s mỗi người ở GDD mục 16).
+
+### Sprint R4 · Vòng chơi tối thiểu và Cửa 1
+
+- Bí cảnh instance cho party tối đa 6; treo máy farm một bãi (tính lười khi tắt game, auto khi mở); FTUE rút gọn 5 bước trên map mới.
+- Chơi thử 2 tuần (5–10 người) như Sprint 8 cũ.
+
+Cửa 1 qua khi (đề xuất, chờ duyệt): ít nhất 60% người thử còn chơi ở ngày 14; điều khiển tay và auto đều mượt trên Android tầm trung; không trận nào lệch mã băm; băng thông AOI trong ngân sách.
+
+### Điều chỉnh khối MVP (mục 5)
+
+| Khối | Đổi |
+|---|---|
+| M2 | Từ "worker xác minh" thành pool combat server + phát lại input log kiểm chứng (GDD mục 16) |
+| M3 | Thêm world server Go (AOI, snapshot, lọc sương mù); hành trình theo chặng đổi thành di chuyển tự do có kiểm tra tốc độ |
+| M4 | Client Cocos thêm HUD map mở và phòng chiến real-time; dashboard giữ cho quản trị |
+| M8 | Bot phát input stream thay nhật ký lệnh (mô hình tải mới ở GDD mục 16) |
