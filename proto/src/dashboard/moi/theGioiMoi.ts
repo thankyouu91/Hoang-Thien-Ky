@@ -85,6 +85,8 @@ export interface MoiState {
   nvTuLuyenXong?: boolean;
   danhVong?: Record<string, number>;
   beQuanNgay?: { ngay: string; gio: number };
+  /** Phe của lựa chọn gần nhất (bước chon), cho thưởng danh vọng "$pheDaChon". */
+  pheCuoi?: string;
   /** Bế quan đang chạy (sau chương 0): mốc bắt đầu, kết thúc, tu vi mỗi giờ tính lúc bắt đầu. */
   beQuan?: { batDau: number; ketThuc: number; moiGio: number };
 }

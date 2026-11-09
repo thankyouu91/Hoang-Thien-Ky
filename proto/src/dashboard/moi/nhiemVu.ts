@@ -3,7 +3,7 @@
 // động từ chưa nhận ra lùi về "đến điểm + xong" (luật chung tab Nhiệm vụ: không nhiệm vụ nào kẹt). File thuần, test bằng node.
 // Kinh nghiệm theo bảng exp của tab Nhiệm vụ: q(L) = 10 + 2L, nguồn sourcesQ dạng [cấp 1–60, cấp 61+] nhân q.
 import { apply, toScroll } from "@ktlp/rules";
-import { composeTechnique, type Element, type SkillType, type UnitSpec } from "@ktlp/sim";
+import { composeTechnique, ELEMENTS, type Element, type SkillType, type UnitSpec } from "@ktlp/sim";
 import NHIEM_VU from "../../../../data/nhiem_vu/ha_nhiem_vu.json" with { type: "json" };
 import THU_CUOI from "../../../../data/he_thong/json/thu_cuoi.json" with { type: "json" };
 import type { World } from "../mock/world.ts";
@@ -16,6 +16,8 @@ interface NvStep {
   count?: number;
   turns?: number;
   fromLevel?: number;
+  level?: number;
+  cost?: { or?: { item: string; count: number }[] };
   options?: { id: string; cost?: { item: string; count: number }[]; reward?: { danhVong?: Record<string, number> } }[];
   enemy?: { count: number; kind?: string; element?: string; skill?: string; statPermille: number };
   target?: { type?: string | string[] };
@@ -29,13 +31,13 @@ interface NvQuest {
   minLevel: number;
   requires?: string[];
   steps: NvStep[];
-  reward: { expQ?: string; exp?: number; linhThach?: number; items?: { item: string; grade?: string; element?: string; count?: number }[] };
+  reward: { expQ?: string; exp?: number; linhThach?: number; items?: { item: string; grade?: string; element?: string; count?: number }[]; danhVong?: Record<string, number> };
 }
 interface Trial {
   id: string;
   lesson: string;
   enemy: { count: number; kind: string; element: string; skill?: SkillType; statPermille?: number };
-  loan?: { element: string; skill: SkillType }[];
+  loan?: { element: string; skill: SkillType }[] | string;
   expect?: string[];
   reward?: { items?: { item: string; grade: string; element: string }[] };
 }
@@ -80,10 +82,10 @@ export function nvBuocHienTai(moi: MoiState, q: NvQuest): NvStep {
   return q.steps[Math.min(moi.nvBuoc ?? 0, q.steps.length - 1)];
 }
 
-/** Hệ trong spec: "$home" là hệ vùng, "$beatenByHome" là hệ bị hệ vùng khắc; không ghi thì hệ bị khắc (trận thắng dễ hiểu). */
+/** Hệ trong spec: "$home" là hệ vùng; biến khác ($beatenByHome, $roundDistinct…) hay bỏ trống thì hệ bị hệ vùng khắc. */
 function heCuaSpec(spec: string | undefined, home: Element): Element {
   if (spec === "$home") return home;
-  if (!spec || spec === "$beatenByHome") return heBiKhac(home);
+  if (!spec || spec.startsWith("$")) return heBiKhac(home);
   return spec as Element;
 }
 
@@ -114,7 +116,7 @@ function tranNv(w: World, moi: MoiState, q: NvQuest, spec: NonNullable<NvStep["e
   const { input } = tranThang((p) => ({
     teamA: [me, ...(themKy ?? [dongMon(2, Math.max(1, lv - 2), home, "can_don", 0), dongMon(3, Math.max(1, lv - 2), home, "tam_xa", 1)])],
     teamB: Array.from({ length: spec.count }, (_, i) => ONE_MON(101 + i, lv, p, foe, i === spec.count - 1 ? "tam_xa" : skill, i === spec.count - 1 ? 1 : 0)),
-  }), spec.statPermille, (moi.seed % 9_973) + bamChuoi(q.id) % 1000);
+  }), spec.statPermille ?? 1000, (moi.seed % 9_973) + bamChuoi(q.id) % 1000);
   return themChienBao(w, moi, input, `${q.name}: ${spec.count} ${spec.kind === "tu_si" ? "tu sĩ" : "dị thú"} hệ ${TEN_HE[foe]}`, `${w.region.region.code}/hang_di_thu`, now);
 }
 
@@ -133,7 +135,10 @@ export const LOI_AI: Record<string, string> = {
 
 /** Quyển mượn của ải, hệ đã quy về hệ thật ($home → hệ vùng). */
 export function quyenMuon(trial: Trial, home: Element): { element: Element; skill: SkillType }[] {
-  return (trial.loan ?? []).map((l) => ({ element: heCuaSpec(l.element, home), skill: l.skill }));
+  // Ải 8: loan "all_elements" (mượn hệ bất kỳ); prototype cho chọn trong cả 12 hệ, một lượt thay cho 3 lượt.
+  if (trial.loan === "all_elements") return ELEMENTS.map((e) => ({ element: e, skill: "can_don" as SkillType }));
+  if (!Array.isArray(trial.loan)) return [];
+  return trial.loan.map((l) => ({ element: heCuaSpec(l.element, home), skill: l.skill }));
 }
 
 /** Trận vượt ải: người chơi solo cộng quyển mượn đã chọn. */
@@ -176,9 +181,13 @@ export function lamNv(w: World, moi: MoiState, q: NvQuest, arg: Record<string, u
     if (!r.ok) return r;
     moi.nvBuoc = (moi.nvBuoc ?? 0) + 1;
     if (moi.nvBuoc < q.steps.length) return r;
-    // Xong nhiệm vụ: đánh dấu và phát vật phẩm; thưởng chữ do NguonMoi nối thêm.
+    // Xong nhiệm vụ: đánh dấu; danh vọng thưởng cộng luôn ($pheDaChon = phe đã chọn ở bước chon gần nhất).
     moi.xong.push(q.id);
     moi.nvBuoc = 0;
+    for (const [phe, n] of Object.entries(q.reward.danhVong ?? {})) {
+      const key = phe === "$pheDaChon" ? (moi.pheCuoi ?? "chinh_dao_minh") : phe;
+      moi.danhVong = { ...moi.danhVong, [key]: (moi.danhVong?.[key] ?? 0) + n };
+    }
     return { ...r, xongNhiemVu: true };
   };
   switch (step.do) {
@@ -202,7 +211,14 @@ export function lamNv(w: World, moi: MoiState, q: NvQuest, arg: Record<string, u
       return xongBuoc({ ok: true, battleId, message: "Qua ải" });
     }
     case "thang":
-    case "chiem": {
+    case "chiem":
+    // Các bước có giao chiến của chương 2–5: prototype chạy như một trận thắng tại điểm (đề xuất).
+    case "ha_ten_do":
+    case "ho_tong":
+    case "pha_nut":
+    case "tham_chien":
+    case "gop_thu_cong_thanh":
+    case "luyen_bai": {
       const battleId = tranNv(w, moi, q, step.enemy ?? { count: 3, statPermille: 900 }, now);
       const roi = roiTanQuyen(w, moi, q, now);
       return xongBuoc({ ok: true, battleId, message: roi ? `Thắng trận: ${roi}` : "Thắng trận" });
@@ -251,11 +267,25 @@ export function lamNv(w: World, moi: MoiState, q: NvQuest, arg: Record<string, u
       const dv = Object.entries(o.reward?.danhVong ?? {});
       moi.danhVong ??= {};
       for (const [phe, n] of dv) moi.danhVong[phe] = (moi.danhVong[phe] ?? 0) + n;
+      if (dv.length) moi.pheCuoi = dv[0][0]; // phe của lựa chọn gần nhất, cho "$pheDaChon"
       return xongBuoc({ ok: true, message: dv.length ? `Danh vọng ${dv.map(([p, n]) => `${p} +${n}`).join(", ")}` : undefined });
     }
     case "dot_pha": {
       if (me.level <= (step.fromLevel ?? me.level - 1)) return { ok: false, error: "chua_dot_pha" };
       return xongBuoc({ ok: true, message: "Đột phá thành, cảnh giới mới" });
+    }
+    case "dat_cap": {
+      if (me.level < (step.level ?? q.minLevel)) return { ok: false, error: "chua_du_cap_nv" };
+      return xongBuoc({ ok: true, message: `Đã đạt cấp ${step.level ?? q.minLevel}` });
+    }
+    case "nuoi_bi_canh": {
+      // Nạp nuôi bí cảnh: lấy nhánh linh thạch khi đủ, không thì dựng trận tụ linh tạm (fallback, miễn phí).
+      const gia = step.cost?.or?.find((c) => c.item === "linh_thach")?.count ?? 0;
+      if (gia && w.player.linhThach >= gia) {
+        w.player.linhThach -= gia;
+        return xongBuoc({ ok: true, message: `Nạp ${gia} linh thạch nuôi bí cảnh` });
+      }
+      return xongBuoc({ ok: true, message: "Dựng trận tụ linh tạm cho bí cảnh" });
     }
     default:
       // den, di_qua và động từ chưa nhận ra: tới nơi là xong (prototype chưa có hành trình theo chặng).
@@ -291,7 +321,17 @@ export function loiBuoc(_q: NvQuest, step: NvStep): { loi: string; nut: string }
       return { loi: "Tới bia Tầm Đạo ở thành chủ, xem bài học rồi mượn một quyển để vượt ải.", nut: "Vượt ải" };
     case "thang":
     case "chiem":
+    case "ha_ten_do":
+    case "ho_tong":
+    case "pha_nut":
+    case "tham_chien":
+    case "gop_thu_cong_thanh":
+    case "luyen_bai":
       return { loi: "Thắng trận tại điểm nhiệm vụ. Thắng còn rơi tàn quyển.", nut: "Ra trận" };
+    case "dat_cap":
+      return { loi: `Đạt cấp ${step.level ?? ""} là xong; bế quan và nhiệm vụ cộng tu vi.`, nut: "Kiểm cấp" };
+    case "nuoi_bi_canh":
+      return { loi: "Nạp linh thạch nuôi bí cảnh; thiếu thì dựng trận tụ linh tạm.", nut: "Nạp nuôi" };
     case "thuan_phuc":
       return { loi: "Thắng dị thú rồi thu phục nó làm thú cưỡi.", nut: "Thuần phục" };
     case "nop":

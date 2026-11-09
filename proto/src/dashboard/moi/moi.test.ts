@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { simulate } from "@ktlp/sim";
+import { apply } from "@ktlp/rules";
 import type { RegionMap } from "../../scenes/map/region.ts";
 import REGION_JSON from "../../../../data/maps/ha_diem_loi_dinh_coc.json" with { type: "json" };
 import {
@@ -189,7 +190,7 @@ test("bế quan không trừ tu vi khi mốc kết thúc trước mốc bắt đ
 
 // ---- Tuyến nhiệm vụ chính 1–250 (moi/nhiemVu.ts) --------------------------------------------------------------------
 
-test("đi hết chương 1 bằng máy chạy nhiệm vụ: không kẹt, trận thắng, lên cấp 51", () => {
+test("đi hết chuỗi nhiệm vụ chính 1.1–5.8 bằng máy chạy: không kẹt, trận thắng, cấp 250", () => {
   const { w } = diHetChuoi(1313);
   const { moi } = taoTheGioiMoi(1313, REGION, NOW);
   moi.xong = CHUOI.map((q) => q.id);
@@ -219,7 +220,7 @@ test("đi hết chương 1 bằng máy chạy nhiệm vụ: không kẹt, trận
   };
   let guard = 0;
   let q = nvHienTai(moi);
-  while (q && q.chapter === 1 && guard++ < 300) {
+  while (q && guard++ < 3000) {
     if (me.level < q.minLevel) {
       lenToi(q.minLevel);
       continue;
@@ -238,6 +239,15 @@ test("đi hết chương 1 bằng máy chạy nhiệm vụ: không kẹt, trận
       lenToi(breakOf(me.level) + 1);
       r = lamNv(w, moi, q, {}, now);
     }
+    if (!r.ok && r.error === "chua_du_cap_nv") {
+      lenToi(Math.max(q.minLevel, 250)); // dat_cap 250 (5.8)
+      r = lamNv(w, moi, q, {}, now);
+    }
+    if (!r.ok && r.error === "thieu_tan_quyen") {
+      // bước chọn tốn quyển mà túi rỗng: coi như nhặt thêm từ bãi quái
+      for (let i = 0; i < 2; i++) assert.ok(apply(w.rules, { type: "nhat_tan_quyen", actor: "system", memberId: PLAYER, kind: "loi.can_don.bao", grade: 1 }, now).ok);
+      r = lamNv(w, moi, q, { chon: "tu_choi" }, now);
+    }
     assert.ok(r.ok, `kẹt ở ${q.id}: ${r.ok ? "" : r.error}`);
     if (r.battleId) assert.equal(simulate(moi.tran[r.battleId]).winner, "A", `trận ${q.id} thua`);
     if (r.xongNhiemVu) {
@@ -249,8 +259,10 @@ test("đi hết chương 1 bằng máy chạy nhiệm vụ: không kẹt, trận
     q = nvHienTai(moi);
   }
   assert.ok(moi.xong.includes("chinh.1.10"), "chưa xong chương 1");
-  assert.ok(me.level >= 51, `cấp ${me.level} < 51`);
+  assert.ok(moi.xong.includes("chinh.5.8"), "chưa xong 5.8 (dữ liệu chương 2–5 của 09636ee)");
+  assert.equal(me.level, 250, `cấp ${me.level} khác 250`);
   assert.ok(w.player.mounts.some(Boolean), "chưa có thú cưỡi (1.3)");
+  assert.ok(Object.keys(moi.danhVong ?? {}).length > 0, "chưa có danh vọng nào");
 });
 
 test("nhịp bế quan 16q mỗi giờ chậm dần theo cấp (không lên cấp quá nhanh)", () => {
