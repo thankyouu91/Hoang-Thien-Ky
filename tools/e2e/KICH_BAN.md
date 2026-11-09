@@ -27,7 +27,7 @@ Cột "Cấp sau bước" tính theo đường cong kinh nghiệm E(L) ở tab N
 | 6 | Đánh trận PvE đầu (3 dị thú hệ bị khắc) | 6 | `chinh.0.5` | Trận phát được, thấy chữ khắc chế hệ, thắng, về Động phủ | 3 (1.500) |
 | 7 | Cùng tông môn chiếm một mỏ linh thạch cấp 1 của NPC trong tầm Truyền Tống Trận, rồi thu mỏ ở Động phủ | 7 | `chinh.0.6` | Mỏ đổi sang màu tông môn; thu mỏ thì linh thạch tăng | 4 (1.950) |
 | 8 | Đặt nhắc giờ bí cảnh gần nhất (12:00 hoặc 20:00) trên thẻ Lịch | 8 | `chinh.0.7` | Lịch hiện giờ bí cảnh kế tiếp và dấu đã nhắc; nhận đan, phù | **5** (2.500) |
-| 9 | Chơi tiếp: `chinh.1.1` Ải thứ nhất chưa có trong bản chơi thử, nên bế quan 8 giờ từ thẻ đã xong hoặc dòng "Tu luyện tiếp" (114 tu vi/giờ ở cấp 5), tắt game rồi quay lại | — | — | Việc nên làm và thẻ đã xong chỉ tới bế quan, không ngõ cụt; hết giờ cộng tu vi kể cả khi tắt game | 6 (bế quan cấp 6: 130/giờ) |
+| 9 | Chơi tiếp chương 1 (`chinh.1.1`–`1.10`, f566933): làm nhiệm vụ khi đủ cấp; thiếu cấp thì thẻ ghi "Mở ở cấp N" và bế quan (16q tu vi/giờ, trần 8 giờ/ngày, làm mới 05:00); bí cảnh 1.6 trong khung 12:00 hoặc 20:00 (30 phút); 1.10 đột phá ở cấp 50 | — | `chinh.1.*` | Việc nên làm hiện "Chương 1 · …"; quá 8 giờ báo "đủ 8 giờ"; không kẹt tới 2.1 (e2e 06: ngày 24, cấp 53) | 7 sau 8 giờ đầu |
 
 Ở mỗi bước, hướng dẫn tối đa 2 câu và người chơi tự chạm (GDD mục 14, Nguyên tắc). Thuật ngữ Hán Việt có tooltip.
 

@@ -59,26 +59,21 @@ test("người mới đi hết nhập môn từ cấp 1 tới cấp 5", async ({
 
   const cap = await capHienTai(page);
   expect(cap, "hết nhập môn (2.500 kinh nghiệm) phải lên cấp 5").toBeGreaterThanOrEqual(5);
+  // Hết chương 0 thì thẻ nổi chuyển sang tuyến nhiệm vụ chính (f566933): "Chương 1 · 1.1", có việc làm tiếp.
   const the = page.locator(THE_FTUE);
-  await expect(the, "thẻ báo đã xong 15 phút đầu").toBeVisible();
-  // Không ngõ cụt: thẻ đã xong cho làm tiếp ngay (bế quan, từ 4fe2fcb) hoặc chỉ tới nhiệm vụ kế.
-  await expect
-    .soft(the.locator('[data-f="be_quan"]').first().or(the.getByText(/Nhiệm vụ kế|Next quest/i)).first(), "thẻ đã xong có việc làm tiếp (bế quan hoặc nhiệm vụ kế)")
-    .toBeVisible();
+  await expect.poll(async () => (await trangThaiFtue(page)).nv, { message: "hết nhập môn thì thẻ chỉ tới nhiệm vụ chính 1.1", timeout: 10_000 }).toBe("1.1");
+  await expect(the.locator('[data-f="nv"], [data-f="be_quan"]').first(), "thẻ có nút làm tiếp (nhiệm vụ hoặc bế quan), không ngõ cụt").toBeVisible();
   await anh.chup("het-nhap-mon");
 
   // Bước 8: thẻ Lịch hôm nay hiện giờ bí cảnh gần nhất.
   await expect(page.getByText(/12:00|20:00/).first(), "Lịch hôm nay hiện giờ bí cảnh").toBeVisible();
 
-  // Đóng thẻ, tải lại: không hiện lại FTUE, cấp giữ nguyên.
-  await the.locator('[data-f="an"]').click();
-  await expect(the).toHaveCount(0);
+  // Tải lại: không hiện lại bước FTUE nào, cấp và nhiệm vụ giữ nguyên.
   await page.reload();
   expect(await capHienTai(page)).toBe(cap);
-  await page.waitForTimeout(1500);
-  const st = await trangThaiFtue(page);
-  expect(st.buoc, "tải lại sau khi xong không hiện lại bước FTUE nào").toBeNull();
-  await anh.chup("sau-khi-dong-the");
+  await expect.poll(async () => (await trangThaiFtue(page)).nv, { message: "tải lại vẫn ở nhiệm vụ 1.1", timeout: 10_000 }).toBe("1.1");
+  expect((await trangThaiFtue(page)).buoc, "tải lại sau khi xong không hiện lại bước FTUE nào").toBeNull();
+  await anh.chup("sau-khi-tai-lai");
   expect(loiTrang, "không có lỗi JS suốt lượt chơi").toEqual([]);
 });
 

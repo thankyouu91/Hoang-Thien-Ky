@@ -127,6 +127,31 @@ export async function capHienTai(page: Page): Promise<number> {
   return Number((await lv.textContent())?.trim());
 }
 
+/** q(L) và E(L) của tab Nhiệm vụ (GDD): kinh nghiệm một trận cùng cấp, và kinh nghiệm lên cấp kế (làm tròn chục). */
+export const q = (L: number) => 10 + 2 * L;
+export function kinhNghiemCap(L: number): number {
+  const p = L < 60 ? 0.3 + (0.7 * (L - 1)) / 59 : 1;
+  return Math.round((320 * q(L) * (0.4 + 0.002 * L) * p) / 10) * 10;
+}
+/** Tổng tu vi từ cấp 1 tới (cấp, tu vi dư). */
+export function tongTuVi(cap: number, tuVi: number): number {
+  let t = tuVi;
+  for (let L = 1; L < cap; L++) t += kinhNghiemCap(L);
+  return t;
+}
+/** Cấp và tu vi dư sau khi cộng `them` vào (cấp, tu vi) đang có. */
+export function congTuVi(cap: number, tuVi: number, them: number): { cap: number; tuVi: number } {
+  let t = tuVi + them;
+  while (t >= kinhNghiemCap(cap)) t -= kinhNghiemCap(cap++);
+  return { cap, tuVi: t };
+}
+
+/** Tu vi hiện có, đọc từ title vòng tu vi trên thanh trên ("Tu vi 20 / 910"). */
+export async function tuViHienTai(page: Page): Promise<number> {
+  const t = (await page.locator("#topbar .xp-ring").getAttribute("title")) ?? "";
+  return Number((/([\d.]+)\s*\//.exec(t)?.[1] ?? "").replace(/\./g, ""));
+}
+
 /** Linh thạch trên thanh trên. */
 export async function linhThach(page: Page): Promise<number> {
   const t = (await page.locator("#topbar .pill.stone").textContent()) ?? "";
@@ -154,7 +179,10 @@ export interface BuocDaQua {
 export interface TrangThaiFtue {
   /** FTUE bước 2–8 đang làm, null khi không đọc được (thẻ ẩn, đang trong trận, hoặc đã xong). */
   buoc: number | null;
+  /** Hết chương 0 (Nhập Thế): thẻ chuyển sang tuyến nhiệm vụ chính, hoặc báo xong. */
   xong: boolean;
+  /** Nhiệm vụ chính đang làm sau chương 0, ví dụ "1.3" (thẻ "Chương 1 · 1.3"); null khi chưa tới. */
+  nv: string | null;
   tran: boolean;
   loi: string;
 }
@@ -165,10 +193,13 @@ export async function trangThaiFtue(page: Page): Promise<TrangThaiFtue> {
     const tran = location.hash === "#tran";
     const hien = !!the && !the.hidden && the.getBoundingClientRect().height > 0;
     const loi = (the?.querySelector("p")?.textContent ?? "").replace(/\s+/g, " ").trim();
-    if (!hien) return { buoc: null, xong: false, tran, loi };
-    const xong = !!the.querySelector('[data-f="an"]') || (!!the.querySelector(".ftue-pill") && !/\d+\s*\/\s*\d+/.test(the.textContent ?? ""));
-    const m = /(\d+)\s*\/\s*(\d+)/.exec(the.querySelector(".ftue-so, .ftue-pill")?.textContent ?? "");
-    return { buoc: !xong && m ? Number(m[1]) + 1 : null, xong, tran, loi };
+    if (!hien) return { buoc: null, xong: false, nv: null, tran, loi };
+    const so = the.querySelector(".ftue-so, .ftue-pill")?.textContent ?? "";
+    // Thẻ chương 1+: "Chương 1 · 1.1"; thu gọn: "Nhiệm vụ 1.1 · Tên" (f566933).
+    const nv = /Chương\s*\d+\s*·\s*(\d+\.\d+)/.exec(so)?.[1] ?? /Nhiệm vụ\s+(\d+\.\d+)\s*·/.exec(so)?.[1] ?? null;
+    const xong = !!nv || !!the.querySelector('[data-f="an"], [data-f="nv"]') || (!!the.querySelector(".ftue-pill") && !/\d+\s*\/\s*\d+/.test(the.textContent ?? ""));
+    const m = /(\d+)\s*\/\s*(\d+)/.exec(so);
+    return { buoc: !xong && m ? Number(m[1]) + 1 : null, xong, nv, tran, loi };
   });
 }
 
@@ -183,7 +214,7 @@ export function soCau(s: string): number {
 }
 
 /** Chữ báo lỗi đang hiện (toast đỏ), để ghi vào báo cáo khi bấm mà không qua bước. */
-async function baoLoiDangHien(page: Page): Promise<string | null> {
+export async function baoLoiDangHien(page: Page): Promise<string | null> {
   const t = page.locator("#toast.show.bad");
   return (await t.count()) ? ((await t.textContent()) ?? "").trim() : null;
 }
@@ -205,7 +236,7 @@ export async function thanhTrenOnDinh(page: Page): Promise<{ cap: number; lt: nu
 }
 
 /** Trong màn Trận: chọn tốc độ nhanh nhất, chờ phát hết (thanh tua tới cuối), rồi Quay lại như người chơi. */
-async function xemHetTran(page: Page, anh: MayAnh, toiDaGiay = 120): Promise<void> {
+export async function xemHetTran(page: Page, anh: MayAnh, toiDaGiay = 120): Promise<void> {
   // Như người mới: xem vài giây đầu ở ×1 (lúc nhãn "Khắc ×1,5" hiện), chụp, rồi mới tua nhanh nhất.
   await page.waitForTimeout(2500);
   await anh.chup("dang-xem-tran");
