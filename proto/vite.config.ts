@@ -15,7 +15,7 @@ export default defineConfig({
     emptyOutDir: true,
     // Trang dev đi kèm bản build (thienhoangky.fun/three.html, /src/hieu_ung/xem_thu/), vì cả site nằm sau Cloudflare Access.
     rolldownOptions: {
-      input: { main: page("./index.html"), three: page("./three.html"), xem_thu: page("./src/hieu_ung/xem_thu/index.html") },
+      input: { main: page("./index.html"), choi: page("./choi.html"), three: page("./three.html"), xem_thu: page("./src/hieu_ung/xem_thu/index.html") },
     },
   },
 });

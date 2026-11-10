@@ -37,16 +37,16 @@ function playerLevel(): number {
 }
 
 export class BaiScene implements Scene {
-  readonly id = "bai";
-  readonly label = "Bãi quái";
+  readonly id: string = "bai";
+  readonly label: string = "Bãi quái";
   readonly camera = new Camera();
   readonly hud: HTMLElement;
-  private sprites: Sprites;
-  private bai: Bai | null = null;
+  protected sprites: Sprites;
+  protected bai: Bai | null = null;
   private backdrop: ArenaBackdrop | null = null;
   private active = false;
-  private down: { x: number; y: number } | null = null;
-  private view: View | null = null;
+  protected down: { x: number; y: number } | null = null;
+  protected view: View | null = null;
   private shown = "";
 
   constructor(sprites: Sprites) {
@@ -74,8 +74,7 @@ export class BaiScene implements Scene {
   enter(v: View): void {
     this.active = true;
     this.view = v;
-    this.bai ??= new Bai(playerLevel());
-    this.backdrop ??= createArenaBackdrop("cao_nguyen", { length: BAI.w, halfCross: BAI.h / 2 });
+    this.bai ??= this.makeBai();
     this.camera.zoom = Math.max(0.6, Math.min(1.3, v.w / 520));
     this.follow(1);
     const canvas = v.ctx.canvas;
@@ -87,11 +86,34 @@ export class BaiScene implements Scene {
     }
   }
 
+  /** Khu đang chơi; scenes/mmo ghi đè để dựng từng khu của thế giới. */
+  protected makeBai(): Bai {
+    return new Bai(playerLevel());
+  }
+
+  /** Vẽ nền khu; mặc định là sân Three.js cao nguyên của bãi mẫu. */
+  protected ground(ctx: CanvasRenderingContext2D, b: Bai): void {
+    this.backdrop ??= createArenaBackdrop("cao_nguyen", { length: b.w, halfCross: b.h / 2 });
+    ctx.save();
+    ctx.translate(0, b.h / 2);
+    const ok = this.backdrop.draw(ctx, performance.now() / 1000, false);
+    ctx.restore();
+    if (!ok) {
+      ctx.fillStyle = "#5d6a43";
+      ctx.fillRect(0, 0, b.w, b.h);
+    }
+  }
+
+  /** Dòng trạng thái trên cùng của HUD. */
+  protected statusLine(b: Bai): string {
+    return `${tr("Tu vi")} +${b.tuVi} · ${b.kills} ${tr("dị thú")} · ${tr("Cấp")} ${b.level}`;
+  }
+
   leave(): void {
     this.active = false;
   }
 
-  private tap(sx: number, sy: number): void {
+  protected tap(sx: number, sy: number): void {
     const d = this.down;
     this.down = null;
     if (!this.active || !this.bai || !this.view || !d || Math.hypot(sx - d.x, sy - d.y) > 10) return;
@@ -102,16 +124,17 @@ export class BaiScene implements Scene {
   }
 
   /** Camera bám theo người chơi, không lộ phần ngoài bãi; k là phần quãng còn lại đi trong một khung. */
-  private follow(k: number): void {
-    const p = this.bai!.player;
+  protected follow(k: number): void {
+    const b = this.bai!;
+    const p = b.player;
     const c = this.camera;
     c.x += (p.x - c.x) * k;
     c.y += (p.y - c.y) * k;
     const v = this.view;
     if (!v) return;
     const clamp = (val: number, half: number, size: number) => (size <= 2 * half ? size / 2 : Math.max(half, Math.min(size - half, val)));
-    c.x = clamp(c.x, v.w / 2 / c.zoom, BAI.w);
-    c.y = clamp(c.y, (v.h - v.bottom) / 2 / c.zoom, BAI.h);
+    c.x = clamp(c.x, v.w / 2 / c.zoom, b.w);
+    c.y = clamp(c.y, (v.h - v.bottom) / 2 / c.zoom, b.h);
   }
 
   update(dt: number): void {
@@ -127,14 +150,7 @@ export class BaiScene implements Scene {
     this.view = v;
     const ctx = v.ctx;
     this.camera.apply(v);
-    ctx.save();
-    ctx.translate(0, BAI.h / 2);
-    const ground = this.backdrop?.draw(ctx, performance.now() / 1000, false);
-    ctx.restore();
-    if (!ground) {
-      ctx.fillStyle = "#5d6a43";
-      ctx.fillRect(0, 0, BAI.w, BAI.h);
-    }
+    this.ground(ctx, b);
     const p = b.player;
     const tgt = b.get(p.target);
     if (p.goal) this.ring(ctx, p.goal.x, p.goal.y, 10, "rgba(255, 250, 240, 0.7)");
@@ -158,7 +174,7 @@ export class BaiScene implements Scene {
     let top = a.y - SIZE;
     if (a.kind === "monster") {
       const img = this.sprites.get(beastSprite(a.element, a.id));
-      const s = SIZE * 1.15;
+      const s = SIZE * (a.boss ? 2.6 : 1.15);
       if (img) {
         ctx.save();
         ctx.translate(a.x, 0);
@@ -177,7 +193,7 @@ export class BaiScene implements Scene {
       ctx.font = `600 11px ${FONT_TEXT}`;
       ctx.textAlign = "center";
       ctx.fillStyle = a.kind === "player" ? "#ffd34d" : "#fffaf0";
-      ctx.fillText(a.kind === "player" ? tr("Ta") : a.name, a.x, top - 12);
+      ctx.fillText(a.kind === "player" ? tr(a.name) : a.name, a.x, top - 12);
     }
     // Thanh máu trên đầu
     ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
@@ -241,11 +257,12 @@ export class BaiScene implements Scene {
     const p = b.player;
     const pts = ultPoints(b.level);
     const cds = BAI.skills.map((s) => Math.ceil(b.cooldown(s)));
-    const key = [Math.round(p.hp), Math.round(p.shield), Math.floor(b.mana), Math.floor(b.ult * 100), b.tuVi, b.kills, cds.join()].join("|");
+    const status = this.statusLine(b);
+    const key = [Math.round(p.hp), p.hpMax, Math.round(p.shield), Math.floor(b.mana), Math.floor(b.ult * 100), status, cds.join()].join("|");
     if (key === this.shown) return;
     this.shown = key;
     const q = (s: string) => this.hud.querySelector<HTMLElement>(s)!;
-    q(".bai-tv").textContent = `${tr("Tu vi")} +${b.tuVi} · ${b.kills} ${tr("dị thú")} · ${tr("Cấp")} ${b.level}`;
+    q(".bai-tv").textContent = status;
     q(".hp i").style.width = `${(100 * p.hp) / p.hpMax}%`;
     q(".hp span").textContent = `HP ${Math.round(p.hp)}/${p.hpMax}${p.shield > 0 ? ` +${Math.round(p.shield)}` : ""}`;
     q(".mp i").style.width = `${(100 * b.mana) / b.manaMax}%`;

@@ -36,6 +36,24 @@ export interface Actor {
   /** Lúc ra đòn gần nhất và lúc trúng đòn gần nhất (để màn chọn hoạt ảnh) */
   actAt: number;
   hurtAt: number;
+  /** Thủ lĩnh của khu (màn vẽ to hơn) */
+  boss?: boolean;
+}
+
+/** Tuỳ chọn cho thế giới liền mạch (scenes/mmo): cỡ khu, dải đi được, cấp quái, chỉ số người chơi. Bỏ trống là bãi mẫu. */
+export interface BaiOpts {
+  w?: number;
+  h?: number;
+  /** y nhỏ nhất đi được (phần trên của nền 3/4 là tường, cây) */
+  top?: number;
+  monsterLevel?: number;
+  hp?: number;
+  atk?: number;
+  packs?: number;
+  boss?: boolean;
+  entry?: { x: number; y: number };
+  bots?: string[];
+  elements?: ElementId[];
 }
 
 /** Sự kiện để màn vẽ: số sát thương, hồi máu, chiêu, chiêu cuối. */
@@ -70,7 +88,15 @@ export class Bai {
   readonly actors: Actor[] = [];
   fx: Fx[] = [];
   readonly player: Actor;
-  readonly level: number;
+  level: number;
+  readonly w: number;
+  readonly h: number;
+  readonly top: number;
+  readonly mLevel: number;
+  /** Treo auto: người chơi tự tìm quái như bot */
+  auto = false;
+  onKill?: (m: Actor) => void;
+  private o: BaiOpts;
   tuVi = 0;
   kills = 0;
   mana: number = BATTLE.manaMax;
@@ -81,19 +107,31 @@ export class Bai {
   readonly ready = new Map<SkillType, number>();
   private rnd: () => number;
 
-  constructor(level = 1, element: ElementId = "moc", seed = 1) {
+  constructor(level = 1, element: ElementId = "moc", seed = 1, o: BaiOpts = {}) {
     this.level = level;
+    this.o = o;
+    this.w = o.w ?? BAI.w;
+    this.h = o.h ?? BAI.h;
+    this.top = o.top ?? 0;
+    this.mLevel = o.monsterLevel ?? BAI.level;
+    const els = o.elements ?? PACK_ELEMENTS;
+    const packs = o.boss ? 1 : (o.packs ?? BAI.packs);
     this.rnd = rng(seed);
     this.player = this.human(1, "player", "Ta", element, 0);
-    BAI.bots.forEach((name, i) => this.human(100 + i, "bot", name, PACK_ELEMENTS[i % PACK_ELEMENTS.length], i + 1));
-    for (let p = 0; p < BAI.packs; p++) {
-      const home = { x: BAI.w * (0.45 + 0.4 * (p % 2)), y: BAI.h * (0.25 + 0.5 * Math.floor(p / 2)) };
-      for (let k = 0; k < BAI.perPack; k++) {
-        const hp = BAI.monsterHp(BAI.level);
+    (o.bots ?? BAI.bots).forEach((name, i) => this.human(100 + i, "bot", name, PACK_ELEMENTS[i % PACK_ELEMENTS.length], i + 1));
+    for (let p = 0; p < packs; p++) {
+      // Tới 4 bầy: chỗ của bãi mẫu. Nhiều hơn (khu rộng): rải đều theo chiều ngang, so le hai hàng.
+      const home = o.boss
+        ? { x: this.w * 0.7, y: (this.top + this.h) / 2 }
+        : packs <= 4
+          ? { x: this.w * (0.45 + 0.4 * (p % 2)), y: this.top + (this.h - this.top) * (0.25 + 0.5 * Math.floor(p / 2)) }
+          : { x: this.w * (0.2 + (0.7 * p) / (packs - 1)), y: this.top + (this.h - this.top) * (0.25 + 0.5 * (p % 2)) };
+      for (let k = 0; k < (o.boss ? 1 : BAI.perPack); k++) {
+        const hp = BAI.monsterHp(this.mLevel) * (o.boss ? 15 : 1);
         this.actors.push({
-          id: 1000 + p * 100 + k, kind: "monster", name: "Dị thú", element: PACK_ELEMENTS[p % PACK_ELEMENTS.length],
+          id: 1000 + p * 100 + k, kind: "monster", name: "Dị thú", element: els[p % els.length], boss: o.boss,
           x: home.x + (this.rnd() - 0.5) * BAI.roam, y: home.y + (this.rnd() - 0.5) * BAI.roam, face: -1,
-          hp, hpMax: hp, atk: BAI.monsterAtk(BAI.level), shield: 0, shieldUntil: 0, goal: null, target: null, nextHit: 0,
+          hp, hpMax: hp, atk: BAI.monsterAtk(this.mLevel) * (o.boss ? 2.5 : 1), shield: 0, shieldUntil: 0, goal: null, target: null, nextHit: 0,
           alive: true, respawnAt: 0, home, pack: p, actAt: -9, hurtAt: -9,
         });
       }
@@ -102,9 +140,11 @@ export class Bai {
 
   private human(id: number, kind: Kind, name: string, element: ElementId, i: number): Actor {
     // Người chơi đứng giữa cửa bãi, bot xếp vòng quanh để không dồn thành một cột.
-    const home = { x: BAI.entry.x + (i ? Math.cos(i * 0.9) * 70 : 0), y: BAI.entry.y + (i ? Math.sin(i * 0.9) * 110 : 0) };
+    const e = this.o.entry ?? BAI.entry;
+    const home = { x: e.x + (i ? Math.cos(i * 0.9) * 70 : 0), y: e.y + (i ? Math.sin(i * 0.9) * 110 : 0) };
+    const hp = this.o.hp ?? BAI.hp;
     const a: Actor = {
-      id, kind, name, element, x: home.x, y: home.y, face: 1, hp: BAI.hp, hpMax: BAI.hp, atk: BAI.atk, shield: 0,
+      id, kind, name, element, x: home.x, y: home.y, face: 1, hp, hpMax: hp, atk: this.o.atk ?? BAI.atk, shield: 0,
       shieldUntil: 0, goal: null, target: null, nextHit: 0, alive: true, respawnAt: 0, home, pack: -1, actAt: -9, hurtAt: -9,
     };
     this.actors.push(a);
@@ -117,7 +157,7 @@ export class Bai {
 
   /** Chạm đất: đi tới đó, bỏ mục tiêu đang đánh. */
   moveTo(x: number, y: number): void {
-    this.player.goal = { x: Math.max(0, Math.min(BAI.w, x)), y: Math.max(0, Math.min(BAI.h, y)) };
+    this.player.goal = { x: Math.max(0, Math.min(this.w, x)), y: Math.max(this.top, Math.min(this.h, y)) };
     this.player.target = null;
   }
 
@@ -222,8 +262,12 @@ export class Bai {
     const d = Math.hypot(x - a.x, y - a.y);
     if (d < 2) return true;
     const s = Math.min(d, speed * dt);
-    a.x += ((x - a.x) / d) * s;
-    a.y += ((y - a.y) / d) * s;
+    const nx = Math.max(0, Math.min(this.w, a.x + ((x - a.x) / d) * s));
+    const ny = Math.max(this.top, Math.min(this.h, a.y + ((y - a.y) / d) * s));
+    // Đích nằm ngoài dải đi được (quái lang thang sát mép): coi như đã tới, khỏi giậm chân mãi.
+    if (nx === a.x && ny === a.y) return true;
+    a.x = nx;
+    a.y = ny;
     if (Math.abs(x - a.x) > 1) a.face = x > a.x ? 1 : -1;
     return false;
   }
@@ -235,10 +279,10 @@ export class Bai {
       a.target = null;
       tgt = undefined;
     }
-    if (!tgt && a.kind === "bot" && !a.goal) {
+    if (!tgt && (a.kind === "bot" || (this.auto && a === this.player)) && !a.goal) {
       tgt = this.nearestMonster(a, 520);
       if (tgt) a.target = tgt.id;
-      else a.goal = { x: BAI.w * (0.35 + 0.6 * this.rnd()), y: BAI.h * this.rnd() };
+      else a.goal = { x: this.w * (0.2 + 0.6 * this.rnd()), y: this.top + (this.h - this.top) * this.rnd() };
     }
     if (tgt) {
       if (dist(a, tgt) > BAI.meleeRange) this.walk(a, tgt.x, tgt.y, BAI.speed, dt);
@@ -300,8 +344,9 @@ export class Bai {
     to.shield = 0;
     to.respawnAt = this.t + (to.kind === "monster" ? BAI.respawn : BAI.revive);
     if (to.kind === "monster" && from === this.player) {
-      this.tuVi += BAI.tuVi(BAI.level);
+      this.tuVi += BAI.tuVi(this.mLevel);
       this.kills++;
+      this.onKill?.(to);
     }
   }
 }
