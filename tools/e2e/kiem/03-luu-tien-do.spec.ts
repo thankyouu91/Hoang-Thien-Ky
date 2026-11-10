@@ -22,7 +22,7 @@ test("tải lại trang giữ tiến độ, Chơi lại từ đầu về cấp 1
   // Đóng hẳn trình duyệt rồi mở lại (trang mới, cùng bộ nhớ): vẫn như cũ.
   const trang2 = await page.context().newPage();
   await page.close();
-  await trang2.goto("/");
+  await trang2.goto("/dong_phu.html");
   expect(await capHienTai(trang2), "mở lại game giữ cấp").toBe(cap);
   await expect.poll(() => buocHienTai(trang2), { message: "mở lại game giữ bước FTUE" }).toBe(buoc);
 

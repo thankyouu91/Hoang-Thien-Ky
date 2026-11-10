@@ -1,4 +1,4 @@
-// Tiến trình của bản MMORPG chơi được (choi.html): 13 vùng × 9 khu nối thành một dải thế giới, cấp, tu vi, linh thạch,
+// Tiến trình của bản MMORPG chơi được (index.html): 13 vùng × 9 khu nối thành một dải thế giới, cấp, tu vi, linh thạch,
 // bình máu, cường hóa vũ khí, nhiệm vụ diệt quái nối tiếp. Không chạm DOM để test bằng node. Mọi số là đề xuất.
 import type { ElementId } from "../../replay/types.ts";
 import { BAI } from "../bai/thamSo.ts";

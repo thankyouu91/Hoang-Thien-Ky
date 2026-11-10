@@ -8,7 +8,7 @@
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host",
-    "test": "node --test src/three/three.test.ts src/hieu_ung/hieu_ung.test.ts src/scenes/battle/chuyenDong.test.ts src/scenes/battle/mauAo.test.ts src/dashboard/tiemNang.test.ts src/scenes/bai/bai.test.ts src/scenes/mmo/tienTrinh.test.ts"
+    "test": "node --test src/three/three.test.ts src/hieu_ung/hieu_ung.test.ts src/scenes/battle/chuyenDong.test.ts src/scenes/battle/mauAo.test.ts src/dashboard/tiemNang.test.ts src/scenes/bai/bai.test.ts src/scenes/mmo/tienTrinh.test.ts src/scenes/mmo/oDat.test.ts"
   },
   "dependencies": {
     "@fontsource-variable/lora": "^5.3.0",

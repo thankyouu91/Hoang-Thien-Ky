@@ -60,7 +60,7 @@ export function ghiLoiTrang(page: Page): string[] {
 /** Mở game như người mới: trình duyệt sạch, chọn ngôn ngữ trước khi trang chạy (giống bấm VI · EN rồi tải lại). */
 export async function moGame(page: Page, ngonNgu: NgonNgu = "vi"): Promise<void> {
   if (ngonNgu === "en") await page.addInitScript(() => localStorage.getItem("htk.lang") ?? localStorage.setItem("htk.lang", "en"));
-  await page.goto("/");
+  await page.goto("/dong_phu.html");
   await expect(page.locator("#login, #topbar .lv").first()).toBeVisible({ timeout: 30_000 });
 }
 

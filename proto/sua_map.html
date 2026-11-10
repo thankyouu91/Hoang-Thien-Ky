@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thiên Hoang Ký · Sửa map</title>
+    <link rel="icon" href="/brand/favicon.ico" sizes="any" />
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #14110f; color: #efe6d6; font: 13px/1.4 system-ui, sans-serif; }
+      body { display: grid; grid-template-columns: 300px 1fr; }
+      #side { grid-template-columns: minmax(0, 1fr); overflow-y: auto; padding: 10px; background: #1f1a16; border-right: 1px solid #3a322a; display: grid; gap: 10px; align-content: start; }
+      #side h1 { margin: 0; font-size: 16px; color: #ffd98a; }
+      #side h2 { margin: 0 0 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #b9a98f; }
+      select, input, button { font: inherit; color: inherit; background: #2a231d; border: 1px solid #4a4036; border-radius: 5px; padding: 5px 7px; min-width: 0; }
+      button { cursor: pointer; }
+      button:hover { border-color: #d9a12b; }
+      button.on { border-color: #d9a12b; color: #ffd34d; }
+      button.go { background: #8c1f17; border-color: #8c1f17; }
+      .row { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+      .row > select { flex: 1; }
+      .num { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+      .num label { display: grid; font-size: 11px; color: #b9a98f; }
+      .num input { width: 100%; }
+      #pal { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; max-height: 38vh; overflow-y: auto; }
+      #pal button { padding: 2px; height: 64px; display: grid; place-items: center; overflow: hidden; }
+      #pal img { max-width: 100%; max-height: 58px; image-rendering: pixelated; }
+      #odat { display: grid; grid-template-columns: repeat(8, 32px); gap: 3px; }
+      #odat button { width: 32px; height: 32px; padding: 0; image-rendering: pixelated; }
+      #odat button.on { outline: 2px solid #ffd34d; outline-offset: 1px; }
+      #view { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
+      #msg { color: #9fd49a; min-height: 18px; }
+      small { color: #8f8372; }
+    </style>
+  </head>
+  <body>
+    <aside id="side"></aside>
+    <canvas id="view"></canvas>
+    <script type="module" src="./src/sua_map/main.ts"></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-// Bản MMORPG chơi được (choi.html): thế giới là dải khu nối nhau, nhìn 3/4 từ trên, nền vẽ sẵn chien_truong/<vùng>/<khu>.
+// Bản MMORPG chơi được (index.html): thế giới là dải khu nối nhau, nhìn 3/4 từ trên, nền vẽ sẵn chien_truong/<vùng>/<khu>.
 // Dùng lại trọn màn bãi quái (BaiScene: đi, đánh, chiêu, bot); thêm ở đây: qua khu ở hai mép, cấp và tu vi, linh thạch,
 // bình máu, tiệm và truyền tống ở khu an toàn, nhiệm vụ nối tiếp, treo auto, phím tắt, lưu vào localStorage.
 // Người chơi khác là bot trong trình duyệt (người dùng chốt 2026-11-09); người thật để tới MVP có máy chủ.
@@ -10,27 +10,18 @@ import { FONT_DISPLAY, FONT_TEXT, loadCanvasFonts } from "../../theme/fonts.ts";
 import { Bai } from "../bai/bai.ts";
 import { BaiScene } from "../bai/baiScene.ts";
 import { BAI } from "../bai/thamSo.ts";
+import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
+import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
   atkOf, buyPot, hpOf, kill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
 
-/** Nền 688×384 (cỡ lớn nhất PixelLab vẽ một lần) vẽ gấp đôi. */
-const W = 1376;
-/**
- * Bãi quái là lưới COLS × ROWS tấm nền (20 lần diện tích một tấm, người dùng chọn 2026-11-10): tấm ở cột lẻ lật ngang, hàng lẻ
- * lật dọc, nên mép khớp nhau không lộ đường nối. Cả bãi đi được; số bầy quái tính theo diện tích.
- */
-const COLS = 5;
-const ROWS = 4;
-const FIELD_PACKS = 48;
-const H = 768;
-/** Phần trên của nền là tường, gốc cây: không đi lên đó. */
-const TOP_PCT = 0.37;
 const SAVE_KEY = "htk.mmo.v1";
 const POT_CD = 5;
 const NAMES = ["Lạc Vân", "Tô Hàn", "Mạc Kỳ", "Diệp Thanh", "Hoa Ảnh", "Trần Phong", "Liễu Sương", "Minh Nguyệt", "Tử Sâm", "Hàn Liên", "Vô Song", "Cố Bắc"];
-const ASSET = (p: string) => `${import.meta.env.BASE_URL}pixellab/${p}.png`;
+/** Hình trong assets/: mặc định ở pixellab/, đường dẫn bắt đầu bằng freepixel/ thì ở assets/freepixel/. */
+const ASSET = (p: string) => `${import.meta.env.BASE_URL}${p.startsWith("freepixel/") ? "" : "pixellab/"}${p}.png`;
 
 function load(): Save | null {
   try {
@@ -47,6 +38,13 @@ export class MmoScene extends BaiScene {
   private save: Save;
   private fresh: boolean;
   private entry: "left" | "right" | "mid" = "mid";
+  /** Map của khu đang chơi */
+  private map_: MapKhu | null = null;
+  /** Map tự thiết kế bằng app sửa map (sua_map.html), khóa theo tên file */
+  private maps = new Map<string, MapKhu>();
+  /** Bộ ô đất và tấm nền đã vẽ sẵn của từng map có lớp ô. */
+  private bo: BoODat | null = null;
+  private nenO = new WeakMap<MapKhu, HTMLCanvasElement>();
   private imgs = new Map<string, HTMLImageElement>();
   private keys = new Set<string>();
   private keyMove = false;
@@ -62,14 +60,23 @@ export class MmoScene extends BaiScene {
     const s = load();
     this.fresh = !s;
     this.save = s ?? newSave("Vô Danh", "moc");
-    this.camera.minZoom = 0.6;
+    // ?khu=<số>: vào thẳng một khu để chơi thử map vừa sửa.
+    const khu = new URLSearchParams(location.search).get("khu");
+    if (khu !== null && Number(khu) >= 0 && Number(khu) < ZONE_COUNT) {
+      this.save.zone = Math.floor(Number(khu));
+      this.fresh = false;
+    }
+    this.camera.minZoom = 0.2;
     this.camera.maxZoom = 2.2;
     this.bar = document.createElement("div");
     this.bar.className = "mmo-bar";
     this.bar.innerHTML = `<div class="bai-bar xp"><i></i><span></span></div>
       <div class="mmo-btns"><button type="button" data-a="pot"></button><button type="button" data-a="auto"></button>
-      <button type="button" data-a="shop">Tiệm</button><button type="button" data-a="map">Bản đồ</button><button type="button" data-a="help">?</button></div>`;
+      <button type="button" data-a="shop">B · Tiệm</button><button type="button" data-a="map">M · Bản đồ</button><button type="button" data-a="help">?</button></div>`;
     this.hud.prepend(this.bar);
+    this.hud.classList.add("mmo-hud");
+    // Nhãn phím trên từng ô chiêu: số 1–6, và Q W E R T cho năm chiêu đầu.
+    this.hud.querySelectorAll(".bai-skills button").forEach((btn, i) => btn.insertAdjacentHTML("afterbegin", `<kbd>${i + 1}${KEYS[i] ? ` ${KEYS[i].toUpperCase()}` : ""}</kbd>`));
     this.bar.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLButtonElement>("button")?.dataset.a;
       if (a) this.act(a);
@@ -83,38 +90,62 @@ export class MmoScene extends BaiScene {
     window.addEventListener("blur", () => this.keys.clear());
     addStyle();
     void loadCanvasFonts();
+    void this.loadMaps();
   }
 
   override enter(v: View): void {
     super.enter(v);
+    // Nền giữ độ nét của bãi mẫu (zoom bãi mẫu chia SCALE), nên người trên màn hình còn 40%; lăn chuột hay chụm tay để đổi.
+    this.camera.zoom = Math.max(0.6, Math.min(1.3, v.w / 520)) / SCALE;
+    this.follow(1);
     if (this.fresh) this.intro();
     else this.note(zone(this.save.zone).name, true);
   }
 
   // ---------- Khu ----------
 
-  private size(z: Zone): { w: number; h: number; top: number; file: string; packs: number } {
-    const file = `chien_truong/${z.bg}`;
-    if (z.safe || z.boss) return { w: W, h: H, top: H * TOP_PCT, file, packs: z.safe ? 0 : 4 };
-    return { w: W * COLS, h: H * ROWS, top: 0, file, packs: FIELD_PACKS };
+  private mapOf(z: Zone): MapKhu {
+    return this.maps.get(mapId(z.bg)) ?? macDinh(z);
+  }
+
+  /**
+   * Nạp các map tự thiết kế (assets/map_khu/, danh sách ở index.json do app sửa map ghi) một lần lúc mở game;
+   * khu đang đứng có map riêng thì dựng lại khu. Lỗi mạng hay file hỏng: bỏ qua, dùng map mặc định.
+   */
+  private async loadMaps(): Promise<void> {
+    const get = (name: string) => fetch(`${import.meta.env.BASE_URL}map_khu/${name}.json`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    const ids = ((await get("index")) as string[] | null) ?? [];
+    this.bo = (await fetch(`${import.meta.env.BASE_URL}pixellab/${O_DIR}bo.json`).then((r) => (r.ok ? r.json() : null)).catch(() => null)) as BoODat | null;
+    const bo = this.bo;
+    await Promise.all(ids.map(async (id) => {
+      const m = (await get(id)) as MapKhu | null;
+      if (!m || !(m.w > 0) || !(m.h > 0)) return;
+      const o = bo && m.o ? m.o : undefined;
+      // Nước trong lớp ô thành vùng cấm ngay lúc nạp, để mọi chỗ dùng m.cam (đi lại, rải bầy, cửa vào) đều thấy.
+      this.maps.set(id, { ...m, nen: m.nen ?? [], vat: m.vat ?? [], bay: m.bay ?? [], cam: [...(m.cam ?? []), ...(o ? camLop(o, bo!) : [])], o });
+    }));
+    if (this.bai && this.maps.has(mapId(zone(this.save.zone).bg))) this.go(this.save.zone, this.entry);
   }
 
   protected override makeBai(): Bai {
     const s = this.save;
     const z = zone(s.zone);
-    const d = this.size(z);
-    const mid = (d.top + d.h) / 2;
+    const m = this.mapOf(z);
+    this.map_ = m;
     const b = new Bai(s.lv, s.element, s.zone + 1, {
-      w: d.w, h: d.h, top: d.top, monsterLevel: z.level, hp: hpOf(s.lv), atk: atkOf(s.lv, s.wpn), packs: d.packs, boss: z.boss,
-      entry: { x: this.entry === "left" ? 70 : this.entry === "right" ? d.w - 70 : d.w / 2, y: mid },
-      // Khu an toàn đông người hơn bãi quái; mỗi khu một nhóm tên khác nhau.
-      bots: Array.from({ length: z.safe ? 6 : z.boss ? 2 : NAMES.length }, (_, i) => NAMES[(s.zone * 5 + i) % NAMES.length]),
+      w: m.w, h: m.h, monsterLevel: z.level, hp: hpOf(s.lv), atk: atkOf(s.lv, s.wpn), boss: z.boss, blocked: m.cam,
+      homes: z.safe ? [] : m.bay.length > 0 ? m.bay : z.boss ? undefined : bayTuDong(m),
+      bosses: z.safe || z.boss ? [] : bossTuDong(m),
+      entry: choVao(m, this.entry === "left" ? 70 : this.entry === "right" ? m.w - 70 : m.w / 2),
+      // Mỗi khu một nhóm tên khác nhau.
+      bots: Array.from({ length: z.boss ? 2 : 8 }, (_, i) => NAMES[(s.zone * 5 + i) % NAMES.length]),
       elements: [z.element],
     });
     b.player.name = s.name;
     b.auto = this.auto && !z.safe;
     b.onKill = () => this.onKill(b, z);
-    this.img(d.file);
+    for (const h of [...m.nen, ...m.vat]) this.img(h.file);
+    if (m.o) for (const t of this.bo!.bo) this.img(O_DIR + t.f);
     return b;
   }
 
@@ -171,8 +202,9 @@ export class MmoScene extends BaiScene {
     this.clock += dt;
     if (!this.dlg.open) {
       const k = this.keys;
-      const dx = (k.has("d") || k.has("arrowright") ? 1 : 0) - (k.has("a") || k.has("arrowleft") ? 1 : 0);
-      const dy = (k.has("s") || k.has("arrowdown") ? 1 : 0) - (k.has("w") || k.has("arrowup") ? 1 : 0);
+      // Chỉ phím mũi tên: Q W E R T là phím chiêu (người dùng chốt 2026-11-10), nên bỏ W A S D.
+      const dx = (k.has("arrowright") ? 1 : 0) - (k.has("arrowleft") ? 1 : 0);
+      const dy = (k.has("arrowdown") ? 1 : 0) - (k.has("arrowup") ? 1 : 0);
       if (dx || dy) {
         b.moveTo(b.player.x + dx * 90, b.player.y + dy * 90);
         this.keyMove = true;
@@ -200,10 +232,10 @@ export class MmoScene extends BaiScene {
     if (e.repeat) return;
     const b = this.bai;
     if (!b) return;
-    const n = Number(k);
-    if (n >= 1 && n <= BAI.skills.length) b.cast(BAI.skills[n - 1]);
-    else if (k === "6" || k === "r") b.castUlt();
-    else if (k === "q") this.act("pot");
+    const i = k.length !== 1 ? -1 : k >= "1" && k <= "6" ? Number(k) - 1 : KEYS.indexOf(k);
+    if (i >= 0 && i < BAI.skills.length) b.cast(BAI.skills[i]);
+    else if (i === BAI.skills.length) b.castUlt();
+    else if (k === "z") this.act("pot");
     else if (k === "f") this.act("auto");
     else if (k === "m") this.act("map");
     else if (k === "b") this.act("shop");
@@ -251,10 +283,10 @@ export class MmoScene extends BaiScene {
     q(".xp i").style.width = `${(100 * s.xp) / need}%`;
     q(".xp span").textContent = `Cấp ${s.lv} · Tu vi ${s.xp}/${need}`;
     const pot = q('[data-a="pot"]') as HTMLButtonElement;
-    pot.textContent = cd > 0 ? `Bình máu ×${s.pots} (${cd}s)` : `Bình máu ×${s.pots}`;
+    pot.textContent = cd > 0 ? `Z · Bình ×${s.pots} (${cd}s)` : `Z · Bình máu ×${s.pots}`;
     pot.disabled = s.pots <= 0 || cd > 0 || !b.player.alive;
     const auto = q('[data-a="auto"]');
-    auto.textContent = this.auto ? "Auto: bật" : "Auto: tắt";
+    auto.textContent = this.auto ? "F · Auto bật" : "F · Auto tắt";
     auto.classList.toggle("on", this.auto);
     (q('[data-a="shop"]') as HTMLButtonElement).disabled = !zone(s.zone).safe;
   }
@@ -281,60 +313,49 @@ export class MmoScene extends BaiScene {
     return i.complete && i.naturalWidth > 0 ? i : null;
   }
 
-  /** Chỗ đứng của tiệm và trận truyền tống ở khu an toàn. */
-  private spots(b: Bai): { file: string; label: string; act: string; x: number; y: number }[] {
-    return [
-      { file: "cong_trinh/chung/thuong_hoi", label: "Thương hội", act: "shop", x: b.w * 0.36, y: b.top + 30 },
-      { file: "cong_trinh/chung/truyen_tong_tran", label: "Truyền tống trận", act: "map", x: b.w * 0.66, y: b.top + 30 },
-    ];
-  }
-
   protected override ground(ctx: CanvasRenderingContext2D, b: Bai): void {
     const z = zone(this.save.zone);
-    const bg = this.ready(this.size(z).file);
+    const m = this.map_!;
     ctx.imageSmoothingEnabled = false;
-    if (bg) {
-      const vis = this.view ? this.camera.visible(this.view) : { x: 0, y: 0, w: b.w, h: b.h };
-      for (let j = 0; j * H < b.h; j++) {
-        for (let i = 0; i * W < b.w; i++) {
-          // Chỉ vẽ tấm đang nằm trong vùng nhìn.
-          if ((i + 1) * W < vis.x || i * W > vis.x + vis.w || (j + 1) * H < vis.y || j * H > vis.y + vis.h) continue;
-          ctx.save();
-          ctx.translate(i * W + (i % 2 ? W : 0), j * H + (j % 2 ? H : 0));
-          ctx.scale(i % 2 ? -1 : 1, j % 2 ? -1 : 1);
-          // Rộng thêm 1 đơn vị để hai tấm kề nhau không hở khe khi zoom lẻ.
-          ctx.drawImage(bg, 0, 0, W + 1, H + 1);
-          ctx.restore();
-        }
-      }
-    } else {
-      ctx.fillStyle = "#39422c";
-      ctx.fillRect(0, 0, b.w, b.h);
+    ctx.fillStyle = "#39422c";
+    ctx.fillRect(0, 0, b.w, b.h);
+    const hinh = (h: MapKhu["nen"][number]) => {
+      const im = this.ready(h.file);
+      if (!im) return;
+      if (h.lat) {
+        ctx.save();
+        ctx.translate(h.x + h.w, h.y);
+        ctx.scale(-1, 1);
+        ctx.drawImage(im, 0, 0, h.w, h.h);
+        ctx.restore();
+      } else ctx.drawImage(im, h.x, h.y, h.w, h.h);
+    };
+    m.nen.forEach(hinh);
+    if (m.o) {
+      let cv = this.nenO.get(m) ?? null;
+      if (!cv && (cv = veLop(m.o, this.bo!, (f) => this.ready(O_DIR + f)))) this.nenO.set(m, cv);
+      if (cv) ctx.drawImage(cv, 0, 0, m.o.cot * m.o.co, m.o.hang * m.o.co);
     }
-    const mid = (b.top + b.h) / 2;
+    m.vat.forEach(hinh);
     const pulse = 0.55 + 0.25 * Math.sin(this.clock * 3);
     const gate = (x: number, idx: number, dir: 1 | -1) => {
       if (idx < 0 || idx >= ZONE_COUNT) return;
+      const mid = choVao(m, x - dir * 70).y;
       const g = ctx.createRadialGradient(x, mid, 4, x, mid, 150);
       g.addColorStop(0, `rgba(255, 236, 170, ${pulse})`);
       g.addColorStop(1, "rgba(255, 236, 170, 0)");
       ctx.fillStyle = g;
-      ctx.fillRect(x - 150, b.top, 300, b.h - b.top);
+      ctx.fillRect(x - 150, 0, 300, b.h);
       const t = zone(idx);
       this.text(ctx, `${dir < 0 ? "◀ " : ""}${t.name}${t.safe ? "" : ` (cấp ${t.level})`}${dir > 0 ? " ▶" : ""}`, x - dir * 14, mid - 70, dir < 0 ? "left" : "right");
     };
     gate(0, z.idx - 1, -1);
     gate(b.w, z.idx + 1, 1);
-    if (!z.safe) return;
-    for (const s of this.spots(b)) {
-      const im = this.ready(s.file);
-      if (im) ctx.drawImage(im, s.x - 110, s.y - 118, 220, 132);
-      this.text(ctx, s.label, s.x, s.y + 30, "center");
-    }
+    for (const h of m.vat) if (h.act) this.text(ctx, ACT_LABEL[h.act], h.x + h.w / 2, h.y + h.h + 24, "center");
   }
 
   private text(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, align: CanvasTextAlign): void {
-    ctx.font = `700 15px ${FONT_TEXT}`;
+    ctx.font = `700 ${15 / Math.min(1, this.camera.zoom)}px ${FONT_TEXT}`;
     ctx.textAlign = align;
     ctx.lineWidth = 4;
     ctx.strokeStyle = "rgba(20, 14, 8, 0.85)";
@@ -344,12 +365,11 @@ export class MmoScene extends BaiScene {
   }
 
   protected override tap(sx: number, sy: number): void {
-    const b = this.bai;
     const d = this.down;
-    if (b && d && this.view && zone(this.save.zone).safe && Math.hypot(sx - d.x, sy - d.y) <= 10) {
+    if (this.map_ && d && this.view && Math.hypot(sx - d.x, sy - d.y) <= 10) {
       const p = this.camera.toWorld(sx, sy, this.view);
-      const hit = this.spots(b).find((s) => Math.abs(p.x - s.x) < 100 && p.y > s.y - 118 && p.y < s.y + 36);
-      if (hit) {
+      const hit = this.map_.vat.find((h) => h.act && p.x >= h.x && p.x <= h.x + h.w && p.y >= h.y && p.y <= h.y + h.h + 36);
+      if (hit?.act) {
         this.down = null;
         this.act(hit.act);
         return;
@@ -359,14 +379,16 @@ export class MmoScene extends BaiScene {
   }
 
   override draw(v: View): void {
+    // Hiệu ứng nền theo hệ của vùng (lá rơi ở rừng Mộc, tàn lửa ở núi Hỏa, tuyết, sương): phủ vùng đang nhìn.
+    this.vfx.nenTheo(this.bai ? zone(this.save.zone).element : null, this.nhin(v));
     super.draw(v);
     const b = this.bai;
     if (!b) return;
     const ctx = v.ctx;
     ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
     // Bản đồ nhỏ góc phải: chấm quái đỏ, người khác xanh, mình vàng.
-    const mw = Math.min(b.w > W ? 220 : 150, v.w * 0.35);
-    const mh = (mw * (b.h - b.top)) / b.w;
+    const mw = Math.min(150, v.w * 0.3);
+    const mh = (mw * b.h) / b.w;
     const mx = v.w - mw - 8;
     ctx.fillStyle = "rgba(20, 14, 8, 0.6)";
     ctx.fillRect(mx - 2, 6, mw + 4, mh + 4);
@@ -374,7 +396,7 @@ export class MmoScene extends BaiScene {
       if (!a.alive) continue;
       ctx.fillStyle = a.kind === "monster" ? "#e0553f" : a.kind === "bot" ? "#9cc7e6" : "#ffd34d";
       const r = a.kind === "player" ? 3 : a.boss ? 4 : 2;
-      ctx.fillRect(mx + (a.x / b.w) * mw - r / 2, 8 + ((a.y - b.top) / (b.h - b.top)) * mh - r / 2, r, r);
+      ctx.fillRect(mx + (a.x / b.w) * mw - r / 2, 8 + (a.y / b.h) * mh - r / 2, r, r);
     }
     // Thông báo: tên khu, lên cấp, nhặt đồ.
     this.notes = this.notes.filter((n) => this.clock - n.at < 3);
@@ -483,10 +505,13 @@ export class MmoScene extends BaiScene {
 }
 
 const HELP = `<ul>
-  <li><b>Đi:</b> chạm đất, hoặc phím W A S D / mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
-  <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím 1–5; chiêu cuối phím R (mở ở cấp 150).</li>
-  <li><b>Q</b> uống bình máu · <b>F</b> treo auto · <b>M</b> truyền tống · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
+  <li><b>Đi:</b> chạm đất, hoặc phím mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
+  <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím 1–5 hoặc Q W E R T; chiêu cuối phím 6 (mở ở cấp 150).</li>
+  <li><b>Z</b> uống bình máu · <b>F</b> treo auto · <b>M</b> truyền tống · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
+
+/** Phím chữ của năm chiêu đầu, theo thứ tự ô. */
+const KEYS = "qwert";
 
 let styled = false;
 function addStyle(): void {
@@ -494,6 +519,24 @@ function addStyle(): void {
   styled = true;
   const st = document.createElement("style");
   st.textContent = `.mmo-bar{display:grid;gap:4px}
+/* Thanh hành động kiểu MMORPG: một bảng gọn giữa đáy màn hình. Trái: máu, mana, nội tại; giữa: ô chiêu có nhãn phím; phải: nút phụ. */
+.mmo-hud kbd{position:absolute;top:1px;left:3px;font:700 10px/1.2 system-ui,sans-serif;color:#f6e3ad;text-shadow:0 1px 0 #000}
+.mmo-hud .bai-skills button{position:relative}
+@media (min-width:760px){
+.mmo-hud{width:fit-content;margin:0 auto;padding:6px 10px 6px;border:1px solid var(--line);border-bottom:0;border-radius:8px 8px 0 0;gap:3px 10px;align-items:center;
+grid-template-columns:230px auto auto;grid-template-areas:"st st st" "hp sk bt" "mp sk bt" "ul sk bt" "xp xp xp"}
+.mmo-hud .mmo-bar{display:contents}
+.mmo-hud .bai-row{grid-area:st;font-size:11px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:780px}
+.mmo-hud .hp{grid-area:hp;height:18px}.mmo-hud .mp{grid-area:mp}.mmo-hud .ul{grid-area:ul;height:10px}.mmo-hud .ul span{line-height:10px;font-size:9px}
+.mmo-hud .hp span{line-height:18px}
+.mmo-hud .xp{grid-area:xp;height:8px}.mmo-hud .xp span{line-height:8px;font-size:8px;text-align:center;padding:0}
+.mmo-hud .bai-skills{grid-area:sk;grid-template-columns:repeat(6,58px)}
+.mmo-hud .bai-skills button{height:58px;padding:12px 1px 1px}
+.mmo-hud .bai-skills b{font-size:10px}
+.mmo-hud .mmo-btns{grid-area:bt;grid-template-columns:repeat(2,auto);gap:3px}
+.mmo-hud .mmo-btns button{height:26px;padding:0 8px;font-size:11px;white-space:nowrap}
+.mmo-hud .mmo-btns [data-a="help"]{grid-column:1/-1;height:20px}
+}
 .bai-bar.xp{height:12px}.bai-bar.xp i{background:#8e6bd1}.bai-bar.xp span{line-height:12px;font-size:10px}
 .mmo-btns{display:grid;grid-template-columns:2fr 1.4fr 1fr 1.2fr .5fr;gap:4px}
 .mmo-btns button{min-width:0;height:34px;border:1px solid var(--line);border-radius:6px;background:#241f1a;color:var(--ink);font:inherit;font-size:12px}

@@ -15,6 +15,7 @@ import { createArenaBackdrop, type ArenaBackdrop } from "../../three/index.ts";
 import { animInfo, drawCharacter, resolveLook, type Anim } from "../battle/character.ts";
 import { Bai, type Actor } from "./bai.ts";
 import { BAI, ultPoints } from "./thamSo.ts";
+import { VfxSf, type Nhin } from "./vfxSf.ts";
 
 const SIZE = 56; // cạnh hình người, đơn vị thế giới
 const TAP_PICK = 40; // chạm cách quái chừng này thì tính là chạm quái
@@ -139,9 +140,34 @@ export class BaiScene implements Scene {
 
   update(dt: number): void {
     if (!this.bai) return;
+    this.vfx.update(dt);
     this.bai.step(Math.min(dt, 0.1));
     this.follow(Math.min(1, dt * 6));
     this.syncHud();
+  }
+
+  /** Hiệu ứng Sprite Fusion (src/vfx_sf); mỗi sự kiện fx của bãi chỉ sinh hiệu ứng một lần. */
+  protected readonly vfx = new VfxSf();
+  private daVe = new WeakSet<object>();
+
+  /** Vùng thế giới đang hiện trên màn. */
+  protected nhin(v: View): Nhin {
+    const z = this.camera.zoom;
+    return { x: this.camera.x - v.w / 2 / z, y: this.camera.y - (v.h - v.bottom) / 2 / z, w: v.w / z, h: v.h / z };
+  }
+
+  /** Sinh hiệu ứng cho các sự kiện mới của bãi. */
+  private sinhVfx(b: Bai): void {
+    for (const f of b.fx) {
+      if (this.daVe.has(f)) continue;
+      this.daVe.add(f);
+      if (f.kind === "skill") {
+        if (f.skill === "hoi_phuc") this.vfx.hoiPhuc(f.x, f.y);
+        else if (f.skill === "ho_the") this.vfx.hoThe(f.x, f.y, BAI.shieldSec);
+        else this.vfx.danh(f.el, f.skill, f.x, f.y, f.r ?? 60, f.dir ?? 1);
+      } else if (f.kind === "ult") this.vfx.chieuCuoi(f.el, f.x, f.y, f.r ?? BAI.ultRadius);
+      else if (f.kind === "hit" && f.me) this.vfx.trungDon(f.x, f.y, f.dir ?? 1);
+    }
   }
 
   draw(v: View): void {
@@ -151,11 +177,13 @@ export class BaiScene implements Scene {
     const ctx = v.ctx;
     this.camera.apply(v);
     this.ground(ctx, b);
+    this.sinhVfx(b);
     const p = b.player;
     const tgt = b.get(p.target);
     if (p.goal) this.ring(ctx, p.goal.x, p.goal.y, 10, "rgba(255, 250, 240, 0.7)");
     if (tgt?.alive) this.ring(ctx, tgt.x, tgt.y, 26, "#ffd34d");
     for (const a of [...b.actors].filter((a) => a.alive).sort((x, y) => x.y - y.y)) this.drawActor(ctx, b, a);
+    this.vfx.draw(ctx, this.nhin(v));
     this.drawFx(ctx, b);
   }
 
@@ -190,7 +218,8 @@ export class BaiScene implements Scene {
       const anim = this.anim(b, a, look);
       if (look && anim) drawCharacter(ctx, this.sprites, look, anim.anim, anim.frame, a.x, a.y, SIZE / 64, mirror);
       else this.blob(ctx, a);
-      ctx.font = `600 11px ${FONT_TEXT}`;
+      // Camera lùi xa (scenes/mmo) thì chữ vẫn giữ cỡ đọc được trên màn hình.
+      ctx.font = `600 ${11 / Math.min(1, this.camera.zoom)}px ${FONT_TEXT}`;
       ctx.textAlign = "center";
       ctx.fillStyle = a.kind === "player" ? "#ffd34d" : "#fffaf0";
       ctx.fillText(a.kind === "player" ? tr(a.name) : a.name, a.x, top - 12);
@@ -234,14 +263,15 @@ export class BaiScene implements Scene {
     ctx.strokeStyle = "rgba(0, 0, 0, 0.75)";
     b.fx.forEach((f, i) => {
       const age = b.t - f.t;
-      if (f.kind === "skill" || f.kind === "ult") {
-        const big = f.kind === "ult";
-        burst(ctx, f.el, f.x, f.y - 20, age / (big ? 1.1 : 0.6), i * 7919 + Math.floor(f.t * 10), big ? 28 : 12, f.r ?? 60, big ? 9 : 6);
+      // Chiêu và chiêu cuối vẽ bằng vfx (sinhVfx); giữ vòng hạt cũ cho chiêu cuối để thấy rõ bán kính.
+      if (f.kind === "ult") {
+        burst(ctx, f.el, f.x, f.y - 20, age / 1.1, i * 7919 + Math.floor(f.t * 10), 28, f.r ?? 60, 9);
         return;
       }
+      if (f.kind === "skill") return;
       if (age > 0.8 || !f.amount) return;
       ctx.globalAlpha = 1 - age / 0.8;
-      ctx.font = `bold 15px ${FONT_TEXT}`;
+      ctx.font = `bold ${15 / Math.min(1, this.camera.zoom)}px ${FONT_TEXT}`;
       const text = (f.kind === "heal" ? "+" : "") + f.amount;
       const y = f.y - SIZE - 14 - age * 40;
       ctx.strokeText(text, f.x, y);

@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { Bai } from "../bai/bai.ts";
+import { bayTuDong, bossTuDong, choVao, macDinh, trongCam } from "./mapKhu.ts";
+import { BAI } from "../bai/thamSo.ts";
 import { atkOf, buyPot, hpOf, kill, newSave, nextCombat, QUEST_N, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT } from "./tienTrinh.ts";
 
 test("dải thế giới: sơn môn an toàn, cấp quái tăng dần, cửa bí cảnh có thủ lĩnh", () => {
@@ -55,8 +57,39 @@ test("khu của thế giới: quái đứng trong dải đi được, thủ lĩn
   // Bãi rộng 5×4 tấm: 48 bầy rải khắp cả hai chiều, không dồn một dải.
   const big = new Bai(1, "moc", 2, { w: 6880, h: 3072, packs: 48, bots: [] });
   const homes = big.actors.filter((a) => a.kind === "monster").map((a) => a.home);
-  assert.equal(homes.length, 48 * 4);
+  assert.equal(homes.length, 48 * BAI.perPack);
   for (const hm of homes) assert.ok(hm.x > 0 && hm.x < 6880 && hm.y > 0 && hm.y < 3072);
   assert.ok(Math.min(...homes.map((hm) => hm.y)) < 600 && Math.max(...homes.map((hm) => hm.y)) > 2400);
   assert.ok(Math.min(...homes.map((hm) => hm.x)) < 800 && Math.max(...homes.map((hm) => hm.x)) > 6000);
+});
+
+test("map khu: mặc định có dải cấm, bầy tự rải và chỗ vào đều nằm ngoài vùng cấm; người không đi vào vùng cấm", () => {
+  const m = macDinh(zone(1));
+  assert.equal(macDinh(zone(0)).vat.length, 2);
+  const homes = bayTuDong(m);
+  assert.equal(homes.length, 24);
+  for (const p of homes) assert.ok(!trongCam(m, p.x, p.y));
+  const e = choVao(m, 70);
+  assert.ok(!trongCam(m, e.x, e.y));
+  // Boss tự đặt nằm ngoài vùng cấm, xa cửa trái; là một con riêng, máu gấp BAI.bossHp, hồi sinh chậm.
+  const bo = bossTuDong(m);
+  assert.equal(bo.length, 1);
+  assert.ok(!trongCam(m, bo[0].x, bo[0].y) && bo[0].x > m.w / 2);
+  assert.deepEqual(bossTuDong({ ...m, boss: [{ x: 5, y: 5, ten: "Lão Hổ" }] }), [{ x: 5, y: 5, ten: "Lão Hổ" }]);
+  const b = new Bai(1, "moc", 2, { w: m.w, h: m.h, homes, blocked: m.cam, entry: e, bots: [], bosses: bo });
+  assert.equal(b.actors.filter((a) => a.kind === "monster").length, 24 * BAI.perPack + 1);
+  const boss = b.actors.find((a) => a.boss)!;
+  assert.equal(boss.name, "Thủ lĩnh");
+  assert.equal(boss.hpMax, BAI.monsterHp(b.mLevel) * BAI.bossHp);
+  b.player.atk = boss.hpMax * 2;
+  boss.x = b.player.x + 10;
+  boss.y = b.player.y;
+  b.attack(boss.id);
+  for (let i = 0; i < 60 * 3 && boss.alive; i++) b.step(1 / 60);
+  assert.equal(boss.alive, false);
+  assert.ok(boss.respawnAt - b.t > BAI.respawn);
+  assert.equal(b.tuVi, BAI.tuVi(b.mLevel) * BAI.bossTuVi);
+  b.moveTo(e.x, 10);
+  for (let i = 0; i < 60 * 30; i++) b.step(1 / 60);
+  assert.ok(!trongCam(m, b.player.x, b.player.y) && b.player.y < e.y);
 });

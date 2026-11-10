@@ -1,0 +1,110 @@
+/* Lớp áo tối viền vàng cho HUD bản MMORPG (choi.html). Chỉ đè màu và khung, không đổi bố cục.
+   Tiền tố `body` để thắng các <style> mà scene chèn vào lúc chạy (cùng bộ chọn, chèn sau). */
+:root {
+  --tv-nen: #0f0c09;
+  --tv-go: linear-gradient(180deg, #3a2a1b 0%, #261a10 55%, #17100a 100%);
+  --tv-vang: #d0a85a;
+  --tv-vang-sang: #f6e3ad;
+  --tv-vang-toi: #6b4a1c;
+  --tv-ngoc: #7fb08c;
+  --tv-giay: #eadfc4;
+  --tv-mo: #a89878;
+  --tv-do: #b04a3e;
+  --tv-vien: 1px solid var(--tv-vang-toi);
+  --tv-sang-trong: inset 0 1px 0 rgba(255, 226, 160, 0.18), inset 0 0 0 1px rgba(0, 0, 0, 0.55);
+}
+
+/* Khung HUD dưới: gỗ tối, nẹp vàng phía trên */
+body .bai-hud {
+  background: var(--tv-go);
+  border-top: 2px solid var(--tv-vang);
+  box-shadow: 0 -1px 0 #000, inset 0 2px 0 rgba(255, 226, 160, 0.12), 0 -8px 24px rgba(0, 0, 0, 0.5);
+  color: var(--tv-giay);
+}
+body .bai-row { color: var(--tv-mo); }
+
+/* Thanh máu, linh lực, tu vi: rãnh đen, viền vàng tối, ruột chuyển sắc */
+body .bai-bar {
+  border-radius: 3px;
+  background: #0a0806;
+  border: var(--tv-vien);
+  box-shadow: inset 0 1px 3px #000;
+}
+body .bai-bar i { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 0 -2px 0 rgba(0, 0, 0, 0.28); }
+body .bai-bar.hp i { background: linear-gradient(180deg, #c9584a, #8a2e25); }
+body .bai-bar.mp i { background: linear-gradient(180deg, #5f9fd0, #2f5f94); }
+body .bai-bar.ul i { background: linear-gradient(180deg, #f1cf7a, #b37f25); }
+body .bai-bar.xp i { background: linear-gradient(180deg, #8fc79c, #4d8460); }
+body .bai-bar span { color: var(--tv-vang-sang); text-shadow: 0 1px 0 #000, 0 0 3px #000; font-weight: 600; }
+
+/* Nút: gỗ tối, vành vàng, chữ có chân */
+body .mmo-btns button,
+body .bai-skills button {
+  background: var(--tv-go);
+  border: var(--tv-vien);
+  border-radius: 4px;
+  box-shadow: var(--tv-sang-trong);
+  color: var(--tv-giay);
+  font-family: "Lora Variable", Cambria, serif;
+  transition: transform 80ms ease-out, border-color 120ms ease-out;
+}
+body .mmo-btns button:not(:disabled):active,
+body .bai-skills button:not(:disabled):active { transform: scale(0.96); }
+body .bai-skills button { border-color: var(--tv-vang); }
+body .bai-skills b { color: var(--tv-vang-sang); }
+body .bai-skills small { color: var(--tv-mo); }
+body .bai-skills .ult {
+  border-color: var(--tv-vang-sang);
+  box-shadow: var(--tv-sang-trong), 0 0 8px rgba(240, 200, 110, 0.45);
+}
+body .mmo-btns button.on {
+  border-color: var(--tv-vang-sang);
+  color: var(--tv-vang-sang);
+  box-shadow: var(--tv-sang-trong), 0 0 8px rgba(240, 200, 110, 0.4);
+}
+body .mmo-btns button:focus-visible,
+body .bai-skills button:focus-visible,
+body .mmo-dlg button:focus-visible { outline: 2px solid var(--tv-vang-sang); outline-offset: 1px; }
+
+/* Bảng hội thoại: nền tối, khung vàng hai lớp */
+body .mmo-dlg {
+  background: radial-gradient(120% 60% at 50% 0%, rgba(255, 214, 140, 0.1), transparent 60%), #17120d;
+  color: var(--tv-giay);
+  border: 1px solid var(--tv-vang);
+  border-radius: 4px;
+  outline: 1px solid var(--tv-vang-toi);
+  outline-offset: -5px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+}
+body .mmo-dlg::backdrop { background: rgba(5, 4, 3, 0.72); }
+body .mmo-dlg h2 {
+  color: var(--tv-vang);
+  text-align: center;
+  letter-spacing: 0.04em;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--tv-vang-toi);
+  margin-bottom: 10px;
+}
+body .mmo-dlg input,
+body .mmo-dlg select {
+  background: #0c0a08;
+  border: var(--tv-vien);
+  border-radius: 4px;
+  color: var(--tv-giay);
+}
+body .mmo-dlg button {
+  background: var(--tv-go);
+  border: var(--tv-vien);
+  border-radius: 4px;
+  box-shadow: var(--tv-sang-trong);
+  color: var(--tv-giay);
+}
+body .mmo-dlg button.go {
+  background: linear-gradient(180deg, #e9c97c, #b98a33 60%, #8f6520);
+  border-color: var(--tv-vang-sang);
+  color: #241708;
+  text-shadow: 0 1px 0 rgba(255, 240, 200, 0.5);
+}
+body .mmo-dlg button.bad { color: #e08a7c; border-color: #6e2c25; }
+body .mmo-dlg button.on { border: 1px solid var(--tv-vang-sang); color: var(--tv-vang-sang); }
+body .mmo-list small { color: var(--tv-mo); }

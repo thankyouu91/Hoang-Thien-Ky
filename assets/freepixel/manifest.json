@@ -1,0 +1,372 @@
+{
+ "license": "FreePixel (freepixel.art): miễn phí dùng cá nhân và thương mại, không cần ghi công; xem https://freepixel.art/license/",
+ "downloaded": "2026-11-10",
+ "size": "200×200 PNG trong suốt",
+ "assets": [
+  {
+   "file": "cay/soi_xanh.png",
+   "description": "Cây sồi tán xanh",
+   "source": "freepixel.art environment nature 0000"
+  },
+  {
+   "file": "cay/thong.png",
+   "description": "Cây thông",
+   "source": "freepixel.art environment nature 0001"
+  },
+  {
+   "file": "cay/anh_dao.png",
+   "description": "Cây anh đào hồng",
+   "source": "freepixel.art environment nature 0002"
+  },
+  {
+   "file": "cay/cay_kho_lon.png",
+   "description": "Cây khô lớn trụi lá",
+   "source": "freepixel.art environment nature 0003"
+  },
+  {
+   "file": "cay/da_co_thu.png",
+   "description": "Cây đa cổ thụ rễ rủ",
+   "source": "freepixel.art environment nature 0004"
+  },
+  {
+   "file": "cay/cay_lam_luc.png",
+   "description": "Cây tán lam lục",
+   "source": "freepixel.art environment nature 0007"
+  },
+  {
+   "file": "cay/phong_do.png",
+   "description": "Cây phong lá đỏ cam",
+   "source": "freepixel.art environment nature 0008"
+  },
+  {
+   "file": "cay/bach_duong.png",
+   "description": "Cây bạch dương lá bạc",
+   "source": "freepixel.art environment nature 0009"
+  },
+  {
+   "file": "cay/cay_an_qua.png",
+   "description": "Cây ăn quả đỏ",
+   "source": "freepixel.art environment nature 0010"
+  },
+  {
+   "file": "cay/truc_cao.png",
+   "description": "Khóm trúc cao",
+   "source": "freepixel.art environment nature 0011"
+  },
+  {
+   "file": "cay/cay_hoa_lam.png",
+   "description": "Cây hoa lam",
+   "source": "freepixel.art environment nature 0012"
+  },
+  {
+   "file": "cay/co_thu_gia.png",
+   "description": "Cây cổ thụ già thân to",
+   "source": "freepixel.art environment nature 0013"
+  },
+  {
+   "file": "cay/tung_bonsai.png",
+   "description": "Cây tùng dáng bonsai",
+   "source": "freepixel.art environment nature 0014"
+  },
+  {
+   "file": "cay/thong_tuyet.png",
+   "description": "Cây thông phủ tuyết",
+   "source": "freepixel.art environment nature 0015"
+  },
+  {
+   "file": "cay/cay_tron.png",
+   "description": "Cây tán tròn",
+   "source": "freepixel.art environment nature 0016"
+  },
+  {
+   "file": "cay/cay_tim.png",
+   "description": "Cây tán tím sẫm",
+   "source": "freepixel.art environment nature 0017"
+  },
+  {
+   "file": "cay/anh_dao_rung.png",
+   "description": "Cây anh đào rụng hoa",
+   "source": "freepixel.art environment nature 0018"
+  },
+  {
+   "file": "da/da_xam_lon.png",
+   "description": "Tảng đá xám lớn",
+   "source": "freepixel.art environment nature 0020"
+  },
+  {
+   "file": "da/da_co.png",
+   "description": "Tảng đá phủ cỏ",
+   "source": "freepixel.art environment nature 0023"
+  },
+  {
+   "file": "da/da_nham_thach.png",
+   "description": "Đá nham thạch nứt lửa",
+   "source": "freepixel.art environment nature 0024"
+  },
+  {
+   "file": "da/da_nau.png",
+   "description": "Tảng đá nâu",
+   "source": "freepixel.art environment nature 0026"
+  },
+  {
+   "file": "da/da_xep.png",
+   "description": "Đá xếp tầng xám",
+   "source": "freepixel.art environment nature 0027"
+  },
+  {
+   "file": "da/da_lam.png",
+   "description": "Tảng đá lam",
+   "source": "freepixel.art environment nature 0033"
+  },
+  {
+   "file": "da/goc_cay_lon.png",
+   "description": "Gốc cây lớn",
+   "source": "freepixel.art environment nature 0035"
+  },
+  {
+   "file": "da/da_cuoi_xam.png",
+   "description": "Đá cuội xám",
+   "source": "freepixel.art environment nature 0036"
+  },
+  {
+   "file": "da/da_bang.png",
+   "description": "Tảng băng",
+   "source": "freepixel.art environment nature 0037"
+  },
+  {
+   "file": "da/phien_da.png",
+   "description": "Phiến đá lát",
+   "source": "freepixel.art environment nature 0038"
+  },
+  {
+   "file": "da/da_den.png",
+   "description": "Đá đen vân đỏ",
+   "source": "freepixel.art environment nature 0039"
+  },
+  {
+   "file": "co/co_bui.png",
+   "description": "Bụi cỏ",
+   "source": "freepixel.art environment nature 0043"
+  },
+  {
+   "file": "co/duong_xi.png",
+   "description": "Dương xỉ",
+   "source": "freepixel.art environment nature 0044"
+  },
+  {
+   "file": "co/sen.png",
+   "description": "Lá sen có hoa",
+   "source": "freepixel.art environment nature 0045"
+  },
+  {
+   "file": "co/lau.png",
+   "description": "Bụi lau",
+   "source": "freepixel.art environment nature 0046"
+  },
+  {
+   "file": "co/oai_huong.png",
+   "description": "Bụi oải hương",
+   "source": "freepixel.art environment nature 0048"
+  },
+  {
+   "file": "co/lua_mi.png",
+   "description": "Bó lúa mì",
+   "source": "freepixel.art environment nature 0053"
+  },
+  {
+   "file": "co/co_cao_xanh.png",
+   "description": "Cỏ cao xanh",
+   "source": "freepixel.art environment nature 0056"
+  },
+  {
+   "file": "co/cau_gai.png",
+   "description": "Quả cầu gai",
+   "source": "freepixel.art environment nature 0058"
+  },
+  {
+   "file": "nuoc/thac.png",
+   "description": "Thác nước",
+   "source": "freepixel.art environment nature 0060"
+  },
+  {
+   "file": "nuoc/ao_ca.png",
+   "description": "Ao cá koi tròn",
+   "source": "freepixel.art environment nature 0061"
+  },
+  {
+   "file": "nuoc/gieng.png",
+   "description": "Giếng đá mái gỗ",
+   "source": "freepixel.art environment nature 0063"
+  },
+  {
+   "file": "nuoc/suoi_phun.png",
+   "description": "Suối phun",
+   "source": "freepixel.art environment nature 0064"
+  },
+  {
+   "file": "nuoc/linh_tuyen.png",
+   "description": "Linh tuyền phun cao",
+   "source": "freepixel.art environment nature 0065"
+  },
+  {
+   "file": "nuoc/ao_nho.png",
+   "description": "Ao nhỏ",
+   "source": "freepixel.art environment nature 0068"
+  },
+  {
+   "file": "nuoc/suoi_da.png",
+   "description": "Suối chảy qua đá",
+   "source": "freepixel.art environment nature 0069"
+  },
+  {
+   "file": "nuoc/dao_nho.png",
+   "description": "Đảo nhỏ giữa nước",
+   "source": "freepixel.art environment nature 0072"
+  },
+  {
+   "file": "nuoc/suoi_lam.png",
+   "description": "Suối lam",
+   "source": "freepixel.art environment nature 0078"
+  },
+  {
+   "file": "cong_trinh/hang_bang.png",
+   "description": "Hang băng",
+   "source": "freepixel.art environment structures 0012"
+  },
+  {
+   "file": "cong_trinh/cong_da.png",
+   "description": "Cổng vòm đá",
+   "source": "freepixel.art environment structures 0013"
+  },
+  {
+   "file": "cong_trinh/mieu_hang.png",
+   "description": "Miếu thờ trong hang",
+   "source": "freepixel.art environment structures 0014"
+  },
+  {
+   "file": "cong_trinh/cua_hang.png",
+   "description": "Cửa hang đá",
+   "source": "freepixel.art environment structures 0016"
+  },
+  {
+   "file": "cong_trinh/cau_go.png",
+   "description": "Cầu gỗ",
+   "source": "freepixel.art environment structures 0017"
+  },
+  {
+   "file": "cong_trinh/cau_da.png",
+   "description": "Cầu đá bắc qua nước",
+   "source": "freepixel.art environment structures 0019"
+  },
+  {
+   "file": "cong_trinh/cua_nguc.png",
+   "description": "Cửa ngục đá",
+   "source": "freepixel.art environment structures 0050"
+  },
+  {
+   "file": "cong_trinh/duoc.png",
+   "description": "Đuốc cháy",
+   "source": "freepixel.art environment structures 0051"
+  },
+  {
+   "file": "cong_trinh/cot_da.png",
+   "description": "Cột đá cổ",
+   "source": "freepixel.art environment structures 0058"
+  },
+  {
+   "file": "cong_trinh/cot_da_vo.png",
+   "description": "Cột đá vỡ",
+   "source": "freepixel.art environment structures 0059"
+  },
+  {
+   "file": "cong_trinh/cong_da_nho.png",
+   "description": "Cổng đá nhỏ",
+   "source": "freepixel.art environment structures 0066"
+  },
+  {
+   "file": "cong_trinh/cua_hang_sang.png",
+   "description": "Cửa hang có đèn",
+   "source": "freepixel.art environment structures 0067"
+  },
+  {
+   "file": "cong_trinh/truyen_tong_mon.png",
+   "description": "Cổng truyền tống xanh",
+   "source": "freepixel.art environment structures 0070"
+  },
+  {
+   "file": "cong_trinh/tran_lua.png",
+   "description": "Trận pháp lửa trên đất",
+   "source": "freepixel.art environment structures 0071"
+  },
+  {
+   "file": "cong_trinh/ho_den.png",
+   "description": "Hố sâu đen",
+   "source": "freepixel.art environment structures 0074"
+  },
+  {
+   "file": "cong_trinh/tinh_the.png",
+   "description": "Cụm tinh thể",
+   "source": "freepixel.art environment structures 0075"
+  },
+  {
+   "file": "cong_trinh/bang_chi_duong.png",
+   "description": "Bảng chỉ đường gỗ",
+   "source": "freepixel.art environment structures 0076"
+  },
+  {
+   "file": "cong_trinh/den_duong.png",
+   "description": "Đèn đường",
+   "source": "freepixel.art environment structures 0077"
+  },
+  {
+   "file": "cong_trinh/co_hong.png",
+   "description": "Cờ hồng",
+   "source": "freepixel.art environment structures 0078"
+  },
+  {
+   "file": "cong_trinh/lua_trai.png",
+   "description": "Lửa trại",
+   "source": "freepixel.art environment structures 0079"
+  },
+  {
+   "file": "cong_trinh/leu.png",
+   "description": "Lều vải",
+   "source": "freepixel.art environment structures 0080"
+  },
+  {
+   "file": "cong_trinh/ghe_da.png",
+   "description": "Ghế dài",
+   "source": "freepixel.art environment structures 0088"
+  },
+  {
+   "file": "cong_trinh/cong_sat.png",
+   "description": "Cổng vòm sắt",
+   "source": "freepixel.art environment structures 0092"
+  },
+  {
+   "file": "cong_trinh/bia_mo.png",
+   "description": "Bia mộ",
+   "source": "freepixel.art environment structures 0093"
+  },
+  {
+   "file": "cong_trinh/tuong_dong.png",
+   "description": "Tượng đồng",
+   "source": "freepixel.art environment structures 0094"
+  },
+  {
+   "file": "cong_trinh/dai_phun.png",
+   "description": "Đài phun nước",
+   "source": "freepixel.art environment structures 0095"
+  },
+  {
+   "file": "cong_trinh/chau_hoa.png",
+   "description": "Chậu hoa",
+   "source": "freepixel.art environment structures 0096"
+  },
+  {
+   "file": "cong_trinh/cot_la_ma.png",
+   "description": "Cột đá trắng",
+   "source": "freepixel.art environment structures 0099"
+  }
+ ]
+}

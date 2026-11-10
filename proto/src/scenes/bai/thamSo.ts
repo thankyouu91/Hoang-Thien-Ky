@@ -13,11 +13,16 @@ export const BAI = {
 
   /** Bầy quái: số bầy, số con mỗi bầy, bán kính đi loanh quanh quanh tổ, quá xa tổ thì bỏ đuổi về tổ */
   packs: 4,
-  perPack: 4,
-  roam: 110,
+  perPack: 6,
+  roam: 130,
   leash: 360,
   /** Giây chờ hồi sinh sau khi chết */
   respawn: 6,
+  /** Boss của khu (thủ lĩnh đứng một mình): bội máu, bội công, bội tu vi, giây hồi sinh */
+  bossHp: 10,
+  bossAtk: 2.2,
+  bossTuVi: 12,
+  bossRespawn: 90,
   /** Cấp quái của bãi mẫu (hang dị thú gần thành chủ) */
   level: 10,
   /** Quái theo cấp L: máu, công, giây giữa hai đòn, tốc độ đi loanh quanh và đuổi */

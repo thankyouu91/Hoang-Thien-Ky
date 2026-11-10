@@ -1,0 +1,1388 @@
+{
+ "w": 3456,
+ "h": 1920,
+ "nen": [],
+ "vat": [
+  {
+   "file": "vat_canh/bui_gai",
+   "x": 2088,
+   "y": 1470,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 264,
+   "y": -66,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 2616,
+   "y": -18,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3144,
+   "y": 1086,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/cay_kho",
+   "x": 2929.6,
+   "y": 180,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_hoa_trang",
+   "x": 264,
+   "y": 1518,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 3336,
+   "y": 558,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/da_nho",
+   "x": 264,
+   "y": 654,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 2808,
+   "y": -66,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 3144,
+   "y": 222,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 216,
+   "y": 1374,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/goc_cay",
+   "x": 1944,
+   "y": 318,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3192,
+   "y": 1230,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3336,
+   "y": -66,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_tron",
+   "x": 1032,
+   "y": 1038,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 120,
+   "y": 1278,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 744,
+   "y": 222,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 3288,
+   "y": 270,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 1656,
+   "y": -18,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 1416,
+   "y": 1662,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_gai",
+   "x": 2184,
+   "y": 798,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 120,
+   "y": 1422,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 24,
+   "y": 558,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/goc_cay",
+   "x": 2040,
+   "y": 1086,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_gai",
+   "x": 1224,
+   "y": 1134,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_gai",
+   "x": 2760,
+   "y": 1470,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3000,
+   "y": 126,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 1176,
+   "y": -66,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/da_cuoi",
+   "x": 1224,
+   "y": 414,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 1272,
+   "y": 1614,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/goc_cay",
+   "x": 696,
+   "y": 1182,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 2328,
+   "y": 30,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_kho",
+   "x": 529.6,
+   "y": 228,
+   "w": 140.8,
+   "h": 140.8
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 2184,
+   "y": -18,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 2040,
+   "y": 30,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_gai",
+   "x": 2568,
+   "y": 1566,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3384,
+   "y": 702,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 1800,
+   "y": 1806,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 744,
+   "y": 1758,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/da_nho",
+   "x": 2376,
+   "y": 1230,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 120,
+   "y": 1758,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 2328,
+   "y": 1134,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/da_nho",
+   "x": 1704,
+   "y": 846,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/thong_non",
+   "x": 3073.6,
+   "y": 1188,
+   "w": 140.8,
+   "h": 140.8
+  },
+  {
+   "file": "vat_canh/thong_non",
+   "x": 1201.6,
+   "y": 660,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_hoa_trang",
+   "x": 2136,
+   "y": 702,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_tron",
+   "x": 1272,
+   "y": 1086,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/da_nho",
+   "x": 2472,
+   "y": 798,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/cay_kho",
+   "x": 529.6,
+   "y": 564,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 888,
+   "y": 30,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/cay_kho",
+   "x": 817.6,
+   "y": 1188,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/lau_say",
+   "x": 2232,
+   "y": 270,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/da_cuoi",
+   "x": 2136,
+   "y": 366,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 2232,
+   "y": 1806,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_hoa_trang",
+   "x": 2040,
+   "y": 270,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_gai",
+   "x": 1032,
+   "y": 558,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 1128,
+   "y": 1182,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/da_nho",
+   "x": 1080,
+   "y": 222,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 72,
+   "y": 1758,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_hoa_trang",
+   "x": 1368,
+   "y": 174,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 168,
+   "y": 1614,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 552,
+   "y": 1662,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_kho",
+   "x": 2977.6,
+   "y": 1332,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/thong_non",
+   "x": 769.6,
+   "y": 852,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 3336,
+   "y": 126,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 120,
+   "y": 1230,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_hoa_trang",
+   "x": 984,
+   "y": 798,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 456,
+   "y": 78,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3288,
+   "y": 750,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 3336,
+   "y": 1038,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 2712,
+   "y": 1614,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 2472,
+   "y": 1758,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 2040,
+   "y": -66,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_tron",
+   "x": 456,
+   "y": 1134,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 168,
+   "y": 222,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/thong_non",
+   "x": 1633.6,
+   "y": 372,
+   "w": 140.8,
+   "h": 140.8
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 1272,
+   "y": 1758,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 504,
+   "y": 990,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/da_cuoi",
+   "x": 1080,
+   "y": 510,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/da_nho",
+   "x": 2520,
+   "y": 1374,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 24,
+   "y": 1710,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 504,
+   "y": 1278,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/da_nho",
+   "x": 1800,
+   "y": 1278,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 1032,
+   "y": 1710,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_tron",
+   "x": 504,
+   "y": 846,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 2760,
+   "y": 1758,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_qua_do",
+   "x": 1272,
+   "y": 1518,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 2808,
+   "y": 846,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 840,
+   "y": 1758,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 1176,
+   "y": 606,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 1992,
+   "y": 1806,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 552,
+   "y": 30,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 3048,
+   "y": 1182,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_qua_do",
+   "x": 600,
+   "y": 558,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_qua_do",
+   "x": 1944,
+   "y": 462,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 2280,
+   "y": 1758,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 72,
+   "y": 126,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/da_cuoi",
+   "x": 2808,
+   "y": 222,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/da_nho",
+   "x": 744,
+   "y": 702,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 168,
+   "y": -18,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/goc_cay",
+   "x": 1656,
+   "y": 1230,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3144,
+   "y": 30,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 1032,
+   "y": 414,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 2712,
+   "y": 78,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_gai",
+   "x": 1800,
+   "y": 1470,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 1080,
+   "y": -18,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 2376,
+   "y": -66,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 2952,
+   "y": 30,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_qua_do",
+   "x": 3000,
+   "y": 798,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3192,
+   "y": 462,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/da_cuoi",
+   "x": 2520,
+   "y": 1278,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_hoa_trang",
+   "x": 648,
+   "y": 846,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_hoa_trang",
+   "x": 360,
+   "y": 366,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/thong_non",
+   "x": 241.6,
+   "y": 420,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_kho",
+   "x": 241.6,
+   "y": 564,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 2616,
+   "y": 942,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 3288,
+   "y": 1710,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_gai",
+   "x": 1560,
+   "y": 1278,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/cay_kho",
+   "x": 1921.6,
+   "y": 132,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_gai",
+   "x": 2472,
+   "y": 990,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/thong_non",
+   "x": 1825.6,
+   "y": 900,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 2184,
+   "y": 1806,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 2904,
+   "y": 30,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 72,
+   "y": 510,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3384,
+   "y": 1662,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 3336,
+   "y": 1230,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 1560,
+   "y": 270,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/truc",
+   "x": 504,
+   "y": 1614,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 24,
+   "y": 126,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/da_cuoi",
+   "x": 1272,
+   "y": 318,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3336,
+   "y": 1182,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_tron",
+   "x": 264,
+   "y": 846,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 3192,
+   "y": 1758,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 3048,
+   "y": 30,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/khuc_go_muc",
+   "x": 984,
+   "y": 30,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/thong_non",
+   "x": 1345.6,
+   "y": 1284,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 504,
+   "y": -18,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/cay_kho",
+   "x": 385.6,
+   "y": 132,
+   "w": 140.8,
+   "h": 140.8,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 1032,
+   "y": 1614,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 2040,
+   "y": 1374,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/bui_qua_do",
+   "x": 2808,
+   "y": 1182,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 2760,
+   "y": 30,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 2520,
+   "y": 30,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 2040,
+   "y": 1710,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/tang_da_reu",
+   "x": 2280,
+   "y": 1662,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 360,
+   "y": 126,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/bui_tron",
+   "x": 408,
+   "y": 942,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/co_cao",
+   "x": 2184,
+   "y": 1086,
+   "w": 96,
+   "h": 96,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_kho",
+   "x": 1201.6,
+   "y": 1428,
+   "w": 140.8,
+   "h": 140.8
+  },
+  {
+   "file": "vat_canh/nam_rung",
+   "x": 1416,
+   "y": -18,
+   "w": 96,
+   "h": 96
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1777,
+   "y": -190,
+   "w": 190,
+   "h": 210,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 3265,
+   "y": 1394,
+   "w": 190,
+   "h": 210
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1105,
+   "y": 1250,
+   "w": 190,
+   "h": 210
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1,
+   "y": 674,
+   "w": 190,
+   "h": 210,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1057,
+   "y": 818,
+   "w": 190,
+   "h": 210
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 3121,
+   "y": 530,
+   "w": 190,
+   "h": 210,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1489,
+   "y": 2,
+   "w": 190,
+   "h": 210,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1729,
+   "y": 482,
+   "w": 190,
+   "h": 210,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1633,
+   "y": 50,
+   "w": 190,
+   "h": 210
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 721,
+   "y": 1490,
+   "w": 190,
+   "h": 210
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1921,
+   "y": 1154,
+   "w": 190,
+   "h": 210,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 2977,
+   "y": 530,
+   "w": 190,
+   "h": 210
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": -47,
+   "y": 242,
+   "w": 190,
+   "h": 210
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": -95,
+   "y": 1010,
+   "w": 190,
+   "h": 210,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 817,
+   "y": 386,
+   "w": 190,
+   "h": 210,
+   "lat": true
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 3169,
+   "y": 818,
+   "w": 190,
+   "h": 210
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1345,
+   "y": 530,
+   "w": 190,
+   "h": 210
+  },
+  {
+   "file": "vat_canh/cay_co_thu",
+   "x": 1393,
+   "y": 1010,
+   "w": 190,
+   "h": 210,
+   "lat": true
+  }
+ ],
+ "bay": [
+  {
+   "x": 1152,
+   "y": 432
+  },
+  {
+   "x": 2400,
+   "y": 1440
+  },
+  {
+   "x": 480,
+   "y": 576
+  },
+  {
+   "x": 1632,
+   "y": 1488
+  },
+  {
+   "x": 2976,
+   "y": 1056
+  },
+  {
+   "x": 1440,
+   "y": 960
+  },
+  {
+   "x": 2112,
+   "y": 240
+  },
+  {
+   "x": 3168,
+   "y": 1632
+  },
+  {
+   "x": 864,
+   "y": 1152
+  },
+  {
+   "x": 1920,
+   "y": 1728
+  },
+  {
+   "x": 2784,
+   "y": 720
+  },
+  {
+   "x": 384,
+   "y": 1728
+  },
+  {
+   "x": 1344,
+   "y": 144
+  },
+  {
+   "x": 2304,
+   "y": 1056
+  }
+ ],
+ "boss": [
+  {
+   "x": 960,
+   "y": 288,
+   "ten": "Thanh Mộc Lang Vương"
+  },
+  {
+   "x": 2880,
+   "y": 1728,
+   "ten": "Độc Căn Mộc Yêu"
+  }
+ ],
+ "cam": [],
+ "o": {
+  "co": 48,
+  "cot": 72,
+  "hang": 40,
+  "dat": [
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccccccccccccccccccccbcbbbhhbhhcccccccccccc",
+   "ccccccccccccccmmmmmmmmmmcccccccccccccccccccccccccbbbbbbbbbbbbccchhhhhhhc",
+   "ccccccccccccccmmmmmmmmssssscccccccccccccccccccbbbbbbnnnnnnbbbbhhhhhhhhhh",
+   "ccccccccccccccmmmmmmmssssssscccccccccccccccccbbbnnnnnnnnnnnnbbbbhhhhhhhh",
+   "cccccccccccccccccccmsssssssssscccccccccccccccbbnnnnnnnnnnnnnnnbbbhhhhhhh",
+   "ccchhhhhhchccccccccsssssssssssccccccccccccccbbnnnnnnnnnnnnnnnnnbbccccccc",
+   "chhhhhhhhhhhccccccccssssssssscccccccccccccccbbnnnnnnnnnnnnnnnnnbbccccccc",
+   "chhhhhhhhhhhhccccccccsssssssscccccccccccccccbbnnnnnnnnnnnnnnnnbbbccccccc",
+   "chhhhhhhhhhhhcccccccccsscccccccccccccccddccccbbnnnnnnnnnnnnnnnbbbccccccc",
+   "chhhhhhhhhhhhccccccccccccccccccccccccccddcccccbbnnnnnnnnnnnnbbbbcccccccc",
+   "chhhhhhhhhhhcccccccccccccccccccccmcmmccddcccccbbbbbnnnnnnnbbbbbccccccccc",
+   "ccchhhhhhcccccccccccccccccccccccmmmmmccddcccccccbbbbbbbbbbbbcccccccccccc",
+   "ccccccccccccccccccccccccccccccccmmmmdddddccccccccccccbbbcbcccccccccccccc",
+   "ccccccccccccccccccccccccccddddddddddddddddccccccccccccccccccccccccccccdd",
+   "ccccccccccccccccccccccccdddddddddddddmcdddddccccccccccccccccccccccccdddd",
+   "cccccccccccccccccccccccddddccccccmmmccccdddddccccccccccccccccccccccddddc",
+   "ddccccccccccccccccccccdddcccccccccccccccddcdddccccccccccccccccccccdddccc",
+   "dddccccccccccccccccccdddccccccccccccccccddccdddcccccccccccccccccddddcccc",
+   "cddddccccccccccccccddddccccccccccccccccccccccddddccccccccccccccddddccccc",
+   "ccddddddddddddddcdddddcccccccccccccccccchhhhhcddddddddddddcccddddccccccc",
+   "ccccddddddddddddddddcccccccccccccccccmmhhhhhhhccddddddddddddddddcccccccc",
+   "cccccccccccccccdddcccccccccccccccccmmmhhhhhhhhcccccccccccdddddcccccccccc",
+   "ccccccccccccccccccccccccccccccccccmmmmhhhhhhhhcccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccmmmhhhhhhhhhssssssscccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccmmhhhhhhcsssssssssscccccccccccccccc",
+   "cccccccccccnnnnnnnccccccccccccccmcccccmmmhhccssssssssssscccccccccccccccc",
+   "ccccccccccnnnnnnnnncccccccccccmmmmmmmccccccccssssssssssssccccccccccccccc",
+   "ccccccccccnnnnnnnnnccccccccccmmmmmmmmmccccccsssssssssssscccccccccccccccc",
+   "ccccccccccnnnnnnnnnccccccccccmmmmmmmmmmcccccccsssssssssscccccccccccccccc",
+   "cccccccccccnnnnnnnccccccccccmmmmmmmmmmmccccccccssssssccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccmmmmmmmmmmccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccmmmmmmmmmcccccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccmmmmmmmccccccccccccccccccccccccccccccccccc",
+   "ccccccccccccccccccccccccccccccccmmmccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+   "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  ]
+ }
+}
