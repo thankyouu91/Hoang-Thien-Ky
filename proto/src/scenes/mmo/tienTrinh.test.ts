@@ -52,4 +52,11 @@ test("khu của thế giới: quái đứng trong dải đi được, thủ lĩn
   const boss = new Bai(1, "moc", 2, { boss: true, bots: [] });
   assert.equal(boss.actors.filter((a) => a.kind === "monster").length, 1);
   assert.equal(new Bai(1, "moc", 2, { packs: 0, bots: [] }).actors.length, 1);
+  // Bãi rộng 5×4 tấm: 48 bầy rải khắp cả hai chiều, không dồn một dải.
+  const big = new Bai(1, "moc", 2, { w: 6880, h: 3072, packs: 48, bots: [] });
+  const homes = big.actors.filter((a) => a.kind === "monster").map((a) => a.home);
+  assert.equal(homes.length, 48 * 4);
+  for (const hm of homes) assert.ok(hm.x > 0 && hm.x < 6880 && hm.y > 0 && hm.y < 3072);
+  assert.ok(Math.min(...homes.map((hm) => hm.y)) < 600 && Math.max(...homes.map((hm) => hm.y)) > 2400);
+  assert.ok(Math.min(...homes.map((hm) => hm.x)) < 800 && Math.max(...homes.map((hm) => hm.x)) > 6000);
 });

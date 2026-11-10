@@ -116,16 +116,17 @@ export class Bai {
     this.mLevel = o.monsterLevel ?? BAI.level;
     const els = o.elements ?? PACK_ELEMENTS;
     const packs = o.boss ? 1 : (o.packs ?? BAI.packs);
+    const cols = Math.ceil(Math.sqrt((packs * this.w) / (this.h - this.top)));
     this.rnd = rng(seed);
     this.player = this.human(1, "player", "Ta", element, 0);
     (o.bots ?? BAI.bots).forEach((name, i) => this.human(100 + i, "bot", name, PACK_ELEMENTS[i % PACK_ELEMENTS.length], i + 1));
     for (let p = 0; p < packs; p++) {
-      // Tới 4 bầy: chỗ của bãi mẫu. Nhiều hơn (khu rộng): rải đều theo chiều ngang, so le hai hàng.
+      // Tới 4 bầy: chỗ của bãi mẫu. Nhiều hơn (khu rộng): rải theo lưới ô gần vuông khắp khu.
       const home = o.boss
         ? { x: this.w * 0.7, y: (this.top + this.h) / 2 }
         : packs <= 4
           ? { x: this.w * (0.45 + 0.4 * (p % 2)), y: this.top + (this.h - this.top) * (0.25 + 0.5 * Math.floor(p / 2)) }
-          : { x: this.w * (0.2 + (0.7 * p) / (packs - 1)), y: this.top + (this.h - this.top) * (0.25 + 0.5 * (p % 2)) };
+          : { x: (this.w * ((p % cols) + 0.5)) / cols, y: this.top + ((this.h - this.top) * (Math.floor(p / cols) + 0.5)) / Math.ceil(packs / cols) };
       for (let k = 0; k < (o.boss ? 1 : BAI.perPack); k++) {
         const hp = BAI.monsterHp(this.mLevel) * (o.boss ? 15 : 1);
         this.actors.push({

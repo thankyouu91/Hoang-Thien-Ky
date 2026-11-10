@@ -17,8 +17,13 @@ import {
 
 /** Nền 688×384 (cỡ lớn nhất PixelLab vẽ một lần) vẽ gấp đôi. */
 const W = 1376;
-/** Bãi quái rộng gấp chừng này lần nền: ghép nền nối tiếp, tấm lẻ lật gương nên mép khớp nhau không lộ đường nối. */
-const WIDE = 3;
+/**
+ * Bãi quái là lưới COLS × ROWS tấm nền (20 lần diện tích một tấm, người dùng chọn 2026-11-10): tấm ở cột lẻ lật ngang, hàng lẻ
+ * lật dọc, nên mép khớp nhau không lộ đường nối. Cả bãi đi được; số bầy quái tính theo diện tích.
+ */
+const COLS = 5;
+const ROWS = 4;
+const FIELD_PACKS = 48;
 const H = 768;
 /** Phần trên của nền là tường, gốc cây: không đi lên đó. */
 const TOP_PCT = 0.37;
@@ -89,8 +94,9 @@ export class MmoScene extends BaiScene {
   // ---------- Khu ----------
 
   private size(z: Zone): { w: number; h: number; top: number; file: string; packs: number } {
-    const n = z.safe || z.boss ? 1 : WIDE;
-    return { w: W * n, h: H, top: H * TOP_PCT, file: `chien_truong/${z.bg}`, packs: z.safe ? 0 : 4 * n };
+    const file = `chien_truong/${z.bg}`;
+    if (z.safe || z.boss) return { w: W, h: H, top: H * TOP_PCT, file, packs: z.safe ? 0 : 4 };
+    return { w: W * COLS, h: H * ROWS, top: 0, file, packs: FIELD_PACKS };
   }
 
   protected override makeBai(): Bai {
@@ -102,7 +108,7 @@ export class MmoScene extends BaiScene {
       w: d.w, h: d.h, top: d.top, monsterLevel: z.level, hp: hpOf(s.lv), atk: atkOf(s.lv, s.wpn), packs: d.packs, boss: z.boss,
       entry: { x: this.entry === "left" ? 70 : this.entry === "right" ? d.w - 70 : d.w / 2, y: mid },
       // Khu an toàn đông người hơn bãi quái; mỗi khu một nhóm tên khác nhau.
-      bots: Array.from({ length: z.safe ? 6 : z.boss ? 2 : 5 }, (_, i) => NAMES[(s.zone * 5 + i) % NAMES.length]),
+      bots: Array.from({ length: z.safe ? 6 : z.boss ? 2 : NAMES.length }, (_, i) => NAMES[(s.zone * 5 + i) % NAMES.length]),
       elements: [z.element],
     });
     b.player.name = s.name;
@@ -288,13 +294,18 @@ export class MmoScene extends BaiScene {
     const bg = this.ready(this.size(z).file);
     ctx.imageSmoothingEnabled = false;
     if (bg) {
-      for (let i = 0; i * W < b.w; i++) {
-        ctx.save();
-        ctx.translate(i * W + (i % 2 ? W : 0), 0);
-        if (i % 2) ctx.scale(-1, 1);
-        // Rộng thêm 1 đơn vị để hai tấm kề nhau không hở khe khi zoom lẻ.
-        ctx.drawImage(bg, 0, 0, W + 1, b.h);
-        ctx.restore();
+      const vis = this.view ? this.camera.visible(this.view) : { x: 0, y: 0, w: b.w, h: b.h };
+      for (let j = 0; j * H < b.h; j++) {
+        for (let i = 0; i * W < b.w; i++) {
+          // Chỉ vẽ tấm đang nằm trong vùng nhìn.
+          if ((i + 1) * W < vis.x || i * W > vis.x + vis.w || (j + 1) * H < vis.y || j * H > vis.y + vis.h) continue;
+          ctx.save();
+          ctx.translate(i * W + (i % 2 ? W : 0), j * H + (j % 2 ? H : 0));
+          ctx.scale(i % 2 ? -1 : 1, j % 2 ? -1 : 1);
+          // Rộng thêm 1 đơn vị để hai tấm kề nhau không hở khe khi zoom lẻ.
+          ctx.drawImage(bg, 0, 0, W + 1, H + 1);
+          ctx.restore();
+        }
       }
     } else {
       ctx.fillStyle = "#39422c";
@@ -354,7 +365,7 @@ export class MmoScene extends BaiScene {
     const ctx = v.ctx;
     ctx.setTransform(v.dpr, 0, 0, v.dpr, 0, 0);
     // Bản đồ nhỏ góc phải: chấm quái đỏ, người khác xanh, mình vàng.
-    const mw = Math.min(b.w > W ? 280 : 150, v.w * 0.4);
+    const mw = Math.min(b.w > W ? 220 : 150, v.w * 0.35);
     const mh = (mw * (b.h - b.top)) / b.w;
     const mx = v.w - mw - 8;
     ctx.fillStyle = "rgba(20, 14, 8, 0.6)";
