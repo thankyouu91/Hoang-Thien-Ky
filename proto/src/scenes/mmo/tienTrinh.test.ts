@@ -235,7 +235,7 @@ test("khu của thế giới: quái đứng trong dải đi được, thủ lĩn
 
 test("map khu: mặc định có dải cấm, bầy tự rải và chỗ vào đều nằm ngoài vùng cấm; người không đi vào vùng cấm", () => {
   const m = macDinh(zone(1));
-  assert.equal(macDinh(zone(0)).vat.length, 7); // bảy công trình sau lưng NPC (Cố Tàng đứng ở quảng trường)
+  assert.equal(macDinh(zone(0)).vat.length, 0); // khu an toàn không dán công trình lên đất
   const homes = bayTuDong(m);
   assert.equal(homes.length, 24);
   for (const p of homes) assert.ok(!trongCam(m, p.x, p.y));

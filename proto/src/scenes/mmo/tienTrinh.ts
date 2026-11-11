@@ -834,19 +834,20 @@ export function afkHarvest(s: Save, now: number, today: string): { xp: number; l
 }
 
 // ---------- NPC ở sơn môn và bến đò ----------
-// Tám NPC chức năng theo docs/CHI_THI_CLAUDE_LOOT_VA_UIUX.md bước 7, xếp thành tám phân khu của thành: hàng sau sát tường (Lầu Gác tây
-// bắc, Luyện Khí Phường, Trà Lâu, Tứ Hợp Viện đông bắc), Giếng Cổ giữa quảng trường, hàng trước (Đạo Quán tây nam, Lôi Đài đông nam),
-// Dịch Trạm sát cổng đông. x là phần chiều ngang map, y là phần chiều sâu của dải đi được (0 sát tường, 1 sát mép dưới).
-// Công trình sau lưng từng NPC khai ở mapKhu.ts (NHA).
-export const NPCS: { id: string; ten: string; noi: string; viec: string; dau: string; x: number; y: number }[] = [
-  { id: "thuong_hoi", ten: "Chưởng Quỹ Thương Hội", noi: "Lầu Gác", viec: "Mua bán", dau: "⚖", x: 0.2, y: 0.13 },
-  { id: "tho_ren", ten: "Thiết Tượng Thần Công", noi: "Luyện Khí Phường", viec: "Rèn đồ", dau: "⚒", x: 0.38, y: 0.13 },
-  { id: "mat_tham", ten: "Mật Thám Thiên Cơ Các", noi: "Trà Lâu", viec: "Treo thưởng", dau: "✉", x: 0.62, y: 0.13 },
-  { id: "su_gia", ten: "Sứ Giả Chính Đạo Minh", noi: "Tứ Hợp Viện", viec: "Tông môn", dau: "⚑", x: 0.8, y: 0.13 },
-  { id: "co_tang", ten: "Cố Tàng", noi: "Giếng Cổ", viec: "Nhiệm vụ", dau: "❢", x: 0.5, y: 0.42 },
-  { id: "duoc_su", ten: "Đan Đạo Dược Sư", noi: "Đạo Quán", viec: "Luyện đan", dau: "⚗", x: 0.25, y: 0.74 },
-  { id: "trong_tai", ten: "Võ Đạo Trọng Tài", noi: "Lôi Đài", viec: "Tháp, sự kiện", dau: "⚔", x: 0.75, y: 0.74 },
-  { id: "xa_phu", ten: "Xa Phu Thần Tốc", noi: "Dịch Trạm", viec: "Truyền tống", dau: "✦", x: 0.92, y: 0.44 },
+// Tám NPC chức năng theo docs/CHI_THI_CLAUDE_LOOT_VA_UIUX.md bước 7. NPC đứng thẳng trên nền đất, không có công trình dán lên map
+// (người dùng chốt 2026-11-11: tranh cong_trinh/chung là tranh phong cảnh, chỉ làm banner trong hộp thoại).
+// son, ben: chỗ đứng ở sơn môn và ở bến đò, [x, y] với x là phần chiều ngang map, y là phần chiều sâu của dải đi được (0 sát mép trên,
+// 1 sát mép dưới). Bến đò xếp theo nền vẽ: Xa Phu trên cầu tàu, Chưởng Quỹ và Thợ Rèn cạnh thùng gỗ trên bờ, Cố Tàng giữa bến,
+// Trọng Tài và Mật Thám ở hai góc. shortcut: toạ độ đo trên nền Vạn Mộc Lâm; vùng khác vẽ cầu tàu lệch thì chỉnh riêng khi cần.
+export const NPCS: { id: string; chuc: string; ten: string; viec: string; dau: string; son: [number, number]; ben: [number, number] }[] = [
+  { id: "thuong_hoi", chuc: "Thương Hội", ten: "Chưởng Quỹ", viec: "Mua bán", dau: "⚖", son: [0.2, 0.13], ben: [0.37, 0.36] },
+  { id: "tho_ren", chuc: "Thợ Rèn", ten: "Thiết Tượng", viec: "Rèn đồ", dau: "⚒", son: [0.38, 0.13], ben: [0.44, 0.3] },
+  { id: "mat_tham", chuc: "Thiên Cơ Các", ten: "Mật Thám", viec: "Treo thưởng", dau: "✉", son: [0.62, 0.13], ben: [0.9, 0.22] },
+  { id: "su_gia", chuc: "Chính Đạo Minh", ten: "Sứ Giả", viec: "Tông môn", dau: "⚑", son: [0.8, 0.13], ben: [0.7, 0.2] },
+  { id: "co_tang", chuc: "Nhiệm Vụ", ten: "Cố Tàng", viec: "Nhiệm vụ", dau: "❢", son: [0.5, 0.42], ben: [0.5, 0.2] },
+  { id: "duoc_su", chuc: "Dược Sư", ten: "Đan Đạo", viec: "Luyện đan", dau: "⚗", son: [0.25, 0.74], ben: [0.27, 0.2] },
+  { id: "trong_tai", chuc: "Võ Đạo", ten: "Trọng Tài", viec: "Tháp, sự kiện", dau: "⚔", son: [0.75, 0.74], ben: [0.1, 0.24] },
+  { id: "xa_phu", chuc: "Dịch Trạm", ten: "Xa Phu", viec: "Truyền tống", dau: "✦", son: [0.92, 0.44], ben: [0.52, 0.66] },
 ];
 
 /** Đan Đạo Dược Sư: BREW nguyên liệu luyện ra một bình máu hoặc một Hồi Linh Đan. Thắp hương: hôm đó diệt dị thú thêm INCENSE phần nghìn tu vi. Số là đề xuất. */

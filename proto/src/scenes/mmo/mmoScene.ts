@@ -89,6 +89,8 @@ export class MmoScene extends BaiScene {
   /** NPC của khu an toàn đang đứng (rỗng ở khu có quái), và NPC đang tự chạy tới để nói chuyện */
   private npcs: { id: string; x: number; y: number }[] = [];
   private goNpc = "";
+  /** Tranh làm banner đầu hộp thoại đang mở từ một NPC (file trong assets/pixellab/, không đuôi); "" khi mở bằng phím tắt */
+  private banner = "";
   /** Chuột phải đang giữ trên đất (toạ độ màn hình): nhân vật chạy bám theo; rightDown để bỏ qua cú chạm của nút phải */
   private rmb: { x: number; y: number } | null = null;
   private rightDown = false;
@@ -204,7 +206,10 @@ export class MmoScene extends BaiScene {
       this.restat();
       this.persist();
     });
-    this.dlg.addEventListener("close", () => (this.panel = ""));
+    this.dlg.addEventListener("close", () => {
+      this.panel = "";
+      this.banner = "";
+    });
     window.addEventListener("keydown", (e) => this.key(e, true));
     window.addEventListener("keyup", (e) => this.key(e, false));
     window.addEventListener("blur", () => this.keys.clear());
@@ -280,8 +285,8 @@ export class MmoScene extends BaiScene {
     b.onKill = (m) => this.onKill(b, z, m);
     this.loot = [];
     this.goNpc = "";
-    // NPC đứng trước công trình của mình, theo bố cục tám phân khu (NPCS, mapKhu.npcCho).
-    this.npcs = !z.safe ? [] : NPCS.map((n) => ({ id: n.id, ...npcCho(m, n) }));
+    // NPC đứng thẳng trên nền đất; sơn môn và bến đò mỗi nơi một bố cục (NPCS, mapKhu.npcCho).
+    this.npcs = !z.safe ? [] : NPCS.map((n) => ({ id: n.id, ...npcCho(m, z.bg.endsWith("ben_do") ? n.ben : n.son) }));
     for (const h of [...m.nen, ...m.vat]) this.img(h.file);
     if (m.o) for (const t of this.bo!.bo) this.img(O_DIR + t.f);
     return b;
@@ -643,6 +648,7 @@ export class MmoScene extends BaiScene {
   private talk(id: string): void {
     this.goNpc = "";
     if (this.bai) this.bai.player.goal = null;
+    this.banner = NPC_BANNER[id] ?? "";
     this.act(NPC_ACT[id]);
   }
 
@@ -784,7 +790,7 @@ export class MmoScene extends BaiScene {
     const list = q(".mmo-npcs");
     list.hidden = this.npcs.length === 0;
     list.style.top = `${MAP_Y + mh + 96}px`;
-    list.innerHTML = `<b>NPC trong thành</b>${this.npcs.map((n) => NPCS.find((x) => x.id === n.id)!).map((n) => `<button type="button" data-npc="${n.id}" title="${n.ten} · ${n.noi}">${n.dau} ${n.viec}</button>`).join("")}`;
+    list.innerHTML = `<b>NPC trong thành</b>${this.npcs.map((n) => NPCS.find((x) => x.id === n.id)!).map((n) => `<button type="button" data-npc="${n.id}" title="[${n.chuc}] ${n.ten}">${n.dau} ${n.viec}</button>`).join("")}`;
     q('.mmo-quick [data-a="char"] i').style.backgroundImage = `url(${import.meta.env.BASE_URL}icon_ve/he/${s.element}.webp)`;
     all('.mmo-top [data-a="mail"]').forEach((el) => el.classList.toggle("dot", newMail > 0));
     all('.mmo-top [data-a="sit"]').forEach((el) => el.classList.toggle("on", this.sit));
@@ -925,19 +931,26 @@ export class MmoScene extends BaiScene {
         ctx.fillStyle = "#f1cf7a";
         ctx.fillRect(n.x - 10, n.y - 44, 20, 44);
       }
-      this.text(ctx, info.ten, n.x, n.y - 64, "center");
-      if (near?.id === n.id) {
-        const kk = 1 / Math.min(1, this.camera.zoom);
-        const by = n.y - 64 - 30 * kk + Math.sin(this.clock * 4) * 2 * kk;
-        ctx.fillStyle = "#f1cf7a";
-        ctx.beginPath();
-        ctx.arc(n.x, by, 13 * kk, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#1d1610";
-        ctx.font = `700 ${16 * kk}px system-ui, sans-serif`;
-        ctx.textAlign = "center";
-        ctx.fillText(info.dau, n.x, by + 6 * kk);
-      }
+      // Trên đầu: "[Chức danh] Tên" chữ mảnh màu vàng cổ, trên nữa là icon nhỏ (to và nhấp nhô khi đứng trong tầm nói chuyện).
+      const kk = 1 / Math.min(1, this.camera.zoom);
+      const on = near?.id === n.id;
+      ctx.textAlign = "center";
+      ctx.font = `600 ${12 * kk}px ${FONT_TEXT}`;
+      ctx.lineWidth = 3 * kk;
+      ctx.strokeStyle = "rgba(20, 14, 8, 0.8)";
+      const label = `[${info.chuc}] ${info.ten}`;
+      ctx.strokeText(label, n.x, n.y - 62);
+      ctx.fillStyle = "#e3c98a";
+      ctx.fillText(label, n.x, n.y - 62);
+      const r = (on ? 11 : 7) * kk;
+      const by = n.y - 62 - 14 * kk - r + (on ? Math.sin(this.clock * 4) * 2 * kk : 0);
+      ctx.fillStyle = on ? "#f1cf7a" : "rgba(227, 201, 138, 0.85)";
+      ctx.beginPath();
+      ctx.arc(n.x, by, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#1d1610";
+      ctx.font = `700 ${(on ? 14 : 9) * kk}px system-ui, sans-serif`;
+      ctx.fillText(info.dau, n.x, by + (on ? 5 : 3) * kk);
     });
     // Đồ rơi: cột sáng màu phẩm chất và icon nhỏ, cỡ giữ nguyên trên màn hình khi thu nhỏ.
     const k = 1 / Math.min(1, this.camera.zoom);
@@ -1123,6 +1136,7 @@ export class MmoScene extends BaiScene {
     const top = this.dlg.open && title === this.dlgTitle ? this.dlg.scrollTop : 0;
     this.dlgTitle = title;
     this.dlg.innerHTML = html;
+    if (this.banner) this.dlg.querySelector("h2")?.insertAdjacentHTML("afterend", `<div class="mmo-banner" style="background-image:url(${import.meta.env.BASE_URL}pixellab/${this.banner}.png)"></div>`);
     this.dlg.scrollTop = top;
     // Mọi bảng có nút đóng trên thanh tiêu đề; bảng tạo nhân vật thì không đóng được.
     if (!this.fresh) this.dlg.querySelector("h2")?.insertAdjacentHTML("beforeend", `<button type="button" data-close class="x" aria-label="Đóng">×</button>`);
@@ -1690,6 +1704,11 @@ const GENDER: Record<Gender, string> = { nam: "nam", nu: "nữ" };
 const NPC_R = 150;
 /** Tầm phím Tab tìm dị thú để khóa. */
 const LOCK_R = 700;
+/** Tranh phong cảnh của từng nơi, chỉ dùng làm banner trong hộp thoại của NPC (không dán lên mặt đất). */
+const NPC_BANNER: Record<string, string> = {
+  thuong_hoi: "cong_trinh/chung/thuong_hoi", tho_ren: "cong_trinh/chung/luyen_khi_cac", duoc_su: "cong_trinh/chung/luyen_dan_phong", trong_tai: "cong_trinh/chung/dien_vo_truong",
+  su_gia: "cong_trinh/chung/tang_kinh_cac", xa_phu: "cong_trinh/chung/truyen_tong_tran", mat_tham: "cong_trinh/chung/bao_kho", co_tang: "cong_trinh/chung/phi_thang_dai",
+};
 const NPC_ACT: Record<string, string> = { su_gia: "sect", tho_ren: "forge", thuong_hoi: "shop", duoc_su: "alchemy", co_tang: "quest", trong_tai: "event", xa_phu: "map", mat_tham: "bounty" };
 const BAG_TABS = [["all", "Tất cả"], ["trang_bi", "Trang bị"], ["dan_duoc", "Đan dược"], ["nl", "Nguyên liệu"]];
 /** Dòng chỉ số của trang bị: khóa, tên, có phải phần nghìn (hiện thành %) không. */
