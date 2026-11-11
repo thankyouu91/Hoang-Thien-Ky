@@ -136,7 +136,10 @@ export function newSave(name: string, element: ElementId, gender: Gender = "nam"
 }
 
 export const hpOf = (lv: number) => 2000 + 220 * (lv - 1);
-export const atkOf = (lv: number, wpn: number) => Math.round((100 + 12 * (lv - 1)) * (1 + 0.08 * wpn));
+/** Trần cường hóa vũ khí và phần công mỗi bậc. Rà cân bằng 2026-11-11: trước đó không trần, 8% mỗi bậc, +20 đã là +160% công trong khi trọn bộ đồ chỉ +14%. */
+export const WPN_MAX = 20;
+export const WPN_STEP = 0.05;
+export const atkOf = (lv: number, wpn: number) => Math.round((100 + 12 * (lv - 1)) * (1 + WPN_STEP * Math.min(wpn, WPN_MAX)));
 /** Tu vi cần để lên cấp kế: càng cao càng phải farm nhiều (người dùng chốt 2026-11-09). */
 export const xpNeed = (lv: number) => Math.round(40 * lv ** 1.3);
 export const potPrice = (z: Zone) => 15 + 10 * z.region;
@@ -215,7 +218,7 @@ export const mineHolder = (idx: number) => ([2, 4, 5].includes(idx % PER) ? SECT
 
 export function upgrade(s: Save): boolean {
   const c = wpnPrice(s);
-  if (s.gold < c) return false;
+  if (s.wpn >= WPN_MAX || s.gold < c) return false;
   s.gold -= c;
   s.wpn++;
   return true;
@@ -518,7 +521,7 @@ export function buySect(s: Save, id: string, rnd: () => number = Math.random): b
   else {
     const it = id === "pills" ? stack(rnd, "hoi_linh_dan", "Hồi Linh Đan", "dan_duoc", "luc", "dan/dan_duoc_hoi_mana", 1, `Hồi ${MANA_HEAL * 100}% mana`, 5)
       : id === "scroll" ? stack(rnd, `tan_quyen_${s.element}`, `Tàn quyển hệ ${ELEMENT_STYLE[s.element].name}`, "tan_quyen", "tim", `tan_quyen/${s.element}`, s.lv, "Mảnh công pháp, gom đủ để ghép ở Tàng Kinh Các")
-      : gear(s.lv, id === "gear" ? "tim" : "vang", rnd);
+      : gear(s.lv, id === "gear" ? "tim" : "vang", rnd, zone(s.zone).region);
     if (!pickUp(s, it)) return false;
   }
   t.tong = sectLife(s);
@@ -659,7 +662,10 @@ export function setBonus(s: Save): Record<SetKey, number> {
 /** Một mốc bộ viết thành chữ, ví dụ "Công +3% · Chí mạng +2%". */
 export const setLine = (m: Partial<Record<SetKey, number>>) => (Object.entries(m) as [SetKey, number][]).map(([k, v]) => `${SET_KEY_NAME[k]} +${v / 10}%`).join(" · ");
 
-function gear(lv: number, rarity: ItemRarity, rnd: () => number): ItemInstance {
+/** Bộ trang bị rơi ở vùng region: mỗi vùng một bộ, xoay vòng qua SETS. */
+export const setOfRegion = (region: number) => SETS[region % SETS.length];
+
+function gear(lv: number, rarity: ItemRarity, rnd: () => number, region: number): ItemInstance {
   const pool = KIEU.filter((k) => k.do_hiem === rarity);
   const k = pool[Math.floor(rnd() * pool.length)];
   const stats: ItemStats = {};
@@ -669,8 +675,9 @@ function gear(lv: number, rarity: ItemRarity, rnd: () => number): ItemInstance {
   const it: ItemInstance = { id: uid(rnd), code: k.ma_vp, name: k.ten, type: "trang_bi", rarity, slot: k.o, icon: `trang_bi/${ART[k.o]}/${String(k.so).padStart(2, "0")}`, count: 1, lv, stats };
   // shortcut: trang_bi.json chưa ghi giới tính nên chia theo số thứ tự của kiểu (lẻ nam, chẵn nữ); thay bằng trường riêng khi dữ liệu có.
   if (GENDERED.includes(k.o)) it.gender = k.so % 2 ? "nam" : "nu";
-  // Món Lam một nửa thuộc một bộ, Tím trở lên luôn thuộc một bộ; Lục không có bộ.
-  if (rarity !== "luc" && (rarity !== "lam" || rnd() < 0.5)) it.set = SETS[Math.floor(rnd() * SETS.length)].id;
+  // Món Lam trở lên thuộc bộ của vùng rơi ra nó; Lục không có bộ. Rà cân bằng 2026-11-11: trước đó bộ chọn ngẫu nhiên trong 8 và chỉ nửa
+  // số món Lam có bộ, một món đúng bộ đúng ô cần chừng 6.300 lần giết trong khi đi hết thế giới chỉ chừng 2.800 lần.
+  if (rarity !== "luc") it.set = setOfRegion(region).id;
   return it;
 }
 
@@ -690,7 +697,7 @@ export function rollDrop(z: Zone, isBoss: boolean, rnd: () => number = Math.rand
   // Linh thạch giữ mức cũ (2 + cấp, thủ lĩnh cửa bí cảnh ×20), dao động ±25%.
   const out = [stack(rnd, "linh_thach", "Linh thạch", "linh_thach", "luc", "linh_thach/ha", lv, "", Math.max(1, Math.round(((2 + z.level) * (z.boss ? 20 : 1) * (0.75 + 0.5 * rnd()) * (1000 + bonus.gold)) / 1000)))];
   if (isBoss) {
-    out.push(gear(lv, rollRarity(rnd, event ? "tim" : "lam"), rnd), potItem(1, rnd));
+    out.push(gear(lv, rollRarity(rnd, event ? "tim" : "lam"), rnd, z.region), potItem(1, rnd));
     if (rnd() < 0.4) out.push(scroll());
     return out;
   }
@@ -699,8 +706,9 @@ export function rollDrop(z: Zone, isBoss: boolean, rnd: () => number = Math.rand
     const [list, dir] = rnd() < 0.5 ? [ORES, "quang"] : [HERBS, "duoc"];
     out.push(stack(rnd, list[tier][0], list[tier][1], "khoang_thach", RARITY_IDS[tier], `${dir}/${list[tier][0]}`, lv, "Nguyên liệu rèn và luyện đan"));
   }
-  if (rnd() < 0.1) out.push(gear(lv, rollRarity(rnd), rnd));
-  if (rnd() < 0.02) out.push(scroll());
+  if (rnd() < 0.1) out.push(gear(lv, rollRarity(rnd), rnd, z.region));
+  // Tàn quyển 5% trong số lần có rơi (2% mỗi lần giết). Rà cân bằng 2026-11-11: mức 2% cũ sau khi nhân 40% chỉ còn 0,8%, học đủ năm chiêu cần 16 quyển.
+  if (rnd() < 0.05) out.push(scroll());
   return out;
 }
 

@@ -203,6 +203,21 @@ test("NPC: luyện đan từ nguyên liệu, thắp hương thêm tu vi, treo th
   assert.equal(L.bountyOf(s, "d2").n, 0);
 });
 
+test("rà cân bằng 2026-11-11: cường hóa vũ khí có trần, đồ Lam trở lên mang bộ của vùng", () => {
+  const s = newSave("A", "moc");
+  s.gold = 1e9;
+  let n = 0;
+  while (upgrade(s)) n++;
+  assert.equal(n, L.WPN_MAX);
+  assert.equal(atkOf(1, 999), atkOf(1, L.WPN_MAX));
+  assert.equal(atkOf(1, L.WPN_MAX), 200);
+  for (const idx of [7, 16, 7 + 9 * 8]) {
+    const g = L.rollDrop(zone(idx), true, () => 0.5).find((x) => x.type === "trang_bi")!;
+    assert.equal(g.set, L.setOfRegion(zone(idx).region).id);
+  }
+  assert.equal(L.setOfRegion(8).id, L.setOfRegion(0).id);
+});
+
 test("tiệm: thiếu linh thạch thì không mua được", () => {
   const s = newSave("A", "moc");
   assert.equal(buyPot(s, zone(0)), false);

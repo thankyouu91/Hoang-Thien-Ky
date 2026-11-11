@@ -18,13 +18,14 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, npcCho, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  BOUNTY_N, bountyGold, bountyKill, bountyOf, brew, BREW, incense, INCENSE, NPCS, canWear, setCounts, setGender, setLine, setOf, SETS, SET_TIERS, type Gender, learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
+  setOfRegion, WPN_MAX, BOUNTY_N, bountyGold, bountyKill, bountyOf, brew, BREW, incense, INCENSE, NPCS, canWear, setCounts, setGender, setLine, setOf, SETS, SET_TIERS, type Gender, learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
 
 const SAVE_KEY = "htk.mmo.v1";
-const POT_CD = 5;
+/** Giây hồi của bình máu. Rà cân bằng 2026-11-11: 5 giây thì bình hồi 8% máu mỗi giây, trụ vô hạn trước 5–6 con ngang cấp. */
+const POT_CD = 10;
 const NAMES = ["Lạc Vân", "Tô Hàn", "Mạc Kỳ", "Diệp Thanh", "Hoa Ảnh", "Trần Phong", "Liễu Sương", "Minh Nguyệt", "Tử Sâm", "Hàn Liên", "Vô Song", "Cố Bắc"];
 /** Hình trong assets/: icon_ve/ là icon vẽ (.webp); còn lại mặc định ở pixellab/, đường dẫn bắt đầu bằng freepixel/ thì ở assets/freepixel/. */
 const ASSET = (p: string) => (p.startsWith("icon_ve/") ? `${import.meta.env.BASE_URL}${p}.webp` : `${import.meta.env.BASE_URL}${p.startsWith("freepixel/") ? "" : "pixellab/"}${p}.png`);
@@ -460,9 +461,10 @@ export class MmoScene extends BaiScene {
     }
     this.autoCast(b);
     // Tự uống khi gần cạn (người dùng chốt 2026-11-11), kể cả khi không treo auto: bình máu có hồi chiêu POT_CD, đan mana thì không.
-    if (!this.dlg.open && b.player.alive) {
-      if (b.player.hp < b.player.hpMax * AUTO_POT.hp) this.act("pot");
-      if (b.mana < b.manaMax * AUTO_POT.mana) this.act("mana");
+    // Mở bảng thì thế giới vẫn chạy, nên vẫn tự uống (rà UX 2026-11-11: trước đó mở túi giữa bãi quái là mất tự uống).
+    if (b.player.alive) {
+      if (b.player.hp < b.player.hpMax * AUTO_POT.hp) this.usePot(b);
+      if (b.mana < b.manaMax * AUTO_POT.mana) this.useMana(b);
     }
     super.update(dt);
     const p = b.player;
@@ -671,27 +673,35 @@ export class MmoScene extends BaiScene {
     else this.act("auto");
   }
 
+  private usePot(b: Bai): void {
+    const s = this.save;
+    const p = b.player;
+    if (!p.alive || s.pots <= 0 || this.clock < this.potAt || p.hp >= p.hpMax) return;
+    s.pots--;
+    this.potAt = this.clock + POT_CD;
+    const v = Math.round(Math.min(p.hpMax * POT_HEAL, p.hpMax - p.hp));
+    p.hp += v;
+    b.fx.push({ t: b.t, x: p.x, y: p.y, el: p.element, kind: "heal", amount: v });
+    this.persist();
+  }
+
+  private useMana(b: Bai): void {
+    const s = this.save;
+    const it = s.bag.find((x) => x.code === "hoi_linh_dan");
+    if (it && b.player.alive && b.mana < b.manaMax && consume(s, it.id)) {
+      b.mana = Math.min(b.manaMax, b.mana + b.manaMax * MANA_HEAL);
+      this.persist();
+    }
+  }
+
   private act(a: string): void {
     const b = this.bai;
     if (!b) return;
     const s = this.save;
     const z = zone(s.zone);
-    if (a === "pot") {
-      const p = b.player;
-      if (!p.alive || s.pots <= 0 || this.clock < this.potAt || p.hp >= p.hpMax) return;
-      s.pots--;
-      this.potAt = this.clock + POT_CD;
-      const v = Math.round(Math.min(p.hpMax * POT_HEAL, p.hpMax - p.hp));
-      p.hp += v;
-      b.fx.push({ t: b.t, x: p.x, y: p.y, el: p.element, kind: "heal", amount: v });
-      this.persist();
-    } else if (a === "mana") {
-      const it = s.bag.find((x) => x.code === "hoi_linh_dan");
-      if (it && b.player.alive && b.mana < b.manaMax && consume(s, it.id)) {
-        b.mana = Math.min(b.manaMax, b.mana + b.manaMax * MANA_HEAL);
-        this.persist();
-      }
-    } else if (a === "ctx") this.context();
+    if (a === "pot") this.usePot(b);
+    else if (a === "mana") this.useMana(b);
+    else if (a === "ctx") this.context();
     else if (a === "auto") {
       this.auto = !this.auto;
       b.auto = this.auto && !z.safe;
@@ -920,7 +930,7 @@ export class MmoScene extends BaiScene {
     };
     gate(0, z.idx - 1, -1);
     gate(b.w, z.idx + 1, 1);
-    for (const h of m.vat) if (h.ten || h.act) this.text(ctx, h.ten ?? ACT_LABEL[h.act!], h.x + h.w / 2, h.ten ? h.y - 12 : h.y + h.h + 22, "center");
+    for (const h of m.vat) if (h.act) this.text(ctx, ACT_LABEL[h.act], h.x + h.w / 2, h.y + h.h + 22, "center");
     // NPC: hình người đứng thở, tên trên đầu; lại gần thì hiện bong bóng ký hiệu chức năng.
     const near = this.nearNpc();
     this.veNpc = this.npcs.map((n, i) => () => {
@@ -983,22 +993,9 @@ export class MmoScene extends BaiScene {
     const m = this.map_;
     if (!m) return [];
     return [
-      ...m.vat.map((h) => ({ y: h.y + h.h - 24, draw: () => this.veNha(h) })),
+      ...m.vat.map((h) => ({ y: h.y + h.h - 24, draw: () => this.veHinh?.(h) })),
       ...this.npcs.map((n, i) => ({ y: n.y, draw: () => this.veNpc[i]?.() })),
     ];
-  }
-
-  /** Vẽ một hình của map; công trình của thành (có tên) là tranh vuông nên đóng thêm khung gỗ viền vàng cho ra tấm biển. */
-  private veNha(h: MapKhu["vat"][number]): void {
-    this.veHinh?.(h);
-    const ctx = this.view?.ctx;
-    if (!h.ten || !ctx) return;
-    ctx.lineWidth = 8;
-    ctx.strokeStyle = "#2a1d14";
-    ctx.strokeRect(h.x, h.y, h.w, h.h);
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "#c9a45c";
-    ctx.strokeRect(h.x + 1, h.y + 1, h.w - 2, h.h - 2);
   }
 
   private text(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, align: CanvasTextAlign): void {
@@ -1421,7 +1418,7 @@ export class MmoScene extends BaiScene {
       <h3 class="mmo-bagsec">Túi <em>${s.bag.length}/${BAG_MAX} ô · linh thạch <b>${s.gold}</b> · chạm một món để xem chỉ số rồi mới chọn mặc, dùng hay bán</em></h3>
       ${this.bagBody()}
       <h3>Bộ trang bị <em>mốc 2 / 4 / 7 món cùng bộ, cộng dồn</em></h3>
-      <div class="mmo-sets">${Object.keys(setCounts(s)).map((id) => this.setBox(id)).join("") || `<span class="mute">Chưa mặc món nào thuộc bộ. Đồ Lam trở lên mới có bộ.</span>`}</div>
+      <div class="mmo-sets">${Object.keys(setCounts(s)).map((id) => this.setBox(id)).join("") || `<span class="mute">Chưa mặc món nào thuộc bộ. Đồ Lam trở lên mang bộ của vùng rơi ra nó; vùng đang đứng rơi bộ ${setOfRegion(zone(s.zone).region).ten}.</span>`}</div>
       <details class="mmo-all-sets"><summary>Bảng ${SETS.length} bộ trang bị</summary><div class="mmo-sets">${SETS.map((x) => this.setBox(x.id)).join("")}</div></details>
       <h3>Tiềm năng <em>còn <b>${pts}</b> điểm · mỗi cấp 1 điểm</em></h3><div class="mmo-attr">${attrs}</div>
       <footer><span>Linh thạch ${s.gold}</span>
@@ -1625,7 +1622,8 @@ export class MmoScene extends BaiScene {
     const wp = wpnPrice(s);
     this.open(`<h2>Luyện Khí Phường</h2><p>Linh thạch: <b>${s.gold}</b></p>
       <div class="mmo-list">
-        <button type="button" data-buy="wpn" ${s.gold < wp ? "disabled" : ""}><b>Cường hóa vũ khí +${s.wpn} → +${s.wpn + 1}</b><small>Công ${atkOf(s.lv, s.wpn)} → ${atkOf(s.lv, s.wpn + 1)} · ${wp} linh thạch</small></button>
+        ${s.wpn >= WPN_MAX ? `<button type="button" disabled><b>Vũ khí +${s.wpn} · đã tối đa</b><small>Công ${atkOf(s.lv, s.wpn)}</small></button>`
+          : `<button type="button" data-buy="wpn" ${s.gold < wp ? "disabled" : ""}><b>Cường hóa vũ khí +${s.wpn} → +${s.wpn + 1}</b><small>Công ${atkOf(s.lv, s.wpn)} → ${atkOf(s.lv, s.wpn + 1)} · ${wp} linh thạch · tối đa +${WPN_MAX}</small></button>`}
         <button type="button" disabled><b>Khảm ngọc, đục lỗ, tẩy luyện</b><small>Chưa mở</small></button></div>`);
   }
 

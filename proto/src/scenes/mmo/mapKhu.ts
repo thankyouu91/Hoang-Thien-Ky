@@ -31,8 +31,6 @@ export interface Hinh extends Rect {
   lat?: boolean;
   /** Chạm vào thì mở tiệm hay truyền tống */
   act?: "shop" | "map";
-  /** Tên hiện dưới hình (công trình của thành) */
-  ten?: string;
 }
 
 export interface MapKhu {
