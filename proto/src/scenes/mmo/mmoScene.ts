@@ -15,7 +15,7 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
+  buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
@@ -82,6 +82,12 @@ export class MmoScene extends BaiScene {
   private bagTab = "all";
   private selItem = "";
   private fullAt = -9;
+  /** Bảng Bản đồ: vùng đang xem ở tầng 2, null là tầng 1 (cả thế giới) */
+  private mapRegion: number | null = null;
+  /** Khu đang tự chạy tới (bấm trên bản đồ), null khi không; routeX, routeAt để phát hiện kẹt */
+  private route: number | null = null;
+  private routeX = 0;
+  private routeAt = 0;
 
   constructor(sprites: Sprites) {
     super(sprites);
@@ -350,6 +356,7 @@ export class MmoScene extends BaiScene {
         }
       }
       if (dx || dy) {
+        this.route = null;
         b.moveTo(b.player.x + dx * 90, b.player.y + dy * 90);
         this.keyMove = true;
       } else if (this.keyMove) {
@@ -357,6 +364,7 @@ export class MmoScene extends BaiScene {
         this.keyMove = false;
       }
     }
+    this.run(b);
     super.update(dt);
     const p = b.player;
     if (!p.alive) return;
@@ -368,6 +376,34 @@ export class MmoScene extends BaiScene {
     if (p.x <= 6 && this.save.zone > 0) this.go(this.save.zone - 1, "right");
     else if (p.x >= b.w - 6 && this.save.zone < ZONE_COUNT - 1) this.go(this.save.zone + 1, "left");
     this.syncBar(b);
+  }
+
+  /**
+   * Tự chạy tới khu this.route: thế giới là một dải khu nên chỉ cần đi tới mép trái hay phải, sang khu thì đi tiếp.
+   * shortcut: đi thẳng tới cửa, không tìm đường vòng; đứng yên 4 giây (kẹt vùng cấm của map tự thiết kế) thì dừng. Thêm tìm đường khi map có mê cung.
+   */
+  private run(b: Bai): void {
+    const to = this.route;
+    if (to === null) return;
+    const p = b.player;
+    const zi = this.save.zone;
+    if (zi === to || !p.alive) {
+      if (zi === to) this.note(`Đã tới ${zone(to).name}`);
+      this.route = null;
+      p.goal = null;
+      return;
+    }
+    if (Math.abs(p.x - this.routeX) > 20) {
+      this.routeX = p.x;
+      this.routeAt = this.clock;
+    } else if (this.clock - this.routeAt > 4) {
+      this.route = null;
+      this.note("Bị chặn đường, dừng tự chạy");
+      return;
+    }
+    const x = to > zi ? b.w : 0;
+    p.target = null;
+    b.moveTo(x, choVao(this.map_!, x + (to > zi ? -70 : 70)).y);
   }
 
   private key(e: KeyboardEvent, down: boolean): void {
@@ -439,7 +475,10 @@ export class MmoScene extends BaiScene {
     } else if (a === "shop") {
       if (z.safe) this.shop();
       else this.note("Tiệm chỉ mở ở sơn môn và bến đò");
-    } else if (a === "map") this.map();
+    } else if (a === "map") {
+      if (this.panel !== "map") this.mapRegion = null;
+      this.map();
+    }
     else if (a === "help") this.help();
     else if (a === "sit") {
       const p = b.player;
@@ -644,6 +683,7 @@ export class MmoScene extends BaiScene {
   }
 
   protected override tap(sx: number, sy: number): void {
+    this.route = null;
     const d = this.down;
     if (this.map_ && d && this.view && Math.hypot(sx - d.x, sy - d.y) <= 10) {
       const p = this.camera.toWorld(sx, sy, this.view);
@@ -729,6 +769,9 @@ export class MmoScene extends BaiScene {
     else if (d.use === "pot") {
       this.act("pot");
       this.bag();
+    } else if (d.openmap !== undefined) {
+      this.dlg.close();
+      this.act("map");
     } else if (d.item) {
       this.selItem = d.item;
       this.bag();
@@ -783,14 +826,28 @@ export class MmoScene extends BaiScene {
     }
     else if (d.buy === "pot") {
       if (buyPot(s, zone(s.zone))) this.shop();
+    } else if (d.buy === "phu") {
+      if (buyPhu(s, zone(s.zone))) this.shop();
+    } else if (d.region !== undefined) {
+      this.mapRegion = d.region === "" ? null : Number(d.region);
+      this.map();
+    } else if (d.route !== undefined) {
+      this.route = Number(d.route);
+      this.routeAt = this.clock;
+      this.sit = false;
+      this.dlg.close();
+      this.note(`Tự chạy tới ${zone(this.route).name} · bấm phím mũi tên hoặc chạm đất để dừng`);
     } else if (d.buy === "wpn") {
       if (upgrade(s)) {
         if (this.bai) this.applyStats(this.bai, false);
         this.shop();
       }
     } else if (d.tp !== undefined) {
-      this.dlg.close();
-      this.go(Number(d.tp), "mid");
+      if (teleport(s, Number(d.tp))) {
+        this.route = null;
+        this.dlg.close();
+        this.go(Number(d.tp), "mid");
+      } else this.note("Cần Truyền Tống Phù (mua ở Thương hội)");
     } else if (d.start !== undefined) {
       const name = this.dlg.querySelector<HTMLInputElement>("input")!.value;
       const el = this.dlg.querySelector<HTMLSelectElement>("select")!.value as ElementId;
@@ -812,28 +869,55 @@ export class MmoScene extends BaiScene {
     this.open(`<h2>Thương hội</h2><p>Linh thạch: <b>${s.gold}</b></p>
       <div class="mmo-list">
         <button type="button" data-buy="pot" ${s.gold < pp ? "disabled" : ""}><b>Bình máu</b> (đang có ${s.pots})<small>Hồi ${POT_HEAL * 100}% máu · ${pp} linh thạch</small></button>
+        <button type="button" data-buy="phu" ${s.gold < phuPrice(zone(s.zone)) ? "disabled" : ""}><b>Truyền Tống Phù</b> (đang có ${s.phu ?? 0})<small>Truyền tống về sơn môn, bến đò khi đang ở ngoài · ${phuPrice(zone(s.zone))} linh thạch</small></button>
         <button type="button" data-buy="wpn" ${s.gold < wp ? "disabled" : ""}><b>Cường hóa vũ khí +${s.wpn} → +${s.wpn + 1}</b><small>Công ${atkOf(s.lv, s.wpn)} → ${atkOf(s.lv, s.wpn + 1)} · ${wp} linh thạch</small></button>
       </div><button type="button" data-close>Đóng</button>`);
   }
 
+  /**
+   * Bản đồ hai tầng. Tầng 1: cả thế giới dạng đĩa, 12 vùng vòng ngoài và Cấm Khu ở tâm, vùng chưa tới phủ sương.
+   * Tầng 2: chín khu của một vùng nối thành đường; bấm một khu để tự chạy tới, nút Truyền tống về sơn môn hay bến đò.
+   */
   private map(): void {
     const s = this.save;
-    const here = zone(s.zone).region;
-    const rows = REGIONS.map(([, name, el], r) => {
-      const open = s.maxZone >= townOf(r);
-      const lv = zone(townOf(r) + 1).level;
-      return `<button type="button" data-tp="${townOf(r)}" ${open ? "" : "disabled"} class="${r === here ? "on" : ""}">
-        <b>${name}</b><small>${ELEMENT_STYLE[el].name} · dị thú cấp ${lv}–${lv + 10}${open ? "" : " · chưa tới"}</small></button>`;
+    const B = import.meta.env.BASE_URL;
+    const here = zone(s.zone);
+    const r = this.mapRegion;
+    if (r === null) {
+      const n = REGIONS.length - 1;
+      const nodes = REGIONS.map(([, name, el], i) => {
+        const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+        const [x, y] = i === n ? [50, 50] : [50 + 41 * Math.cos(a), 50 + 41 * Math.sin(a)];
+        const lv = zone(townOf(i) + 1).level;
+        return `<button type="button" data-region="${i}" class="${s.maxZone >= townOf(i) ? "" : "fog"} ${i === here.region ? "on" : ""}" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%" title="${name}">
+          <i style="background-image:url(${B}icon_ve/he/${el}.webp)"></i><b>${name}</b><small>${ELEMENT_STYLE[el].name} · cấp ${lv}+</small></button>`;
+      }).join("");
+      this.open(`<h2>Bản đồ thế giới</h2><div class="mmo-world">${nodes}</div>
+        <footer><span>Đang ở: ${here.name}</span><span>Bấm một vùng để xem chín khu của vùng</span></footer>`, true);
+      return;
+    }
+    const [, name, el] = REGIONS[r];
+    const nodes = Array.from({ length: 9 }, (_, k) => {
+      const z = zone(townOf(r) + k);
+      const hold = mineHolder(z.idx);
+      return `<button type="button" data-route="${z.idx}" class="${z.safe ? "safe" : z.boss ? "boss" : ""} ${z.idx === s.zone ? "on" : ""} ${z.idx <= s.maxZone ? "" : "fog"}" ${z.idx <= s.maxZone + 1 && z.idx !== s.zone ? "" : "disabled"}
+        title="${z.idx === s.zone ? "Đang ở đây" : z.idx <= s.maxZone + 1 ? "Bấm để tự chạy tới" : "Chưa tới được"}"><i>${k + 1}</i><b>${z.name.split(" · ")[1]}</b><small>${z.safe ? "An toàn" : z.boss ? `Thủ lĩnh ${z.level}` : `Cấp ${z.level}`}</small>
+        ${hold ? `<em class="${hold[0] === s.sect?.id ? "mine" : ""}" title="${hold[1]} (tông môn NPC) đang giữ mỏ này">⚑ ${hold[1].split(" ").slice(0, 2).join(" ")}</em>` : ""}</button>`;
     }).join("");
-    this.open(`<h2>Truyền tống trận</h2><p>Tới sơn môn của vùng đã đặt chân. Đang ở: ${zone(s.zone).name}</p>
-      <div class="mmo-list">${rows}</div><button type="button" data-close>Đóng</button>`);
+    const free = here.safe;
+    const tp = (idx: number, ten: string) => `<button type="button" data-tp="${idx}" ${idx <= s.maxZone && idx !== s.zone && (free || s.phu) ? "" : "disabled"}>Truyền tống: ${ten}</button>`;
+    this.open(`<h2>${name}</h2><h3>Chín khu <em>hệ ${ELEMENT_STYLE[el].name} · bấm một khu để tự chạy tới</em></h3>
+      <div class="mmo-path">${nodes}</div>
+      <p class="mmo-note">${free ? "Đang ở khu an toàn: truyền tống miễn phí." : `Đang ở ngoài: mỗi lần truyền tống tốn 1 Truyền Tống Phù (đang có <b>${s.phu ?? 0}</b>).`}</p>
+      <footer><button type="button" data-region="">◂ Thế giới</button><span>${tp(townOf(r), "Sơn môn")} ${tp(townOf(r) + 8, "Bến đò")}</span></footer>`, true);
   }
 
   /** Túi: thẻ lọc, lưới BAG_MAX ô, khung phải là món đang chọn (so chỉ số với món đang mặc, nút Trang bị, Sử dụng, Bán). */
   private bag(): void {
     const s = this.save;
     // Bình máu là bộ đếm (save.pots) nên hiện thành một ô ảo đứng đầu.
-    const all: ItemInstance[] = [...(s.pots > 0 ? [{ ...potItem(s.pots), id: "pot" }] : []), ...s.bag];
+    const all: ItemInstance[] = [...(s.pots > 0 ? [{ ...potItem(s.pots), id: "pot" }] : []), ...(s.phu ? [{ ...phuItem(s.phu), id: "phu" }] : []), ...s.bag];
+    const virtual = (it: ItemInstance) => it.id === "pot" || it.id === "phu";
     const tab = this.bagTab;
     const list = all.filter((it) => tab === "all" || (tab === "nl" ? it.type === "khoang_thach" || it.type === "tan_quyen" : it.type === tab));
     const sel = list.find((it) => it.id === this.selItem) ?? list[0];
@@ -850,8 +934,8 @@ export class MmoScene extends BaiScene {
       }).join("");
       const btns = [
         sel.slot ? `<button type="button" data-equip="${sel.id}">Trang bị</button>` : "",
-        sel.id === "pot" ? `<button type="button" data-use="pot">Sử dụng</button>` : sel.type === "dan_duoc" ? `<button type="button" data-useitem="${sel.id}">Sử dụng</button>` : "",
-        sel.id === "pot" ? "" : `<button type="button" class="bad" data-sell="${sel.id}">Bán · ${sellPrice(sel)} linh thạch</button>`,
+        sel.id === "pot" ? `<button type="button" data-use="pot">Sử dụng</button>` : sel.id === "phu" ? `<button type="button" data-openmap>Mở bản đồ</button>` : sel.type === "dan_duoc" ? `<button type="button" data-useitem="${sel.id}">Sử dụng</button>` : "",
+        virtual(sel) ? "" : `<button type="button" class="bad" data-sell="${sel.id}">Bán · ${sellPrice(sel)} linh thạch</button>`,
       ].join("");
       detail = `<header><i class="q-${sel.rarity}" style="${url(sel)}"></i><span><b style="color:${RARITY[sel.rarity][1]}">${esc(sel.name)}</b>
           <em>Phẩm ${RARITY[sel.rarity][0]}${sel.slot ? ` · ${SLOTS.find(([id]) => id === sel.slot)![1]} · cấp ${sel.lv}` : ""}</em></span></header>
@@ -1000,7 +1084,7 @@ const HELP = `<ul>
   <li><b>Đi:</b> chạm đất, hoặc phím mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
   <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng.</li>
   <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>H</b> thư.</li>
-  <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm) · <b>F</b> treo auto · <b>M</b> truyền tống · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
+  <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm) · <b>F</b> treo auto · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
   <li><b>I</b> túi · <b>P</b> nhân vật (cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
   <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím Cách hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán.</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;

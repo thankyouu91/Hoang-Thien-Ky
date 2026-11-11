@@ -99,6 +99,8 @@ export interface Save {
   sect?: { id: string; cong: number; checkIn: string; taskDay: string; kills: number; taskDone: boolean };
   /** Mã các thư đã nhận quà */
   mail?: string[];
+  /** Số Truyền Tống Phù */
+  phu?: number;
   /** Túi đồ, tối đa BAG_MAX ô; bình máu và linh thạch không nằm ở đây (pots, gold) */
   bag: ItemInstance[];
   /** Đồ đang mặc theo ô (EquipSlot) */
@@ -106,7 +108,7 @@ export interface Save {
 }
 
 export function newSave(name: string, element: ElementId): Save {
-  return { v: 1, name: name.trim().slice(0, 16) || "Vô Danh", element, lv: 1, xp: 0, gold: 0, pots: 3, wpn: 0, zone: 0, maxZone: 0, quest: { zone: 1, n: 0 }, bag: [], equips: {} };
+  return { v: 1, name: name.trim().slice(0, 16) || "Vô Danh", element, lv: 1, xp: 0, gold: 0, pots: 3, wpn: 0, zone: 0, maxZone: 0, quest: { zone: 1, n: 0 }, phu: 3, bag: [], equips: {} };
 }
 
 export const hpOf = (lv: number) => 2000 + 220 * (lv - 1);
@@ -162,6 +164,30 @@ export function buyPot(s: Save, z: Zone): boolean {
   s.pots++;
   return true;
 }
+
+export const phuPrice = (z: Zone) => 60 + 30 * z.region;
+
+export function buyPhu(s: Save, z: Zone): boolean {
+  if (s.gold < phuPrice(z)) return false;
+  s.gold -= phuPrice(z);
+  s.phu = (s.phu ?? 0) + 1;
+  return true;
+}
+
+/**
+ * Truyền tống tới một khu an toàn đã từng tới (sơn môn, bến đò). Đang đứng ở khu an toàn thì dùng truyền tống trận, miễn phí;
+ * ở ngoài thì tốn 1 Truyền Tống Phù. true là đi được (người gọi chuyển khu). Giá phù và 3 phù khởi đầu là đề xuất.
+ */
+export function teleport(s: Save, idx: number): boolean {
+  if (idx !== Math.floor(idx) || idx < 0 || idx > s.maxZone || !zone(idx).safe) return false;
+  if (zone(s.zone).safe) return true;
+  if (!s.phu) return false;
+  s.phu--;
+  return true;
+}
+
+/** Tông môn NPC giữ một mỏ (khu mỏ dược, mỏ quặng, mỏ linh thạch); null với khu khác. shortcut: xếp cố định theo số khu, đổi khi có tranh đoạt mỏ thật. */
+export const mineHolder = (idx: number) => ([2, 4, 5].includes(idx % PER) ? SECTS[(Math.floor(idx / PER) + (idx % PER)) % SECTS.length] : null);
 
 export function upgrade(s: Save): boolean {
   const c = wpnPrice(s);
@@ -407,6 +433,10 @@ function gear(lv: number, rarity: ItemRarity, rnd: () => number): ItemInstance {
   }
   return { id: uid(rnd), code: k.ma_vp, name: k.ten, type: "trang_bi", rarity, slot: k.o, icon: `trang_bi/${ART[k.o]}/${String(k.so).padStart(2, "0")}`, count: 1, lv, stats };
 }
+
+/** Truyền Tống Phù dưới dạng một món để hiện trong túi; số lượng thật nằm ở save.phu. */
+export const phuItem = (count: number): ItemInstance =>
+  stack(Math.random, "truyen_tong_phu", "Truyền Tống Phù", "dan_duoc", "lam", "phu/bao_ngoc", 1, "Truyền tống về sơn môn hay bến đò khi đang ở ngoài khu an toàn. Dùng trong Bản đồ (M).", count);
 
 /** Đồ rơi khi giết một con ở khu z. isBoss: thủ lĩnh (cửa bí cảnh hay thủ lĩnh trong bãi). */
 export function rollDrop(z: Zone, isBoss: boolean, rnd: () => number = Math.random): ItemInstance[] {

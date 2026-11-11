@@ -271,3 +271,52 @@ body .mmo-dlg .mmo-tabs button.on { border-color: var(--m-gold2); color: var(--m
 body .mmo-detail .mute { color: var(--m-mute); }
 body .mmo-detail dd i { font-style: normal; font-size: 11px; }
 body .mmo-detail dd .up { color: #8fd49a; } body .mmo-detail dd .down { color: #e0806a; }
+
+/* ---------- Bản đồ: đĩa thế giới (tầng 1) và đường chín khu (tầng 2) ---------- */
+body .mmo-world {
+  position: relative; width: min(100%, 460px); aspect-ratio: 1; margin: 6px auto 0; border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(201, 164, 92, 0.16) 0 17%, transparent 17.4%),
+    radial-gradient(circle, transparent 40.6%, rgba(201, 164, 92, 0.35) 41%, transparent 41.6%),
+    radial-gradient(circle, rgba(56, 44, 28, 0.55), rgba(18, 14, 10, 0.2) 70%);
+  animation: mmo-zoom 0.25s ease-out;
+}
+body .mmo-dlg .mmo-world button {
+  position: absolute; transform: translate(-50%, -50%); width: 92px; display: grid; justify-items: center; gap: 1px; padding: 0;
+  border: 0; background: none; box-shadow: none; color: var(--m-text); cursor: pointer;
+}
+body .mmo-world i { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--m-gold); background: #000 center / cover; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); transition: transform 0.15s; }
+body .mmo-world button:hover i { transform: scale(1.12); }
+body .mmo-world b { font-size: 11px; line-height: 1.2; color: var(--m-gold2); text-shadow: var(--m-shadow); white-space: nowrap; }
+body .mmo-world small { font: 9px system-ui, sans-serif; color: var(--m-mute); white-space: nowrap; }
+body .mmo-world .on i { border-color: #8fd49a; box-shadow: 0 0 0 2px #8fd49a, 0 0 14px rgba(143, 212, 154, 0.7); }
+/* Sương mù: vùng và khu chưa từng tới */
+body .mmo-world .fog i, body .mmo-path .fog i { filter: grayscale(1) brightness(0.5) blur(1px); }
+body .mmo-world .fog b, body .mmo-world .fog small, body .mmo-path .fog b, body .mmo-path .fog small { opacity: 0.45; }
+body .mmo-world .fog::after {
+  content: ""; position: absolute; left: 50%; top: 22px; width: 70px; height: 50px; transform: translate(-50%, -50%); pointer-events: none;
+  background: radial-gradient(closest-side, rgba(226, 226, 220, 0.4), transparent); filter: blur(4px);
+}
+@keyframes mmo-zoom { from { transform: scale(0.72); opacity: 0; } }
+body .mmo-path { position: relative; display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; padding: 6px 0 2px; animation: mmo-zoom 0.25s ease-out; }
+body .mmo-path::before { content: ""; position: absolute; left: 5%; right: 5%; top: 24px; border-top: 2px dashed var(--m-gold); opacity: 0.55; }
+body .mmo-dlg .mmo-path button { position: relative; display: grid; justify-items: center; align-content: start; gap: 2px; padding: 0; border: 0; background: none; box-shadow: none; color: var(--m-text); }
+body .mmo-dlg .mmo-path button:disabled { opacity: 1; }
+body .mmo-path i { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #8c6a3a; background: #1d1610; font: 700 13px/30px system-ui, sans-serif; color: var(--m-gold2); text-align: center; }
+body .mmo-path .safe i { border-color: #8fd49a; color: #8fd49a; }
+body .mmo-path .boss i { border-color: #e0553f; color: #ff9a85; }
+body .mmo-path .on i { background: var(--m-gold); color: #1d1610; box-shadow: 0 0 12px rgba(241, 207, 122, 0.7); }
+body .mmo-path button:hover:not(:disabled) i { transform: scale(1.12); }
+body .mmo-path b { font-size: 11px; line-height: 1.2; color: var(--m-gold2); }
+body .mmo-path small { font: 9px system-ui, sans-serif; color: var(--m-mute); }
+body .mmo-path em { font: 9px system-ui, sans-serif; font-style: normal; color: #e0806a; }
+body .mmo-path em.mine { color: #8fd49a; }
+body .mmo-note { margin: 12px 0 0; color: var(--m-mute); }
+@media (max-width: 640px) {
+  body .mmo-path { grid-template-columns: repeat(3, 1fr); gap: 12px 2px; }
+  body .mmo-path::before { display: none; }
+  body .mmo-dlg .mmo-world button { width: 70px; }
+  body .mmo-world i { width: 34px; height: 34px; }
+  body .mmo-world b { font-size: 9px; }
+  body .mmo-world small { display: none; }
+}

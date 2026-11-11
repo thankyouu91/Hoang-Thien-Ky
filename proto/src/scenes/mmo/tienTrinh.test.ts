@@ -66,6 +66,21 @@ test("rơi đồ: linh thạch luôn rơi, thủ lĩnh chắc chắn rơi trang 
   assert.equal(L.pickUp(s, only[0]), true);
 });
 
+test("truyền tống: khu an toàn đã tới; ngoài khu an toàn tốn phù", () => {
+  const s = newSave("A", "moc");
+  s.maxZone = 9;
+  assert.equal(L.teleport(s, 1), false); // khu có quái
+  assert.equal(L.teleport(s, 18), false); // chưa tới
+  assert.equal(L.teleport(s, 8), true); // đang ở sơn môn: miễn phí
+  assert.equal(s.phu, 3);
+  s.zone = 1;
+  assert.equal(L.teleport(s, 0), true);
+  assert.equal(s.phu, 2);
+  s.phu = 0;
+  assert.equal(L.teleport(s, 0), false);
+  assert.ok(L.mineHolder(2) && !L.mineHolder(0) && !L.mineHolder(7));
+});
+
 test("tiệm: thiếu linh thạch thì không mua được", () => {
   const s = newSave("A", "moc");
   assert.equal(buyPot(s, zone(0)), false);
