@@ -375,3 +375,42 @@ body .mmo-all-sets summary { cursor: pointer; color: var(--m-gold2); margin-bott
 
 /* Phím I cuộn tới phần Túi: chừa chỗ cho thanh tiêu đề dính */
 body .mmo-bagsec { scroll-margin-top: 58px; }
+
+/* ---------- Cụm phím cánh hoa (góc dưới phải): đánh thường ở tâm, sáu ô chiêu ôm quanh, lướt né và chiêu cuối ở vòng trong ---------- */
+body .mmo-hud .bai-skills { position: fixed; right: 12px; bottom: 12px; z-index: 6; display: block; width: 260px; height: 260px; pointer-events: none; }
+body .mmo-hud .bai-skills button {
+  position: absolute; left: calc(178px + var(--r, 118px) * cos(var(--a, 0deg))); top: calc(178px + var(--r, 118px) * sin(var(--a, 0deg)));
+  width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%; pointer-events: auto; transform: none;
+  box-shadow: 0 0 0 1px #000, 0 3px 8px rgba(0, 0, 0, 0.6);
+}
+body .mmo-hud .bai-skills button:nth-child(1) { --a: 180deg; } body .mmo-hud .bai-skills button:nth-child(2) { --a: 201deg; }
+body .mmo-hud .bai-skills button:nth-child(3) { --a: 222deg; } body .mmo-hud .bai-skills button:nth-child(4) { --a: 243deg; }
+body .mmo-hud .bai-skills button:nth-child(5) { --a: 264deg; } body .mmo-hud .bai-skills button:nth-child(6) { --a: 285deg; }
+body .mmo-hud .bai-skills .ult { --a: 225deg; --r: 66px; width: 52px; height: 52px; margin: -26px 0 0 -26px; transform: none; }
+body .mmo-hud .bai-skills .dash { --a: 135deg; --r: 76px; width: 44px; height: 44px; margin: -22px 0 0 -22px; }
+body .mmo-hud .bai-skills .atk { --r: 0px; width: 74px; height: 74px; margin: -37px 0 0 -37px; border: 2px solid var(--m-gold2); background-size: 70%; box-shadow: 0 0 0 1px #000, 0 0 14px rgba(241, 207, 122, 0.45); }
+body .mmo-hud .bai-skills .atk:active { transform: scale(0.94); }
+body .mmo-hud .bai-skills kbd, body .mmo-hud .bai-skills .ult kbd { left: 50%; top: -5px; transform: translateX(-50%); border-radius: 3px; }
+body .mmo-hud .bai-skills button[data-cd]:not([data-cd=""])::after { border-radius: 50%; font-size: 17px; }
+@media (max-width: 760px) { body .mmo-hud .bai-skills { bottom: 104px; right: 4px; transform: scale(0.86); transform-origin: bottom right; } }
+
+/* Hào quang cảnh giới: vòng vạch quay quanh chân dung, màu và tốc độ theo đại cảnh giới */
+body .mmo-face { --aura: #c9a45c; --spin: 16s; }
+body .mmo-face[data-realm="1"] { --aura: #8fd49a; --spin: 12s; } body .mmo-face[data-realm="2"] { --aura: #38bdf8; --spin: 9s; }
+body .mmo-face[data-realm="3"] { --aura: #c084fc; --spin: 7s; } body .mmo-face[data-realm="4"] { --aura: #f43f5e; --spin: 5s; }
+body .mmo-face::before { background: repeating-conic-gradient(from -4deg, var(--aura) 0 8deg, transparent 0 45deg); animation: mmo-spin var(--spin) linear infinite; filter: drop-shadow(0 0 4px var(--aura)); }
+body .mmo-face::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; pointer-events: none; box-shadow: 0 0 12px 2px var(--aura); opacity: 0.55; animation: mmo-pulse 2.4s ease-in-out infinite; }
+@keyframes mmo-spin { to { transform: rotate(360deg); } }
+@keyframes mmo-pulse { 50% { opacity: 0.15; } }
+/* Ống máu chất lỏng: vệt sáng trôi trên phần máu còn */
+body .mmo-me .hp i { background: linear-gradient(180deg, #d9485c, #8a1a35 60%, #5e0f25); overflow: hidden; }
+body .mmo-me .hp i::after { content: ""; position: absolute; inset: 0 -21px 0 -21px; background: repeating-linear-gradient(105deg, transparent 0 14px, rgba(255, 255, 255, 0.16) 14px 20px); animation: mmo-flow 1.6s linear infinite; }
+@keyframes mmo-flow { to { transform: translateX(20.7px); } }
+@media (prefers-reduced-motion: reduce) { body .mmo-face::before, body .mmo-face::after, body .mmo-me .hp i::after { animation: none; } }
+
+/* Nút [F] theo ngữ cảnh: nổi vàng giữa màn hình, trên thanh dưới */
+body .mmo-top .mmo-ctx {
+  left: 50%; bottom: 150px; transform: translateX(-50%); padding: 7px 16px; border: 1px solid #f1cf7a; border-radius: 18px; cursor: pointer;
+  background: linear-gradient(180deg, #f1cf7a, #b37f25); color: #1d1610; font: 700 13px "Lora Variable", Cambria, serif; box-shadow: 0 0 14px rgba(241, 207, 122, 0.6);
+}
+body .mmo-ctx kbd { padding: 0 6px; margin-right: 4px; border-radius: 3px; background: #1d1610; color: #f1cf7a; font: 700 11px/16px system-ui, sans-serif; }

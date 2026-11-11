@@ -193,6 +193,33 @@ export class Bai {
     this.player.target = null;
   }
 
+  private dashAt = 0;
+  private guardUntil = 0;
+  /** Giây hồi còn lại của lướt né. */
+  dashLeft(): number {
+    return Math.max(0, this.dashAt - this.t);
+  }
+
+  /** Lướt né theo hướng (dx, dy), không có hướng thì theo hướng đang nhìn: dừng trước vùng cấm, không dính đòn trong BAI.dashGuard giây. */
+  dash(dx: number, dy: number): boolean {
+    const p = this.player;
+    if (!p.alive || this.dashLeft() > 0) return false;
+    if (!dx && !dy) dx = p.face;
+    const d = Math.hypot(dx, dy);
+    for (let i = 0; i < 8; i++) {
+      const x = Math.max(0, Math.min(this.w, p.x + ((dx / d) * BAI.dashDist) / 8));
+      const y = Math.max(this.top, Math.min(this.h, p.y + ((dy / d) * BAI.dashDist) / 8));
+      if (this.inBlocked(x, y)) break;
+      p.x = x;
+      p.y = y;
+    }
+    if (dx) p.face = dx > 0 ? 1 : -1;
+    p.goal = null;
+    this.dashAt = this.t + BAI.dashCd;
+    this.guardUntil = this.t + BAI.dashGuard;
+    return true;
+  }
+
   /** Chạm quái: tới gần rồi đánh thường. */
   attack(id: number): void {
     const m = this.get(id);
@@ -406,6 +433,7 @@ export class Bai {
   }
 
   private damage(from: Actor, to: Actor, raw: number): void {
+    if (to === this.player && this.t < this.guardUntil) return; // vừa lướt né
     let amount = raw;
     // Chưa cộng điểm thì crit = 0, không rút số ngẫu nhiên: trận cũ giữ nguyên kết quả.
     if (from === this.player && this.mod.crit > 0 && this.rnd() < this.mod.crit / 1000) amount *= 1.5 + this.mod.critDmg / 1000;

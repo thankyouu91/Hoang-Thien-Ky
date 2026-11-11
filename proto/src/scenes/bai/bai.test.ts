@@ -58,6 +58,25 @@ m.hpMax = m.hp = 1e7;
   assert.ok(Math.abs(b.player.x - m.x) < BAI.meleeRange);
 });
 
+test("lướt né: đi một quãng, có hồi chiêu, không dính đòn ngay sau đó", () => {
+  const b = new Bai();
+  const p = b.player;
+  const x = p.x;
+  assert.ok(b.dash(1, 0));
+  assert.ok(Math.abs(p.x - x - BAI.dashDist) < 1);
+  assert.equal(b.dash(1, 0), false);
+  assert.ok(b.dashLeft() > 0);
+  const m = monsters(b)[0];
+  m.x = p.x + 10;
+  m.y = p.y;
+  m.target = p.id;
+  const hp = p.hp;
+  b.step(0.05);
+  assert.equal(p.hp, hp);
+  for (let i = 0; i < (BAI.dashCd + 0.1) / 0.05; i++) b.step(0.05);
+  assert.ok(p.hp < hp && b.dashLeft() === 0);
+});
+
 test("người chơi giết quái được tu vi, quái hồi sinh ở tổ sau ít giây", () => {
   const b = new Bai();
   const m = monsters(b)[0];

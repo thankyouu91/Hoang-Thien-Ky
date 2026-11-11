@@ -64,6 +64,11 @@ export const BAI = {
   zonePct: 0.2,
   leech: 0.2,
 
+  /** Lướt né (đề xuất): quãng lướt, giây hồi, số giây không dính đòn ngay sau khi lướt */
+  dashDist: 220,
+  dashCd: 4,
+  dashGuard: 0.35,
+
   /** Chiêu cuối: thanh nội tại đầy sau chừng này sát thương gây ra; mở ở cấp 150 với 1 điểm, mỗi 10 cấp sau +1 điểm */
   ultFill: 4000,
   ultLevel: 150,
