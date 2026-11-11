@@ -93,7 +93,7 @@ export interface Save {
   diem?: Record<string, number>;
   /** Tầng của từng chiêu, 1 khi chưa ghi */
   tang?: Record<string, number>;
-  /** Chiêu xếp vào sáu ô ra chiêu (Q W E R T U), null là ô trống; chưa ghi thì năm chiêu khởi đầu */
+  /** Chiêu xếp vào sáu ô ra chiêu (Q W E R T Y), null là ô trống; chưa ghi thì năm chiêu khởi đầu */
   slots?: (SkillType | null)[];
   /** Tông môn đang ở: cống hiến, ngày điểm danh gần nhất, nhiệm vụ diệt dị thú của ngày taskDay */
   sect?: { id: string; cong: number; checkIn: string; taskDay: string; kills: number; taskDone: boolean };
