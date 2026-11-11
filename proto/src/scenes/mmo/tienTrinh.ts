@@ -104,6 +104,10 @@ export interface Save {
     ore?: boolean;
     boss?: boolean;
   };
+  /** Số tầng tháp Tầm Đạo đã qua (0–8) */
+  thap?: number;
+  /** Bế quan: mốc bắt đầu tích (ms), ngày của bộ đếm, số giây đã thu trong ngày đó */
+  afk?: { from: number; day: string; used: number };
   /** Bậc lĩnh ngộ từng hệ, lên bằng ghép tàn quyển ở Tàng Kinh Các */
   ngo?: Record<string, number>;
   /** Mã các thư đã nhận quà */
@@ -540,15 +544,15 @@ function gear(lv: number, rarity: ItemRarity, rnd: () => number): ItemInstance {
 export const phuItem = (count: number): ItemInstance =>
   stack(Math.random, "truyen_tong_phu", "Truyền Tống Phù", "dan_duoc", "lam", "phu/bao_ngoc", 1, "Truyền tống về sơn môn hay bến đò khi đang ở ngoài khu an toàn. Dùng trong Bản đồ (M).", count);
 
-/** Đồ rơi khi giết một con ở khu z. isBoss: thủ lĩnh (cửa bí cảnh hay thủ lĩnh trong bãi). */
-export function rollDrop(z: Zone, isBoss: boolean, rnd: () => number = Math.random): ItemInstance[] {
+/** Đồ rơi khi giết một con ở khu z. isBoss: thủ lĩnh (cửa bí cảnh hay thủ lĩnh trong bãi). event: đang giờ Bí Cảnh Tranh Đoạt, thủ lĩnh chắc chắn rơi phẩm Tím. */
+export function rollDrop(z: Zone, isBoss: boolean, rnd: () => number = Math.random, event = false): ItemInstance[] {
   const lv = Math.max(1, z.level);
   const tier = Math.min(3, Math.floor(z.region / 4));
   const scroll = () => stack(rnd, `tan_quyen_${z.element}`, `Tàn quyển hệ ${ELEMENT_STYLE[z.element].name}`, "tan_quyen", "tim", `tan_quyen/${z.element}`, lv, "Mảnh công pháp, gom đủ để ghép ở Tàng Kinh Các");
   // Linh thạch giữ mức cũ (2 + cấp, thủ lĩnh cửa bí cảnh ×20), dao động ±25%.
   const out = [stack(rnd, "linh_thach", "Linh thạch", "linh_thach", "luc", "linh_thach/ha", lv, "", Math.max(1, Math.round((2 + z.level) * (z.boss ? 20 : 1) * (0.75 + 0.5 * rnd()))))];
   if (isBoss) {
-    out.push(gear(lv, rnd() < 0.5 ? "lam" : "tim", rnd), potItem(1, rnd));
+    out.push(gear(lv, rnd() < 0.5 && !event ? "lam" : "tim", rnd), potItem(1, rnd));
     if (rnd() < 0.4) out.push(scroll());
     if (rnd() < 0.15) out.push(gear(lv, "vang", rnd));
     // Phẩm Đỏ: chỉ thủ lĩnh vùng cuối (Cấm Khu), thay cho "Tứ Tượng Thần Vực" của chỉ thị vì thế giới chưa có vùng đó.
@@ -624,4 +628,62 @@ export function consume(s: Save, id: string): ItemInstance | null {
   if (!it || it.type !== "dan_duoc") return null;
   if (--it.count <= 0) s.bag.splice(i, 1);
   return it;
+}
+
+// ---------- Hoạt động: lịch sự kiện, tháp Tầm Đạo, bế quan ----------
+// Giờ sự kiện theo docs/CHI_THI_CLAUDE_LOOT_VA_UIUX.md bước 6, tính theo đồng hồ máy người chơi. Thưởng tháp, danh hiệu và
+// tốc độ bế quan là đề xuất, chưa có trong GDD.
+
+/** Sự kiện trong ngày: các khung giờ [bắt đầu, kết thúc) tính bằng phút từ 0 giờ. */
+export const EVENTS = {
+  bi_canh: { ten: "Bí Cảnh Tranh Đoạt", gio: [[720, 750], [1200, 1230]], mo: "Thủ lĩnh ở Cửa bí cảnh chắc chắn rơi trang bị phẩm Tím" },
+  the_gioi: { ten: "Dị Thú Xuất Thế", gio: [[1260, 1290]], mo: "Săn Tứ Tượng Thần Thú liên máy chủ, rơi phẩm Vàng và Đỏ" },
+  chien: { ten: "Chiến tranh địa bàn", gio: [[1260, 1320]], mo: "Liên minh tranh mỏ và công phá sơn môn" },
+};
+export type EventId = keyof typeof EVENTS;
+export const eventOn = (id: EventId, min: number) => EVENTS[id].gio.some(([a, b]) => min >= a && min < b);
+/** Số phút tới lần mở kế của sự kiện (0 khi đang mở). */
+export const eventIn = (id: EventId, min: number) => (eventOn(id, min) ? 0 : Math.min(...EVENTS[id].gio.map(([a]) => (a - min + 1440) % 1440)));
+
+/**
+ * Tháp Tầm Đạo 8 tầng. shortcut: chưa có phó bản riêng, tầng n là hạ thủ lĩnh Cửa bí cảnh của vùng thứ n theo đúng thứ tự;
+ * chưa ép dùng công pháp khắc hệ (nhân vật mới có một hệ). Dựng phó bản riêng khi có hệ đổi công pháp.
+ */
+export const TOWER = ["Sơ Nhập Đạo Đồ", "Tầm Đạo Giả", "Vấn Đạo Nhân", "Ngộ Đạo Sĩ", "Đắc Đạo Khách", "Chứng Đạo Tôn", "Hợp Đạo Chân Nhân", "Đạo Tổ"];
+/** Khu của tầng n (từ 0): Cửa bí cảnh của vùng n. */
+export const towerZone = (n: number) => townOf(n) + 7;
+export const towerGold = (n: number) => 300 * (n + 1);
+/** Danh hiệu đang có theo số tầng đã qua; "" khi chưa qua tầng nào. */
+export const title = (s: Save) => TOWER[(s.thap ?? 0) - 1] ?? "";
+
+/** Gọi khi hạ một thủ lĩnh ở khu z; trả về số linh thạch thưởng nếu vừa qua tầng kế của tháp, không thì 0. Thưởng thêm 2 tàn quyển hệ của vùng (túi đầy thì mất). */
+export function towerKill(s: Save, z: Zone, rnd: () => number = Math.random): number {
+  const n = s.thap ?? 0;
+  if (n >= TOWER.length || z.idx !== towerZone(n)) return 0;
+  s.thap = n + 1;
+  s.gold += towerGold(n);
+  pickUp(s, stack(rnd, `tan_quyen_${z.element}`, `Tàn quyển hệ ${ELEMENT_STYLE[z.element].name}`, "tan_quyen", "tim", `tan_quyen/${z.element}`, z.level, "Mảnh công pháp, gom đủ để ghép ở Tàng Kinh Các", 2));
+  return towerGold(n);
+}
+
+/**
+ * Bế quan: tu vi tự tích theo giờ thật kể cả khi tắt game, tối đa capSec mỗi ngày; perHour là phần tu vi của một cấp mỗi giờ.
+ * Để rất thấp (8 giờ ≈ 16% một cấp) để giữ nhịp lên cấp đã chốt 2026-11-09. spring: cộng thêm (phần nghìn) khi tông môn mình giữ
+ * Mỏ linh thạch (Linh Tuyền) của vùng đang đứng.
+ */
+export const AFK = { capSec: 8 * 3600, perHour: 0.02, spring: 200 };
+
+export function afkPending(s: Save, now: number, today: string): { sec: number; left: number; xp: number; buff: boolean } {
+  const a = s.afk;
+  const used = a && a.day === today ? a.used : 0;
+  const sec = Math.floor(Math.max(0, Math.min(a ? (now - a.from) / 1000 : 0, AFK.capSec - used)));
+  const buff = !!s.sect && mineHolder(townOf(zone(s.zone).region) + 5)?.[0] === s.sect.id;
+  return { sec, left: AFK.capSec - used - sec, buff, xp: Math.floor((xpNeed(s.lv) * AFK.perHour * sec * (1000 + (buff ? AFK.spring : 0))) / 3600 / 1000) };
+}
+
+/** Thu tu vi bế quan; trả về tu vi nhận và số cấp vừa lên. Cũng dùng để bắt đầu tích lần đầu (chưa có s.afk). */
+export function afkHarvest(s: Save, now: number, today: string): { xp: number; levels: number } {
+  const p = afkPending(s, now, today);
+  s.afk = { from: now, day: today, used: (s.afk?.day === today ? s.afk.used : 0) + p.sec };
+  return { xp: p.xp, levels: p.xp > 0 ? gainXp(s, p.xp) : 0 };
 }

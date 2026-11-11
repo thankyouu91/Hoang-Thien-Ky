@@ -106,6 +106,28 @@ test("tông môn: nhiệm vụ thủ lĩnh và nộp nguyên liệu, Bảo Khố
   assert.ok(L.stats(s).atk > atk);
 });
 
+test("hoạt động: giờ sự kiện, tháp theo thứ tự, bế quan có trần 8 giờ mỗi ngày", () => {
+  assert.ok(L.eventOn("bi_canh", 725) && L.eventOn("bi_canh", 1200) && !L.eventOn("bi_canh", 750));
+  assert.equal(L.eventIn("bi_canh", 700), 20);
+  assert.equal(L.eventIn("bi_canh", 1300), 1440 - 1300 + 720);
+  assert.equal(L.eventIn("chien", 1270), 0);
+  assert.equal(L.rollDrop(zone(7), true, () => 0.1, true)[1].rarity, "tim");
+  const s = newSave("A", "moc");
+  assert.equal(L.towerKill(s, zone(L.towerZone(1))), 0); // sai thứ tự
+  assert.equal(L.towerKill(s, zone(7)), L.towerGold(0));
+  assert.equal(L.towerKill(s, zone(7)), 0);
+  assert.ok(s.thap === 1 && L.title(s) === L.TOWER[0] && L.scrollCount(s, "moc") === 2);
+  const H = 3600e3;
+  assert.equal(L.afkHarvest(s, 0, "d1").xp, 0); // bắt đầu tích
+  const p = L.afkPending(s, 2 * H, "d1");
+  assert.ok(p.sec === 7200 && p.xp === Math.floor(xpNeed(s.lv) * 0.02 * 2) && !p.buff);
+  assert.equal(L.afkHarvest(s, 2 * H, "d1").xp, p.xp);
+  assert.equal(L.afkPending(s, 20 * H, "d1").sec, 6 * 3600); // trần 8 giờ
+  L.afkHarvest(s, 20 * H, "d1");
+  assert.equal(L.afkPending(s, 23 * H, "d1").sec, 0);
+  assert.equal(L.afkPending(s, 25 * H, "d2").sec, 5 * 3600); // sang ngày thì tính lại
+});
+
 test("tiệm: thiếu linh thạch thì không mua được", () => {
   const s = newSave("A", "moc");
   assert.equal(buyPot(s, zone(0)), false);

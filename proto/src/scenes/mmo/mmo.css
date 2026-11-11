@@ -332,3 +332,16 @@ body .mmo-ngo i { width: 44px; height: 44px; border-radius: 3px; background: var
 body .mmo-ngo small { color: var(--m-mute); }
 body .mmo-ward { height: 16px; margin-bottom: 10px; }
 @media (max-width: 640px) { body .mmo-list.two { grid-template-columns: 1fr; } body .mmo-ngo { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---------- Liên minh, hoạt động ---------- */
+body .mmo-note.first { margin: 0 0 4px; }
+body .mmo-scroll { max-height: 150px; overflow: auto; padding-right: 4px; }
+body .mmo-stats dd.ally { color: #38bdf8; } body .mmo-stats dd.neutral { color: #f1dfae; } body .mmo-stats dd.foe { color: #f43f5e; }
+body .mmo-events { display: grid; gap: 6px; }
+body .mmo-events > div { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 8px 12px; background: rgba(0, 0, 0, 0.25); border: 1px solid #2c2214; border-radius: 4px; }
+body .mmo-events > div.live { border-color: #8fd49a; box-shadow: inset 0 0 12px rgba(143, 212, 154, 0.18); }
+body .mmo-events span { display: grid; } body .mmo-events b { color: var(--m-gold2); } body .mmo-events small { color: var(--m-mute); }
+body .mmo-events em { font-style: normal; color: var(--m-mute); white-space: nowrap; } body .mmo-events .live em { color: #8fd49a; }
+body .mmo-dlg .mmo-list button.on { border-color: var(--m-gold2); }
+body .mmo-dlg .mmo-list button.lock { opacity: 0.4; }
+body .mmo-body .title { color: var(--m-gold2); }

@@ -15,7 +15,7 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
+  AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
@@ -249,7 +249,9 @@ export class MmoScene extends BaiScene {
     const s = this.save;
     const r = kill(s, z);
     // Đồ văng ra quanh xác quái; nhặt ở pull().
-    for (const item of rollDrop(z, !!m.boss)) {
+    const thap = m.boss ? towerKill(s, z) : 0;
+    if (thap) this.note(`Qua tầng ${s.thap} tháp Tầm Đạo: +${thap} linh thạch, danh hiệu ${title(s)}`, true);
+    for (const item of rollDrop(z, !!m.boss, Math.random, z.boss && eventOn("bi_canh", nowMin()))) {
       const a = Math.random() * Math.PI * 2;
       const d = (20 + 20 * Math.random()) * SCALE;
       this.loot.push({ x: m.x + Math.cos(a) * d, y: m.y + Math.sin(a) * d * 0.6, item, at: this.clock, pull: false });
@@ -495,6 +497,8 @@ export class MmoScene extends BaiScene {
         this.note("Tọa thiền: hồi máu và mana. Đi hay bị đánh thì đứng dậy.");
       }
     } else if (a === "sect") this.sect();
+    else if (a === "ally") this.ally();
+    else if (a === "event") this.event();
     else if (a === "mail") this.mail();
     else if (a === "bag") this.bag();
     else if (a === "char") this.char();
@@ -772,6 +776,10 @@ export class MmoScene extends BaiScene {
     else if (d.use === "pot") {
       this.act("pot");
       this.bag();
+    } else if (d.afk !== undefined) {
+      const r = afkHarvest(s, Date.now(), today());
+      if (r.xp > 0) this.note(`Thu hoạch bế quan: +${r.xp} tu vi${r.levels ? ` · lên cấp ${s.lv}!` : ""}`, true);
+      this.restat();
     } else if (d.openmap !== undefined) {
       this.dlg.close();
       this.act("map");
@@ -856,7 +864,8 @@ export class MmoScene extends BaiScene {
         this.shop();
       }
     } else if (d.tp !== undefined) {
-      if (teleport(s, Number(d.tp))) {
+      // Nút "Vào ngay" của Bí Cảnh Tranh Đoạt tới thẳng Cửa bí cảnh (khu có quái), chỉ bấm được khi đang mở và đứng ở khu an toàn.
+      if (teleport(s, Number(d.tp)) || (zone(Number(d.tp)).boss && Number(d.tp) <= s.maxZone && zone(s.zone).safe && eventOn("bi_canh", nowMin()))) {
         this.route = null;
         this.dlg.close();
         this.go(Number(d.tp), "mid");
@@ -994,7 +1003,7 @@ export class MmoScene extends BaiScene {
     this.open(`<h2>Nhân vật</h2><div class="mmo-char">
       <div class="mmo-doll"><div class="mmo-gear">${SLOTS.slice(0, 4).map(slot).join("")}</div>
         <div class="mmo-body"><i class="mmo-face" style="background-image:url(${B}icon_ve/he/${s.element}.webp)"></i>
-          <b>${esc(s.name)}</b><small>Hệ ${ELEMENT_STYLE[s.element].name} · Cấp ${s.lv}</small><small>Tu vi ${s.xp}/${xpNeed(s.lv)}</small></div>
+          <b>${esc(s.name)}</b>${title(s) ? `<small class="title">「${title(s)}」</small>` : ""}<small>Hệ ${ELEMENT_STYLE[s.element].name} · Cấp ${s.lv}</small><small>Tu vi ${s.xp}/${xpNeed(s.lv)}</small></div>
         <div class="mmo-gear">${SLOTS.slice(4).map(slot).join("")}</div></div>
       <div><h3>Chỉ số</h3><dl class="mmo-stats">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div></div>
       <h3>Tiềm năng <em>còn <b>${pts}</b> điểm · mỗi cấp 1 điểm</em></h3><div class="mmo-attr">${attrs}</div>
@@ -1105,6 +1114,67 @@ export class MmoScene extends BaiScene {
       <footer><span></span><button type="button" data-leave class="bad">Rời tông môn</button></footer>`, true);
   }
 
+  /**
+   * Liên minh (phím L). Bản xem trước: chưa có máy chủ nên liên minh, địch thủ và đội hình đều là tông môn và tu sĩ NPC xếp cố định
+   * (người dùng chốt 2026-11-11: dựng màn mẫu). Chỉ đồng hồ đếm tới giờ chiến 21:00 là thật. Không cộng tài nguyên, không đánh được.
+   */
+  private ally(): void {
+    const s = this.save;
+    const t = s.sect;
+    if (!t) {
+      this.open(`<h2>Liên minh</h2><p>Gia nhập một tông môn (phím G, từ cấp ${SECT.level}) rồi mới vào được liên minh.</p>`);
+      return;
+    }
+    const me = SECTS.findIndex(([id]) => id === t.id);
+    const name = (i: number) => SECTS[(me + i) % SECTS.length][1];
+    const mines = Array.from({ length: ZONE_COUNT }, (_, i) => zone(i)).filter((z) => mineHolder(z.idx)?.[0] === t.id);
+    const rate = (z: Zone) => (2 + z.level) * 10;
+    const wait = eventIn("chien", nowMin());
+    const half = Math.ceil(NAMES.length / 2);
+    this.open(`<h2>Liên minh</h2><p class="mmo-note first">Bản xem trước: số liệu là tông môn NPC, chưa tranh đoạt được. Mở thật khi có máy chủ.</p>
+      <h3>Cứ điểm đang giữ <em><b>${mines.length}</b> mỏ · tổng ${mines.reduce((n, z) => n + rate(z), 0)} linh thạch/giờ</em></h3>
+      <dl class="mmo-stats mmo-scroll">${mines.map((z) => `<dt>${z.name}</dt><dd>cấp ${z.level} · ${rate(z)}/giờ</dd>`).join("")}</dl>
+      <h3>Chiến tranh địa bàn <em>21:00 – 22:00 mỗi ngày</em></h3>
+      <dl class="mmo-stats"><dt>Khai chiến</dt><dd>${wait ? `còn ${dur(wait)}` : "<b>đang diễn ra</b>"}</dd><dt>Địch thủ đã tuyên chiến</dt><dd class="foe">${name(2)}</dd>
+        <dt>Đội Tiên phong</dt><dd>${NAMES.slice(0, half).join(", ")}</dd><dt>Đội Phòng thủ chính điện</dt><dd>${esc(s.name)}, ${NAMES.slice(half).join(", ")}</dd></dl>
+      <h3>Ngoại giao</h3>
+      <dl class="mmo-stats"><dt>Đồng minh</dt><dd class="ally">${name(0)} (tông môn mình)</dd><dt>Trung lập</dt><dd class="neutral">${name(1)}</dd><dt>Kẻ thù</dt><dd class="foe">${name(2)}</dd></dl>`, true);
+  }
+
+  /** Trung tâm hoạt động (phím V): lịch sự kiện theo giờ máy, tháp Tầm Đạo, bế quan. */
+  private event(): void {
+    const s = this.save;
+    const min = nowMin();
+    const day = today();
+    if (!s.afk) afkHarvest(s, Date.now(), day); // lần đầu mở: bắt đầu tích
+    const best = Math.max(-1, ...REGIONS.map((_, r) => (s.maxZone >= towerZone(r) ? r : -1)));
+    const ev = (id: EventId, btn: string) => {
+      const e = EVENTS[id];
+      const w = eventIn(id, min);
+      return `<div class="${w ? "" : "live"}"><span><b>${e.ten}</b><small>${e.gio.map(([a, b]) => `${hm(a)} – ${hm(b)}`).join(" · ")} · ${e.mo}</small></span><em>${w ? `còn ${dur(w)}` : "đang mở"}</em>${btn}</div>`;
+    };
+    const n = s.thap ?? 0;
+    const floors = TOWER.map((ten, i) => {
+      const z = zone(towerZone(i));
+      const st = i < n ? "done" : i === n ? "on" : "lock";
+      return `<button type="button" data-route="${z.idx}" class="${st}" ${i === n && z.idx <= s.maxZone + 1 && z.idx !== s.zone ? "" : "disabled"} title="${i === n ? "Bấm để tự chạy tới" : ""}">
+        <b>Tầng ${i + 1} · ${ten}${i < n ? " · đã qua" : ""}</b><small>Hạ thủ lĩnh hệ ${ELEMENT_STYLE[z.element].name} cấp ${z.level} ở ${z.name} · thưởng ${towerGold(i)} linh thạch, 2 tàn quyển, danh hiệu</small></button>`;
+    }).join("");
+    const p = afkPending(s, Date.now(), day);
+    this.open(`<h2>Hoạt động</h2>
+      <h3>Lịch hôm nay <em>giờ theo máy của bạn · bây giờ ${hm(min)}</em></h3>
+      <div class="mmo-events">
+        ${ev("bi_canh", `<button type="button" data-tp="${best < 0 ? "" : towerZone(best)}" ${eventOn("bi_canh", min) && best >= 0 && zone(s.zone).safe ? "" : "disabled"} title="Vào Cửa bí cảnh xa nhất đã tới, từ khu an toàn">Vào ngay</button>`)}
+        ${ev("the_gioi", `<button type="button" disabled title="Cần máy chủ">Chưa mở</button>`)}
+      </div>
+      <h3>Tháp Tầm Đạo <em>đã qua <b>${n}</b>/${TOWER.length} tầng${title(s) ? ` · danh hiệu ${title(s)}` : ""}</em></h3>
+      <div class="mmo-list mmo-scroll">${floors}</div>
+      <h3>Bế quan <em>tu vi tự tích kể cả khi tắt game · tối đa ${AFK.capSec / 3600} giờ mỗi ngày</em></h3>
+      <dl class="mmo-stats"><dt>Đã tích</dt><dd>${dur(Math.floor(p.sec / 60))} · <b>${p.xp}</b> tu vi</dd><dt>Còn lại hôm nay</dt><dd>${dur(Math.floor(p.left / 60))}</dd>
+        <dt>Linh Tuyền</dt><dd>${p.buff ? `+${AFK.spring / 10}% (tông môn giữ Mỏ linh thạch vùng này)` : "không (tông môn mình chưa giữ Mỏ linh thạch vùng này)"}</dd></dl>
+      <footer><span>Mỗi giờ ${AFK.perHour * 100}% tu vi của một cấp</span><button type="button" data-afk ${p.xp > 0 ? "" : "disabled"}>Thu hoạch tu vi</button></footer>`, true);
+  }
+
   /** Thư: quà theo mốc cấp, nhận một lần. */
   private mail(): void {
     const list = mails(this.save);
@@ -1131,22 +1201,26 @@ export class MmoScene extends BaiScene {
 const HELP = `<ul>
   <li><b>Đi:</b> chạm đất, hoặc phím mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
   <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng.</li>
-  <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>H</b> thư.</li>
+  <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>L</b> liên minh · <b>V</b> hoạt động (sự kiện, tháp, bế quan) · <b>H</b> thư.</li>
   <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm) · <b>F</b> treo auto · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
   <li><b>I</b> túi · <b>P</b> nhân vật (cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
   <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím Cách hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán.</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
 
-const PANELS: Record<string, string> = { i: "bag", p: "char", o: "skills", g: "sect", h: "mail" };
+const PANELS: Record<string, string> = { i: "bag", p: "char", o: "skills", g: "sect", h: "mail", l: "ally", v: "event" };
 /** Hàng nút trên cùng, cạnh bản đồ nhỏ: hành động, phím, tên, hình (đường dẫn trong icon_ve/) hoặc một ký hiệu. */
-const QUICK = [["bag", "I", "Túi", "linh_thach/ha"], ["char", "P", "Nhân vật", "he/moc"], ["skills", "O", "Kỹ năng", "chieu/can_quet"], ["sect", "G", "Tông môn", "ui/tab/tong_mon"], ["map", "M", "Bản đồ", "✦"], ["auto", "F", "Treo máy", "↻"]];
+const QUICK = [["bag", "I", "Túi", "linh_thach/ha"], ["char", "P", "Nhân vật", "he/moc"], ["skills", "O", "Kỹ năng", "chieu/can_quet"], ["sect", "G", "Tông môn", "ui/tab/tong_mon"], ["map", "M", "Bản đồ", "✦"], ["event", "V", "Hoạt động", "✺"], ["auto", "F", "Treo máy", "↻"]];
 /** Hàng nút tròn dưới bản đồ nhỏ. */
-const ACTS = [["sit", "X", "Tọa thiền", "☯"], ["shop", "B", "Tiệm", "⚖"], ["mail", "H", "Thư", "✉"], ["help", "?", "Thiết lập", "⚙"]];
+const ACTS = [["sit", "X", "Tọa thiền", "☯"], ["shop", "B", "Tiệm", "⚖"], ["ally", "L", "Liên minh", "⚑"], ["mail", "H", "Thư", "✉"], ["help", "?", "Thiết lập", "⚙"]];
 /** Tung độ phần bản đồ nhỏ vẽ trên canvas, ngay dưới thanh tiêu đề của khung .mmo-map. */
 const MAP_Y = 34;
 /** Ngày theo máy người chơi, YYYY-MM-DD: mốc của điểm danh và nhiệm vụ tông môn. */
 const today = () => new Date().toLocaleDateString("sv");
-const MENU = [["bag", "I", "Túi"], ["char", "P", "Nhân vật"], ["skills", "O", "Kỹ năng"], ["map", "M", "Bản đồ"], ["shop", "B", "Tiệm"], ["auto", "F", "Treo auto"], ["sit", "X", "Tọa thiền"], ["sect", "G", "Tông môn"], ["mail", "H", "Thư"], ["help", "?", "Thiết lập"]];
+/** Phút từ 0 giờ theo máy người chơi: mốc của lịch sự kiện. */
+const nowMin = () => new Date().getHours() * 60 + new Date().getMinutes();
+const hm = (min: number) => `${Math.floor(min / 60)}:${String(min % 60).padStart(2, "0")}`;
+const dur = (min: number) => (min >= 60 ? `${Math.floor(min / 60)} giờ ${min % 60} phút` : `${min} phút`);
+const MENU = [["bag", "I", "Túi"], ["char", "P", "Nhân vật"], ["skills", "O", "Kỹ năng"], ["map", "M", "Bản đồ"], ["shop", "B", "Tiệm"], ["auto", "F", "Treo auto"], ["sit", "X", "Tọa thiền"], ["sect", "G", "Tông môn"], ["ally", "L", "Liên minh"], ["event", "V", "Hoạt động"], ["mail", "H", "Thư"], ["help", "?", "Thiết lập"]];
 /** Bảy ô trang bị (SlotId của @htk/rules): bốn ô bên trái chân dung, ba ô bên phải. */
 const SLOTS = [["mu", "Mũ"], ["ao", "Áo"], ["dai", "Đai"], ["giay", "Giày"], ["vu_khi", "Vũ khí"], ["bao_tay", "Bao tay"], ["ngoc_boi", "Ngọc bội"]];
 const esc = (t: string) => t.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
