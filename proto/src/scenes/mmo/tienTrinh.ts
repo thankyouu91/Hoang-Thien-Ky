@@ -834,17 +834,19 @@ export function afkHarvest(s: Save, now: number, today: string): { xp: number; l
 }
 
 // ---------- NPC ở sơn môn và bến đò ----------
-// Tám NPC chức năng theo docs/CHI_THI_CLAUDE_LOOT_VA_UIUX.md bước 7. shortcut: nền mỗi vùng là một bức vẽ riêng nên chưa biết chỗ
-// từng công trình; NPC đứng rải dọc đường đi theo fx (phần chiều ngang map). Đặt đúng công trình khi map sơn môn được dựng bằng app sửa map.
-export const NPCS: { id: string; ten: string; noi: string; viec: string; dau: string; fx: number }[] = [
-  { id: "su_gia", ten: "Sứ Giả Chính Đạo Minh", noi: "Tứ Hợp Viện", viec: "Tông môn", dau: "⚑", fx: 0.1 },
-  { id: "tho_ren", ten: "Thiết Tượng Thần Công", noi: "Luyện Khí Phường", viec: "Rèn đồ", dau: "⚒", fx: 0.2 },
-  { id: "thuong_hoi", ten: "Chưởng Quỹ Thương Hội", noi: "Lầu Gác", viec: "Mua bán", dau: "⚖", fx: 0.31 },
-  { id: "duoc_su", ten: "Đan Đạo Dược Sư", noi: "Đạo Quán", viec: "Luyện đan", dau: "⚗", fx: 0.42 },
-  { id: "co_tang", ten: "Cố Tàng", noi: "Giếng Cổ", viec: "Nhiệm vụ", dau: "❢", fx: 0.5 },
-  { id: "trong_tai", ten: "Võ Đạo Trọng Tài", noi: "Lôi Đài", viec: "Tháp, sự kiện", dau: "⚔", fx: 0.58 },
-  { id: "xa_phu", ten: "Xa Phu Thần Tốc", noi: "Dịch Trạm", viec: "Truyền tống", dau: "✦", fx: 0.7 },
-  { id: "mat_tham", ten: "Mật Thám Thiên Cơ Các", noi: "Trà Lâu", viec: "Treo thưởng", dau: "✉", fx: 0.82 },
+// Tám NPC chức năng theo docs/CHI_THI_CLAUDE_LOOT_VA_UIUX.md bước 7, xếp thành tám phân khu của thành: hàng sau sát tường (Lầu Gác tây
+// bắc, Luyện Khí Phường, Trà Lâu, Tứ Hợp Viện đông bắc), Giếng Cổ giữa quảng trường, hàng trước (Đạo Quán tây nam, Lôi Đài đông nam),
+// Dịch Trạm sát cổng đông. x là phần chiều ngang map, y là phần chiều sâu của dải đi được (0 sát tường, 1 sát mép dưới).
+// Công trình sau lưng từng NPC khai ở mapKhu.ts (NHA).
+export const NPCS: { id: string; ten: string; noi: string; viec: string; dau: string; x: number; y: number }[] = [
+  { id: "thuong_hoi", ten: "Chưởng Quỹ Thương Hội", noi: "Lầu Gác", viec: "Mua bán", dau: "⚖", x: 0.2, y: 0.13 },
+  { id: "tho_ren", ten: "Thiết Tượng Thần Công", noi: "Luyện Khí Phường", viec: "Rèn đồ", dau: "⚒", x: 0.38, y: 0.13 },
+  { id: "mat_tham", ten: "Mật Thám Thiên Cơ Các", noi: "Trà Lâu", viec: "Treo thưởng", dau: "✉", x: 0.62, y: 0.13 },
+  { id: "su_gia", ten: "Sứ Giả Chính Đạo Minh", noi: "Tứ Hợp Viện", viec: "Tông môn", dau: "⚑", x: 0.8, y: 0.13 },
+  { id: "co_tang", ten: "Cố Tàng", noi: "Giếng Cổ", viec: "Nhiệm vụ", dau: "❢", x: 0.5, y: 0.42 },
+  { id: "duoc_su", ten: "Đan Đạo Dược Sư", noi: "Đạo Quán", viec: "Luyện đan", dau: "⚗", x: 0.25, y: 0.74 },
+  { id: "trong_tai", ten: "Võ Đạo Trọng Tài", noi: "Lôi Đài", viec: "Tháp, sự kiện", dau: "⚔", x: 0.75, y: 0.74 },
+  { id: "xa_phu", ten: "Xa Phu Thần Tốc", noi: "Dịch Trạm", viec: "Truyền tống", dau: "✦", x: 0.92, y: 0.44 },
 ];
 
 /** Đan Đạo Dược Sư: BREW nguyên liệu luyện ra một bình máu hoặc một Hồi Linh Đan. Thắp hương: hôm đó diệt dị thú thêm INCENSE phần nghìn tu vi. Số là đề xuất. */

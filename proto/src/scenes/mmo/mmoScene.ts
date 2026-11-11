@@ -15,7 +15,7 @@ import { animInfo, drawCharacter, resolveLook } from "../battle/character.ts";
 import { dangFor, drawDang } from "../battle/dangDung.ts";
 import { phapLuanExtent, trackLevel, type PhapLuanSpec } from "../battle/phapLuan.ts";
 import { BAI } from "../bai/thamSo.ts";
-import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, trongCam, type MapKhu } from "./mapKhu.ts";
+import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, npcCho, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
   BOUNTY_N, bountyGold, bountyKill, bountyOf, brew, BREW, incense, INCENSE, NPCS, canWear, setCounts, setGender, setLine, setOf, SETS, SET_TIERS, type Gender, learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
@@ -280,12 +280,8 @@ export class MmoScene extends BaiScene {
     b.onKill = (m) => this.onKill(b, z, m);
     this.loot = [];
     this.goNpc = "";
-    // NPC đứng rải dọc đường đi, so le trên dưới cho khỏi che nhau.
-    this.npcs = !z.safe ? [] : NPCS.map((n, i) => {
-      const p = choVao(m, m.w * n.fx);
-      const y = p.y + (i % 2 ? 70 : -70);
-      return { id: n.id, x: p.x, y: trongCam(m, p.x, y) ? p.y : y };
-    });
+    // NPC đứng trước công trình của mình, theo bố cục tám phân khu (NPCS, mapKhu.npcCho).
+    this.npcs = !z.safe ? [] : NPCS.map((n) => ({ id: n.id, ...npcCho(m, n) }));
     for (const h of [...m.nen, ...m.vat]) this.img(h.file);
     if (m.o) for (const t of this.bo!.bo) this.img(O_DIR + t.f);
     return b;
@@ -918,7 +914,7 @@ export class MmoScene extends BaiScene {
     };
     gate(0, z.idx - 1, -1);
     gate(b.w, z.idx + 1, 1);
-    for (const h of m.vat) if (h.act) this.text(ctx, ACT_LABEL[h.act], h.x + h.w / 2, h.y + h.h + 24, "center");
+    for (const h of m.vat) if (h.ten || h.act) this.text(ctx, h.ten ?? ACT_LABEL[h.act!], h.x + h.w / 2, h.ten ? h.y - 12 : h.y + h.h + 22, "center");
     // NPC: hình người đứng thở, tên trên đầu; lại gần thì hiện bong bóng ký hiệu chức năng.
     const near = this.nearNpc();
     this.veNpc = this.npcs.map((n, i) => () => {
@@ -974,9 +970,22 @@ export class MmoScene extends BaiScene {
     const m = this.map_;
     if (!m) return [];
     return [
-      ...m.vat.map((h) => ({ y: h.y + h.h - 24, draw: () => this.veHinh?.(h) })),
+      ...m.vat.map((h) => ({ y: h.y + h.h - 24, draw: () => this.veNha(h) })),
       ...this.npcs.map((n, i) => ({ y: n.y, draw: () => this.veNpc[i]?.() })),
     ];
+  }
+
+  /** Vẽ một hình của map; công trình của thành (có tên) là tranh vuông nên đóng thêm khung gỗ viền vàng cho ra tấm biển. */
+  private veNha(h: MapKhu["vat"][number]): void {
+    this.veHinh?.(h);
+    const ctx = this.view?.ctx;
+    if (!h.ten || !ctx) return;
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = "#2a1d14";
+    ctx.strokeRect(h.x, h.y, h.w, h.h);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#c9a45c";
+    ctx.strokeRect(h.x + 1, h.y + 1, h.w - 2, h.h - 2);
   }
 
   private text(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, align: CanvasTextAlign): void {

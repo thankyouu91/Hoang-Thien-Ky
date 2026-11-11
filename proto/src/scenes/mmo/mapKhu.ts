@@ -12,11 +12,23 @@ export const H = 768 * SCALE;
 export const FIELD_PACKS = 24;
 const TOP_PCT = 0.37;
 const SPOT = 1.5;
-/** Công trình đứng sau lưng từng NPC ở khu an toàn (hình trong cong_trinh/chung/), và việc khi chạm vào công trình. */
+/**
+ * Công trình đứng sau lưng từng NPC ở khu an toàn: file hình trong assets/pixellab/ (không đuôi), và việc khi chạm vào công trình.
+ * Đây là chỗ thay hình: hiện dùng tranh sẵn có trong cong_trinh/chung/ (tranh phong cảnh, chưa phải nhà dựng riêng; Trà Lâu và Tứ Hợp
+ * Viện mượn tranh Bảo Khố, Tàng Kinh Các; Giếng Cổ chưa có hình). Vẽ hình mới bằng PixelLab thì chỉ đổi đường dẫn ở đây
+ * (người dùng chốt 2026-11-11: dựng map trước, vẽ sau khi lượt PixelLab đặt lại 2026-12-05).
+ */
 const NHA: Record<string, [string, ("shop" | "map")?]> = {
-  su_gia: ["tang_kinh_cac"], tho_ren: ["luyen_khi_cac"], thuong_hoi: ["thuong_hoi", "shop"], duoc_su: ["luyen_dan_phong"],
-  trong_tai: ["dien_vo_truong"], xa_phu: ["truyen_tong_tran", "map"], mat_tham: ["bao_kho"],
+  thuong_hoi: ["cong_trinh/chung/thuong_hoi", "shop"], tho_ren: ["cong_trinh/chung/luyen_khi_cac"], mat_tham: ["cong_trinh/chung/bao_kho"],
+  su_gia: ["cong_trinh/chung/tang_kinh_cac"], duoc_su: ["cong_trinh/chung/luyen_dan_phong"], trong_tai: ["cong_trinh/chung/dien_vo_truong"],
+  xa_phu: ["cong_trinh/chung/truyen_tong_tran", "map"],
 };
+
+/** Chỗ đứng của một NPC trên map: theo x, y của NPCS trong dải đi được; rơi vào vùng cấm (map tự thiết kế) thì lấy chỗ đi được cùng hoành độ. */
+export function npcCho(m: MapKhu, n: { x: number; y: number }): { x: number; y: number } {
+  const p = { x: m.w * n.x, y: m.h * (TOP_PCT + (1 - TOP_PCT) * n.y) };
+  return trongCam(m, p.x, p.y) ? choVao(m, p.x) : p;
+}
 
 export interface Rect {
   x: number;
@@ -32,6 +44,8 @@ export interface Hinh extends Rect {
   lat?: boolean;
   /** Chạm vào thì mở tiệm hay truyền tống */
   act?: "shop" | "map";
+  /** Tên hiện dưới hình (công trình của thành) */
+  ten?: string;
 }
 
 export interface MapKhu {
@@ -59,13 +73,15 @@ export const mapId = (bg: string) => bg.replace("/", "__");
 /** Map khi khu chưa có file: một tấm nền phủ kín, cấm dải trên (tường, gốc cây), khu an toàn có tiệm và trận truyền tống. */
 export function macDinh(z: Zone): MapKhu {
   const top = H * TOP_PCT;
-  const spot = (file: string, act: "shop" | "map" | undefined, cx: number): Hinh => ({
-    file: `cong_trinh/chung/${file}`, act, x: cx - 110 * SPOT, y: top + 30 - 118 * SPOT, w: 220 * SPOT, h: 132 * SPOT,
+  // Công trình đứng ngay sau lưng NPC: đáy hình cách chân NPC 46 đơn vị về phía trên.
+  const spot = (n: (typeof NPCS)[number]): Hinh => ({
+    file: NHA[n.id][0], act: NHA[n.id][1], ten: n.noi, w: 220 * SPOT, h: 132 * SPOT,
+    x: W * n.x - 110 * SPOT, y: H * (TOP_PCT + (1 - TOP_PCT) * n.y) - 46 - 132 * SPOT,
   });
   return {
     w: W, h: H,
     nen: [{ file: `chien_truong/${z.bg}`, x: 0, y: 0, w: W, h: H }],
-    vat: z.safe ? NPCS.filter((n) => NHA[n.id]).map((n) => spot(NHA[n.id][0], NHA[n.id][1], W * n.fx)) : [],
+    vat: z.safe ? NPCS.filter((n) => NHA[n.id]).map(spot) : [],
     bay: [],
     cam: [{ x: 0, y: 0, w: W, h: top }],
   };
