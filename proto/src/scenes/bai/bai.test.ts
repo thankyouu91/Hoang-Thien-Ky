@@ -68,6 +68,7 @@ test("lướt né: đi một quãng, có hồi chiêu, không dính đòn ngay s
   assert.ok(b.dashLeft() > 0);
   const m = monsters(b)[0];
   m.x = p.x + 10;
+  m.home = { x: m.x, y: p.y }; // kẻo quái xa tổ quá thì bỏ đuổi
   m.y = p.y;
   m.target = p.id;
   const hp = p.hp;

@@ -2,7 +2,7 @@
 // (sua_map.html). Người hay AI agent sửa thẳng file JSON đều được; khu chưa có file thì dùng macDinh().
 // Toạ độ theo đơn vị thế giới, gốc ở góc trên trái. Người cao chừng 56 đơn vị.
 import type { LopO } from "./oDat.ts";
-import type { Zone } from "./tienTrinh.ts";
+import { NPCS, type Zone } from "./tienTrinh.ts";
 
 /** Nền 688×384 vẽ ở cỡ 3440×1920 khi theo mặc định: người bằng 40% so với lúc nền vẽ gấp đôi (người dùng chốt 2026-11-10). */
 export const SCALE = 2.5;
@@ -11,7 +11,12 @@ export const H = 768 * SCALE;
 /** Số bầy quái khi map không tự đặt chỗ bầy. */
 export const FIELD_PACKS = 24;
 const TOP_PCT = 0.37;
-const SPOT = 2;
+const SPOT = 1.5;
+/** Công trình đứng sau lưng từng NPC ở khu an toàn (hình trong cong_trinh/chung/), và việc khi chạm vào công trình. */
+const NHA: Record<string, [string, ("shop" | "map")?]> = {
+  su_gia: ["tang_kinh_cac"], tho_ren: ["luyen_khi_cac"], thuong_hoi: ["thuong_hoi", "shop"], duoc_su: ["luyen_dan_phong"],
+  trong_tai: ["dien_vo_truong"], xa_phu: ["truyen_tong_tran", "map"], mat_tham: ["bao_kho"],
+};
 
 export interface Rect {
   x: number;
@@ -54,13 +59,13 @@ export const mapId = (bg: string) => bg.replace("/", "__");
 /** Map khi khu chưa có file: một tấm nền phủ kín, cấm dải trên (tường, gốc cây), khu an toàn có tiệm và trận truyền tống. */
 export function macDinh(z: Zone): MapKhu {
   const top = H * TOP_PCT;
-  const spot = (file: string, act: "shop" | "map", cx: number): Hinh => ({
+  const spot = (file: string, act: "shop" | "map" | undefined, cx: number): Hinh => ({
     file: `cong_trinh/chung/${file}`, act, x: cx - 110 * SPOT, y: top + 30 - 118 * SPOT, w: 220 * SPOT, h: 132 * SPOT,
   });
   return {
     w: W, h: H,
     nen: [{ file: `chien_truong/${z.bg}`, x: 0, y: 0, w: W, h: H }],
-    vat: z.safe ? [spot("thuong_hoi", "shop", W * 0.36), spot("truyen_tong_tran", "map", W * 0.66)] : [],
+    vat: z.safe ? NPCS.filter((n) => NHA[n.id]).map((n) => spot(NHA[n.id][0], NHA[n.id][1], W * n.fx)) : [],
     bay: [],
     cam: [{ x: 0, y: 0, w: W, h: top }],
   };

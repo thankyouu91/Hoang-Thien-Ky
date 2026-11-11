@@ -89,6 +89,14 @@ export class MmoScene extends BaiScene {
   /** NPC của khu an toàn đang đứng (rỗng ở khu có quái), và NPC đang tự chạy tới để nói chuyện */
   private npcs: { id: string; x: number; y: number }[] = [];
   private goNpc = "";
+  /** Chuột phải đang giữ trên đất (toạ độ màn hình): nhân vật chạy bám theo; rightDown để bỏ qua cú chạm của nút phải */
+  private rmb: { x: number; y: number } | null = null;
+  private rightDown = false;
+  /** Tàn ảnh của cú lướt gần nhất */
+  private trail: { x0: number; y0: number; x1: number; y1: number; at: number; face: number } | null = null;
+  /** Hàm vẽ một hình của map và từng NPC, đặt trong ground() để props() vẽ xen theo tung độ */
+  private veHinh: ((h: MapKhu["vat"][number]) => void) | null = null;
+  private veNpc: (() => void)[] = [];
   /** Tiêu đề của bảng đang mở, để biết lần vẽ kế là vẽ lại hay mở bảng khác */
   private dlgTitle = "";
   /** Mốc giờ được ra chiêu kế khi treo auto */
@@ -138,6 +146,7 @@ export class MmoScene extends BaiScene {
       <nav class="mmo-act">${ACTS.map(([a, k, t, g]) => `<button type="button" data-a="${a}" title="${t} (${k})"><i>${g}</i><span>${t}</span></button>`).join("")}</nav>
       <div class="mmo-log"></div>
       <nav class="mmo-npcs" hidden></nav>
+      <nav class="mmo-pm" hidden></nav>
       <button type="button" class="mmo-ctx" data-a="ctx" hidden></button>
       <div class="mmo-tgt" hidden><b></b><div class="bai-bar hp"><i></i><span></span></div></div>
       <nav class="mmo-menu" hidden>${MENU.map(([a, k, t]) => `<button type="button" data-a="${a}"><kbd>${k}</kbd>${t}</button>`).join("")}</nav>
@@ -146,6 +155,11 @@ export class MmoScene extends BaiScene {
     this.top.addEventListener("click", (e) => {
       const d = (e.target as HTMLElement).closest<HTMLButtonElement>("button")?.dataset;
       if (d?.npc) this.runTo(d.npc);
+      if (d?.soi) {
+        const [ten, he, mau, cong] = d.soi.split("|");
+        this.top.querySelector<HTMLElement>(".mmo-pm")!.hidden = true;
+        this.open(`<h2>${ten}</h2><dl class="mmo-stats"><dt>Hệ</dt><dd>${he}</dd><dt>Máu</dt><dd>${mau}</dd><dt>Công</dt><dd>${cong}</dd><dt>Trang bị</dt><dd>Chưa xem được (người chơi khác hiện là bot)</dd></dl>`);
+      }
       if (!d?.a) return;
       this.menu(false);
       this.act(d.a);
@@ -166,6 +180,7 @@ export class MmoScene extends BaiScene {
     });
     document.addEventListener("pointerdown", (e) => {
       if (!(e.target as HTMLElement).closest(".mmo-menu, [data-more]")) this.menu(false);
+      if (e.button !== 2 && !(e.target as HTMLElement).closest(".mmo-pm")) this.top.querySelector<HTMLElement>(".mmo-pm")!.hidden = true;
     });
     this.bar.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLButtonElement>("button")?.dataset.a;
@@ -175,6 +190,20 @@ export class MmoScene extends BaiScene {
     this.dlg.className = "mmo-dlg";
     document.body.append(this.dlg);
     this.dlg.addEventListener("click", (e) => this.dlgClick(e));
+    this.dlg.addEventListener("contextmenu", (e) => {
+      const d = (e.target as HTMLElement).closest<HTMLButtonElement>("button")?.dataset;
+      if (!d?.item && !d?.unequip) return;
+      e.preventDefault();
+      const s = this.save;
+      const it = s.bag.find((x) => x.id === d.item);
+      if (d.unequip) unequip(s, d.unequip);
+      else if (d.item === "pot") this.act("pot");
+      else if (it?.slot) equip(s, it.id);
+      else if (it?.code === "hoi_linh_dan") this.act("mana");
+      else return;
+      this.restat();
+      this.persist();
+    });
     this.dlg.addEventListener("close", () => (this.panel = ""));
     window.addEventListener("keydown", (e) => this.key(e, true));
     window.addEventListener("keyup", (e) => this.key(e, false));
@@ -185,6 +214,20 @@ export class MmoScene extends BaiScene {
 
   override enter(v: View): void {
     super.enter(v);
+    const canvas = v.ctx.canvas;
+    if (!canvas.dataset.mmo) {
+      canvas.dataset.mmo = "1";
+      canvas.addEventListener("pointerdown", (e) => {
+        this.rightDown = e.button === 2;
+        if (this.rightDown) this.rightClick(e.offsetX, e.offsetY, e.clientX, e.clientY);
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (this.rmb) this.rmb = { x: e.offsetX, y: e.offsetY };
+      });
+      const up = () => (this.rmb = null);
+      canvas.addEventListener("pointerup", up);
+      canvas.addEventListener("pointercancel", up);
+    }
     // Nền giữ độ nét của bãi mẫu (zoom bãi mẫu chia SCALE), nên người trên màn hình còn 40%; lăn chuột hay chụm tay để đổi.
     this.camera.zoom = Math.max(0.6, Math.min(1.3, v.w / 520)) / SCALE;
     this.follow(1);
@@ -400,6 +443,11 @@ export class MmoScene extends BaiScene {
         this.keyMove = false;
       }
     }
+    if (this.rmb && this.view && !this.dlg.open) {
+      const w = this.camera.toWorld(this.rmb.x, this.rmb.y, this.view);
+      if (Math.hypot(w.x - b.player.x, w.y - b.player.y) > 24) b.moveTo(w.x, w.y);
+      this.sit = false;
+    }
     this.run(b);
     if (this.goNpc) {
       const n = this.npcs.find((x) => x.id === this.goNpc);
@@ -501,6 +549,10 @@ export class MmoScene extends BaiScene {
     else if (k === "2") this.act("mana");
     else if (k === "x") this.act("sit");
     else if (k === "f") this.context();
+    else if (k === "tab") {
+      e.preventDefault();
+      this.lockNext();
+    }
     else if (k === "a") this.hit();
     else if (k === "m") this.act("map");
     else if (k === "b") this.act("shop");
@@ -508,6 +560,16 @@ export class MmoScene extends BaiScene {
       e.preventDefault();
       this.dash();
     }
+  }
+
+  /** Phím Tab: khóa con dị thú gần nhất; bấm tiếp thì chuyển sang con gần kế (trong tầm LOCK_R). */
+  private lockNext(): void {
+    const b = this.bai;
+    if (!b) return;
+    const p = b.player;
+    const d = (a: { x: number; y: number }) => Math.hypot(a.x - p.x, a.y - p.y);
+    const list = b.actors.filter((a) => a.kind === "monster" && a.alive && d(a) < LOCK_R).sort((x, y) => d(x) - d(y));
+    if (list.length) b.attack(list[(list.findIndex((a) => a.id === p.target) + 1) % list.length].id);
   }
 
   /** Đánh thường con dị thú gần nhất (nút giữa cụm phím, phím A). */
@@ -526,9 +588,13 @@ export class MmoScene extends BaiScene {
     const k = this.keys;
     const dx = (k.has("arrowright") ? 1 : 0) - (k.has("arrowleft") ? 1 : 0);
     const dy = (k.has("arrowdown") ? 1 : 0) - (k.has("arrowup") ? 1 : 0);
-    if (this.bai?.dash(dx, dy)) {
+    const p = this.bai?.player;
+    const from = p ? { x: p.x, y: p.y } : null;
+    if (p && from && this.bai!.dash(dx, dy)) {
+      this.trail = { x0: from.x, y0: from.y, x1: p.x, y1: p.y, at: this.clock, face: p.face };
       this.sit = false;
       this.route = null;
+      this.goNpc = "";
     }
   }
 
@@ -536,6 +602,38 @@ export class MmoScene extends BaiScene {
   private ctxText(): string {
     const n = this.nearNpc();
     return n ? `Nói chuyện với ${NPCS.find((x) => x.id === n.id)!.ten}` : this.loot.length ? `Nhặt đồ (${this.loot.length})` : "";
+  }
+
+  /**
+   * Chuột phải (người dùng yêu cầu 2026-11-11): vào NPC thì nói chuyện, vào dị thú thì khóa và đánh thường liên tục, vào người chơi khác
+   * thì mở menu, còn trên đất thì giữ để nhân vật chạy bám theo chuột.
+   */
+  private rightClick(sx: number, sy: number, cx: number, cy: number): void {
+    const b = this.bai;
+    if (!b || !this.view || this.dlg.open) return;
+    const p = this.camera.toWorld(sx, sy, this.view);
+    const on = (a: { x: number; y: number }) => Math.abs(p.x - a.x) < 34 && p.y > a.y - 70 && p.y < a.y + 14;
+    const npc = this.npcs.find(on);
+    const actor = b.actors.find((a) => a.alive && a.kind !== "player" && on(a));
+    this.route = null;
+    this.goNpc = "";
+    this.top.querySelector<HTMLElement>(".mmo-pm")!.hidden = true;
+    if (npc) {
+      if (this.nearNpc()?.id === npc.id) this.talk(npc.id);
+      else this.runTo(npc.id);
+    } else if (actor?.kind === "monster") b.attack(actor.id);
+    else if (actor) this.playerMenu(actor, cx, cy);
+    else this.rmb = { x: sx, y: sy };
+  }
+
+  /** Menu chuột phải lên người chơi khác. Người khác hiện là bot nên chỉ Soi đồ dùng được; ba mục còn lại chờ máy chủ. */
+  private playerMenu(a: { name: string; element: ElementId; hp: number; hpMax: number; atk: number }, cx: number, cy: number): void {
+    const m = this.top.querySelector<HTMLElement>(".mmo-pm")!;
+    m.innerHTML = `<b>${esc(a.name)}</b><button type="button" data-soi="${esc(a.name)}|${ELEMENT_STYLE[a.element].name}|${Math.round(a.hp)}/${a.hpMax}|${Math.round(a.atk)}">Soi đồ</button>
+      ${["Mời đội", "Giao dịch", "Khiêu chiến"].map((t) => `<button type="button" disabled title="Cần máy chủ">${t}</button>`).join("")}`;
+    m.hidden = false;
+    m.style.left = `${Math.min(cx, innerWidth - 150)}px`;
+    m.style.top = `${Math.min(cy, innerHeight - 170)}px`;
   }
 
   /** NPC đứng trong tầm nói chuyện (NPC_R), gần nhất. */
@@ -779,7 +877,33 @@ export class MmoScene extends BaiScene {
       if (!cv && (cv = veLop(m.o, this.bo!, (f) => this.ready(O_DIR + f)))) this.nenO.set(m, cv);
       if (cv) ctx.drawImage(cv, 0, 0, m.o.cot * m.o.co, m.o.hang * m.o.co);
     }
-    m.vat.forEach(hinh);
+    this.veHinh = hinh;
+    // Vòng trận dưới chân mục tiêu đang khóa: hai vòng nét đứt quay ngược nhau.
+    const tgt = b.get(b.player.target);
+    if (tgt?.alive && tgt.kind === "monster") {
+      ctx.save();
+      ctx.strokeStyle = "#ffd34d";
+      ctx.lineWidth = 3;
+      [[34, 14, 1], [24, 9, -1.6]].forEach(([r, dash, dir]) => {
+        ctx.setLineDash([dash, dash * 0.7]);
+        ctx.lineDashOffset = this.clock * 40 * dir;
+        ctx.beginPath();
+        ctx.ellipse(tgt.x, tgt.y, r, r * 0.4, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+    // Tàn ảnh của cú lướt: ba bóng mờ dần dọc quãng lướt.
+    const tr = this.trail;
+    const lookMe = resolveLook(this.sprites, LOOKS[this.playerLook]);
+    if (tr && lookMe && this.clock - tr.at < 0.35) {
+      const fade = 1 - (this.clock - tr.at) / 0.35;
+      [0, 0.33, 0.66].forEach((f, i) => {
+        ctx.globalAlpha = fade * (0.18 + 0.14 * i);
+        drawCharacter(ctx, this.sprites, lookMe, "dung", 0, tr.x0 + (tr.x1 - tr.x0) * f, tr.y0 + (tr.y1 - tr.y0) * f, 56 / 64, tr.face < 0);
+      });
+      ctx.globalAlpha = 1;
+    }
     const pulse = 0.55 + 0.25 * Math.sin(this.clock * 3);
     const gate = (x: number, idx: number, dir: 1 | -1) => {
       if (idx < 0 || idx >= ZONE_COUNT) return;
@@ -797,7 +921,7 @@ export class MmoScene extends BaiScene {
     for (const h of m.vat) if (h.act) this.text(ctx, ACT_LABEL[h.act], h.x + h.w / 2, h.y + h.h + 24, "center");
     // NPC: hình người đứng thở, tên trên đầu; lại gần thì hiện bong bóng ký hiệu chức năng.
     const near = this.nearNpc();
-    this.npcs.forEach((n, i) => {
+    this.veNpc = this.npcs.map((n, i) => () => {
       const info = NPCS.find((x) => x.id === n.id)!;
       const look = resolveLook(this.sprites, LOOKS[(i + 2) % LOOKS.length]);
       const frames = look ? (animInfo(this.sprites, look, "dung")?.frames ?? 1) : 1;
@@ -845,6 +969,16 @@ export class MmoScene extends BaiScene {
     ctx.imageSmoothingEnabled = false;
   }
 
+  /** Công trình, vật cảnh và NPC vẽ xen với người theo tung độ chân (BaiScene xếp chung một lượt). */
+  protected override props(): { y: number; draw: () => void }[] {
+    const m = this.map_;
+    if (!m) return [];
+    return [
+      ...m.vat.map((h) => ({ y: h.y + h.h - 24, draw: () => this.veHinh?.(h) })),
+      ...this.npcs.map((n, i) => ({ y: n.y, draw: () => this.veNpc[i]?.() })),
+    ];
+  }
+
   private text(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, align: CanvasTextAlign): void {
     ctx.font = `700 ${15 / Math.min(1, this.camera.zoom)}px ${FONT_TEXT}`;
     ctx.textAlign = align;
@@ -856,6 +990,11 @@ export class MmoScene extends BaiScene {
   }
 
   protected override tap(sx: number, sy: number): void {
+    if (this.rightDown) {
+      // Nút phải đã xử lý ở rightClick; không tính là một cú chạm.
+      this.down = null;
+      return;
+    }
     this.route = null;
     this.goNpc = "";
     const d = this.down;
@@ -1505,8 +1644,8 @@ export class MmoScene extends BaiScene {
 }
 
 const HELP = `<ul>
-  <li><b>Đi:</b> chạm đất, hoặc phím mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
-  <li><b>Đánh:</b> chạm dị thú (hoặc phím A, nút giữa cụm phím) để đánh thường; <b>phím Cách</b> lướt né; chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng; năm chiêu sau học bằng tàn quyển khi đủ cấp.</li>
+  <li><b>Đi:</b> chạm đất, phím mũi tên, hoặc giữ chuột phải để chạy theo chuột. <b>Chuột phải</b> vào dị thú để khóa đánh, vào NPC để nói chuyện, vào người chơi khác để mở menu, vào món trong túi để mặc, tháo hay dùng ngay. Đi tới mép sáng hai bên để sang khu khác.</li>
+  <li><b>Đánh:</b> chạm dị thú (hoặc phím A, nút giữa cụm phím) để đánh thường; <b>phím Cách</b> lướt né; <b>Tab</b> khóa con gần nhất (bấm tiếp để đổi con); chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng; năm chiêu sau học bằng tàn quyển khi đủ cấp.</li>
   <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>L</b> liên minh · <b>V</b> hoạt động (sự kiện, tháp, bế quan) · <b>H</b> thư.</li>
   <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm); máu dưới 35% hay mana dưới 20% thì tự uống nếu trong túi còn · <b>F</b> nhặt đồ khi có đồ rơi, không thì bật tắt treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò). Ở sơn môn và bến đò có 8 NPC: lại gần rồi bấm <b>F</b>, chạm vào NPC, hoặc bấm tên trong danh sách dưới bản đồ nhỏ để tự chạy tới.</li>
   <li><b>P</b> hoặc <b>I</b> nhân vật và túi (xem chỉ số món rồi mặc, cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
@@ -1540,6 +1679,8 @@ const itemTip = (it: ItemInstance) =>
 const GENDER: Record<Gender, string> = { nam: "nam", nu: "nữ" };
 /** Tầm nói chuyện với NPC (đơn vị thế giới) và bảng mà từng NPC mở. */
 const NPC_R = 150;
+/** Tầm phím Tab tìm dị thú để khóa. */
+const LOCK_R = 700;
 const NPC_ACT: Record<string, string> = { su_gia: "sect", tho_ren: "forge", thuong_hoi: "shop", duoc_su: "alchemy", co_tang: "quest", trong_tai: "event", xa_phu: "map", mat_tham: "bounty" };
 const BAG_TABS = [["all", "Tất cả"], ["trang_bi", "Trang bị"], ["dan_duoc", "Đan dược"], ["nl", "Nguyên liệu"]];
 /** Dòng chỉ số của trang bị: khóa, tên, có phải phần nghìn (hiện thành %) không. */

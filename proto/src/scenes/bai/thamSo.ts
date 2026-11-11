@@ -65,7 +65,7 @@ export const BAI = {
   leech: 0.2,
 
   /** Lướt né (đề xuất): quãng lướt, giây hồi, số giây không dính đòn ngay sau khi lướt */
-  dashDist: 220,
+  dashDist: 180,
   dashCd: 4,
   dashGuard: 0.35,
 

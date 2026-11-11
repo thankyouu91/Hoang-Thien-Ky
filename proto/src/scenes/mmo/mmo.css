@@ -421,3 +421,10 @@ body .mmo-npcs b { grid-column: 1 / -1; font: 700 10px system-ui, sans-serif; le
 body .mmo-npcs button { padding: 3px 2px; border: 1px solid var(--m-line); border-radius: 3px; background: var(--m-slot); color: var(--m-text); font: 10px system-ui, sans-serif; text-align: left; white-space: nowrap; overflow: hidden; cursor: pointer; }
 body .mmo-npcs button:hover { border-color: var(--m-gold); color: var(--m-gold2); }
 @media (max-width: 760px) { body .mmo-npcs { display: none; } }
+
+/* Menu chuột phải lên người chơi khác */
+body .mmo-top .mmo-pm { z-index: 7; min-width: 130px; display: grid; gap: 2px; padding: 6px; background: rgba(18, 14, 10, 0.97); border: 1px solid var(--m-gold); border-radius: 4px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); }
+body .mmo-pm b { padding: 2px 6px 4px; color: var(--m-gold2); border-bottom: 1px solid var(--m-line); }
+body .mmo-pm button { padding: 5px 8px; border: 0; border-radius: 3px; background: none; color: var(--m-text); font: inherit; text-align: left; cursor: pointer; }
+body .mmo-pm button:hover:not(:disabled) { background: rgba(201, 164, 92, 0.16); }
+body .mmo-pm button:disabled { opacity: 0.4; cursor: default; }

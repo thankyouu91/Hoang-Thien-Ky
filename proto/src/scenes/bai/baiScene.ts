@@ -184,9 +184,16 @@ export class BaiScene implements Scene {
     const tgt = b.get(p.target);
     if (p.goal) this.ring(ctx, p.goal.x, p.goal.y, 10, "rgba(255, 250, 240, 0.7)");
     if (tgt?.alive) this.ring(ctx, tgt.x, tgt.y, 26, "#ffd34d");
-    for (const a of [...b.actors].filter((a) => a.alive).sort((x, y) => x.y - y.y)) this.drawActor(ctx, b, a);
+    // Xếp theo tung độ chân: ai đứng thấp hơn trên màn hình thì vẽ sau, đè lên người và vật đứng trên.
+    const things = [...b.actors.filter((a) => a.alive).map((a) => ({ y: a.y, draw: () => this.drawActor(ctx, b, a) })), ...this.props(b)];
+    for (const t of things.sort((x, y) => x.y - y.y)) t.draw();
     this.vfx.draw(ctx, this.nhin(v));
     this.drawFx(ctx, b);
+  }
+
+  /** Vật vẽ xen với người theo tung độ chân (scenes/mmo: NPC, công trình). */
+  protected props(_b: Bai): { y: number; draw: () => void }[] {
+    return [];
   }
 
   private ring(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, color: string): void {
