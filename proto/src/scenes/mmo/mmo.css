@@ -111,12 +111,40 @@ body .mmo-coin { font-size: 11px; color: var(--m-gold2); text-shadow: var(--m-sh
 body .mmo-quest { top: 86px; left: 12px; max-width: 230px; display: grid; gap: 1px; text-shadow: var(--m-shadow); }
 body .mmo-quest b { font: 700 10px system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: var(--m-gold); }
 body .mmo-quest em { font-style: normal; color: #8fd49a; }
-body .mmo-zone { top: 102px; right: 8px; width: 154px; text-align: center; font-size: 11px; color: var(--m-gold2); text-shadow: var(--m-shadow); }
+body .mmo-realm { font-size: 11px; color: var(--m-gold2); text-shadow: var(--m-shadow); }
+/* Khung bản đồ nhỏ: tiêu đề (tên khu, nhãn an toàn hay nguy hiểm), khoảng trống cho canvas vẽ chấm, chân khung */
+body .mmo-map { top: 6px; right: 5px; box-sizing: border-box; border: 1px solid var(--m-line); border-radius: 4px; pointer-events: none; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); }
+body .mmo-map header { display: flex; justify-content: space-between; align-items: center; gap: 6px; height: 25px; padding: 0 6px; background: rgba(18, 14, 10, 0.92); border-bottom: 1px solid var(--m-line); }
+body .mmo-map header b { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 11px; color: var(--m-gold2); }
+body .mmo-map header em { flex: none; padding: 0 5px; border-radius: 3px; background: #7a2a22; font: 700 9px/15px system-ui, sans-serif; color: #fff; }
+body .mmo-map header em.safe { background: #2f6b3c; }
+body .mmo-map header em.boss { background: #5b3a8c; }
+body .mmo-map > i { display: block; }
+body .mmo-map footer { padding: 2px 6px; background: rgba(18, 14, 10, 0.92); border-top: 1px solid var(--m-line); font-size: 10px; color: var(--m-mute); text-align: center; }
+/* Hàng nút vuông cạnh bản đồ nhỏ và hàng nút tròn bên dưới */
+body .mmo-quick { top: 6px; right: 170px; display: flex; gap: 5px; }
+body .mmo-quick button, body .mmo-act button { position: relative; display: grid; justify-items: center; gap: 2px; padding: 0; border: 0; background: none; color: var(--m-text); font: 10px system-ui, sans-serif; text-shadow: var(--m-shadow); cursor: pointer; }
+body .mmo-quick i, body .mmo-act i {
+  display: grid; place-items: center; width: 38px; height: 38px; box-sizing: border-box; border: 1px solid var(--m-line); border-radius: 4px;
+  background: rgba(18, 14, 10, 0.9) center / cover no-repeat; font: 400 18px/1 system-ui, sans-serif; color: var(--m-gold2); text-shadow: none;
+}
+body .mmo-act { right: 5px; display: flex; gap: 6px; }
+body .mmo-act i { width: 34px; height: 34px; border-radius: 50%; font-size: 16px; }
+body .mmo-quick button:hover i, body .mmo-act button:hover:not(:disabled) i { border-color: var(--m-gold); }
+body .mmo-act button.on i { border-color: #8fd49a; color: #8fd49a; box-shadow: 0 0 8px rgba(143, 212, 154, 0.5); }
+body .mmo-act button:disabled { opacity: 0.4; cursor: default; }
+body .mmo-quick button.dot::after { content: ""; position: absolute; top: -3px; right: 0; width: 9px; height: 9px; border-radius: 50%; background: #d1352b; border: 1px solid #000; }
+/* Nhật ký hệ thống góc dưới trái */
+body .mmo-log { left: 8px; bottom: 8px; width: 270px; display: grid; gap: 1px; padding: 6px 8px; background: rgba(18, 14, 10, 0.6); border: 1px solid rgba(77, 58, 31, 0.7); border-radius: 4px; font-size: 11px; pointer-events: none; }
+body .mmo-log:empty { display: none; }
+body .mmo-log b { color: #8fd49a; font-weight: 400; }
+@media (max-width: 1000px) { body .mmo-log { display: none; } }
+@media (max-width: 760px) { body .mmo-quick { display: none; } }
 body .mmo-tgt { top: 10px; left: 50%; transform: translateX(-50%); width: 240px; text-align: center; color: #fff; text-shadow: var(--m-shadow); }
 body .mmo-tgt .bai-bar { height: 9px; margin-top: 3px; border-radius: 2px; }
 body .mmo-tgt .bai-bar span { display: none; }
 @media (max-width: 620px) {
-  body .mmo-quest, body .mmo-zone { display: none; }
+  body .mmo-quest, body .mmo-act span { display: none; }
   body .mmo-tgt { top: 76px; }
 }
 
@@ -158,7 +186,7 @@ body .mmo-dlg h2 {
 body .mmo-dlg h2 .x { width: 28px; height: 28px; padding: 0; border: 1px solid var(--m-line); border-radius: 3px; background: var(--m-slot); box-shadow: none; color: var(--m-mute); font: 400 18px/1 system-ui, sans-serif; cursor: pointer; }
 body .mmo-dlg h2 .x:hover { border-color: var(--m-gold); color: var(--m-gold2); }
 body .mmo-dlg h3 { display: flex; justify-content: space-between; align-items: baseline; margin: 16px 0 8px; font: 700 11px system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: var(--m-gold); }
-body .mmo-dlg h3:first-of-type { margin-top: 0; }
+body .mmo-dlg h2 + h3 { margin-top: 0; }
 body .mmo-dlg h3 em { font: 400 12px "Lora Variable", Cambria, serif; letter-spacing: 0; text-transform: none; color: var(--m-mute); }
 body .mmo-dlg h3 em b { color: var(--m-gold2); }
 body .mmo-dlg p { margin: 0 0 10px; }

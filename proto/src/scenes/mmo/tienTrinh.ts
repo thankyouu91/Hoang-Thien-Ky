@@ -93,6 +93,10 @@ export interface Save {
   tang?: Record<string, number>;
   /** Chiêu xếp vào sáu ô ra chiêu (Q W E R T U), null là ô trống; chưa ghi thì năm chiêu khởi đầu */
   slots?: (SkillType | null)[];
+  /** Tông môn đang ở: cống hiến, ngày điểm danh gần nhất, nhiệm vụ diệt dị thú của ngày taskDay */
+  sect?: { id: string; cong: number; checkIn: string; taskDay: string; kills: number; taskDone: boolean };
+  /** Mã các thư đã nhận quà */
+  mail?: string[];
 }
 
 export function newSave(name: string, element: ElementId): Save {
@@ -213,7 +217,7 @@ export function stats(s: Save) {
   const b = attributeBonuses(member(s));
   const up = (base: number, k = 0) => Math.round((base * (1000 + k)) / 1000);
   return {
-    hp: up(hpOf(s.lv), b.hp), atk: up(atkOf(s.lv, s.wpn), b.atk), manaMul: 1000 + (b.manaMax ?? 0),
+    hp: up(hpOf(s.lv), b.hp), atk: up(up(atkOf(s.lv, s.wpn), b.atk), rankOf(s)?.[2]), manaMul: 1000 + (b.manaMax ?? 0),
     def: b.def ?? 0, crit: b.critBonus ?? 0, critDmg: b.critDamage ?? 0, manaCut: b.manaCostCut ?? 0, speed: b.attackSpeed ?? 0, cd: b.cooldownCut ?? 0,
   };
 }
@@ -248,4 +252,92 @@ export function clearSlot(s: Save, i: number): void {
   const slots = slotsOf(s);
   slots[i] = null;
   s.slots = slots;
+}
+
+// ---------- Cảnh giới, tọa thiền, tông môn, thư ----------
+// Tên cảnh giới theo data/he_thong/json/vi_dien.json (mỗi đại cảnh giới 50 cấp). Số của tọa thiền, tông môn và thư là đề xuất
+// cho bản chơi một mình, chưa có trong GDD; tọa thiền chỉ hồi máu và mana, không cho tu vi (giữ nhịp lên cấp, chốt 2026-11-09).
+
+const REALMS = ["Luyện Khí", "Trúc Cơ", "Kết Đan", "Nguyên Anh", "Hóa Thần"];
+export function realm(lv: number): string {
+  const k = (lv - 1) % 50;
+  return `${REALMS[Math.min(REALMS.length - 1, Math.floor((lv - 1) / 50))]} · ${k < 17 ? "Sơ kỳ" : k < 34 ? "Trung kỳ" : "Hậu kỳ"}`;
+}
+
+/** Tọa thiền: phần máu và mana tối đa hồi mỗi giây. */
+export const SIT = { hp: 0.05, mana: 0.1 };
+
+/** Tông môn NPC để gia nhập (tên tạm). */
+export const SECTS: [string, string, string][] = [
+  ["thanh_van", "Thanh Vân Tông", "Kiếm tu chính đạo, sơn môn trên mây"],
+  ["huyen_thien", "Huyền Thiên Tông", "Trận pháp và bùa chú"],
+  ["van_thu", "Vạn Thú Cốc", "Ngự thú, sống giữa rừng sâu"],
+];
+export const SECT = { level: 10, checkIn: 50, donate: 100, donateCong: 10, taskKills: 30, taskCong: 100 };
+/** Cấp bậc: cống hiến cần, tên, công cộng thêm (phần nghìn). */
+export const RANKS: [number, string, number][] = [[0, "Ngoại môn đệ tử", 20], [300, "Nội môn đệ tử", 40], [1000, "Chân truyền đệ tử", 60], [3000, "Trưởng lão", 80]];
+
+export const rankOf = (s: Save) => (s.sect ? [...RANKS].reverse().find(([n]) => s.sect!.cong >= n)! : null);
+
+export function joinSect(s: Save, id: string): boolean {
+  if (s.sect || s.lv < SECT.level || !SECTS.some(([k]) => k === id)) return false;
+  s.sect = { id, cong: 0, checkIn: "", taskDay: "", kills: 0, taskDone: false };
+  return true;
+}
+
+export function leaveSect(s: Save): void {
+  delete s.sect;
+}
+
+/** Điểm danh mỗi ngày một lần. today: ngày theo máy người chơi, dạng YYYY-MM-DD. */
+export function checkIn(s: Save, today: string): boolean {
+  const t = s.sect;
+  if (!t || t.checkIn === today) return false;
+  t.checkIn = today;
+  t.cong += SECT.checkIn;
+  s.gold += 20 * s.lv;
+  return true;
+}
+
+export function donate(s: Save): boolean {
+  const t = s.sect;
+  if (!t || s.gold < SECT.donate) return false;
+  s.gold -= SECT.donate;
+  t.cong += SECT.donateCong;
+  return true;
+}
+
+/** Số dị thú đã diệt cho nhiệm vụ tông môn hôm nay. */
+export const sectKills = (s: Save, today: string) => (s.sect?.taskDay === today ? s.sect.kills : 0);
+
+/** Gọi mỗi lần diệt dị thú; true khi vừa xong nhiệm vụ tông môn của ngày. */
+export function sectKill(s: Save, today: string): boolean {
+  const t = s.sect;
+  if (!t) return false;
+  if (t.taskDay !== today) Object.assign(t, { taskDay: today, kills: 0, taskDone: false });
+  if (t.taskDone || ++t.kills < SECT.taskKills) return false;
+  t.taskDone = true;
+  t.cong += SECT.taskCong;
+  return true;
+}
+
+const MAILS = [
+  { id: "chao", lv: 1, ten: "Quà nhập thế", gold: 50, pots: 3 },
+  { id: "lv5", lv: 5, ten: "Mừng đạt cấp 5", gold: 200, pots: 3 },
+  { id: "lv10", lv: 10, ten: "Mừng đạt cấp 10", gold: 500, pots: 5 },
+  { id: "lv20", lv: 20, ten: "Mừng đạt cấp 20", gold: 1500, pots: 8 },
+  { id: "lv30", lv: 30, ten: "Mừng đạt cấp 30", gold: 3000, pots: 10 },
+  { id: "lv50", lv: 50, ten: "Mừng đạt cấp 50", gold: 8000, pots: 15 },
+];
+
+/** Thư đã tới (theo cấp), mới nhất trước. */
+export const mails = (s: Save) => MAILS.filter((m) => s.lv >= m.lv).map((m) => ({ ...m, claimed: !!s.mail?.includes(m.id) })).reverse();
+
+export function claimMail(s: Save, id: string): boolean {
+  const m = mails(s).find((x) => x.id === id);
+  if (!m || m.claimed) return false;
+  s.mail = [...(s.mail ?? []), id];
+  s.gold += m.gold;
+  s.pots += m.pots;
+  return true;
 }

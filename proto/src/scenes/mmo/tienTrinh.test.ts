@@ -132,3 +132,38 @@ test("chiêu đã học theo cấp và xếp ô", async () => {
   assert.equal(t.slotsOf(s)[1], null);
   assert.equal(t.setSlot(s, 9, "can_don"), false);
 });
+
+test("cảnh giới, tông môn, thư", async () => {
+  const t = await import("./tienTrinh.ts");
+  assert.equal(t.realm(1), "Luyện Khí · Sơ kỳ");
+  assert.equal(t.realm(50), "Luyện Khí · Hậu kỳ");
+  assert.equal(t.realm(70), "Trúc Cơ · Trung kỳ");
+  const s = t.newSave("A", "moc");
+  assert.equal(t.joinSect(s, "thanh_van"), false); // chưa đủ cấp
+  s.lv = 10;
+  const atk0 = t.stats(s).atk;
+  assert.equal(t.joinSect(s, "khong_co"), false);
+  assert.equal(t.joinSect(s, "thanh_van"), true);
+  assert.equal(t.stats(s).atk, Math.round(atk0 * 1.02));
+  assert.equal(t.checkIn(s, "2026-11-11"), true);
+  assert.equal(t.checkIn(s, "2026-11-11"), false);
+  assert.equal(t.checkIn(s, "2026-11-12"), true);
+  assert.equal(s.sect!.cong, 100);
+  let done = 0;
+  for (let i = 0; i < 40; i++) if (t.sectKill(s, "2026-11-12")) done++;
+  assert.equal(done, 1);
+  assert.equal(s.sect!.cong, 200);
+  assert.equal(t.sectKills(s, "2026-11-13"), 0);
+  s.gold = 100;
+  assert.equal(t.donate(s), true);
+  assert.equal(t.donate(s), false);
+  assert.equal(t.rankOf(s)![1], "Ngoại môn đệ tử");
+  s.sect!.cong = 300;
+  assert.equal(t.rankOf(s)![1], "Nội môn đệ tử");
+  assert.deepEqual(t.mails(s).map((m) => m.id), ["lv10", "lv5", "chao"]);
+  const pots = s.pots;
+  assert.equal(t.claimMail(s, "chao"), true);
+  assert.equal(t.claimMail(s, "chao"), false);
+  assert.equal(t.claimMail(s, "lv50"), false);
+  assert.equal(s.pots, pots + 3);
+});
