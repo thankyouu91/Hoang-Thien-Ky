@@ -4,6 +4,8 @@ import type { ElementId } from "../../replay/types.ts";
 import { ATTRIBUTES, attributeBonuses, layerCost, TAY_DIEM, TECHNIQUE_LAYERS, trainingPoints, unspentPoints, type Member } from "@htk/rules";
 import type { SkillType } from "@htk/sim";
 import { BAI } from "../bai/thamSo.ts";
+import { ELEMENT_STYLE } from "../../theme/elements.ts";
+import TRANG_BI from "../../../../data/he_thong/json/trang_bi.json" with { type: "json" };
 
 /** Vùng theo thứ tự đi: thư mục nền chien_truong/, tên, hệ của dị thú. */
 export const REGIONS: [string, string, ElementId][] = [
@@ -97,10 +99,14 @@ export interface Save {
   sect?: { id: string; cong: number; checkIn: string; taskDay: string; kills: number; taskDone: boolean };
   /** Mã các thư đã nhận quà */
   mail?: string[];
+  /** Túi đồ, tối đa BAG_MAX ô; bình máu và linh thạch không nằm ở đây (pots, gold) */
+  bag: ItemInstance[];
+  /** Đồ đang mặc theo ô (EquipSlot) */
+  equips: Record<string, ItemInstance | null>;
 }
 
 export function newSave(name: string, element: ElementId): Save {
-  return { v: 1, name: name.trim().slice(0, 16) || "Vô Danh", element, lv: 1, xp: 0, gold: 0, pots: 3, wpn: 0, zone: 0, maxZone: 0, quest: { zone: 1, n: 0 } };
+  return { v: 1, name: name.trim().slice(0, 16) || "Vô Danh", element, lv: 1, xp: 0, gold: 0, pots: 3, wpn: 0, zone: 0, maxZone: 0, quest: { zone: 1, n: 0 }, bag: [], equips: {} };
 }
 
 export const hpOf = (lv: number) => 2000 + 220 * (lv - 1);
@@ -126,19 +132,14 @@ export function gainXp(s: Save, xp: number): number {
 
 export interface KillResult {
   xp: number;
-  gold: number;
-  pot: boolean;
   /** Thưởng nhiệm vụ nếu con này làm xong nhiệm vụ */
   quest: { xp: number; gold: number } | null;
   levels: number;
 }
 
-/** Giết một con ở khu z: tu vi, linh thạch, có thể rơi bình máu (roll trong [0, 1)), tính tiến độ nhiệm vụ. */
-export function kill(s: Save, z: Zone, roll: number): KillResult {
-  const k = z.boss ? 20 : 1;
-  const r: KillResult = { xp: BAI.tuVi(z.level) * k, gold: (2 + z.level) * k, pot: z.boss || roll < 0.1, quest: null, levels: 0 };
-  if (r.pot) s.pots++;
-  s.gold += r.gold;
+/** Giết một con ở khu z: tu vi và tiến độ nhiệm vụ. Linh thạch và đồ thì rơi ra đất (rollDrop), nhặt mới có. */
+export function kill(s: Save, z: Zone): KillResult {
+  const r: KillResult = { xp: BAI.tuVi(z.level) * (z.boss ? 20 : 1), quest: null, levels: 0 };
   let xp = r.xp;
   if (z.idx === s.quest.zone && ++s.quest.n >= (z.boss ? 1 : QUEST_N)) {
     r.quest = { xp: Math.round(xpNeed(s.lv) * 0.3), gold: 20 * z.level };
@@ -215,10 +216,12 @@ export function resetSkills(s: Save): void {
 /** Chỉ số sau khi cộng điểm tiềm năng. hp, atk là số cuối; các khóa còn lại là phần nghìn. */
 export function stats(s: Save) {
   const b = attributeBonuses(member(s));
+  const g = gearBonus(s);
   const up = (base: number, k = 0) => Math.round((base * (1000 + k)) / 1000);
   return {
-    hp: up(hpOf(s.lv), b.hp), atk: up(up(atkOf(s.lv, s.wpn), b.atk), rankOf(s)?.[2]), manaMul: 1000 + (b.manaMax ?? 0),
-    def: b.def ?? 0, crit: b.critBonus ?? 0, critDmg: b.critDamage ?? 0, manaCut: b.manaCostCut ?? 0, speed: b.attackSpeed ?? 0, cd: b.cooldownCut ?? 0,
+    hp: up(hpOf(s.lv) + g.hp, b.hp), atk: up(up(atkOf(s.lv, s.wpn) + g.atk, b.atk), rankOf(s)?.[2]), manaMul: 1000 + (b.manaMax ?? 0),
+    // shortcut: trận chỉ có một loại sát thương nên thủ ngoại và thủ nội của đồ gộp trung bình vào một chỉ số thủ; tách khi có sát thương nội/ngoại.
+    def: (b.def ?? 0) + Math.round((g.defExt + g.defInt) / 2), defExt: g.defExt, defInt: g.defInt, crit: (b.critBonus ?? 0) + g.crit, critDmg: b.critDamage ?? 0, manaCut: b.manaCostCut ?? 0, speed: b.attackSpeed ?? 0, cd: b.cooldownCut ?? 0,
   };
 }
 
@@ -340,4 +343,153 @@ export function claimMail(s: Save, id: string): boolean {
   s.gold += m.gold;
   s.pots += m.pots;
   return true;
+}
+
+// ---------- Vật phẩm: rơi, nhặt, túi, trang bị ----------
+// Kiểu trang bị (tên, ô, độ hiếm, số hình) và hệ số độ hiếm lấy từ data/he_thong/json/trang_bi.json. Tỷ lệ rơi theo
+// docs/CHI_THI_CLAUDE_LOOT_VA_UIUX.md; chỉ số của món, giá bán và công dụng đan là đề xuất, chưa có trong GDD.
+
+export type ItemRarity = "luc" | "lam" | "tim" | "vang" | "do";
+export type ItemType = "trang_bi" | "dan_duoc" | "khoang_thach" | "tan_quyen" | "linh_thach";
+export type EquipSlot = "vu_khi" | "mu" | "ao" | "dai" | "bao_tay" | "giay" | "ngoc_boi";
+export type ItemStats = { atk?: number; hp?: number; defExt?: number; defInt?: number; crit?: number };
+
+export interface ItemInstance {
+  id: string;
+  /** Mã loại; món xếp chồng thì cùng mã vào một ô */
+  code: string;
+  name: string;
+  type: ItemType;
+  rarity: ItemRarity;
+  slot?: EquipSlot;
+  /** Đường dẫn trong icon_ve/, không đuôi */
+  icon: string;
+  count: number;
+  /** Cấp của món: cấp quái rơi ra nó */
+  lv?: number;
+  /** atk, hp là số cộng thẳng; defExt, defInt, crit là phần nghìn */
+  stats?: ItemStats;
+  desc?: string;
+}
+
+export const BAG_MAX = 30;
+/** Tên và màu cột sáng của từng phẩm. */
+export const RARITY: Record<ItemRarity, [string, string]> = { luc: ["Lục", "#22c55e"], lam: ["Lam", "#38bdf8"], tim: ["Tím", "#c084fc"], vang: ["Vàng", "#facc15"], do: ["Đỏ", "#f43f5e"] };
+const RARITY_IDS = Object.keys(RARITY) as ItemRarity[];
+/** Hồi Linh Đan hồi chừng này phần mana tối đa. */
+export const MANA_HEAL = 0.5;
+
+const KIEU = TRANG_BI.kieu as { ma_vp: string; o: EquipSlot; so: number; ten: string; do_hiem: ItemRarity }[];
+const HE_SO = Object.fromEntries((TRANG_BI.do_hiem as { id: string; he_so: number }[]).map((r) => [r.id, r.he_so]));
+const ART: Record<EquipSlot, string> = { vu_khi: "kiem", mu: "mu", ao: "ao", dai: "dai", bao_tay: "bao_tay", giay: "giay", ngoc_boi: "ngoc_boi" };
+/** Chỉ số của món theo ô: atk, hp là phần của công, máu chuẩn cùng cấp; còn lại là phần nghìn. Nhân hệ số độ hiếm. */
+const GEAR_STAT: Record<EquipSlot, ItemStats> = {
+  vu_khi: { atk: 0.1 }, bao_tay: { atk: 0.04, crit: 15 }, ngoc_boi: { hp: 0.03, crit: 15 },
+  mu: { hp: 0.05, defInt: 20 }, ao: { hp: 0.08, defExt: 20 }, dai: { hp: 0.05 }, giay: { defExt: 10, defInt: 10 },
+};
+const ORES = [["thiet_tinh", "Thiết Tinh"], ["tinh_kim", "Tinh Kim"], ["huyen_thiet", "Huyền Thiết"], ["than_kim", "Thần Kim"]];
+const HERBS = [["linh_thao", "Linh Thảo"], ["huyen_chi", "Huyền Chi"], ["ngoc_sam", "Ngọc Sâm"], ["than_lien", "Thần Liên"]];
+
+const uid = (rnd: () => number) => Math.floor(rnd() * 2 ** 40).toString(36);
+const stack = (rnd: () => number, code: string, name: string, type: ItemType, rarity: ItemRarity, icon: string, lv: number, desc: string, count = 1): ItemInstance =>
+  ({ id: uid(rnd), code, name, type, rarity, icon, count, lv, desc });
+
+/** Bình máu dưới dạng một món, để hiện trong túi và rơi ra đất; số lượng thật nằm ở save.pots. */
+export const potItem = (count: number, rnd: () => number = Math.random): ItemInstance =>
+  stack(rnd, "binh_mau", "Bình máu", "dan_duoc", "luc", "dan/dan_duoc_hoi_mau", 1, `Hồi ${POT_HEAL * 100}% máu (phím 1)`, count);
+
+function gear(lv: number, rarity: ItemRarity, rnd: () => number): ItemInstance {
+  const pool = KIEU.filter((k) => k.do_hiem === rarity);
+  const k = pool[Math.floor(rnd() * pool.length)];
+  const stats: ItemStats = {};
+  for (const [key, w] of Object.entries(GEAR_STAT[k.o]) as [keyof ItemStats, number][]) {
+    stats[key] = Math.round(((key === "atk" ? atkOf(lv, 0) : key === "hp" ? hpOf(lv) : 1) * w * HE_SO[rarity]) / 1000);
+  }
+  return { id: uid(rnd), code: k.ma_vp, name: k.ten, type: "trang_bi", rarity, slot: k.o, icon: `trang_bi/${ART[k.o]}/${String(k.so).padStart(2, "0")}`, count: 1, lv, stats };
+}
+
+/** Đồ rơi khi giết một con ở khu z. isBoss: thủ lĩnh (cửa bí cảnh hay thủ lĩnh trong bãi). */
+export function rollDrop(z: Zone, isBoss: boolean, rnd: () => number = Math.random): ItemInstance[] {
+  const lv = Math.max(1, z.level);
+  const tier = Math.min(3, Math.floor(z.region / 4));
+  const scroll = () => stack(rnd, `tan_quyen_${z.element}`, `Tàn quyển hệ ${ELEMENT_STYLE[z.element].name}`, "tan_quyen", "tim", `tan_quyen/${z.element}`, lv, "Mảnh công pháp, gom đủ để ghép ở Tàng Kinh Các");
+  // Linh thạch giữ mức cũ (2 + cấp, thủ lĩnh cửa bí cảnh ×20), dao động ±25%.
+  const out = [stack(rnd, "linh_thach", "Linh thạch", "linh_thach", "luc", "linh_thach/ha", lv, "", Math.max(1, Math.round((2 + z.level) * (z.boss ? 20 : 1) * (0.75 + 0.5 * rnd()))))];
+  if (isBoss) {
+    out.push(gear(lv, rnd() < 0.5 ? "lam" : "tim", rnd), potItem(1, rnd));
+    if (rnd() < 0.4) out.push(scroll());
+    if (rnd() < 0.15) out.push(gear(lv, "vang", rnd));
+    // Phẩm Đỏ: chỉ thủ lĩnh vùng cuối (Cấm Khu), thay cho "Tứ Tượng Thần Vực" của chỉ thị vì thế giới chưa có vùng đó.
+    if (z.region === REGIONS.length - 1 && rnd() < 0.05) out.push(gear(lv, "do", rnd));
+    return out;
+  }
+  if (rnd() < 0.3) out.push(rnd() < 0.5 ? potItem(1, rnd) : stack(rnd, "hoi_linh_dan", "Hồi Linh Đan", "dan_duoc", "luc", "dan/dan_duoc_hoi_mana", 1, `Hồi ${MANA_HEAL * 100}% mana`));
+  if (rnd() < 0.25) {
+    const [list, dir] = rnd() < 0.5 ? [ORES, "quang"] : [HERBS, "duoc"];
+    out.push(stack(rnd, list[tier][0], list[tier][1], "khoang_thach", RARITY_IDS[tier], `${dir}/${list[tier][0]}`, lv, "Nguyên liệu rèn và luyện đan"));
+  }
+  if (rnd() < 0.1) out.push(gear(lv, rnd() < 0.7 ? "luc" : "lam", rnd));
+  if (rnd() < 0.02) out.push(scroll());
+  return out;
+}
+
+/** Nhặt một món: linh thạch và bình máu vào bộ đếm, món xếp chồng vào ô cùng mã, còn lại chiếm một ô. false khi túi đầy. */
+export function pickUp(s: Save, it: ItemInstance): boolean {
+  if (it.type === "linh_thach") s.gold += it.count;
+  else if (it.code === "binh_mau") s.pots += it.count;
+  else {
+    const same = it.type === "trang_bi" ? undefined : s.bag.find((x) => x.code === it.code);
+    if (same) same.count += it.count;
+    else if (s.bag.length >= BAG_MAX) return false;
+    else s.bag.push(it);
+  }
+  return true;
+}
+
+/** Mặc món trang bị trong túi; món đang ở ô đó về túi (đổi chỗ nên không cần ô trống). */
+export function equip(s: Save, id: string): boolean {
+  const i = s.bag.findIndex((x) => x.id === id);
+  const it = s.bag[i];
+  if (!it?.slot) return false;
+  const old = s.equips[it.slot];
+  if (old) s.bag[i] = old;
+  else s.bag.splice(i, 1);
+  s.equips[it.slot] = it;
+  return true;
+}
+
+export function unequip(s: Save, slot: string): boolean {
+  const it = s.equips[slot];
+  if (!it || s.bag.length >= BAG_MAX) return false;
+  s.bag.push(it);
+  s.equips[slot] = null;
+  return true;
+}
+
+/** Tổng chỉ số của đồ đang mặc. */
+export function gearBonus(s: Save): Required<ItemStats> {
+  const g = { atk: 0, hp: 0, defExt: 0, defInt: 0, crit: 0 };
+  for (const it of Object.values(s.equips)) for (const [k, v] of Object.entries(it?.stats ?? {})) g[k as keyof ItemStats] += v;
+  return g;
+}
+
+/** Giá bán cả ô. */
+export const sellPrice = (it: ItemInstance) =>
+  Math.max(1, Math.round((it.lv ?? 1) * (it.type === "trang_bi" ? 3 * (RARITY_IDS.indexOf(it.rarity) + 1) : 0.5))) * it.count;
+
+export function sell(s: Save, id: string): boolean {
+  const i = s.bag.findIndex((x) => x.id === id);
+  if (i < 0) return false;
+  s.gold += sellPrice(s.bag[i]);
+  s.bag.splice(i, 1);
+  return true;
+}
+
+/** Dùng một cái của món đan dược trong túi; trả về món (để màn chơi áp công dụng) hoặc null khi không có. */
+export function consume(s: Save, id: string): ItemInstance | null {
+  const i = s.bag.findIndex((x) => x.id === id);
+  const it = s.bag[i];
+  if (!it || it.type !== "dan_duoc") return null;
+  if (--it.count <= 0) s.bag.splice(i, 1);
+  return it;
 }

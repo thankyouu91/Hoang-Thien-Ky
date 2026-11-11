@@ -240,3 +240,14 @@ body .mmo-detail nav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px
   body .mmo-grid, body .mmo-grid5 { grid-template-columns: repeat(5, 52px); justify-content: center; }
   body .mmo-barrow { flex-wrap: wrap; }
 }
+
+/* ---------- Vật phẩm: viền theo phẩm chất, thẻ lọc của túi ---------- */
+body .q-luc { --q: #22c55e; } body .q-lam { --q: #38bdf8; } body .q-tim { --q: #c084fc; } body .q-vang { --q: #facc15; } body .q-do { --q: #f43f5e; }
+body .mmo-slot[class*="q-"], body .mmo-detail header i[class*="q-"] { border-color: var(--q); box-shadow: inset 0 0 10px -2px var(--q); }
+body .mmo-slot[class*="q-"].on { box-shadow: 0 0 0 1px var(--m-gold2), 0 0 10px rgba(241, 223, 174, 0.45), inset 0 0 10px -2px var(--q); }
+body .mmo-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+body .mmo-dlg .mmo-tabs button { padding: 4px 12px; }
+body .mmo-dlg .mmo-tabs button.on { border-color: var(--m-gold2); color: var(--m-gold2); }
+body .mmo-detail .mute { color: var(--m-mute); }
+body .mmo-detail dd i { font-style: normal; font-size: 11px; }
+body .mmo-detail dd .up { color: #8fd49a; } body .mmo-detail dd .down { color: #e0806a; }

@@ -3,6 +3,7 @@ import { test } from "node:test";
 import { Bai } from "../bai/bai.ts";
 import { bayTuDong, bossTuDong, choVao, macDinh, trongCam } from "./mapKhu.ts";
 import { BAI } from "../bai/thamSo.ts";
+import * as L from "./tienTrinh.ts";
 import { atkOf, buyPot, hpOf, kill, newSave, nextCombat, QUEST_N, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT } from "./tienTrinh.ts";
 
 test("dải thế giới: sơn môn an toàn, cấp quái tăng dần, cửa bí cảnh có thủ lĩnh", () => {
@@ -24,13 +25,45 @@ test("giết quái: lên cấp, xong nhiệm vụ thì sang khu kế", () => {
   const s = newSave("  A  ", "hoa");
   assert.equal(s.name, "A");
   let levels = 0;
-  for (let i = 0; i < QUEST_N; i++) levels += kill(s, zone(1), 0.5).levels;
+  for (let i = 0; i < QUEST_N; i++) levels += kill(s, zone(1)).levels;
   assert.equal(s.quest.zone, 2);
   assert.ok(levels >= 1 && s.lv === 1 + levels && s.xp < xpNeed(s.lv));
   assert.ok(s.gold > 0);
+});
+
+test("rơi đồ: linh thạch luôn rơi, thủ lĩnh chắc chắn rơi trang bị lam hoặc tím; nhặt, mặc, gỡ, bán", () => {
+  const s = newSave("A", "moc");
+  // rnd = 0.99: quái thường không trúng tỷ lệ nào ngoài linh thạch.
+  const only = L.rollDrop(zone(1), false, () => 0.99);
+  assert.deepEqual(only.map((x) => x.code), ["linh_thach"]);
+  assert.ok(L.pickUp(s, only[0]) && s.gold === only[0].count && s.bag.length === 0);
+  // rnd = 0: trúng mọi tỷ lệ.
+  const all = L.rollDrop(zone(1), false, () => 0);
+  assert.deepEqual(all.map((x) => x.type), ["linh_thach", "dan_duoc", "khoang_thach", "trang_bi", "tan_quyen"]);
+  const boss = L.rollDrop(zone(7), true, () => 0.5);
+  const g = boss.find((x) => x.type === "trang_bi")!;
+  assert.ok(["lam", "tim"].includes(g.rarity) && g.slot && Object.keys(g.stats!).length > 0);
   const pots = s.pots;
-  kill(s, zone(1), 0.01);
+  for (const it of boss) assert.ok(L.pickUp(s, it));
   assert.equal(s.pots, pots + 1);
+  // Nguyên liệu cùng mã xếp chồng một ô.
+  const ore = all[2];
+  L.pickUp(s, { ...ore, id: "a" });
+  L.pickUp(s, { ...ore, id: "b" });
+  assert.equal(s.bag.filter((x) => x.code === ore.code).length, 1);
+  assert.equal(s.bag.find((x) => x.code === ore.code)!.count, 2);
+  const before = L.stats(s);
+  assert.ok(L.equip(s, g.id) && s.equips[g.slot!] === g && !s.bag.includes(g));
+  const after = L.stats(s);
+  assert.ok(after.atk + after.hp + after.def + after.crit > before.atk + before.hp + before.def + before.crit);
+  assert.ok(L.unequip(s, g.slot!) && s.bag.includes(g));
+  assert.deepEqual(L.stats(s), before);
+  const gold = s.gold;
+  assert.ok(L.sell(s, g.id) && s.gold === gold + L.sellPrice(g) && !s.bag.includes(g));
+  // Túi đầy thì trang bị không nhặt được, linh thạch vẫn nhặt được.
+  while (s.bag.length < L.BAG_MAX) s.bag.push({ ...g, id: String(s.bag.length) });
+  assert.equal(L.pickUp(s, { ...g, id: "x" }), false);
+  assert.equal(L.pickUp(s, only[0]), true);
 });
 
 test("tiệm: thiếu linh thạch thì không mua được", () => {

@@ -15,6 +15,7 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
+  BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
@@ -22,13 +23,17 @@ import {
 const SAVE_KEY = "htk.mmo.v1";
 const POT_CD = 5;
 const NAMES = ["Lạc Vân", "Tô Hàn", "Mạc Kỳ", "Diệp Thanh", "Hoa Ảnh", "Trần Phong", "Liễu Sương", "Minh Nguyệt", "Tử Sâm", "Hàn Liên", "Vô Song", "Cố Bắc"];
-/** Hình trong assets/: mặc định ở pixellab/, đường dẫn bắt đầu bằng freepixel/ thì ở assets/freepixel/. */
-const ASSET = (p: string) => `${import.meta.env.BASE_URL}${p.startsWith("freepixel/") ? "" : "pixellab/"}${p}.png`;
+/** Hình trong assets/: icon_ve/ là icon vẽ (.webp); còn lại mặc định ở pixellab/, đường dẫn bắt đầu bằng freepixel/ thì ở assets/freepixel/. */
+const ASSET = (p: string) => (p.startsWith("icon_ve/") ? `${import.meta.env.BASE_URL}${p}.webp` : `${import.meta.env.BASE_URL}${p.startsWith("freepixel/") ? "" : "pixellab/"}${p}.png`);
 
 function load(): Save | null {
   try {
     const s = JSON.parse(localStorage.getItem(SAVE_KEY) ?? "null") as Save | null;
-    return s && s.v === 1 && s.zone >= 0 && s.zone < ZONE_COUNT ? s : null;
+    if (!s || s.v !== 1 || !(s.zone >= 0) || s.zone >= ZONE_COUNT) return null;
+    // Bản lưu từ trước khi có túi đồ.
+    s.bag ??= [];
+    s.equips ??= {};
+    return s;
   } catch {
     return null;
   }
@@ -71,6 +76,12 @@ export class MmoScene extends BaiScene {
   /** Nhật ký hệ thống góc dưới trái */
   private log: string[] = [];
   private selSkill: SkillType = BAI.skills[0];
+  /** Đồ rơi trên đất của khu đang đứng: tọa độ thế giới, mốc giờ rơi, pull = đang bị hút về người chơi */
+  private loot: { x: number; y: number; item: ItemInstance; at: number; pull: boolean }[] = [];
+  /** Bảng Túi: thẻ đang xem và món đang chọn */
+  private bagTab = "all";
+  private selItem = "";
+  private fullAt = -9;
 
   constructor(sprites: Sprites) {
     super(sprites);
@@ -196,7 +207,8 @@ export class MmoScene extends BaiScene {
     b.player.name = s.name;
     this.applyStats(b, true);
     b.auto = this.auto && !z.safe;
-    b.onKill = () => this.onKill(b, z);
+    b.onKill = (m) => this.onKill(b, z, m);
+    this.loot = [];
     for (const h of [...m.nen, ...m.vat]) this.img(h.file);
     if (m.o) for (const t of this.bo!.bo) this.img(O_DIR + t.f);
     return b;
@@ -226,10 +238,15 @@ export class MmoScene extends BaiScene {
     }
   }
 
-  private onKill(b: Bai, z: Zone): void {
+  private onKill(b: Bai, z: Zone, m: { x: number; y: number; boss?: boolean }): void {
     const s = this.save;
-    const r = kill(s, z, Math.random());
-    if (r.pot) this.note("Nhặt được 1 bình máu");
+    const r = kill(s, z);
+    // Đồ văng ra quanh xác quái; nhặt ở pull().
+    for (const item of rollDrop(z, !!m.boss)) {
+      const a = Math.random() * Math.PI * 2;
+      const d = (20 + 20 * Math.random()) * SCALE;
+      this.loot.push({ x: m.x + Math.cos(a) * d, y: m.y + Math.sin(a) * d * 0.6, item, at: this.clock, pull: false });
+    }
     if (sectKill(s, today())) this.note(`Xong nhiệm vụ tông môn: +${SECT.taskCong} cống hiến`, true);
     if (r.quest) this.note(`Xong nhiệm vụ: +${r.quest.xp} tu vi, +${r.quest.gold} linh thạch`, true);
     if (r.levels > 0) {
@@ -237,6 +254,39 @@ export class MmoScene extends BaiScene {
       this.applyStats(b, true);
     }
     this.persist();
+  }
+
+  /** Hút đồ rơi về phía người chơi rồi nhặt: tự hút khi lại gần (PICK_R); treo auto hoặc phím Cách thì hút cả khu. */
+  private pull(b: Bai, dt: number): void {
+    const p = b.player;
+    const s = this.save;
+    let got = false;
+    this.loot = this.loot.filter((l) => {
+      const age = this.clock - l.at;
+      if (age > LOOT_TTL) return false;
+      const d = Math.hypot(p.x - l.x, p.y - l.y);
+      // Nửa giây đầu nằm yên cho người chơi thấy đồ rơi.
+      if (age < 0.5 || (!l.pull && !b.auto && d > PICK_R)) return true;
+      if (d > 30) {
+        const v = Math.min(d, LOOT_SPEED * dt);
+        l.x += ((p.x - l.x) / d) * v;
+        l.y += ((p.y - l.y) / d) * v;
+        return true;
+      }
+      const it = l.item;
+      if (!pickUp(s, it)) {
+        l.pull = false;
+        if (this.clock - this.fullAt > 5) {
+          this.fullAt = this.clock;
+          this.note("Túi đầy: bán bớt đồ trong túi (I)");
+        }
+        return true;
+      }
+      got = true;
+      this.note(it.type === "linh_thach" ? `+${it.count} linh thạch` : `Nhặt: ${it.name}${it.count > 1 ? ` ×${it.count}` : ""}`, false, it.type !== "trang_bi" && it.type !== "tan_quyen");
+      return false;
+    });
+    if (got) this.persist();
   }
 
   private applyStats(b: Bai, heal: boolean): void {
@@ -311,6 +361,7 @@ export class MmoScene extends BaiScene {
     super.update(dt);
     const p = b.player;
     if (!p.alive) return;
+    this.pull(b, dt);
     if (p.x <= 6 && this.save.zone > 0) this.go(this.save.zone - 1, "right");
     else if (p.x >= b.w - 6 && this.save.zone < ZONE_COUNT - 1) this.go(this.save.zone + 1, "left");
     this.syncBar(b);
@@ -347,6 +398,7 @@ export class MmoScene extends BaiScene {
     else if (k === "b") this.act("shop");
     else if (k === " ") {
       e.preventDefault();
+      for (const l of this.loot) l.pull = true;
       const p = b.player;
       const near = b.actors
         .filter((a) => a.kind === "monster" && a.alive)
@@ -539,6 +591,30 @@ export class MmoScene extends BaiScene {
     gate(0, z.idx - 1, -1);
     gate(b.w, z.idx + 1, 1);
     for (const h of m.vat) if (h.act) this.text(ctx, ACT_LABEL[h.act], h.x + h.w / 2, h.y + h.h + 24, "center");
+    // Đồ rơi: cột sáng màu phẩm chất và icon nhỏ, cỡ giữ nguyên trên màn hình khi thu nhỏ.
+    const k = 1 / Math.min(1, this.camera.zoom);
+    ctx.imageSmoothingEnabled = true;
+    for (const l of this.loot) {
+      const c = RARITY[l.item.rarity][1];
+      const g = ctx.createLinearGradient(0, l.y, 0, l.y - 110 * k);
+      g.addColorStop(0, c);
+      g.addColorStop(1, `${c}00`);
+      ctx.fillStyle = g;
+      ctx.globalAlpha = 0.3;
+      ctx.fillRect(l.x - 9 * k, l.y - 110 * k, 18 * k, 110 * k);
+      ctx.globalAlpha = 0.9;
+      ctx.fillRect(l.x - 2.5 * k, l.y - 110 * k, 5 * k, 110 * k);
+      ctx.globalAlpha = 1;
+      const im = this.ready(`icon_ve/${l.item.icon}`) ?? this.ready(`icon_ve/${FIRST(l.item.icon)}`);
+      const sz = 24 * k;
+      const y = l.y - sz / 2 + Math.sin(this.clock * 4 + l.x) * 2 * k;
+      if (im) ctx.drawImage(im, l.x - sz / 2, y, sz, sz);
+      else {
+        ctx.fillStyle = c;
+        ctx.fillRect(l.x - sz / 4, y + sz / 4, sz / 2, sz / 2);
+      }
+    }
+    ctx.imageSmoothingEnabled = false;
   }
 
   private text(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, align: CanvasTextAlign): void {
@@ -609,8 +685,9 @@ export class MmoScene extends BaiScene {
     }
   }
 
-  private note(text: string, big = false): void {
-    this.notes.push({ text, at: this.clock, big });
+  /** quiet: chỉ ghi vào nhật ký góc dưới trái, không hiện chữ giữa màn hình. */
+  private note(text: string, big = false, quiet = false): void {
+    if (!quiet) this.notes.push({ text, at: this.clock, big });
     this.log = [...this.log.slice(-5), text];
     this.top.querySelector(".mmo-log")!.innerHTML = this.log.map((t) => `<span><b>[Hệ thống]</b> ${esc(t)}</span>`).join("");
   }
@@ -635,6 +712,24 @@ export class MmoScene extends BaiScene {
     if (d.close !== undefined) this.dlg.close();
     else if (d.use === "pot") {
       this.act("pot");
+      this.bag();
+    } else if (d.item) {
+      this.selItem = d.item;
+      this.bag();
+    } else if (d.tab) {
+      this.bagTab = d.tab;
+      this.bag();
+    } else if (d.equip) {
+      if (equip(s, d.equip)) this.restat();
+    } else if (d.unequip) {
+      if (unequip(s, d.unequip)) this.restat();
+      else this.note("Túi đầy, không gỡ được");
+    } else if (d.sell) {
+      const it = s.bag.find((x) => x.id === d.sell);
+      if (it && (["luc", "lam"].includes(it.rarity) || confirm(`Bán ${it.name} (phẩm ${RARITY[it.rarity][0]})?`)) && sell(s, it.id)) this.bag();
+    } else if (d.useitem) {
+      const b = this.bai;
+      if (b && consume(s, d.useitem)) b.mana = Math.min(b.manaMax, b.mana + b.manaMax * MANA_HEAL);
       this.bag();
     } else if (d.stat) {
       if (addStat(s, d.stat)) this.restat();
@@ -719,18 +814,40 @@ export class MmoScene extends BaiScene {
       <div class="mmo-list">${rows}</div><button type="button" data-close>Đóng</button>`);
   }
 
-  /** Túi: lưới ô, hiện những gì bản lưu đang có. Chưa có vật phẩm rơi nên mới có bình máu, linh thạch, vũ khí. */
+  /** Túi: thẻ lọc, lưới BAG_MAX ô, khung phải là món đang chọn (so chỉ số với món đang mặc, nút Trang bị, Sử dụng, Bán). */
   private bag(): void {
     const s = this.save;
-    const B = import.meta.env.BASE_URL;
-    const items = [
-      `<button type="button" class="mmo-slot" data-use="pot" ${s.pots > 0 ? "" : "disabled"} title="Bình máu: hồi ${POT_HEAL * 100}% máu. Chạm để uống (phím 1)" style="background-image:url(${B}icon_ve/dan/dan_duoc_hoi_mau.webp)"><small>${s.pots}</small></button>`,
-      `<button type="button" class="mmo-slot" disabled title="Linh thạch" style="background-image:url(${B}icon_ve/linh_thach/ha.webp)"><small>${s.gold}</small></button>`,
-      `<button type="button" class="mmo-slot" disabled title="Vũ khí +${s.wpn}: công ${atkOf(s.lv, s.wpn)}" style="background-image:url(${B}icon_ve/trang_bi/kiem/01.webp)"><small>+${s.wpn}</small></button>`,
-    ];
-    const empty = '<button type="button" class="mmo-slot" disabled></button>'.repeat(BAG_SLOTS - items.length);
-    this.open(`<h2>Túi</h2><div class="mmo-grid">${items.join("")}${empty}</div>
-      <footer><span>${items.length}/${BAG_SLOTS} ô</span><span>Chạm bình máu để uống · mua thêm ở Thương hội</span></footer>`);
+    // Bình máu là bộ đếm (save.pots) nên hiện thành một ô ảo đứng đầu.
+    const all: ItemInstance[] = [...(s.pots > 0 ? [{ ...potItem(s.pots), id: "pot" }] : []), ...s.bag];
+    const tab = this.bagTab;
+    const list = all.filter((it) => tab === "all" || (tab === "nl" ? it.type === "khoang_thach" || it.type === "tan_quyen" : it.type === tab));
+    const sel = list.find((it) => it.id === this.selItem) ?? list[0];
+    const cells = list.map((it) => `<button type="button" class="mmo-slot q-${it.rarity} ${it === sel ? "on" : ""}" data-item="${it.id}" title="${esc(it.name)}" style="${url(it)}">${it.count > 1 ? `<small>${it.count}</small>` : ""}</button>`).join("");
+    const empty = '<button type="button" class="mmo-slot" disabled></button>'.repeat(Math.max(0, BAG_MAX - list.length));
+    let detail = `<span class="mute">${all.length ? "Thẻ này chưa có món nào." : "Túi trống. Diệt dị thú rồi lại gần để nhặt đồ rơi."}</span>`;
+    if (sel) {
+      const worn = sel.slot ? s.equips[sel.slot] : null;
+      const lines = STAT_ROWS.filter(([k]) => sel.stats?.[k] || worn?.stats?.[k]).map(([k, ten, pm]) => {
+        const v = sel.stats?.[k] ?? 0;
+        const d = v - (worn?.stats?.[k] ?? 0);
+        const fmt = (n: number) => (pm ? `${n / 10}%` : String(n));
+        return `<dt>${ten}</dt><dd>+${fmt(v)}${worn && d ? ` <i class="${d > 0 ? "up" : "down"}">${d > 0 ? "▲" : "▼"}${fmt(Math.abs(d))}</i>` : ""}</dd>`;
+      }).join("");
+      const btns = [
+        sel.slot ? `<button type="button" data-equip="${sel.id}">Trang bị</button>` : "",
+        sel.id === "pot" ? `<button type="button" data-use="pot">Sử dụng</button>` : sel.type === "dan_duoc" ? `<button type="button" data-useitem="${sel.id}">Sử dụng</button>` : "",
+        sel.id === "pot" ? "" : `<button type="button" class="bad" data-sell="${sel.id}">Bán · ${sellPrice(sel)} linh thạch</button>`,
+      ].join("");
+      detail = `<header><i class="q-${sel.rarity}" style="${url(sel)}"></i><span><b style="color:${RARITY[sel.rarity][1]}">${esc(sel.name)}</b>
+          <em>Phẩm ${RARITY[sel.rarity][0]}${sel.slot ? ` · ${SLOTS.find(([id]) => id === sel.slot)![1]} · cấp ${sel.lv}` : ""}</em></span></header>
+        ${sel.desc ? `<span>${sel.desc}</span>` : ""}
+        ${lines ? `<dl class="mmo-stats">${lines}</dl>` : ""}
+        ${sel.slot ? `<span class="mute">${worn ? `Đang mặc: ${esc(worn.name)} (▲▼ so với món này)` : "Ô này đang trống"}</span>` : ""}
+        <nav>${btns}</nav>`;
+    }
+    this.open(`<h2>Túi</h2><nav class="mmo-tabs">${BAG_TABS.map(([id, ten]) => `<button type="button" data-tab="${id}" class="${id === tab ? "on" : ""}">${ten}</button>`).join("")}</nav>
+      <div class="mmo-skills"><div class="mmo-grid5">${cells}${empty}</div><div class="mmo-detail">${detail}</div></div>
+      <footer><span>${s.bag.length}/${BAG_MAX} ô</span><span>Linh thạch <b>${s.gold}</b></span></footer>`, true);
   }
 
   /** Áp lại chỉ số sau khi cộng hay tẩy điểm, rồi vẽ lại bảng đang mở. */
@@ -739,7 +856,7 @@ export class MmoScene extends BaiScene {
     if (this.panel) this.act(this.panel);
   }
 
-  /** Nhân vật: ô trang bị quanh chân dung (chưa có đồ rơi nên mới có vũ khí), chỉ số, điểm tiềm năng. */
+  /** Nhân vật: bảy ô trang bị quanh chân dung (chạm món đang mặc để gỡ), chỉ số đã cộng đồ, điểm tiềm năng. */
   private char(): void {
     const s = this.save;
     const b = this.bai!;
@@ -749,14 +866,16 @@ export class MmoScene extends BaiScene {
     const cost = statResetCost(s);
     const spent = Object.values(s.diem ?? {}).some((n) => n > 0);
     const B = import.meta.env.BASE_URL;
-    const slot = ([id, ten]: string[]) =>
-      id === "vu_khi"
-        ? `<button type="button" class="mmo-slot" disabled title="Vũ khí +${s.wpn}" style="background-image:url(${B}icon_ve/trang_bi/kiem/01.webp)"><small>+${s.wpn}</small></button>`
+    const slot = ([id, ten]: string[]) => {
+      const it = s.equips[id];
+      return it
+        ? `<button type="button" class="mmo-slot q-${it.rarity}" data-unequip="${id}" title="${esc(it.name)} (${ten}, phẩm ${RARITY[it.rarity][0]}, cấp ${it.lv}) · chạm để gỡ về túi" style="${url(it)}"></button>`
         : `<button type="button" class="mmo-slot" disabled title="${ten}: chưa có"><span class="nm">${ten}</span></button>`;
+    };
     const rows: [string, string | number][] = [
-      ["Máu", `${Math.round(p.hp)}/${p.hpMax}`], ["Mana", `${Math.floor(b.mana)}/${b.manaMax}`], ["Công", st.atk], ["Thủ", `+${st.def / 10}%`],
+      ["Máu", `${Math.round(p.hp)}/${p.hpMax}`], ["Mana", `${Math.floor(b.mana)}/${b.manaMax}`], ["Công", st.atk], ["Thủ", `+${st.def / 10}%`], ["Thủ ngoại (đồ)", `+${st.defExt / 10}%`], ["Thủ nội (đồ)", `+${st.defInt / 10}%`],
       ["Chí mạng", `${st.crit / 10}%`], ["Sát thương chí mạng", `${150 + st.critDmg / 10}%`], ["Tốc đánh", `+${st.speed / 10}%`],
-      ["Giảm hồi chiêu", `${st.cd / 10}%`], ["Giảm mana", `${st.manaCut / 10}%`],
+      ["Giảm hồi chiêu", `${st.cd / 10}%`], ["Giảm mana", `${st.manaCut / 10}%`], ["Cường hóa vũ khí", `+${s.wpn}`],
     ];
     const attrs = ATTRIBUTES.map((a) => `<div><span><b>${a.ten}</b><small>${(a as { tomTat?: string }).tomTat ?? ""}</small></span><i>${s.diem?.[a.id] ?? 0}</i>
       <button type="button" data-stat="${a.id}" ${pts > 0 ? "" : "disabled"} title="Cộng 1 điểm">+</button></div>`).join("");
@@ -868,6 +987,7 @@ const HELP = `<ul>
   <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>H</b> thư.</li>
   <li><b>1</b> uống bình máu (hàng số 1–6 là ô vật phẩm) · <b>F</b> treo auto · <b>M</b> truyền tống · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
   <li><b>I</b> túi · <b>P</b> nhân vật (cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
+  <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím Cách hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán.</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
 
 const PANELS: Record<string, string> = { i: "bag", p: "char", o: "skills", g: "sect", h: "mail" };
@@ -883,7 +1003,16 @@ const MENU = [["bag", "I", "Túi"], ["char", "P", "Nhân vật"], ["skills", "O"
 /** Bảy ô trang bị (SlotId của @htk/rules): bốn ô bên trái chân dung, ba ô bên phải. */
 const SLOTS = [["mu", "Mũ"], ["ao", "Áo"], ["dai", "Đai"], ["giay", "Giày"], ["vu_khi", "Vũ khí"], ["bao_tay", "Bao tay"], ["ngoc_boi", "Ngọc bội"]];
 const esc = (t: string) => t.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
-const BAG_SLOTS = 24;
+/** shortcut: nhiều kiểu trang bị chưa có hình vẽ riêng (icon_ve/trang_bi/<ô>/ còn thiếu số), khi đó hiện hình 01 của ô; bỏ khi vẽ đủ 430 kiểu. */
+const FIRST = (icon: string) => icon.replace(/\/\d+$/, "/01");
+const url = (it: ItemInstance) => `background-image:url(${import.meta.env.BASE_URL}icon_ve/${it.icon}.webp),url(${import.meta.env.BASE_URL}icon_ve/${FIRST(it.icon)}.webp)`;
+const BAG_TABS = [["all", "Tất cả"], ["trang_bi", "Trang bị"], ["dan_duoc", "Đan dược"], ["nl", "Nguyên liệu"]];
+/** Dòng chỉ số của trang bị: khóa, tên, có phải phần nghìn (hiện thành %) không. */
+const STAT_ROWS: [keyof ItemStats, string, boolean][] = [["atk", "Công", false], ["hp", "Máu", false], ["defExt", "Thủ ngoại", true], ["defInt", "Thủ nội", true], ["crit", "Chí mạng", true]];
+/** Đồ rơi: tầm tự hút và tốc độ bay về người chơi (đơn vị thế giới), số giây nằm trên đất trước khi mất. */
+const PICK_R = 50 * SCALE;
+const LOOT_SPEED = 900;
+const LOOT_TTL = 120;
 const SKILL_DESC: Record<string, string> = {
   can_quet: "Quét các dị thú quanh mình",
   tam_xa: "Đánh một mục tiêu ở xa",
