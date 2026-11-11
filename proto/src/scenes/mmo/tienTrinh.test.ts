@@ -81,6 +81,31 @@ test("truyền tống: khu an toàn đã tới; ngoài khu an toàn tốn phù",
   assert.ok(L.mineHolder(2) && !L.mineHolder(0) && !L.mineHolder(7));
 });
 
+test("tông môn: nhiệm vụ thủ lĩnh và nộp nguyên liệu, Bảo Khố không làm tụt cấp bậc, ghép tàn quyển cộng công", () => {
+  const s = newSave("A", "moc");
+  s.lv = 10;
+  assert.ok(L.joinSect(s, "thanh_van"));
+  assert.equal(L.sectKill(s, "d1", true), L.SECT.bossCong);
+  assert.equal(L.sectKill(s, "d1", true), 0);
+  assert.equal(L.submitOre(s, "d1"), false);
+  const ore = L.rollDrop(zone(1), false, () => 0)[2];
+  L.pickUp(s, { ...ore, count: 15 });
+  assert.equal(L.submitOre(s, "d1"), true);
+  assert.equal(L.submitOre(s, "d1"), false);
+  assert.equal(L.oreCount(s), 5);
+  assert.ok(L.donateOre(s) && L.oreCount(s) === 0 && s.bag.length === 0);
+  s.sect!.cong = s.sect!.tong = 400;
+  assert.equal(L.rankOf(s)![1], "Nội môn đệ tử");
+  assert.equal(L.sectLevel(s), 5);
+  assert.equal(L.buySect(s, "gear2"), false); // chưa đủ bậc
+  assert.ok(L.buySect(s, "scroll") && s.sect!.cong === 250 && L.rankOf(s)![1] === "Nội môn đệ tử");
+  const atk = L.stats(s).atk;
+  assert.equal(L.combine(s, "moc"), false); // mới 1 tàn quyển
+  s.bag.find((x) => x.code === "tan_quyen_moc")!.count = 10;
+  assert.ok(L.combine(s, "moc") && s.ngo!.moc === 1 && L.scrollCount(s, "moc") === 0);
+  assert.ok(L.stats(s).atk > atk);
+});
+
 test("tiệm: thiếu linh thạch thì không mua được", () => {
   const s = newSave("A", "moc");
   assert.equal(buyPot(s, zone(0)), false);
@@ -206,7 +231,7 @@ test("cảnh giới, tông môn, thư", async () => {
   assert.equal(t.donate(s), true);
   assert.equal(t.donate(s), false);
   assert.equal(t.rankOf(s)![1], "Ngoại môn đệ tử");
-  s.sect!.cong = 300;
+  s.sect!.cong = s.sect!.tong = 300;
   assert.equal(t.rankOf(s)![1], "Nội môn đệ tử");
   assert.deepEqual(t.mails(s).map((m) => m.id), ["lv10", "lv5", "chao"]);
   const pots = s.pots;

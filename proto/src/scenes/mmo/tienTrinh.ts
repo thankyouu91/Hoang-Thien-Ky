@@ -96,7 +96,16 @@ export interface Save {
   /** Chiêu xếp vào sáu ô ra chiêu (Q W E R T Y), null là ô trống; chưa ghi thì năm chiêu khởi đầu */
   slots?: (SkillType | null)[];
   /** Tông môn đang ở: cống hiến, ngày điểm danh gần nhất, nhiệm vụ diệt dị thú của ngày taskDay */
-  sect?: { id: string; cong: number; checkIn: string; taskDay: string; kills: number; taskDone: boolean };
+  sect?: {
+    id: string; cong: number; checkIn: string; taskDay: string; kills: number; taskDone: boolean;
+    /** Cống hiến tích cả đời (không trừ khi tiêu ở Bảo Khố): tính cấp bậc và cấp tông môn. Bản lưu cũ chưa ghi thì bằng cong. */
+    tong?: number;
+    /** Nhiệm vụ nộp nguyên liệu và hạ thủ lĩnh của ngày taskDay đã xong chưa */
+    ore?: boolean;
+    boss?: boolean;
+  };
+  /** Bậc lĩnh ngộ từng hệ, lên bằng ghép tàn quyển ở Tàng Kinh Các */
+  ngo?: Record<string, number>;
   /** Mã các thư đã nhận quà */
   mail?: string[];
   /** Số Truyền Tống Phù */
@@ -245,7 +254,7 @@ export function stats(s: Save) {
   const g = gearBonus(s);
   const up = (base: number, k = 0) => Math.round((base * (1000 + k)) / 1000);
   return {
-    hp: up(hpOf(s.lv) + g.hp, b.hp), atk: up(up(atkOf(s.lv, s.wpn) + g.atk, b.atk), rankOf(s)?.[2]), manaMul: 1000 + (b.manaMax ?? 0),
+    hp: up(hpOf(s.lv) + g.hp, b.hp), atk: up(up(up(atkOf(s.lv, s.wpn) + g.atk, b.atk), rankOf(s)?.[2]), NGO.atk * ngoTotal(s)), manaMul: 1000 + (b.manaMax ?? 0),
     // shortcut: trận chỉ có một loại sát thương nên thủ ngoại và thủ nội của đồ gộp trung bình vào một chỉ số thủ; tách khi có sát thương nội/ngoại.
     def: (b.def ?? 0) + Math.round((g.defExt + g.defInt) / 2), defExt: g.defExt, defInt: g.defInt, crit: (b.critBonus ?? 0) + g.crit, critDmg: b.critDamage ?? 0, manaCut: b.manaCostCut ?? 0, speed: b.attackSpeed ?? 0, cd: b.cooldownCut ?? 0,
   };
@@ -296,21 +305,38 @@ export function realm(lv: number): string {
 /** Tọa thiền: phần máu và mana tối đa hồi mỗi giây. */
 export const SIT = { hp: 0.05, mana: 0.1 };
 
-/** Tông môn NPC để gia nhập (tên tạm). */
-export const SECTS: [string, string, string][] = [
-  ["thanh_van", "Thanh Vân Tông", "Kiếm tu chính đạo, sơn môn trên mây"],
-  ["huyen_thien", "Huyền Thiên Tông", "Trận pháp và bùa chú"],
-  ["van_thu", "Vạn Thú Cốc", "Ngự thú, sống giữa rừng sâu"],
+/** Tông môn NPC để gia nhập: mã, tên, mô tả, tông chủ (tên tạm). */
+export const SECTS: [string, string, string, string][] = [
+  ["thanh_van", "Thanh Vân Tông", "Kiếm tu chính đạo, sơn môn trên mây", "Lăng Hư chân nhân"],
+  ["huyen_thien", "Huyền Thiên Tông", "Trận pháp và bùa chú", "Huyền Cơ lão tổ"],
+  ["van_thu", "Vạn Thú Cốc", "Ngự thú, sống giữa rừng sâu", "Bách Thú cốc chủ"],
 ];
-export const SECT = { level: 10, checkIn: 50, donate: 100, donateCong: 10, taskKills: 30, taskCong: 100 };
-/** Cấp bậc: cống hiến cần, tên, công cộng thêm (phần nghìn). */
-export const RANKS: [number, string, number][] = [[0, "Ngoại môn đệ tử", 20], [300, "Nội môn đệ tử", 40], [1000, "Chân truyền đệ tử", 60], [3000, "Trưởng lão", 80]];
+export const SECT = { level: 10, checkIn: 50, donate: 100, donateCong: 10, taskKills: 30, taskCong: 100, oreNeed: 10, oreCong: 80, bossCong: 120, donateOre: 5, donateOreCong: 10, perLevel: 100, maxLevel: 200 };
+/** Cấp bậc: cống hiến cả đời cần, tên, công cộng thêm (phần nghìn). */
+export const RANKS: [number, string, number][] = [[0, "Ngoại môn đệ tử", 20], [300, "Nội môn đệ tử", 40], [1000, "Chân truyền đệ tử", 60], [3000, "Trưởng lão", 80], [8000, "Phó tông chủ", 100]];
 
-export const rankOf = (s: Save) => (s.sect ? [...RANKS].reverse().find(([n]) => s.sect!.cong >= n)! : null);
+/** Cống hiến cả đời. */
+export const sectLife = (s: Save) => (s.sect ? (s.sect.tong ?? s.sect.cong) : 0);
+export const rankOf = (s: Save) => (s.sect ? [...RANKS].reverse().find(([n]) => sectLife(s) >= n)! : null);
+/** Cấp tông môn (1–200). shortcut: bản một người chơi nên cấp tông môn lên theo cống hiến của chính mình; khi có máy chủ thì là quỹ chung cả tông. */
+export const sectLevel = (s: Save) => Math.min(SECT.maxLevel, 1 + Math.floor(sectLife(s) / SECT.perLevel));
+
+function gainCong(s: Save, n: number): number {
+  const t = s.sect!;
+  t.tong = sectLife(s) + n;
+  t.cong += n;
+  return n;
+}
+
+/** Sang ngày mới thì xóa tiến độ nhiệm vụ ngày. */
+function sectDay(s: Save, today: string): void {
+  const t = s.sect!;
+  if (t.taskDay !== today) Object.assign(t, { taskDay: today, kills: 0, taskDone: false, ore: false, boss: false });
+}
 
 export function joinSect(s: Save, id: string): boolean {
   if (s.sect || s.lv < SECT.level || !SECTS.some(([k]) => k === id)) return false;
-  s.sect = { id, cong: 0, checkIn: "", taskDay: "", kills: 0, taskDone: false };
+  s.sect = { id, cong: 0, tong: 0, checkIn: "", taskDay: "", kills: 0, taskDone: false };
   return true;
 }
 
@@ -323,30 +349,106 @@ export function checkIn(s: Save, today: string): boolean {
   const t = s.sect;
   if (!t || t.checkIn === today) return false;
   t.checkIn = today;
-  t.cong += SECT.checkIn;
+  gainCong(s, SECT.checkIn);
   s.gold += 20 * s.lv;
   return true;
 }
 
 export function donate(s: Save): boolean {
-  const t = s.sect;
-  if (!t || s.gold < SECT.donate) return false;
+  if (!s.sect || s.gold < SECT.donate) return false;
   s.gold -= SECT.donate;
-  t.cong += SECT.donateCong;
+  gainCong(s, SECT.donateCong);
+  return true;
+}
+
+/** Số nguyên liệu (quặng, dược thảo) trong túi. */
+export const oreCount = (s: Save) => s.bag.reduce((n, it) => n + (it.type === "khoang_thach" ? it.count : 0), 0);
+
+function takeOre(s: Save, n: number): boolean {
+  if (oreCount(s) < n) return false;
+  for (const it of s.bag.filter((x) => x.type === "khoang_thach")) {
+    const k = Math.min(n, it.count);
+    it.count -= k;
+    n -= k;
+  }
+  s.bag = s.bag.filter((x) => x.count > 0);
+  return true;
+}
+
+/** Quyên nguyên liệu: SECT.donateOre cái đổi SECT.donateOreCong cống hiến. */
+export function donateOre(s: Save): boolean {
+  if (!s.sect || !takeOre(s, SECT.donateOre)) return false;
+  gainCong(s, SECT.donateOreCong);
+  return true;
+}
+
+/** Nhiệm vụ ngày: nộp SECT.oreNeed nguyên liệu. */
+export function submitOre(s: Save, today: string): boolean {
+  if (!s.sect) return false;
+  sectDay(s, today);
+  if (s.sect.ore || !takeOre(s, SECT.oreNeed)) return false;
+  s.sect.ore = true;
+  gainCong(s, SECT.oreCong);
   return true;
 }
 
 /** Số dị thú đã diệt cho nhiệm vụ tông môn hôm nay. */
 export const sectKills = (s: Save, today: string) => (s.sect?.taskDay === today ? s.sect.kills : 0);
+/** Nhiệm vụ nộp nguyên liệu, hạ thủ lĩnh hôm nay đã xong chưa. */
+export const sectDone = (s: Save, today: string) => ({ ore: s.sect?.taskDay === today && !!s.sect.ore, boss: s.sect?.taskDay === today && !!s.sect.boss });
 
-/** Gọi mỗi lần diệt dị thú; true khi vừa xong nhiệm vụ tông môn của ngày. */
-export function sectKill(s: Save, today: string): boolean {
+/** Gọi mỗi lần diệt dị thú; trả về cống hiến vừa nhận (0 khi chưa xong nhiệm vụ nào): diệt đủ dị thú, hạ một thủ lĩnh. */
+export function sectKill(s: Save, today: string, isBoss = false): number {
   const t = s.sect;
-  if (!t) return false;
-  if (t.taskDay !== today) Object.assign(t, { taskDay: today, kills: 0, taskDone: false });
-  if (t.taskDone || ++t.kills < SECT.taskKills) return false;
-  t.taskDone = true;
-  t.cong += SECT.taskCong;
+  if (!t) return 0;
+  sectDay(s, today);
+  let gain = 0;
+  if (isBoss && !t.boss) {
+    t.boss = true;
+    gain += gainCong(s, SECT.bossCong);
+  }
+  if (!t.taskDone && ++t.kills >= SECT.taskKills) {
+    t.taskDone = true;
+    gain += gainCong(s, SECT.taskCong);
+  }
+  return gain;
+}
+
+// Tàng Kinh Các: ghép tàn quyển cùng hệ để lên bậc lĩnh ngộ hệ đó, mỗi bậc cộng công. Số là đề xuất, chưa có trong GDD;
+// shortcut: chưa có công pháp độc quyền do tông chủ sáng lập (cần hệ công pháp tự ghép của bản cũ), thêm khi nối hệ đó vào MMO.
+export const NGO = { need: 10, max: 10, atk: 10 };
+export const ngoTotal = (s: Save) => Object.values(s.ngo ?? {}).reduce((a, b) => a + b, 0);
+export const scrollCount = (s: Save, el: string) => s.bag.find((x) => x.code === `tan_quyen_${el}`)?.count ?? 0;
+
+export function combine(s: Save, el: string): boolean {
+  const it = s.bag.find((x) => x.code === `tan_quyen_${el}`);
+  if (!s.sect || !it || it.count < NGO.need || (s.ngo?.[el] ?? 0) >= NGO.max) return false;
+  it.count -= NGO.need;
+  s.bag = s.bag.filter((x) => x.count > 0);
+  s.ngo = { ...s.ngo, [el]: (s.ngo?.[el] ?? 0) + 1 };
+  return true;
+}
+
+/** Bảo Khố: mã, tên, giá cống hiến, bậc tối thiểu (vị trí trong RANKS). Giá là đề xuất. */
+export const SECT_SHOP: [string, string, number, number][] = [
+  ["pots", "Bình máu ×5", 40, 0], ["pills", "Hồi Linh Đan ×5", 40, 0], ["phu", "Truyền Tống Phù", 60, 0],
+  ["scroll", "Tàn quyển hệ của mình", 150, 1], ["gear", "Trang bị phẩm Tím theo cấp mình", 500, 1], ["gear2", "Trang bị phẩm Vàng theo cấp mình", 2000, 3],
+];
+
+export function buySect(s: Save, id: string, rnd: () => number = Math.random): boolean {
+  const row = SECT_SHOP.find(([k]) => k === id);
+  const t = s.sect;
+  if (!row || !t || t.cong < row[2] || RANKS.indexOf(rankOf(s)!) < row[3]) return false;
+  if (id === "pots") s.pots += 5;
+  else if (id === "phu") s.phu = (s.phu ?? 0) + 1;
+  else {
+    const it = id === "pills" ? stack(rnd, "hoi_linh_dan", "Hồi Linh Đan", "dan_duoc", "luc", "dan/dan_duoc_hoi_mana", 1, `Hồi ${MANA_HEAL * 100}% mana`, 5)
+      : id === "scroll" ? stack(rnd, `tan_quyen_${s.element}`, `Tàn quyển hệ ${ELEMENT_STYLE[s.element].name}`, "tan_quyen", "tim", `tan_quyen/${s.element}`, s.lv, "Mảnh công pháp, gom đủ để ghép ở Tàng Kinh Các")
+      : gear(s.lv, id === "gear" ? "tim" : "vang", rnd);
+    if (!pickUp(s, it)) return false;
+  }
+  t.tong = sectLife(s);
+  t.cong -= row[2];
   return true;
 }
 

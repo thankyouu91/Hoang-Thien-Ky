@@ -320,3 +320,15 @@ body .mmo-note { margin: 12px 0 0; color: var(--m-mute); }
   body .mmo-world b { font-size: 9px; }
   body .mmo-world small { display: none; }
 }
+
+/* ---------- Tông môn ---------- */
+body .mmo-sect { display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: center; margin-bottom: 12px; padding: 10px 12px; background: rgba(0, 0, 0, 0.25); border: 1px solid #2c2214; border-radius: 4px; }
+body .mmo-sect > i { width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--m-gold); background: #000 center / cover; }
+body .mmo-list.two { grid-template-columns: 1fr 1fr; }
+body .mmo-dlg .mmo-list button.done { color: #8fd49a; }
+body .mmo-ngo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+body .mmo-dlg .mmo-ngo button { display: grid; justify-items: center; gap: 2px; padding: 8px 4px; }
+body .mmo-ngo i { width: 44px; height: 44px; border-radius: 3px; background: var(--m-slot) center / cover; }
+body .mmo-ngo small { color: var(--m-mute); }
+body .mmo-ward { height: 16px; margin-bottom: 10px; }
+@media (max-width: 640px) { body .mmo-list.two { grid-template-columns: 1fr; } body .mmo-ngo { grid-template-columns: repeat(3, 1fr); } }

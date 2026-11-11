@@ -15,7 +15,7 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
+  buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
@@ -82,6 +82,8 @@ export class MmoScene extends BaiScene {
   private bagTab = "all";
   private selItem = "";
   private fullAt = -9;
+  /** Bảng Tông môn: thẻ đang xem */
+  private sectTab = "dai_dien";
   /** Bảng Bản đồ: vùng đang xem ở tầng 2, null là tầng 1 (cả thế giới) */
   private mapRegion: number | null = null;
   /** Khu đang tự chạy tới (bấm trên bản đồ), null khi không; routeX, routeAt để phát hiện kẹt */
@@ -252,7 +254,8 @@ export class MmoScene extends BaiScene {
       const d = (20 + 20 * Math.random()) * SCALE;
       this.loot.push({ x: m.x + Math.cos(a) * d, y: m.y + Math.sin(a) * d * 0.6, item, at: this.clock, pull: false });
     }
-    if (sectKill(s, today())) this.note(`Xong nhiệm vụ tông môn: +${SECT.taskCong} cống hiến`, true);
+    const cong = sectKill(s, today(), !!m.boss);
+    if (cong) this.note(`Xong nhiệm vụ tông môn: +${cong} cống hiến`, true);
     if (r.quest) this.note(`Xong nhiệm vụ: +${r.quest.xp} tu vi, +${r.quest.gold} linh thạch`, true);
     if (r.levels > 0) {
       this.note(`Lên cấp ${s.lv}!`, true);
@@ -805,7 +808,17 @@ export class MmoScene extends BaiScene {
     } else if (d.checkin !== undefined) {
       if (checkIn(s, today())) this.restat();
     } else if (d.donate !== undefined) {
-      if (donate(s)) this.restat();
+      if (d.donate === "ore" ? donateOre(s) : donate(s)) this.restat();
+    } else if (d.stab) {
+      this.sectTab = d.stab;
+      this.sect();
+    } else if (d.submitore !== undefined) {
+      if (submitOre(s, today())) this.restat();
+    } else if (d.combine) {
+      if (combine(s, d.combine)) this.restat();
+    } else if (d.sbuy) {
+      if (buySect(s, d.sbuy)) this.restat();
+      else this.note("Không đổi được: thiếu cống hiến, chưa đủ cấp bậc hoặc túi đầy");
     } else if (d.mail) {
       if (claimMail(s, d.mail)) this.mail();
     } else if (d.pick !== undefined) {
@@ -1040,21 +1053,56 @@ export class MmoScene extends BaiScene {
       return;
     }
     const day = today();
+    const B = import.meta.env.BASE_URL;
     const [, rank, buff] = rankOf(s)!;
-    const next = RANKS.find(([n]) => n > t.cong);
-    const kills = Math.min(sectKills(s, day), SECT.taskKills);
-    const taskDone = t.taskDay === day && t.taskDone;
-    this.open(`<h2>${SECTS.find(([id]) => id === t.id)![1]}</h2>
-      <dl class="mmo-stats"><dt>Cấp bậc</dt><dd>${rank}</dd><dt>Cống hiến</dt><dd>${t.cong}${next ? ` / ${next[0]}` : ""}</dd><dt>Công cộng thêm</dt><dd>+${buff / 10}%</dd></dl>
-      <h3>Hoạt động hôm nay</h3>
-      <div class="mmo-list">
-        <button type="button" data-checkin ${t.checkIn === day ? "disabled" : ""}><b>Điểm danh${t.checkIn === day ? " · đã xong" : ""}</b><small>+${SECT.checkIn} cống hiến · +${20 * s.lv} linh thạch</small></button>
-        <button type="button" disabled><b>Nhiệm vụ: diệt ${kills}/${SECT.taskKills} dị thú${taskDone ? " · đã xong" : ""}</b><small>+${SECT.taskCong} cống hiến · tự tính khi diệt dị thú ở bất kỳ khu nào</small></button>
-        <button type="button" data-donate ${s.gold >= SECT.donate ? "" : "disabled"}><b>Hiến ${SECT.donate} linh thạch</b><small>+${SECT.donateCong} cống hiến · đang có ${s.gold} linh thạch</small></button>
-      </div>
-      <h3>Cấp bậc</h3>
-      <dl class="mmo-stats">${RANKS.map(([n, ten, k]) => `<dt>${ten}${ten === rank ? " ◂" : ""}</dt><dd>${n} cống hiến · công +${k / 10}%</dd>`).join("")}</dl>
-      <footer><span></span><button type="button" data-leave class="bad">Rời tông môn</button></footer>`);
+    const life = sectLife(s);
+    const next = RANKS.find(([n]) => n > life);
+    const [, ten, , chu] = SECTS.find(([id]) => id === t.id)!;
+    const tab = this.sectTab;
+    let body = "";
+    if (tab === "dai_dien") {
+      const kills = Math.min(sectKills(s, day), SECT.taskKills);
+      const killDone = t.taskDay === day && t.taskDone;
+      const done = sectDone(s, day);
+      const ores = oreCount(s);
+      const task = (ok: boolean, text: string, cong: number, attr = "disabled") => `<button type="button" ${ok ? "disabled" : attr} class="${ok ? "done" : ""}"><b>${text}${ok ? " · đã xong" : ""}</b><small>+${cong} cống hiến</small></button>`;
+      body = `<h3>Tông vụ hôm nay</h3><div class="mmo-list">
+          <button type="button" data-checkin ${t.checkIn === day ? 'disabled class="done"' : ""}><b>Điểm danh${t.checkIn === day ? " · đã xong" : ""}</b><small>+${SECT.checkIn} cống hiến · +${20 * s.lv} linh thạch</small></button>
+          ${task(killDone, `Diệt ${kills}/${SECT.taskKills} dị thú (khu nào cũng tính)`, SECT.taskCong)}
+          ${task(done.ore, `Nộp ${SECT.oreNeed} nguyên liệu (đang có ${ores})`, SECT.oreCong, ores >= SECT.oreNeed ? "data-submitore" : "disabled")}
+          ${task(done.boss, "Hạ một thủ lĩnh (cửa bí cảnh hoặc thủ lĩnh trong bãi)", SECT.bossCong)}
+        </div>
+        <h3>Quyên góp <em>nâng cấp tông môn</em></h3><div class="mmo-list two">
+          <button type="button" data-donate ${s.gold >= SECT.donate ? "" : "disabled"}><b>Hiến ${SECT.donate} linh thạch</b><small>+${SECT.donateCong} cống hiến · đang có ${s.gold}</small></button>
+          <button type="button" data-donate="ore" ${ores >= SECT.donateOre ? "" : "disabled"}><b>Hiến ${SECT.donateOre} nguyên liệu</b><small>+${SECT.donateOreCong} cống hiến · đang có ${ores}</small></button>
+        </div>
+        <h3>Cấp bậc</h3><dl class="mmo-stats">${RANKS.map(([n, r, k]) => `<dt>${r}${r === rank ? " ◂" : ""}</dt><dd>${n} cống hiến · công +${k / 10}%</dd>`).join("")}</dl>`;
+    } else if (tab === "kinh_cac") {
+      body = `<h3>Ghép tàn quyển <em>${NGO.need} tàn quyển cùng hệ lên một bậc lĩnh ngộ · mỗi bậc công +${NGO.atk / 10}% · tối đa bậc ${NGO.max}</em></h3>
+        <div class="mmo-ngo">${(Object.keys(ELEMENT_STYLE) as ElementId[]).map((el) => {
+          const n = scrollCount(s, el);
+          const lv = s.ngo?.[el] ?? 0;
+          return `<button type="button" data-combine="${el}" ${n >= NGO.need && lv < NGO.max ? "" : "disabled"} title="Hệ ${ELEMENT_STYLE[el].name}: bậc ${lv}, có ${n} tàn quyển">
+            <i style="background-image:url(${B}icon_ve/tan_quyen/${el}.webp)"></i><b>${ELEMENT_STYLE[el].name} · bậc ${lv}</b><small>${lv >= NGO.max ? "Đã viên mãn" : `${n}/${NGO.need} tàn quyển`}</small></button>`;
+        }).join("")}</div>
+        <p class="mmo-note">Tàn quyển rơi từ dị thú (2%) và thủ lĩnh (40%) theo hệ của vùng, hoặc đổi ở Bảo Khố. Công pháp độc quyền của tông môn: chưa mở.</p>`;
+    } else if (tab === "bao_kho") {
+      const ri = RANKS.indexOf(rankOf(s)!);
+      body = `<h3>Đổi bằng cống hiến <em>đang có <b>${t.cong}</b></em></h3><div class="mmo-list two">${SECT_SHOP.map(([id, name, price, need]) =>
+        `<button type="button" data-sbuy="${id}" ${t.cong >= price && ri >= need ? "" : "disabled"}><b>${name}</b><small>${price} cống hiến${ri < need ? ` · cần bậc ${RANKS[need][1]}` : ""}</small></button>`).join("")}</div>
+        <p class="mmo-note">Tiêu cống hiến không làm tụt cấp bậc. Ấn bộ set: chưa mở.</p>`;
+    } else {
+      body = `<h3>Đại Trận Hộ Môn</h3><div class="bai-bar hp mmo-ward"><i style="width:100%"></i><span>Độ bền 100%</span></div>
+        <dl class="mmo-stats"><dt>Trạng thái</dt><dd>Vận hành, chưa bị công phá</dd><dt>Bảo vật chấn tông</dt><dd>Chưa có</dd><dt>Công Thành Chiến</dt><dd>Chưa mở (cần máy chủ)</dd></dl>
+        <p class="mmo-note">Thẻ này mới hiện trạng thái; đánh và thủ sơn môn mở cùng Công Thành Chiến.</p>`;
+    }
+    this.open(`<h2>${ten}</h2>
+      <div class="mmo-sect"><i style="background-image:url(${B}icon_ve/ui/tab/tong_mon.webp)"></i>
+        <dl class="mmo-stats"><dt>Cấp tông môn</dt><dd>${sectLevel(s)} / ${SECT.maxLevel}</dd><dt>Tông chủ</dt><dd>${chu}</dd>
+          <dt>Cấp bậc của mình</dt><dd>${rank} · công +${buff / 10}%</dd><dt>Cống hiến</dt><dd>${t.cong} (cả đời ${life}${next ? ` / ${next[0]}` : ""})</dd></dl></div>
+      <nav class="mmo-tabs">${SECT_TABS.map(([id, name]) => `<button type="button" data-stab="${id}" class="${id === tab ? "on" : ""}">${name}</button>`).join("")}</nav>
+      ${body}
+      <footer><span></span><button type="button" data-leave class="bad">Rời tông môn</button></footer>`, true);
   }
 
   /** Thư: quà theo mốc cấp, nhận một lần. */
@@ -1105,6 +1153,7 @@ const esc = (t: string) => t.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 /** shortcut: nhiều kiểu trang bị chưa có hình vẽ riêng (icon_ve/trang_bi/<ô>/ còn thiếu số), khi đó hiện hình 01 của ô; bỏ khi vẽ đủ 430 kiểu. */
 const FIRST = (icon: string) => icon.replace(/\/\d+$/, "/01");
 const url = (it: ItemInstance) => `background-image:url(${import.meta.env.BASE_URL}icon_ve/${it.icon}.webp),url(${import.meta.env.BASE_URL}icon_ve/${FIRST(it.icon)}.webp)`;
+const SECT_TABS = [["dai_dien", "Đại Điện"], ["kinh_cac", "Tàng Kinh Các"], ["bao_kho", "Bảo Khố"], ["dai_tran", "Đại Trận Hộ Môn"]];
 const BAG_TABS = [["all", "Tất cả"], ["trang_bi", "Trang bị"], ["dan_duoc", "Đan dược"], ["nl", "Nguyên liệu"]];
 /** Dòng chỉ số của trang bị: khóa, tên, có phải phần nghìn (hiện thành %) không. */
 const STAT_ROWS: [keyof ItemStats, string, boolean][] = [["atk", "Công", false], ["hp", "Máu", false], ["defExt", "Thủ ngoại", true], ["defInt", "Thủ nội", true], ["crit", "Chí mạng", true]];
