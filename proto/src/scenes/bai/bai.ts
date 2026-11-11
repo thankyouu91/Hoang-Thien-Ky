@@ -120,7 +120,7 @@ export class Bai {
   mana: number = BATTLE.manaMax;
   manaMax: number = BATTLE.manaMax;
   /** Chỉ số cộng của riêng người chơi, phần nghìn: thủ, chí mạng, sát thương chí mạng, giảm mana, tốc đánh, giảm hồi chiêu */
-  mod = { def: 0, crit: 0, critDmg: 0, manaCut: 0, speed: 0, cd: 0 };
+  mod = { def: 0, crit: 0, critDmg: 0, manaCut: 0, speed: 0, cd: 0, leech: 0, regen: 0 };
   /** Mức cộng theo tầng của một chiêu, phần nghìn (layerBonus của @htk/rules) */
   skillBonus: (skill: SkillType) => { uyLuc: number; hoiChieu: number; mana: number } = () => ({ uyLuc: 0, hoiChieu: 0, mana: 0 });
   /** Thanh nội tại chiêu cuối, 0 tới 1 */
@@ -282,6 +282,8 @@ export class Bai {
   step(dt: number): void {
     this.t += dt;
     this.mana = Math.min(this.manaMax, this.mana + BATTLE.manaRegenPerSec * dt);
+    const me = this.player;
+    if (this.mod.regen > 0 && me.alive) me.hp = Math.min(me.hpMax, me.hp + ((me.hpMax * this.mod.regen) / 1000) * dt);
     for (const a of this.actors) {
       if (!a.alive) {
         if (this.t >= a.respawnAt) this.revive(a);
@@ -415,7 +417,11 @@ export class Bai {
     to.hp -= amount;
     to.hurtAt = this.t;
     this.fx.push({ t: this.t, x: to.x, y: to.y, el: from.element, kind: "hit", amount: amount + blocked, me: from === this.player || to === this.player, dir: to.x >= from.x ? 1 : -1 });
-    if (from === this.player) this.ult = Math.min(1, this.ult + (amount + blocked) / BAI.ultFill);
+    if (from === this.player) {
+      this.ult = Math.min(1, this.ult + (amount + blocked) / BAI.ultFill);
+      // Hút máu của bộ trang bị (phần nghìn sát thương gây ra), hồi lặng lẽ không hiện số.
+      if (this.mod.leech > 0 && from.alive) from.hp = Math.min(from.hpMax, from.hp + (amount * this.mod.leech) / 1000);
+    }
     // Quái bị đánh thì cả bầy quay sang đuổi người đánh.
     if (to.kind === "monster" && from.kind !== "monster") {
       for (const m of this.actors) if (m.pack === to.pack && m.alive && m.target === null) m.target = from.id;

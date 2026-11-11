@@ -44,6 +44,8 @@ export class BaiScene implements Scene {
   readonly hud: HTMLElement;
   protected sprites: Sprites;
   protected bai: Bai | null = null;
+  /** Hình của người chơi trong LOOKS (scenes/mmo đổi theo giới tính) */
+  protected playerLook = 0;
   private backdrop: ArenaBackdrop | null = null;
   private active = false;
   protected down: { x: number; y: number } | null = null;
@@ -213,7 +215,7 @@ export class BaiScene implements Scene {
       } else this.blob(ctx, a);
       top = a.y - s;
     } else {
-      const want = LOOKS[(a.id === 1 ? 0 : a.id - 99) % LOOKS.length];
+      const want = LOOKS[(a.id === 1 ? this.playerLook : a.id - 99) % LOOKS.length];
       const look = resolveLook(this.sprites, want);
       const anim = this.anim(b, a, look);
       if (look && anim) drawCharacter(ctx, this.sprites, look, anim.anim, anim.frame, a.x, a.y, SIZE / 64, mirror);

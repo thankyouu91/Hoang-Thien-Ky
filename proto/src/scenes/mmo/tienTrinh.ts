@@ -77,9 +77,13 @@ export function nextCombat(idx: number): number {
   return zone(i).safe ? i - 1 : i;
 }
 
+export type Gender = "nam" | "nu";
+
 export interface Save {
   v: 1;
   name: string;
+  /** Giới tính nhân vật: quyết định hình và đồ mặc được (mũ, áo, đai, giày chia nam nữ). Bản lưu cũ chưa ghi thì là nam. */
+  gender?: Gender;
   element: ElementId;
   lv: number;
   xp: number;
@@ -123,8 +127,8 @@ export interface Save {
   equips: Record<string, ItemInstance | null>;
 }
 
-export function newSave(name: string, element: ElementId): Save {
-  return { v: 1, name: name.trim().slice(0, 16) || "Vô Danh", element, lv: 1, xp: 0, gold: 0, pots: 3, wpn: 0, zone: 0, maxZone: 0, quest: { zone: 1, n: 0 }, phu: 3, hoc: [], bag: [], equips: {} };
+export function newSave(name: string, element: ElementId, gender: Gender = "nam"): Save {
+  return { v: 1, gender, name: name.trim().slice(0, 16) || "Vô Danh", element, lv: 1, xp: 0, gold: 0, pots: 3, wpn: 0, zone: 0, maxZone: 0, quest: { zone: 1, n: 0 }, phu: 3, hoc: [], bag: [], equips: {} };
 }
 
 export const hpOf = (lv: number) => 2000 + 220 * (lv - 1);
@@ -280,11 +284,15 @@ export function stats(s: Save) {
   const b = attributeBonuses(member(s));
   const g = gearBonus(s);
   const p = passives(s);
+  const sb = setBonus(s);
   const up = (base: number, k = 0) => Math.round((base * (1000 + k)) / 1000);
   return {
-    hp: up(up(hpOf(s.lv) + g.hp, b.hp), p.hp), atk: up(up(up(up(atkOf(s.lv, s.wpn) + g.atk, b.atk), rankOf(s)?.[2]), NGO.atk * ngoTotal(s)), p.atk), manaMul: 1000 + (b.manaMax ?? 0) + p.manaMax,
+    hp: up(up(hpOf(s.lv) + g.hp, b.hp), p.hp + sb.hp), atk: up(up(up(up(atkOf(s.lv, s.wpn) + g.atk, b.atk), rankOf(s)?.[2]), NGO.atk * ngoTotal(s)), p.atk + sb.atk), manaMul: 1000 + (b.manaMax ?? 0) + p.manaMax + sb.manaMax,
     // shortcut: trận chỉ có một loại sát thương nên thủ ngoại và thủ nội của đồ gộp trung bình vào một chỉ số thủ; tách khi có sát thương nội/ngoại.
-    def: (b.def ?? 0) + Math.round((g.defExt + g.defInt) / 2) + p.def, defExt: g.defExt, defInt: g.defInt, crit: (b.critBonus ?? 0) + g.crit + p.crit, critDmg: (b.critDamage ?? 0) + p.critDmg, manaCut: (b.manaCostCut ?? 0) + p.manaCut, speed: (b.attackSpeed ?? 0) + p.speed, cd: (b.cooldownCut ?? 0) + p.cd,
+    def: (b.def ?? 0) + Math.round((g.defExt + g.defInt) / 2) + p.def + sb.def, defExt: g.defExt, defInt: g.defInt, crit: (b.critBonus ?? 0) + g.crit + p.crit + sb.crit, critDmg: (b.critDamage ?? 0) + p.critDmg + sb.critDmg,
+    manaCut: (b.manaCostCut ?? 0) + p.manaCut + sb.manaCut, speed: (b.attackSpeed ?? 0) + p.speed + sb.speed, cd: (b.cooldownCut ?? 0) + p.cd + sb.cd,
+    // Chỉ bộ trang bị mới cho: hút máu, hồi máu mỗi giây, thêm tỉ lệ rơi đồ và linh thạch (phần nghìn).
+    leech: sb.leech, regen: sb.regen, drop: sb.drop, gold: sb.gold,
   };
 }
 
@@ -559,6 +567,10 @@ export interface ItemInstance {
   lv?: number;
   /** atk, hp là số cộng thẳng; defExt, defInt, crit là phần nghìn */
   stats?: ItemStats;
+  /** Đồ nam hay đồ nữ (mũ, áo, đai, giày); không ghi là ai cũng mặc được */
+  gender?: Gender;
+  /** Bộ trang bị mà món thuộc về (mã trong SETS) */
+  set?: string;
   desc?: string;
 }
 
@@ -577,6 +589,8 @@ const GEAR_STAT: Record<EquipSlot, ItemStats> = {
   vu_khi: { atk: 0.1 }, bao_tay: { atk: 0.04, crit: 15 }, ngoc_boi: { hp: 0.03, crit: 15 },
   mu: { hp: 0.05, defInt: 20 }, ao: { hp: 0.08, defExt: 20 }, dai: { hp: 0.05 }, giay: { defExt: 10, defInt: 10 },
 };
+/** Ô chia đồ nam, đồ nữ; vũ khí, bao tay, ngọc bội ai cũng mặc được. */
+const GENDERED: EquipSlot[] = ["mu", "ao", "dai", "giay"];
 const ORES = [["thiet_tinh", "Thiết Tinh"], ["tinh_kim", "Tinh Kim"], ["huyen_thiet", "Huyền Thiết"], ["than_kim", "Thần Kim"]];
 const HERBS = [["linh_thao", "Linh Thảo"], ["huyen_chi", "Huyền Chi"], ["ngoc_sam", "Ngọc Sâm"], ["than_lien", "Thần Liên"]];
 
@@ -588,6 +602,59 @@ const stack = (rnd: () => number, code: string, name: string, type: ItemType, ra
 export const potItem = (count: number, rnd: () => number = Math.random): ItemInstance =>
   stack(rnd, "binh_mau", "Bình máu", "dan_duoc", "luc", "dan/dan_duoc_hoi_mau", 1, `Hồi ${POT_HEAL * 100}% máu (phím 1)`, count);
 
+/** Tỉ lệ rơi (người dùng chốt 2026-11-11): quái thường chỉ any phần lần giết là có rơi (linh thạch và đồ); khi rơi trang bị thì phẩm theo do, vang, tim, còn lại lục 70% lam 30%. */
+export const DROP = { any: 0.4, do: 0.005, vang: 0.03, tim: 0.05 };
+
+/** Phẩm của một món trang bị vừa rơi; min là phẩm thấp nhất (thủ lĩnh ít nhất Lam, giờ Bí Cảnh ít nhất Tím). */
+export function rollRarity(rnd: () => number, min: ItemRarity = "luc"): ItemRarity {
+  const r = rnd();
+  const got: ItemRarity = r < DROP.do ? "do" : r < DROP.do + DROP.vang ? "vang" : r < DROP.do + DROP.vang + DROP.tim ? "tim" : rnd() < 0.7 ? "luc" : "lam";
+  return RARITY_IDS.indexOf(got) < RARITY_IDS.indexOf(min) ? min : got;
+}
+
+// ---------- Bộ trang bị (set) ----------
+// Tên và mốc 2/4/7 món lấy từ data/he_thong/json/set.json (ấn bộ của bản cũ). Hiệu ứng ở đây viết lại cho trận đánh tay của MMO:
+// mỗi bộ một hướng (công, chí mạng, thủ, hút máu, tốc, pháp, hồi, tụ bảo); các dòng cộng là đề xuất, chưa có trong GDD.
+// Mốc cộng dồn: đủ 4 món thì nhận cả dòng mốc 2 và mốc 4. Số là phần nghìn; regen là phần nghìn máu tối đa mỗi giây.
+export type SetKey = "atk" | "hp" | "def" | "crit" | "critDmg" | "speed" | "cd" | "manaCut" | "manaMax" | "leech" | "regen" | "drop" | "gold";
+export const SET_KEY_NAME: Record<SetKey, string> = {
+  atk: "Công", hp: "Máu", def: "Thủ", crit: "Chí mạng", critDmg: "Sát thương chí mạng", speed: "Tốc đánh", cd: "Giảm hồi chiêu", manaCut: "Giảm mana",
+  manaMax: "Mana tối đa", leech: "Hút máu", regen: "Hồi máu mỗi giây", drop: "Tỉ lệ rơi đồ", gold: "Linh thạch rơi",
+};
+export const SET_TIERS = [2, 4, 7];
+export const SETS: { id: string; ten: string; vai: string; moc: Partial<Record<SetKey, number>>[] }[] = [
+  { id: "van_kiem", ten: "Vạn Kiếm", vai: "Công kích", moc: [{ atk: 30 }, { atk: 50, crit: 20 }, { atk: 80, critDmg: 150 }] },
+  { id: "loi_tri", ten: "Lôi Trì", vai: "Chí mạng", moc: [{ crit: 30 }, { critDmg: 80 }, { crit: 40, critDmg: 120 }] },
+  { id: "ban_thach", ten: "Bàn Thạch", vai: "Phòng thủ", moc: [{ hp: 40 }, { def: 80, regen: 1 }, { hp: 80, def: 80 }] },
+  { id: "huyet_anh", ten: "Huyết Ảnh", vai: "Hút máu", moc: [{ leech: 35 }, { critDmg: 50, leech: 20 }, { atk: 50, leech: 30 }] },
+  { id: "liep_thu", ten: "Liệp Thú", vai: "Tốc đánh, săn thú", moc: [{ speed: 30 }, { crit: 20, atk: 40 }, { speed: 60, drop: 100 }] },
+  { id: "van_uyen", ten: "Văn Uyên", vai: "Pháp lực", moc: [{ manaMax: 40 }, { manaCut: 45, cd: 30 }, { cd: 50, atk: 40 }] },
+  { id: "bach_thao", ten: "Bách Thảo", vai: "Hồi phục", moc: [{ regen: 2 }, { regen: 1, hp: 40 }, { regen: 3, def: 50 }] },
+  { id: "tu_bao", ten: "Tụ Bảo", vai: "Tài lộc", moc: [{ gold: 100 }, { drop: 100 }, { gold: 200, drop: 150 }] },
+];
+export const setOf = (id: string | undefined) => SETS.find((x) => x.id === id);
+
+/** Số món đang mặc của từng bộ. */
+export function setCounts(s: Save): Record<string, number> {
+  const n: Record<string, number> = {};
+  for (const it of Object.values(s.equips)) if (it?.set) n[it.set] = (n[it.set] ?? 0) + 1;
+  return n;
+}
+
+/** Tổng các dòng cộng của mọi mốc bộ đã kích. */
+export function setBonus(s: Save): Record<SetKey, number> {
+  const sum = { atk: 0, hp: 0, def: 0, crit: 0, critDmg: 0, speed: 0, cd: 0, manaCut: 0, manaMax: 0, leech: 0, regen: 0, drop: 0, gold: 0 };
+  for (const [id, n] of Object.entries(setCounts(s))) {
+    setOf(id)?.moc.forEach((m, i) => {
+      if (n >= SET_TIERS[i]) for (const [k, v] of Object.entries(m)) sum[k as SetKey] += v;
+    });
+  }
+  return sum;
+}
+
+/** Một mốc bộ viết thành chữ, ví dụ "Công +3% · Chí mạng +2%". */
+export const setLine = (m: Partial<Record<SetKey, number>>) => (Object.entries(m) as [SetKey, number][]).map(([k, v]) => `${SET_KEY_NAME[k]} +${v / 10}%`).join(" · ");
+
 function gear(lv: number, rarity: ItemRarity, rnd: () => number): ItemInstance {
   const pool = KIEU.filter((k) => k.do_hiem === rarity);
   const k = pool[Math.floor(rnd() * pool.length)];
@@ -595,26 +662,32 @@ function gear(lv: number, rarity: ItemRarity, rnd: () => number): ItemInstance {
   for (const [key, w] of Object.entries(GEAR_STAT[k.o]) as [keyof ItemStats, number][]) {
     stats[key] = Math.round(((key === "atk" ? atkOf(lv, 0) : key === "hp" ? hpOf(lv) : 1) * w * HE_SO[rarity]) / 1000);
   }
-  return { id: uid(rnd), code: k.ma_vp, name: k.ten, type: "trang_bi", rarity, slot: k.o, icon: `trang_bi/${ART[k.o]}/${String(k.so).padStart(2, "0")}`, count: 1, lv, stats };
+  const it: ItemInstance = { id: uid(rnd), code: k.ma_vp, name: k.ten, type: "trang_bi", rarity, slot: k.o, icon: `trang_bi/${ART[k.o]}/${String(k.so).padStart(2, "0")}`, count: 1, lv, stats };
+  // shortcut: trang_bi.json chưa ghi giới tính nên chia theo số thứ tự của kiểu (lẻ nam, chẵn nữ); thay bằng trường riêng khi dữ liệu có.
+  if (GENDERED.includes(k.o)) it.gender = k.so % 2 ? "nam" : "nu";
+  // Món Lam một nửa thuộc một bộ, Tím trở lên luôn thuộc một bộ; Lục không có bộ.
+  if (rarity !== "luc" && (rarity !== "lam" || rnd() < 0.5)) it.set = SETS[Math.floor(rnd() * SETS.length)].id;
+  return it;
 }
 
 /** Truyền Tống Phù dưới dạng một món để hiện trong túi; số lượng thật nằm ở save.phu. */
 export const phuItem = (count: number): ItemInstance =>
   stack(Math.random, "truyen_tong_phu", "Truyền Tống Phù", "dan_duoc", "lam", "phu/bao_ngoc", 1, "Truyền tống về sơn môn hay bến đò khi đang ở ngoài khu an toàn. Dùng trong Bản đồ (M).", count);
 
-/** Đồ rơi khi giết một con ở khu z. isBoss: thủ lĩnh (cửa bí cảnh hay thủ lĩnh trong bãi). event: đang giờ Bí Cảnh Tranh Đoạt, thủ lĩnh chắc chắn rơi phẩm Tím. */
-export function rollDrop(z: Zone, isBoss: boolean, rnd: () => number = Math.random, event = false): ItemInstance[] {
+/**
+ * Đồ rơi khi giết một con ở khu z. isBoss: thủ lĩnh (cửa bí cảnh hay thủ lĩnh trong bãi), luôn rơi. event: đang giờ Bí Cảnh Tranh Đoạt,
+ * thủ lĩnh rơi ít nhất phẩm Tím. bonus: phần nghìn cộng thêm vào tỉ lệ rơi và lượng linh thạch (bộ Tụ Bảo, Liệp Thú).
+ */
+export function rollDrop(z: Zone, isBoss: boolean, rnd: () => number = Math.random, event = false, bonus: { drop: number; gold: number } = { drop: 0, gold: 0 }): ItemInstance[] {
+  if (!isBoss && rnd() >= (DROP.any * (1000 + bonus.drop)) / 1000) return [];
   const lv = Math.max(1, z.level);
   const tier = Math.min(3, Math.floor(z.region / 4));
   const scroll = () => stack(rnd, `tan_quyen_${z.element}`, `Tàn quyển hệ ${ELEMENT_STYLE[z.element].name}`, "tan_quyen", "tim", `tan_quyen/${z.element}`, lv, "Mảnh công pháp, gom đủ để ghép ở Tàng Kinh Các");
   // Linh thạch giữ mức cũ (2 + cấp, thủ lĩnh cửa bí cảnh ×20), dao động ±25%.
-  const out = [stack(rnd, "linh_thach", "Linh thạch", "linh_thach", "luc", "linh_thach/ha", lv, "", Math.max(1, Math.round((2 + z.level) * (z.boss ? 20 : 1) * (0.75 + 0.5 * rnd()))))];
+  const out = [stack(rnd, "linh_thach", "Linh thạch", "linh_thach", "luc", "linh_thach/ha", lv, "", Math.max(1, Math.round(((2 + z.level) * (z.boss ? 20 : 1) * (0.75 + 0.5 * rnd()) * (1000 + bonus.gold)) / 1000)))];
   if (isBoss) {
-    out.push(gear(lv, rnd() < 0.5 && !event ? "lam" : "tim", rnd), potItem(1, rnd));
+    out.push(gear(lv, rollRarity(rnd, event ? "tim" : "lam"), rnd), potItem(1, rnd));
     if (rnd() < 0.4) out.push(scroll());
-    if (rnd() < 0.15) out.push(gear(lv, "vang", rnd));
-    // Phẩm Đỏ: chỉ thủ lĩnh vùng cuối (Cấm Khu), thay cho "Tứ Tượng Thần Vực" của chỉ thị vì thế giới chưa có vùng đó.
-    if (z.region === REGIONS.length - 1 && rnd() < 0.05) out.push(gear(lv, "do", rnd));
     return out;
   }
   if (rnd() < 0.3) out.push(rnd() < 0.5 ? potItem(1, rnd) : stack(rnd, "hoi_linh_dan", "Hồi Linh Đan", "dan_duoc", "luc", "dan/dan_duoc_hoi_mana", 1, `Hồi ${MANA_HEAL * 100}% mana`));
@@ -622,7 +695,7 @@ export function rollDrop(z: Zone, isBoss: boolean, rnd: () => number = Math.rand
     const [list, dir] = rnd() < 0.5 ? [ORES, "quang"] : [HERBS, "duoc"];
     out.push(stack(rnd, list[tier][0], list[tier][1], "khoang_thach", RARITY_IDS[tier], `${dir}/${list[tier][0]}`, lv, "Nguyên liệu rèn và luyện đan"));
   }
-  if (rnd() < 0.1) out.push(gear(lv, rnd() < 0.7 ? "luc" : "lam", rnd));
+  if (rnd() < 0.1) out.push(gear(lv, rollRarity(rnd), rnd));
   if (rnd() < 0.02) out.push(scroll());
   return out;
 }
@@ -640,11 +713,21 @@ export function pickUp(s: Save, it: ItemInstance): boolean {
   return true;
 }
 
+/** Đồ nam chỉ nhân vật nam mặc được, đồ nữ chỉ nhân vật nữ. */
+export const canWear = (s: Save, it: ItemInstance) => !it.gender || it.gender === (s.gender ?? "nam");
+
+/** Đổi giới tính (bản lưu cũ chưa chọn): chỉ được khi không mặc món nào chia nam nữ. */
+export function setGender(s: Save, g: Gender): boolean {
+  if (Object.values(s.equips).some((it) => it?.gender)) return false;
+  s.gender = g;
+  return true;
+}
+
 /** Mặc món trang bị trong túi; món đang ở ô đó về túi (đổi chỗ nên không cần ô trống). */
 export function equip(s: Save, id: string): boolean {
   const i = s.bag.findIndex((x) => x.id === id);
   const it = s.bag[i];
-  if (!it?.slot) return false;
+  if (!it?.slot || !canWear(s, it)) return false;
   const old = s.equips[it.slot];
   if (old) s.bag[i] = old;
   else s.bag.splice(i, 1);

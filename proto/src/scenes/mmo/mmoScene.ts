@@ -18,7 +18,7 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
+  canWear, setCounts, setGender, setLine, setOf, SETS, SET_TIERS, type Gender, learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
@@ -257,7 +257,7 @@ export class MmoScene extends BaiScene {
     // Đồ văng ra quanh xác quái; nhặt ở pull().
     const thap = m.boss ? towerKill(s, z) : 0;
     if (thap) this.note(`Qua tầng ${s.thap} tháp Tầm Đạo: +${thap} linh thạch, danh hiệu ${title(s)}`, true);
-    for (const item of rollDrop(z, !!m.boss, Math.random, z.boss && eventOn("bi_canh", nowMin()))) {
+    for (const item of rollDrop(z, !!m.boss, Math.random, z.boss && eventOn("bi_canh", nowMin()), stats(s))) {
       const a = Math.random() * Math.PI * 2;
       const d = (20 + 20 * Math.random()) * SCALE;
       this.loot.push({ x: m.x + Math.cos(a) * d, y: m.y + Math.sin(a) * d * 0.6, item, at: this.clock, pull: false });
@@ -315,6 +315,7 @@ export class MmoScene extends BaiScene {
     b.manaMax = Math.round((BATTLE.manaMax * st.manaMul) / 1000);
     b.mana = Math.min(b.mana, b.manaMax);
     b.mod = st;
+    this.playerLook = s.gender === "nu" ? 1 : 0;
     b.skillBonus = (k) => layerBonus(layerOf(this.save, k));
     p.hp = heal ? p.hpMax : Math.min(p.hp, p.hpMax);
     this.barKey = "";
@@ -736,7 +737,7 @@ export class MmoScene extends BaiScene {
    */
   private drawStage(): void {
     const c = this.dlg.querySelector<HTMLCanvasElement>(".mmo-stage canvas");
-    const look = resolveLook(this.sprites, LOOKS[0]);
+    const look = resolveLook(this.sprites, LOOKS[this.playerLook]);
     if (!c || !look) return;
     const w = c.clientWidth;
     const h = c.clientHeight;
@@ -841,6 +842,11 @@ export class MmoScene extends BaiScene {
       const r = afkHarvest(s, Date.now(), today());
       if (r.xp > 0) this.note(`Thu hoạch bế quan: +${r.xp} tu vi${r.levels ? ` · lên cấp ${s.lv}!` : ""}`, true);
       this.restat();
+    } else if (d.gender) {
+      if (setGender(s, d.gender as Gender)) {
+        this.restat();
+        this.help();
+      } else this.note("Gỡ mũ, áo, đai, giày đang mặc rồi mới đổi giới tính được");
     } else if (d.openbag) {
       this.selItem = d.openbag;
       this.bagTab = "all";
@@ -942,8 +948,8 @@ export class MmoScene extends BaiScene {
       } else this.note("Cần Truyền Tống Phù (mua ở Thương hội)");
     } else if (d.start !== undefined) {
       const name = this.dlg.querySelector<HTMLInputElement>("input")!.value;
-      const el = this.dlg.querySelector<HTMLSelectElement>("select")!.value as ElementId;
-      this.save = newSave(name, el);
+      const el = this.dlg.querySelector<HTMLSelectElement>('select[name="he"]')!.value as ElementId;
+      this.save = newSave(name, el, this.dlg.querySelector<HTMLSelectElement>('select[name="gender"]')!.value as Gender);
       this.fresh = false;
       this.dlg.close();
       this.go(0, "mid");
@@ -1004,6 +1010,15 @@ export class MmoScene extends BaiScene {
       <footer><button type="button" data-region="">◂ Thế giới</button><span>${tp(townOf(r), "Sơn môn")} ${tp(townOf(r) + 8, "Bến đò")}</span></footer>`, true);
   }
 
+  /** Khung một bộ trang bị: tên, hướng, số món đang mặc, ba mốc 2/4/7 (mốc đã kích thì sáng). */
+  private setBox(id: string): string {
+    const st = setOf(id);
+    if (!st) return "";
+    const n = setCounts(this.save)[id] ?? 0;
+    return `<div class="mmo-set ${n >= SET_TIERS[0] ? "on" : ""}"><b>Bộ ${st.ten}</b><em>${st.vai} · đang mặc ${n}/7</em>
+      ${st.moc.map((m, i) => `<span class="${n >= SET_TIERS[i] ? "on" : ""}">${SET_TIERS[i]} món: ${setLine(m)}</span>`).join("")}</div>`;
+  }
+
   /** Mọi món trong túi; bình máu và Truyền Tống Phù là bộ đếm (save.pots, save.phu) nên hiện thành ô ảo đứng đầu. */
   private bagItems(): ItemInstance[] {
     const s = this.save;
@@ -1030,15 +1045,16 @@ export class MmoScene extends BaiScene {
         return `<dt>${ten}</dt><dd>+${fmt(v)}${worn && d ? ` <i class="${d > 0 ? "up" : "down"}">${d > 0 ? "▲" : "▼"}${fmt(Math.abs(d))}</i>` : ""}</dd>`;
       }).join("");
       const btns = [
-        sel.slot ? `<button type="button" data-equip="${sel.id}">Trang bị</button>` : "",
+        sel.slot ? `<button type="button" data-equip="${sel.id}" ${canWear(s, sel) ? "" : "disabled"}>${canWear(s, sel) ? "Trang bị" : `Đồ ${GENDER[sel.gender!]}, không mặc được`}</button>` : "",
         sel.id === "pot" ? `<button type="button" data-use="pot">Sử dụng</button>` : sel.id === "phu" ? `<button type="button" data-openmap>Mở bản đồ</button>` : sel.type === "dan_duoc" ? `<button type="button" data-useitem="${sel.id}">Sử dụng</button>` : "",
         virtual(sel) ? "" : `<button type="button" class="bad" data-sell="${sel.id}">Bán · ${sellPrice(sel)} linh thạch</button>`,
       ].join("");
       detail = `<header><i class="q-${sel.rarity}" style="${url(sel)}"></i><span><b style="color:${RARITY[sel.rarity][1]}">${esc(sel.name)}</b>
-          <em>Phẩm ${RARITY[sel.rarity][0]}${sel.slot ? ` · ${SLOTS.find(([id]) => id === sel.slot)![1]} · cấp ${sel.lv}` : ""}</em></span></header>
+          <em>Phẩm ${RARITY[sel.rarity][0]}${sel.slot ? ` · ${SLOTS.find(([id]) => id === sel.slot)![1]}${sel.gender ? ` ${GENDER[sel.gender]}` : ""} · cấp ${sel.lv}` : ""}</em></span></header>
         ${sel.desc ? `<span>${sel.desc}</span>` : ""}
         ${lines ? `<dl class="mmo-stats">${lines}</dl>` : ""}
         ${sel.slot ? `<span class="mute">${worn ? `Đang mặc: ${esc(worn.name)} (▲▼ so với món này)` : "Ô này đang trống"}</span>` : ""}
+        ${sel.set ? this.setBox(sel.set) : ""}
         <nav>${btns}</nav>`;
     }
     this.open(`<h2>Túi</h2><nav class="mmo-tabs">${BAG_TABS.map(([id, ten]) => `<button type="button" data-tab="${id}" class="${id === tab ? "on" : ""}">${ten}</button>`).join("")}</nav>
@@ -1071,7 +1087,7 @@ export class MmoScene extends BaiScene {
     const rows: [string, string | number][] = [
       ["Máu", `${Math.round(p.hp)}/${p.hpMax}`], ["Mana", `${Math.floor(b.mana)}/${b.manaMax}`], ["Công", st.atk], ["Thủ", `+${st.def / 10}%`], ["Thủ ngoại (đồ)", `+${st.defExt / 10}%`], ["Thủ nội (đồ)", `+${st.defInt / 10}%`],
       ["Chí mạng", `${st.crit / 10}%`], ["Sát thương chí mạng", `${150 + st.critDmg / 10}%`], ["Tốc đánh", `+${st.speed / 10}%`],
-      ["Giảm hồi chiêu", `${st.cd / 10}%`], ["Giảm mana", `${st.manaCut / 10}%`], ["Cường hóa vũ khí", `+${s.wpn}`],
+      ["Giảm hồi chiêu", `${st.cd / 10}%`], ["Giảm mana", `${st.manaCut / 10}%`], ["Cường hóa vũ khí", `+${s.wpn}`], ["Hút máu", `${st.leech / 10}%`], ["Hồi máu mỗi giây", `${st.regen / 10}%`], ["Rơi đồ / linh thạch thêm", `+${st.drop / 10}% / +${st.gold / 10}%`],
     ];
     const attrs = ATTRIBUTES.map((a) => `<div><span><b>${a.ten}</b><small>${(a as { tomTat?: string }).tomTat ?? ""}</small></span><i>${s.diem?.[a.id] ?? 0}</i>
       <button type="button" data-stat="${a.id}" ${pts > 0 ? "" : "disabled"} title="Cộng 1 điểm">+</button></div>`).join("");
@@ -1081,8 +1097,11 @@ export class MmoScene extends BaiScene {
           <b>${esc(s.name)}</b>${title(s) ? `<small class="title">「${title(s)}」</small>` : ""}<small>Hệ ${ELEMENT_STYLE[s.element].name} · Cấp ${s.lv}</small><small>Tu vi ${s.xp}/${xpNeed(s.lv)}</small></div>
         <div class="mmo-gear">${SLOTS.slice(4).map(slot).join("")}</div></div>
       <div><h3>Chỉ số</h3><dl class="mmo-stats">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div></div>
+      <h3>Bộ trang bị <em>mốc 2 / 4 / 7 món cùng bộ, cộng dồn</em></h3>
+      <div class="mmo-sets">${Object.keys(setCounts(s)).map((id) => this.setBox(id)).join("") || `<span class="mute">Chưa mặc món nào thuộc bộ. Đồ Lam trở lên mới có bộ.</span>`}</div>
+      <details class="mmo-all-sets"><summary>Bảng ${SETS.length} bộ trang bị</summary><div class="mmo-sets">${SETS.map((x) => this.setBox(x.id)).join("")}</div></details>
       <h3>Túi <em>${s.bag.length}/${BAG_MAX} ô · chạm trang bị để mặc ngay, chạm món khác để mở Túi</em></h3>
-      <div class="mmo-grid10">${this.bagItems().map((it) => `<button type="button" class="mmo-slot q-${it.rarity}" ${it.slot ? `data-equip="${it.id}"` : `data-openbag="${it.id}"`} title="${esc(itemTip(it))}" style="${url(it)}">${it.count > 1 ? `<small>${it.count}</small>` : ""}</button>`).join("")}${'<button type="button" class="mmo-slot" disabled></button>'.repeat(Math.max(0, BAG_MAX - this.bagItems().length))}</div>
+      <div class="mmo-grid10">${this.bagItems().map((it) => `<button type="button" class="mmo-slot q-${it.rarity}" ${it.slot && canWear(s, it) ? `data-equip="${it.id}"` : `data-openbag="${it.id}"`} title="${esc(itemTip(it))}" style="${url(it)}">${it.count > 1 ? `<small>${it.count}</small>` : ""}</button>`).join("")}${'<button type="button" class="mmo-slot" disabled></button>'.repeat(Math.max(0, BAG_MAX - this.bagItems().length))}</div>
       <h3>Tiềm năng <em>còn <b>${pts}</b> điểm · mỗi cấp 1 điểm</em></h3><div class="mmo-attr">${attrs}</div>
       <footer><span>Linh thạch ${s.gold}</span>
       <button type="button" data-statreset class="bad" ${spent && s.gold >= cost ? "" : "disabled"}>Tẩy điểm (${cost ? `${cost} linh thạch` : "miễn phí"})</button></footer>`, true);
@@ -1269,6 +1288,8 @@ export class MmoScene extends BaiScene {
 
   private help(): void {
     this.open(`<h2>Thiết lập và trợ giúp</h2>${HELP}
+      <p>Giới tính nhân vật: <b>${this.save.gender === "nu" ? "Nữ" : "Nam"}</b> · mũ, áo, đai, giày chia đồ nam và đồ nữ.
+        <button type="button" data-gender="${this.save.gender === "nu" ? "nam" : "nu"}">Đổi sang ${this.save.gender === "nu" ? "Nam" : "Nữ"}</button></p>
       <button type="button" data-close>Đóng</button> <button type="button" data-reset class="bad">Chơi lại từ đầu</button>`);
   }
 
@@ -1276,7 +1297,8 @@ export class MmoScene extends BaiScene {
     const els = (Object.keys(ELEMENT_STYLE) as ElementId[]).map((e) => `<option value="${e}">${ELEMENT_STYLE[e].name}</option>`).join("");
     this.open(`<h2>Thiên Hoang Ký</h2><p>Nhập thế tu hành: đi khắp 13 vùng, diệt dị thú, lên cấp, hạ thủ lĩnh bí cảnh.</p>
       <label>Đạo hiệu <input maxlength="16" placeholder="Vô Danh" /></label>
-      <label>Hệ công pháp <select>${els}</select></label>${HELP}
+      <label>Giới tính <select name="gender"><option value="nam">Nam</option><option value="nu">Nữ</option></select></label>
+      <label>Hệ công pháp <select name="he">${els}</select></label>${HELP}
       <button type="button" data-start class="go">Nhập thế</button>`);
     this.dlg.addEventListener("cancel", (e) => this.fresh && e.preventDefault());
   }
@@ -1288,7 +1310,7 @@ const HELP = `<ul>
   <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>L</b> liên minh · <b>V</b> hoạt động (sự kiện, tháp, bế quan) · <b>H</b> thư.</li>
   <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm); máu dưới 35% hay mana dưới 20% thì tự uống nếu trong túi còn · <b>F</b> treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
   <li><b>I</b> túi · <b>P</b> nhân vật (cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
-  <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím Cách hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán.</li>
+  <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím Cách hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán. Mũ, áo, đai, giày chia đồ nam và đồ nữ; đồ Lam trở lên có thể thuộc một bộ, mặc đủ 2 / 4 / 7 món cùng bộ thì kích thêm chỉ số (xem ở bảng Nhân vật).</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
 
 const PANELS: Record<string, string> = { i: "bag", p: "char", o: "skills", g: "sect", h: "mail", l: "ally", v: "event" };
@@ -1314,7 +1336,8 @@ const url = (it: ItemInstance) => `background-image:url(${import.meta.env.BASE_U
 const SECT_TABS = [["dai_dien", "Đại Điện"], ["kinh_cac", "Tàng Kinh Các"], ["bao_kho", "Bảo Khố"], ["dai_tran", "Đại Trận Hộ Môn"]];
 /** Chú thích một món khi rê chuột: tên, phẩm, cấp, chỉ số. */
 const itemTip = (it: ItemInstance) =>
-  [`${it.name} · phẩm ${RARITY[it.rarity][0]}${it.slot ? ` · cấp ${it.lv}` : ""}`, ...STAT_ROWS.filter(([k]) => it.stats?.[k]).map(([k, ten, pm]) => `${ten} +${pm ? `${it.stats![k]! / 10}%` : it.stats![k]}`), it.desc ?? ""].filter(Boolean).join("\n");
+  [`${it.name} · phẩm ${RARITY[it.rarity][0]}${it.slot ? ` · cấp ${it.lv}` : ""}${it.gender ? ` · đồ ${GENDER[it.gender]}` : ""}${it.set ? ` · bộ ${setOf(it.set)?.ten}` : ""}`, ...STAT_ROWS.filter(([k]) => it.stats?.[k]).map(([k, ten, pm]) => `${ten} +${pm ? `${it.stats![k]! / 10}%` : it.stats![k]}`), it.desc ?? ""].filter(Boolean).join("\n");
+const GENDER: Record<Gender, string> = { nam: "nam", nu: "nữ" };
 const BAG_TABS = [["all", "Tất cả"], ["trang_bi", "Trang bị"], ["dan_duoc", "Đan dược"], ["nl", "Nguyên liệu"]];
 /** Dòng chỉ số của trang bị: khóa, tên, có phải phần nghìn (hiện thành %) không. */
 const STAT_ROWS: [keyof ItemStats, string, boolean][] = [["atk", "Công", false], ["hp", "Máu", false], ["defExt", "Thủ ngoại", true], ["defInt", "Thủ nội", true], ["crit", "Chí mạng", true]];

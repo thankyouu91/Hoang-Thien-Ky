@@ -33,8 +33,13 @@ test("giết quái: lên cấp, xong nhiệm vụ thì sang khu kế", () => {
 
 test("rơi đồ: linh thạch luôn rơi, thủ lĩnh chắc chắn rơi trang bị lam hoặc tím; nhặt, mặc, gỡ, bán", () => {
   const s = newSave("A", "moc");
-  // rnd = 0.99: quái thường không trúng tỷ lệ nào ngoài linh thạch.
-  const only = L.rollDrop(zone(1), false, () => 0.99);
+  // Quái thường chỉ 40% số lần là có rơi.
+  assert.deepEqual(L.rollDrop(zone(1), false, () => 0.99), []);
+  assert.deepEqual(L.rollDrop(zone(1), false, () => 0.45), []);
+  assert.ok(L.rollDrop(zone(1), false, () => 0.45, false, { drop: 150, gold: 0 }).length > 0); // bộ Tụ Bảo +15% thì 0,45 < 0,46
+  // Có rơi nhưng không trúng tỷ lệ nào ngoài linh thạch.
+  let call = 0;
+  const only = L.rollDrop(zone(1), false, () => (call++ === 0 ? 0.1 : 0.99));
   assert.deepEqual(only.map((x) => x.code), ["linh_thach"]);
   assert.ok(L.pickUp(s, only[0]) && s.gold === only[0].count && s.bag.length === 0);
   // rnd = 0: trúng mọi tỷ lệ.
@@ -142,6 +147,34 @@ test("công pháp cộng chỉ số bị động theo tầng", () => {
   assert.equal(L.passives(s).cd, 0); // khong_che đủ cấp nhưng chưa học
   s.hoc = ["khong_che"];
   assert.equal(L.passives(s).cd, 5);
+});
+
+test("phẩm rơi 0,5% đỏ, 3% vàng, 5% tím; đồ chia nam nữ; bộ trang bị kích theo mốc 2/4/7", () => {
+  const seq = (...v: number[]) => { let i = 0; return () => v[Math.min(i++, v.length - 1)]; };
+  assert.equal(L.rollRarity(seq(0.004)), "do");
+  assert.equal(L.rollRarity(seq(0.03)), "vang");
+  assert.equal(L.rollRarity(seq(0.08)), "tim");
+  assert.equal(L.rollRarity(seq(0.09, 0.5)), "luc");
+  assert.equal(L.rollRarity(seq(0.09, 0.9)), "lam");
+  assert.equal(L.rollRarity(seq(0.09, 0.5), "lam"), "lam");
+  const s = newSave("A", "moc", "nu");
+  const mk = (slot: L.EquipSlot, set: string, gender?: L.Gender): L.ItemInstance => ({ id: slot, code: slot, name: slot, type: "trang_bi", rarity: "tim", slot, icon: "", count: 1, lv: 1, stats: {}, set, gender });
+  const SLOTS: L.EquipSlot[] = ["vu_khi", "mu", "ao", "dai", "bao_tay", "giay", "ngoc_boi"];
+  s.bag.push(mk("ao", "van_kiem", "nam"));
+  assert.equal(L.equip(s, "ao"), false); // đồ nam, nhân vật nữ
+  s.bag = SLOTS.map((o) => mk(o, "van_kiem", o === "ao" ? "nu" : undefined));
+  const atk0 = L.stats(s).atk;
+  assert.ok(L.equip(s, "vu_khi"));
+  assert.equal(L.setBonus(s).atk, 0); // 1 món chưa kích
+  assert.ok(L.equip(s, "mu"));
+  assert.equal(L.setBonus(s).atk, 30);
+  for (const o of SLOTS.slice(2)) assert.ok(L.equip(s, o));
+  assert.deepEqual([L.setCounts(s).van_kiem, L.setBonus(s).atk, L.setBonus(s).crit, L.setBonus(s).critDmg], [7, 160, 20, 150]);
+  assert.equal(L.stats(s).atk, Math.round(atk0 * 1.16));
+  assert.equal(L.setGender(s, "nam"), false); // đang mặc áo nữ
+  L.unequip(s, "ao");
+  assert.ok(L.setGender(s, "nam") && L.setCounts(s).van_kiem === 6);
+  assert.equal(L.setLine({ atk: 30, crit: 20 }), "Công +3% · Chí mạng +2%");
 });
 
 test("tiệm: thiếu linh thạch thì không mua được", () => {
