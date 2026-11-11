@@ -112,7 +112,11 @@ export class Bai {
   tuVi = 0;
   kills = 0;
   mana: number = BATTLE.manaMax;
-  readonly manaMax: number = BATTLE.manaMax;
+  manaMax: number = BATTLE.manaMax;
+  /** Chỉ số cộng của riêng người chơi, phần nghìn: thủ, chí mạng, sát thương chí mạng, giảm mana, tốc đánh, giảm hồi chiêu */
+  mod = { def: 0, crit: 0, critDmg: 0, manaCut: 0, speed: 0, cd: 0 };
+  /** Mức cộng theo tầng của một chiêu, phần nghìn (layerBonus của @htk/rules) */
+  skillBonus: (skill: SkillType) => { uyLuc: number; hoiChieu: number; mana: number } = () => ({ uyLuc: 0, hoiChieu: 0, mana: 0 });
   /** Thanh nội tại chiêu cuối, 0 tới 1 */
   ult = 0;
   /** Lúc hết hồi chiêu của từng chiêu */
@@ -192,7 +196,12 @@ export class Bai {
   }
 
   manaCost(skill: SkillType): number {
-    return SKILL_SPECS[skill].mana;
+    return Math.round((SKILL_SPECS[skill].mana * Math.max(0, 1000 - this.skillBonus(skill).mana - this.mod.manaCut)) / 1000);
+  }
+
+  /** Giây hồi chiêu đầy đủ của một chiêu, đã tính tầng và chỉ số giảm hồi chiêu. */
+  cooldownOf(skill: SkillType): number {
+    return (SKILL_SPECS[skill].cooldownTicks / TICKS_PER_SECOND) * Math.max(0.2, (1000 - this.skillBonus(skill).hoiChieu - this.mod.cd) / 1000);
   }
 
   /** Giây hồi chiêu còn lại (0 là dùng được). */
@@ -204,11 +213,13 @@ export class Bai {
   cast(skill: SkillType): boolean {
     const spec = SKILL_SPECS[skill];
     const p = this.player;
-    if (!p.alive || this.cooldown(skill) > 0 || this.mana < spec.mana) return false;
+    const cost = this.manaCost(skill);
+    const pow = (1000 + this.skillBonus(skill).uyLuc) / 1000;
+    if (!p.alive || this.cooldown(skill) > 0 || this.mana < cost) return false;
     if (skill === "hoi_phuc" || skill === "ho_the") {
-      if (skill === "hoi_phuc") this.heal(p, p.hpMax * BAI.healPct);
+      if (skill === "hoi_phuc") this.heal(p, p.hpMax * BAI.healPct * pow);
       else {
-        p.shield = p.hpMax * BAI.shieldPct;
+        p.shield = p.hpMax * BAI.shieldPct * pow;
         p.shieldUntil = this.t + BAI.shieldSec;
       }
       this.fx.push({ t: this.t, x: p.x, y: p.y, el: p.element, kind: "skill", r: 50, skill });
@@ -221,13 +232,13 @@ export class Bai {
         .filter((a) => a.kind === "monster" && a.alive && dist(a, main) <= radius)
         .sort((a, b) => dist(a, main) - dist(b, main))
         .slice(0, spec.targets);
-      for (const m of hit) this.damage(p, m, (p.atk * spec.k * BAI.skillScale) / 1000);
+      for (const m of hit) this.damage(p, m, ((p.atk * spec.k * BAI.skillScale) / 1000) * pow);
       p.target = main.id;
       p.face = main.x >= p.x ? 1 : -1;
       this.fx.push({ t: this.t, x: main.x, y: main.y, el: p.element, kind: "skill", r: radius, skill, dir: main.x >= p.x ? 1 : -1 });
     }
-    this.mana -= spec.mana;
-    this.ready.set(skill, this.t + spec.cooldownTicks / TICKS_PER_SECOND);
+    this.mana -= cost;
+    this.ready.set(skill, this.t + this.cooldownOf(skill));
     p.actAt = this.t;
     return true;
   }
@@ -317,7 +328,7 @@ export class Bai {
       else if (this.t >= a.nextHit) {
         a.face = tgt.x >= a.x ? 1 : -1;
         this.damage(a, tgt, a.atk);
-        a.nextHit = this.t + BAI.hitEvery;
+        a.nextHit = this.t + BAI.hitEvery * (a === this.player ? 1000 / (1000 + this.mod.speed) : 1);
         a.actAt = this.t;
       }
     } else if (a.goal && this.walk(a, a.goal.x, a.goal.y, BAI.speed, dt)) a.goal = null;
@@ -354,7 +365,11 @@ export class Bai {
   }
 
   private damage(from: Actor, to: Actor, raw: number): void {
-    let amount = Math.round(raw);
+    let amount = raw;
+    // Chưa cộng điểm thì crit = 0, không rút số ngẫu nhiên: trận cũ giữ nguyên kết quả.
+    if (from === this.player && this.mod.crit > 0 && this.rnd() < this.mod.crit / 1000) amount *= 1.5 + this.mod.critDmg / 1000;
+    if (to === this.player) amount = (amount * 1000) / (1000 + this.mod.def);
+    amount = Math.round(amount);
     const blocked = Math.min(to.shield, amount);
     to.shield -= blocked;
     amount -= blocked;

@@ -1,6 +1,7 @@
 // Tiến trình của bản MMORPG chơi được (index.html): 13 vùng × 9 khu nối thành một dải thế giới, cấp, tu vi, linh thạch,
 // bình máu, cường hóa vũ khí, nhiệm vụ diệt quái nối tiếp. Không chạm DOM để test bằng node. Mọi số là đề xuất.
 import type { ElementId } from "../../replay/types.ts";
+import { ATTRIBUTES, attributeBonuses, layerCost, TAY_DIEM, TECHNIQUE_LAYERS, trainingPoints, unspentPoints, type Member } from "@htk/rules";
 import { BAI } from "../bai/thamSo.ts";
 
 /** Vùng theo thứ tự đi: thư mục nền chien_truong/, tên, hệ của dị thú. */
@@ -85,6 +86,10 @@ export interface Save {
   zone: number;
   maxZone: number;
   quest: { zone: number; n: number };
+  /** Điểm tiềm năng đã cộng theo thuộc tính (ATTRIBUTES của @htk/rules) */
+  diem?: Record<string, number>;
+  /** Tầng của từng chiêu, 1 khi chưa ghi */
+  tang?: Record<string, number>;
 }
 
 export function newSave(name: string, element: ElementId): Save {
@@ -156,4 +161,56 @@ export function upgrade(s: Save): boolean {
   s.gold -= c;
   s.wpn++;
   return true;
+}
+
+// ---------- Xây nhân vật: điểm tiềm năng và tầng chiêu ----------
+// Luật và số lấy nguyên của bản cũ: @htk/rules tiem_nang.ts (mỗi cấp 1 điểm vào 6 thuộc tính, tẩy điểm miễn phí dưới cấp 50)
+// và layers.ts (mỗi cấp 20 điểm luyện, chiêu 10 tầng). Chiêu ở đây tính như công pháp phẩm Phàm; bỏ phần cống hiến vì chưa có tông môn.
+
+export const layerOf = (s: Save, skill: string) => s.tang?.[skill] ?? 1;
+/** Nhân vật dưới dạng Member của @htk/rules, chỉ đủ các trường mà luật điểm đọc. */
+const member = (s: Save) =>
+  ({ level: s.lv, diemTiemNang: s.diem ?? {}, learned: BAI.skills.map((k) => ({ layer: layerOf(s, k), grade: 1 })) }) as unknown as Member;
+
+export const statPoints = (s: Save) => unspentPoints(member(s));
+export const skillPoints = (s: Save) => trainingPoints(member(s));
+
+export function addStat(s: Save, id: string): boolean {
+  if (statPoints(s) < 1 || !ATTRIBUTES.some((a) => a.id === id)) return false;
+  s.diem = { ...s.diem, [id]: (s.diem?.[id] ?? 0) + 1 };
+  return true;
+}
+
+export const statResetCost = (s: Save) => (s.lv < TAY_DIEM.mienPhiDuoiCap ? 0 : TAY_DIEM.linhThach);
+
+export function resetStats(s: Save): boolean {
+  const cost = statResetCost(s);
+  if (s.gold < cost) return false;
+  s.gold -= cost;
+  s.diem = {};
+  return true;
+}
+
+/** Điểm luyện để lên tầng kế của một chiêu; null khi đã tối đa. */
+export const layerPrice = (s: Save, skill: string) => (layerOf(s, skill) >= TECHNIQUE_LAYERS ? null : layerCost(layerOf(s, skill) + 1, 1).diemLuyen);
+
+export function upSkill(s: Save, skill: string): boolean {
+  const cost = layerPrice(s, skill);
+  if (cost === null || cost > skillPoints(s) || !BAI.skills.includes(skill as never)) return false;
+  s.tang = { ...s.tang, [skill]: layerOf(s, skill) + 1 };
+  return true;
+}
+
+export function resetSkills(s: Save): void {
+  s.tang = {};
+}
+
+/** Chỉ số sau khi cộng điểm tiềm năng. hp, atk là số cuối; các khóa còn lại là phần nghìn. */
+export function stats(s: Save) {
+  const b = attributeBonuses(member(s));
+  const up = (base: number, k = 0) => Math.round((base * (1000 + k)) / 1000);
+  return {
+    hp: up(hpOf(s.lv), b.hp), atk: up(atkOf(s.lv, s.wpn), b.atk), manaMul: 1000 + (b.manaMax ?? 0),
+    def: b.def ?? 0, crit: b.critBonus ?? 0, critDmg: b.critDamage ?? 0, manaCut: b.manaCostCut ?? 0, speed: b.attackSpeed ?? 0, cd: b.cooldownCut ?? 0,
+  };
 }

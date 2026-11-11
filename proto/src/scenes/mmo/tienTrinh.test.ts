@@ -93,3 +93,27 @@ test("map khu: mặc định có dải cấm, bầy tự rải và chỗ vào đ
   for (let i = 0; i < 60 * 30; i++) b.step(1 / 60);
   assert.ok(!trongCam(m, b.player.x, b.player.y) && b.player.y < e.y);
 });
+
+test("điểm tiềm năng và tầng chiêu theo luật bản cũ", async () => {
+  const t = await import("./tienTrinh.ts");
+  const s = t.newSave("A", "moc");
+  assert.equal(t.statPoints(s), 0);
+  assert.equal(t.addStat(s, "the_phach"), false);
+  s.lv = 11;
+  assert.equal(t.statPoints(s), 10);
+  const hp0 = t.stats(s).hp;
+  for (let i = 0; i < 10; i++) assert.equal(t.addStat(s, "the_phach"), true);
+  assert.equal(t.addStat(s, "the_phach"), false);
+  assert.equal(t.stats(s).hp, Math.round(hp0 * 1.01));
+  assert.equal(t.resetStats(s), true);
+  assert.equal(t.statPoints(s), 10);
+  // 10 cấp × 20 điểm luyện = 200: tầng 2 (10) + 3 (20) + 4 (30) + 5 (40) + 6 (50) = 150, tầng 7 cần 60 thì thiếu.
+  assert.equal(t.skillPoints(s), 200);
+  for (let i = 0; i < 5; i++) assert.equal(t.upSkill(s, "can_quet"), true);
+  assert.equal(t.layerOf(s, "can_quet"), 6);
+  assert.equal(t.skillPoints(s), 50);
+  assert.equal(t.upSkill(s, "can_quet"), false);
+  assert.equal(t.upSkill(s, "khong_co"), false);
+  t.resetSkills(s);
+  assert.equal(t.skillPoints(s), 200);
+});
