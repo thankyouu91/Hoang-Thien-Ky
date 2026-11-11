@@ -372,3 +372,6 @@ body .mmo-sets .mute { grid-column: 1 / -1; color: var(--m-mute); }
 body .mmo-all-sets { margin-top: 8px; }
 body .mmo-all-sets summary { cursor: pointer; color: var(--m-gold2); margin-bottom: 6px; }
 @media (max-width: 640px) { body .mmo-sets { grid-template-columns: 1fr; } }
+
+/* Phím I cuộn tới phần Túi: chừa chỗ cho thanh tiêu đề dính */
+body .mmo-bagsec { scroll-margin-top: 58px; }

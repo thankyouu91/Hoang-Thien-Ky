@@ -86,6 +86,8 @@ export class MmoScene extends BaiScene {
   private bagTab = "all";
   private selItem = "";
   private fullAt = -9;
+  /** Tiêu đề của bảng đang mở, để biết lần vẽ kế là vẽ lại hay mở bảng khác */
+  private dlgTitle = "";
   /** Mốc giờ được ra chiêu kế khi treo auto */
   private autoAt = 0;
   /** Bảng Tông môn: thẻ đang xem */
@@ -526,7 +528,12 @@ export class MmoScene extends BaiScene {
     else if (a === "ally") this.ally();
     else if (a === "event") this.event();
     else if (a === "mail") this.mail();
-    else if (a === "bag") this.bag();
+    else if (a === "bag") {
+      // Túi nằm trong bảng Nhân vật (người dùng chốt 2026-11-11): phím I mở bảng đó và cuộn tới phần Túi.
+      this.char();
+      this.dlg.querySelector(".mmo-bagsec")?.scrollIntoView();
+      a = "char";
+    }
     else if (a === "char") this.char();
     else if (a === "skills") this.skills();
     if (this.dlg.open) this.panel = a;
@@ -821,7 +828,12 @@ export class MmoScene extends BaiScene {
 
   private open(html: string, wide = false): void {
     this.dlg.classList.toggle("wide", wide);
+    // Vẽ lại đúng bảng đang mở (chọn món, đổi thẻ, cộng điểm) thì giữ chỗ đang cuộn.
+    const title = /<h2>(.*?)<\/h2>/.exec(html)?.[1] ?? "";
+    const top = this.dlg.open && title === this.dlgTitle ? this.dlg.scrollTop : 0;
+    this.dlgTitle = title;
     this.dlg.innerHTML = html;
+    this.dlg.scrollTop = top;
     // Mọi bảng có nút đóng trên thanh tiêu đề; bảng tạo nhân vật thì không đóng được.
     if (!this.fresh) this.dlg.querySelector("h2")?.insertAdjacentHTML("beforeend", `<button type="button" data-close class="x" aria-label="Đóng">×</button>`);
     this.keys.clear();
@@ -837,7 +849,7 @@ export class MmoScene extends BaiScene {
     if (d.close !== undefined) this.dlg.close();
     else if (d.use === "pot") {
       this.act("pot");
-      this.bag();
+      this.char();
     } else if (d.afk !== undefined) {
       const r = afkHarvest(s, Date.now(), today());
       if (r.xp > 0) this.note(`Thu hoạch bế quan: +${r.xp} tu vi${r.levels ? ` · lên cấp ${s.lv}!` : ""}`, true);
@@ -856,10 +868,10 @@ export class MmoScene extends BaiScene {
       this.act("map");
     } else if (d.item) {
       this.selItem = d.item;
-      this.bag();
+      this.char();
     } else if (d.tab) {
       this.bagTab = d.tab;
-      this.bag();
+      this.char();
     } else if (d.equip) {
       if (equip(s, d.equip)) this.restat();
     } else if (d.unequip) {
@@ -867,10 +879,10 @@ export class MmoScene extends BaiScene {
       else this.note("Túi đầy, không gỡ được");
     } else if (d.sell) {
       const it = s.bag.find((x) => x.id === d.sell);
-      if (it && (["luc", "lam"].includes(it.rarity) || confirm(`Bán ${it.name} (phẩm ${RARITY[it.rarity][0]})?`)) && sell(s, it.id)) this.bag();
+      if (it && (["luc", "lam"].includes(it.rarity) || confirm(`Bán ${it.name} (phẩm ${RARITY[it.rarity][0]})?`)) && sell(s, it.id)) this.char();
     } else if (d.useitem) {
       this.act("mana");
-      this.bag();
+      this.char();
     } else if (d.stat) {
       if (addStat(s, d.stat)) this.restat();
     } else if (d.statreset !== undefined) {
@@ -1025,15 +1037,18 @@ export class MmoScene extends BaiScene {
     return [...(s.pots > 0 ? [{ ...potItem(s.pots), id: "pot" }] : []), ...(s.phu ? [{ ...phuItem(s.phu), id: "phu" }] : []), ...s.bag];
   }
 
-  /** Túi: thẻ lọc, lưới BAG_MAX ô, khung phải là món đang chọn (so chỉ số với món đang mặc, nút Trang bị, Sử dụng, Bán). */
-  private bag(): void {
+  /**
+   * Phần Túi của bảng Nhân vật: thẻ lọc, lưới BAG_MAX ô, khung phải là món đang chọn với chỉ số so với món đang mặc và nút
+   * Trang bị / Sử dụng / Bán. Chạm một món chỉ chọn nó; phải bấm nút mới mặc (không thay ngay).
+   */
+  private bagBody(): string {
     const s = this.save;
     const all = this.bagItems();
     const virtual = (it: ItemInstance) => it.id === "pot" || it.id === "phu";
     const tab = this.bagTab;
     const list = all.filter((it) => tab === "all" || (tab === "nl" ? it.type === "khoang_thach" || it.type === "tan_quyen" : it.type === tab));
     const sel = list.find((it) => it.id === this.selItem) ?? list[0];
-    const cells = list.map((it) => `<button type="button" class="mmo-slot q-${it.rarity} ${it === sel ? "on" : ""}" data-item="${it.id}" title="${esc(it.name)}" style="${url(it)}">${it.count > 1 ? `<small>${it.count}</small>` : ""}</button>`).join("");
+    const cells = list.map((it) => `<button type="button" class="mmo-slot q-${it.rarity} ${it === sel ? "on" : ""}" data-item="${it.id}" title="${esc(itemTip(it))}" style="${url(it)}">${it.count > 1 ? `<small>${it.count}</small>` : ""}</button>`).join("");
     const empty = '<button type="button" class="mmo-slot" disabled></button>'.repeat(Math.max(0, BAG_MAX - list.length));
     let detail = `<span class="mute">${all.length ? "Thẻ này chưa có món nào." : "Túi trống. Diệt dị thú rồi lại gần để nhặt đồ rơi."}</span>`;
     if (sel) {
@@ -1045,7 +1060,7 @@ export class MmoScene extends BaiScene {
         return `<dt>${ten}</dt><dd>+${fmt(v)}${worn && d ? ` <i class="${d > 0 ? "up" : "down"}">${d > 0 ? "▲" : "▼"}${fmt(Math.abs(d))}</i>` : ""}</dd>`;
       }).join("");
       const btns = [
-        sel.slot ? `<button type="button" data-equip="${sel.id}" ${canWear(s, sel) ? "" : "disabled"}>${canWear(s, sel) ? "Trang bị" : `Đồ ${GENDER[sel.gender!]}, không mặc được`}</button>` : "",
+        sel.slot ? `<button type="button" data-equip="${sel.id}" ${canWear(s, sel) ? "" : "disabled"}>${canWear(s, sel) ? (worn ? `Mặc thay ${esc(worn.name)}` : "Trang bị") : `Đồ ${GENDER[sel.gender!]}, không mặc được`}</button>` : "",
         sel.id === "pot" ? `<button type="button" data-use="pot">Sử dụng</button>` : sel.id === "phu" ? `<button type="button" data-openmap>Mở bản đồ</button>` : sel.type === "dan_duoc" ? `<button type="button" data-useitem="${sel.id}">Sử dụng</button>` : "",
         virtual(sel) ? "" : `<button type="button" class="bad" data-sell="${sel.id}">Bán · ${sellPrice(sel)} linh thạch</button>`,
       ].join("");
@@ -1057,9 +1072,8 @@ export class MmoScene extends BaiScene {
         ${sel.set ? this.setBox(sel.set) : ""}
         <nav>${btns}</nav>`;
     }
-    this.open(`<h2>Túi</h2><nav class="mmo-tabs">${BAG_TABS.map(([id, ten]) => `<button type="button" data-tab="${id}" class="${id === tab ? "on" : ""}">${ten}</button>`).join("")}</nav>
-      <div class="mmo-skills"><div class="mmo-grid5">${cells}${empty}</div><div class="mmo-detail">${detail}</div></div>
-      <footer><span>${s.bag.length}/${BAG_MAX} ô</span><span>Linh thạch <b>${s.gold}</b></span></footer>`, true);
+    return `<nav class="mmo-tabs">${BAG_TABS.map(([id, ten]) => `<button type="button" data-tab="${id}" class="${id === tab ? "on" : ""}">${ten}</button>`).join("")}</nav>
+      <div class="mmo-skills"><div class="mmo-grid5">${cells}${empty}</div><div class="mmo-detail">${detail}</div></div>`;
   }
 
   /** Áp lại chỉ số sau khi cộng hay tẩy điểm, rồi vẽ lại bảng đang mở. */
@@ -1068,7 +1082,7 @@ export class MmoScene extends BaiScene {
     if (this.panel) this.act(this.panel);
   }
 
-  /** Nhân vật: bảy ô trang bị quanh chân dung (chạm món đang mặc để gỡ), chỉ số đã cộng đồ, điểm tiềm năng. */
+  /** Nhân vật và Túi chung một bảng (phím P hoặc I): bảy ô trang bị quanh hình (chạm món đang mặc để gỡ), chỉ số, túi, bộ trang bị, điểm tiềm năng. */
   private char(): void {
     const s = this.save;
     const b = this.bai!;
@@ -1097,11 +1111,11 @@ export class MmoScene extends BaiScene {
           <b>${esc(s.name)}</b>${title(s) ? `<small class="title">「${title(s)}」</small>` : ""}<small>Hệ ${ELEMENT_STYLE[s.element].name} · Cấp ${s.lv}</small><small>Tu vi ${s.xp}/${xpNeed(s.lv)}</small></div>
         <div class="mmo-gear">${SLOTS.slice(4).map(slot).join("")}</div></div>
       <div><h3>Chỉ số</h3><dl class="mmo-stats">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div></div>
+      <h3 class="mmo-bagsec">Túi <em>${s.bag.length}/${BAG_MAX} ô · linh thạch <b>${s.gold}</b> · chạm một món để xem chỉ số rồi mới chọn mặc, dùng hay bán</em></h3>
+      ${this.bagBody()}
       <h3>Bộ trang bị <em>mốc 2 / 4 / 7 món cùng bộ, cộng dồn</em></h3>
       <div class="mmo-sets">${Object.keys(setCounts(s)).map((id) => this.setBox(id)).join("") || `<span class="mute">Chưa mặc món nào thuộc bộ. Đồ Lam trở lên mới có bộ.</span>`}</div>
       <details class="mmo-all-sets"><summary>Bảng ${SETS.length} bộ trang bị</summary><div class="mmo-sets">${SETS.map((x) => this.setBox(x.id)).join("")}</div></details>
-      <h3>Túi <em>${s.bag.length}/${BAG_MAX} ô · chạm trang bị để mặc ngay, chạm món khác để mở Túi</em></h3>
-      <div class="mmo-grid10">${this.bagItems().map((it) => `<button type="button" class="mmo-slot q-${it.rarity}" ${it.slot && canWear(s, it) ? `data-equip="${it.id}"` : `data-openbag="${it.id}"`} title="${esc(itemTip(it))}" style="${url(it)}">${it.count > 1 ? `<small>${it.count}</small>` : ""}</button>`).join("")}${'<button type="button" class="mmo-slot" disabled></button>'.repeat(Math.max(0, BAG_MAX - this.bagItems().length))}</div>
       <h3>Tiềm năng <em>còn <b>${pts}</b> điểm · mỗi cấp 1 điểm</em></h3><div class="mmo-attr">${attrs}</div>
       <footer><span>Linh thạch ${s.gold}</span>
       <button type="button" data-statreset class="bad" ${spent && s.gold >= cost ? "" : "disabled"}>Tẩy điểm (${cost ? `${cost} linh thạch` : "miễn phí"})</button></footer>`, true);
@@ -1309,13 +1323,13 @@ const HELP = `<ul>
   <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng; năm chiêu sau học bằng tàn quyển khi đủ cấp.</li>
   <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>L</b> liên minh · <b>V</b> hoạt động (sự kiện, tháp, bế quan) · <b>H</b> thư.</li>
   <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm); máu dưới 35% hay mana dưới 20% thì tự uống nếu trong túi còn · <b>F</b> treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
-  <li><b>I</b> túi · <b>P</b> nhân vật (cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
+  <li><b>P</b> hoặc <b>I</b> nhân vật và túi (xem chỉ số món rồi mặc, cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
   <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím Cách hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán. Mũ, áo, đai, giày chia đồ nam và đồ nữ; đồ Lam trở lên có thể thuộc một bộ, mặc đủ 2 / 4 / 7 món cùng bộ thì kích thêm chỉ số (xem ở bảng Nhân vật).</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
 
 const PANELS: Record<string, string> = { i: "bag", p: "char", o: "skills", g: "sect", h: "mail", l: "ally", v: "event" };
 /** Hàng nút trên cùng, cạnh bản đồ nhỏ: hành động, phím, tên, hình (đường dẫn trong icon_ve/) hoặc một ký hiệu. */
-const QUICK = [["bag", "I", "Túi", "linh_thach/ha"], ["char", "P", "Nhân vật", "he/moc"], ["skills", "O", "Kỹ năng", "chieu/can_quet"], ["sect", "G", "Tông môn", "ui/tab/tong_mon"], ["map", "M", "Bản đồ", "✦"], ["event", "V", "Hoạt động", "✺"], ["auto", "F", "Treo máy", "↻"]];
+const QUICK = [["char", "P", "Nhân vật", "he/moc"], ["bag", "I", "Túi", "linh_thach/ha"], ["skills", "O", "Kỹ năng", "chieu/can_quet"], ["sect", "G", "Tông môn", "ui/tab/tong_mon"], ["map", "M", "Bản đồ", "✦"], ["event", "V", "Hoạt động", "✺"], ["auto", "F", "Treo máy", "↻"]];
 /** Hàng nút tròn dưới bản đồ nhỏ. */
 const ACTS = [["sit", "X", "Tọa thiền", "☯"], ["shop", "B", "Tiệm", "⚖"], ["ally", "L", "Liên minh", "⚑"], ["mail", "H", "Thư", "✉"], ["help", "?", "Thiết lập", "⚙"]];
 /** Tung độ phần bản đồ nhỏ vẽ trên canvas, ngay dưới thanh tiêu đề của khung .mmo-map. */
