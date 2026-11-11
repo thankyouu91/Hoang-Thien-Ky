@@ -10,7 +10,10 @@ import type { ElementId } from "../../replay/types.ts";
 import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
 import { FONT_DISPLAY, FONT_TEXT, loadCanvasFonts } from "../../theme/fonts.ts";
 import { Bai } from "../bai/bai.ts";
-import { BaiScene } from "../bai/baiScene.ts";
+import { BaiScene, LOOKS } from "../bai/baiScene.ts";
+import { resolveLook } from "../battle/character.ts";
+import { dangFor, drawDang } from "../battle/dangDung.ts";
+import { phapLuanExtent, trackLevel, type PhapLuanSpec } from "../battle/phapLuan.ts";
 import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
@@ -725,7 +728,42 @@ export class MmoScene extends BaiScene {
     super.tap(sx, sy);
   }
 
+  /**
+   * Sân Pháp tướng trong bảng Nhân vật, lấy từ màn Nhân vật của bản cũ (dashboard/screens/nhanVat.ts): nhân vật đứng thở,
+   * pháp luân sau lưng theo hệ, chiêu ở ô đầu và cấp (phapLuan.ts: có từ Trúc Cơ, lớn dần theo cấp). Đạo đồ là ảnh nền trong HTML.
+   */
+  private drawStage(): void {
+    const c = this.dlg.querySelector<HTMLCanvasElement>(".mmo-stage canvas");
+    const look = resolveLook(this.sprites, LOOKS[0]);
+    if (!c || !look) return;
+    const w = c.clientWidth;
+    const h = c.clientHeight;
+    if (!w || !h) return;
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    if (c.width !== w * dpr) {
+      c.width = w * dpr;
+      c.height = h * dpr;
+    }
+    const ctx = c.getContext("2d")!;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    ctx.imageSmoothingEnabled = false;
+    const s = this.save;
+    const t = performance.now() / 1000;
+    const spec: PhapLuanSpec = { element: s.element, type: slotsOf(s).find((k) => k !== null) ?? BAI.skills[0], grade: 1, level: s.lv };
+    // Thu người cho vòng nằm gọn trong sân, như bản cũ (tâm vòng cao khoảng 43 px ảnh trên chân).
+    const ext = phapLuanExtent(spec);
+    const base = (h - 14) / 80;
+    const scale = Math.min(base, Math.max(ext ? Math.min((w / 2 - 3) / ext, (h - 12) / (43 + ext)) : base, base * 0.7));
+    ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+    ctx.beginPath();
+    ctx.ellipse(w / 2, h - 10, w * 0.24, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    drawDang(ctx, this.sprites, look, dangFor(undefined), "dung", 0, t, w / 2, h - 10, scale, false, ELEMENT_STYLE[s.element].color, 0, { spec, beat: { clock: t, ...trackLevel(this, s.lv, t) } });
+  }
+
   override draw(v: View): void {
+    if (this.dlg.open && this.panel === "char") this.drawStage();
     // Hiệu ứng nền theo hệ của vùng (lá rơi ở rừng Mộc, tàn lửa ở núi Hỏa, tuyết, sương): phủ vùng đang nhìn.
     this.vfx.nenTheo(this.bai ? zone(this.save.zone).element : null, this.nhin(v));
     super.draw(v);
@@ -1032,7 +1070,7 @@ export class MmoScene extends BaiScene {
       <button type="button" data-stat="${a.id}" ${pts > 0 ? "" : "disabled"} title="Cộng 1 điểm">+</button></div>`).join("");
     this.open(`<h2>Nhân vật</h2><div class="mmo-char">
       <div class="mmo-doll"><div class="mmo-gear">${SLOTS.slice(0, 4).map(slot).join("")}</div>
-        <div class="mmo-body"><i class="mmo-face" style="background-image:url(${B}icon_ve/he/${s.element}.webp)"></i>
+        <div class="mmo-body"><div class="mmo-stage"><img src="${B}icon_ve/dao_do/${s.element}/${Math.min(5, Math.ceil(s.lv / 50))}.webp" alt=""><canvas aria-label="Pháp tướng"></canvas></div>
           <b>${esc(s.name)}</b>${title(s) ? `<small class="title">「${title(s)}」</small>` : ""}<small>Hệ ${ELEMENT_STYLE[s.element].name} · Cấp ${s.lv}</small><small>Tu vi ${s.xp}/${xpNeed(s.lv)}</small></div>
         <div class="mmo-gear">${SLOTS.slice(4).map(slot).join("")}</div></div>
       <div><h3>Chỉ số</h3><dl class="mmo-stats">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div></div>

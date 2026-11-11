@@ -227,7 +227,7 @@ body .mmo-grid { display: grid; grid-template-columns: repeat(6, 52px); gap: 6px
 
 /* Nhân vật */
 body .mmo-char { display: grid; grid-template-columns: auto 1fr; gap: 22px; align-items: start; }
-body .mmo-doll { display: grid; grid-template-columns: 52px 124px 52px; gap: 8px; align-items: center; }
+body .mmo-doll { display: grid; grid-template-columns: 52px 176px 52px; gap: 8px; align-items: center; }
 body .mmo-gear { display: grid; gap: 6px; }
 body .mmo-body { display: grid; justify-items: center; gap: 3px; text-align: center; }
 body .mmo-body .mmo-face { width: 92px; height: 92px; margin-bottom: 6px; }
@@ -349,3 +349,8 @@ body .mmo-body .title { color: var(--m-gold2); }
 /* Túi nằm trong bảng Nhân vật: mười ô một hàng */
 body .mmo-grid10 { display: grid; grid-template-columns: repeat(10, 52px); gap: 6px; justify-content: center; }
 @media (max-width: 640px) { body .mmo-grid10 { grid-template-columns: repeat(5, 52px); } }
+
+/* Sân Pháp tướng: đạo đồ (tranh mực đen trên nền trắng) đảo màu thành nét sáng trên nền tối, nhân vật và pháp luân vẽ trên canvas */
+body .mmo-stage { position: relative; width: 176px; height: 250px; margin-bottom: 4px; border-radius: 4px; background: radial-gradient(ellipse at 50% 45%, rgba(201, 164, 92, 0.16), transparent 70%); overflow: hidden; }
+body .mmo-stage img { position: absolute; left: 50%; top: 0; height: 100%; aspect-ratio: 2 / 3; transform: translateX(-50%); filter: invert(1) sepia(0.7) saturate(1.6) brightness(1.5); mix-blend-mode: screen; opacity: 0.95; -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent); mask-image: linear-gradient(to bottom, #000 72%, transparent); pointer-events: none; }
+body .mmo-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }

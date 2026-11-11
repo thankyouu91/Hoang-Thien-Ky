@@ -20,7 +20,7 @@ import { VfxSf, type Nhin } from "./vfxSf.ts";
 const SIZE = 56; // cạnh hình người, đơn vị thế giới
 const TAP_PICK = 40; // chạm cách quái chừng này thì tính là chạm quái
 const RING = { player: "#f2e6c8", bot: "#9cc7e6", monster: "#d6372a" };
-const LOOKS: Look[] = [
+export const LOOKS: Look[] = [
   { body: "nam_khoe", outfit: "dao_bao", weapon: "kiem", hat: "ngoc_quan" },
   { body: "nu_manh", outfit: "tu_duoc", weapon: "truong" },
   { body: "nam_khoe", outfit: "tu_ren" },
