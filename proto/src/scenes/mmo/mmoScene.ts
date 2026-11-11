@@ -18,7 +18,7 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, npcCho, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  setOfRegion, WPN_MAX, BOUNTY_N, bountyGold, bountyKill, bountyOf, brew, BREW, incense, INCENSE, NPCS, canWear, setCounts, setGender, setLine, setOf, SETS, SET_TIERS, type Gender, learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
+  die, DEATH_XP, setOfRegion, WPN_MAX, BOUNTY_N, bountyGold, bountyKill, bountyOf, brew, BREW, incense, INCENSE, NPCS, canWear, setCounts, setGender, setLine, setOf, SETS, SET_TIERS, type Gender, learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
@@ -87,6 +87,8 @@ export class MmoScene extends BaiScene {
   private bagTab = "all";
   private selItem = "";
   private fullAt = -9;
+  /** Người chơi đang nằm chờ hồi sinh (đã trừ tu vi); sống lại thì đưa về sơn môn */
+  private dead = false;
   /** NPC của khu an toàn đang đứng (rỗng ở khu có quái), và NPC đang tự chạy tới để nói chuyện */
   private npcs: { id: string; x: number; y: number }[] = [];
   private goNpc = "";
@@ -468,7 +470,24 @@ export class MmoScene extends BaiScene {
     }
     super.update(dt);
     const p = b.player;
-    if (!p.alive) return;
+    if (!p.alive) {
+      if (!this.dead) {
+        // Chết: mất một phần tu vi của cấp, bỏ mọi việc đang tự chạy; sống lại thì về sơn môn của vùng.
+        this.dead = true;
+        this.route = null;
+        this.goNpc = "";
+        this.rmb = null;
+        const loss = die(this.save);
+        this.note(loss ? `Trọng thương: mất ${loss} tu vi, về sơn môn dưỡng thương` : "Trọng thương: về sơn môn dưỡng thương", true);
+        this.persist();
+      }
+      return;
+    }
+    if (this.dead) {
+      this.dead = false;
+      this.go(townOf(zone(this.save.zone).region), "mid");
+      return;
+    }
     this.pull(b, dt);
     for (const btn of this.slotBtns) {
       const sk = btn.dataset.s as SkillType | undefined;
@@ -1671,6 +1690,7 @@ const HELP = `<ul>
   <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm); máu dưới 35% hay mana dưới 20% thì tự uống nếu trong túi còn · <b>F</b> nhặt đồ khi có đồ rơi, không thì bật tắt treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò). Ở sơn môn và bến đò có 8 NPC: lại gần rồi bấm <b>F</b>, chạm vào NPC, hoặc bấm tên trong danh sách dưới bản đồ nhỏ để tự chạy tới.</li>
   <li><b>P</b> hoặc <b>I</b> nhân vật và túi (xem chỉ số món rồi mặc, cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
   <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím F hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán. Mũ, áo, đai, giày chia đồ nam và đồ nữ; đồ Lam trở lên có thể thuộc một bộ, mặc đủ 2 / 4 / 7 món cùng bộ thì kích thêm chỉ số (xem ở bảng Nhân vật).</li>
+  <li><b>Chết:</b> mất ${DEATH_XP * 100}% tu vi của cấp đang có (không tụt cấp) và hồi sinh ở sơn môn của vùng.</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
 
 const PANELS: Record<string, string> = { i: "bag", p: "char", o: "skills", g: "sect", h: "mail", l: "ally", v: "event" };

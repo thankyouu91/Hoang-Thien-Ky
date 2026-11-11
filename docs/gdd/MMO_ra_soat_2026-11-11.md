@@ -6,7 +6,7 @@ Cách đo: số cân bằng tính bằng script gọi thẳng luật trong `tien
 
 ## A. Cân bằng — kết luận: CÓ VẤN ĐỀ NGHIÊM TRỌNG
 
-### A1. Nhịp lên cấp (NGHIÊM TRỌNG, chờ quyết định)
+### A1. Nhịp lên cấp (NGHIÊM TRỌNG, ĐÃ SỬA theo quyết định cùng ngày)
 
 | Mốc | Số lần giết | Giờ chơi (1 lần giết / 3 giây) |
 |---|---|---|
@@ -20,7 +20,9 @@ Cách đo: số cân bằng tính bằng script gọi thẳng luật trong `tien
 - Mục tiêu đã chốt ngày 2026-11-09 là "cấp 50 ≈ ngày 24". Hiện cấp 50 đạt trong khoảng 40 phút. Lệch hàng chục lần.
 - Nguyên nhân chính: thưởng nhiệm vụ chính là 30% tu vi của một cấp cho mỗi 8 con. Ở cấp 50, không có nhiệm vụ cần 63 lần giết mỗi cấp; có nhiệm vụ còn 19.
 - Vì thế bế quan (16% một cấp mỗi ngày) và thắp hương (+10%) gần như không đáng kể so với nhịp này.
-- Chưa sửa: đây là quyết định thiết kế (mục tiêu nhịp cho bản MMO là bao nhiêu).
+- Quyết định: giữ đúng mốc "cấp 50 ≈ ngày 24". Sửa: tu vi cần `54 × cấp^2,2`; thưởng nhiệm vụ đổi thành thêm 50% tu vi của số quái vừa diệt (thưởng tính theo phần trăm một cấp thì dù tăng tu vi cần bao nhiêu, mỗi cấp cũng không quá 160 lần giết).
+- Sau sửa: cấp 5 sau 128 lần giết (6 phút), cấp 10 sau 866 (0,7 giờ), cấp 20 sau 4.837 (4 giờ), cấp 30 sau 12.616 (10,5 giờ), cấp 50 sau 41.008 (34 giờ, khoảng ngày 23 nếu chơi 1,5 giờ mỗi ngày).
+- Hệ quả cần theo dõi: chuỗi nhiệm vụ vẫn đẩy người chơi sang khu kế sau mỗi 8 con, nên người chơi sẽ tới khu vượt cấp mình và phải quay lại cày; mốc học chiêu (cấp 15, 20, 30) và tông môn (cấp 10) giờ xa hơn nhiều; chiêu cuối cấp 150 và tháp tầng cao là đích rất xa.
 
 ### A2. Cường hóa vũ khí không trần (ĐÃ SỬA)
 
@@ -46,11 +48,12 @@ Cách đo: số cân bằng tính bằng script gọi thẳng luật trong `tien
 - Sửa: 2% mỗi lần giết (5% trong số lần có rơi).
 - Còn lại: lĩnh ngộ tối đa cả 12 hệ cần 1.200 quyển, vẫn ngoài tầm. Nên coi lĩnh ngộ là đích dài hạn hoặc hạ số quyển mỗi bậc.
 
-### A6. Mana không phải là giới hạn (chờ quyết định)
+### A6. Mana không phải là giới hạn (ĐÃ SỬA theo quyết định cùng ngày)
 
 - Mana tối đa 300, hồi 50 mỗi giây: đầy lại sau 6 giây. Cận chiến đơn (120 mana, hồi 1 giây) gần như dùng liên tục được.
 - Hệ quả: Hồi Linh Đan, bộ Văn Uyên, bị động giảm mana và mana tối đa gần như vô dụng.
 - Số hồi 50 lấy của trận tự động cũ (`BATTLE.manaRegenPerSec`), chưa chỉnh cho đánh tay.
+- Sửa: đánh tay hồi 15 mỗi giây (`BAI.manaRegen`), đầy lại sau 20 giây.
 
 ### A7. Linh thạch: nhiệm vụ lấn át đồ rơi (ghi nhận)
 
@@ -69,7 +72,7 @@ Cách đo: số cân bằng tính bằng script gọi thẳng luật trong `tien
 ## B. Rà chéo hệ thống và phạm vi
 
 1. **Treo auto chơi thay toàn bộ.** Tự đánh, tự ra chiêu, tự hút đồ, tự uống thuốc, cộng với việc không thể chết (A3) và nhịp A1: game có thể tự đi hết nội dung. Trái với trụ cột "đánh tay thời gian thực" chốt 2026-11-09.
-2. **Chết không có giá.** Hồi sinh 3 giây tại chỗ vào khu, không mất gì.
+2. **Chết không có giá (ĐÃ SỬA).** Trước: hồi sinh 3 giây tại chỗ vào khu, không mất gì. Giờ: mất 5% tu vi của cấp đang có và hồi sinh ở sơn môn của vùng.
 3. **Phím F ba nghĩa** (nói chuyện, nhặt đồ, bật tắt auto): đồ vừa hút xong mà bấm lần nữa là bật auto ngoài ý muốn.
 4. **Bốn màn chỉ để xem:** Liên minh, thẻ Đại Trận, Dị Thú Xuất Thế, ba mục trong menu người chơi. Đều do yêu cầu, nhưng người chơi mới sẽ gặp nhiều nút không làm được gì.
 5. **Tàn quyển có ba chỗ tiêu** (học chiêu, lĩnh ngộ, và là hàng ở Bảo Khố) trong khi nguồn ít: đã nới ở A5.
@@ -101,10 +104,20 @@ Chưa đạt:
 | Tàn quyển 2% mỗi lần giết | `tienTrinh.ts` (`rollDrop`) |
 | Tự uống thuốc cả khi đang mở bảng | `mmoScene.ts` (`usePot`, `useMana`) |
 | Dọn code khung công trình thừa | `mmoScene.ts`, `mapKhu.ts` |
+| Tu vi cần `54 × cấp^2,2`; thưởng nhiệm vụ = 50% tu vi số quái của nhiệm vụ | `tienTrinh.ts` (`XP_A`, `XP_POW`, `QUEST_XP`) |
+| Mana hồi 15 mỗi giây | `thamSo.ts` (`manaRegen`), `bai.ts` |
+| Chết: mất 5% tu vi cấp, về sơn môn | `tienTrinh.ts` (`die`), `mmoScene.ts` |
 
-## E. Quyết định cần người thiết kế chốt
+## E. Quyết định đã chốt (2026-11-11)
 
-1. Mục tiêu nhịp lên cấp cho bản MMO (A1).
-2. Mana có nên là giới hạn thật không (A6).
-3. Treo auto được làm tới đâu, và chết có mất gì không (B1, B2).
-4. Đồ khác giới có rơi không (A9).
+1. Nhịp lên cấp: đúng mốc cũ, cấp 50 ≈ ngày 24 (A1).
+2. Mana: hồi 15 mỗi giây (A6).
+3. Chết: về sơn môn, mất 5% tu vi cấp (B2). Treo auto giữ nguyên.
+4. Đồ khác giới: vẫn rơi cả hai (A9).
+
+## F. Còn mở
+
+- Giá bình máu so với thu nhập (A3); lĩnh ngộ cần 1.200 tàn quyển (A5); linh thạch nhiệm vụ lấn át đồ rơi (A7).
+- Chuỗi nhiệm vụ đẩy người chơi vượt cấp sau khi nhịp chậm lại (A1).
+- Phím F ba nghĩa; bốn màn chỉ để xem; tải nhận thức cho người mới (B3, B4, B7).
+- Mục C2 tới C7 của phần UI/UX.

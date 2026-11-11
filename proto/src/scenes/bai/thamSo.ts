@@ -64,6 +64,8 @@ export const BAI = {
   zonePct: 0.2,
   leech: 0.2,
 
+  /** Mana hồi mỗi giây khi đánh tay. Rà cân bằng 2026-11-11: mức 50 của trận tự động (BATTLE.manaRegenPerSec) làm mana đầy lại sau 6 giây, đan và dòng mana thành vô dụng; người dùng chốt 15. */
+  manaRegen: 15,
   /** Lướt né (đề xuất): quãng lướt, giây hồi, số giây không dính đòn ngay sau khi lướt */
   dashDist: 180,
   dashCd: 4,

@@ -23,13 +23,14 @@ Vòng chơi: đi qua các khu nối nhau → diệt dị thú bằng đánh tay 
 
 - Chọn lúc tạo: đạo hiệu, giới tính (nam, nữ), một trong 12 hệ. Hệ quyết định tên chiêu, màu hiệu ứng, đạo đồ.
 - Máu `2000 + 220 × (cấp − 1)`; công `(100 + 12 × (cấp − 1)) × (1 + 5% × bậc cường hóa vũ khí)`, cường hóa tối đa +20.
-- Tu vi lên cấp kế: `40 × cấp^1,3`. Cảnh giới mỗi 50 cấp: Luyện Khí, Trúc Cơ, Kết Đan, Nguyên Anh, Hóa Thần, mỗi cảnh giới ba kỳ.
+- Tu vi lên cấp kế: `54 × cấp^2,2`. Mốc đo được khi luôn đánh quái ngang cấp và luôn có nhiệm vụ (1 lần giết mỗi 3 giây): cấp 5 sau 6 phút, cấp 10 sau 0,7 giờ, cấp 20 sau 4 giờ, cấp 30 sau 10,5 giờ, cấp 50 sau 34 giờ (khoảng ngày 24 nếu chơi 1,5 giờ mỗi ngày).
+- Tu vi mỗi con: `5 + 2 × cấp quái`; thủ lĩnh cửa bí cảnh gấp 20. Thưởng nhiệm vụ chính: thêm 50% tu vi của số quái vừa diệt cho nhiệm vụ. Cảnh giới mỗi 50 cấp: Luyện Khí, Trúc Cơ, Kết Đan, Nguyên Anh, Hóa Thần, mỗi cảnh giới ba kỳ.
 - Điểm tiềm năng: mỗi cấp 1 điểm vào sáu thuộc tính (luật `@htk/rules` `tiem_nang.ts`); tẩy điểm miễn phí dưới cấp 50, từ đó 1.000 linh thạch.
 - Bảng Nhân vật (P hoặc I): sân Pháp tướng (đạo đồ, hình nhân vật, pháp luân từ Trúc Cơ), bảy ô trang bị, chỉ số, túi, bộ trang bị, tiềm năng.
 
 ## 4. Chiến đấu
 
-- Đánh tay thời gian thực. Đánh thường mỗi giây một đòn bằng công. Mana tối đa 300, hồi 50 mỗi giây.
+- Đánh tay thời gian thực. Đánh thường mỗi giây một đòn bằng công. Mana tối đa 300, hồi 15 mỗi giây (đầy lại sau 20 giây).
 - Sáu ô chiêu Q W E R T Y, chiêu cuối U (mở ở cấp 150, cần thanh nội tại đầy). Sát thương chiêu = công × hệ số × 2.
 - Mười loại chiêu, tên riêng theo hệ (lấy từ `tan_quyen.json`):
 
@@ -52,7 +53,7 @@ Vòng chơi: đi qua các khu nối nhau → diệt dị thú bằng đánh tay 
 - Tab khóa mục tiêu; chuột phải vào quái để khóa đánh; giữ chuột phải để chạy theo chuột.
 - Treo auto (F khi không có ngữ cảnh): tự tìm quái, tự đánh, tự ra chiêu (chừa 30% mana cho hồi phục và hộ thể), tự hút đồ.
 - Tự uống: máu dưới 35% uống bình máu (hồi 40%, hồi chiêu 10 giây); mana dưới 20% uống Hồi Linh Đan (hồi 50%).
-- Chết: hồi sinh sau 3 giây, không mất gì.
+- Chết: mất 5% tu vi của cấp đang có (không tụt cấp), sau 3 giây hồi sinh ở sơn môn của vùng.
 
 ## 5. Rơi đồ và vật phẩm
 

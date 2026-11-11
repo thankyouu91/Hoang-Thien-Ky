@@ -140,8 +140,25 @@ export const hpOf = (lv: number) => 2000 + 220 * (lv - 1);
 export const WPN_MAX = 20;
 export const WPN_STEP = 0.05;
 export const atkOf = (lv: number, wpn: number) => Math.round((100 + 12 * (lv - 1)) * (1 + WPN_STEP * Math.min(wpn, WPN_MAX)));
-/** Tu vi cần để lên cấp kế: càng cao càng phải farm nhiều (người dùng chốt 2026-11-09). */
-export const xpNeed = (lv: number) => Math.round(40 * lv ** 1.3);
+/**
+ * Tu vi cần để lên cấp kế: càng cao càng phải farm nhiều (người dùng chốt 2026-11-09). Rà cân bằng 2026-11-11: công thức cũ 40 × cấp^1,3
+ * cộng thưởng nhiệm vụ 30% một cấp cho cấp 50 sau chừng 40 phút; người dùng chốt lại đúng mốc "cấp 50 ≈ ngày 24", tính 1,5 giờ chơi mỗi ngày
+ * và 1 lần giết mỗi 3 giây, tức chừng 43.000 lần giết tới cấp 50. Mũ 2,2 để mấy cấp đầu vẫn nhanh (cấp 1 → 2 chừng 5 con).
+ */
+export const XP_A = 54;
+export const XP_POW = 2.2;
+export const xpNeed = (lv: number) => Math.round(XP_A * lv ** XP_POW);
+/** Thưởng nhiệm vụ chính: thêm chừng này phần tu vi của số quái vừa diệt cho nhiệm vụ (trước là 30% một cấp, lấn át hẳn việc diệt quái). */
+export const QUEST_XP = 0.5;
+/** Chết: mất chừng này phần tu vi của cấp đang có (không tụt cấp) và về sơn môn của vùng. Người dùng chốt 2026-11-11. */
+export const DEATH_XP = 0.05;
+
+/** Trừ tu vi khi chết; trả về số đã mất. */
+export function die(s: Save): number {
+  const loss = Math.min(s.xp, Math.round(xpNeed(s.lv) * DEATH_XP));
+  s.xp -= loss;
+  return loss;
+}
 export const potPrice = (z: Zone) => 15 + 10 * z.region;
 export const wpnPrice = (s: Save) => Math.round(100 * (s.wpn + 1) ** 1.5);
 /** Bình máu hồi chừng này phần máu tối đa. */
@@ -171,7 +188,7 @@ export function kill(s: Save, z: Zone, today = ""): KillResult {
   const r: KillResult = { xp: Math.round((BAI.tuVi(z.level) * (z.boss ? 20 : 1) * (today && s.huong === today ? 1000 + INCENSE : 1000)) / 1000), quest: null, levels: 0 };
   let xp = r.xp;
   if (z.idx === s.quest.zone && ++s.quest.n >= (z.boss ? 1 : QUEST_N)) {
-    r.quest = { xp: Math.round(xpNeed(s.lv) * 0.3), gold: 20 * z.level };
+    r.quest = { xp: Math.round(BAI.tuVi(z.level) * (z.boss ? 20 : QUEST_N) * QUEST_XP), gold: 20 * z.level };
     xp += r.quest.xp;
     s.gold += r.quest.gold;
     s.quest = { zone: nextCombat(z.idx + 1), n: 0 };

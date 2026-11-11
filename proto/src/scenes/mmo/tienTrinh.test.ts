@@ -218,6 +218,27 @@ test("rà cân bằng 2026-11-11: cường hóa vũ khí có trần, đồ Lam t
   assert.equal(L.setOfRegion(8).id, L.setOfRegion(0).id);
 });
 
+test("nhịp lên cấp đã chốt: cấp 50 cần chừng 43.000 lần giết; chết mất 5% tu vi cấp, không tụt cấp", () => {
+  const s = newSave("A", "moc");
+  let kills = 0;
+  while (s.lv < 50) {
+    // Luôn farm khu cao cấp nhất không vượt cấp mình, luôn có nhiệm vụ ở đó.
+    let z = zone(1);
+    for (let i = 0; i < ZONE_COUNT; i++) if (!zone(i).safe && !zone(i).boss && zone(i).level <= s.lv) z = zone(i);
+    s.quest.zone = z.idx;
+    kill(s, z);
+    kills++;
+  }
+  assert.ok(kills > 38000 && kills < 48000, String(kills));
+  s.xp = Math.round(xpNeed(s.lv) * 0.5);
+  const xp = s.xp;
+  assert.equal(L.die(s), Math.round(xpNeed(s.lv) * L.DEATH_XP));
+  assert.ok(s.lv === 50 && s.xp === xp - Math.round(xpNeed(50) * L.DEATH_XP));
+  s.xp = 3;
+  assert.equal(L.die(s), 3);
+  assert.equal(s.xp, 0);
+});
+
 test("tiệm: thiếu linh thạch thì không mua được", () => {
   const s = newSave("A", "moc");
   assert.equal(buyPot(s, zone(0)), false);

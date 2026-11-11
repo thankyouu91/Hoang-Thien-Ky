@@ -1,7 +1,7 @@
 // Logic bãi quái mẫu, đánh tay thời gian thực (người dùng chốt 2026-11-09): người chơi chạm đất để đi, chạm quái để tới gần
 // và đánh thường, bấm chiêu trên thanh chiêu; quái đi theo bầy quanh tổ, bị đánh thì cả bầy đuổi, chết thì hồi sinh; bot là
 // người chơi khác giả lập. Không vẽ gì ở đây (baiScene.ts vẽ), để test được bằng node.
-// Mana và chiêu dùng lại của sim: BATTLE.manaMax, manaRegenPerSec, SKILL_SPECS (Mana, hồi chiêu, tầm, bán kính, hệ số).
+// Mana và chiêu dùng lại của sim: BATTLE.manaMax, SKILL_SPECS; mana hồi theo BAI.manaRegen. Trước đó cũng lấy manaRegenPerSec của sim, (Mana, hồi chiêu, tầm, bán kính, hệ số).
 import { BATTLE, SKILL_SPECS, TICKS_PER_SECOND, type SkillType } from "@htk/sim";
 import type { ElementId } from "../../replay/types.ts";
 import { BAI, ultPoints } from "./thamSo.ts";
@@ -308,7 +308,7 @@ export class Bai {
 
   step(dt: number): void {
     this.t += dt;
-    this.mana = Math.min(this.manaMax, this.mana + BATTLE.manaRegenPerSec * dt);
+    this.mana = Math.min(this.manaMax, this.mana + BAI.manaRegen * dt);
     const me = this.player;
     if (this.mod.regen > 0 && me.alive) me.hp = Math.min(me.hpMax, me.hp + ((me.hpMax * this.mod.regen) / 1000) * dt);
     for (const a of this.actors) {
