@@ -252,15 +252,36 @@ export function resetSkills(s: Save): void {
   s.tang = {};
 }
 
+/**
+ * Chỉ số bị động của từng công pháp (chiêu) đã học: mỗi tầng cộng một phần (phần nghìn) vào một chỉ số, ngoài uy lực của chính chiêu
+ * (layerBonus). Người dùng chốt 2026-11-11: công pháp nào cũng phải cộng sát thương kèm buff hay chỉ số. Chỉ số nào, bao nhiêu là đề xuất.
+ */
+export type PassiveKey = "atk" | "hp" | "def" | "crit" | "critDmg" | "cd" | "speed" | "manaCut" | "manaMax";
+export const PASSIVE: Record<SkillType, [PassiveKey, number]> = {
+  can_quet: ["atk", 10], tam_xa: ["crit", 5], dien_rong: ["critDmg", 20], ho_the: ["def", 10], hoi_phuc: ["hp", 10],
+  can_don: ["atk", 10], khong_che: ["cd", 5], than_phap: ["speed", 10], bua_chu: ["manaCut", 10], tran_phap: ["manaMax", 20],
+};
+export const PASSIVE_NAME: Record<PassiveKey, string> = { atk: "Công", hp: "Máu", def: "Thủ", crit: "Chí mạng", critDmg: "Sát thương chí mạng", cd: "Giảm hồi chiêu", speed: "Tốc đánh", manaCut: "Giảm mana", manaMax: "Mana tối đa" };
+/** Chỉ số bị động của một chiêu ở tầng layer (phần nghìn). */
+export const passiveOf = (skill: SkillType, layer: number) => PASSIVE[skill][1] * layer;
+
+/** Tổng chỉ số bị động của mọi chiêu đã học (phần nghìn). */
+export function passives(s: Save): Record<PassiveKey, number> {
+  const p = { atk: 0, hp: 0, def: 0, crit: 0, critDmg: 0, cd: 0, speed: 0, manaCut: 0, manaMax: 0 };
+  for (const k of learned(s)) p[PASSIVE[k][0]] += passiveOf(k, layerOf(s, k));
+  return p;
+}
+
 /** Chỉ số sau khi cộng điểm tiềm năng. hp, atk là số cuối; các khóa còn lại là phần nghìn. */
 export function stats(s: Save) {
   const b = attributeBonuses(member(s));
   const g = gearBonus(s);
+  const p = passives(s);
   const up = (base: number, k = 0) => Math.round((base * (1000 + k)) / 1000);
   return {
-    hp: up(hpOf(s.lv) + g.hp, b.hp), atk: up(up(up(atkOf(s.lv, s.wpn) + g.atk, b.atk), rankOf(s)?.[2]), NGO.atk * ngoTotal(s)), manaMul: 1000 + (b.manaMax ?? 0),
+    hp: up(up(hpOf(s.lv) + g.hp, b.hp), p.hp), atk: up(up(up(up(atkOf(s.lv, s.wpn) + g.atk, b.atk), rankOf(s)?.[2]), NGO.atk * ngoTotal(s)), p.atk), manaMul: 1000 + (b.manaMax ?? 0) + p.manaMax,
     // shortcut: trận chỉ có một loại sát thương nên thủ ngoại và thủ nội của đồ gộp trung bình vào một chỉ số thủ; tách khi có sát thương nội/ngoại.
-    def: (b.def ?? 0) + Math.round((g.defExt + g.defInt) / 2), defExt: g.defExt, defInt: g.defInt, crit: (b.critBonus ?? 0) + g.crit, critDmg: b.critDamage ?? 0, manaCut: b.manaCostCut ?? 0, speed: b.attackSpeed ?? 0, cd: b.cooldownCut ?? 0,
+    def: (b.def ?? 0) + Math.round((g.defExt + g.defInt) / 2) + p.def, defExt: g.defExt, defInt: g.defInt, crit: (b.critBonus ?? 0) + g.crit + p.crit, critDmg: (b.critDamage ?? 0) + p.critDmg, manaCut: (b.manaCostCut ?? 0) + p.manaCut, speed: (b.attackSpeed ?? 0) + p.speed, cd: (b.cooldownCut ?? 0) + p.cd,
   };
 }
 

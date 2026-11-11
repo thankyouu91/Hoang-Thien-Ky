@@ -128,6 +128,20 @@ test("hoạt động: giờ sự kiện, tháp theo thứ tự, bế quan có tr
   assert.equal(L.afkPending(s, 25 * H, "d2").sec, 5 * 3600); // sang ngày thì tính lại
 });
 
+test("công pháp cộng chỉ số bị động theo tầng", () => {
+  const s = newSave("A", "moc");
+  const p0 = L.passives(s);
+  assert.deepEqual([p0.atk, p0.crit, p0.critDmg, p0.def, p0.hp, p0.cd], [10, 5, 20, 10, 10, 0]); // năm chiêu khởi đầu tầng 1
+  const atk = L.stats(s).atk;
+  s.lv = 3;
+  assert.ok(L.upSkill(s, "can_quet"));
+  assert.equal(L.passives(s).atk, 20);
+  s.lv = 1;
+  assert.ok(L.stats(s).atk > atk);
+  s.lv = 10;
+  assert.equal(L.passives(s).cd, 5); // khong_che học ở cấp 10
+});
+
 test("tiệm: thiếu linh thạch thì không mua được", () => {
   const s = newSave("A", "moc");
   assert.equal(buyPot(s, zone(0)), false);

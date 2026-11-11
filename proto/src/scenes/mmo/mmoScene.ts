@@ -18,7 +18,7 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
+  PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
@@ -613,7 +613,8 @@ export class MmoScene extends BaiScene {
     const bo = layerBonus(l);
     return `<b>${SKILL_NAME[sk]}</b><em>Tầng ${l}/${TECHNIQUE_LAYERS}</em><span>${SKILL_DESC[sk] ?? ""}</span>
       <span>Mana ${b.manaCost(sk)} · Hồi chiêu ${b.cooldownOf(sk).toFixed(1)}s</span>
-      <span>Uy lực +${bo.uyLuc / 10}% · Mana −${bo.mana / 10}% · Hồi chiêu −${bo.hoiChieu / 10}%</span>`;
+      <span>Uy lực +${bo.uyLuc / 10}% · Mana −${bo.mana / 10}% · Hồi chiêu −${bo.hoiChieu / 10}%</span>
+      <span>Bị động: ${PASSIVE_NAME[PASSIVE[sk][0]]} +${passiveOf(sk, l) / 10}%</span>`;
   }
 
   protected override statusLine(): string {
@@ -1108,7 +1109,8 @@ export class MmoScene extends BaiScene {
     const detail = `<header><i style="${url(sel)}"></i><span><b>${SKILL_NAME[sel]}</b><em>${ok ? `Tầng ${l}/${TECHNIQUE_LAYERS}${at >= 0 ? ` · đang ở ô ${SLOT_KEYS[at]}` : ""}` : `Học ở cấp ${SKILL_UNLOCK.find(([k]) => k === sel)![1]}`}</em></span></header>
       <span>${SKILL_DESC[sel] ?? ""}</span>
       <dl class="mmo-stats"><dt>Mana</dt><dd>${b.manaCost(sel)}</dd><dt>Hồi chiêu</dt><dd>${b.cooldownOf(sel).toFixed(1)}s</dd>
-        <dt>Cộng theo tầng</dt><dd>Uy lực +${bo.uyLuc / 10}% · Mana −${bo.mana / 10}%</dd></dl>
+        <dt>Sát thương chiêu</dt><dd>Uy lực +${bo.uyLuc / 10}% · Mana −${bo.mana / 10}%</dd>
+        <dt>Bị động (luôn có khi đã học)</dt><dd>${PASSIVE_NAME[PASSIVE[sel][0]]} +${passiveOf(sel, l) / 10}%${l < TECHNIQUE_LAYERS ? ` <i class="up">tầng kế +${passiveOf(sel, l + 1) / 10}%</i>` : ""}</dd></dl>
       ${ok ? `<nav><button type="button" data-slot="${this.selSlot}" data-sk="${sel}">${inSlot ? `Gỡ khỏi ô ${key}` : `Xếp vào ô ${key}`}</button>
         <button type="button" data-up="${sel}" ${c !== null && c <= pts ? "" : "disabled"}>${c === null ? "Đã tối đa" : `Lên tầng · ${c} điểm`}</button></nav>` : ""}`;
     this.open(`<h2>Kỹ năng</h2>
@@ -1116,6 +1118,8 @@ export class MmoScene extends BaiScene {
       <div class="mmo-barrow">${bar}<button type="button" class="mmo-slot ult" disabled title="Chiêu cuối: mở ở cấp ${BAI.ultLevel}" style="${url("tran_phap")}"><kbd>${KEYS[ULT_KEY].toUpperCase()}</kbd></button></div>
       <h3>Chiêu thức <em>đã học <b>${has.length}</b>/${SKILL_UNLOCK.length}</em></h3>
       <div class="mmo-skills"><div class="mmo-grid5">${grid}</div><div class="mmo-detail">${detail}</div></div>
+      <h3>Công pháp cộng thêm <em>tổng chỉ số bị động của ${has.length} chiêu đã học · lên tầng thì tăng</em></h3>
+      <dl class="mmo-stats two">${(Object.entries(passives(s)) as [PassiveKey, number][]).map(([k, v]) => `<dt class="${v ? "" : "off"}">${PASSIVE_NAME[k]}</dt><dd class="${v ? "" : "off"}">+${v / 10}%</dd>`).join("")}</dl>
       <footer><span>Điểm luyện: <b>${pts}</b> · mỗi cấp 20 điểm</span>
       <button type="button" data-skreset class="bad" ${Object.keys(s.tang ?? {}).length ? "" : "disabled"}>Tẩy tầng (miễn phí)</button></footer>`, true);
   }
