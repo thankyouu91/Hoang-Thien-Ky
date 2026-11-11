@@ -82,6 +82,8 @@ export class MmoScene extends BaiScene {
   private bagTab = "all";
   private selItem = "";
   private fullAt = -9;
+  /** Mốc giờ được ra chiêu kế khi treo auto */
+  private autoAt = 0;
   /** Bảng Tông môn: thẻ đang xem */
   private sectTab = "dai_dien";
   /** Bảng Bản đồ: vùng đang xem ở tầng 2, null là tầng 1 (cả thế giới) */
@@ -370,6 +372,7 @@ export class MmoScene extends BaiScene {
       }
     }
     this.run(b);
+    this.autoCast(b);
     super.update(dt);
     const p = b.player;
     if (!p.alive) return;
@@ -409,6 +412,19 @@ export class MmoScene extends BaiScene {
     const x = to > zi ? b.w : 0;
     p.target = null;
     b.moveTo(x, choVao(this.map_!, x + (to > zi ? -70 : 70)).y);
+  }
+
+  /**
+   * Treo auto thì tự ra chiêu ngoài đánh thường (người dùng chốt 2026-11-11): mỗi AUTO_GAP giây thử một chiêu theo thứ tự ô.
+   * Chiêu đánh chỉ ra khi đang có mục tiêu; hồi phục khi máu dưới 60%, hộ thể khi máu dưới 80% và chưa có khiên; chiêu cuối khi đầy. Chiêu đánh chừa AUTO_KEEP mana cho hai chiêu thủ.
+   */
+  private autoCast(b: Bai): void {
+    const p = b.player;
+    if (!b.auto || !p.alive || this.clock < this.autoAt) return;
+    const hp = p.hp / p.hpMax;
+    const fight = b.get(p.target)?.alive === true;
+    const ok = (sk: SkillType) => (sk === "hoi_phuc" ? hp < 0.6 : sk === "ho_the" ? fight && hp < 0.8 && p.shield <= 0 : fight && b.mana - b.manaCost(sk) >= b.manaMax * AUTO_KEEP);
+    if ((fight && b.castUlt()) || slotsOf(this.save).some((sk) => sk !== null && ok(sk) && b.cast(sk))) this.autoAt = this.clock + AUTO_GAP;
   }
 
   private key(e: KeyboardEvent, down: boolean): void {
@@ -1202,7 +1218,7 @@ const HELP = `<ul>
   <li><b>Đi:</b> chạm đất, hoặc phím mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
   <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng.</li>
   <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>L</b> liên minh · <b>V</b> hoạt động (sự kiện, tháp, bế quan) · <b>H</b> thư.</li>
-  <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm) · <b>F</b> treo auto · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
+  <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm) · <b>F</b> treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
   <li><b>I</b> túi · <b>P</b> nhân vật (cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
   <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím Cách hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán.</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
@@ -1235,6 +1251,10 @@ const STAT_ROWS: [keyof ItemStats, string, boolean][] = [["atk", "Công", false]
 const PICK_R = 50 * SCALE;
 const LOOT_SPEED = 900;
 const LOOT_TTL = 120;
+/** Treo auto: số giây giữa hai lần tự ra chiêu. */
+const AUTO_GAP = 0.6;
+/** Treo auto: chiêu đánh chừa lại chừng này phần mana cho hồi phục và hộ thể. */
+const AUTO_KEEP = 0.3;
 const SKILL_DESC: Record<string, string> = {
   can_quet: "Quét các dị thú quanh mình",
   tam_xa: "Đánh một mục tiêu ở xa",
