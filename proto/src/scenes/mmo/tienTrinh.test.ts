@@ -117,3 +117,18 @@ test("điểm tiềm năng và tầng chiêu theo luật bản cũ", async () =>
   t.resetSkills(s);
   assert.equal(t.skillPoints(s), 200);
 });
+
+test("chiêu đã học theo cấp và xếp ô", async () => {
+  const t = await import("./tienTrinh.ts");
+  const s = t.newSave("A", "moc");
+  assert.deepEqual(t.slotsOf(s), ["can_quet", "tam_xa", "dien_rong", "ho_the", "hoi_phuc", null]);
+  assert.equal(t.learned(s).length, 5);
+  assert.equal(t.setSlot(s, 5, "can_don"), false); // chưa học
+  s.lv = 5;
+  assert.equal(t.setSlot(s, 5, "can_don"), true);
+  assert.equal(t.setSlot(s, 0, "can_don"), true); // đổi chỗ với ô 0
+  assert.deepEqual(t.slotsOf(s), ["can_don", "tam_xa", "dien_rong", "ho_the", "hoi_phuc", "can_quet"]);
+  t.clearSlot(s, 1);
+  assert.equal(t.slotsOf(s)[1], null);
+  assert.equal(t.setSlot(s, 9, "can_don"), false);
+});

@@ -3,6 +3,7 @@ import { App } from "./app/app.ts";
 import { Sprites } from "./assets/sprites.ts";
 import "./dashboard/fonts.css";
 import "./theme/hud_toi_vang.css";
+import "./scenes/mmo/mmo.css";
 import { MmoScene } from "./scenes/mmo/mmoScene.ts";
 
 const sprites = new Sprites();

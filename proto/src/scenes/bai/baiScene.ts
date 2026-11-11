@@ -286,9 +286,11 @@ export class BaiScene implements Scene {
     const b = this.bai!;
     const p = b.player;
     const pts = ultPoints(b.level);
-    const cds = BAI.skills.map((s) => Math.ceil(b.cooldown(s)));
+    type Sk = (typeof BAI.skills)[number];
+    const btns = [...this.hud.querySelectorAll<HTMLButtonElement>("[data-s]")];
+    const cds = btns.map((x) => Math.ceil(b.cooldown(x.dataset.s as Sk)));
     const status = this.statusLine(b);
-    const key = [Math.round(p.hp), p.hpMax, Math.round(p.shield), Math.floor(b.mana), Math.floor(b.ult * 100), status, cds.join()].join("|");
+    const key = [Math.round(p.hp), p.hpMax, Math.round(p.shield), Math.floor(b.mana), Math.floor(b.ult * 100), status, cds.join(), btns.map((x) => x.dataset.s).join()].join("|");
     if (key === this.shown) return;
     this.shown = key;
     const q = (s: string) => this.hud.querySelector<HTMLElement>(s)!;
@@ -299,10 +301,12 @@ export class BaiScene implements Scene {
     q(".mp span").textContent = `Mana ${Math.floor(b.mana)}/${b.manaMax}`;
     q(".ul i").style.width = `${100 * b.ult}%`;
     q(".ul span").textContent = `${tr("Nội tại")} ${Math.floor(b.ult * 100)}%`;
-    this.hud.querySelectorAll<HTMLButtonElement>("[data-s]").forEach((btn, i) => {
+    btns.forEach((btn, i) => {
       const cd = cds[i];
-      btn.querySelector("small")!.textContent = cd > 0 ? `${cd}s` : `${b.manaCost(BAI.skills[i])} Mana`;
-      btn.disabled = cd > 0 || b.mana < b.manaCost(BAI.skills[i]);
+      const cost = b.manaCost(btn.dataset.s as Sk);
+      btn.querySelector("small")!.textContent = cd > 0 ? `${cd}s` : `${cost} Mana`;
+      btn.disabled = cd > 0 || b.mana < cost;
+      btn.dataset.cd = cd > 0 ? String(cd) : ""; // cho CSS của scene con vẽ số hồi chiêu đè lên hình chiêu
     });
     const ult = q("[data-ult]") as HTMLButtonElement;
     ult.querySelector("small")!.textContent = pts === 0 ? tr("Mở ở cấp 150") : `${pts} ${tr("điểm")}`;

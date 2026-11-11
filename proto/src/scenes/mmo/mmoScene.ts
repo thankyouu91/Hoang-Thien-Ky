@@ -15,7 +15,7 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  addStat, atkOf, buyPot, kill, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
+  addStat, atkOf, buyPot, clearSlot, kill, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
 
@@ -61,6 +61,11 @@ export class MmoScene extends BaiScene {
   /** Khung trên màn hình (bản PC): nhân vật, nhiệm vụ, mục tiêu, menu, chú thích chiêu */
   private top: HTMLElement;
   private barKey = "";
+  /** Sáu ô ra chiêu theo thứ tự ô (Q W E R T U) */
+  private slotBtns: HTMLButtonElement[] = [];
+  /** Bảng Kỹ năng: ô ra chiêu và chiêu đang chọn */
+  private selSlot = 0;
+  private selSkill: SkillType = BAI.skills[0];
 
   constructor(sprites: Sprites) {
     super(sprites);
@@ -77,32 +82,45 @@ export class MmoScene extends BaiScene {
     this.camera.maxZoom = 2.2;
     this.bar = document.createElement("div");
     this.bar.className = "mmo-bar";
-    this.bar.innerHTML = `<div class="bai-bar xp"><i></i><span></span></div>
-      <div class="mmo-btns"><button type="button" data-a="pot"></button><button type="button" data-a="auto"></button>
-      <button type="button" data-a="shop">B · Tiệm</button><button type="button" data-a="map">M · Bản đồ</button><button type="button" data-a="bag">I · Túi</button><button type="button" data-a="char">P · Nhân vật</button><button type="button" data-a="skills">O · Kỹ năng</button><button type="button" data-a="help">?</button></div>`;
+    const B = import.meta.env.BASE_URL;
+    this.bar.innerHTML = `<div class="mmo-items"><button type="button" data-a="pot" title="Bình máu" style="background-image:url(${B}icon_ve/dan/dan_duoc_hoi_mau.webp)"><kbd>1</kbd><small></small></button>${[2, 3, 4, 5, 6].map((n) => `<button type="button" disabled><kbd>${n}</kbd></button>`).join("")}</div>
+      <div class="bai-bar xp"><i></i><span></span></div>`;
     this.hud.prepend(this.bar);
     this.hud.classList.add("mmo-hud");
     this.bar.classList.add("mmo-ui");
     const base = import.meta.env.BASE_URL;
-    this.hud.querySelectorAll<HTMLElement>(".bai-skills button").forEach((btn, i) => (btn.style.backgroundImage = `url(${base}icon_ve/chieu/${BAI.skills[i] ?? "tran_phap"}.webp)`));
+    this.hud.querySelector<HTMLElement>("[data-ult]")!.style.backgroundImage = `url(${base}icon_ve/chieu/tran_phap.webp)`;
     this.hud.addEventListener("mouseover", (e) => this.tip((e.target as HTMLElement).closest<HTMLElement>(".bai-skills button")));
     this.hud.addEventListener("mouseleave", () => this.tip(null));
     // Bố cục theo mẫu người dùng gửi 2026-11-11: khung nhân vật trên trái, mục tiêu trên giữa, menu dọc dưới bản đồ nhỏ.
     this.top = document.createElement("div");
     this.top.className = "mmo-top mmo-ui";
-    this.top.innerHTML = `<div class="mmo-me"><i class="mmo-face"></i><div><b class="mmo-name"></b>
-      <div class="bai-bar hp"><i></i><span></span></div><div class="bai-bar mp"><i></i><span></span></div><div class="bai-bar xp"><i></i><span></span></div></div></div>
+    this.top.innerHTML = `<div class="mmo-me"><i class="mmo-face"><em class="mmo-lv"></em></i><div><b class="mmo-name"></b>
+      <div class="bai-bar hp"><i></i><span></span></div><div class="bai-bar mp"><i></i><span></span></div><span class="mmo-coin"></span></div></div>
       <div class="mmo-quest"></div>
+      <div class="mmo-zone"></div>
       <div class="mmo-tgt" hidden><b></b><div class="bai-bar hp"><i></i><span></span></div></div>
-      <nav class="mmo-menu">${MENU.map(([a, k, t]) => `<button type="button" data-a="${a}"><kbd>${k}</kbd>${t}</button>`).join("")}</nav>
+      <nav class="mmo-menu" hidden>${MENU.map(([a, k, t]) => `<button type="button" data-a="${a}"><kbd>${k}</kbd>${t}</button>`).join("")}</nav>
       <div class="mmo-tip" hidden></div>`;
     document.body.append(this.top);
     this.top.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLButtonElement>("button")?.dataset.a;
-      if (a) this.act(a);
+      if (!a) return;
+      this.menu(false);
+      this.act(a);
     });
     // Nhãn phím trên từng ô chiêu: số 1–6, và Q W E R T cho năm chiêu đầu.
-    this.hud.querySelectorAll(".bai-skills button").forEach((btn, i) => btn.insertAdjacentHTML("afterbegin", `<kbd>${i + 1}${KEYS[i] ? ` ${KEYS[i].toUpperCase()}` : ""}</kbd>`));
+    this.hud.querySelectorAll(".bai-skills button").forEach((btn, i) => btn.insertAdjacentHTML("afterbegin", `<kbd>${KEYS[i].toUpperCase()}</kbd>`));
+    // Ô chiêu thứ sáu (phím U) nằm sau ô chiêu cuối (Y); nút Menu gộp các bảng, đứng cạnh thanh chiêu.
+    this.hud.querySelector(".bai-skills")!.insertAdjacentHTML("beforeend", `<button type="button" disabled class="extra"><kbd>${KEYS[ULT_KEY + 1].toUpperCase()}</kbd><b></b><small></small></button>`);
+    this.slotBtns = [...this.hud.querySelectorAll<HTMLButtonElement>(".bai-skills button:not([data-ult])")];
+    this.hud.insertAdjacentHTML("beforeend", `<button type="button" class="mmo-more" data-more title="Menu"><i></i><small>Menu</small></button>`);
+    this.hud.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("[data-more]")) this.menu();
+    });
+    document.addEventListener("pointerdown", (e) => {
+      if (!(e.target as HTMLElement).closest(".mmo-menu, [data-more]")) this.menu(false);
+    });
     this.bar.addEventListener("click", (e) => {
       const a = (e.target as HTMLElement).closest<HTMLButtonElement>("button")?.dataset.a;
       if (a) this.act(a);
@@ -115,7 +133,6 @@ export class MmoScene extends BaiScene {
     window.addEventListener("keydown", (e) => this.key(e, true));
     window.addEventListener("keyup", (e) => this.key(e, false));
     window.addEventListener("blur", () => this.keys.clear());
-    addStyle();
     void loadCanvasFonts();
     void this.loadMaps();
   }
@@ -226,6 +243,32 @@ export class MmoScene extends BaiScene {
     b.skillBonus = (k) => layerBonus(layerOf(this.save, k));
     p.hp = heal ? p.hpMax : Math.min(p.hp, p.hpMax);
     this.barKey = "";
+    this.syncSlots();
+  }
+
+  /** Đưa chiêu đã xếp (slotsOf) lên sáu ô ra chiêu: BaiScene đọc chiêu của ô từ data-s. */
+  private syncSlots(): void {
+    const sl = slotsOf(this.save);
+    this.slotBtns.forEach((btn, i) => {
+      const sk = sl[i];
+      if (sk) btn.dataset.s = sk;
+      else delete btn.dataset.s;
+      btn.style.backgroundImage = sk ? `url(${import.meta.env.BASE_URL}icon_ve/chieu/${sk}.webp)` : "none";
+      btn.querySelector("b")!.textContent = sk ? SKILL_NAME[sk] : "";
+      if (sk) return;
+      btn.querySelector("small")!.textContent = "";
+      btn.disabled = true;
+    });
+  }
+
+  /** Mở hay đóng menu bật lên từ nút Menu cạnh thanh chiêu. */
+  private menu(show?: boolean): void {
+    const m = this.top.querySelector<HTMLElement>(".mmo-menu")!;
+    m.hidden = !(show ?? m.hidden);
+    if (m.hidden) return;
+    const r = this.hud.querySelector(".mmo-more")!.getBoundingClientRect();
+    m.style.right = `${Math.max(8, innerWidth - r.right)}px`;
+    m.style.bottom = `${innerHeight - r.top + 8}px`;
   }
 
   // ---------- Vòng chơi ----------
@@ -274,10 +317,12 @@ export class MmoScene extends BaiScene {
     if (e.repeat) return;
     const b = this.bai;
     if (!b) return;
-    const i = k.length !== 1 ? -1 : k >= "1" && k <= "6" ? Number(k) - 1 : KEYS.indexOf(k);
-    if (i >= 0 && i < BAI.skills.length) b.cast(BAI.skills[i]);
-    else if (i === BAI.skills.length) b.castUlt();
-    else if (k === "z") this.act("pot");
+    // Chiêu theo hàng Q W E R T, chiêu cuối Y; hàng số 1–6 là ô vật phẩm (mới có bình máu ở ô 1). Người dùng chốt 2026-11-11.
+    const i = k.length !== 1 ? -1 : KEYS.indexOf(k);
+    const sk = i < 0 || i === ULT_KEY ? null : slotsOf(this.save)[i < ULT_KEY ? i : i - 1];
+    if (sk) b.cast(sk);
+    else if (i === ULT_KEY) b.castUlt();
+    else if (k === "1") this.act("pot");
     else if (k === "f") this.act("auto");
     else if (k === "m") this.act("map");
     else if (k === "b") this.act("shop");
@@ -337,15 +382,16 @@ export class MmoScene extends BaiScene {
         (el.firstElementChild as HTMLElement).style.width = `${Math.max(0, Math.min(100, (100 * a) / n))}%`;
         el.lastElementChild!.textContent = text;
       });
-    bar(".mmo-ui .xp", s.xp, need, `Cấp ${s.lv} · Tu vi ${s.xp}/${need}`);
+    bar(".mmo-hud .xp", s.xp, need, `Tu vi ${s.xp}/${need}`);
     bar(".mmo-me .hp", p.hp, p.hpMax, `${Math.round(p.hp)}/${p.hpMax}`);
     bar(".mmo-me .mp", b.mana, b.manaMax, `${Math.floor(b.mana)}/${b.manaMax}`);
     const q = (sel: string) => this.top.querySelector<HTMLElement>(sel)!;
-    q(".mmo-name").textContent = `${s.name} · Cấp ${s.lv}`;
-    const face = q(".mmo-face");
-    face.textContent = s.name.slice(0, 1).toUpperCase();
-    face.style.background = ELEMENT_STYLE[s.element].color;
-    q(".mmo-quest").innerHTML = `<b>${zone(s.zone).name}</b><span>Nhiệm vụ: ${questText(s)}</span><span>Linh thạch ${s.gold} · Bình máu ${s.pots}</span>`;
+    q(".mmo-name").textContent = s.name;
+    q(".mmo-lv").textContent = String(s.lv);
+    q(".mmo-face").style.backgroundImage = `url(${import.meta.env.BASE_URL}icon_ve/he/${s.element}.webp)`;
+    q(".mmo-coin").textContent = `Linh thạch ${s.gold}`;
+    q(".mmo-quest").innerHTML = `<b>Nhiệm vụ</b><span>${questText(s)}</span>${this.auto ? "<em>Đang treo auto (F)</em>" : ""}`;
+    q(".mmo-zone").textContent = zone(s.zone).name;
     const tg = q(".mmo-tgt");
     tg.hidden = !tgt;
     if (tgt) {
@@ -353,11 +399,10 @@ export class MmoScene extends BaiScene {
       bar(".mmo-tgt .hp", tgt.hp, tgt.hpMax, "");
     }
     const pot = this.bar.querySelector<HTMLButtonElement>('[data-a="pot"]')!;
-    pot.textContent = cd > 0 ? `Z · Bình ×${s.pots} (${cd}s)` : `Z · Bình máu ×${s.pots}`;
     pot.disabled = s.pots <= 0 || cd > 0 || !p.alive;
-    this.bar.querySelector('[data-a="auto"]')!.textContent = this.auto ? "F · Auto bật" : "F · Auto tắt";
-    all('.mmo-ui [data-a="auto"]').forEach((el) => el.classList.toggle("on", this.auto));
-    all('.mmo-ui [data-a="shop"]').forEach((el) => ((el as HTMLButtonElement).disabled = !zone(s.zone).safe));
+    pot.querySelector("small")!.textContent = cd > 0 ? `${cd}s` : `${s.pots}`;
+    all('.mmo-menu [data-a="auto"]').forEach((el) => el.classList.toggle("on", this.auto));
+    all('.mmo-menu [data-a="shop"]').forEach((el) => ((el as HTMLButtonElement).disabled = !zone(s.zone).safe));
   }
 
   /** Bảng chú thích khi rê chuột lên một ô chiêu. */
@@ -366,7 +411,7 @@ export class MmoScene extends BaiScene {
     t.hidden = !btn || !this.bai;
     if (t.hidden) return;
     const sk = btn!.dataset.s as SkillType | undefined;
-    t.innerHTML = sk ? this.skillInfo(sk) : `<b>Chiêu cuối</b><span>Đánh mạnh mọi dị thú quanh mình khi thanh nội tại đầy.</span><span>Mở ở cấp ${BAI.ultLevel} · phím 6</span>`;
+    t.innerHTML = sk ? this.skillInfo(sk) : btn!.dataset.ult === undefined ? `<b>Ô trống</b><span>Mở bảng Kỹ năng (O) để xếp chiêu vào ô này.</span>` : `<b>Chiêu cuối</b><span>Đánh mạnh mọi dị thú quanh mình khi thanh nội tại đầy.</span><span>Mở ở cấp ${BAI.ultLevel} · phím Y</span>`;
     const r = btn!.getBoundingClientRect();
     t.style.left = `${r.left + r.width / 2}px`;
     t.style.bottom = `${innerHeight - r.top + 8}px`;
@@ -521,6 +566,8 @@ export class MmoScene extends BaiScene {
   private open(html: string, wide = false): void {
     this.dlg.classList.toggle("wide", wide);
     this.dlg.innerHTML = html;
+    // Mọi bảng có nút đóng trên thanh tiêu đề; bảng tạo nhân vật thì không đóng được.
+    if (!this.fresh) this.dlg.querySelector("h2")?.insertAdjacentHTML("beforeend", `<button type="button" data-close class="x" aria-label="Đóng">×</button>`);
     this.keys.clear();
     if (!this.dlg.open) this.dlg.showModal();
   }
@@ -541,6 +588,18 @@ export class MmoScene extends BaiScene {
       if (resetStats(s)) this.restat();
     } else if (d.up) {
       if (upSkill(s, d.up)) this.restat();
+    } else if (d.pick !== undefined) {
+      this.selSlot = Number(d.pick);
+      this.selSkill = slotsOf(s)[this.selSlot] ?? this.selSkill;
+      this.skills();
+    } else if (d.skill) {
+      this.selSkill = d.skill as SkillType;
+      this.skills();
+    } else if (d.slot !== undefined) {
+      const i = Number(d.slot);
+      if (slotsOf(s)[i] === d.sk) clearSlot(s, i);
+      else setSlot(s, i, d.sk!);
+      this.restat();
     } else if (d.skreset !== undefined) {
       resetSkills(s);
       this.restat();
@@ -596,14 +655,15 @@ export class MmoScene extends BaiScene {
   /** Túi: lưới ô, hiện những gì bản lưu đang có. Chưa có vật phẩm rơi nên mới có bình máu, linh thạch, vũ khí. */
   private bag(): void {
     const s = this.save;
+    const B = import.meta.env.BASE_URL;
     const items = [
-      `<button type="button" data-use="pot" ${s.pots > 0 ? "" : "disabled"} title="Chạm để uống (phím Z)"><b>Bình máu</b><small>×${s.pots}</small></button>`,
-      `<button type="button" disabled><b>Linh thạch</b><small>${s.gold}</small></button>`,
-      `<button type="button" disabled><b>Vũ khí</b><small>+${s.wpn}</small></button>`,
+      `<button type="button" class="mmo-slot" data-use="pot" ${s.pots > 0 ? "" : "disabled"} title="Bình máu: hồi ${POT_HEAL * 100}% máu. Chạm để uống (phím 1)" style="background-image:url(${B}icon_ve/dan/dan_duoc_hoi_mau.webp)"><small>${s.pots}</small></button>`,
+      `<button type="button" class="mmo-slot" disabled title="Linh thạch" style="background-image:url(${B}icon_ve/linh_thach/ha.webp)"><small>${s.gold}</small></button>`,
+      `<button type="button" class="mmo-slot" disabled title="Vũ khí +${s.wpn}: công ${atkOf(s.lv, s.wpn)}" style="background-image:url(${B}icon_ve/trang_bi/kiem/01.webp)"><small>+${s.wpn}</small></button>`,
     ];
-    const empty = '<button type="button" disabled class="empty"></button>'.repeat(BAG_SLOTS - items.length);
-    this.open(`<h2>Túi</h2><div class="mmo-bag">${items.join("")}${empty}</div>
-      <p><small>Chạm bình máu để uống. Mua thêm và cường hóa vũ khí ở Thương hội (B).</small></p><button type="button" data-close>Đóng (I)</button>`);
+    const empty = '<button type="button" class="mmo-slot" disabled></button>'.repeat(BAG_SLOTS - items.length);
+    this.open(`<h2>Túi</h2><div class="mmo-grid">${items.join("")}${empty}</div>
+      <footer><span>${items.length}/${BAG_SLOTS} ô</span><span>Chạm bình máu để uống · mua thêm ở Thương hội</span></footer>`);
   }
 
   /** Áp lại chỉ số sau khi cộng hay tẩy điểm, rồi vẽ lại bảng đang mở. */
@@ -621,47 +681,66 @@ export class MmoScene extends BaiScene {
     const pts = statPoints(s);
     const cost = statResetCost(s);
     const spent = Object.values(s.diem ?? {}).some((n) => n > 0);
+    const B = import.meta.env.BASE_URL;
     const slot = ([id, ten]: string[]) =>
       id === "vu_khi"
-        ? `<div class="has" style="background-image:url(${import.meta.env.BASE_URL}icon_ve/trang_bi/kiem/01.webp)"><small>Vũ khí +${s.wpn}</small></div>`
-        : `<div><small>${ten}</small></div>`;
+        ? `<button type="button" class="mmo-slot" disabled title="Vũ khí +${s.wpn}" style="background-image:url(${B}icon_ve/trang_bi/kiem/01.webp)"><small>+${s.wpn}</small></button>`
+        : `<button type="button" class="mmo-slot" disabled title="${ten}: chưa có"><span class="nm">${ten}</span></button>`;
     const rows: [string, string | number][] = [
       ["Máu", `${Math.round(p.hp)}/${p.hpMax}`], ["Mana", `${Math.floor(b.mana)}/${b.manaMax}`], ["Công", st.atk], ["Thủ", `+${st.def / 10}%`],
       ["Chí mạng", `${st.crit / 10}%`], ["Sát thương chí mạng", `${150 + st.critDmg / 10}%`], ["Tốc đánh", `+${st.speed / 10}%`],
-      ["Giảm hồi chiêu", `${st.cd / 10}%`], ["Giảm mana", `${st.manaCut / 10}%`], ["Linh thạch", s.gold],
+      ["Giảm hồi chiêu", `${st.cd / 10}%`], ["Giảm mana", `${st.manaCut / 10}%`],
     ];
-    const attrs = ATTRIBUTES.map((a) => `<div><b>${a.ten}</b><small>${(a as { tomTat?: string }).tomTat ?? ""}</small><i>${s.diem?.[a.id] ?? 0}</i>
-      <button type="button" data-stat="${a.id}" ${pts > 0 ? "" : "disabled"}>+</button></div>`).join("");
+    const attrs = ATTRIBUTES.map((a) => `<div><span><b>${a.ten}</b><small>${(a as { tomTat?: string }).tomTat ?? ""}</small></span><i>${s.diem?.[a.id] ?? 0}</i>
+      <button type="button" data-stat="${a.id}" ${pts > 0 ? "" : "disabled"} title="Cộng 1 điểm">+</button></div>`).join("");
     this.open(`<h2>Nhân vật</h2><div class="mmo-char">
       <div class="mmo-doll"><div class="mmo-gear">${SLOTS.slice(0, 4).map(slot).join("")}</div>
-        <div class="mmo-body"><i class="mmo-face" style="background:${ELEMENT_STYLE[s.element].color}">${esc(s.name.slice(0, 1).toUpperCase())}</i>
+        <div class="mmo-body"><i class="mmo-face" style="background-image:url(${B}icon_ve/he/${s.element}.webp)"></i>
           <b>${esc(s.name)}</b><small>Hệ ${ELEMENT_STYLE[s.element].name} · Cấp ${s.lv}</small><small>Tu vi ${s.xp}/${xpNeed(s.lv)}</small></div>
         <div class="mmo-gear">${SLOTS.slice(4).map(slot).join("")}</div></div>
-      <dl class="mmo-stats">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div>
-      <h3>Điểm tiềm năng: còn ${pts}</h3><div class="mmo-attr">${attrs}</div>
-      <button type="button" data-close>Đóng (P)</button>
-      <button type="button" data-statreset class="bad" ${spent && s.gold >= cost ? "" : "disabled"}>Tẩy điểm (${cost ? `${cost} linh thạch` : "miễn phí"})</button>`, true);
+      <div><h3>Chỉ số</h3><dl class="mmo-stats">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div></div>
+      <h3>Tiềm năng <em>còn <b>${pts}</b> điểm · mỗi cấp 1 điểm</em></h3><div class="mmo-attr">${attrs}</div>
+      <footer><span>Linh thạch ${s.gold}</span>
+      <button type="button" data-statreset class="bad" ${spent && s.gold >= cost ? "" : "disabled"}>Tẩy điểm (${cost ? `${cost} linh thạch` : "miễn phí"})</button></footer>`, true);
   }
 
-  /** Kỹ năng: mỗi chiêu 10 tầng, lên tầng bằng điểm luyện (mỗi cấp 20 điểm), tẩy tầng để chia lại. */
+  /**
+   * Kỹ năng: hàng trên là thanh chiêu (chọn một ô), lưới dưới là mọi chiêu (chọn một chiêu), khung phải là chi tiết chiêu đang chọn
+   * với nút xếp vào ô đang chọn và nút lên tầng. Chiêu học theo cấp (SKILL_UNLOCK), lên tầng bằng điểm luyện.
+   */
   private skills(): void {
     const s = this.save;
     const b = this.bai!;
     const pts = skillPoints(s);
-    const icon = (f: string, k: string) => `<i style="background-image:url(${import.meta.env.BASE_URL}icon_ve/chieu/${f}.webp)"><kbd>${k}</kbd></i>`;
-    const rows = BAI.skills.map((sk, i) => {
-      const l = layerOf(s, sk);
-      const c = layerPrice(s, sk);
-      const bo = layerBonus(l);
-      return `<div>${icon(sk, `${i + 1} ${KEYS[i].toUpperCase()}`)}<span><b>${SKILL_NAME[sk]} <em>Tầng ${l}/${TECHNIQUE_LAYERS}</em></b>
-        <small>${SKILL_DESC[sk] ?? ""} · Mana ${b.manaCost(sk)} · Hồi chiêu ${b.cooldownOf(sk).toFixed(1)}s</small>
-        <small>Uy lực +${bo.uyLuc / 10}% · Mana −${bo.mana / 10}% · Hồi chiêu −${bo.hoiChieu / 10}%</small></span>
-        <button type="button" data-up="${sk}" ${c !== null && c <= pts ? "" : "disabled"}>${c === null ? "Tối đa" : `Lên tầng (${c})`}</button></div>`;
+    const sl = slotsOf(s);
+    const has = learned(s);
+    const url = (f: string) => `background-image:url(${import.meta.env.BASE_URL}icon_ve/chieu/${f}.webp)`;
+    const sel = this.selSkill;
+    const bar = sl.map((sk, i) => `<button type="button" class="mmo-slot ${i === this.selSlot ? "on" : ""}" data-pick="${i}" title="Ô ${SLOT_KEYS[i]}${sk ? `: ${SKILL_NAME[sk]}` : " (trống)"}" style="${sk ? url(sk) : ""}"><kbd>${SLOT_KEYS[i]}</kbd></button>`).join("");
+    const grid = SKILL_UNLOCK.map(([sk, lv]) => {
+      const ok = has.includes(sk);
+      return `<button type="button" class="mmo-slot ${sk === sel ? "on" : ""} ${ok ? "" : "lock"}" data-skill="${sk}" title="${SKILL_NAME[sk]}${ok ? "" : ` (học ở cấp ${lv})`}" style="${url(sk)}"><small>${ok ? `T${layerOf(s, sk)}` : `Cấp ${lv}`}</small></button>`;
     }).join("");
-    this.open(`<h2>Kỹ năng</h2><h3>Điểm luyện: còn ${pts}</h3><div class="mmo-skl">${rows}
-      <div>${icon("tran_phap", "6")}<span><b>Chiêu cuối</b><small>Đánh mạnh mọi dị thú quanh mình khi thanh nội tại đầy · mở ở cấp ${BAI.ultLevel}</small></span><span></span></div></div>
-      <button type="button" data-close>Đóng (O)</button>
-      <button type="button" data-skreset class="bad" ${Object.keys(s.tang ?? {}).length ? "" : "disabled"}>Tẩy tầng (miễn phí)</button>`, true);
+    const ok = has.includes(sel);
+    const l = layerOf(s, sel);
+    const c = layerPrice(s, sel);
+    const bo = layerBonus(l);
+    const key = SLOT_KEYS[this.selSlot];
+    const inSlot = sl[this.selSlot] === sel;
+    const at = sl.indexOf(sel);
+    const detail = `<header><i style="${url(sel)}"></i><span><b>${SKILL_NAME[sel]}</b><em>${ok ? `Tầng ${l}/${TECHNIQUE_LAYERS}${at >= 0 ? ` · đang ở ô ${SLOT_KEYS[at]}` : ""}` : `Học ở cấp ${SKILL_UNLOCK.find(([k]) => k === sel)![1]}`}</em></span></header>
+      <span>${SKILL_DESC[sel] ?? ""}</span>
+      <dl class="mmo-stats"><dt>Mana</dt><dd>${b.manaCost(sel)}</dd><dt>Hồi chiêu</dt><dd>${b.cooldownOf(sel).toFixed(1)}s</dd>
+        <dt>Cộng theo tầng</dt><dd>Uy lực +${bo.uyLuc / 10}% · Mana −${bo.mana / 10}%</dd></dl>
+      ${ok ? `<nav><button type="button" data-slot="${this.selSlot}" data-sk="${sel}">${inSlot ? `Gỡ khỏi ô ${key}` : `Xếp vào ô ${key}`}</button>
+        <button type="button" data-up="${sel}" ${c !== null && c <= pts ? "" : "disabled"}>${c === null ? "Đã tối đa" : `Lên tầng · ${c} điểm`}</button></nav>` : ""}`;
+    this.open(`<h2>Kỹ năng</h2>
+      <h3>Thanh chiêu <em>chọn một ô, rồi chọn chiêu và bấm Xếp</em></h3>
+      <div class="mmo-barrow">${bar}<button type="button" class="mmo-slot ult" disabled title="Chiêu cuối: mở ở cấp ${BAI.ultLevel}" style="${url("tran_phap")}"><kbd>${KEYS[ULT_KEY].toUpperCase()}</kbd></button></div>
+      <h3>Chiêu thức <em>đã học <b>${has.length}</b>/${SKILL_UNLOCK.length}</em></h3>
+      <div class="mmo-skills"><div class="mmo-grid5">${grid}</div><div class="mmo-detail">${detail}</div></div>
+      <footer><span>Điểm luyện: <b>${pts}</b> · mỗi cấp 20 điểm</span>
+      <button type="button" data-skreset class="bad" ${Object.keys(s.tang ?? {}).length ? "" : "disabled"}>Tẩy tầng (miễn phí)</button></footer>`, true);
   }
 
   private help(): void {
@@ -681,8 +760,8 @@ export class MmoScene extends BaiScene {
 
 const HELP = `<ul>
   <li><b>Đi:</b> chạm đất, hoặc phím mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
-  <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím 1–5 hoặc Q W E R T; chiêu cuối phím 6 (mở ở cấp 150).</li>
-  <li><b>Z</b> uống bình máu · <b>F</b> treo auto · <b>M</b> truyền tống · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
+  <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím Q W E R T U; chiêu cuối phím Y (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng.</li>
+  <li><b>1</b> uống bình máu (hàng số 1–6 là ô vật phẩm) · <b>F</b> treo auto · <b>M</b> truyền tống · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
   <li><b>I</b> túi · <b>P</b> nhân vật (cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
 
@@ -691,94 +770,23 @@ const MENU = [["bag", "I", "Túi"], ["char", "P", "Nhân vật"], ["skills", "O"
 /** Bảy ô trang bị (SlotId của @htk/rules): bốn ô bên trái chân dung, ba ô bên phải. */
 const SLOTS = [["mu", "Mũ"], ["ao", "Áo"], ["dai", "Đai"], ["giay", "Giày"], ["vu_khi", "Vũ khí"], ["bao_tay", "Bao tay"], ["ngoc_boi", "Ngọc bội"]];
 const esc = (t: string) => t.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
-const BAG_SLOTS = 20;
+const BAG_SLOTS = 24;
 const SKILL_DESC: Record<string, string> = {
   can_quet: "Quét các dị thú quanh mình",
   tam_xa: "Đánh một mục tiêu ở xa",
   dien_rong: "Sát thương cả một vùng",
   ho_the: `Khiên ${BAI.shieldPct * 100}% máu trong ${BAI.shieldSec} giây`,
   hoi_phuc: `Hồi ${BAI.healPct * 100}% máu`,
+  can_don: "Một đòn mạnh vào một mục tiêu gần",
+  khong_che: "Đòn nhanh, tốn ít mana, một mục tiêu",
+  than_phap: "Đánh một mục tiêu ở rất xa",
+  bua_chu: "Bùa nổ rất mạnh vào một mục tiêu",
+  tran_phap: "Trận lớn đánh mạnh cả vùng, hồi chiêu dài",
 };
 
-/** Phím chữ của năm chiêu đầu, theo thứ tự ô. */
-const KEYS = "qwert";
+/** Phím của hàng ô chiêu, theo thứ tự ô: năm chiêu, chiêu cuối, một ô trống. */
+const KEYS = "qwertyu";
+/** Vị trí phím chiêu cuối (Y) trong KEYS; sáu phím còn lại là sáu ô ra chiêu. */
+const ULT_KEY = 5;
+const SLOT_KEYS = [...KEYS].filter((_, i) => i !== ULT_KEY).map((k) => k.toUpperCase());
 
-let styled = false;
-function addStyle(): void {
-  if (styled) return;
-  styled = true;
-  const st = document.createElement("style");
-  st.textContent = `.mmo-bar{display:grid;gap:4px}
-/* Bản PC, bố cục theo mẫu người dùng gửi 2026-11-11: đáy giữa chỉ còn ô chiêu có hình và ô bình máu; máu, mana, tu vi lên khung nhân vật trên trái. */
-.mmo-hud kbd{position:absolute;top:1px;left:3px;font:700 10px/1.2 system-ui,sans-serif;color:#f6e3ad;text-shadow:0 1px 0 #000,0 0 3px #000}
-.mmo-hud .bai-skills button{position:relative;background-size:cover;background-position:center}
-.mmo-top{display:none}
-@media (min-width:760px){
-.mmo-top{display:block}
-.mmo-hud{width:fit-content;margin:0 auto;padding:6px 8px;border:1px solid var(--line);border-bottom:0;border-radius:8px 8px 0 0;grid-template-columns:auto auto;gap:4px 8px;align-items:end}
-.mmo-hud .bai-row,.mmo-hud>.hp,.mmo-hud>.mp,.mmo-hud .mmo-bar .xp,.mmo-hud .mmo-btns button:not([data-a="pot"]){display:none}
-.mmo-hud .mmo-bar{grid-column:1;grid-row:1}
-.mmo-hud .mmo-btns{display:block}
-.mmo-hud .mmo-btns [data-a="pot"]{width:66px;height:56px;padding:2px;font-size:10px;line-height:1.25;white-space:normal}
-.mmo-hud .bai-skills{grid-column:2;grid-row:1;grid-template-columns:repeat(6,56px)}
-.mmo-hud .bai-skills button{height:56px;padding:0;align-content:end;overflow:hidden}
-.mmo-hud .bai-skills button:disabled{opacity:1;filter:grayscale(.85) brightness(.55)}
-.mmo-hud .bai-skills b{display:none}
-.mmo-hud .bai-skills small{background:rgba(0,0,0,.72);font-size:10px;line-height:14px;color:#f6e3ad}
-.mmo-hud .ul{grid-column:1/-1;grid-row:2;height:8px}.mmo-hud .ul span{line-height:8px;font-size:8px;text-align:center;padding:0}
-.mmo-me,.mmo-quest,.mmo-tgt,.mmo-menu,.mmo-tip{position:fixed;z-index:5;color:#eadfc4;font:12px/1.35 "Lora Variable",Cambria,serif}
-.mmo-me{top:8px;left:8px;display:grid;grid-template-columns:56px 200px;gap:8px;align-items:center;padding:6px 10px 6px 6px;background:rgba(15,12,9,.84);border:1px solid #6b4a1c;border-radius:34px 8px 8px 34px}
-.mmo-face{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;border:2px solid #d0a85a;font:700 24px "Cormorant Garamond",serif;color:#fff;text-shadow:0 1px 2px #000}
-.mmo-me>div{display:grid;gap:3px}.mmo-me .bai-bar{height:13px}.mmo-me .bai-bar span{line-height:13px;font-size:10px}.mmo-me .xp{height:7px}.mmo-me .xp span{display:none}
-.mmo-name{color:#f6e3ad;font-size:13px}
-.mmo-quest{top:90px;left:8px;width:232px;display:grid;gap:2px;padding:6px 8px;background:rgba(15,12,9,.7);border:1px solid #6b4a1c;border-radius:6px;font-size:11px}
-.mmo-quest b{color:#f6e3ad}
-.mmo-tgt{top:8px;left:50%;transform:translateX(-50%);width:260px;padding:5px 8px;text-align:center;background:rgba(15,12,9,.84);border:1px solid #6b4a1c;border-radius:6px;color:#f6e3ad}
-.mmo-tgt[hidden],.mmo-tip[hidden]{display:none}
-.mmo-tgt .bai-bar{height:10px;margin-top:3px}
-.mmo-menu{top:112px;right:8px;display:grid;gap:3px;width:122px}
-.mmo-menu button{display:flex;gap:6px;align-items:center;height:26px;padding:0 8px;border:1px solid #6b4a1c;border-radius:4px;background:rgba(23,16,10,.88);color:inherit;font:inherit;cursor:pointer}
-.mmo-menu button:hover{border-color:#d0a85a}.mmo-menu button.on{border-color:#f6e3ad;color:#f6e3ad}.mmo-menu button:disabled{opacity:.45;cursor:default}
-.mmo-menu kbd{min-width:16px;text-align:center;font:700 10px system-ui,sans-serif;color:#d0a85a}
-.mmo-tip{z-index:6;transform:translateX(-50%);width:240px;display:grid;gap:3px;padding:8px 10px;background:rgba(15,12,9,.96);border:1px solid #d0a85a;border-radius:4px;pointer-events:none}
-.mmo-tip b{color:#f6e3ad;font-size:14px}.mmo-tip em{color:#7fb08c;font-style:normal}
-}
-.bai-bar.xp{height:12px}.bai-bar.xp i{background:#8e6bd1}.bai-bar.xp span{line-height:12px;font-size:10px}
-.mmo-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-.mmo-bag{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:10px}
-.mmo-dlg .mmo-bag button{aspect-ratio:1;padding:2px;display:grid;align-content:center;font-size:11px;min-width:0}
-.mmo-dlg .mmo-bag button:disabled{opacity:1;cursor:default}.mmo-dlg .mmo-bag .empty{opacity:.35}
-.mmo-stats{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0 0 12px}.mmo-stats dt{opacity:.7}.mmo-stats dd{margin:0;font-weight:600}
-.mmo-dlg.wide{width:min(660px,94vw)}
-.mmo-dlg h3{margin:12px 0 6px;font:700 15px "Lora Variable",Cambria,serif;color:#d0a85a}
-.mmo-char{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
-@media (max-width:620px){.mmo-char{grid-template-columns:1fr}}
-.mmo-doll{display:grid;grid-template-columns:60px 112px 60px;gap:8px;align-items:center}
-.mmo-gear{display:grid;gap:6px}
-.mmo-gear div{width:60px;height:60px;display:grid;align-content:end;border:1px solid #6b4a1c;border-radius:4px;background:#0c0a08 center/cover;text-align:center}
-.mmo-gear small{font-size:9px;line-height:13px;opacity:.5}.mmo-gear .has{border-color:#d0a85a}.mmo-gear .has small{opacity:1;background:rgba(0,0,0,.72);color:#f6e3ad}
-.mmo-body{display:grid;justify-items:center;gap:3px;text-align:center}
-.mmo-dlg .mmo-face{display:grid;place-items:center;width:84px;height:84px;border-radius:50%;border:2px solid #d0a85a;font:700 38px "Cormorant Garamond",serif;color:#fff;text-shadow:0 1px 2px #000}
-.mmo-attr{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-bottom:12px}
-.mmo-attr div{display:grid;grid-template-columns:1fr auto 30px;gap:0 8px;align-items:center}
-.mmo-attr small{grid-column:1;grid-row:2;opacity:.7;font-size:11px}.mmo-attr i{grid-column:2;grid-row:1/3;font-style:normal;font-weight:700;color:#f6e3ad}
-.mmo-dlg .mmo-attr button{grid-column:3;grid-row:1/3;padding:2px 0;width:30px}
-.mmo-skl{display:grid;gap:8px;margin-bottom:12px}.mmo-skl>div{display:grid;grid-template-columns:52px 1fr auto;gap:0 10px;align-items:center}
-.mmo-skl i{position:relative;width:52px;height:52px;border:1px solid #d0a85a;border-radius:4px;background:#0c0a08 center/cover}
-.mmo-skl kbd{position:absolute;top:1px;left:3px;font:700 10px system-ui,sans-serif;color:#f6e3ad;text-shadow:0 1px 0 #000,0 0 3px #000}
-.mmo-skl span{display:grid;gap:1px}.mmo-skl em{color:#7fb08c;font-style:normal;font-size:12px;font-weight:400}.mmo-skl small{opacity:.75}
-.mmo-btns button{min-width:0;height:34px;border:1px solid var(--line);border-radius:6px;background:#241f1a;color:var(--ink);font:inherit;font-size:12px}
-.mmo-btns button:disabled{opacity:.45}.mmo-btns button.on{border-color:#d9a12b;color:#ffd34d}
-.mmo-dlg{width:min(440px,92vw);max-height:86vh;overflow:auto;padding:16px;border:1px solid #a33;border-radius:10px;background:#fbf3df;color:#2a1d14;font:14px/1.45 "Lora Variable",Cambria,serif}
-.mmo-dlg::backdrop{background:rgba(10,8,6,.6)}
-.mmo-dlg h2{margin:0 0 6px;font:700 24px "Cormorant Garamond",serif;color:#8c1f17}
-.mmo-dlg p{margin:0 0 10px}.mmo-dlg ul{margin:8px 0 12px;padding-left:18px}.mmo-dlg li{margin-bottom:4px}
-.mmo-dlg label{display:grid;gap:2px;margin-bottom:8px;font-weight:600}
-.mmo-dlg input,.mmo-dlg select{font:inherit;padding:8px;border:1px solid #b9a37a;border-radius:6px;background:#fffaf0;color:inherit}
-.mmo-dlg button{font:inherit;padding:8px 14px;border:1px solid #b9a37a;border-radius:6px;background:#fffaf0;color:inherit;cursor:pointer}
-.mmo-dlg button:disabled{opacity:.45;cursor:default}
-.mmo-dlg button.go{width:100%;background:#8c1f17;border-color:#8c1f17;color:#fffaf0;font-weight:700;font-size:16px}
-.mmo-dlg button.bad{color:#8c1f17}.mmo-dlg button.on{border-color:#8c1f17;border-width:2px}
-.mmo-list{display:grid;gap:6px;margin-bottom:12px}.mmo-list button{text-align:left;display:grid}.mmo-list small{color:#6b5a45}`;
-  document.head.append(st);
-}

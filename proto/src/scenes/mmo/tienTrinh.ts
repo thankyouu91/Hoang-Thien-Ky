@@ -2,6 +2,7 @@
 // bình máu, cường hóa vũ khí, nhiệm vụ diệt quái nối tiếp. Không chạm DOM để test bằng node. Mọi số là đề xuất.
 import type { ElementId } from "../../replay/types.ts";
 import { ATTRIBUTES, attributeBonuses, layerCost, TAY_DIEM, TECHNIQUE_LAYERS, trainingPoints, unspentPoints, type Member } from "@htk/rules";
+import type { SkillType } from "@htk/sim";
 import { BAI } from "../bai/thamSo.ts";
 
 /** Vùng theo thứ tự đi: thư mục nền chien_truong/, tên, hệ của dị thú. */
@@ -90,6 +91,8 @@ export interface Save {
   diem?: Record<string, number>;
   /** Tầng của từng chiêu, 1 khi chưa ghi */
   tang?: Record<string, number>;
+  /** Chiêu xếp vào sáu ô ra chiêu (Q W E R T U), null là ô trống; chưa ghi thì năm chiêu khởi đầu */
+  slots?: (SkillType | null)[];
 }
 
 export function newSave(name: string, element: ElementId): Save {
@@ -170,7 +173,7 @@ export function upgrade(s: Save): boolean {
 export const layerOf = (s: Save, skill: string) => s.tang?.[skill] ?? 1;
 /** Nhân vật dưới dạng Member của @htk/rules, chỉ đủ các trường mà luật điểm đọc. */
 const member = (s: Save) =>
-  ({ level: s.lv, diemTiemNang: s.diem ?? {}, learned: BAI.skills.map((k) => ({ layer: layerOf(s, k), grade: 1 })) }) as unknown as Member;
+  ({ level: s.lv, diemTiemNang: s.diem ?? {}, learned: SKILL_UNLOCK.map(([k]) => ({ layer: layerOf(s, k), grade: 1 })) }) as unknown as Member;
 
 export const statPoints = (s: Save) => unspentPoints(member(s));
 export const skillPoints = (s: Save) => trainingPoints(member(s));
@@ -196,7 +199,7 @@ export const layerPrice = (s: Save, skill: string) => (layerOf(s, skill) >= TECH
 
 export function upSkill(s: Save, skill: string): boolean {
   const cost = layerPrice(s, skill);
-  if (cost === null || cost > skillPoints(s) || !BAI.skills.includes(skill as never)) return false;
+  if (cost === null || cost > skillPoints(s) || !learned(s).includes(skill as SkillType)) return false;
   s.tang = { ...s.tang, [skill]: layerOf(s, skill) + 1 };
   return true;
 }
@@ -213,4 +216,36 @@ export function stats(s: Save) {
     hp: up(hpOf(s.lv), b.hp), atk: up(atkOf(s.lv, s.wpn), b.atk), manaMul: 1000 + (b.manaMax ?? 0),
     def: b.def ?? 0, crit: b.critBonus ?? 0, critDmg: b.critDamage ?? 0, manaCut: b.manaCostCut ?? 0, speed: b.attackSpeed ?? 0, cd: b.cooldownCut ?? 0,
   };
+}
+
+// ---------- Chiêu đã học và ô ra chiêu ----------
+
+/** Cấp học từng chiêu: năm chiêu khởi đầu có sẵn, năm chiêu còn lại của sim mở dần. Mốc cấp là đề xuất, chưa có trong GDD. */
+export const SKILL_UNLOCK: [SkillType, number][] = [
+  ...BAI.skills.map((k): [SkillType, number] => [k, 1]),
+  ["can_don", 5], ["khong_che", 10], ["than_phap", 15], ["bua_chu", 20], ["tran_phap", 30],
+];
+export const SLOT_COUNT = 6;
+
+export const learned = (s: Save) => SKILL_UNLOCK.filter(([, lv]) => s.lv >= lv).map(([k]) => k);
+
+export function slotsOf(s: Save): (SkillType | null)[] {
+  return Array.from({ length: SLOT_COUNT }, (_, i) => (s.slots ? (s.slots[i] ?? null) : (BAI.skills[i] ?? null)));
+}
+
+/** Xếp một chiêu đã học vào ô i; chiêu đang ở ô khác thì hai ô đổi chỗ. */
+export function setSlot(s: Save, i: number, skill: string): boolean {
+  if (i !== Math.floor(i) || i < 0 || i >= SLOT_COUNT || !learned(s).includes(skill as SkillType)) return false;
+  const slots = slotsOf(s);
+  const j = slots.indexOf(skill as SkillType);
+  if (j >= 0) slots[j] = slots[i];
+  slots[i] = skill as SkillType;
+  s.slots = slots;
+  return true;
+}
+
+export function clearSlot(s: Save, i: number): void {
+  const slots = slotsOf(s);
+  slots[i] = null;
+  s.slots = slots;
 }
