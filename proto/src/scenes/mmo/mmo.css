@@ -414,3 +414,10 @@ body .mmo-top .mmo-ctx {
   background: linear-gradient(180deg, #f1cf7a, #b37f25); color: #1d1610; font: 700 13px "Lora Variable", Cambria, serif; box-shadow: 0 0 14px rgba(241, 207, 122, 0.6);
 }
 body .mmo-ctx kbd { padding: 0 6px; margin-right: 4px; border-radius: 3px; background: #1d1610; color: #f1cf7a; font: 700 11px/16px system-ui, sans-serif; }
+
+/* ---------- Danh sách NPC dưới bản đồ nhỏ (chỉ ở khu an toàn) ---------- */
+body .mmo-npcs { right: 6px; width: 156px; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 6px; background: rgba(18, 14, 10, 0.72); border: 1px solid var(--m-line); border-radius: 4px; }
+body .mmo-npcs b { grid-column: 1 / -1; font: 700 10px system-ui, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: var(--m-gold); }
+body .mmo-npcs button { padding: 3px 2px; border: 1px solid var(--m-line); border-radius: 3px; background: var(--m-slot); color: var(--m-text); font: 10px system-ui, sans-serif; text-align: left; white-space: nowrap; overflow: hidden; cursor: pointer; }
+body .mmo-npcs button:hover { border-color: var(--m-gold); color: var(--m-gold2); }
+@media (max-width: 760px) { body .mmo-npcs { display: none; } }

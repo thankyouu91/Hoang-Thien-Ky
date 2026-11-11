@@ -11,14 +11,14 @@ import { ELEMENT_STYLE, SKILL_NAME } from "../../theme/elements.ts";
 import { FONT_DISPLAY, FONT_TEXT, loadCanvasFonts } from "../../theme/fonts.ts";
 import { Bai } from "../bai/bai.ts";
 import { BaiScene, LOOKS } from "../bai/baiScene.ts";
-import { resolveLook } from "../battle/character.ts";
+import { animInfo, drawCharacter, resolveLook } from "../battle/character.ts";
 import { dangFor, drawDang } from "../battle/dangDung.ts";
 import { phapLuanExtent, trackLevel, type PhapLuanSpec } from "../battle/phapLuan.ts";
 import { BAI } from "../bai/thamSo.ts";
-import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
+import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, trongCam, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  canWear, setCounts, setGender, setLine, setOf, SETS, SET_TIERS, type Gender, learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
+  BOUNTY_N, bountyGold, bountyKill, bountyOf, brew, BREW, incense, INCENSE, NPCS, canWear, setCounts, setGender, setLine, setOf, SETS, SET_TIERS, type Gender, learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
@@ -86,6 +86,9 @@ export class MmoScene extends BaiScene {
   private bagTab = "all";
   private selItem = "";
   private fullAt = -9;
+  /** NPC của khu an toàn đang đứng (rỗng ở khu có quái), và NPC đang tự chạy tới để nói chuyện */
+  private npcs: { id: string; x: number; y: number }[] = [];
+  private goNpc = "";
   /** Tiêu đề của bảng đang mở, để biết lần vẽ kế là vẽ lại hay mở bảng khác */
   private dlgTitle = "";
   /** Mốc giờ được ra chiêu kế khi treo auto */
@@ -134,16 +137,18 @@ export class MmoScene extends BaiScene {
       <nav class="mmo-quick">${QUICK.map(([a, k, t, img]) => `<button type="button" data-a="${a}" title="${t} (${k})"><i ${img.includes("/") ? `style="background-image:url(${B}icon_ve/${img}.webp)"` : ""}>${img.includes("/") ? "" : img}</i><span>${t}</span></button>`).join("")}</nav>
       <nav class="mmo-act">${ACTS.map(([a, k, t, g]) => `<button type="button" data-a="${a}" title="${t} (${k})"><i>${g}</i><span>${t}</span></button>`).join("")}</nav>
       <div class="mmo-log"></div>
+      <nav class="mmo-npcs" hidden></nav>
       <button type="button" class="mmo-ctx" data-a="ctx" hidden></button>
       <div class="mmo-tgt" hidden><b></b><div class="bai-bar hp"><i></i><span></span></div></div>
       <nav class="mmo-menu" hidden>${MENU.map(([a, k, t]) => `<button type="button" data-a="${a}"><kbd>${k}</kbd>${t}</button>`).join("")}</nav>
       <div class="mmo-tip" hidden></div>`;
     document.body.append(this.top);
     this.top.addEventListener("click", (e) => {
-      const a = (e.target as HTMLElement).closest<HTMLButtonElement>("button")?.dataset.a;
-      if (!a) return;
+      const d = (e.target as HTMLElement).closest<HTMLButtonElement>("button")?.dataset;
+      if (d?.npc) this.runTo(d.npc);
+      if (!d?.a) return;
       this.menu(false);
-      this.act(a);
+      this.act(d.a);
     });
     // Ô chiêu thứ sáu (phím Y) đứng trước ô chiêu cuối (U); nhãn phím theo thứ tự ô. Nút Menu gộp các bảng, đứng cạnh thanh chiêu.
     this.hud.querySelector("[data-ult]")!.insertAdjacentHTML("beforebegin", `<button type="button" disabled class="extra"><b></b><small></small></button>`);
@@ -231,6 +236,13 @@ export class MmoScene extends BaiScene {
     b.auto = this.auto && !z.safe;
     b.onKill = (m) => this.onKill(b, z, m);
     this.loot = [];
+    this.goNpc = "";
+    // NPC đứng rải dọc đường đi, so le trên dưới cho khỏi che nhau.
+    this.npcs = !z.safe ? [] : NPCS.map((n, i) => {
+      const p = choVao(m, m.w * n.fx);
+      const y = p.y + (i % 2 ? 70 : -70);
+      return { id: n.id, x: p.x, y: trongCam(m, p.x, y) ? p.y : y };
+    });
     for (const h of [...m.nen, ...m.vat]) this.img(h.file);
     if (m.o) for (const t of this.bo!.bo) this.img(O_DIR + t.f);
     return b;
@@ -262,7 +274,9 @@ export class MmoScene extends BaiScene {
 
   private onKill(b: Bai, z: Zone, m: { x: number; y: number; boss?: boolean }): void {
     const s = this.save;
-    const r = kill(s, z);
+    const r = kill(s, z, today());
+    const thuong = bountyKill(s, z, today());
+    if (thuong) this.note(`Xong treo thưởng Thiên Cơ Các: +${thuong} linh thạch`, true);
     // Đồ văng ra quanh xác quái; nhặt ở pull().
     const thap = m.boss ? towerKill(s, z) : 0;
     if (thap) this.note(`Qua tầng ${s.thap} tháp Tầm Đạo: +${thap} linh thạch, danh hiệu ${title(s)}`, true);
@@ -378,6 +392,7 @@ export class MmoScene extends BaiScene {
       }
       if (dx || dy) {
         this.route = null;
+        this.goNpc = "";
         b.moveTo(b.player.x + dx * 90, b.player.y + dy * 90);
         this.keyMove = true;
       } else if (this.keyMove) {
@@ -386,6 +401,14 @@ export class MmoScene extends BaiScene {
       }
     }
     this.run(b);
+    if (this.goNpc) {
+      const n = this.npcs.find((x) => x.id === this.goNpc);
+      if (!n || !b.player.goal) {
+        // Tới nơi (hoặc bị người chơi đổi hướng): đứng đủ gần thì mở lời.
+        if (n && this.nearNpc()?.id === n.id && !this.dlg.open) this.talk(n.id);
+        this.goNpc = "";
+      }
+    }
     this.autoCast(b);
     // Tự uống khi gần cạn (người dùng chốt 2026-11-11), kể cả khi không treo auto: bình máu có hồi chiêu POT_CD, đan mana thì không.
     if (!this.dlg.open && b.player.alive) {
@@ -511,12 +534,40 @@ export class MmoScene extends BaiScene {
 
   /** Việc của nút [F] lúc này, "" khi không có gì quanh đây (khi đó F bật tắt treo auto). */
   private ctxText(): string {
-    return this.loot.length ? `Nhặt đồ (${this.loot.length})` : "";
+    const n = this.nearNpc();
+    return n ? `Nói chuyện với ${NPCS.find((x) => x.id === n.id)!.ten}` : this.loot.length ? `Nhặt đồ (${this.loot.length})` : "";
   }
 
-  /** Phím F theo ngữ cảnh: có đồ rơi thì hút hết về; không thì bật tắt treo auto. */
+  /** NPC đứng trong tầm nói chuyện (NPC_R), gần nhất. */
+  private nearNpc(): { id: string; x: number; y: number } | undefined {
+    const p = this.bai?.player;
+    if (!p) return undefined;
+    return this.npcs.filter((n) => Math.hypot(n.x - p.x, n.y - p.y) < NPC_R).sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y))[0];
+  }
+
+  /** Mở bảng chức năng của một NPC. */
+  private talk(id: string): void {
+    this.goNpc = "";
+    if (this.bai) this.bai.player.goal = null;
+    this.act(NPC_ACT[id]);
+  }
+
+  /** Tự chạy tới đứng trước một NPC rồi nói chuyện (bấm tên trong danh sách dưới bản đồ nhỏ, hoặc chạm NPC). */
+  private runTo(id: string): void {
+    const n = this.npcs.find((x) => x.id === id);
+    const b = this.bai;
+    if (!n || !b) return;
+    this.route = null;
+    this.sit = false;
+    this.goNpc = id;
+    b.moveTo(n.x, n.y + 40);
+  }
+
+  /** Phím F theo ngữ cảnh: đứng gần NPC thì nói chuyện; có đồ rơi thì hút hết về; không thì bật tắt treo auto. */
   private context(): void {
-    if (this.loot.length) for (const l of this.loot) l.pull = true;
+    const n = this.nearNpc();
+    if (n) this.talk(n.id);
+    else if (this.loot.length) for (const l of this.loot) l.pull = true;
     else this.act("auto");
   }
 
@@ -565,7 +616,11 @@ export class MmoScene extends BaiScene {
         this.sitAt = b.t;
         this.note("Tọa thiền: hồi máu và mana. Đi hay bị đánh thì đứng dậy.");
       }
-    } else if (a === "sect") this.sect();
+    } else if (a === "quest") this.quest();
+    else if (a === "alchemy") this.alchemy();
+    else if (a === "forge") this.forge();
+    else if (a === "bounty") this.bounty();
+    else if (a === "sect") this.sect();
     else if (a === "ally") this.ally();
     else if (a === "event") this.event();
     else if (a === "mail") this.mail();
@@ -632,6 +687,10 @@ export class MmoScene extends BaiScene {
     tag.className = z.safe ? "safe" : z.boss ? "boss" : "";
     map.querySelector("footer")!.textContent = z.safe ? `Khu ${(z.idx % 9) + 1}/9 · có tiệm và truyền tống` : `Khu ${(z.idx % 9) + 1}/9 · dị thú cấp ${z.level}`;
     q(".mmo-act").style.top = `${MAP_Y + mh + 30}px`;
+    const list = q(".mmo-npcs");
+    list.hidden = this.npcs.length === 0;
+    list.style.top = `${MAP_Y + mh + 96}px`;
+    list.innerHTML = `<b>NPC trong thành</b>${this.npcs.map((n) => NPCS.find((x) => x.id === n.id)!).map((n) => `<button type="button" data-npc="${n.id}" title="${n.ten} · ${n.noi}">${n.dau} ${n.viec}</button>`).join("")}`;
     q('.mmo-quick [data-a="char"] i').style.backgroundImage = `url(${import.meta.env.BASE_URL}icon_ve/he/${s.element}.webp)`;
     all('.mmo-top [data-a="mail"]').forEach((el) => el.classList.toggle("dot", newMail > 0));
     all('.mmo-top [data-a="sit"]').forEach((el) => el.classList.toggle("on", this.sit));
@@ -736,6 +795,30 @@ export class MmoScene extends BaiScene {
     gate(0, z.idx - 1, -1);
     gate(b.w, z.idx + 1, 1);
     for (const h of m.vat) if (h.act) this.text(ctx, ACT_LABEL[h.act], h.x + h.w / 2, h.y + h.h + 24, "center");
+    // NPC: hình người đứng thở, tên trên đầu; lại gần thì hiện bong bóng ký hiệu chức năng.
+    const near = this.nearNpc();
+    this.npcs.forEach((n, i) => {
+      const info = NPCS.find((x) => x.id === n.id)!;
+      const look = resolveLook(this.sprites, LOOKS[(i + 2) % LOOKS.length]);
+      const frames = look ? (animInfo(this.sprites, look, "dung")?.frames ?? 1) : 1;
+      if (!look || !drawCharacter(ctx, this.sprites, look, "dung", Math.floor(this.clock * 5 + i) % frames, n.x, n.y, 56 / 64, false)) {
+        ctx.fillStyle = "#f1cf7a";
+        ctx.fillRect(n.x - 10, n.y - 44, 20, 44);
+      }
+      this.text(ctx, info.ten, n.x, n.y - 64, "center");
+      if (near?.id === n.id) {
+        const kk = 1 / Math.min(1, this.camera.zoom);
+        const by = n.y - 64 - 30 * kk + Math.sin(this.clock * 4) * 2 * kk;
+        ctx.fillStyle = "#f1cf7a";
+        ctx.beginPath();
+        ctx.arc(n.x, by, 13 * kk, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#1d1610";
+        ctx.font = `700 ${16 * kk}px system-ui, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.fillText(info.dau, n.x, by + 6 * kk);
+      }
+    });
     // Đồ rơi: cột sáng màu phẩm chất và icon nhỏ, cỡ giữ nguyên trên màn hình khi thu nhỏ.
     const k = 1 / Math.min(1, this.camera.zoom);
     ctx.imageSmoothingEnabled = true;
@@ -774,9 +857,17 @@ export class MmoScene extends BaiScene {
 
   protected override tap(sx: number, sy: number): void {
     this.route = null;
+    this.goNpc = "";
     const d = this.down;
     if (this.map_ && d && this.view && Math.hypot(sx - d.x, sy - d.y) <= 10) {
       const p = this.camera.toWorld(sx, sy, this.view);
+      const npc = this.npcs.find((n) => Math.abs(p.x - n.x) < 34 && p.y > n.y - 70 && p.y < n.y + 14);
+      if (npc) {
+        this.down = null;
+        if (this.nearNpc()?.id === npc.id) this.talk(npc.id);
+        else this.runTo(npc.id);
+        return;
+      }
       const hit = this.map_.vat.find((h) => h.act && p.x >= h.x && p.x <= h.x + h.w && p.y >= h.y && p.y <= h.y + h.h + 36);
       if (hit?.act) {
         this.down = null;
@@ -842,6 +933,8 @@ export class MmoScene extends BaiScene {
       const r = a.kind === "player" ? 3 : a.boss ? 4 : 2;
       ctx.fillRect(mx + (a.x / b.w) * mw - r / 2, MAP_Y + (a.y / b.h) * mh - r / 2, r, r);
     }
+    ctx.fillStyle = "#f1cf7a";
+    for (const n of this.npcs) ctx.fillRect(mx + (n.x / b.w) * mw - 2, MAP_Y + (n.y / b.h) * mh - 2, 4, 4);
     // Thông báo: tên khu, lên cấp, nhặt đồ.
     this.notes = this.notes.filter((n) => this.clock - n.at < 3);
     ctx.textAlign = "center";
@@ -996,9 +1089,14 @@ export class MmoScene extends BaiScene {
       this.dlg.close();
       this.note(`Tự chạy tới ${zone(this.route).name} · bấm phím mũi tên hoặc chạm đất để dừng`);
     } else if (d.buy === "wpn") {
-      if (upgrade(s)) {
-        if (this.bai) this.applyStats(this.bai, false);
-        this.shop();
+      if (upgrade(s)) this.restat();
+    } else if (d.brew) {
+      if (brew(s, d.brew as "pot" | "pill")) this.restat();
+      else this.note("Không luyện được: thiếu nguyên liệu hoặc túi đầy");
+    } else if (d.incense !== undefined) {
+      if (incense(s, today())) {
+        this.note(`Thắp hương: hôm nay diệt dị thú thêm ${INCENSE / 10}% tu vi`, true);
+        this.restat();
       }
     } else if (d.tp !== undefined) {
       // Nút "Vào ngay" của Bí Cảnh Tranh Đoạt tới thẳng Cửa bí cảnh (khu có quái), chỉ bấm được khi đang mở và đứng ở khu an toàn.
@@ -1024,12 +1122,10 @@ export class MmoScene extends BaiScene {
   private shop(): void {
     const s = this.save;
     const pp = potPrice(zone(s.zone));
-    const wp = wpnPrice(s);
     this.open(`<h2>Thương hội</h2><p>Linh thạch: <b>${s.gold}</b></p>
       <div class="mmo-list">
         <button type="button" data-buy="pot" ${s.gold < pp ? "disabled" : ""}><b>Bình máu</b> (đang có ${s.pots})<small>Hồi ${POT_HEAL * 100}% máu · ${pp} linh thạch</small></button>
         <button type="button" data-buy="phu" ${s.gold < phuPrice(zone(s.zone)) ? "disabled" : ""}><b>Truyền Tống Phù</b> (đang có ${s.phu ?? 0})<small>Truyền tống về sơn môn, bến đò khi đang ở ngoài · ${phuPrice(zone(s.zone))} linh thạch</small></button>
-        <button type="button" data-buy="wpn" ${s.gold < wp ? "disabled" : ""}><b>Cường hóa vũ khí +${s.wpn} → +${s.wpn + 1}</b><small>Công ${atkOf(s.lv, s.wpn)} → ${atkOf(s.lv, s.wpn + 1)} · ${wp} linh thạch</small></button>
       </div><button type="button" data-close>Đóng</button>`);
   }
 
@@ -1341,6 +1437,47 @@ export class MmoScene extends BaiScene {
       <footer><span>Mỗi giờ ${AFK.perHour * 100}% tu vi của một cấp</span><button type="button" data-afk ${p.xp > 0 ? "" : "disabled"}>Thu hoạch tu vi</button></footer>`, true);
   }
 
+  /** Cố Tàng (Giếng Cổ): nhiệm vụ chính tuyến đang làm và hướng dẫn tân thủ. */
+  private quest(): void {
+    const s = this.save;
+    this.open(`<h2>Cố Tàng</h2><p>"Tiểu hữu mới nhập thế? Cứ theo nhiệm vụ mà đi, lão chỉ đường cho."</p>
+      <h3>Nhiệm vụ chính tuyến</h3><div class="mmo-list"><button type="button" data-route="${s.quest.zone}" ${s.quest.zone !== s.zone ? "" : "disabled"}><b>${questText(s)}</b><small>Bấm để tự chạy tới khu đó · xong thì nhận tu vi và linh thạch, nhiệm vụ kế tự mở</small></button></div>
+      <h3>Hướng dẫn</h3>${HELP}`);
+  }
+
+  /** Đan Đạo Dược Sư (Đạo Quán): luyện nguyên liệu thành đan, thắp hương mỗi ngày. */
+  private alchemy(): void {
+    const s = this.save;
+    const n = oreCount(s);
+    const done = s.huong === today();
+    this.open(`<h2>Đan Đạo Dược Sư</h2><p>Nguyên liệu đang có: <b>${n}</b> (quặng và dược thảo rơi từ dị thú).</p>
+      <h3>Luyện đan <em>${BREW} nguyên liệu một viên</em></h3><div class="mmo-list two">
+        <button type="button" data-brew="pot" ${n >= BREW ? "" : "disabled"}><b>Luyện Bình máu</b><small>Hồi ${POT_HEAL * 100}% máu · đang có ${s.pots}</small></button>
+        <button type="button" data-brew="pill" ${n >= BREW ? "" : "disabled"}><b>Luyện Hồi Linh Đan</b><small>Hồi mana · đang có ${s.bag.find((x) => x.code === "hoi_linh_dan")?.count ?? 0}</small></button></div>
+      <h3>Lư hương</h3><div class="mmo-list"><button type="button" data-incense ${done ? 'disabled class="done"' : ""}><b>Thắp hương${done ? " · hôm nay đã thắp" : ""}</b><small>Hôm nay diệt dị thú thêm ${INCENSE / 10}% tu vi · mỗi ngày một lần, miễn phí</small></button></div>`);
+  }
+
+  /** Thiết Tượng Thần Công (Luyện Khí Phường): cường hóa vũ khí. */
+  private forge(): void {
+    const s = this.save;
+    const wp = wpnPrice(s);
+    this.open(`<h2>Luyện Khí Phường</h2><p>Linh thạch: <b>${s.gold}</b></p>
+      <div class="mmo-list">
+        <button type="button" data-buy="wpn" ${s.gold < wp ? "disabled" : ""}><b>Cường hóa vũ khí +${s.wpn} → +${s.wpn + 1}</b><small>Công ${atkOf(s.lv, s.wpn)} → ${atkOf(s.lv, s.wpn + 1)} · ${wp} linh thạch</small></button>
+        <button type="button" disabled><b>Khảm ngọc, đục lỗ, tẩy luyện</b><small>Chưa mở</small></button></div>`);
+  }
+
+  /** Mật Thám Thiên Cơ Các (Trà Lâu): treo thưởng săn dị thú mỗi ngày. */
+  private bounty(): void {
+    const s = this.save;
+    const b = bountyOf(s, today());
+    const z = zone(b.zone);
+    this.open(`<h2>Thiên Cơ Các</h2>
+      <h3>Treo thưởng hôm nay</h3><div class="mmo-list"><button type="button" data-route="${z.idx}" class="${b.done ? "done" : ""}" ${b.done || z.idx === s.zone ? "disabled" : ""}>
+        <b>Diệt ${Math.min(b.n, BOUNTY_N)}/${BOUNTY_N} dị thú ở ${z.name}${b.done ? " · đã lĩnh thưởng" : ""}</b><small>Thưởng ${bountyGold(z)} linh thạch, tự lĩnh khi đủ số · bấm để tự chạy tới</small></button>
+        <button type="button" disabled><b>Bảng truy nã ác nhân</b><small>Chưa mở (cần máy chủ)</small></button></div>`);
+  }
+
   /** Thư: quà theo mốc cấp, nhận một lần. */
   private mail(): void {
     const list = mails(this.save);
@@ -1371,7 +1508,7 @@ const HELP = `<ul>
   <li><b>Đi:</b> chạm đất, hoặc phím mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
   <li><b>Đánh:</b> chạm dị thú (hoặc phím A, nút giữa cụm phím) để đánh thường; <b>phím Cách</b> lướt né; chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng; năm chiêu sau học bằng tàn quyển khi đủ cấp.</li>
   <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>L</b> liên minh · <b>V</b> hoạt động (sự kiện, tháp, bế quan) · <b>H</b> thư.</li>
-  <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm); máu dưới 35% hay mana dưới 20% thì tự uống nếu trong túi còn · <b>F</b> nhặt đồ khi có đồ rơi, không thì bật tắt treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
+  <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm); máu dưới 35% hay mana dưới 20% thì tự uống nếu trong túi còn · <b>F</b> nhặt đồ khi có đồ rơi, không thì bật tắt treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò). Ở sơn môn và bến đò có 8 NPC: lại gần rồi bấm <b>F</b>, chạm vào NPC, hoặc bấm tên trong danh sách dưới bản đồ nhỏ để tự chạy tới.</li>
   <li><b>P</b> hoặc <b>I</b> nhân vật và túi (xem chỉ số món rồi mặc, cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
   <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím F hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán. Mũ, áo, đai, giày chia đồ nam và đồ nữ; đồ Lam trở lên có thể thuộc một bộ, mặc đủ 2 / 4 / 7 món cùng bộ thì kích thêm chỉ số (xem ở bảng Nhân vật).</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
@@ -1401,6 +1538,9 @@ const SECT_TABS = [["dai_dien", "Đại Điện"], ["kinh_cac", "Tàng Kinh Các
 const itemTip = (it: ItemInstance) =>
   [`${it.name} · phẩm ${RARITY[it.rarity][0]}${it.slot ? ` · cấp ${it.lv}` : ""}${it.gender ? ` · đồ ${GENDER[it.gender]}` : ""}${it.set ? ` · bộ ${setOf(it.set)?.ten}` : ""}`, ...STAT_ROWS.filter(([k]) => it.stats?.[k]).map(([k, ten, pm]) => `${ten} +${pm ? `${it.stats![k]! / 10}%` : it.stats![k]}`), it.desc ?? ""].filter(Boolean).join("\n");
 const GENDER: Record<Gender, string> = { nam: "nam", nu: "nữ" };
+/** Tầm nói chuyện với NPC (đơn vị thế giới) và bảng mà từng NPC mở. */
+const NPC_R = 150;
+const NPC_ACT: Record<string, string> = { su_gia: "sect", tho_ren: "forge", thuong_hoi: "shop", duoc_su: "alchemy", co_tang: "quest", trong_tai: "event", xa_phu: "map", mat_tham: "bounty" };
 const BAG_TABS = [["all", "Tất cả"], ["trang_bi", "Trang bị"], ["dan_duoc", "Đan dược"], ["nl", "Nguyên liệu"]];
 /** Dòng chỉ số của trang bị: khóa, tên, có phải phần nghìn (hiện thành %) không. */
 const STAT_ROWS: [keyof ItemStats, string, boolean][] = [["atk", "Công", false], ["hp", "Máu", false], ["defExt", "Thủ ngoại", true], ["defInt", "Thủ nội", true], ["crit", "Chí mạng", true]];

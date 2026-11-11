@@ -177,6 +177,32 @@ test("phẩm rơi 0,5% đỏ, 3% vàng, 5% tím; đồ chia nam nữ; bộ trang
   assert.equal(L.setLine({ atk: 30, crit: 20 }), "Công +3% · Chí mạng +2%");
 });
 
+test("NPC: luyện đan từ nguyên liệu, thắp hương thêm tu vi, treo thưởng ngày", () => {
+  const s = newSave("A", "moc");
+  assert.equal(L.NPCS.length, 8);
+  assert.equal(L.brew(s, "pot"), false);
+  const ore = L.rollDrop(zone(1), false, () => 0)[2];
+  L.pickUp(s, { ...ore, count: 7 });
+  const pots = s.pots;
+  assert.ok(L.brew(s, "pot") && s.pots === pots + 1 && L.oreCount(s) === 4);
+  assert.ok(L.brew(s, "pill") && s.bag.some((x) => x.code === "hoi_linh_dan") && L.oreCount(s) === 1);
+  assert.equal(L.brew(s, "pill"), false);
+  const base = kill(newSave("B", "moc"), zone(2), "d1").xp;
+  assert.ok(L.incense(s, "d1") && !L.incense(s, "d1"));
+  assert.equal(kill(s, zone(2), "d1").xp, Math.round(base * 1.1));
+  assert.equal(kill(s, zone(2), "d2").xp, base);
+  s.maxZone = 5;
+  const b = L.bountyOf(s, "d1");
+  const z = zone(b.zone);
+  assert.ok(!z.safe && !z.boss && z.idx <= 5);
+  assert.equal(L.bountyKill(s, zone(z.idx === 1 ? 2 : 1), "d1"), 0); // sai khu
+  const gold = s.gold;
+  let got = 0;
+  for (let i = 0; i < L.BOUNTY_N + 5; i++) got += L.bountyKill(s, z, "d1");
+  assert.ok(got === L.bountyGold(z) && s.gold === gold + got);
+  assert.equal(L.bountyOf(s, "d2").n, 0);
+});
+
 test("tiệm: thiếu linh thạch thì không mua được", () => {
   const s = newSave("A", "moc");
   assert.equal(buyPot(s, zone(0)), false);

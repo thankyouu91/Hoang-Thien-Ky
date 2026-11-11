@@ -111,6 +111,10 @@ export interface Save {
   };
   /** Chiêu đã học bằng tàn quyển (các chiêu có trong SKILL_SCROLLS); năm chiêu khởi đầu không cần ghi */
   hoc?: SkillType[];
+  /** Ngày thắp hương gần nhất ở Đạo Quán (hôm đó diệt dị thú được thêm tu vi) */
+  huong?: string;
+  /** Treo thưởng của Thiên Cơ Các trong ngày day: khu phải săn, số con đã diệt, đã lĩnh thưởng chưa */
+  bounty?: { day: string; zone: number; n: number; done: boolean };
   /** Số tầng tháp Tầm Đạo đã qua (0–8) */
   thap?: number;
   /** Bế quan: mốc bắt đầu tích (ms), ngày của bộ đếm, số giây đã thu trong ngày đó */
@@ -160,8 +164,8 @@ export interface KillResult {
 }
 
 /** Giết một con ở khu z: tu vi và tiến độ nhiệm vụ. Linh thạch và đồ thì rơi ra đất (rollDrop), nhặt mới có. */
-export function kill(s: Save, z: Zone): KillResult {
-  const r: KillResult = { xp: BAI.tuVi(z.level) * (z.boss ? 20 : 1), quest: null, levels: 0 };
+export function kill(s: Save, z: Zone, today = ""): KillResult {
+  const r: KillResult = { xp: Math.round((BAI.tuVi(z.level) * (z.boss ? 20 : 1) * (today && s.huong === today ? 1000 + INCENSE : 1000)) / 1000), quest: null, levels: 0 };
   let xp = r.xp;
   if (z.idx === s.quest.zone && ++s.quest.n >= (z.boss ? 1 : QUEST_N)) {
     r.quest = { xp: Math.round(xpNeed(s.lv) * 0.3), gold: 20 * z.level };
@@ -827,4 +831,60 @@ export function afkHarvest(s: Save, now: number, today: string): { xp: number; l
   const p = afkPending(s, now, today);
   s.afk = { from: now, day: today, used: (s.afk?.day === today ? s.afk.used : 0) + p.sec };
   return { xp: p.xp, levels: p.xp > 0 ? gainXp(s, p.xp) : 0 };
+}
+
+// ---------- NPC ở sơn môn và bến đò ----------
+// Tám NPC chức năng theo docs/CHI_THI_CLAUDE_LOOT_VA_UIUX.md bước 7. shortcut: nền mỗi vùng là một bức vẽ riêng nên chưa biết chỗ
+// từng công trình; NPC đứng rải dọc đường đi theo fx (phần chiều ngang map). Đặt đúng công trình khi map sơn môn được dựng bằng app sửa map.
+export const NPCS: { id: string; ten: string; noi: string; viec: string; dau: string; fx: number }[] = [
+  { id: "su_gia", ten: "Sứ Giả Chính Đạo Minh", noi: "Tứ Hợp Viện", viec: "Tông môn", dau: "⚑", fx: 0.1 },
+  { id: "tho_ren", ten: "Thiết Tượng Thần Công", noi: "Luyện Khí Phường", viec: "Rèn đồ", dau: "⚒", fx: 0.2 },
+  { id: "thuong_hoi", ten: "Chưởng Quỹ Thương Hội", noi: "Lầu Gác", viec: "Mua bán", dau: "⚖", fx: 0.31 },
+  { id: "duoc_su", ten: "Đan Đạo Dược Sư", noi: "Đạo Quán", viec: "Luyện đan", dau: "⚗", fx: 0.42 },
+  { id: "co_tang", ten: "Cố Tàng", noi: "Giếng Cổ", viec: "Nhiệm vụ", dau: "❢", fx: 0.5 },
+  { id: "trong_tai", ten: "Võ Đạo Trọng Tài", noi: "Lôi Đài", viec: "Tháp, sự kiện", dau: "⚔", fx: 0.58 },
+  { id: "xa_phu", ten: "Xa Phu Thần Tốc", noi: "Dịch Trạm", viec: "Truyền tống", dau: "✦", fx: 0.7 },
+  { id: "mat_tham", ten: "Mật Thám Thiên Cơ Các", noi: "Trà Lâu", viec: "Treo thưởng", dau: "✉", fx: 0.82 },
+];
+
+/** Đan Đạo Dược Sư: BREW nguyên liệu luyện ra một bình máu hoặc một Hồi Linh Đan. Thắp hương: hôm đó diệt dị thú thêm INCENSE phần nghìn tu vi. Số là đề xuất. */
+export const BREW = 3;
+export const INCENSE = 100;
+
+export function brew(s: Save, kind: "pot" | "pill", rnd: () => number = Math.random): boolean {
+  if (oreCount(s) < BREW) return false;
+  if (kind === "pill") {
+    const have = s.bag.some((x) => x.code === "hoi_linh_dan");
+    if (!have && s.bag.length >= BAG_MAX && s.bag.filter((x) => x.type === "khoang_thach").every((x) => x.count > BREW)) return false; // không còn ô cho món mới
+  }
+  takeOre(s, BREW);
+  return pickUp(s, kind === "pot" ? potItem(1, rnd) : stack(rnd, "hoi_linh_dan", "Hồi Linh Đan", "dan_duoc", "luc", "dan/dan_duoc_hoi_mana", 1, `Hồi ${MANA_HEAL * 100}% mana`));
+}
+
+export function incense(s: Save, today: string): boolean {
+  if (s.huong === today) return false;
+  s.huong = today;
+  return true;
+}
+
+/** Treo thưởng mỗi ngày: diệt BOUNTY_N dị thú ở một khu đã tới (chọn theo ngày), thưởng linh thạch theo cấp khu. Số là đề xuất. */
+export const BOUNTY_N = 20;
+export const bountyGold = (z: Zone) => 100 + 40 * z.level;
+
+export function bountyOf(s: Save, today: string): NonNullable<Save["bounty"]> {
+  if (s.bounty?.day !== today) {
+    const zones = Array.from({ length: Math.max(s.maxZone, 1) + 1 }, (_, i) => zone(i)).filter((z) => !z.safe && !z.boss);
+    const h = [...today].reduce((a, c) => a + c.charCodeAt(0), 0);
+    s.bounty = { day: today, zone: zones[h % zones.length].idx, n: 0, done: false };
+  }
+  return s.bounty;
+}
+
+/** Gọi mỗi lần diệt dị thú; trả về linh thạch thưởng khi vừa đủ số, không thì 0. */
+export function bountyKill(s: Save, z: Zone, today: string): number {
+  const b = bountyOf(s, today);
+  if (b.done || z.idx !== b.zone || ++b.n < BOUNTY_N) return 0;
+  b.done = true;
+  s.gold += bountyGold(z);
+  return bountyGold(z);
 }
