@@ -373,6 +373,11 @@ export class MmoScene extends BaiScene {
     }
     this.run(b);
     this.autoCast(b);
+    // Tự uống khi gần cạn (người dùng chốt 2026-11-11), kể cả khi không treo auto: bình máu có hồi chiêu POT_CD, đan mana thì không.
+    if (!this.dlg.open && b.player.alive) {
+      if (b.player.hp < b.player.hpMax * AUTO_POT.hp) this.act("pot");
+      if (b.mana < b.manaMax * AUTO_POT.mana) this.act("mana");
+    }
     super.update(dt);
     const p = b.player;
     if (!p.alive) return;
@@ -796,6 +801,10 @@ export class MmoScene extends BaiScene {
       const r = afkHarvest(s, Date.now(), today());
       if (r.xp > 0) this.note(`Thu hoạch bế quan: +${r.xp} tu vi${r.levels ? ` · lên cấp ${s.lv}!` : ""}`, true);
       this.restat();
+    } else if (d.openbag) {
+      this.selItem = d.openbag;
+      this.bagTab = "all";
+      this.act("bag");
     } else if (d.openmap !== undefined) {
       this.dlg.close();
       this.act("map");
@@ -950,11 +959,16 @@ export class MmoScene extends BaiScene {
       <footer><button type="button" data-region="">◂ Thế giới</button><span>${tp(townOf(r), "Sơn môn")} ${tp(townOf(r) + 8, "Bến đò")}</span></footer>`, true);
   }
 
+  /** Mọi món trong túi; bình máu và Truyền Tống Phù là bộ đếm (save.pots, save.phu) nên hiện thành ô ảo đứng đầu. */
+  private bagItems(): ItemInstance[] {
+    const s = this.save;
+    return [...(s.pots > 0 ? [{ ...potItem(s.pots), id: "pot" }] : []), ...(s.phu ? [{ ...phuItem(s.phu), id: "phu" }] : []), ...s.bag];
+  }
+
   /** Túi: thẻ lọc, lưới BAG_MAX ô, khung phải là món đang chọn (so chỉ số với món đang mặc, nút Trang bị, Sử dụng, Bán). */
   private bag(): void {
     const s = this.save;
-    // Bình máu là bộ đếm (save.pots) nên hiện thành một ô ảo đứng đầu.
-    const all: ItemInstance[] = [...(s.pots > 0 ? [{ ...potItem(s.pots), id: "pot" }] : []), ...(s.phu ? [{ ...phuItem(s.phu), id: "phu" }] : []), ...s.bag];
+    const all = this.bagItems();
     const virtual = (it: ItemInstance) => it.id === "pot" || it.id === "phu";
     const tab = this.bagTab;
     const list = all.filter((it) => tab === "all" || (tab === "nl" ? it.type === "khoang_thach" || it.type === "tan_quyen" : it.type === tab));
@@ -1022,6 +1036,8 @@ export class MmoScene extends BaiScene {
           <b>${esc(s.name)}</b>${title(s) ? `<small class="title">「${title(s)}」</small>` : ""}<small>Hệ ${ELEMENT_STYLE[s.element].name} · Cấp ${s.lv}</small><small>Tu vi ${s.xp}/${xpNeed(s.lv)}</small></div>
         <div class="mmo-gear">${SLOTS.slice(4).map(slot).join("")}</div></div>
       <div><h3>Chỉ số</h3><dl class="mmo-stats">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div></div>
+      <h3>Túi <em>${s.bag.length}/${BAG_MAX} ô · chạm trang bị để mặc ngay, chạm món khác để mở Túi</em></h3>
+      <div class="mmo-grid10">${this.bagItems().map((it) => `<button type="button" class="mmo-slot q-${it.rarity}" ${it.slot ? `data-equip="${it.id}"` : `data-openbag="${it.id}"`} title="${esc(itemTip(it))}" style="${url(it)}">${it.count > 1 ? `<small>${it.count}</small>` : ""}</button>`).join("")}${'<button type="button" class="mmo-slot" disabled></button>'.repeat(Math.max(0, BAG_MAX - this.bagItems().length))}</div>
       <h3>Tiềm năng <em>còn <b>${pts}</b> điểm · mỗi cấp 1 điểm</em></h3><div class="mmo-attr">${attrs}</div>
       <footer><span>Linh thạch ${s.gold}</span>
       <button type="button" data-statreset class="bad" ${spent && s.gold >= cost ? "" : "disabled"}>Tẩy điểm (${cost ? `${cost} linh thạch` : "miễn phí"})</button></footer>`, true);
@@ -1218,7 +1234,7 @@ const HELP = `<ul>
   <li><b>Đi:</b> chạm đất, hoặc phím mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
   <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng.</li>
   <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>L</b> liên minh · <b>V</b> hoạt động (sự kiện, tháp, bế quan) · <b>H</b> thư.</li>
-  <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm) · <b>F</b> treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
+  <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm); máu dưới 35% hay mana dưới 20% thì tự uống nếu trong túi còn · <b>F</b> treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
   <li><b>I</b> túi · <b>P</b> nhân vật (cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
   <li><b>Đồ rơi:</b> dị thú chết rơi linh thạch và đồ có cột sáng theo phẩm; lại gần là tự nhặt, phím Cách hút hết đồ trong khu. Mở túi (I) để mặc, dùng, bán.</li>
   <li>Tiến độ tự lưu trên máy này.</li></ul>`;
@@ -1244,6 +1260,9 @@ const esc = (t: string) => t.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 const FIRST = (icon: string) => icon.replace(/\/\d+$/, "/01");
 const url = (it: ItemInstance) => `background-image:url(${import.meta.env.BASE_URL}icon_ve/${it.icon}.webp),url(${import.meta.env.BASE_URL}icon_ve/${FIRST(it.icon)}.webp)`;
 const SECT_TABS = [["dai_dien", "Đại Điện"], ["kinh_cac", "Tàng Kinh Các"], ["bao_kho", "Bảo Khố"], ["dai_tran", "Đại Trận Hộ Môn"]];
+/** Chú thích một món khi rê chuột: tên, phẩm, cấp, chỉ số. */
+const itemTip = (it: ItemInstance) =>
+  [`${it.name} · phẩm ${RARITY[it.rarity][0]}${it.slot ? ` · cấp ${it.lv}` : ""}`, ...STAT_ROWS.filter(([k]) => it.stats?.[k]).map(([k, ten, pm]) => `${ten} +${pm ? `${it.stats![k]! / 10}%` : it.stats![k]}`), it.desc ?? ""].filter(Boolean).join("\n");
 const BAG_TABS = [["all", "Tất cả"], ["trang_bi", "Trang bị"], ["dan_duoc", "Đan dược"], ["nl", "Nguyên liệu"]];
 /** Dòng chỉ số của trang bị: khóa, tên, có phải phần nghìn (hiện thành %) không. */
 const STAT_ROWS: [keyof ItemStats, string, boolean][] = [["atk", "Công", false], ["hp", "Máu", false], ["defExt", "Thủ ngoại", true], ["defInt", "Thủ nội", true], ["crit", "Chí mạng", true]];
@@ -1252,6 +1271,8 @@ const PICK_R = 50 * SCALE;
 const LOOT_SPEED = 900;
 const LOOT_TTL = 120;
 /** Treo auto: số giây giữa hai lần tự ra chiêu. */
+/** Tự uống: bình máu khi máu dưới hp, Hồi Linh Đan khi mana dưới mana (phần của tối đa). */
+const AUTO_POT = { hp: 0.35, mana: 0.2 };
 const AUTO_GAP = 0.6;
 /** Treo auto: chiêu đánh chừa lại chừng này phần mana cho hồi phục và hộ thể. */
 const AUTO_KEEP = 0.3;

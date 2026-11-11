@@ -345,3 +345,7 @@ body .mmo-events em { font-style: normal; color: var(--m-mute); white-space: now
 body .mmo-dlg .mmo-list button.on { border-color: var(--m-gold2); }
 body .mmo-dlg .mmo-list button.lock { opacity: 0.4; }
 body .mmo-body .title { color: var(--m-gold2); }
+
+/* Túi nằm trong bảng Nhân vật: mười ô một hàng */
+body .mmo-grid10 { display: grid; grid-template-columns: repeat(10, 52px); gap: 6px; justify-content: center; }
+@media (max-width: 640px) { body .mmo-grid10 { grid-template-columns: repeat(5, 52px); } }
