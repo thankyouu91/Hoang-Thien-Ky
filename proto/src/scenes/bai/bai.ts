@@ -38,6 +38,10 @@ export interface Actor {
   hurtAt: number;
   /** Thủ lĩnh của khu (màn vẽ to hơn) */
   boss?: boolean;
+  /** Đang choáng tới mốc giờ này (chiêu khống chế): quái đứng yên, không đánh */
+  stunUntil?: number;
+  /** Đang bị thiêu đốt (chiêu bùa chú): mỗi giây mất dmg máu tới mốc until */
+  burn?: { until: number; next: number; dmg: number };
 }
 
 /** Tuỳ chọn cho thế giới liền mạch (scenes/mmo): cỡ khu, dải đi được, cấp quái, chỉ số người chơi. Bỏ trống là bãi mẫu. */
@@ -99,6 +103,8 @@ export class Bai {
   t = 0;
   readonly actors: Actor[] = [];
   fx: Fx[] = [];
+  /** Trận đang cháy trên đất (chiêu trận pháp): mỗi giây đánh quái đứng trong bán kính */
+  zones: { x: number; y: number; r: number; until: number; next: number; dmg: number }[] = [];
   readonly player: Actor;
   level: number;
   readonly w: number;
@@ -232,7 +238,24 @@ export class Bai {
         .filter((a) => a.kind === "monster" && a.alive && dist(a, main) <= radius)
         .sort((a, b) => dist(a, main) - dist(b, main))
         .slice(0, spec.targets);
-      for (const m of hit) this.damage(p, m, ((p.atk * spec.k * BAI.skillScale) / 1000) * pow);
+      const dmg = ((p.atk * spec.k * BAI.skillScale) / 1000) * pow;
+      if (skill === "than_phap") {
+        // Lướt tới sát mục tiêu (không lướt vào vùng cấm).
+        const tx = main.x + (p.x <= main.x ? -1 : 1) * BAI.meleeRange * 0.7;
+        if (!this.inBlocked(tx, main.y)) {
+          p.x = tx;
+          p.y = main.y;
+          p.goal = null;
+        }
+      }
+      for (const m of hit) {
+        this.damage(p, m, dmg);
+        if (!m.alive) continue;
+        if (skill === "khong_che") m.stunUntil = this.t + (m.boss ? BAI.bossStunSec : BAI.stunSec);
+        else if (skill === "bua_chu") m.burn = { until: this.t + BAI.burnSec, next: this.t + 1, dmg: (dmg * BAI.burnPct) / BAI.burnSec };
+      }
+      if (skill === "can_don") this.heal(p, dmg * BAI.leech);
+      else if (skill === "tran_phap") this.zones.push({ x: main.x, y: main.y, r: radius, until: this.t + BAI.zoneSec, next: this.t + 1, dmg: dmg * BAI.zonePct });
       p.target = main.id;
       p.face = main.x >= p.x ? 1 : -1;
       this.fx.push({ t: this.t, x: main.x, y: main.y, el: p.element, kind: "skill", r: radius, skill, dir: main.x >= p.x ? 1 : -1 });
@@ -265,9 +288,23 @@ export class Bai {
         continue;
       }
       if (a.shield > 0 && this.t >= a.shieldUntil) a.shield = 0;
-      if (a.kind === "monster") this.monster(a, dt);
-      else this.fighter(a, dt);
+      if (a.burn && this.t >= a.burn.next) {
+        const burn = a.burn;
+        if ((burn.next += 1) > burn.until) delete a.burn;
+        this.damage(this.player, a, burn.dmg);
+        if (!a.alive) continue;
+      }
+      if (a.kind === "monster") {
+        if ((a.stunUntil ?? 0) <= this.t) this.monster(a, dt);
+      } else this.fighter(a, dt);
     }
+    for (const z of this.zones) {
+      if (this.t < z.next) continue;
+      z.next += 1;
+      for (const m of this.actors) if (m.kind === "monster" && m.alive && dist(m, z) <= z.r) this.damage(this.player, m, z.dmg);
+      this.fx.push({ t: this.t, x: z.x, y: z.y, el: this.player.element, kind: "skill", r: z.r, skill: "dien_rong" });
+    }
+    this.zones = this.zones.filter((z) => z.next <= z.until);
     this.fx = this.fx.filter((f) => this.t - f.t < FX_LIFE);
   }
 
@@ -278,6 +315,8 @@ export class Bai {
     a.y = a.home.y;
     a.target = null;
     a.goal = null;
+    delete a.burn;
+    delete a.stunUntil;
   }
 
   private nearestMonster(from: Actor, within: number): Actor | undefined {

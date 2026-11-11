@@ -55,11 +55,10 @@ const RAMP: Partial<Record<ElementId, string[]>> = {
 };
 
 /**
- * Hiệu ứng theo hệ và chiêu. Tất cả là đề xuất; hệ chưa có kiểu riêng thì dùng năng lượng tô màu hệ.
+ * Hiệu ứng riêng của hệ, bản gọn (một mục tiêu) và bản rộng. Tất cả là đề xuất; hệ chưa có kiểu riêng thì dùng năng lượng tô màu hệ.
  * Toạ độ (x, y) là chân mục tiêu; r là bán kính chiêu (đơn vị thế giới).
  */
-function chieu(el: ElementId, skill: SkillType | undefined, x: number, y: number, r: number, seed: number, to: number): Fx {
-  const wide = skill === "dien_rong";
+function theoHe(el: ElementId, wide: boolean, x: number, y: number, r: number, seed: number, to: number): Fx {
   const size = Math.max(0.6, Math.min(2, r / 70));
   switch (el) {
     case "hoa":
@@ -85,6 +84,27 @@ function chieu(el: ElementId, skill: SkillType | undefined, x: number, y: number
   }
 }
 
+/**
+ * Hiệu ứng của một chiêu: dáng theo loại chiêu (chém, đâm, nổ, vòng trận…), màu và chất theo hệ (theoHe).
+ * Phân bổ lại 2026-11-11 theo yêu cầu người dùng; skill undefined là đòn không thuộc loại nào (dùng bản gọn của hệ).
+ */
+function chieu(el: ElementId, skill: SkillType | undefined, x: number, y: number, r: number, seed: number, to: number): Fx[] {
+  const ramp = (RAMP[el] ?? RAMP.kim!).map(hex);
+  const he = (wide: boolean) => theoHe(el, wide, x, y, r, seed, to);
+  const chem = (size: number, facing: number, k = 0) => slash({ x, y: y - 18, size, facing, ground: y, ramp, seed: seed + k });
+  const vong = (hold: number, radius: number) => energy({ kind: "orb", x, y: y - 20, to: [x, y - 20], ground: y, colors: ramp, hold, radius, seed });
+  switch (skill) {
+    case "can_quet": return [chem(1.2, to)]; // một nhát quét rộng màu hệ
+    case "can_don": return [chem(1.5, to), impact({ x, y: y - 20, size: 0.9, angle: to > 0 ? 0 : Math.PI, ground: y, seed })]; // nhát nặng kèm tia chạm
+    case "than_phap": return [chem(1, to), chem(1, -to, 7)]; // hai nhát chéo của cú lướt
+    case "khong_che": return [vong(1.4, 20), he(false)]; // quả cầu trói giữ lâu
+    case "bua_chu": return [explosion({ x, y, ground: y, size: 0.6, seed }), he(false)]; // bùa nổ rồi chất của hệ bám lại
+    case "tran_phap": return [vong(1, r / PX), he(true)]; // vòng trận lớn rồi hệ bung rộng
+    case "dien_rong": return [he(true)];
+    default: return [he(false)]; // tầm xa
+  }
+}
+
 function hex(h: string): number {
   const v = parseInt(h.slice(1), 16);
   return (255 << 24) | ((v & 255) << 16) | (((v >> 8) & 255) << 8) | ((v >> 16) & 255);
@@ -102,7 +122,7 @@ export class VfxSf {
 
   /** Chiêu đánh (hoặc chiêu cuối với skill undefined, r lớn) nổ tại mục tiêu. */
   danh(el: ElementId, skill: SkillType | undefined, x: number, y: number, r: number, to: number): void {
-    this.them(chieu(el, skill, x, y, r, this.seed++, to));
+    for (const fx of chieu(el, skill, x, y, r, this.seed++, to)) this.them(fx);
   }
   private them(fx: Fx, song = SONG): void {
     this.list.push({ fx, het: this.t + song });
@@ -110,7 +130,7 @@ export class VfxSf {
   /** Chiêu cuối: nổ lớn tô màu hệ. */
   chieuCuoi(el: ElementId, x: number, y: number, r: number): void {
     this.them(explosion({ x, y, ground: y, size: Math.min(2.5, r / 90), seed: this.seed++ }));
-    this.them(chieu(el, "dien_rong", x, y, r, this.seed++, 1));
+    this.them(theoHe(el, true, x, y, r, this.seed++, 1));
   }
   hoiPhuc(x: number, y: number): void {
     this.them(heal({ x, y, kind: "heal", seed: this.seed++ }));

@@ -139,7 +139,9 @@ test("công pháp cộng chỉ số bị động theo tầng", () => {
   s.lv = 1;
   assert.ok(L.stats(s).atk > atk);
   s.lv = 10;
-  assert.equal(L.passives(s).cd, 5); // khong_che học ở cấp 10
+  assert.equal(L.passives(s).cd, 0); // khong_che đủ cấp nhưng chưa học
+  s.hoc = ["khong_che"];
+  assert.equal(L.passives(s).cd, 5);
 });
 
 test("tiệm: thiếu linh thạch thì không mua được", () => {
@@ -234,6 +236,15 @@ test("chiêu đã học theo cấp và xếp ô", async () => {
   assert.equal(t.learned(s).length, 5);
   assert.equal(t.setSlot(s, 5, "can_don"), false); // chưa học
   s.lv = 5;
+  assert.equal(t.setSlot(s, 5, "can_don"), false); // đủ cấp nhưng chưa học bằng tàn quyển
+  assert.equal(t.learn(s, "can_don"), false); // chưa có tàn quyển
+  s.bag.push(t.rollDrop(t.zone(1), false, () => 0)[4]);
+  assert.equal(t.learn(s, "khong_che"), false); // chưa đủ cấp
+  assert.ok(t.learn(s, "can_don") && t.scrollsAll(s) === 0 && !t.learn(s, "can_don"));
+  assert.equal(t.skillName("hoa", "can_don"), "Liệt Hỏa Trảm");
+  const old = { ...t.newSave("B", "moc"), lv: 12, hoc: undefined };
+  t.migrateSkills(old);
+  assert.deepEqual(old.hoc, ["can_don", "khong_che"]);
   assert.equal(t.setSlot(s, 5, "can_don"), true);
   assert.equal(t.setSlot(s, 0, "can_don"), true); // đổi chỗ với ô 0
   assert.deepEqual(t.slotsOf(s), ["can_don", "tam_xa", "dien_rong", "ho_the", "hoi_phuc", "can_quet"]);

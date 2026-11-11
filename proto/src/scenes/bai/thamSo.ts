@@ -51,6 +51,19 @@ export const BAI = {
   shieldPct: 0.25,
   shieldSec: 6,
 
+  /**
+   * Cơ chế riêng của năm chiêu học sau (người dùng chốt 2026-11-11: thêm chiêu có cơ chế mới; số là đề xuất):
+   * khống chế làm choáng (thủ lĩnh choáng ngắn), thân pháp lướt tới sát mục tiêu, bùa chú thiêu đốt thêm burnPct sát thương rải trong
+   * burnSec giây, trận pháp để lại trận burn mỗi giây zonePct sát thương trong zoneSec giây, cận chiến đơn hút leech sát thương thành máu.
+   */
+  stunSec: 2,
+  bossStunSec: 0.6,
+  burnSec: 5,
+  burnPct: 0.6,
+  zoneSec: 5,
+  zonePct: 0.2,
+  leech: 0.2,
+
   /** Chiêu cuối: thanh nội tại đầy sau chừng này sát thương gây ra; mở ở cấp 150 với 1 điểm, mỗi 10 cấp sau +1 điểm */
   ultFill: 4000,
   ultLevel: 150,

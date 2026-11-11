@@ -224,6 +224,12 @@ export class BaiScene implements Scene {
       ctx.fillStyle = a.kind === "player" ? "#ffd34d" : "#fffaf0";
       ctx.fillText(a.kind === "player" ? tr(a.name) : a.name, a.x, top - 12);
     }
+    if ((a.stunUntil ?? 0) > b.t) {
+      ctx.font = `700 ${11 / Math.min(1, this.camera.zoom)}px ${FONT_TEXT}`;
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#ffd34d";
+      ctx.fillText("✦ Choáng", a.x, top - 24);
+    }
     // Thanh máu trên đầu
     ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
     ctx.fillRect(a.x - 21, top - 8, 42, 5);

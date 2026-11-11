@@ -12,6 +12,52 @@ test("sinh quái theo bầy, có bot", () => {
   assert.ok(monsters(b).every((m) => m.alive && m.hp === m.hpMax));
 });
 
+test("cơ chế chiêu: khống chế làm choáng, bùa chú thiêu đốt, trận pháp để lại trận, cận đơn hút máu, thân pháp lướt tới", () => {
+  const setup = () => {
+    const b = new Bai();
+    b.mana = 1e6;
+    b.manaMax = 1e6;
+    const m = monsters(b)[0];
+m.hpMax = m.hp = 1e7;
+    // Chỉ để lại một con: quái bị đánh thì cả bầy cùng đuổi.
+    for (const o of b.actors) if (o.kind === "monster" && o !== m) Object.assign(o, { alive: false, respawnAt: 1e9 });
+    b.player.x = m.x - 30;
+    b.player.y = m.y;
+    b.player.target = m.id;
+    return { b, m };
+  };
+  let { b, m } = setup();
+  assert.ok(b.cast("khong_che"));
+  m.target = b.player.id;
+  const hp = b.player.hp;
+  for (let i = 0; i < (BAI.stunSec - 0.2) / 0.05; i++) b.step(0.05);
+  assert.equal(b.player.hp, hp); // đang choáng, không đánh
+  ({ b, m } = setup());
+  assert.ok(b.cast("bua_chu"));
+  const after = m.hp;
+  b.player.target = null;
+  for (let i = 0; i < (BAI.burnSec + 1) / 0.05; i++) b.step(0.05);
+  assert.ok(m.hp < after && !m.burn);
+  ({ b, m } = setup());
+  assert.ok(b.cast("tran_phap"));
+  assert.equal(b.zones.length, 1);
+  const z0 = m.hp;
+  b.player.target = null;
+  m.x = b.zones[0].x;
+  m.y = b.zones[0].y;
+  m.stunUntil = 1e9; // đứng yên trong trận
+  for (let i = 0; i < (BAI.zoneSec + 1.5) / 0.05; i++) b.step(0.05);
+  assert.ok(m.hp < z0 && b.zones.length === 0);
+  ({ b, m } = setup());
+  b.player.hp = 1;
+  assert.ok(b.cast("can_don"));
+  assert.ok(b.player.hp > 1);
+  ({ b, m } = setup());
+  b.player.x = m.x - 200;
+  assert.ok(b.cast("than_phap"));
+  assert.ok(Math.abs(b.player.x - m.x) < BAI.meleeRange);
+});
+
 test("người chơi giết quái được tu vi, quái hồi sinh ở tổ sau ít giây", () => {
   const b = new Bai();
   const m = monsters(b)[0];

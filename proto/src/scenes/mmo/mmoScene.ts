@@ -18,7 +18,7 @@ import { BAI } from "../bai/thamSo.ts";
 import { ACT_LABEL, bayTuDong, bossTuDong, choVao, macDinh, mapId, SCALE, type MapKhu } from "./mapKhu.ts";
 import { camLop, O_DIR, veLop, type BoODat } from "./oDat.ts";
 import {
-  PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
+  learn, migrateSkills, scrollsAll, SKILL_SCROLLS, skillName, PASSIVE, PASSIVE_NAME, passiveOf, passives, type PassiveKey, AFK, afkHarvest, afkPending, eventIn, eventOn, EVENTS, title, TOWER, towerGold, towerKill, towerZone, type EventId, buySect, combine, donateOre, NGO, oreCount, scrollCount, SECT_SHOP, sectDone, sectLevel, sectLife, submitOre, buyPhu, mineHolder, phuItem, phuPrice, teleport, BAG_MAX, consume, equip, MANA_HEAL, pickUp, potItem, RARITY, rollDrop, sell, sellPrice, unequip, type ItemInstance, type ItemStats,
   addStat, atkOf, buyPot, checkIn, claimMail, clearSlot, donate, joinSect, kill, leaveSect, mails, RANKS, rankOf, realm, SECT, sectKill, sectKills, SECTS, SIT, learned, setSlot, SKILL_UNLOCK, slotsOf, layerOf, layerPrice, resetSkills, resetStats, skillPoints, statPoints, statResetCost, stats, upSkill, newSave, POT_HEAL, potPrice, questText, REGIONS, townOf, upgrade, wpnPrice, xpNeed, zone, ZONE_COUNT,
   type Save, type Zone,
 } from "./tienTrinh.ts";
@@ -36,6 +36,7 @@ function load(): Save | null {
     // Bản lưu từ trước khi có túi đồ.
     s.bag ??= [];
     s.equips ??= {};
+    migrateSkills(s);
     return s;
   } catch {
     return null;
@@ -328,7 +329,7 @@ export class MmoScene extends BaiScene {
       if (sk) btn.dataset.s = sk;
       else delete btn.dataset.s;
       btn.style.backgroundImage = sk ? `url(${import.meta.env.BASE_URL}icon_ve/chieu/${sk}.webp)` : "none";
-      btn.querySelector("b")!.textContent = sk ? SKILL_NAME[sk] : "";
+      btn.querySelector("b")!.textContent = sk ? skillName(this.save.element, sk) : "";
       if (sk) return;
       btn.querySelector("small")!.textContent = "";
       btn.disabled = true;
@@ -611,7 +612,7 @@ export class MmoScene extends BaiScene {
     const b = this.bai!;
     const l = layerOf(this.save, sk);
     const bo = layerBonus(l);
-    return `<b>${SKILL_NAME[sk]}</b><em>Tầng ${l}/${TECHNIQUE_LAYERS}</em><span>${SKILL_DESC[sk] ?? ""}</span>
+    return `<b>${skillName(this.save.element, sk)}</b><em>${SKILL_NAME[sk]} · tầng ${l}/${TECHNIQUE_LAYERS}</em><span>${SKILL_DESC[sk] ?? ""}</span>
       <span>Mana ${b.manaCost(sk)} · Hồi chiêu ${b.cooldownOf(sk).toFixed(1)}s</span>
       <span>Uy lực +${bo.uyLuc / 10}% · Mana −${bo.mana / 10}% · Hồi chiêu −${bo.hoiChieu / 10}%</span>
       <span>Bị động: ${PASSIVE_NAME[PASSIVE[sk][0]]} +${passiveOf(sk, l) / 10}%</span>`;
@@ -868,6 +869,11 @@ export class MmoScene extends BaiScene {
       if (addStat(s, d.stat)) this.restat();
     } else if (d.statreset !== undefined) {
       if (resetStats(s)) this.restat();
+    } else if (d.learn) {
+      if (learn(s, d.learn)) {
+        this.note(`Đã học ${skillName(s.element, d.learn as SkillType)}`, true);
+        this.restat();
+      }
     } else if (d.up) {
       if (upSkill(s, d.up)) this.restat();
     } else if (d.join) {
@@ -1094,10 +1100,10 @@ export class MmoScene extends BaiScene {
     const has = learned(s);
     const url = (f: string) => `background-image:url(${import.meta.env.BASE_URL}icon_ve/chieu/${f}.webp)`;
     const sel = this.selSkill;
-    const bar = sl.map((sk, i) => `<button type="button" class="mmo-slot ${i === this.selSlot ? "on" : ""}" data-pick="${i}" title="Ô ${SLOT_KEYS[i]}${sk ? `: ${SKILL_NAME[sk]}` : " (trống)"}" style="${sk ? url(sk) : ""}"><kbd>${SLOT_KEYS[i]}</kbd></button>`).join("");
+    const bar = sl.map((sk, i) => `<button type="button" class="mmo-slot ${i === this.selSlot ? "on" : ""}" data-pick="${i}" title="Ô ${SLOT_KEYS[i]}${sk ? `: ${skillName(s.element, sk)}` : " (trống)"}" style="${sk ? url(sk) : ""}"><kbd>${SLOT_KEYS[i]}</kbd></button>`).join("");
     const grid = SKILL_UNLOCK.map(([sk, lv]) => {
       const ok = has.includes(sk);
-      return `<button type="button" class="mmo-slot ${sk === sel ? "on" : ""} ${ok ? "" : "lock"}" data-skill="${sk}" title="${SKILL_NAME[sk]}${ok ? "" : ` (học ở cấp ${lv})`}" style="${url(sk)}"><small>${ok ? `T${layerOf(s, sk)}` : `Cấp ${lv}`}</small></button>`;
+      return `<button type="button" class="mmo-slot ${sk === sel ? "on" : ""} ${ok ? "" : "lock"}" data-skill="${sk}" title="${skillName(s.element, sk)}${ok ? "" : ` (cấp ${lv}, ${SKILL_SCROLLS[sk]} tàn quyển)`}" style="${url(sk)}"><small>${ok ? `T${layerOf(s, sk)}` : s.lv >= lv ? "Học" : `Cấp ${lv}`}</small></button>`;
     }).join("");
     const ok = has.includes(sel);
     const l = layerOf(s, sel);
@@ -1105,14 +1111,18 @@ export class MmoScene extends BaiScene {
     const bo = layerBonus(l);
     const key = SLOT_KEYS[this.selSlot];
     const inSlot = sl[this.selSlot] === sel;
+    const needLv = SKILL_UNLOCK.find(([k]) => k === sel)![1];
+    const needSc = SKILL_SCROLLS[sel] ?? 0;
     const at = sl.indexOf(sel);
-    const detail = `<header><i style="${url(sel)}"></i><span><b>${SKILL_NAME[sel]}</b><em>${ok ? `Tầng ${l}/${TECHNIQUE_LAYERS}${at >= 0 ? ` · đang ở ô ${SLOT_KEYS[at]}` : ""}` : `Học ở cấp ${SKILL_UNLOCK.find(([k]) => k === sel)![1]}`}</em></span></header>
+    const detail = `<header><i style="${url(sel)}"></i><span><b>${skillName(s.element, sel)}</b><em>${SKILL_NAME[sel]} · ${ok ? `tầng ${l}/${TECHNIQUE_LAYERS}${at >= 0 ? ` · đang ở ô ${SLOT_KEYS[at]}` : ""}` : `cần cấp ${needLv} và ${needSc} tàn quyển`}</em></span></header>
       <span>${SKILL_DESC[sel] ?? ""}</span>
       <dl class="mmo-stats"><dt>Mana</dt><dd>${b.manaCost(sel)}</dd><dt>Hồi chiêu</dt><dd>${b.cooldownOf(sel).toFixed(1)}s</dd>
         <dt>Sát thương chiêu</dt><dd>Uy lực +${bo.uyLuc / 10}% · Mana −${bo.mana / 10}%</dd>
         <dt>Bị động (luôn có khi đã học)</dt><dd>${PASSIVE_NAME[PASSIVE[sel][0]]} +${passiveOf(sel, l) / 10}%${l < TECHNIQUE_LAYERS ? ` <i class="up">tầng kế +${passiveOf(sel, l + 1) / 10}%</i>` : ""}</dd></dl>
       ${ok ? `<nav><button type="button" data-slot="${this.selSlot}" data-sk="${sel}">${inSlot ? `Gỡ khỏi ô ${key}` : `Xếp vào ô ${key}`}</button>
-        <button type="button" data-up="${sel}" ${c !== null && c <= pts ? "" : "disabled"}>${c === null ? "Đã tối đa" : `Lên tầng · ${c} điểm`}</button></nav>` : ""}`;
+        <button type="button" data-up="${sel}" ${c !== null && c <= pts ? "" : "disabled"}>${c === null ? "Đã tối đa" : `Lên tầng · ${c} điểm`}</button></nav>`
+        : `<nav><button type="button" data-learn="${sel}" ${s.lv >= needLv && scrollsAll(s) >= needSc ? "" : "disabled"}>Học · ${needSc} tàn quyển (đang có ${scrollsAll(s)})</button></nav>
+          <span class="mute">${s.lv < needLv ? `Chưa đủ cấp ${needLv}. ` : ""}Tàn quyển hệ nào cũng dùng được: rơi từ dị thú và thủ lĩnh, thưởng tháp Tầm Đạo, đổi ở Bảo Khố.</span>`}`;
     this.open(`<h2>Kỹ năng</h2>
       <h3>Thanh chiêu <em>chọn một ô, rồi chọn chiêu và bấm Xếp</em></h3>
       <div class="mmo-barrow">${bar}<button type="button" class="mmo-slot ult" disabled title="Chiêu cuối: mở ở cấp ${BAI.ultLevel}" style="${url("tran_phap")}"><kbd>${KEYS[ULT_KEY].toUpperCase()}</kbd></button></div>
@@ -1274,7 +1284,7 @@ export class MmoScene extends BaiScene {
 
 const HELP = `<ul>
   <li><b>Đi:</b> chạm đất, hoặc phím mũi tên. Đi tới mép sáng hai bên để sang khu khác.</li>
-  <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng.</li>
+  <li><b>Đánh:</b> chạm dị thú (hoặc phím Cách) để đánh thường; chiêu ở thanh dưới, phím Q W E R T Y; chiêu cuối phím U (mở ở cấp 150). Xếp chiêu vào ô trong bảng Kỹ năng; năm chiêu sau học bằng tàn quyển khi đủ cấp.</li>
   <li><b>X</b> tọa thiền (hồi máu, mana) · <b>G</b> tông môn · <b>L</b> liên minh · <b>V</b> hoạt động (sự kiện, tháp, bế quan) · <b>H</b> thư.</li>
   <li><b>1</b> uống bình máu · <b>2</b> uống Hồi Linh Đan (hàng số 1–6 là ô vật phẩm); máu dưới 35% hay mana dưới 20% thì tự uống nếu trong túi còn · <b>F</b> treo auto (tự đánh, tự ra chiêu, tự nhặt đồ) · <b>M</b> bản đồ (bấm khu để tự chạy tới; truyền tống về sơn môn, bến đò) · <b>B</b> tiệm (ở sơn môn, bến đò).</li>
   <li><b>I</b> túi · <b>P</b> nhân vật (cộng điểm tiềm năng) · <b>O</b> kỹ năng (lên tầng chiêu); nhấn lại để đóng.</li>
@@ -1324,11 +1334,11 @@ const SKILL_DESC: Record<string, string> = {
   dien_rong: "Sát thương cả một vùng",
   ho_the: `Khiên ${BAI.shieldPct * 100}% máu trong ${BAI.shieldSec} giây`,
   hoi_phuc: `Hồi ${BAI.healPct * 100}% máu`,
-  can_don: "Một đòn mạnh vào một mục tiêu gần",
-  khong_che: "Đòn nhanh, tốn ít mana, một mục tiêu",
-  than_phap: "Đánh một mục tiêu ở rất xa",
-  bua_chu: "Bùa nổ rất mạnh vào một mục tiêu",
-  tran_phap: "Trận lớn đánh mạnh cả vùng, hồi chiêu dài",
+  can_don: `Một đòn mạnh vào một mục tiêu gần, hút ${BAI.leech * 100}% sát thương thành máu`,
+  khong_che: `Đòn nhanh làm choáng ${BAI.stunSec} giây (thủ lĩnh ${BAI.bossStunSec} giây)`,
+  than_phap: "Lướt tới sát một mục tiêu ở rất xa rồi chém",
+  bua_chu: `Bùa nổ rất mạnh, thiêu đốt thêm ${BAI.burnPct * 100}% sát thương trong ${BAI.burnSec} giây`,
+  tran_phap: `Trận lớn đánh cả vùng rồi cháy tiếp ${BAI.zoneSec} giây, mỗi giây ${BAI.zonePct * 100}% sát thương`,
 };
 
 /** Phím của hàng ô chiêu, theo thứ tự ô: sáu ô chiêu rồi chiêu cuối. */

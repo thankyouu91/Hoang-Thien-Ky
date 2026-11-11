@@ -5,6 +5,7 @@ import { ATTRIBUTES, attributeBonuses, layerCost, TAY_DIEM, TECHNIQUE_LAYERS, tr
 import type { SkillType } from "@htk/sim";
 import { BAI } from "../bai/thamSo.ts";
 import { ELEMENT_STYLE } from "../../theme/elements.ts";
+import TAN_QUYEN from "../../../../data/he_thong/json/tan_quyen.json" with { type: "json" };
 import TRANG_BI from "../../../../data/he_thong/json/trang_bi.json" with { type: "json" };
 
 /** Vùng theo thứ tự đi: thư mục nền chien_truong/, tên, hệ của dị thú. */
@@ -104,6 +105,8 @@ export interface Save {
     ore?: boolean;
     boss?: boolean;
   };
+  /** Chiêu đã học bằng tàn quyển (các chiêu có trong SKILL_SCROLLS); năm chiêu khởi đầu không cần ghi */
+  hoc?: SkillType[];
   /** Số tầng tháp Tầm Đạo đã qua (0–8) */
   thap?: number;
   /** Bế quan: mốc bắt đầu tích (ms), ngày của bộ đếm, số giây đã thu trong ngày đó */
@@ -121,7 +124,7 @@ export interface Save {
 }
 
 export function newSave(name: string, element: ElementId): Save {
-  return { v: 1, name: name.trim().slice(0, 16) || "Vô Danh", element, lv: 1, xp: 0, gold: 0, pots: 3, wpn: 0, zone: 0, maxZone: 0, quest: { zone: 1, n: 0 }, phu: 3, bag: [], equips: {} };
+  return { v: 1, name: name.trim().slice(0, 16) || "Vô Danh", element, lv: 1, xp: 0, gold: 0, pots: 3, wpn: 0, zone: 0, maxZone: 0, quest: { zone: 1, n: 0 }, phu: 3, hoc: [], bag: [], equips: {} };
 }
 
 export const hpOf = (lv: number) => 2000 + 220 * (lv - 1);
@@ -294,7 +297,41 @@ export const SKILL_UNLOCK: [SkillType, number][] = [
 ];
 export const SLOT_COUNT = 6;
 
-export const learned = (s: Save) => SKILL_UNLOCK.filter(([, lv]) => s.lv >= lv).map(([k]) => k);
+/**
+ * Tàn quyển cần để học chiêu, ngoài mốc cấp (người dùng chốt 2026-11-11: vừa đủ cấp vừa phải có tàn quyển). Tàn quyển hệ nào cũng
+ * được, vì tàn quyển rơi theo hệ của vùng chứ không theo hệ nhân vật. Số lượng là đề xuất.
+ */
+export const SKILL_SCROLLS: Partial<Record<SkillType, number>> = { can_don: 1, khong_che: 2, than_phap: 3, bua_chu: 4, tran_phap: 6 };
+
+export const learned = (s: Save) => SKILL_UNLOCK.filter(([k, lv]) => s.lv >= lv && (!SKILL_SCROLLS[k] || !!s.hoc?.includes(k))).map(([k]) => k);
+/** Tổng tàn quyển mọi hệ trong túi. */
+export const scrollsAll = (s: Save) => s.bag.reduce((n, it) => n + (it.type === "tan_quyen" ? it.count : 0), 0);
+
+/** Học một chiêu: đủ cấp, chưa học, đủ tàn quyển (trừ từ chồng nhiều nhất trước). */
+export function learn(s: Save, skill: string): boolean {
+  const row = SKILL_UNLOCK.find(([k]) => k === skill);
+  let need = SKILL_SCROLLS[skill as SkillType] ?? 0;
+  if (!row || !need || s.lv < row[1] || s.hoc?.includes(row[0]) || scrollsAll(s) < need) return false;
+  for (const it of s.bag.filter((x) => x.type === "tan_quyen").sort((a, b) => b.count - a.count)) {
+    const k = Math.min(need, it.count);
+    it.count -= k;
+    need -= k;
+  }
+  s.bag = s.bag.filter((x) => x.count > 0);
+  s.hoc = [...(s.hoc ?? []), row[0]];
+  return true;
+}
+
+/** Bản lưu từ trước khi học chiêu cần tàn quyển: giữ các chiêu đã mở theo cấp lúc đó. */
+export function migrateSkills(s: Save): void {
+  s.hoc ??= SKILL_UNLOCK.filter(([k, lv]) => SKILL_SCROLLS[k] && s.lv >= lv).map(([k]) => k);
+}
+
+/** Tên chiêu riêng của từng hệ, lấy từ tan_quyen.json (biến thể "bạo" của mỗi hệ × loại chiêu), ví dụ Hỏa + cận chiến đơn = Liệt Hỏa Trảm. */
+const TEN_CHIEU: Record<string, string> = Object.fromEntries(
+  (TAN_QUYEN as { name: string; element: string; type: string; variant: string }[]).filter((x) => x.variant === "bao").map((x) => [`${x.element}.${x.type}`, x.name]),
+);
+export const skillName = (el: ElementId, skill: SkillType) => TEN_CHIEU[`${el}.${skill}`] ?? skill;
 
 export function slotsOf(s: Save): (SkillType | null)[] {
   return Array.from({ length: SLOT_COUNT }, (_, i) => (s.slots ? (s.slots[i] ?? null) : (BAI.skills[i] ?? null)));
