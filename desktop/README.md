@@ -15,7 +15,7 @@ Phiên bản lấy từ `version` trong `package.json` của thư mục này; t�
 
 ## Cần biết
 
-- Tiến độ lưu ở `localStorage` của ứng dụng, trong `%APPDATA%\thien-hoang-ky-desktop`. Nó tách khỏi tiến độ trên trình duyệt
+- Tiến độ lưu ở `localStorage` của ứng dụng, trong `%APPDATA%\Thiên Hoang Ký`. Nó tách khỏi tiến độ trên trình duyệt
   (`play.thienhoangky.fun`), không tự chuyển sang.
 - Gỡ cài đặt không xóa thư mục dữ liệu đó; cài bản mới đè lên thì tiến độ giữ nguyên.
 - Bộ cài chưa ký số: Windows SmartScreen sẽ hiện cảnh báo "Windows protected your PC", bấm "More info" rồi "Run anyway".
